@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.bingoogolapple.refreshlayout.BGARefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:scrollbars="none">
+
+        <include layout="@layout/content_banner"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvGames"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@android:color/white"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_list"/>
+
+        <GridView
+            android:id="@+id/gvMore"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            tools:listiem="@layout/item_grid"/>
+    </ScrollView>
+
+</cn.bingoogolapple.refreshlayout.BGARefreshLayout>
