@@ -1,7 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@+id/wvGift"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
+<cn.bingoogolapple.refreshlayout.BGARefreshLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/rlContent"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent" >
 
-</WebView>
+	<ScrollView
+			android:background = "@color/black"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" >
+
+		<LinearLayout
+				android:id = "@+id/llContainer"
+				android:orientation = "vertical"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content" >
+
+			<include layout = "@layout/view_banner" />
+
+			<ViewStub
+					android:id="@+id/vSub"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					android:inflatedId="@+id/llGame"
+					android:layout="@layout/view_gifts_game_installed"/>
+
+			<LinearLayout
+					android:id = "@+id/llRecommend"
+					android:layout_width = "match_parent"
+					android:layout_height = "100dp"
+					android:orientation = "vertical" >
+
+				<TextView
+						android:layout_width = "match_parent"
+						android:layout_height = "wrap_content"
+						android:text = "今日限量" />
+
+				<android.support.v4.view.ViewPager
+						android:id = "@+id/vpRecommend"
+						android:layout_width = "match_parent"
+						android:layout_height = "0dp"
+						android:layout_weight = "1"
+						android:padding = "10dp" >
+
+				</android.support.v4.view.ViewPager >
+
+			</LinearLayout >
+
+			<LinearLayout
+					android:id = "@+id/llHot"
+					android:layout_width = "match_parent"
+					android:layout_height = "wrap_content"
+					android:orientation = "vertical" >
+
+				<TextView
+						android:layout_width = "match_parent"
+						android:layout_height = "wrap_content"
+						android:text = "热门礼包" />
+
+				<GridView
+						android:id = "@+id/gvHot"
+						android:layout_width = "match_parent"
+						android:layout_height = "wrap_content" >
+
+				</GridView >
+
+			</LinearLayout >
+		</LinearLayout >
+	</ScrollView >
+
+</cn.bingoogolapple.refreshlayout.BGARefreshLayout >

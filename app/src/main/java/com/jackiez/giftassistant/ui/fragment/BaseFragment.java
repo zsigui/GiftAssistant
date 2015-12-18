@@ -1,9 +1,16 @@
 package com.jackiez.giftassistant.ui.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.jackiez.giftassistant.engine.NetEngine;
 import com.jackiez.giftassistant.ui.AssistantApp;
 import com.jackiez.giftassistant.ui.activity.BaseActivity;
 
@@ -17,6 +24,13 @@ public abstract class BaseFragment extends Fragment {
     protected AssistantApp mApp;
     protected View mContentView;
     protected BaseActivity mActivity;
+	protected NetEngine mEngine;
+	// 用于判断是否初始化结束
+	protected boolean mIsPrepared = false;
+	// 用于判断是否已经处于加载中
+	protected boolean mIsLoading = false;
+	// 用于避免重复加载
+	protected boolean mHasData = false;
 
     @Override
     public void onAttach(Context context) {
@@ -24,7 +38,99 @@ public abstract class BaseFragment extends Fragment {
         TAG = this.getClass().getSimpleName();
         mApp = AssistantApp.getInstance();
         mActivity = (BaseActivity) context;
+	    mEngine = mApp.getEngine();
     }
 
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser) {
+			onUserVisible();
+		} else {
+			onUserInVisible();
+		}
+	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// 避免多次从xml中加载布局文件
+		if (mContentView == null) {
+			initView(savedInstanceState);
+			setListener();
+			processLogic(savedInstanceState);
+		} else {
+			ViewGroup parent = (ViewGroup) mContentView.getParent();
+			if (parent != null) {
+				parent.removeView(mContentView);
+			}
+		}
+		mIsPrepared = true;
+		lazyLoad();
+		return mContentView;
+	}
+
+	protected void setContentView(@LayoutRes int layoutResID) {
+		mContentView = LayoutInflater.from(mApp).inflate(layoutResID, null);
+	}
+
+	/**
+	 * 初始化View控件
+	 */
+	protected abstract void initView(Bundle savedInstanceState);
+
+	/**
+	 * 给View控件添加事件监听器，在initView方法后执行
+	 */
+	protected abstract void setListener();
+
+	/**
+	 * 处理业务逻辑，状态恢复等操作，在setListener方法后执行
+	 */
+	protected abstract void processLogic(Bundle savedInstanceState);
+
+	/**
+	 * 可在此方法内重写加载网络数据
+	 */
+	protected abstract void lazyLoad();
+
+	/**
+	 * fragment可见的情况下，会调用该方法，默认进行初始化等判断和执行懒加载方法
+	 */
+	protected void onUserVisible() {
+		if (!mIsPrepared || mIsLoading || mHasData) {
+			return;
+		}
+		lazyLoad();
+	}
+
+	/**
+	 * 当fragment不可见时，会调用该方法，可重载实现网络中断任务操作
+	 */
+	protected void onUserInVisible(){};
+
+	/**
+	 * 查找View
+	 *
+	 * @param id   控件的id
+	 * @param <VT> View类型
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected <VT extends View> VT getViewById(@IdRes int id) {
+		return (VT) mContentView.findViewById(id);
+	}
+
+	protected void showToast(String text) {
+		Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
+	}
+
+	protected void showLoadingDialog() {
+		mActivity.showLoadingDialog();
+	}
+
+	protected void dismissLoadingDialog() {
+		if (isVisible()) {
+			mActivity.hideLoadingDialog();
+		}
+	}
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/llGame"
+		android:layout_width = "match_parent"
+		android:layout_height = "100dp"
+		android:background="@color/gray_btn_bg_color"
+		android:orientation = "vertical" >
+
+	<TextView
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:text = "已安装游戏" />
+
+	<android.support.v4.view.ViewPager
+			android:id = "@+id/vpGame"
+			android:layout_width = "match_parent"
+			android:layout_height = "0dp"
+			android:layout_weight = "1"
+			android:padding = "10dp" >
+
+	</android.support.v4.view.ViewPager >
+
+</LinearLayout >
