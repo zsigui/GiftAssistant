@@ -1,4 +1,4 @@
-package com.jackiez.giftassistant;
+package com.oplay.giftassistant;
 
 import org.junit.Test;
 

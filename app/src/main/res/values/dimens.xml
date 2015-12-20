@@ -3,4 +3,15 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="di_tabs_index_ll">60dp</dimen>
+    <dimen name="di_tabs_game_ll">40dp</dimen>
+    <!-- 通用样式 -->
+    <dimen name="common_btn_radius" >5sp</dimen>
+    <dimen name="common_text" >14sp</dimen>
+    <dimen name="common_text_padding_left_right" >18dp</dimen>
+    <dimen name="common_text_padding_top_bottom" >5dp</dimen>
+
+    <!-- ToolBar -->
+    <dimen name="toolbar_title">18sp</dimen>
 </resources>

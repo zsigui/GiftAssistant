@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/ll_tabs_home"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/di_tabs_index_ll"
+              android:background="@color/co_tabs_index_bg"
+              android:orientation="horizontal">
+
+    <CheckedTextView
+        style="@style/CheckedTextNormal.Index"
+        android:drawableTop="@drawable/selector_tab_index_gift"
+        android:text="@string/st_tabs_home_gift"/>
+
+    <LinearLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#E4E3E3"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <CheckedTextView
+        style="@style/CheckedTextNormal.Index"
+        android:drawableTop="@drawable/selector_tab_index_game"
+        android:text="@string/st_tabs_index_game"/>
+
+</LinearLayout>

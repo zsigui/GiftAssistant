@@ -3,12 +3,33 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-	<color name = "transparent">#00000000</color>
-	<color name = "white">#FFFFFF</color>
-	<color name = "black">#000000</color>
+	<color name = "co_transparent">#00000000</color>
+	<color name = "co_white">#FFFFFF</color>
+	<color name = "co_black">#000000</color>
+
+    <color name = "co_opacity_05" >#0D000000</color >
+    <color name = "co_opacity_20" >#33000000</color >
+    <color name = "co_opacity_30" >#4D000000</color >
+    <color name = "co_opacity_50" >#80000000</color >
+    <color name = "co_opacity_70" >#B3000000</color >
+    <color name = "co_opacity_80" >#CC000000</color >
+
+    <!-- 主题通用颜色 -->
+    <color name="co_common_text_fg">#EFF7DE</color>
+    <color name="co_common_green_normal">#99CC00</color>
+    <color name="co_common_green_pressed">#87B300</color>
+    <color name="co_common_green_search_view">#87B300</color>
 
 
 	<!-- 主页面 -->
-	<color name="color_titlebar_bg" >#74684957</color>
-	<color name = "color_titlebar_tv_bg">#FFFFFF</color>
+	<color name="co_title_bar_bg" >#74684957</color>
+	<color name = "co_title_bar_tv_bg">#FFFFFF</color>
+    <color name="co_tabs_index_text_unchecked">#9C9C9C</color>
+    <color name="co_tabs_index_bg">#F0F0F0</color>
+    <color name="co_tabs_game_text_unchecked">#D6FE5E</color>
+    <color name="co_toolbar_index_score">#DCE74A</color>
+
+    <!-- 搜索 -->
+    <color name="co_search_text_hint">#B3E423</color>
+
 </resources>

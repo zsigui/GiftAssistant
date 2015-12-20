@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name = "list_divider_1dp" >1dp</dimen >
+    <dimen name = "list_divider_1px" >1px</dimen >
+    <dimen name = "spacing_block" >@dimen/padding_10dp</dimen >
+    <dimen name = "searchlayout_height" >37dp</dimen >
+    <dimen name = "common_title_big" >17dp</dimen >
+    <dimen name = "common_title" >15dp</dimen >
+    <dimen name = "common_subtitle" >12dp</dimen >
+    <dimen name = "common_subtitle_small" >11dp</dimen >
+    <dimen name = "list_divider_7dp" >7dp</dimen >
+    <dimen name = "list_divider_10dp" >10dp</dimen >
+    <dimen name = "icon_size_list" >60dp</dimen >
+    <dimen name = "icon_size_home" >81dp</dimen >
+    <dimen name = "text_spacing" >3dp</dimen >
+
+    <dimen name = "dialog_title" >17dp</dimen >
+    <dimen name = "dialog_content" >16dp</dimen >
+    <dimen name = "dialog_padding_left_right" >20dp</dimen >
+    <dimen name = "download_button_minheight" >36dp</dimen >
+    <dimen name = "account_margintop" >17dp</dimen >
+
+    <dimen name = "padding_10dp" >10dp</dimen >
+    <dimen name = "padding_drawble" >5dp</dimen >
+
+    <dimen name = "button_border" >1dp</dimen >
+    <!-- 52px-26px-13dp, related to DownloadTextView style -->
+    <dimen name = "button_radius" >5dp</dimen >
+
+    <dimen name = "subject_common_padding" >11dp</dimen >
+    <dimen name = "actionbar_width" >40dp</dimen >
+
+    <dimen name = "divider_10dp" >10dp</dimen >
+    <dimen name = "padding_icon_10dp" >10dp</dimen >
+    <dimen name = "padding_icon_12dp" >12dp</dimen >
+
+    <dimen name = "dialog_new_width" >300dp</dimen >
+</resources>

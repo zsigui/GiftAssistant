@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    android:id = "@+id/toolbar"
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:layout_width = "match_parent"
+    android:layout_height = "?actionBarSize"
+    android:gravity = "center_vertical"
+    app:contentInsetEnd = "0dp"
+    app:contentInsetStart = "0dp"
+    android:paddingRight="15dp"
+    app:popupTheme = "@style/ThemeOverlay.AppCompat.Light"
+    app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <ImageView
+        android:id="@+id/iv_bar_back"
+        android:layout_width="?actionBarSize"
+        android:layout_height="?actionBarSize"
+        android:background="?actionBarItemBackground"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_bar_back"/>
+
+    <include layout="@layout/view_search" />
+
+</android.support.v7.widget.Toolbar >

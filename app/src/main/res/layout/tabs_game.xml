@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_tabs_home_game"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/di_tabs_game_ll"
+    android:background="@color/co_common_green_normal"
+    android:orientation="horizontal">
+
+    <CheckedTextView
+        style="@style/CheckedTextNormal.Game"
+        android:text="@string/st_tabs_game_hot"/>
+
+    <CheckedTextView
+        style="@style/CheckedTextNormal.Game"
+        android:text="@string/st_tabs_game_week"/>
+
+    <CheckedTextView
+        style="@style/CheckedTextNormal.Game"
+        android:text="@string/st_tabs_game_feature"/>
+
+</LinearLayout>
