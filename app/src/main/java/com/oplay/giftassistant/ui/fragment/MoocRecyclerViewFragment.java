@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.model.DataModel;
 import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.adapter.NormalRecyclerViewAdapter;
@@ -30,12 +31,12 @@ import retrofit.Retrofit;
  * Created by zsigui on 15-12-16.
  */
 public class MoocRecyclerViewFragment extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate, BGAOnRVItemClickListener, BGAOnRVItemLongClickListener, BGAOnItemChildClickListener, BGAOnItemChildLongClickListener {
-	private static final String TAG = MoocRecyclerViewFragment.class.getSimpleName();
 	private NormalRecyclerViewAdapter mAdapter;
 	private BGARefreshLayout mRefreshLayout;
 	private RecyclerView mDataRv;
 	private int mNewPageNumber = 0;
 	private int mMorePageNumber = 0;
+    private NetEngine mEngine;
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class MoocRecyclerViewFragment extends BaseFragment implements BGARefresh
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
+        mEngine = mApp.getRetrofit().create(NetEngine.class);
 		BGAMoocStyleRefreshViewHolder moocStyleRefreshViewHolder = new BGAMoocStyleRefreshViewHolder(mApp, true);
 		moocStyleRefreshViewHolder.setUltimateColor(R.color.material_blue_grey_950);
 		moocStyleRefreshViewHolder.setOriginalImage(R.mipmap.ic_launcher);

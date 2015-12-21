@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.model.DataModel;
 import com.oplay.giftassistant.model.HomeModel;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -30,6 +31,7 @@ public class GiftFragment extends BaseFragment {
 	private ViewPager mvpRecommend;
 	private ViewPager mvpHot;
 	private List<View> views;
+    private NetEngine mEngine;
 
 
 	@Override
@@ -56,7 +58,7 @@ public class GiftFragment extends BaseFragment {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-
+        mEngine = mApp.getRetrofit().create(NetEngine.class);
 	}
 
 	@Override

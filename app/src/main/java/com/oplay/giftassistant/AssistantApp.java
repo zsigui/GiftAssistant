@@ -15,13 +15,12 @@ import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.constant.Global;
-import com.oplay.giftassistant.engine.NetEngine;
+import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftassistant.util.SoundPlayer;
 import com.socks.library.KLog;
 
 import java.io.File;
 
-import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 /**
@@ -33,7 +32,7 @@ public class AssistantApp extends Application {
 
     public final static String IMG_PATH = "/gift_assistant/cache/imgs";
     private static AssistantApp sInstance;
-    private NetEngine mEngine;
+    private Retrofit mRetrofit;
 
     // 是否下载完成自动安装
     private boolean mShouldAutoInstall = false;
@@ -61,11 +60,10 @@ public class AssistantApp extends Application {
         sInstance = this;
         initImageLoader();
         KLog.init(true);
-        mEngine = new Retrofit.Builder()
+        mRetrofit = new Retrofit.Builder()
                 .baseUrl(Global.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(NetEngine.class);
+                .build();
         setLogin(true);
     }
 
@@ -73,8 +71,8 @@ public class AssistantApp extends Application {
         return sInstance;
     }
 
-    public NetEngine getEngine() {
-        return mEngine;
+    public Retrofit getRetrofit() {
+        return mRetrofit;
     }
 
     /**

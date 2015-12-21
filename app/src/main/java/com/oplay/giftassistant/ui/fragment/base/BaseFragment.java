@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.oplay.giftassistant.AssistantApp;
-import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 
 /**
@@ -23,7 +22,6 @@ public abstract class BaseFragment extends BaseFragmentLog {
     protected AssistantApp mApp;
     protected View mContentView;
     protected BaseAppCompatActivity mActivity;
-	protected NetEngine mEngine;
 	// 用于判断是否初始化结束
 	protected boolean mIsPrepared = false;
 	// 用于判断是否已经处于加载中
@@ -37,7 +35,6 @@ public abstract class BaseFragment extends BaseFragmentLog {
         TAG = this.getClass().getSimpleName();
         mApp = AssistantApp.getInstance();
         mActivity = (BaseAppCompatActivity) context;
-	    mEngine = mApp.getEngine();
     }
 
 	@Override
