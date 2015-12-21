@@ -52,7 +52,7 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 	 * Method invoked prior to executing the given Runnable in the
 	 * given thread.  This method is invoked by thread {@code t} that
 	 * will execute task {@code r}, and may be used to re-initialize
-	 * ThreadLocals, or to perform logging.
+	 * ThreadLocals, or to onSearch logging.
 	 * <p/>
 	 * <p>This implementation does nothing, but may be customized in
 	 * subclasses. Note: To properly nest multiple overridings, subclasses

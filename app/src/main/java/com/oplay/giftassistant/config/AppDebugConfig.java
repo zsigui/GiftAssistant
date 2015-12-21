@@ -22,6 +22,10 @@ public class AppDebugConfig {
     /* define some tag for debug below */
     public static final String TAG_SEARCH = "op_search_debug";
 
+
+	public static final String TAG_ENCRYPT = "data_encrypt_debug";
+
+
     public static void logMethodName(Object object) {
         if (IS_DEBUG) {
             try {

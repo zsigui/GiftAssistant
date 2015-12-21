@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.ui.widget;
+package com.oplay.giftassistant.ui.widget.search;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,12 +11,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.SearchDataAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.engine.SearchEngine;
 import com.oplay.giftassistant.model.data.SearchPromptResult;
@@ -34,9 +33,10 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/20
  */
-public class SearchLayout extends RelativeLayout implements AdapterView.OnItemClickListener, TextView.OnEditorActionListener, TextWatcher {
+public class SearchLayout extends RelativeLayout implements AdapterView.OnItemClickListener, TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
-    public class ItemType {
+
+	public class ItemType {
         public static final int GIFT = 0;
         public static final int GIFT_PROMPT = 1;
         public static final int GAME = 10;
@@ -46,14 +46,34 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     }
     protected SearchDataAdapter<SearchPromptResult> mBaseAdapter;
     protected AutoCompleteTextView mEdtSearch;
-    protected ImageView mIconSearch;
-    protected View mDivider;
+    protected TextView mIconSearch;
+    protected TextView mIconClear;
+    protected TextView mDivider;
     protected String mCurKeyWord;
     protected boolean mIsAutoPopupPromt;
     private boolean mIsAutoSendRequest;
     private List<String> mKeyWordList;
     private ItemType mItemType;
+	private OnSearchActionListener mSearchActionListener;
     private SearchEngine mEngine;
+	/**
+	 * defined whether need to auto send request to get prompt list
+	 */
+	private boolean mAutoSendRequest;
+	/**
+	 * this list view is used to display the input history<br />
+	 * <b>Note : null means that you don't need display history<b/>
+ 	 */
+	private ListView mHistoryView;
+	/**
+	 * this list view is used to display the auto complete hint<br />
+	 * <b>Note : null means that you don't need display the auto complete hint<b/>
+	 */
+	private ListView mPromptView;
+	/**
+	 *
+	 */
+	private View T;
 
     public SearchLayout(Context context) {
         this(context, null);
@@ -72,8 +92,8 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     protected void onFinishInflate() {
         super.onFinishInflate();
         mEdtSearch = getViewById(R.id.actv_search_input);
-        mIconSearch = getViewById(R.id.iv_search_icon);
-        mDivider = getViewById(R.id.iv_search_divider);
+        mIconSearch = getViewById(R.id.tv_search_icon);
+        mDivider = getViewById(R.id.tv_search_divider);
         if (Build.VERSION.SDK_INT >= 17) {
             mEdtSearch.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
@@ -87,6 +107,7 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         mEdtSearch.setOnItemClickListener(this);
         mEdtSearch.setOnEditorActionListener(this);
         mEdtSearch.addTextChangedListener(this);
+	    mIconSearch.setOnClickListener(this);
     }
 
     private <V extends View> V getViewById(@IdRes int id) {
@@ -94,9 +115,20 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         return (child != null ? (V)child : null);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	@Override
+	public void onClick(View v) {
 
+	}
+
+
+	@Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (position < mKeyWordList.size()) {
+			final String keyword = mKeyWordList.get(position);
+			if (mSearchActionListener != null) {
+				mSearchActionListener.onSearchPerform(keyword);
+			}
+		}
     }
 
     @Override
@@ -156,4 +188,21 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     public void setEngine(@NonNull SearchEngine engine) {
         mEngine = engine;
     }
+
+	/**
+	 *
+	 */
+	public interface OnSearchActionListener {
+
+		/**
+		 * pass search
+		 *
+		 * @param keyword used to be searched
+		 */
+		public void onSearchPerform(String keyword);
+
+		public void onSearchCleared();
+
+		public void onSearchPromptUpdated(String curKeyword, List<String> keywords);
+	}
 }

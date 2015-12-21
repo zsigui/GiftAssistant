@@ -335,7 +335,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Internal method to perform the normalization.
+     * Internal method to onSearch the normalization.
      *
      * @param filename  the filename
      * @param separator The separator character to use

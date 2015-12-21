@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.adapter;
+package com.oplay.giftassistant.ui.widget.search;
 
 import android.view.View;
 import android.view.ViewGroup;
