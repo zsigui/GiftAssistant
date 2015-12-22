@@ -2,36 +2,30 @@
 
 <LinearLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		android:id="@+id/llContent"
+		android:id = "@+id/llContent"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
 		android:background = "@color/gray_btn_bg_color"
 		android:orientation = "vertical" >
 
-    <include layout="@layout/toobar_simple_with_back" />
+	<include layout = "@layout/toolbar_search" />
 
-	<cn.bingoogolapple.bgabanner.BGAViewPager
+	<android.support.v4.view.ViewPager
 			android:id = "@+id/vpContainer"
 			android:layout_width = "match_parent"
 			android:layout_height = "0dp"
 			android:layout_weight = "1"
-			android:background = "@color/float_transparent" >
-	</cn.bingoogolapple.bgabanner.BGAViewPager >
+			android:background = "@color/co_transparent" >
+	</android.support.v4.view.ViewPager >
 
-	<cn.bingoogolapple.bgaindicator.BGAFixedIndicator
-			android:id="@+id/fixIndicator"
+	<FrameLayout
+			android:id = "@+id/fl_container"
 			android:layout_width = "match_parent"
-			android:layout_height = "45dp"
-			android:background = "@color/material_blue_grey_95"
-			app:indicator_dividerVerticalMargin="5dp"
-			app:indicator_dividerWidth="2dp"
-			app:indicator_hasDivider="true"
-			app:indicator_textColor="@color/co_white"
-			app:indicator_textSizeNormal="12sp"
-			app:indicator_textSizeSelected="14sp"
-			app:indicator_triangleHeight="2dp"
-			app:indicator_triangleHorizontalMargin="5dp">
+			android:layout_height = "0dp"
+			android:layout_weight = "1"
+			android:background = "@color/co_transparent" >
 
-	</cn.bingoogolapple.bgaindicator.BGAFixedIndicator >
+	</FrameLayout >
+
+	<include layout = "@layout/tabs_index" />
 </LinearLayout >

@@ -3,7 +3,6 @@ package com.oplay.giftassistant.ui.widget.search;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,8 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.engine.SearchEngine;
-import com.oplay.giftassistant.model.data.SearchPromptResult;
+import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.util.InputMethodUtil;
 import com.socks.library.KLog;
 
@@ -32,16 +30,6 @@ import java.util.List;
  */
 public class SearchLayout extends RelativeLayout implements AdapterView.OnItemClickListener, TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
-
-    public class ItemType {
-        public static final int GIFT = 0;
-        public static final int GIFT_PROMPT = 1;
-        public static final int GAME = 10;
-        public static final int GAME_PROMPT = 11;
-        public static final int MIX = 20;
-        public static final int MIX_PROMPT = 21;
-    }
-
     protected SearchDataAdapter<SearchPromptResult> mBaseAdapter;
     protected AutoCompleteTextView mEdtSearch;
     protected TextView mIconSearch;
@@ -50,9 +38,7 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     protected String mCurKeyWord;
     protected boolean mIsAutoPopupPromt;
     private List<String> mKeyWordList;
-    private ItemType mItemType;
     private OnSearchActionListener mSearchActionListener;
-    private SearchEngine mEngine;
     /**
      * defined whether need to auto send request to get prompt list
      */
@@ -124,7 +110,15 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         }
     }
 
-    private void sendSearchRequest() {
+	public OnSearchActionListener getSearchActionListener() {
+		return mSearchActionListener;
+	}
+
+	public void setSearchActionListener(OnSearchActionListener searchActionListener) {
+		mSearchActionListener = searchActionListener;
+	}
+
+	private void sendSearchRequest() {
         mCurKeyWord = mEdtSearch.getText().toString().trim();
         if (TextUtils.isEmpty(mCurKeyWord)) {
             return;
@@ -209,13 +203,10 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         }
     }
 
-    public SearchEngine getEngine() {
-        return mEngine;
-    }
-
-    public void setEngine(@NonNull SearchEngine engine) {
-        mEngine = engine;
-    }
+	public String getKeyword() {
+		mCurKeyWord = mEdtSearch.getText().toString().trim();
+		return mCurKeyWord;
+	}
 
     /**
      *
@@ -230,8 +221,6 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         void onSearchPerform(String keyword);
 
         void onSearchCleared();
-
-        void onSearchPromptPerform(String curKeyword, List<String> keywords);
 
         void onSearchPromptPerform(String keyword);
     }

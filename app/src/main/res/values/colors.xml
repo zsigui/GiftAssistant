@@ -31,5 +31,6 @@
 
     <!-- 搜索 -->
     <color name="co_search_text_hint">#B3E423</color>
+    <color name="co_list_item_divider">#74585e68</color>
 
 </resources>

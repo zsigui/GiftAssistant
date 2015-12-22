@@ -28,6 +28,7 @@ public abstract class BaseFragment extends BaseFragmentLog {
 	protected boolean mIsLoading = false;
 	// 用于避免重复加载
 	protected boolean mHasData = false;
+	private String mFragName;
 
     @Override
     public void onAttach(Context context) {
@@ -67,6 +68,14 @@ public abstract class BaseFragment extends BaseFragmentLog {
 
 	protected void setContentView(@LayoutRes int layoutResID) {
 		mContentView = LayoutInflater.from(mApp).inflate(layoutResID, null);
+	}
+
+	public String getFragName() {
+		return mFragName;
+	}
+
+	public void setFragName(String fragName) {
+		mFragName = fragName;
 	}
 
 	/**

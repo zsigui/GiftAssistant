@@ -19,7 +19,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_bar_back"/>
     <LinearLayout
-        android:id = "@+id/layout_bar_title"
+        android:id = "@+id/sl_search"
         android:layout_width = "match_parent"
         android:layout_height = "?actionBarSize"
         android:gravity = "center_vertical">
@@ -42,7 +42,7 @@
             android:singleLine = "true"
             android:text="@string/toolbar_title"
             android:textColor = "@android:color/white"
-            android:textSize = "@dimen/toolbar_title" />
+            android:textSize = "@dimen/di_toolbar_title" />
 
     </LinearLayout >
 

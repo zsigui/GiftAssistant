@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,6 +38,10 @@ public class MoocRecyclerViewFragment extends BaseFragment implements BGARefresh
 	private int mNewPageNumber = 0;
 	private int mMorePageNumber = 0;
     private NetEngine mEngine;
+
+	public static Fragment newInstance() {
+		return new MoocRecyclerViewFragment();
+	}
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {

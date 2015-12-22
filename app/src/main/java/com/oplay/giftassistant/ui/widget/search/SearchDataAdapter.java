@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.oplay.giftassistant.model.json.base.JsonBaseImpl;
+import com.oplay.giftassistant.model.json.base.JsonRespBase;
 
 /**
  * @author micle
@@ -41,6 +41,6 @@ public class SearchDataAdapter<T> extends BaseAdapter{
 
     }
 
-    public void doWithPrompt(JsonBaseImpl<T> body) {
+    public void doWithPrompt(JsonRespBase<T> body) {
     }
 }

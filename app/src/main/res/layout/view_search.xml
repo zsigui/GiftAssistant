@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.oplay.giftassistant.ui.widget.search.SearchLayout
-		android:id = "@+id/layout_bar_title"
+		android:id = "@+id/sl_search"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content"
@@ -55,7 +55,7 @@
 			android:layout_alignParentLeft = "true"
 			android:layout_toLeftOf = "@+id/tv_search_clear"
 			android:background = "@color/co_transparent"
-			android:hint = "@string/search_hint"
+			android:hint = "@string/st_search_hint"
 			android:textColor = "@color/co_common_text_fg"
 			android:textColorHint = "@color/co_search_text_hint" />
 

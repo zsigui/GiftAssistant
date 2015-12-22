@@ -13,19 +13,19 @@ import java.util.Arrays;
 /**
  * Created by zsigui on 15-12-21.
  */
-public class DataEncrypt {
+public class NetDataEncrypt {
 
 	static {
 		System.loadLibrary("ymfx");
 	}
 
-	private static DataEncrypt sInstance;
+	private static NetDataEncrypt sInstance;
 	private DecryptDataModel mData = new DecryptDataModel();
 
-	public static DataEncrypt getInstance() {
+	public static NetDataEncrypt getInstance() {
 		synchronized (Object.class) {
 			if (sInstance == null) {
-				sInstance = new DataEncrypt();
+				sInstance = new NetDataEncrypt();
 			}
 		}
 		return sInstance;

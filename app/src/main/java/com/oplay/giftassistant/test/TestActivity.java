@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftassistant.model.DataModel;
+import com.oplay.giftassistant.test.gson_ext.GsonConverterFactory;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -32,6 +32,7 @@ public class TestActivity extends Activity {
 	private TextView tvBackData;
 	private TestEngine mEngine;
 	private Gson mGson;
+	public static String DATA = "";
 
 	static {
 		System.loadLibrary("ymfx");
@@ -63,12 +64,11 @@ public class TestActivity extends Activity {
 						KLog.i("response.status = " + response.code());
 						KLog.i("response.errBody = " + response.errorBody());
 						KLog.i("response.body = " + response.body());
-						KLog.i("response.body.status = " + response.body()==null? null : response.body().status);
 						if (response.code() == 200) {
 							TestActivity.this.runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
-									tvBackData.setText(response.body().data);
+									tvBackData.setText(TestActivity.DATA);
 								}
 							});
 						}

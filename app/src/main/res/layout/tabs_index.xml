@@ -7,6 +7,7 @@
               android:orientation="horizontal">
 
     <CheckedTextView
+		android:id="@+id/ctv_gift"
         style="@style/CheckedTextNormal.Index"
         android:drawableTop="@drawable/selector_tab_index_gift"
         android:text="@string/st_tabs_home_gift"/>
@@ -19,6 +20,7 @@
         android:layout_marginBottom="10dp"/>
 
     <CheckedTextView
+		android:id="@+id/ctv_game"
         style="@style/CheckedTextNormal.Index"
         android:drawableTop="@drawable/selector_tab_index_game"
         android:text="@string/st_tabs_index_game"/>

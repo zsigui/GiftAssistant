@@ -40,8 +40,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
         }
     }
 
-    protected void initView() {
-    }
+    protected abstract void initView();
 
     protected void initMenu(@NonNull Toolbar toolbar) {}
 

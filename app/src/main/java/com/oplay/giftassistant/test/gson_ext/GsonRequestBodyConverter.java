@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.ext.retrofit2;
+package com.oplay.giftassistant.test.gson_ext;
 
 import com.google.gson.Gson;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;

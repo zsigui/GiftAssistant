@@ -9,44 +9,52 @@ import java.io.Serializable;
  * @email zsigui@foxmail.com
  * @date 2015/12/19
  */
-public class JsonBaseImpl<T> implements JsonBase<T>, Serializable {
+public class JsonRespBase<T> implements Serializable {
 
+	/**
+	 * 错误码, 0为成功
+	 */
     @SerializedName("c")
     private int mCode = -1;
 
+	/**
+	 * 数据存放
+	 */
     @SerializedName("d")
     private T mData;
 
-    @SerializedName("msg")
+	/**
+	 * 错误消息说明
+	 */
+    @SerializedName("m")
     private String mMsg;
 
-    @Override
     public T getData() {
         return mData;
     }
 
-    @Override
     public void setData(T data) {
         mData = data;
     }
 
-    @Override
     public int getCode() {
         return mCode;
     }
 
-    @Override
     public void setCode(int code) {
         mCode = code;
     }
 
-    @Override
     public String getMsg() {
         return mMsg;
     }
 
-    @Override
     public void setMsg(String msg) {
         mMsg = msg;
     }
+
+	@Override
+	public String toString() {
+		return "c : " + mCode + ", m : " + mMsg + ", data : " + mData;
+	}
 }

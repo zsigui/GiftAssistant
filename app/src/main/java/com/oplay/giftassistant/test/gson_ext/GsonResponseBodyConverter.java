@@ -1,7 +1,8 @@
-package com.oplay.giftassistant.ext.retrofit2;
+package com.oplay.giftassistant.test.gson_ext;
 
 import com.google.gson.Gson;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.test.TestActivity;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 import com.squareup.okhttp.ResponseBody;
@@ -29,6 +30,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 	public T convert(ResponseBody value) throws IOException {
 		try {
 			String json = NetDataEncrypt.getInstance().decrypt(value.bytes());
+			TestActivity.DATA = json;
 			return gson.fromJson(json, type);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {

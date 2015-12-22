@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -33,9 +34,13 @@ public class GiftFragment extends BaseFragment {
 	private List<View> views;
     private NetEngine mEngine;
 
+	public static Fragment newInstance() {
+		return new GiftFragment();
+	}
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		KLog.i();
 		setContentView(R.layout.fragment_gifts);
 		showLoadingDialog();
 		mBanner = getViewById(R.id.banner);
@@ -48,7 +53,6 @@ public class GiftFragment extends BaseFragment {
 		mBanner.setViews(views);
 		mvpRecommend = getViewById(R.id.vpRecommend);
 		mIsPrepared = true;
-		lazyLoad();
 	}
 
 	@Override
@@ -59,6 +63,7 @@ public class GiftFragment extends BaseFragment {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
         mEngine = mApp.getRetrofit().create(NetEngine.class);
+		lazyLoad();
 	}
 
 	@Override

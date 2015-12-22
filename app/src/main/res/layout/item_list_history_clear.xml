@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/ll_clear"
+		android:orientation = "horizontal"
+		android:gravity = "center"
+		android:paddingBottom = "8dp"
+		android:paddingTop = "8dp"
+		android:background = "@drawable/selector_search_item"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content" >
+
+	<ImageView
+			android:contentDescription = "@null"
+			android:src = "@drawable/ic_search_clear_all"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+
+	<TextView
+			android:text = "@string/st_search_history_clear"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+</LinearLayout >

@@ -13,5 +13,7 @@
     <dimen name="common_text_padding_top_bottom" >5dp</dimen>
 
     <!-- ToolBar -->
-    <dimen name="toolbar_title">18sp</dimen>
+    <dimen name="di_toolbar_title">18sp</dimen>
+
+    <dimen name="di_search_item_history">45dp</dimen>
 </resources>
