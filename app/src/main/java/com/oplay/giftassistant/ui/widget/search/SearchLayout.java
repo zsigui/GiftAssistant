@@ -12,12 +12,10 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.util.InputMethodUtil;
 import com.socks.library.KLog;
 
@@ -30,33 +28,22 @@ import java.util.List;
  */
 public class SearchLayout extends RelativeLayout implements AdapterView.OnItemClickListener, TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
-    protected SearchDataAdapter<SearchPromptResult> mBaseAdapter;
     protected AutoCompleteTextView mEdtSearch;
     protected TextView mIconSearch;
     protected TextView mIconClear;
     protected TextView mDivider;
     protected String mCurKeyWord;
-    protected boolean mIsAutoPopupPromt;
     private List<String> mKeyWordList;
     private OnSearchActionListener mSearchActionListener;
     /**
-     * defined whether need to auto send request to get prompt list
+     * defined whether need to auto send search request to get prompt list
      */
-    private boolean mAutoSendRequest;
+    protected boolean mIsAutoPopupPrompt;
     /**
-     * this list view is used to display the input history<br />
-     * <b>Note : null means that you don't need display history<b/>
+     * defined whether need to auto send search request to get result list <br/>
+     * Note: it will disable {@code mIsAutoPopupPrompt}
      */
-    private ListView mHistoryView;
-    /**
-     * this list view is used to display the auto complete hint<br />
-     * <b>Note : null means that you don't need display the auto complete hint<b/>
-     */
-    private ListView mPromptView;
-    /**
-     *
-     */
-    private View T;
+    private boolean mIsAutoSendRequest;
 
     public SearchLayout(Context context) {
         this(context, null);
@@ -102,7 +89,8 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search_icon:
-                sendSearchRequest();
+                mCurKeyWord = mEdtSearch.getText().toString().trim();
+                sendSearchRequest(mCurKeyWord);
                 break;
             case R.id.tv_search_clear:
                 doClearAction();
@@ -118,9 +106,9 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 		mSearchActionListener = searchActionListener;
 	}
 
-	private void sendSearchRequest() {
-        mCurKeyWord = mEdtSearch.getText().toString().trim();
+	private void sendSearchRequest(String keyword) {
         if (TextUtils.isEmpty(mCurKeyWord)) {
+            KLog.w("the keyword is null or empty");
             return;
         }
         if (mSearchActionListener != null) {
@@ -138,15 +126,11 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
         mEdtSearch.setText(mCurKeyWord);
         mEdtSearch.requestFocus();
         mIconSearch.setEnabled(false);
-        mIconClear.setVisibility(View.GONE);
+        if (mIconClear != null) {
+            mIconClear.setVisibility(View.GONE);
+        }
         if (mDivider != null) {
             mDivider.setVisibility(View.GONE);
-        }
-        if (mPromptView != null) {
-            mPromptView.setVisibility(View.GONE);
-        }
-        if (mHistoryView != null) {
-            mHistoryView.setVisibility(View.VISIBLE);
         }
         if (mSearchActionListener != null) {
             mSearchActionListener.onSearchCleared();
@@ -167,7 +151,8 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            sendSearchRequest();
+            mCurKeyWord = mEdtSearch.getText().toString().trim();
+            sendSearchRequest(mCurKeyWord);
             return true;
         }
         return false;
@@ -184,7 +169,11 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
             doClearAction();
             return;
         }
-        if (mIsAutoPopupPromt && mPromptView != null) {
+        if (mIsAutoSendRequest) {
+            sendSearchRequest(mCurKeyWord);
+            return;
+        }
+        if (mIsAutoPopupPrompt) {
             sendPromptRequest(mCurKeyWord);
         }
     }
@@ -194,8 +183,7 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
     }
 
     public void sendPromptRequest(String keyword) {
-        if (keyword == null || keyword.isEmpty()) {
-            KLog.w("the keyword is null or empty");
+        if (TextUtils.isEmpty(keyword)) {
             return;
         }
         if (mSearchActionListener != null) {
@@ -207,6 +195,14 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 		mCurKeyWord = mEdtSearch.getText().toString().trim();
 		return mCurKeyWord;
 	}
+
+    public boolean isAutoSendRequest() {
+        return mIsAutoSendRequest;
+    }
+
+    public void setIsAutoSendRequest(boolean isAutoSendRequest) {
+        mIsAutoSendRequest = isAutoSendRequest;
+    }
 
     /**
      *
