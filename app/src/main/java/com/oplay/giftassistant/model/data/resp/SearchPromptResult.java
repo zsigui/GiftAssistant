@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model.data.resp;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,6 +12,9 @@ import java.util.List;
  */
 public class SearchPromptResult implements Serializable {
 
-    public String keyword;
-    public List<String> promtList;
+	@SerializedName("keyword")
+	public String keyword;
+
+	@SerializedName("prompts")
+	public List<String> promtList;
 }

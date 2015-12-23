@@ -1,26 +1,30 @@
 package com.oplay.giftassistant.ui.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.widget.FrameLayout;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.engine.SearchEngine;
-import com.oplay.giftassistant.model.data.resp.SearchData;
+import com.oplay.giftassistant.model.data.resp.SearchDataResult;
+import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.model.json.JsonRespSearchData;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftassistant.ui.fragment.LoadingFragment;
+import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
+import com.oplay.giftassistant.ui.fragment.search.EmptySearchFragment;
+import com.oplay.giftassistant.ui.fragment.search.HistoryFragment;
+import com.oplay.giftassistant.ui.fragment.search.ResultFragment;
 import com.oplay.giftassistant.ui.widget.search.SearchLayout;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.SPUtil;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -32,139 +36,234 @@ import retrofit.Retrofit;
  */
 public class SearchActivity extends BaseAppCompatActivity {
 
-    private SearchLayout mSearchLayout;
-    private FrameLayout flSearchContainer;
-    private FragmentManager mFragmentManager;
-    private SearchEngine mEngine;
-    private List<String> mHistoryData;
+	private SearchLayout mSearchLayout;
+	private SearchEngine mEngine;
+	private LinkedList<String> mHistoryData;
+	private ResultFragment mResultFragment;
+	private EmptySearchFragment mEmptySearchFragment;
+	private HistoryFragment mHistoryFragment;
+	private NetErrorFragment mNetErrorFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        processLogic();
-    }
-
-    private void processLogic() {
-        obtainHistoryData();
-        mEngine = mApp.getRetrofit().create(SearchEngine.class);
-        mFragmentManager = getSupportFragmentManager();
-        mSearchLayout.setSearchActionListener(new SearchLayout.OnSearchActionListener() {
-            @Override
-            public void onSearchPerform(String keyword) {
-                if (NetworkUtil.isConnected(SearchActivity.this)) {
-                    showLoadingDialog();
-                    mEngine.getSearchData(keyword).enqueue(new Callback<JsonRespSearchData>() {
-                        @Override
-                        public void onResponse(Response<JsonRespSearchData> response, Retrofit retrofit) {
-                            hideLoadingDialog();
-                            if (response.code() == 200) {
-                                if (response.body().getCode() == StatusCode.SUCCESS) {
-                                    SearchData data = response.body().getData();
-                                    // 检验Key返回数据是否是当前需要的
-                                    if (!data.getKeyword().trim().equals(mSearchLayout.getKeyword())) {
-                                        // 丢弃这次搜索结果
-                                        // 不更新
-                                        return;
-                                    }
-                                    if (data.getGameList() == null && data.getGiftList() == null) {
-                                        displayEmptyUI();
-                                        return;
-                                    }
-                                    // displayListHere
-                                    displayDataUI(data);
-                                    return;
-                                }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.e(response.body());
-                                }
-                            }
-                            displayNetworkErrUI();
-                        }
-
-                        @Override
-                        public void onFailure(Throwable t) {
-                            hideLoadingDialog();
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(t);
-                            }
-                            // 提示网络错误
-                            displayNetworkErrUI();
-                        }
-                    });
-                } else {
-                    displayNetworkErrUI();
-                }
-            }
-
-            @Override
-            public void onSearchCleared() {
-                displayHistoryUI();
-            }
-
-            @Override
-            public void onSearchPromptPerform(String keyword) {
-                if (NetworkUtil.isConnected(SearchActivity.this)) {
-                    mEngine.getSearchPromt(keyword).enqueue(new Callback<JsonRespBase<List<String>>>() {
-                        @Override
-                        public void onResponse(Response<JsonRespBase<List<String>>> response, Retrofit retrofit) {
-
-                        }
-
-                        @Override
-                        public void onFailure(Throwable t) {
-
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    private void obtainHistoryData() {
-        mHistoryData = new ArrayList<>(10);
-        String s = SPUtil.getString(getApplicationContext(),
-                SPConfig.SP_SEARCH_FILE,
-                SPConfig.SP_SEARCH_INDEX_KEY,
-                null);
-        if (TextUtils.isEmpty(s)) {
-            return;
-        }
-        String[] keys = s.split("\r");
-        Collections.addAll(mHistoryData, keys);
-
-    }
-
-    private void displayHistoryUI() {
-    }
-
-    /**
-     * 显示搜索结果界面
-     *
-     * @param data
-     */
-    private void displayDataUI(SearchData data) {
-
-    }
-
-    /**
-     * 显示搜索结果为空界面
-     */
-    private void displayEmptyUI() {
-
-    }
-
-    /**
-     * 显示网络错误提示
-     */
-    private void displayNetworkErrUI() {
-    }
-
-    @Override
-    protected void initView() {
-        setContentView(R.layout.activity_search);
-        mSearchLayout = getViewById(R.id.sl_search);
-
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		processLogic();
+	}
 
 
+	@Override
+	protected void initView() {
+		setContentView(R.layout.activity_search);
+		mSearchLayout = getViewById(R.id.sl_search);
+	}
+
+
+	private void processLogic() {
+		obtainHistoryData();
+		clearHistory();
+		mEngine = mApp.getRetrofit().create(SearchEngine.class);
+		mSearchLayout.setCanGetFocus(true);
+		mSearchLayout.setSearchActionListener(new SearchActionListener());
+		displayHistoryUI(mHistoryData, true);
+		mHistoryFragment.updateData(mHistoryData, true);
+	}
+
+
+	/**
+	 * 获取输入的历史数据
+	 */
+	private void obtainHistoryData() {
+		mHistoryData = new LinkedList<>();
+		String s = SPUtil.getString(getApplicationContext(),
+				SPConfig.SP_SEARCH_FILE,
+				SPConfig.SP_SEARCH_INDEX_KEY,
+				null);
+		if (TextUtils.isEmpty(s)) {
+			return;
+		}
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d("get saveHistory = " + s);
+		}
+
+		String[] keys = s.split("\r");
+		Collections.addAll(mHistoryData, keys);
+	}
+
+	/**
+	 * 将每次的搜索记录写入提示表中，需要每次完成搜索执行一次
+	 */
+	private void saveHistoryData(String newKey) {
+		if (TextUtils.isEmpty(newKey)) {
+			return;
+		}
+
+		// 添加搜索记录，精简个数到10个以内
+		mHistoryData.addFirst(newKey);
+		while (mHistoryData.size() > 10) {
+			mHistoryData.removeLast();
+		}
+
+		StringBuilder builder = new StringBuilder();
+		for (String s : mHistoryData) {
+			builder.append(s).append("\t");
+		}
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d("put saveHistory = " + builder.toString());
+		}
+		SPUtil.putString(getApplicationContext(),
+				SPConfig.SP_SEARCH_FILE,
+				SPConfig.SP_SEARCH_INDEX_KEY,
+				builder.toString());
+	}
+
+	public void clearHistory() {
+		mHistoryData.clear();
+		SPUtil.putString(getApplicationContext(),
+				SPConfig.SP_SEARCH_FILE,
+				SPConfig.SP_SEARCH_INDEX_KEY,
+				"");
+	}
+
+	/**
+	 * 显示历史记录或者提示信息
+	 */
+	private void displayHistoryUI(List<String> data, boolean isHistory) {
+		if (mHistoryFragment == null) {
+			mHistoryFragment = HistoryFragment.newInstance();
+		}
+		mHistoryFragment.updateData(data, isHistory);
+		reattachFrag(R.id.fl_search_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
+	}
+
+	/**
+	 * 显示搜索结果界面
+	 *
+	 * @param data
+	 */
+	private void displayDataUI(SearchDataResult data) {
+		if (mResultFragment == null) {
+			mResultFragment = ResultFragment.newInstance();
+		}
+		mResultFragment.updateData(data);
+		reattachFrag(R.id.fl_search_container, mResultFragment, mResultFragment.getClass().getSimpleName());
+	}
+
+	/**
+	 * 显示搜索结果为空界面
+	 */
+	private void displayEmptyUI() {
+		if (mEmptySearchFragment == null) {
+			mEmptySearchFragment = EmptySearchFragment.newInstance();
+		}
+		reattachFrag(R.id.fl_search_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
+	}
+
+	/**
+	 * 显示网络错误提示
+	 */
+	private void displayNetworkErrUI() {
+		if (mNetErrorFragment == null) {
+			mNetErrorFragment = NetErrorFragment.newInstance();
+		}
+		reattachFrag(R.id.fl_search_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+	}
+
+	private void displayLoadingUI() {
+		reattachFrag(R.id.fl_search_container, LoadingFragment.newInstance(), LoadingFragment.class.getSimpleName());
+	}
+
+	public void sendSearchRequest(String keyword) {
+		mSearchLayout.setText(keyword);
+		mSearchLayout.sendSearchRequest(keyword);
+	}
+
+	private class SearchActionListener implements SearchLayout.OnSearchActionListener {
+		@Override
+		public void onSearchPerform(String keyword) {
+			saveHistoryData(keyword);
+			if (NetworkUtil.isConnected(SearchActivity.this)) {
+				displayLoadingUI();
+				mEngine.getSearchData(keyword).enqueue(new Callback<JsonRespSearchData>() {
+					@Override
+					public void onResponse(Response<JsonRespSearchData> response, Retrofit retrofit) {
+						KLog.e();
+						if (response.code() == 200) {
+							if (response.body().getCode() == StatusCode.SUCCESS) {
+								SearchDataResult data = response.body().getData();
+								// 检验Key返回数据是否是当前需要的
+								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
+									// 丢弃这次搜索结果
+									// 不更新
+									return;
+								}
+								if (data.gameList == null && data.giftList == null) {
+									displayEmptyUI();
+									return;
+								}
+								// display list h  ere
+								displayDataUI(data);
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(response.body());
+							}
+						}
+						displayNetworkErrUI();
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.e(t);
+						}
+						// 提示网络错误
+						displayNetworkErrUI();
+					}
+				});
+			} else {
+				displayNetworkErrUI();
+			}
+		}
+
+		@Override
+		public void onSearchCleared() {
+			displayHistoryUI(mHistoryData, true);
+		}
+
+		@Override
+		public void onSearchPromptPerform(String keyword) {
+			if (NetworkUtil.isConnected(SearchActivity.this)) {
+				mEngine.getSearchPromt(keyword).enqueue(new Callback<JsonRespBase<SearchPromptResult>>() {
+					@Override
+					public void onResponse(Response<JsonRespBase<SearchPromptResult>> response, Retrofit retrofit) {
+						if (response.code() == 200) {
+							if (response.body().getCode() == StatusCode.SUCCESS) {
+								SearchPromptResult data = response.body().getData();
+								// 检验Key返回数据是否是当前需要的
+								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
+									// 丢弃这次搜索结果
+									// 不更新
+									return;
+								}
+								// display list here
+								displayHistoryUI(data.promtList, false);
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(response.body());
+							}
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_FRAG_DEBUG) {
+							KLog.e(t);
+						}
+					}
+				});
+			} // end if
+
+		}
+	} // end internal class
 }

@@ -1,9 +1,8 @@
 package com.oplay.giftassistant.engine;
 
+import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.model.json.JsonRespSearchData;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-
-import java.util.List;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -17,7 +16,7 @@ import retrofit.http.Query;
 public interface SearchEngine {
 
     @GET("search")
-    Call<JsonRespBase<List<String>>> getSearchPromt(@Query("keyword") String keyword);
+    Call<JsonRespBase<SearchPromptResult>> getSearchPromt(@Query("keyword") String keyword);
 
 	@GET("search")
 	Call<JsonRespSearchData> getSearchData(@Query("keyword") String keyword);

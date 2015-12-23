@@ -75,9 +75,9 @@ public class AssistantApp extends Application {
         return mRetrofit;
     }
 
-    /**
-     * �˴�ִ��App�˳�ǰ��������
-     */
+	/**
+	 * do work to release the resource when app exit
+	 */
     public void exit() {
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().destroy();
@@ -93,7 +93,7 @@ public class AssistantApp extends Application {
     }
 
     /**
-     * ��ʼ������ImageLoader����
+     * initial the configuration of Universal-Image-Loader
      */
     private void initImageLoader() {
         try {

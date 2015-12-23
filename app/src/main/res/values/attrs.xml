@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="ScaleView">
         <attr name="measureByHeight" format="boolean"></attr>
         <attr name="fraction" format="float"></attr>
     </declare-styleable>
+
 	<declare-styleable name="ViewIndicator">
-		<attr name="triggerColor" format="color"></attr>
+		<attr name="triggerColor" format="color|reference"></attr>
 		<attr name="normalColor" format="color"></attr>
 		<attr name="triggerSize" format="dimension"></attr>
 		<attr name="normalSize" format="dimension"></attr>
 		<attr name="needSlipTag" format="boolean"></attr>
 		<attr name="slipTagColor" format="color"></attr>
 		<attr name="slipTagSize" format="dimension"></attr>
+	</declare-styleable>
+
+	<!-- the setting attributes of the Loading CircleProgress -->
+	<declare-styleable name = "CircleProgress" >
+		<attr name="color1" format="reference|color"/>
+		<attr name="color2" format="reference|color"/>
+		<attr name="color3" format="reference|color"/>
 	</declare-styleable>
 </resources>

@@ -16,4 +16,7 @@
     <dimen name="di_toolbar_title">18sp</dimen>
 
     <dimen name="di_search_item_history">45dp</dimen>
+
+	<!-- default size of loading circle -->
+	<dimen name="default_circle_view_size">200dp</dimen>
 </resources>

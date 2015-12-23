@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.ui.fragment.search;
+package com.oplay.giftassistant.ui.fragment;
 
 import android.os.Bundle;
 
@@ -8,15 +8,15 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 /**
  * Created by zsigui on 15-12-22.
  */
-public class EmptySearchFragment extends BaseFragment {
+public class NetErrorFragment extends BaseFragment {
 
-	public static EmptySearchFragment newInstance() {
-		return new EmptySearchFragment();
+	public static NetErrorFragment newInstance() {
+		return new NetErrorFragment();
 	}
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_empty_search);
+		setContentView(R.layout.fragment_error_net);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id="@+id/rl_search_history"
               android:orientation = "horizontal"
               android:gravity = "center_vertical"
               android:paddingLeft = "10dp"
@@ -21,7 +22,6 @@
 			android:layout_height = "wrap_content"
 			android:paddingLeft = "10dp"
 			android:paddingRight = "10dp"
-			android:text = "搜索内容"
 			android:textSize = "18sp" />
 
 </LinearLayout >

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -40,6 +42,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
         }
     }
 
+	/**
+	 * this will be called before {@code super.onCreate()} when you override {@code onCreate()} method <br />
+	 * Note: all views initial work have better implemented here
+	 */
     protected abstract void initView();
 
     protected void initMenu(@NonNull Toolbar toolbar) {}
@@ -94,5 +100,55 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
             this.finish();
         }
     }
+
+	protected void replaceFrag(@IdRes int id, Fragment newFrag) {
+		Fragment f = getSupportFragmentManager().findFragmentById(id);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		if (f != null) {
+			ft.replace(id, newFrag);
+		} else {
+			ft.add(id, newFrag);
+		}
+		ft.commit();
+	}
+
+	protected void replaceFrag(@IdRes int id, Fragment newFrag, String tag) {
+		Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		if (f != null) {
+			ft.replace(id, newFrag);
+		} else {
+			ft.add(id, newFrag);
+		}
+		ft.commit();
+	}
+
+	/**
+	 * 重新<code>attach</code>添加Fragment到视图资源ID处，会先<code>detach</code>该ID处已拥有的视图，
+	 * 然后根据tag查找该Fragment是否已经存在且被add了，是则直接<code>attach</code>，否则执行<code>add<code/>，
+	 * 最后执行<code>show</code>显示视图
+	 *
+	 * @param id 进行添加的资源ID名，会先判断是否已存在该ID下的Fragment，存在则先<code>Detach</code>
+	 * @param newFrag 需要<code>attach</code>的新Fragment名
+	 * @param tag 当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
+	 */
+	protected void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
+		Fragment f = getSupportFragmentManager().findFragmentById(id);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		if (f != null && f == newFrag) {
+			ft.attach(f);
+		} else {
+			if (f != null && !f.isDetached()) {
+				ft.detach(f);
+			}
+			Fragment self_f = getSupportFragmentManager().findFragmentByTag(tag);
+			if (self_f == null || !self_f.isAdded()) {
+				ft.add(id, newFrag, tag);
+			}
+			ft.attach(newFrag);
+		}
+		ft.show(newFrag);
+		ft.commit();
+	}
 
 }
