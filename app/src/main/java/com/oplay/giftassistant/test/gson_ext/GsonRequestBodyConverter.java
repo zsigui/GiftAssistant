@@ -20,15 +20,17 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
 	private final Gson gson;
 	private final Type type;
+	private final int cmd;
 
-	GsonRequestBodyConverter(Gson gson, Type type) {
+	GsonRequestBodyConverter(Gson gson, Type type, int cmd) {
 		this.gson = gson;
 		this.type = type;
+		this.cmd = cmd;
 	}
 
 	@Override public RequestBody convert(T value) throws IOException {
 		String json = gson.toJson(value, type);
-		byte[] data = NetDataEncrypt.getInstance().encrypt(json);
+		byte[] data = NetDataEncrypt.getInstance().encrypt(json, cmd);
 		return RequestBody.create(MEDIA_TYPE, data);
 	}
 }

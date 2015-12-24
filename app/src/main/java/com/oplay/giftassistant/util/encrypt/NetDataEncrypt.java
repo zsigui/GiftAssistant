@@ -36,14 +36,15 @@ public class NetDataEncrypt {
 	 * 执行网络操作前对数据进行加密
 	 *
 	 * @param data 待加密内容
+	 * @param data 命令字
 	 * @return 加密结果
 	 */
-	public byte[] encrypt(String data) {
+	public byte[] encrypt(String data, int cmd) {
 		byte[] result = null;
 		bb encryptData = null;
 		try {
 			encryptData = ab.p(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppkey(),
-					mData.getAppSecret(), mData.getSession(), data, mData.getCmd());
+					mData.getAppSecret(), mData.getSession(), data, cmd);
 		} catch (Exception e) {
 			KLog.e(e);
 		}
@@ -69,14 +70,15 @@ public class NetDataEncrypt {
 	 * 对网络请求返回的数据进行解密
 	 *
 	 * @param data 待解密字节数组
+	 * @param cmd 命令字
 	 * @return 解密结果
 	 */
-	public String decrypt(byte[] data) {
+	public String decrypt(byte[] data, int cmd) {
 		String result = null;
 		aa decryptData = null;
 		try {
 			decryptData = ab.up(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppkey(),
-					mData.getAppSecret(), mData.getSession(), data, mData.getCmd());
+					mData.getAppSecret(), mData.getSession(), data, cmd);
 		} catch (Exception e) {
 			KLog.e(e);
 		}

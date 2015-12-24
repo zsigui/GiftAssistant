@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.test.gson_ext;
 
 import com.google.gson.Gson;
+import com.socks.library.KLog;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 
@@ -38,10 +39,26 @@ public final class GsonConverterFactory extends Converter.Factory {
 
 	@Override
 	public Converter<ResponseBody, ?> fromResponseBody(Type type, Annotation[] annotations) {
-		return new GsonResponseBodyConverter<>(gson, type);
+		int cmd = 0;
+		for (Annotation annotation : annotations) {
+			KLog.e("Gson-Anno", annotation);
+			if (annotation instanceof RespCmd) {
+				cmd = ((RespCmd) annotation).value();
+			}
+		}
+		KLog.e("Gson-Anno", cmd);
+		return new GsonResponseBodyConverter<>(gson, type, cmd);
 	}
 
 	@Override public Converter<?, RequestBody> toRequestBody(Type type, Annotation[] annotations) {
-		return new GsonRequestBodyConverter<>(gson, type);
+		int cmd = 0;
+		for (Annotation annotation : annotations) {
+			KLog.e("Gson-Anno", annotation);
+			if (annotation instanceof ReqCmd) {
+				cmd = ((ReqCmd) annotation).value();
+			}
+		}
+		KLog.e("Gson-Anno", cmd);
+		return new GsonRequestBodyConverter<>(gson, type, cmd);
 	}
 }

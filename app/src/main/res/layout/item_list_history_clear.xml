@@ -6,7 +6,7 @@
 		android:gravity = "center"
 		android:paddingBottom = "8dp"
 		android:paddingTop = "8dp"
-		android:background = "@drawable/selector_search_item"
+		android:background = "@drawable/selector_opacity_30"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content" >
 

@@ -10,68 +10,38 @@ import java.io.Serializable;
 public class JsonReqBase<T> implements Serializable{
 
 	@SerializedName("imei")
-	private String mImei;
+	public String imei;
 
 	@SerializedName("imsi")
-	private String mImsi;
+	public String imsi;
+
+	@SerializedName("cid")
+	public String cid;
+
+	@SerializedName("mac")
+	public String mac;
+
+	@SerializedName("apn")
+	public String apn;
+
+	@SerializedName("cn")
+	public String cn;
+
+	@SerializedName("dd")
+	public String dd;
+
+	@SerializedName("dv")
+	public String dv;
+
+	@SerializedName("os")
+	public String os;
 
 	@SerializedName("uid")
-	private int mUid;
+	public int uid;
 
 	@SerializedName("chn")
-	private int mChn;
+	public int chn;
 
-	@SerializedName("subchn")
-	private int mSubChn;
-
-	@SerializedName("data")
-	private T mData;
-
-	public String getImei() {
-		return mImei;
-	}
-
-	public void setImei(String imei) {
-		mImei = imei;
-	}
-
-	public String getImsi() {
-		return mImsi;
-	}
-
-	public void setImsi(String imsi) {
-		mImsi = imsi;
-	}
-
-	public int getUid() {
-		return mUid;
-	}
-
-	public void setUid(int uid) {
-		mUid = uid;
-	}
-
-	public int getChn() {
-		return mChn;
-	}
-
-	public void setChn(int chn) {
-		mChn = chn;
-	}
-
-	public int getSubChn() {
-		return mSubChn;
-	}
-
-	public void setSubChn(int subChn) {
-		mSubChn = subChn;
-	}
-
-	public T getData() {
-		return mData;
-	}
-
-	public void setData(T data) {
-		mData = data;
-	}
+	@SerializedName("d")
+	public T data;
 }

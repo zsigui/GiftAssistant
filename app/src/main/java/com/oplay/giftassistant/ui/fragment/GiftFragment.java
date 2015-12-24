@@ -1,25 +1,26 @@
 package com.oplay.giftassistant.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
+import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
 import com.oplay.giftassistant.engine.NetEngine;
-import com.oplay.giftassistant.model.DataModel;
-import com.oplay.giftassistant.model.HomeModel;
+import com.oplay.giftassistant.model.data.resp.IndexLikeGame;
+import com.oplay.giftassistant.model.data.resp.IndexLimitGift;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.bgabanner.BGABanner;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 /**
  * @author micle
@@ -28,11 +29,40 @@ import retrofit.Retrofit;
  */
 public class GiftFragment extends BaseFragment {
 
-	private BGABanner mBanner;
-	private ViewPager mvpRecommend;
-	private ViewPager mvpHot;
 	private List<View> views;
     private NetEngine mEngine;
+
+	// 活动视图, 3张
+	private BGABanner mBanner;
+	// 猜你喜欢
+	private RelativeLayout mLikeBar;
+	private RecyclerView mLikeView;
+	// 今日限量
+	private RelativeLayout mLimitBar;
+	private RecyclerView mLimitView;
+	// 今日出炉
+	private RelativeLayout mNewBar;
+	private RecyclerView mNewView;
+
+	private IndexGiftLikeAdapter mLikeAdpater;
+	private IndexGiftLimitAdapter mLimitAdpater;
+	private IndexGiftLimitAdapter mNewAdpater;
+	private ArrayList<IndexLikeGame> mGameDatas;
+	private ArrayList<IndexLimitGift> mGiftDatas;
+	private ArrayList<IndexLimitGift> mNewDatas;
+
+	public Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if (msg.what == 1) {
+				mLimitAdpater.updateData(mGiftDatas);
+				mLikeAdpater.updateData(mGameDatas);
+				mNewAdpater.updateData(mNewDatas);
+			}
+		}
+	};
+
 
 	public static Fragment newInstance() {
 		return new GiftFragment();
@@ -40,19 +70,26 @@ public class GiftFragment extends BaseFragment {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		KLog.i();
 		setContentView(R.layout.fragment_gifts);
-		showLoadingDialog();
-		mBanner = getViewById(R.id.banner);
-		views = new ArrayList<>(3);
-		for (int i = 0; i < 3; i++) {
-			View v = View.inflate(mActivity, R.layout.view_banner_img, null);
-			views.add(v);
 
-		}
-		mBanner.setViews(views);
-		mvpRecommend = getViewById(R.id.vpRecommend);
-		mIsPrepared = true;
+		LinearLayoutManager llm1 = new LinearLayoutManager(getContext());
+		llm1.setOrientation(LinearLayoutManager.HORIZONTAL);
+		LinearLayoutManager llm2 = new LinearLayoutManager(getContext());
+		llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+
+		mBanner = getViewById(R.id.banner);
+		mLikeBar = getViewById(R.id.rl_like_all);
+		mLikeView = getViewById(R.id.rv_like_content);
+		mLimitBar = getViewById(R.id.rl_limit_all);
+		mLimitView = getViewById(R.id.rv_limit_content);
+		mNewBar = getViewById(R.id.rl_new_all);
+		mNewView = getViewById(R.id.rv_new_content);
+		mLikeView.setLayoutManager(llm1);
+		mLimitView.setLayoutManager(llm2);
+		mLikeAdpater = new IndexGiftLikeAdapter(mLikeView);
+		mLimitAdpater = new IndexGiftLimitAdapter(mLimitView);
+		mNewAdpater = new IndexGiftLimitAdapter(mNewView);
 	}
 
 	@Override
@@ -63,15 +100,57 @@ public class GiftFragment extends BaseFragment {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
         mEngine = mApp.getRetrofit().create(NetEngine.class);
-		lazyLoad();
+		views = new ArrayList<>(3);
+		for (int i = 0; i < 3; i++) {
+			View v = View.inflate(mActivity, R.layout.view_banner_img, null);
+			views.add(v);
+
+		}
+		mBanner.setViews(views);
+		mIsPrepared = true;
+	}
+
+	public void initData() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				mHasData = true;
+				mGiftDatas = new ArrayList<IndexLimitGift>();
+				mGameDatas = new ArrayList<IndexLikeGame>();
+				for (int i =0 ; i< 10; i++) {
+					IndexLikeGame game = new IndexLikeGame();
+					game.name = "游戏名" + i;
+					game.hasGiftCount = 10 - i;
+					game.newGiftCount = i;
+					game.img = "http://m.ouwan.com/api/extDownloadApp?app_id=4210&chn=200";
+					mGameDatas.add(game);
+					IndexLimitGift gift = new IndexLimitGift();
+					gift.gameName = "游戏名" + i;
+					gift.name = "传奇礼包";
+					gift.img = "http://owan-img.ymapp.com/app/4726/icon/icon_1427963355.png_140_140_100.png";
+					gift.remainCount = i * 10 + i;
+					mGiftDatas.add(gift);
+				}
+				mNewDatas = (ArrayList<IndexLimitGift>) mGiftDatas.clone();
+				mHandler.sendEmptyMessage(1);
+
+			}
+		}).start();
 	}
 
 	@Override
 	protected void lazyLoad() {
 		mIsLoading = true;
-		DataModel<String> d = new DataModel<>();
+		initData();
+		/*DataModel<String> d = new DataModel<>();
 		d.status = 1;
 		d.data = "dadfadf";
+
 		mEngine.postJson(d).enqueue(new Callback<DataModel<Object>>() {
 			@Override
 			public void onResponse(Response<DataModel<Object>> response, Retrofit retrofit) {
@@ -87,7 +166,6 @@ public class GiftFragment extends BaseFragment {
 			@Override
 			public void onResponse(final Response<DataModel<HomeModel>> response, Retrofit retrofit) {
 				try {
-					dismissLoadingDialog();
 					KLog.e(response.message());
 					KLog.e(response.body());
 					KLog.e(response.body().data.banners);
@@ -112,9 +190,8 @@ public class GiftFragment extends BaseFragment {
 			@Override
 			public void onFailure(Throwable t) {
 				KLog.e(t);
-				dismissLoadingDialog();
 				mIsLoading = false;
 			}
-		});
+		});*/
 	}
 }

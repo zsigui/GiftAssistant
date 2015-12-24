@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "100dp"
+              android:padding="5dp"
+              android:background="@drawable/selector_opacity_05"
+              android:layout_height = "match_parent" >
+
+	<!-- 此ImageView需要自定义实现 -->
+	<ImageView
+			android:src="@drawable/warning_circle"
+			android:id="@+id/iv_icon"
+			android:contentDescription="@null"
+			android:layout_centerHorizontal="true"
+			android:layout_width = "90dp"
+			android:layout_height = "90dp" />
+
+	<TextView
+			android:id="@+id/tv_game_name"
+			android:text="刀塔传奇"
+			android:textSize="14sp"
+			android:layout_marginTop="10dp"
+			android:layout_below="@+id/iv_icon"
+			android:textColor="@color/co_black"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+	<TextView
+			android:id="@+id/tv_name"
+			android:text="VIP礼包"
+			android:textSize="14sp"
+			android:layout_marginTop="2dp"
+			android:layout_below="@+id/tv_game_name"
+			android:textColor="@color/common_orange_dark"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+	<TextView
+			android:id="@+id/tv_remain_text"
+			android:text="剩余"
+			android:textSize="10sp"
+			android:layout_marginTop="4dp"
+			android:layout_below="@+id/tv_name"
+			android:textColor="@color/material_grey_600"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+	<TextView
+			android:id="@+id/tv_remain"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:textColor="@color/co_white"
+			android:layout_marginTop="4dp"
+			android:layout_marginLeft="6dp"
+			android:text="123"
+			android:textSize="10sp"
+			android:layout_below="@id/tv_name"
+			android:layout_toRightOf="@+id/tv_remain_text"
+			android:background="@drawable/shape_rect_orange"/>
+
+</RelativeLayout >

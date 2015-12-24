@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/banner"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="150dp"
     app:banner_pointAutoPlayInterval="3000"
-    app:banner_pointGravity="bottom|right"
+    app:banner_pointGravity="bottom|center_horizontal"
     app:banner_pointTopBottomMargin="10dp"
     app:banner_tipTextSize="12sp"
     app:banner_transitionEffect="accordion" >

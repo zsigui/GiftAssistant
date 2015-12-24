@@ -19,16 +19,18 @@ import retrofit.Converter;
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 	private final Gson gson;
 	private final Type type;
+	private final int cmd;
 
-	GsonResponseBodyConverter(Gson gson, Type type) {
+	GsonResponseBodyConverter(Gson gson, Type type, int cmd) {
 		this.gson = gson;
 		this.type = type;
+		this.cmd = cmd;
 	}
 
 	@Override
 	public T convert(ResponseBody value) throws IOException {
 		try {
-			String json = NetDataEncrypt.getInstance().decrypt(value.bytes());
+			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), cmd);
 			return gson.fromJson(json, type);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {

@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.test;
 
+import com.oplay.giftassistant.ext.retrofit2.http.Cmd;
 import com.oplay.giftassistant.model.DataModel;
 
 import retrofit.Call;
@@ -12,5 +13,6 @@ import retrofit.http.POST;
 public interface TestEngine {
 
 	@POST("api")
+	@Cmd(1000)
 	Call<DataModel<String>> testPack(@Body DataModel<String> data);
 }

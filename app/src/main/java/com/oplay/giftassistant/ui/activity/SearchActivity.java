@@ -11,7 +11,7 @@ import com.oplay.giftassistant.engine.SearchEngine;
 import com.oplay.giftassistant.model.data.resp.SearchDataResult;
 import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.model.json.JsonRespSearchData;
-import com.oplay.giftassistant.model.json.base.JsonRespBase;
+import com.oplay.giftassistant.model.json.JsonRespSearchPrompt;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
@@ -233,9 +233,9 @@ public class SearchActivity extends BaseAppCompatActivity {
 		@Override
 		public void onSearchPromptPerform(String keyword) {
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				mEngine.getSearchPromt(keyword).enqueue(new Callback<JsonRespBase<SearchPromptResult>>() {
+				mEngine.getSearchPromt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<SearchPromptResult>> response, Retrofit retrofit) {
+					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
 						if (response.code() == 200) {
 							if (response.body().getCode() == StatusCode.SUCCESS) {
 								SearchPromptResult data = response.body().getData();

@@ -2,71 +2,137 @@
 <cn.bingoogolapple.refreshlayout.BGARefreshLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/rlContent"
+		android:background = "@color/common_bg"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent" >
 
-	<ScrollView
-			android:background = "@color/co_black"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content" >
+	<LinearLayout
+			android:id = "@+id/llContainer"
+			android:orientation = "vertical"
+			android:background = "@color/co_transparent"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent" >
+
+		<include layout = "@layout/view_banner" />
 
 		<LinearLayout
-				android:id = "@+id/llContainer"
-				android:orientation = "vertical"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content" >
+				android:background = "@color/co_white"
+				android:layout_width = "match_parent"
+				android:layout_height = "150dp"
+				android:layout_marginTop = "8dp"
+				android:orientation = "vertical" >
 
-			<include layout = "@layout/view_banner" />
-
-			<ViewStub
-					android:id="@+id/vSub"
-					android:layout_width = "wrap_content"
-					android:layout_height = "wrap_content"
-					android:inflatedId="@+id/llGame"
-					android:layout="@layout/view_gifts_game_installed"/>
-
-			<LinearLayout
-					android:id = "@+id/llRecommend"
+			<RelativeLayout
+					android:id = "@+id/rl_like_all"
 					android:layout_width = "match_parent"
-					android:layout_height = "100dp"
-					android:orientation = "vertical" >
+					android:layout_height = "wrap_content"
+					android:padding = "10dp"
+					android:background = "@drawable/selector_opacity_30" >
 
 				<TextView
-						android:layout_width = "match_parent"
+						android:id = "@+id/tv_like_title"
+						android:layout_width = "wrap_content"
 						android:layout_height = "wrap_content"
+						android:layout_alignParentLeft = "true"
+						android:textColor = "@color/co_black"
+						android:text = "猜你喜欢" />
+
+				<TextView
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_alignParentRight = "true"
+						android:textSize = "10sp"
+						android:layout_centerVertical = "true"
+						android:text = "全部" />
+
+			</RelativeLayout >
+
+			<android.support.v7.widget.RecyclerView
+					android:id = "@+id/rv_like_content"
+					android:layout_width = "match_parent"
+					android:layout_height = "match_parent"
+					/>
+
+		</LinearLayout >
+
+		<LinearLayout
+				android:background = "@color/co_white"
+				android:layout_width = "match_parent"
+				android:layout_height = "150dp"
+				android:layout_marginTop = "8dp"
+				android:orientation = "vertical" >
+
+			<RelativeLayout
+					android:id = "@+id/rl_limit_all"
+					android:layout_width = "match_parent"
+					android:layout_height = "wrap_content"
+					android:padding = "10dp"
+					android:background = "@drawable/selector_opacity_30" >
+
+				<TextView
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_alignParentLeft = "true"
+						android:textColor = "@color/co_black"
 						android:text = "今日限量" />
 
-				<android.support.v4.view.ViewPager
-						android:id = "@+id/vpRecommend"
-						android:layout_width = "match_parent"
-						android:layout_height = "0dp"
-						android:layout_weight = "1"
-						android:padding = "10dp" >
+				<TextView
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_alignParentRight = "true"
+						android:textSize = "10sp"
+						android:layout_centerVertical = "true"
+						android:text = "全部" />
 
-				</android.support.v4.view.ViewPager >
+			</RelativeLayout >
 
-			</LinearLayout >
+			<android.support.v7.widget.RecyclerView
+					android:id = "@+id/rv_limit_content"
+					android:layout_width = "match_parent"
+					android:layout_height = "match_parent"
+					/>
 
-			<LinearLayout
-					android:id = "@+id/llHot"
+		</LinearLayout >
+
+
+		<LinearLayout
+				android:background = "@color/co_white"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:layout_marginTop = "8dp"
+				android:orientation = "vertical" >
+
+			<RelativeLayout
+					android:id = "@+id/rl_new_all"
 					android:layout_width = "match_parent"
 					android:layout_height = "wrap_content"
-					android:orientation = "vertical" >
+					android:padding = "10dp"
+					android:background = "@drawable/selector_opacity_30" >
 
 				<TextView
-						android:layout_width = "match_parent"
+						android:layout_width = "wrap_content"
 						android:layout_height = "wrap_content"
-						android:text = "热门礼包" />
+						android:layout_alignParentLeft = "true"
+						android:textColor = "@color/co_black"
+						android:text = "今日出炉" />
 
-				<GridView
-						android:id = "@+id/gvHot"
-						android:layout_width = "match_parent"
-						android:layout_height = "wrap_content" >
+				<TextView
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_alignParentRight = "true"
+						android:textSize = "10sp"
+						android:layout_centerVertical = "true"
+						android:text = "全部" />
 
-				</GridView >
+			</RelativeLayout >
 
-			</LinearLayout >
+			<android.support.v7.widget.RecyclerView
+					android:id = "@+id/rv_new_content"
+					android:layout_width = "match_parent"
+					android:layout_height = "match_parent"
+					/>
+
 		</LinearLayout >
-	</ScrollView >
+	</LinearLayout >
 
 </cn.bingoogolapple.refreshlayout.BGARefreshLayout >

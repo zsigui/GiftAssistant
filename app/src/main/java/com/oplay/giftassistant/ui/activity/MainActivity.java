@@ -21,7 +21,6 @@ import com.oplay.giftassistant.ui.widget.search.SearchLayout;
  */
 public class MainActivity extends BaseAppCompatActivity {
 
-	//private ViewPager mContainerPager;
 	private long mLastClickTime = 0;
 	private CheckedTextView[] mCtvs;
 	private int mCurIndex = 0;
@@ -38,7 +37,6 @@ public class MainActivity extends BaseAppCompatActivity {
 
 	protected void initView() {
 		setContentView(R.layout.activity_main);
-		//mContainerPager = getViewById(R.id.vpContainer);
 		CheckedTextView ctvGame = getViewById(R.id.ctv_game);
 		CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
 		mCtvs = new CheckedTextView[2];
@@ -57,33 +55,12 @@ public class MainActivity extends BaseAppCompatActivity {
 	}
 
 	protected void processLogic() {
-		/*List<Fragment> fragments = new ArrayList<>(2);
-		fragments.add(new GiftFragment());
-		fragments.add(new MoocRecyclerViewFragment());*/
 		for (CheckedTextView ctv : mCtvs) {
 			ctv.setOnClickListener(this);
 		}
-		/*mContainerPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager(), fragments));
-		mContainerPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				setCurSelected(position);
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-
-			}
-		});*/
 		if (mGiftFragment == null) {
 			mGiftFragment = GiftFragment.newInstance();
 		}
-		//reattachFrag(R.id.fl_main_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
 		setCurSelected(0);
 	}
 
@@ -95,7 +72,6 @@ public class MainActivity extends BaseAppCompatActivity {
 		}
 		mCtvs[mCurIndex].setChecked(true);
 		mCtvs[mCurIndex].setTextColor(getResources().getColor(R.color.co_common_green_normal));
-		//mContainerPager.setCurrentItem(mCurIndex);
 		if (mCurIndex == 0) {
 			if (mGiftFragment == null) {
 				mGiftFragment = GiftFragment.newInstance();

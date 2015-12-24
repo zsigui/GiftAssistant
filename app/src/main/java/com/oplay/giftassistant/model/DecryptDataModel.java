@@ -13,7 +13,6 @@ public class DecryptDataModel {
 	private String mAppkey = "abcdef0123456789";
 	private String mAppSecret = "0123456789abcdef";
 	private String mSession = "testsession";
-	private int mCmd = 0x100;
 
 	public DecryptDataModel() {
 	}
@@ -42,10 +41,6 @@ public class DecryptDataModel {
 		mSession = session;
 	}
 
-	public void setCmd(int cmd) {
-		mCmd = cmd;
-	}
-
 	public int getUid() {
 		return mUid;
 	}
@@ -70,7 +65,4 @@ public class DecryptDataModel {
 		return mSession;
 	}
 
-	public int getCmd() {
-		return mCmd;
-	}
 }
