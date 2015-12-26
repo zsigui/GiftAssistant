@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/di_tabs_game_ll"
-    android:background="@color/co_common_green_normal"
+    android:background="@color/co_tab_index_bg"
     android:orientation="horizontal">
 
     <CheckedTextView

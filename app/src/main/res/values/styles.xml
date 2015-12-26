@@ -4,8 +4,8 @@
     <style name = "AppTheme" parent = "Theme.AppCompat.Light" >
 
         <!-- for actionMode -->
-        <item name = "android:actionModeBackground" >@color/common_blue_light</item >
-        <item name = "actionModeBackground" >@color/common_blue_light</item >
+        <item name = "android:actionModeBackground" >@color/co_status_bar_bg</item >
+        <item name = "actionModeBackground" >@color/co_status_bar_bg</item >
         <!-- show actionMode above content(Toolbar) -->
         <item name = "android:windowActionModeOverlay" >true</item >
         <item name = "windowActionModeOverlay" >true</item >
@@ -20,8 +20,8 @@
         <item name = "android:background" >@null</item >
 
         <!-- actionBarSize changed in Lolipop -->
-        <item name = "android:actionBarSize" >48dp</item >
-        <item name = "actionBarSize" >48dp</item >
+        <item name = "android:actionBarSize" >@dimen/di_tool_bar_bg_height</item >
+        <item name = "actionBarSize" >@dimen/di_tool_bar_bg_height</item >
 
         <!--actionbar style-->
         <item name = "android:actionBarItemBackground" >@drawable/selector_common_item_transparent</item >
@@ -44,7 +44,7 @@
     </style >
 
     <style name="ToolbarStyle">
-        <item name="android:background">@color/co_common_green_normal</item>
+        <item name="android:background">@color/co_tool_bar_bg</item>
     </style>
 
     <style name = "ToolbarNavigationButtonStyle" parent = "Widget.AppCompat.Toolbar.Button.Navigation" >
@@ -70,13 +70,78 @@
 
     <style name = "CheckedTextNormal.Game" >
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/co_tabs_game_text_unchecked</item>
+        <item name="android:textColor">@color/co_tab_index_text_normal</item>
     </style >
 
     <style name = "CheckedTextNormal.Index" >
-        <item name = "android:textColor" >@color/co_tabs_index_text_unchecked</item >
+        <item name = "android:textColor" >@color/co_tab_index_text_normal</item >
         <item name = "android:textSize" >12sp</item >
         <item name = "android:paddingTop" >7dp</item >
         <item name = "android:paddingBottom" >5dp</item >
     </style >
+
+	<!-- 礼物页面-今日出炉等模块最外层 -->
+	<style name = "IndexModuleLayout" >
+		<item name = "android:orientation">vertical</item>
+		<item name = "android:layout_width">match_parent</item>
+		<item name = "android:layout_height">match_parent</item>
+		<item name = "android:background">@color/co_white</item>
+	</style>
+	<style name = "IndexModuleTitleLayout">
+		<item name = "android:layout_width">match_parent</item>
+		<item name = "android:layout_height">@dimen/di_index_hoz_module_title_height</item>
+		<item name = "android:paddingRight">@dimen/di_index_hoz_module_icon_gap</item>
+		<item name = "android:paddingLeft">@dimen/di_index_hoz_module_margin_left</item>
+		<item name = "android:background">@drawable/selector_opacity_05</item>
+	</style>
+	<style name = "IndexListItemLayout" >
+		<item name = "android:layout_width">wrap_content</item>
+		<item name = "android:layout_height">wrap_content</item>
+		<item name = "android:paddingBottom">@dimen/di_index_hoz_module_top_bottom</item>
+		<item name = "android:paddingTop">@dimen/di_index_hoz_module_top_bottom</item>
+		<item name = "android:background">@drawable/selector_opacity_05</item>
+		<item name = "android:paddingLeft">@dimen/di_index_hoz_module_margin_left</item>
+	</style>
+
+
+	<style name = "DefaultTextView">
+		<item name = "android:layout_width">wrap_content</item>
+		<item name = "android:layout_height">wrap_content</item>
+		<item name = "android:textSize">14sp</item>
+		<item name = "android:gravity">center</item>
+		<item name = "android:singleLine">true</item>
+	</style>
+	<style name = "DefaultTextView.More">
+		<item name = "android:layout_alignParentRight">true</item>
+		<item name = "android:textSize">12sp</item>
+		<item name = "android:textColor">@color/co_index_module_text</item>
+		<item name = "android:layout_centerVertical">true</item>
+		<item name = "android:drawableRight">@drawable/ic_more</item>
+		<item name = "android:drawablePadding">6dp</item>
+		<item name = "android:text">@string/st_index_gift_all</item>
+	</style>
+	<style name = "DefaultTextView.Header">
+		<item name = "android:textColor">@color/co_index_module_header</item>
+		<item name = "android:layout_centerVertical">true</item>
+	</style>
+	<style name = "DefaultTextView.Text">
+		<item name = "android:textSize">12sp</item>
+		<item name = "android:textColor">@color/co_index_module_text</item>
+		<item name = "android:layout_centerVertical">true</item>
+		<item name = "android:text">@string/st_index_gift_all</item>
+	</style>
+
+
+	<style name = "DefaultRecyclerView">
+		<item name = "android:layout_width">match_parent</item>
+		<item name = "android:layout_height">wrap_content</item>
+		<item name = "android:paddingTop">@dimen/di_index_hoz_module_top_bottom</item>
+		<item name = "android:paddingBottom">@dimen/di_index_hoz_module_top_bottom</item>
+	</style>
+
+	<style name = "IndexIconLayout">
+		<item name = "android:layout_width">@dimen/di_index_hoz_module_icon_diameter</item>
+		<item name = "android:layout_height">@dimen/di_index_hoz_module_icon_diameter</item>
+		<item name = "android:background">@color/co_transparent</item>
+	</style>
 </resources>

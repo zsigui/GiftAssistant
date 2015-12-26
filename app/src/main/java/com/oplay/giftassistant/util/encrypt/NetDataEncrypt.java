@@ -31,6 +31,14 @@ public class NetDataEncrypt {
 		return sInstance;
 	}
 
+	public void initDecryptDataModel(int uid, String session) {
+		if (mData == null) {
+			mData = new DecryptDataModel();
+		}
+		mData.setSession(session);
+		mData.setUid(uid);
+	}
+
 	/**
 	 *
 	 * 执行网络操作前对数据进行加密
@@ -43,7 +51,7 @@ public class NetDataEncrypt {
 		byte[] result = null;
 		bb encryptData = null;
 		try {
-			encryptData = ab.p(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppkey(),
+			encryptData = ab.p(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppKey(),
 					mData.getAppSecret(), mData.getSession(), data, cmd);
 		} catch (Exception e) {
 			KLog.e(e);
@@ -77,7 +85,7 @@ public class NetDataEncrypt {
 		String result = null;
 		aa decryptData = null;
 		try {
-			decryptData = ab.up(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppkey(),
+			decryptData = ab.up(mData.getUid(), mData.getSdkVer(), mData.getPlatform(), mData.getAppKey(),
 					mData.getAppSecret(), mData.getSession(), data, cmd);
 		} catch (Exception e) {
 			KLog.e(e);
@@ -96,9 +104,5 @@ public class NetDataEncrypt {
 			result = decryptData.getB();
 		}
 		return result;
-	}
-
-	public void setData(DecryptDataModel data) {
-		mData = data;
 	}
 }

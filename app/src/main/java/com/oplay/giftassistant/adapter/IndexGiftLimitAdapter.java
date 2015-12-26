@@ -30,7 +30,7 @@ public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexLimitGift
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, IndexLimitGift giftLimitGame) {
 		bgaViewHolderHelper.setText(R.id.tv_game_name, giftLimitGame.gameName);
 		bgaViewHolderHelper.setText(R.id.tv_name, giftLimitGame.name);
-		bgaViewHolderHelper.setText(R.id.tv_remain, giftLimitGame.remainCount);
+		bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(giftLimitGame.remainCount));
 		ImageLoader.getInstance().displayImage(giftLimitGame.img, bgaViewHolderHelper.<ImageView>getView(R.id
 				.iv_icon));
 	}

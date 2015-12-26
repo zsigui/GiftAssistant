@@ -2,137 +2,111 @@
 <cn.bingoogolapple.refreshlayout.BGARefreshLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/rlContent"
-		android:background = "@color/common_bg"
+		android:background = "@color/co_common_bg"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent" >
 
-	<LinearLayout
+	<cn.bingoogolapple.refreshlayout.BGAStickyNavLayout
 			android:id = "@+id/llContainer"
 			android:orientation = "vertical"
 			android:background = "@color/co_transparent"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent" >
 
-		<include layout = "@layout/view_banner" />
+		<include
+				layout = "@layout/view_banner"
+				android:layout_width = "match_parent"
+				android:layout_height = "@dimen/di_banner_height"
+				android:layout_marginTop = "6dp"
+				android:layout_marginBottom = "6dp" />
+
 
 		<LinearLayout
-				android:background = "@color/co_white"
-				android:layout_width = "match_parent"
-				android:layout_height = "150dp"
-				android:layout_marginTop = "8dp"
-				android:orientation = "vertical" >
+				android:orientation = "vertical"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content" >
 
-			<RelativeLayout
-					android:id = "@+id/rl_like_all"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:padding = "10dp"
-					android:background = "@drawable/selector_opacity_30" >
+			<LinearLayout
+					style = "@style/IndexModuleLayout"
+					android:orientation = "vertical" >
 
-				<TextView
-						android:id = "@+id/tv_like_title"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentLeft = "true"
-						android:textColor = "@color/co_black"
-						android:text = "猜你喜欢" />
+				<RelativeLayout
+						android:id = "@+id/rl_like_all"
+						style = "@style/IndexModuleTitleLayout" >
 
-				<TextView
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentRight = "true"
-						android:textSize = "10sp"
-						android:layout_centerVertical = "true"
-						android:text = "全部" />
+					<TextView style="@style/DefaultTextView.Header"
+							android:text = "@string/st_index_gift_like" />
 
-			</RelativeLayout >
+					<TextView style = "@style/DefaultTextView.More" />
 
-			<android.support.v7.widget.RecyclerView
-					android:id = "@+id/rv_like_content"
-					android:layout_width = "match_parent"
-					android:layout_height = "match_parent"
-					/>
+				</RelativeLayout >
 
-		</LinearLayout >
+				<View
+						android:background = "@color/co_divider_bg"
+						android:layout_width = "match_parent"
+						android:layout_height = "1dp" />
 
-		<LinearLayout
-				android:background = "@color/co_white"
-				android:layout_width = "match_parent"
-				android:layout_height = "150dp"
-				android:layout_marginTop = "8dp"
-				android:orientation = "vertical" >
+				<android.support.v7.widget.RecyclerView
+						android:id = "@+id/rv_like_content"
+						style="@style/DefaultRecyclerView" />
 
-			<RelativeLayout
-					android:id = "@+id/rl_limit_all"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:padding = "10dp"
-					android:background = "@drawable/selector_opacity_30" >
+			</LinearLayout >
 
-				<TextView
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentLeft = "true"
-						android:textColor = "@color/co_black"
-						android:text = "今日限量" />
+			<LinearLayout
+					style = "@style/IndexModuleLayout"
+					android:layout_marginTop = "7dp" >
 
-				<TextView
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentRight = "true"
-						android:textSize = "10sp"
-						android:layout_centerVertical = "true"
-						android:text = "全部" />
+				<RelativeLayout
+						android:id = "@+id/rl_limit_all"
+						style = "@style/IndexModuleTitleLayout" >
 
-			</RelativeLayout >
+					<TextView style = "@style/DefaultTextView.Header"
+							android:text = "@string/st_index_gift_limit" />
 
-			<android.support.v7.widget.RecyclerView
-					android:id = "@+id/rv_limit_content"
-					android:layout_width = "match_parent"
-					android:layout_height = "match_parent"
-					/>
+					<TextView style = "@style/DefaultTextView.More" />
 
+				</RelativeLayout >
+
+				<View
+						android:background = "@color/co_divider_bg"
+						android:layout_width = "match_parent"
+						android:layout_height = "1dp" />
+
+				<android.support.v7.widget.RecyclerView
+						style="@style/DefaultRecyclerView" />
+
+			</LinearLayout >
 		</LinearLayout >
 
 
 		<LinearLayout
-				android:background = "@color/co_white"
-				android:layout_width = "match_parent"
-				android:layout_height = "match_parent"
-				android:layout_marginTop = "8dp"
-				android:orientation = "vertical" >
+				style = "@style/IndexModuleLayout"
+				android:layout_marginTop = "7dp" >
 
 			<RelativeLayout
 					android:id = "@+id/rl_new_all"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:padding = "10dp"
-					android:background = "@drawable/selector_opacity_30" >
+					style = "@style/IndexModuleTitleLayout" >
 
-				<TextView
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentLeft = "true"
-						android:textColor = "@color/co_black"
-						android:text = "今日出炉" />
+				<TextView style="@style/DefaultTextView.Header"
+						android:text = "@string/st_index_gift_new" />
 
-				<TextView
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentRight = "true"
-						android:textSize = "10sp"
-						android:layout_centerVertical = "true"
-						android:text = "全部" />
+				<TextView style = "@style/DefaultTextView.More" />
 
 			</RelativeLayout >
 
+			<View
+					android:background = "@color/co_divider_bg"
+					android:layout_width = "match_parent"
+					android:layout_height = "1dp" />
+
 			<android.support.v7.widget.RecyclerView
 					android:id = "@+id/rv_new_content"
-					android:layout_width = "match_parent"
-					android:layout_height = "match_parent"
-					/>
+					style="@style/DefaultRecyclerView"
+					android:layout_height="match_parent"
+					android:paddingTop="0dp"
+					android:paddingBottom="0dp"/>
 
 		</LinearLayout >
-	</LinearLayout >
+	</cn.bingoogolapple.refreshlayout.BGAStickyNavLayout >
 
 </cn.bingoogolapple.refreshlayout.BGARefreshLayout >

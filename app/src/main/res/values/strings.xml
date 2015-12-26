@@ -14,6 +14,11 @@
     <string name="st_tabs_home_gift">礼包</string>
     <string name="st_tabs_index_game">游戏</string>
 
+    <string name="st_index_gift_all">全部</string>
+    <string name="st_index_gift_like">猜你喜欢</string>
+    <string name="st_index_gift_limit">今日限量</string>
+    <string name="st_index_gift_new">新鲜出炉</string>
+
     <string name="st_tabs_game_hot">热门游戏</string>
     <string name="st_tabs_game_week">本周热榜</string>
     <string name="st_tabs_game_feature">期待榜</string>

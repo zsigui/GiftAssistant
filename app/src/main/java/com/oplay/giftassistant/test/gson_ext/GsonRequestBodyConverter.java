@@ -1,7 +1,9 @@
 package com.oplay.giftassistant.test.gson_ext;
 
 import com.google.gson.Gson;
+import com.oplay.giftassistant.test.TestActivity;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;
+import com.socks.library.KLog;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
@@ -20,17 +22,24 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
 	private final Gson gson;
 	private final Type type;
-	private final int cmd;
 
-	GsonRequestBodyConverter(Gson gson, Type type, int cmd) {
+	GsonRequestBodyConverter(Gson gson, Type type) {
 		this.gson = gson;
 		this.type = type;
-		this.cmd = cmd;
 	}
 
 	@Override public RequestBody convert(T value) throws IOException {
 		String json = gson.toJson(value, type);
+		KLog.d("req json = " + json);
+		int cmd = getCmdByJson(json);
+		KLog.d("req cmd = " + cmd);
+		TestActivity.REQ_DATA = json + "\n请求cmd = " + cmd;
 		byte[] data = NetDataEncrypt.getInstance().encrypt(json, cmd);
 		return RequestBody.create(MEDIA_TYPE, data);
+	}
+
+	private int getCmdByJson(String json) {
+		int t = json.indexOf(":", json.indexOf("\"cmd\"") + 5) + 1;
+		return Integer.parseInt(json.substring(t, json.indexOf(",", t + 1)));
 	}
 }

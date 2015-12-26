@@ -7,12 +7,24 @@ package com.oplay.giftassistant.model;
  */
 public class DecryptDataModel {
 
-	private int mUid = 10001;
+	/**
+	 * 用户uid
+	 */
+	private int mUid = 0;
+	/**
+	 * Session已证明用户处于登录
+	 */
+	private String mSession = "";
+	/**
+	 * SDK版本号，默认
+	 */
 	private int mSdkVer = 1;
+	/**
+	 * 平台系统，默认
+	 */
 	private int mPlatform = 3;
-	private String mAppkey = "abcdef0123456789";
+	private String mAppKey = "abcdef0123456789";
 	private String mAppSecret = "0123456789abcdef";
-	private String mSession = "testsession";
 
 	public DecryptDataModel() {
 	}
@@ -29,8 +41,8 @@ public class DecryptDataModel {
 		mPlatform = platform;
 	}
 
-	public void setAppkey(String appkey) {
-		mAppkey = appkey;
+	public void setAppkey(String appKey) {
+		mAppKey = appKey;
 	}
 
 	public void setAppSecret(String appSecret) {
@@ -53,8 +65,8 @@ public class DecryptDataModel {
 		return mPlatform;
 	}
 
-	public String getAppkey() {
-		return mAppkey;
+	public String getAppKey() {
+		return mAppKey;
 	}
 
 	public String getAppSecret() {

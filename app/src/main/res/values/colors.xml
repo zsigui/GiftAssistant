@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
 	<color name = "co_transparent">#00000000</color>
 	<color name = "co_white">#FFFFFF</color>
 	<color name = "co_black">#000000</color>
@@ -15,22 +13,29 @@
     <color name = "co_opacity_80" >#CC000000</color >
 
     <!-- 主题通用颜色 -->
-    <color name="co_common_text_fg">#EFF7DE</color>
-    <color name="co_common_green_normal">#99CC00</color>
-    <color name="co_common_green_pressed">#87B300</color>
-    <color name="co_common_green_search_view">#87B300</color>
+	<color name = "co_status_bar_bg">#df4b4b</color>
+	<color name = "co_tool_bar_bg">#f85454</color>
+	<color name = "co_tool_bar_item_bg">#d54848</color>
+	<color name = "co_search_bar_hint">#F7A5A5</color>
 
+	<color name = "co_common_bg">#e7e7e7</color>
+	<color name = "co_index_module_header">#333333</color>
+	<color name = "co_index_module_text">#888888</color>
+	<color name = "co_index_module_add_text">#ff8543</color>
+	<color name = "co_index_module_icon_gift_bg">#ffaa17</color>
+	<color name = "co_divider_bg">#dcdcdc</color>
+	<color name = "co_stroke_bg">#e4e4e4</color>
+
+	<color name = "co_btn_red">#f85454</color>
+	<color name = "co_btn_orange">#ffaa17</color>
+	<color name = "co_btn_grey">#c9c9c9</color>
 
 	<!-- 主页面 -->
 	<color name="co_title_bar_bg" >#74684957</color>
 	<color name = "co_title_bar_tv_bg">#FFFFFF</color>
-    <color name="co_tabs_index_text_unchecked">#9C9C9C</color>
-    <color name="co_tabs_index_bg">#F0F0F0</color>
-    <color name="co_tabs_game_text_unchecked">#D6FE5E</color>
-    <color name="co_toolbar_index_score">#DCE74A</color>
 
-    <!-- 搜索 -->
-    <color name="co_search_text_hint">#B3E423</color>
-    <color name="co_list_item_divider">#74585e68</color>
+    <color name="co_tab_index_text_normal">#BBBBBB</color>
+    <color name="co_tab_index_text_selected">#F85454</color>
+    <color name="co_tab_index_bg">#f7f7f7</color>
 
 </resources>

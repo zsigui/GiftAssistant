@@ -42,7 +42,7 @@
             android:singleLine = "true"
             android:text="@string/toolbar_title"
             android:textColor = "@android:color/white"
-            android:textSize = "@dimen/di_toolbar_title" />
+            android:textSize = "@dimen/di_tool_bar_title_size" />
 
     </LinearLayout >
 

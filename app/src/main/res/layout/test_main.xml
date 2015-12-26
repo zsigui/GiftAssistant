@@ -29,6 +29,11 @@
 				android:id = "@+id/tv_back_data"
 				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content" />
+		<TextView
+				android:id = "@+id/tv_real_data"
+				android:layout_marginTop="30dp"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content" />
 
 	</LinearLayout >
 </ScrollView >

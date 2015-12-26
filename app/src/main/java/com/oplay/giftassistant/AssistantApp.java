@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.StrictMode;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -14,7 +15,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftassistant.config.AppDebugConfig;
-import com.oplay.giftassistant.constant.Global;
+import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftassistant.util.SoundPlayer;
 import com.socks.library.KLog;
@@ -33,20 +34,19 @@ public class AssistantApp extends Application {
     public final static String IMG_PATH = "/gift_assistant/cache/imgs";
     private static AssistantApp sInstance;
     private Retrofit mRetrofit;
+	private Gson mGson;
 
     // 是否下载完成自动安装
     private boolean mShouldAutoInstall = false;
     // 是否安装完成自动删除
     private boolean mShouldAutoDeleteApk = false;
     private boolean mIsAutoMsgToast = false;
-    // 渠道号
-    private int mChannelNo;
     // 是否开启省流模式
     private boolean mIsSaveFlow = false;
     // 是否启用下载完成提示音
     private boolean mIsPlayDownloadComplete = false;
-    // 是否已经登录
-    private boolean mIsLogin;
+	// 是否已经完成全局初始化
+	private boolean mIsGlobalInit;
 
     @Override
     public void onCreate() {
@@ -60,14 +60,10 @@ public class AssistantApp extends Application {
         sInstance = this;
         initImageLoader();
         KLog.init(true);
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl(Global.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        setLogin(true);
+	    initRetrofit();
     }
 
-    public static AssistantApp getInstance() {
+	public static AssistantApp getInstance() {
         return sInstance;
     }
 
@@ -91,6 +87,15 @@ public class AssistantApp extends Application {
         }
         ImageLoader.getInstance().clearMemoryCache();
     }
+
+
+	private void initRetrofit() {
+		mGson = new Gson();
+		mRetrofit = new Retrofit.Builder()
+				.baseUrl(Global.BASE_URL)
+				.addConverterFactory(GsonConverterFactory.create(mGson))
+				.build();
+	}
 
     /**
      * initial the configuration of Universal-Image-Loader
@@ -147,14 +152,6 @@ public class AssistantApp extends Application {
         mIsAutoMsgToast = isAutoMsgToast;
     }
 
-    public int getChannelNo() {
-        return mChannelNo;
-    }
-
-    public void setChannelNo(int channelNo) {
-        mChannelNo = channelNo;
-    }
-
     public boolean isSaveFlow() {
         return mIsSaveFlow;
     }
@@ -183,11 +180,15 @@ public class AssistantApp extends Application {
         }
     }
 
-    public boolean isLogin() {
-        return mIsLogin;
-    }
+	public boolean isGlobalInit() {
+		return mIsGlobalInit;
+	}
 
-    public void setLogin(boolean isLogin) {
-        mIsLogin = isLogin;
-    }
+	public void setGlobalInit(boolean isGlobalInit) {
+		mIsGlobalInit = isGlobalInit;
+	}
+
+	public Gson getGson() {
+		return mGson;
+	}
 }

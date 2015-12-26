@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.model.DataModel;
+import com.oplay.giftassistant.model.json.base.JsonReqBase;
+import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.test.gson_ext.GsonConverterFactory;
+import com.oplay.giftassistant.util.CommonUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -30,9 +32,12 @@ public class TestActivity extends Activity {
 	private Button btnSend;
 	private EditText etSendData;
 	private TextView tvBackData;
+	private TextView tvRealData;
 	private TestEngine mEngine;
 	private Gson mGson;
-	public static String DATA = "";
+	public static String RESP_DATA = "";
+	public static String REQ_DATA = "";
+	public static final int TEST_CMD = 999;
 
 	static {
 		System.loadLibrary("ymfx");
@@ -45,38 +50,52 @@ public class TestActivity extends Activity {
 		btnSend = getViewById(R.id.btn_send);
 		etSendData = getViewById(R.id.tv_send_data);
 		tvBackData = getViewById(R.id.tv_back_data);
-
+		tvRealData = getViewById(R.id.tv_real_data);
+		CommonUtil.initMobileInfoModel(this);
 
 		btnSend.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				KLog.i("click");
-				final DataModel<String> dataModel = new DataModel<>();
+				final JsonReqBase<String> dataModel = new JsonReqBase<>();
 				dataModel.data = etSendData.getText().toString().isEmpty() ?
 						"这是测试数据" :
 						etSendData.getText().toString();
-				dataModel.status = 0;
-
-				mEngine.testPack(dataModel).enqueue(new Callback<DataModel<String>>() {
+				CommonUtil.addCommonParams(dataModel, TEST_CMD);
+				mEngine.testPack(dataModel).enqueue(new Callback<JsonRespBase<String>>() {
 					@Override
-					public void onResponse(final Response<DataModel<String>> response, Retrofit retrofit) {
-						KLog.i("response = " + response);
-						KLog.i("response.status = " + response.code());
-						KLog.i("response.errBody = " + response.errorBody());
-						KLog.i("response.body = " + response.body());
+					public void onResponse(final Response<JsonRespBase<String>> response, Retrofit retrofit) {
 						if (response.code() == 200) {
 							TestActivity.this.runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
-									tvBackData.setText(TestActivity.DATA);
+
+									tvBackData.setText("请求数据:\n" + TestActivity.REQ_DATA);
+									tvRealData.setText("返回数据:\n" + TestActivity.RESP_DATA + "\n\n解析获取数据:\n" + response
+											.body().getData());
+								}
+							});
+						} else {
+							TestActivity.this.runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									tvBackData.setText("请求数据:\n" + TestActivity.REQ_DATA);
+									tvRealData.setText("访问失败!\n" + response.code() + " " + response.errorBody());
 								}
 							});
 						}
 					}
 
 					@Override
-					public void onFailure(Throwable t) {
+					public void onFailure(final Throwable t) {
 						KLog.e(t);
+						TestActivity.this.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								tvBackData.setText("请求数据:\n" + TestActivity.REQ_DATA);
+								tvRealData.setText("出错了！\n" + t.getMessage());
+							}
+						});
 					}
 				});
 

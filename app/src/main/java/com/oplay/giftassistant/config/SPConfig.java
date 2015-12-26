@@ -12,9 +12,20 @@ public class SPConfig {
 
      /* 获取闪屏图片地址的键值 */
     public static final String SP_CACHE_FILE = "ab2331ff";
-    public static final String SP_KEY_SPLASH_URL = "img";
+    public static final String KEY_SPLASH_URL = "img";
+
+	/* 获取用户信息,个人信息在SP中存储通过salt进行加密 */
+	public static final String SP_USER_INFO_FILE = "qerkj21";
+	public static final String SALT_USER_INFO = "abcdef33575471";
+	public static final String KEY_USER_INFO = "kljizckuiqew";
+	public static final String KEY_USER_ID = "uid";
+	public static final String KEY_USERNAME = "un";
+	public static final String KEY_SESSION = "ss";
+	public static final String KEY_PHONE = "mp";
+	public static final String KEY_PROFILE_URL = "pu";
+
 
     /* 获取搜索记录 */
     public static final String SP_SEARCH_FILE = "12341bbedf";
-    public static final String SP_SEARCH_INDEX_KEY = "index_search_history";
+    public static final String KEY_SEARCH_INDEX = "index_search_history";
 }

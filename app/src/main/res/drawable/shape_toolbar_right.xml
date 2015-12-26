@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:shape="rectangle">
+	<corners
+			android:topRightRadius="0dp"
+			android:bottomRightRadius="01dp"
+			android:bottomLeftRadius="@dimen/di_search_bar_radius"
+			android:topLeftRadius = "@dimen/di_search_bar_radius" />
+	<padding
+			android:bottom = "2dp"
+			android:left = "10dp"
+			android:right = "10dp"
+			android:top = "2dp" />
+	<solid android:color = "@color/co_tool_bar_item_bg" />
+</shape >

@@ -7,4 +7,5 @@ public class DataModel<T> {
 
 	public int status;
 	public T data;
+	public int cmd;
 }

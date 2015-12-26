@@ -22,8 +22,8 @@ public class NormalRecyclerViewAdapter extends BGARecyclerViewAdapter<UserModel>
 
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, UserModel userModel) {
-		bgaViewHolderHelper.setText(R.id.tvName, userModel.name)
-				.setText(R.id.tvPwd, userModel.pwd);
+		bgaViewHolderHelper.setText(R.id.tvName, userModel.username)
+				.setText(R.id.tvPwd, "");
 		Glide.with(mContext).load(userModel.img).into(bgaViewHolderHelper.<ImageView>getView(R.id.ivPic));
 
 	}

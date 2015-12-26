@@ -76,7 +76,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 		mHistoryData = new LinkedList<>();
 		String s = SPUtil.getString(getApplicationContext(),
 				SPConfig.SP_SEARCH_FILE,
-				SPConfig.SP_SEARCH_INDEX_KEY,
+				SPConfig.KEY_SEARCH_INDEX,
 				null);
 		if (TextUtils.isEmpty(s)) {
 			return;
@@ -112,7 +112,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 		}
 		SPUtil.putString(getApplicationContext(),
 				SPConfig.SP_SEARCH_FILE,
-				SPConfig.SP_SEARCH_INDEX_KEY,
+				SPConfig.KEY_SEARCH_INDEX,
 				builder.toString());
 	}
 
@@ -120,7 +120,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 		mHistoryData.clear();
 		SPUtil.putString(getApplicationContext(),
 				SPConfig.SP_SEARCH_FILE,
-				SPConfig.SP_SEARCH_INDEX_KEY,
+				SPConfig.KEY_SEARCH_INDEX,
 				"");
 	}
 

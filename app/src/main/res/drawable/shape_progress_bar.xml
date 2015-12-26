@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android = "http://schemas.android.com/apk/res/android" >
+	<!-- background -->
+	<item android:id = "@android:id/background" >
+		<shape >
+			<corners
+					android:topLeftRadius = "4dp"
+					android:topRightRadius = "4dp" />
+			<solid android:color = "#c9c9c9" />
+		</shape >
+	</item >
+	<!-- progress -->
+	<item android:id = "@android:id/progress" >
+		<clip >
+			<shape >
+				<corners
+						android:topLeftRadius = "4dp"
+						android:topRightRadius = "4dp" />
+				<solid android:color = "@color/co_index_module_icon_gift_bg" />
+			</shape >
+		</clip >
+	</item >
+	<!-- second progress -->
+
+	<item android:id = "@android:id/secondaryProgress" >
+		<clip >
+			<shape >
+				<corners
+						android:topLeftRadius = "4dp"
+						android:topRightRadius = "4dp" />
+				<solid android:color = "#c9c9c9" />
+			</shape >
+		</clip >
+	</item >
+</layer-list >

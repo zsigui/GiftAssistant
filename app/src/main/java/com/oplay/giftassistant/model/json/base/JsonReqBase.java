@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.model.json.base;
 
 import com.google.gson.annotations.SerializedName;
+import com.oplay.giftassistant.util.CommonUtil;
 
 import java.io.Serializable;
 
@@ -36,12 +37,20 @@ public class JsonReqBase<T> implements Serializable{
 	@SerializedName("os")
 	public String os;
 
-	@SerializedName("uid")
-	public int uid;
-
 	@SerializedName("chn")
 	public int chn;
 
+	@SerializedName("cmd")
+	public int cmd;
+
 	@SerializedName("d")
 	public T data;
+
+	public JsonReqBase() {
+		CommonUtil.addCommonParams(this, 0);
+	}
+
+	public JsonReqBase(int cmd) {
+		CommonUtil.addCommonParams(this, cmd);
+	}
 }

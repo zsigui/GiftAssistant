@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.constant;
+package com.oplay.giftassistant.config;
 
 /**
  * Created by zsigui on 15-12-16.

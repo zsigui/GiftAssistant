@@ -49,12 +49,6 @@ public final class GsonConverterFactory extends Converter.Factory {
 	}
 
 	@Override public Converter<?, RequestBody> toRequestBody(Type type, Annotation[] annotations) {
-		int cmd = 0;
-		for (Annotation annotation : annotations) {
-			if (annotation instanceof Cmd) {
-				cmd = ((Cmd) annotation).value();
-			}
-		}
-		return new GsonRequestBodyConverter<>(gson, type, cmd);
+		return new GsonRequestBodyConverter<>(gson, type);
 	}
 }

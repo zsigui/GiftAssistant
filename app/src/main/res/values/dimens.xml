@@ -1,22 +1,50 @@
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+<resources >
+	<!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name = "activity_horizontal_margin" >16dp</dimen >
+	<dimen name = "activity_vertical_margin" >16dp</dimen >
+	<dimen name = "fab_margin" >16dp</dimen >
 
-    <dimen name="di_tabs_index_ll">60dp</dimen>
-    <dimen name="di_tabs_game_ll">40dp</dimen>
-    <!-- 通用样式 -->
-    <dimen name="common_btn_radius" >5sp</dimen>
-    <dimen name="common_text" >14sp</dimen>
-    <dimen name="common_text_padding_left_right" >18dp</dimen>
-    <dimen name="common_text_padding_top_bottom" >5dp</dimen>
+	<dimen name = "di_tabs_game_ll" >40dp</dimen >
+	<!-- 通用样式 -->
+	<dimen name = "common_btn_radius" >5sp</dimen >
+	<dimen name = "common_text" >14sp</dimen >
+	<dimen name = "common_text_padding_left_right" >18dp</dimen >
+	<dimen name = "common_text_padding_top_bottom" >5dp</dimen >
 
-    <!-- ToolBar -->
-    <dimen name="di_toolbar_title">18sp</dimen>
+	<!-- 主页 -->
+	<dimen name = "di_tab_index_bg_height" >62dp</dimen >
 
-    <dimen name="di_search_item_history">45dp</dimen>
+	<dimen name = "di_tool_bar_profile_diameter" >40dp</dimen >
+	<dimen name = "di_tool_bar_padding_left" >16dp</dimen >
+	<dimen name = "di_tool_bar_profile_margin_right" >9dp</dimen >
+	<dimen name = "di_tool_bar_title_size" >18sp</dimen >
+	<dimen name = "di_tool_bar_bg_height" >56dp</dimen >
+
+	<dimen name = "di_search_bar_text_size" >16sp</dimen >
+	<dimen name = "di_search_bar_radius" >20dp</dimen >
+	<dimen name = "di_search_bar_height" >40dp</dimen >
+
+	<dimen name = "di_banner_height" >151dp</dimen >
+
+
+	<dimen name = "di_btn_radius" >14dp</dimen>
+	<dimen name = "di_btn_padding_top_bottom" >6dp</dimen>
+	<dimen name = "di_btn_padding_left_right" >14dp</dimen>
+
+
+	<!-- 主页-礼包页面 -->
+	<dimen name = "di_index_hoz_module_title_height" >38dp</dimen >
+	<dimen name = "di_index_hoz_module_margin_left" >16dp</dimen >
+	<dimen name = "di_index_hoz_module_icon_gap" >14dp</dimen >
+	<dimen name = "di_index_hoz_module_icon_diameter" >80dp</dimen >
+	<dimen name = "di_index_hoz_module_top_bottom" >12dp</dimen >
+	<dimen name = "di_index_item_margin_left" >7dp</dimen >
+	<dimen name = "di_index_module_gap" >7dp</dimen >
+
+
+	<!-- ToolBar -->
+	<dimen name = "di_search_item_history" >45dp</dimen >
 
 	<!-- default size of loading circle -->
-	<dimen name="default_circle_view_size">200dp</dimen>
-</resources>
+	<dimen name = "default_circle_view_size" >200dp</dimen >
+</resources >

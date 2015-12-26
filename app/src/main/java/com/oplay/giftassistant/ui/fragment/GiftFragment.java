@@ -12,10 +12,12 @@ import android.widget.RelativeLayout;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.model.data.resp.IndexLikeGame;
 import com.oplay.giftassistant.model.data.resp.IndexLimitGift;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,11 +74,12 @@ public class GiftFragment extends BaseFragment {
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_gifts);
 
-		LinearLayoutManager llm1 = new LinearLayoutManager(getContext());
-		llm1.setOrientation(LinearLayoutManager.HORIZONTAL);
-		LinearLayoutManager llm2 = new LinearLayoutManager(getContext());
-		llm2.setOrientation(LinearLayoutManager.HORIZONTAL);
-
+		LinearLayoutManager llmLike = new LinearLayoutManager(getContext());
+		llmLike.setOrientation(LinearLayoutManager.HORIZONTAL);
+		LinearLayoutManager llmLimit = new LinearLayoutManager(getContext());
+		llmLimit.setOrientation(LinearLayoutManager.HORIZONTAL);
+		LinearLayoutManager llmNew = new LinearLayoutManager(getContext());
+		llmNew.setOrientation(LinearLayoutManager.VERTICAL);
 
 		mBanner = getViewById(R.id.banner);
 		mLikeBar = getViewById(R.id.rl_like_all);
@@ -85,8 +88,9 @@ public class GiftFragment extends BaseFragment {
 		mLimitView = getViewById(R.id.rv_limit_content);
 		mNewBar = getViewById(R.id.rl_new_all);
 		mNewView = getViewById(R.id.rv_new_content);
-		mLikeView.setLayoutManager(llm1);
-		mLimitView.setLayoutManager(llm2);
+		mLikeView.setLayoutManager(llmLike);
+		mLimitView.setLayoutManager(llmLimit);
+		mNewView.setLayoutManager(llmNew);
 		mLikeAdpater = new IndexGiftLikeAdapter(mLikeView);
 		mLimitAdpater = new IndexGiftLimitAdapter(mLimitView);
 		mNewAdpater = new IndexGiftLimitAdapter(mNewView);
@@ -107,6 +111,9 @@ public class GiftFragment extends BaseFragment {
 
 		}
 		mBanner.setViews(views);
+		mLikeView.setAdapter(mLikeAdpater);
+		mLimitView.setAdapter(mLimitAdpater);
+		mNewView.setAdapter(mNewAdpater);
 		mIsPrepared = true;
 	}
 
@@ -145,6 +152,7 @@ public class GiftFragment extends BaseFragment {
 
 	@Override
 	protected void lazyLoad() {
+		KLog.d(AppDebugConfig.TAG_APP, "load");
 		mIsLoading = true;
 		initData();
 		/*DataModel<String> d = new DataModel<>();

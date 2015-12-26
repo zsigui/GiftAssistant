@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize"
     android:gravity="center_vertical"
+    android:paddingLeft="@dimen/di_tool_bar_padding_left"
     app:contentInsetEnd="0dp"
     app:contentInsetStart="0dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -20,28 +21,41 @@
 
         <ImageView
             android:id="@+id/iv_profile"
-            android:layout_width="?actionBarSize"
-            android:layout_height="?actionBarSize"
-            android:background="?actionBarItemBackground"
+            android:layout_width="@dimen/di_tool_bar_profile_diameter"
+            android:layout_height="@dimen/di_tool_bar_profile_diameter"
+            android:layout_marginRight="@dimen/di_tool_bar_profile_margin_right"
             android:contentDescription="@null"
             android:scaleType="centerInside"/>
 
         <include
             layout="@layout/view_search"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/di_search_bar_height"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/tv_toolbar_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_score"
-            android:drawablePadding="2dp"
-            android:padding="6dp"
-            android:text="12"
-            android:textColor="@color/co_toolbar_index_score"
-            android:textStyle="bold"/>
+	    <LinearLayout
+			    android:layout_height = "@dimen/di_tool_bar_profile_diameter"
+			    android:background="@drawable/shape_toolbar_right"
+			    android:layout_width = "wrap_content"
+			    android:layout_marginLeft="7dp"
+			    android:gravity="center_vertical" >
+
+		    <ImageView
+				    android:layout_width = "wrap_content"
+				    android:layout_height = "wrap_content"
+				    android:src="@drawable/ic_toolbar_gift"
+				    android:paddingRight="5dp"
+				    android:contentDescription="@null"/>
+
+		    <TextView
+				    android:id="@+id/tv_gift_count"
+				    android:layout_width = "wrap_content"
+				    android:layout_height = "wrap_content"
+				    android:textColor="@color/co_white"
+				    android:text="5"
+				    android:textSize="@dimen/di_search_bar_text_size"/>
+
+		</LinearLayout >
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>

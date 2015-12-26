@@ -181,7 +181,7 @@ public class MoocRecyclerViewFragment extends BaseFragment implements BGARefresh
 	@Override
 	public boolean onItemChildLongClick(ViewGroup parent, View childView, int position) {
 		if (childView.getId() == R.id.tv_item_normal_delete) {
-			showToast("长按了删除 " + mAdapter.getItem(position).name);
+			showToast("长按了删除 " + mAdapter.getItem(position).username);
 			return true;
 		}
 		return false;
@@ -189,12 +189,12 @@ public class MoocRecyclerViewFragment extends BaseFragment implements BGARefresh
 
 	@Override
 	public void onRVItemClick(ViewGroup parent, View itemView, int position) {
-		showToast("点击了条目 " + mAdapter.getItem(position).name);
+		showToast("点击了条目 " + mAdapter.getItem(position).username);
 	}
 
 	@Override
 	public boolean onRVItemLongClick(ViewGroup parent, View itemView, int position) {
-		showToast("长按了条目 " + mAdapter.getItem(position).name);
+		showToast("长按了条目 " + mAdapter.getItem(position).username);
 		return true;
 	}
 }
