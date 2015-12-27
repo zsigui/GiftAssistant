@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.ui.activity.base;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -31,6 +33,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApp = AssistantApp.getInstance();
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.co_status_bar_bg));
+        }
         initView();
         mToolbar = getViewById(R.id.toolbar);
         if (mToolbar != null) {
@@ -151,4 +156,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		ft.commit();
 	}
 
+    protected void displayLoadingUI(@IdRes int resId) {
+        reattachFrag(resId, LoadingFragment.newInstance(), LoadingFragment.class.getSimpleName());
+    }
 }

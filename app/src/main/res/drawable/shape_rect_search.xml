@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android = "http://schemas.android.com/apk/res/android" >
-	<corners
-			android:topLeftRadius = "@dimen/di_search_bar_radius"
-			android:topRightRadius = "@dimen/di_search_bar_radius" />
-	<padding
-			android:bottom = "2dp"
-			android:left = "20dp"
-			android:right = "12dp"
-			android:top = "2dp" />
-	<solid android:color = "@color/co_tool_bar_item_bg" />
-</shape >
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners
+        android:bottomLeftRadius="@dimen/di_search_bar_radius"
+        android:bottomRightRadius="@dimen/di_search_bar_radius"
+        android:topLeftRadius="@dimen/di_search_bar_radius"
+        android:topRightRadius="@dimen/di_search_bar_radius"/>
+    <padding
+        android:bottom="2dp"
+        android:left="20dp"
+        android:right="12dp"
+        android:top="2dp"/>
+    <solid android:color="@color/co_tool_bar_item_bg"/>
+</shape>

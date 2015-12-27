@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:id = "@+id/ll_history_clear"
-		android:orientation = "horizontal"
-		android:gravity = "center"
-		android:paddingBottom = "8dp"
-		android:paddingTop = "8dp"
-		android:background = "@drawable/selector_opacity_30"
-		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content" >
+    android:id="@+id/ll_history_clear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_opacity_05"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
-	<ImageView
-			android:contentDescription = "@null"
-			android:src = "@drawable/ic_search_clear_all"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_search_clear_all"/>
 
-	<TextView
-			android:text = "@string/st_search_history_clear"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content" />
-</LinearLayout >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/st_search_history_clear"
+        android:textColor="@color/co_index_module_header"/>
+</LinearLayout>

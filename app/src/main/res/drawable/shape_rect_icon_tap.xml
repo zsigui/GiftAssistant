@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android = "http://schemas.android.com/apk/res/android" >
-	<corners android:topRightRadius="10dp"
-	         android:topLeftRadius="10dp"/>
-	<padding android:bottom="3dp"
-	         android:left="5dp"
-	         android:right="5dp"
-	         android:top="3dp" />
-	<solid android:color = "@color/co_index_module_icon_gift_bg" />
-</shape >
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners
+        android:bottomLeftRadius="9dp"
+        android:topLeftRadius="0dp"
+        android:bottomRightRadius="10dp"
+        android:topRightRadius="10dp"/>
+    <padding
+        android:bottom="3dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="3dp"/>
+    <solid android:color="@color/co_index_module_icon_gift_bg"/>
+</shape>

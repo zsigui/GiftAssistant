@@ -1,112 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cn.bingoogolapple.refreshlayout.BGARefreshLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:id = "@+id/rlContent"
-		android:background = "@color/co_common_bg"
-		android:layout_width = "match_parent"
-		android:layout_height = "match_parent" >
+    android:id="@+id/rlContent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/co_transparent">
 
-	<cn.bingoogolapple.refreshlayout.BGAStickyNavLayout
-			android:id = "@+id/llContainer"
-			android:orientation = "vertical"
-			android:background = "@color/co_transparent"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent" >
+    <ScrollView
+        android:id="@+id/sv_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/co_transparent"
+        android:orientation="vertical">
 
-		<include
-				layout = "@layout/view_banner"
-				android:layout_width = "match_parent"
-				android:layout_height = "@dimen/di_banner_height"
-				android:layout_marginTop = "6dp"
-				android:layout_marginBottom = "6dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- 广告屏 -->
+            <include
+                layout="@layout/view_banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/di_banner_height"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"/>
 
-		<LinearLayout
-				android:orientation = "vertical"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content" >
+            <!-- 猜你喜欢模块 -->
+            <LinearLayout
+                style="@style/IndexModuleLayout">
 
-			<LinearLayout
-					style = "@style/IndexModuleLayout"
-					android:orientation = "vertical" >
+                <RelativeLayout
+                    android:id="@+id/rl_like_all"
+                    style="@style/IndexModuleTitleLayout"
+                    android:background="@color/co_white"
+                    android:clickable="true">
 
-				<RelativeLayout
-						android:id = "@+id/rl_like_all"
-						style = "@style/IndexModuleTitleLayout" >
+                    <TextView
+                        style="@style/DefaultTextView.Header"
+                        android:text="@string/st_index_gift_like"/>
 
-					<TextView style="@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_like" />
+                    <TextView style="@style/DefaultTextView.More"/>
 
-					<TextView style = "@style/DefaultTextView.More" />
+                </RelativeLayout>
 
-				</RelativeLayout >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/co_divider_bg"/>
 
-				<View
-						android:background = "@color/co_divider_bg"
-						android:layout_width = "match_parent"
-						android:layout_height = "1dp" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_like_content"
+                    style="@style/DefaultRecyclerView"
+                    android:layout_height="147dp"/>
 
-				<android.support.v7.widget.RecyclerView
-						android:id = "@+id/rv_like_content"
-						style="@style/DefaultRecyclerView" />
+            </LinearLayout>
 
-			</LinearLayout >
+            <!-- 限量礼包模块 -->
+            <LinearLayout
+                style="@style/IndexModuleLayout"
+                android:layout_marginTop="7dp">
 
-			<LinearLayout
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "7dp" >
+                <RelativeLayout
+                    android:id="@+id/rl_limit_all"
+                    style="@style/IndexModuleTitleLayout">
 
-				<RelativeLayout
-						android:id = "@+id/rl_limit_all"
-						style = "@style/IndexModuleTitleLayout" >
+                    <TextView
+                        style="@style/DefaultTextView.Header"
+                        android:text="@string/st_index_gift_limit"/>
 
-					<TextView style = "@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_limit" />
+                    <TextView style="@style/DefaultTextView.More"/>
 
-					<TextView style = "@style/DefaultTextView.More" />
+                </RelativeLayout>
 
-				</RelativeLayout >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/co_divider_bg"/>
 
-				<View
-						android:background = "@color/co_divider_bg"
-						android:layout_width = "match_parent"
-						android:layout_height = "1dp" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_limit_content"
+                    style="@style/DefaultRecyclerView"
+                    android:layout_height="180dp"/>
+            </LinearLayout>
 
-				<android.support.v7.widget.RecyclerView
-						style="@style/DefaultRecyclerView" />
+            <!-- 新鲜出炉模块 -->
+            <LinearLayout
+                style="@style/IndexModuleLayout"
+                android:layout_marginTop="7dp">
 
-			</LinearLayout >
-		</LinearLayout >
+                <RelativeLayout
+                    android:id="@+id/rl_new_all"
+                    style="@style/IndexModuleTitleLayout"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/co_white">
 
+                    <TextView
+                        style="@style/DefaultTextView.Header"
+                        android:text="@string/st_index_gift_new"/>
 
-		<LinearLayout
-				style = "@style/IndexModuleLayout"
-				android:layout_marginTop = "7dp" >
+                    <TextView style="@style/DefaultTextView.More"/>
 
-			<RelativeLayout
-					android:id = "@+id/rl_new_all"
-					style = "@style/IndexModuleTitleLayout" >
+                </RelativeLayout>
 
-				<TextView style="@style/DefaultTextView.Header"
-						android:text = "@string/st_index_gift_new" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/co_divider_bg"/>
 
-				<TextView style = "@style/DefaultTextView.More" />
+                <com.oplay.giftassistant.ui.widget.NestedListView
+                    android:id="@+id/rv_new_content"
+                    style="@style/DefaultRecyclerView"
+                    android:layout_height="wrap_content"
+                    android:minHeight="95dp"
+                    android:divider="@color/co_divider_bg"
+                    android:dividerHeight="1dp"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="0dp"/>
+            </LinearLayout>
 
-			</RelativeLayout >
+        </LinearLayout>
+    </ScrollView>
 
-			<View
-					android:background = "@color/co_divider_bg"
-					android:layout_width = "match_parent"
-					android:layout_height = "1dp" />
-
-			<android.support.v7.widget.RecyclerView
-					android:id = "@+id/rv_new_content"
-					style="@style/DefaultRecyclerView"
-					android:layout_height="match_parent"
-					android:paddingTop="0dp"
-					android:paddingBottom="0dp"/>
-
-		</LinearLayout >
-	</cn.bingoogolapple.refreshlayout.BGAStickyNavLayout >
-
-</cn.bingoogolapple.refreshlayout.BGARefreshLayout >
+</cn.bingoogolapple.refreshlayout.BGARefreshLayout>

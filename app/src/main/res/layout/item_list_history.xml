@@ -7,7 +7,7 @@
               android:paddingRight = "10dp"
               android:layout_width = "match_parent"
               android:layout_height = "@dimen/di_search_item_history"
-              android:background = "@drawable/selector_opacity_30" >
+              android:background = "@drawable/selector_opacity_05" >
 
 	<ImageView
 			android:id = "@+id/iv_search_icon"
@@ -20,6 +20,7 @@
 			android:id = "@+id/tv_search_text"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
+            android:textColor="@color/co_index_module_header"
 			android:paddingLeft = "10dp"
 			android:paddingRight = "10dp"
 			android:textSize = "18sp" />

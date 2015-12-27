@@ -8,5 +8,5 @@
 		android:footerDividersEnabled = "true"
 		android:headerDividersEnabled = "true"
 		android:background="@color/co_white"
-		android:divider = "@color/co_list_item_divider" />
+		android:divider = "@color/co_divider_bg" />
 

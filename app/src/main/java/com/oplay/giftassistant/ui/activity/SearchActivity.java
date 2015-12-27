@@ -13,7 +13,6 @@ import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
 import com.oplay.giftassistant.model.json.JsonRespSearchData;
 import com.oplay.giftassistant.model.json.JsonRespSearchPrompt;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.oplay.giftassistant.ui.fragment.search.EmptySearchFragment;
 import com.oplay.giftassistant.ui.fragment.search.HistoryFragment;
@@ -23,9 +22,8 @@ import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.SPUtil;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -38,11 +36,13 @@ public class SearchActivity extends BaseAppCompatActivity {
 
 	private SearchLayout mSearchLayout;
 	private SearchEngine mEngine;
-	private LinkedList<String> mHistoryData;
+	private ArrayList<String> mHistoryData;
 	private ResultFragment mResultFragment;
 	private EmptySearchFragment mEmptySearchFragment;
 	private HistoryFragment mHistoryFragment;
 	private NetErrorFragment mNetErrorFragment;
+
+    private String mLastSearchKey = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +60,10 @@ public class SearchActivity extends BaseAppCompatActivity {
 
 	private void processLogic() {
 		obtainHistoryData();
-		clearHistory();
 		mEngine = mApp.getRetrofit().create(SearchEngine.class);
 		mSearchLayout.setCanGetFocus(true);
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
 		displayHistoryUI(mHistoryData, true);
-		mHistoryFragment.updateData(mHistoryData, true);
 	}
 
 
@@ -73,7 +71,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 	 * 获取输入的历史数据
 	 */
 	private void obtainHistoryData() {
-		mHistoryData = new LinkedList<>();
+		mHistoryData = new ArrayList<>();
 		String s = SPUtil.getString(getApplicationContext(),
 				SPConfig.SP_SEARCH_FILE,
 				SPConfig.KEY_SEARCH_INDEX,
@@ -85,7 +83,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 			KLog.d("get saveHistory = " + s);
 		}
 
-		String[] keys = s.split("\r");
+		String[] keys = s.split("\t");
 		Collections.addAll(mHistoryData, keys);
 	}
 
@@ -97,10 +95,14 @@ public class SearchActivity extends BaseAppCompatActivity {
 			return;
 		}
 
+        if (mHistoryData.contains(newKey)) {
+            mHistoryData.remove(newKey);
+        }
+
 		// 添加搜索记录，精简个数到10个以内
-		mHistoryData.addFirst(newKey);
+		mHistoryData.add(0, newKey);
 		while (mHistoryData.size() > 10) {
-			mHistoryData.removeLast();
+			mHistoryData.remove(mHistoryData.size() - 1);
 		}
 
 		StringBuilder builder = new StringBuilder();
@@ -111,25 +113,25 @@ public class SearchActivity extends BaseAppCompatActivity {
 			KLog.d("put saveHistory = " + builder.toString());
 		}
 		SPUtil.putString(getApplicationContext(),
-				SPConfig.SP_SEARCH_FILE,
-				SPConfig.KEY_SEARCH_INDEX,
-				builder.toString());
+                SPConfig.SP_SEARCH_FILE,
+                SPConfig.KEY_SEARCH_INDEX,
+                builder.toString());
 	}
 
 	public void clearHistory() {
 		mHistoryData.clear();
 		SPUtil.putString(getApplicationContext(),
-				SPConfig.SP_SEARCH_FILE,
-				SPConfig.KEY_SEARCH_INDEX,
-				"");
+                SPConfig.SP_SEARCH_FILE,
+                SPConfig.KEY_SEARCH_INDEX,
+                "");
 	}
 
 	/**
 	 * 显示历史记录或者提示信息
 	 */
-	private void displayHistoryUI(List<String> data, boolean isHistory) {
+	private void displayHistoryUI(ArrayList<String> data, boolean isHistory) {
 		if (mHistoryFragment == null) {
-			mHistoryFragment = HistoryFragment.newInstance();
+			mHistoryFragment = HistoryFragment.newInstance(data, isHistory);
 		}
 		mHistoryFragment.updateData(data, isHistory);
 		reattachFrag(R.id.fl_search_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
@@ -162,14 +164,15 @@ public class SearchActivity extends BaseAppCompatActivity {
 	 * 显示网络错误提示
 	 */
 	private void displayNetworkErrUI() {
+        if ("".equals(mLastSearchKey) ||
+                !mLastSearchKey.equals(mSearchLayout.getKeyword())) {
+            return;
+        }
 		if (mNetErrorFragment == null) {
 			mNetErrorFragment = NetErrorFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_search_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
-	}
-
-	private void displayLoadingUI() {
-		reattachFrag(R.id.fl_search_container, LoadingFragment.newInstance(), LoadingFragment.class.getSimpleName());
+        KLog.e();
+        reattachFrag(R.id.fl_search_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
 	}
 
 	public void sendSearchRequest(String keyword) {
@@ -181,8 +184,9 @@ public class SearchActivity extends BaseAppCompatActivity {
 		@Override
 		public void onSearchPerform(String keyword) {
 			saveHistoryData(keyword);
+            mLastSearchKey = keyword;
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				displayLoadingUI();
+				displayLoadingUI(R.id.fl_search_container);
 				mEngine.getSearchData(keyword).enqueue(new Callback<JsonRespSearchData>() {
 					@Override
 					public void onResponse(Response<JsonRespSearchData> response, Retrofit retrofit) {
@@ -208,7 +212,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 								KLog.e(response.body());
 							}
 						}
-						displayNetworkErrUI();
+                        displayNetworkErrUI();
 					}
 
 					@Override
@@ -227,6 +231,8 @@ public class SearchActivity extends BaseAppCompatActivity {
 
 		@Override
 		public void onSearchCleared() {
+            // 取消上一轮搜索
+            mEngine.getSearchPromt(mLastSearchKey).cancel();
 			displayHistoryUI(mHistoryData, true);
 		}
 
@@ -246,7 +252,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 									return;
 								}
 								// display list here
-								displayHistoryUI(data.promtList, false);
+								displayHistoryUI(data.promptList, false);
 								return;
 							}
 							if (AppDebugConfig.IS_DEBUG) {

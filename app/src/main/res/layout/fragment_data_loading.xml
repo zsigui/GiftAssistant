@@ -6,7 +6,7 @@
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 	<com.oplay.giftassistant.ui.widget.circleprogress.CircleProgress
-			android:id="@+id/progress"
+			android:id="@+id/loading"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			app:color1="@android:color/holo_red_light"

@@ -27,7 +27,7 @@ public class LoadingFragment extends BaseFragment {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_data_loading);
-		mProgress = getViewById(R.id.fl_search_container);
+		mProgress = getViewById(R.id.loading);
 	}
 
 	@Override

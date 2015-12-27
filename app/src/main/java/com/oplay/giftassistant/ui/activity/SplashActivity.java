@@ -60,6 +60,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		if (!mApp.isGlobalInit()) {
+
 			mFirstInitTime = System.currentTimeMillis();
 			mHandler.post(mInitRunnable);
 		} else {

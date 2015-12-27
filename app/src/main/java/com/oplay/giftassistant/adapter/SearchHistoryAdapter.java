@@ -32,30 +32,41 @@ public class SearchHistoryAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		if (mKeywords == null) {
+		if (mKeywords == null || mKeywords.size() == 0) {
 			return 0;
-		}
-		return mKeywords.size();
+		} else if (mIsHistory) {
+            return mKeywords.size() + 1;
+        } else {
+            return mKeywords.size();
+        }
 	}
 
 	@Override
 	public Object getItem(int position) {
-		if (mKeywords == null || mKeywords.size() == 0) {
+		if (getCount() == 0) {
 			return null;
 		}
-		return mKeywords.get(position);
+        if (position == mKeywords.size()) {
+            return "clear placeholder";
+        }
+        return mKeywords.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		if (mIsHistory && position == getCount() - 1) {
-			// the final item to show the clear icon
-			return TYPE_CLEAR;
-		}
-		return TYPE_NORMAL;
+		return position;
 	}
 
-	public void setClearListener(OnClearListener clearListener) {
+    @Override
+    public int getItemViewType(int position) {
+        if (mIsHistory && position == getCount() - 1) {
+            // the final item to show the clear icon
+            return TYPE_CLEAR;
+        }
+        return TYPE_NORMAL;
+    }
+
+    public void setClearListener(OnClearListener clearListener) {
 		mClearListener = clearListener;
 	}
 
@@ -111,9 +122,6 @@ public class SearchHistoryAdapter extends BaseAdapter {
 	}
 
 	public void updateData(List<String> data, boolean isHistory) {
-		if (isHistory && data != null && data.size() > 0) {
-			data.add("clear text place holder");
-		}
 		mKeywords = data;
 		mIsHistory = isHistory;
 		notifyDataSetChanged();

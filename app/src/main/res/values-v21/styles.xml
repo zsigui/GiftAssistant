@@ -1,9 +1,52 @@
 <resources>>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name = "AppBaseTheme" parent = "Theme.AppCompat.Light.NoActionBar" >
+
+        <!-- set the tool bar and status bar background -->
+        <item name="colorPrimary">@color/co_tool_bar_bg</item>
+        <item name="colorPrimaryDark">@color/co_status_bar_bg</item>
+        <item name="colorAccent">@color/co_tool_bar_item_bg</item>
+
+        <!-- for actionMode -->
+        <item name = "android:actionModeBackground" >@color/co_status_bar_bg</item >
+        <item name = "actionModeBackground" >@color/co_status_bar_bg</item >
+        <!-- show actionMode above content(Toolbar) -->
+        <item name = "android:windowActionModeOverlay" >true</item >
+        <item name = "windowActionModeOverlay" >true</item >
+
+
+        <!-- Support library compatibility -->
+        <item name = "android:windowActionBar" >false</item >
+        <item name = "windowActionBar" >false</item >
+        <item name = "android:windowNoTitle" >true</item >
+        <item name = "windowNoTitle" >true</item >
+        <item name = "android:windowBackground" >@color/co_transparent</item >
+        <item name = "android:background" >@color/co_transparent</item >
+
+        <!-- actionBarSize changed in Lolipop -->
+        <item name = "android:actionBarSize" >@dimen/di_tool_bar_bg_height</item >
+        <item name = "actionBarSize" >@dimen/di_tool_bar_bg_height</item >
+
+        <!--actionbar style-->
+        <item name = "android:actionBarItemBackground" >@drawable/selector_common_item_transparent</item >
+        <item name = "actionBarItemBackground" >@drawable/selector_common_item_transparent</item >
+        <item name = "android:actionButtonStyle" >@style/ActionButton.AppTheme</item >
+        <item name = "actionButtonStyle" >@style/ActionButton.AppTheme</item >
+
+        <!-- Toolbar -->
+        <item name = "toolbarStyle" >@style/ToolbarStyle</item >
+        <item name = "toolbarNavigationButtonStyle" >@style/ToolbarNavigationButtonStyle</item >
+        <!--<item name = "android:windowTranslucentStatus" >true</item >-->
+        <!--<item name = "android:fitsSystemWindows" >true</item >-->
+    </style >
+    <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <!-- drawable layout -->
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

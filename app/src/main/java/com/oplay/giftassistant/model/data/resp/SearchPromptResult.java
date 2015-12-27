@@ -3,7 +3,7 @@ package com.oplay.giftassistant.model.data.resp;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author micle
@@ -16,5 +16,5 @@ public class SearchPromptResult implements Serializable {
 	public String keyword;
 
 	@SerializedName("prompts")
-	public List<String> promtList;
+	public ArrayList<String> promptList;
 }

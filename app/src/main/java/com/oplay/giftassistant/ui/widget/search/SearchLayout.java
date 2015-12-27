@@ -1,7 +1,6 @@
 package com.oplay.giftassistant.ui.widget.search;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.IdRes;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,9 +10,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
@@ -21,15 +19,12 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.util.InputMethodUtil;
 import com.socks.library.KLog;
 
-import java.util.List;
-
 /**
  * @author micle
  * @email zsigui@foxmail.com
  * @date 2015/12/20
  */
-public class SearchLayout extends RelativeLayout implements AdapterView.OnItemClickListener,
-		TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
+public class SearchLayout extends LinearLayout implements TextView.OnEditorActionListener, TextWatcher, View.OnClickListener {
 
 	protected AutoCompleteTextView mEdtSearch;
 	protected TextView mIconSearch;
@@ -37,7 +32,6 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 	protected TextView mDivider;
 	protected String mCurKeyWord;
 	protected boolean mCanGetFocus = false;
-	private List<String> mKeyWordList;
 	private OnSearchActionListener mSearchActionListener;
 	/**
 	 * defined whether need to auto send search request to get prompt list
@@ -69,24 +63,17 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 		mIconSearch = getViewById(R.id.tv_search_icon);
 		mIconClear = getViewById(R.id.tv_search_clear);
 		mDivider = getViewById(R.id.tv_search_divider);
-		if (Build.VERSION.SDK_INT >= 17) {
-			mEdtSearch.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
-				@Override
-				public void onDismiss() {
-					if (mKeyWordList != null) {
-						mKeyWordList.clear();
-					}
-				}
-			});
-		}
-		mEdtSearch.setOnItemClickListener(this);
 		mEdtSearch.setOnEditorActionListener(this);
 		mEdtSearch.addTextChangedListener(this);
 		mEdtSearch.setOnClickListener(this);
 		mIconSearch.setOnClickListener(this);
 		if (mIconClear != null) {
+            //mIconClear.setVisibility(View.GONE);
 			mIconClear.setOnClickListener(this);
 		}
+        if (mDivider != null) {
+            //mDivider.setVisibility(View.GONE);
+        }
 	}
 
 	private <V extends View> V getViewById(@IdRes int id) {
@@ -126,7 +113,6 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 			return;
 		}
 		if (mSearchActionListener != null) {
-			mEdtSearch.dismissDropDown();
 			InputMethodUtil.hideSoftInput(mEdtSearch);
 			mSearchActionListener.onSearchPerform(mCurKeyWord);
 		}
@@ -197,18 +183,6 @@ public class SearchLayout extends RelativeLayout implements AdapterView.OnItemCl
 		return !mCanGetFocus || super.onInterceptTouchEvent(ev);
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.v();
-		}
-		if (position < mKeyWordList.size()) {
-			final String keyword = mKeyWordList.get(position);
-			if (mSearchActionListener != null) {
-				mSearchActionListener.onSearchPerform(keyword);
-			}
-		}
-	}
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

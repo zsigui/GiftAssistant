@@ -9,6 +9,16 @@
     <!--礼包 -->
     <string name="st_search_hint">搜索游戏和礼包</string>
     <string name="st_search_history_clear">清空所有搜索记录</string>
+    <!-- 礼包状态 -->
+    <string name="st_gift_or" >或</string>
+    <string name="st_gift_finished" >已结束</string>
+    <string name="st_gift_wait_search" >坐等淘号</string>
+    <string name="st_gift_search" >淘号</string>
+    <string name="st_gift_wait_seize" >坐等抢号</string>
+    <string name="st_gift_seize" >抢号</string>
+    <string name="st_gift_search_count" >已淘号：<font color='#ffaa17'>%s</font>次</string>
+    <string name="st_gift_seize_time" >开抢时间：<font color='#ffaa17'>%s</font></string>
+    <string name="st_gift_remain_count" >剩余 <font color='#ffaa17'>%s</font>个</string>
 
 
     <string name="st_tabs_home_gift">礼包</string>

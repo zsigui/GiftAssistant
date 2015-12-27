@@ -10,6 +10,7 @@ import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ import java.util.List;
  */
 public class HistoryFragment extends BaseFragment {
 
+    private static final String KEY_DATA = "key_history_data";
+    private static final String KEY_IS_HISTORY = "key_is_history";
 	private ListView mListView;
 	private SearchHistoryAdapter mAdapter;
 
@@ -24,12 +27,26 @@ public class HistoryFragment extends BaseFragment {
 		return new HistoryFragment();
 	}
 
+    public static HistoryFragment newInstance(ArrayList<String> data, boolean isHistory) {
+        HistoryFragment fragment = new HistoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(KEY_DATA, data);
+        bundle.putBoolean(KEY_IS_HISTORY, isHistory);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_search_history);
 		mListView = getViewById(R.id.lv_history);
-		mAdapter = new SearchHistoryAdapter(null, true);
-
+        ArrayList<String> data = null;
+        boolean isHistory = true;
+        if (getArguments() != null) {
+            data = getArguments().getStringArrayList(KEY_DATA);
+            isHistory = getArguments().getBoolean(KEY_IS_HISTORY);
+        }
+        mAdapter = new SearchHistoryAdapter(data, isHistory);
 	}
 
 	@Override

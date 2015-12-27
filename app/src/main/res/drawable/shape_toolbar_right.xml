@@ -3,7 +3,7 @@
 		android:shape="rectangle">
 	<corners
 			android:topRightRadius="0dp"
-			android:bottomRightRadius="01dp"
+			android:bottomRightRadius="0dp"
 			android:bottomLeftRadius="@dimen/di_search_bar_radius"
 			android:topLeftRadius = "@dimen/di_search_bar_radius" />
 	<padding

@@ -22,4 +22,20 @@
 		<attr name="color2" format="reference|color"/>
 		<attr name="color3" format="reference|color"/>
 	</declare-styleable>
+
+    <declare-styleable name="ShapeLayout">
+        <attr name="shape_src"
+              format="reference"/>
+    </declare-styleable>
+    
+    <declare-styleable name="RoundedLayout">
+        <attr name="rl_radius" format="dimension" />
+    </declare-styleable>
+    
+    <declare-styleable name="TopInnerArrowLayout">
+        <attr name="arrowSize"
+              format="dimension"/>
+        <attr name="arrowPosition"
+              format="float"/>
+    </declare-styleable>
 </resources>

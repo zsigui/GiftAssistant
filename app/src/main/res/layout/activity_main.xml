@@ -5,17 +5,17 @@
 		android:id = "@+id/llContent"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
-		android:background = "@color/gray_btn_bg_color"
+		android:background = "@color/co_transparent"
 		android:orientation = "vertical" >
 
-	<include layout = "@layout/toolbar_search" />
+	<include layout = "@layout/toobar_index" />
 
 	<FrameLayout
 			android:id = "@+id/fl_main_container"
 			android:layout_width = "match_parent"
 			android:layout_height = "0dp"
 			android:layout_weight = "1"
-			android:background = "@color/co_transparent" >
+			android:background = "@color/co_common_bg" >
 
 	</FrameLayout >
 

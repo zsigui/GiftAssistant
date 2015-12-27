@@ -21,6 +21,8 @@ public class AppDebugConfig {
 	public static final boolean IS_PERM_DEBUG = true;
 
     public static final String TAG_APP = "op_app_debug";
+
+    public static final String TAG_FRAG = "op_fragment_debug";
     /* define some tag for debug below */
     public static final String TAG_SEARCH = "op_search_debug";
 

@@ -53,20 +53,27 @@ public abstract class BaseFragment extends BaseFragmentLog {
 		// 避免多次从xml中加载布局文件
 		if (mContentView == null) {
 			initView(savedInstanceState);
-			setListener();
-			processLogic(savedInstanceState);
 		} else {
 			ViewGroup parent = (ViewGroup) mContentView.getParent();
 			if (parent != null) {
 				parent.removeView(mContentView);
 			}
 		}
-		mIsPrepared = true;
-		lazyLoad();
 		return mContentView;
 	}
 
-	protected void setContentView(@LayoutRes int layoutResID) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!mIsPrepared) {
+            setListener();
+            processLogic(savedInstanceState);
+        }
+        mIsPrepared = true;
+        lazyLoad();
+    }
+
+    protected void setContentView(@LayoutRes int layoutResID) {
 		mContentView = LayoutInflater.from(mApp).inflate(layoutResID, null);
 	}
 
@@ -124,6 +131,11 @@ public abstract class BaseFragment extends BaseFragmentLog {
 	protected <VT extends View> VT getViewById(@IdRes int id) {
 		return (VT) mContentView.findViewById(id);
 	}
+
+    @SuppressWarnings("unchecked")
+    protected <VT extends View> VT getViewById(View contentView, @IdRes int id) {
+        return (VT) contentView.findViewById(id);
+    }
 
 	protected void showToast(String text) {
 		Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
