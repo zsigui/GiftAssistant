@@ -8,7 +8,6 @@
     android:gravity = "center_vertical"
     app:contentInsetEnd = "0dp"
     app:contentInsetStart = "0dp"
-    android:paddingRight="15dp"
     app:popupTheme = "@style/ThemeOverlay.AppCompat.Light"
     app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -20,6 +19,6 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_bar_back"/>
 
-    <include layout="@layout/view_search" />
+    <include layout="@layout/view_search2" />
 
 </android.support.v7.widget.Toolbar >

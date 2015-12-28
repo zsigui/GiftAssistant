@@ -32,6 +32,7 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 	protected TextView mDivider;
 	protected String mCurKeyWord;
 	protected boolean mCanGetFocus = false;
+    private boolean mShowClear = false;
 	private OnSearchActionListener mSearchActionListener;
 	/**
 	 * defined whether need to auto send search request to get prompt list
@@ -61,18 +62,20 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 		super.onFinishInflate();
 		mEdtSearch = getViewById(R.id.actv_search_input);
 		mIconSearch = getViewById(R.id.tv_search_icon);
-		mIconClear = getViewById(R.id.tv_search_clear);
-		mDivider = getViewById(R.id.tv_search_divider);
+        if (mShowClear) {
+            mIconClear = getViewById(R.id.tv_search_clear);
+            mDivider = getViewById(R.id.tv_search_divider);
+        }
 		mEdtSearch.setOnEditorActionListener(this);
 		mEdtSearch.addTextChangedListener(this);
 		mEdtSearch.setOnClickListener(this);
 		mIconSearch.setOnClickListener(this);
 		if (mIconClear != null) {
-            //mIconClear.setVisibility(View.GONE);
+            mIconClear.setVisibility(View.GONE);
 			mIconClear.setOnClickListener(this);
 		}
         if (mDivider != null) {
-            //mDivider.setVisibility(View.GONE);
+            mDivider.setVisibility(View.GONE);
         }
 	}
 
