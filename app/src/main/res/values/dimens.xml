@@ -28,8 +28,9 @@
 
 
 	<dimen name = "di_btn_radius" >14dp</dimen>
-	<dimen name = "di_btn_padding_top_bottom" >6dp</dimen>
+	<dimen name = "di_btn_padding_top_bottom" >0dp</dimen>
 	<dimen name = "di_btn_padding_left_right" >14dp</dimen>
+	<dimen name = "di_btn_height" >28dp</dimen>
 
 
 	<!-- 主页-礼包页面 -->

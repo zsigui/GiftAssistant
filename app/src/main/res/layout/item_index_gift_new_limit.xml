@@ -66,12 +66,12 @@
             android:id="@+id/tv_or"
             style="@style/DefaultTextView.Text"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/st_gift_or"/>
 
         <TextView
             android:id="@+id/tv_bean"
             style="@style/DefaultTextView.Text"
-            android:layout_marginLeft="7dp"
             android:drawableLeft="@drawable/ic_bean"
             android:drawablePadding="4dp"
             android:text="100"/>
@@ -99,11 +99,11 @@
         android:gravity="center">
 
         <TextView
-            android:id="@id/btn_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_btn_orange"
-            android:text="@string/st_gift_search"
+            android:id="@+id/btn_send"
+            style="@style/DefaultTextView"
+            android:layout_height="@dimen/di_btn_height"
+            android:background="@drawable/selector_btn_red"
+            android:text="@string/st_gift_seize"
             android:textColor="@color/co_white"/>
     </LinearLayout>
 </RelativeLayout>

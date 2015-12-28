@@ -47,6 +47,8 @@ public class IndexNewGift implements Serializable{
     */
     // 礼包名称
 	public String name;
+	// 礼包内容
+	public String content;
     // 游戏名称
 	public String gameName;
     // 游戏图标
@@ -65,4 +67,6 @@ public class IndexNewGift implements Serializable{
     public int remainCount;
     // 礼包总数
     public int totalCount;
+	// 已淘号次数
+	public int searchCount;
 }

@@ -16,9 +16,6 @@
     <string name="st_gift_search" >淘号</string>
     <string name="st_gift_wait_seize" >坐等抢号</string>
     <string name="st_gift_seize" >抢号</string>
-    <string name="st_gift_search_count" >已淘号：<font color='#ffaa17'>%s</font>次</string>
-    <string name="st_gift_seize_time" >开抢时间：<font color='#ffaa17'>%s</font></string>
-    <string name="st_gift_remain_count" >剩余 <font color='#ffaa17'>%s</font>个</string>
 
 
     <string name="st_tabs_home_gift">礼包</string>
