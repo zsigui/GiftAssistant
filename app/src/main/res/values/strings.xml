@@ -16,6 +16,8 @@
     <string name="st_gift_search" >淘号</string>
     <string name="st_gift_wait_seize" >坐等抢号</string>
     <string name="st_gift_seize" >抢号</string>
+	<!-- 游戏状态 -->
+    <string name="st_game_download" >下载</string>
 
 
     <string name="st_tabs_home_gift">礼包</string>

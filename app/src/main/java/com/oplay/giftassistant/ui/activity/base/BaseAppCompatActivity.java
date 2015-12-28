@@ -27,6 +27,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     protected AssistantApp mApp;
     private SweetAlertDialog mLoadingDialog;
     private Toolbar mToolbar;
+	protected LoadingFragment mLoadingFragment;
 
 
     @Override
@@ -156,7 +157,15 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		ft.commit();
 	}
 
+	/**
+	 * 显示加载中页面
+	 *
+	 * @param resId 加载位置资源ID
+	 */
     protected void displayLoadingUI(@IdRes int resId) {
-        reattachFrag(resId, LoadingFragment.newInstance(), LoadingFragment.class.getSimpleName());
+	    if (mLoadingFragment == null) {
+		    mLoadingFragment = LoadingFragment.newInstance();
+	    }
+        reattachFrag(resId, mLoadingFragment, LoadingFragment.class.getSimpleName());
     }
 }

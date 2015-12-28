@@ -171,7 +171,6 @@ public class SearchActivity extends BaseAppCompatActivity {
 		if (mNetErrorFragment == null) {
 			mNetErrorFragment = NetErrorFragment.newInstance();
 		}
-        KLog.e();
         reattachFrag(R.id.fl_search_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
 	}
 
@@ -200,7 +199,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 									// 不更新
 									return;
 								}
-								if (data.gameList == null && data.giftList == null) {
+								if (data.games == null && data.gifts == null) {
 									displayEmptyUI();
 									return;
 								}

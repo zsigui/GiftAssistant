@@ -50,7 +50,13 @@ public class JsonReqBase<T> implements Serializable{
 		CommonUtil.addCommonParams(this, 0);
 	}
 
+	public JsonReqBase(T data) {
+		this();
+		this.data = data;
+	}
+
 	public JsonReqBase(int cmd) {
 		CommonUtil.addCommonParams(this, cmd);
+		this.cmd = cmd;
 	}
 }

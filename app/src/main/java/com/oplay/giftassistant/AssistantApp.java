@@ -47,6 +47,8 @@ public class AssistantApp extends Application {
     private boolean mIsPlayDownloadComplete = false;
 	// 是否已经完成全局初始化
 	private boolean mIsGlobalInit;
+	// 是否允许显示下载，根据渠道获取而定
+	private boolean mIsAllowDownload = true;
 
     @Override
     public void onCreate() {
@@ -168,7 +170,15 @@ public class AssistantApp extends Application {
         }
     }
 
-    public boolean isPlayDownloadComplete() {
+	public boolean isAllowDownload() {
+		return mIsAllowDownload;
+	}
+
+	public void setAllowDownload(boolean isAllowDownload) {
+		mIsAllowDownload = isAllowDownload;
+	}
+
+	public boolean isPlayDownloadComplete() {
         return mIsPlayDownloadComplete;
     }
 

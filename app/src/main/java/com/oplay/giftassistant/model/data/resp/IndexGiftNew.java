@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexNewGift implements Serializable{
+public class IndexGiftNew implements Serializable{
 
     // 逻辑说明：
     // isLimit = 1，限量礼包，seizeTime

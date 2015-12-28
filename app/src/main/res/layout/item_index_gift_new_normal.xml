@@ -33,7 +33,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_name"
         style="@style/DefaultTextView.Header"
         android:layout_width="match_parent"
         android:layout_alignTop="@+id/rl_icon"
@@ -45,10 +45,10 @@
         android:text="[暴打魏蜀吴]新手礼包"/>
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/tv_play"
         style="@style/DefaultTextView.Text"
         android:layout_width="match_parent"
-        android:layout_below="@+id/tv_title"
+        android:layout_below="@+id/tv_name"
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="8dp"
         android:layout_toLeftOf="@+id/ll_send"
@@ -61,7 +61,7 @@
         android:id="@+id/tv_score"
         style="@style/DefaultTextView.Text"
         android:layout_width="60dp"
-        android:layout_below="@+id/tv_content"
+        android:layout_below="@+id/tv_play"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@+id/rl_icon"
@@ -73,7 +73,7 @@
     <TextView
         android:id="@+id/tv_percent"
         style="@style/DefaultTextView.Text"
-        android:layout_below="@+id/tv_content"
+        android:layout_below="@+id/tv_play"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@+id/tv_score"
@@ -84,7 +84,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="72dp"
         android:layout_height="8dp"
-        android:layout_below="@+id/tv_content"
+        android:layout_below="@+id/tv_play"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="9dp"
         android:layout_toLeftOf="@+id/ll_send"

@@ -13,11 +13,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
-import com.oplay.giftassistant.model.data.resp.IndexNewGift;
+import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 import com.socks.library.KLog;
@@ -39,53 +39,50 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 	// 限量礼包类型，已结束, disabled
 	private static final int TYPE_LIMIT_FINISHED = 2;
 	// 正常礼包类型，可抢，normal
-	private static final int TYPE_NORMAL_SEIZE = 10;
+	private static final int TYPE_NORMAL_SEIZE = 3;
 	// 正常礼包类型，可淘号，disabled - text
-	private static final int TYPE_NORMAL_SEARCH = 11;
+	private static final int TYPE_NORMAL_SEARCH = 4;
 	// 正常礼包类型，等待抢号，disabled - text
-	private static final int TYPE_NORMAL_WAIT_SEIZE = 12;
+	private static final int TYPE_NORMAL_WAIT_SEIZE = 5;
 	// 正常礼包类型，等待淘号，disabled - text
-	private static final int TYPE_NORMAL_WAIT_SEARCH = 13;
+	private static final int TYPE_NORMAL_WAIT_SEARCH = 6;
 
-	private List<IndexNewGift> mDatas;
+	private List<IndexGiftNew> mData;
 	private Context mContext;
-	private DisplayImageOptions mImageOptions;
 
 	public IndexGiftNewAdapter(Context context) {
 		this(context, null);
 	}
 
-	public IndexGiftNewAdapter(Context context, List<IndexNewGift> datas) {
+	public IndexGiftNewAdapter(Context context, List<IndexGiftNew> data) {
 		mContext = context;
-		this.mDatas = datas;
-		mImageOptions = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_img_empty)
-				.showImageOnFail(R.drawable.ic_img_fail)
-				.showImageOnLoading(R.drawable.ic_img_loading)
-				.build();
+		this.mData = data;
 	}
 
-	public void updateData(List<IndexNewGift> data) {
-		this.mDatas = data;
+	public void updateData(List<IndexGiftNew> data) {
+		this.mData = data;
 		notifyDataSetChanged();
 	}
 
-	public List<IndexNewGift> getDatas() {
-		return mDatas;
+	public List<IndexGiftNew> getData() {
+		return mData;
 	}
 
-	public void setDatas(List<IndexNewGift> datas) {
-		mDatas = datas;
+	public void setData(List<IndexGiftNew> data) {
+		mData = data;
 	}
 
 	@Override
 	public int getCount() {
-		return mDatas == null ? 0 : mDatas.size();
+		return mData == null ? 0 : mData.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return getCount() == 0 ? null : mDatas.get(position);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d("mData = " + (mData != null) + ", " + (getCount()));
+		}
+		return getCount() == 0 ? null : mData.get(position);
 	}
 
 	@Override
@@ -98,9 +95,13 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		return 7;
 	}
 
+	/**
+	 * 获取ListItem类型<br/>
+	 * 注意: 返回的 int 需要范围为 0 ~ getViewTypeCount() - 1, 否则会出现ArrayIndexOutOfBoundsException
+	 */
 	@Override
 	public int getItemViewType(int position) {
-		IndexNewGift gift = mDatas.get(position);
+		IndexGiftNew gift = mData.get(position);
 		long currentTime = System.currentTimeMillis();
 		if (gift.isLimit == 1) {
 			if (currentTime > gift.seizeTime) {
@@ -165,7 +166,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		}
 
 
-		final IndexNewGift gift = mDatas.get(position);
+		final IndexGiftNew gift = mData.get(position);
 
 		setCommonField(viewHolder, gift);
 		// 设置数据和按键状态
@@ -246,8 +247,8 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 	/**
 	 * 设置几个类型下的通用配置
 	 */
-	private void setCommonField(ViewHolder viewHolder, final IndexNewGift gift) {
-		ImageLoader.getInstance().displayImage(gift.img, viewHolder.ivIcon, mImageOptions);
+	private void setCommonField(ViewHolder viewHolder, final IndexGiftNew gift) {
+		ImageLoader.getInstance().displayImage(gift.img, viewHolder.ivIcon, Global.IMAGE_OPTIONS);
 		viewHolder.tvTitle.setText(String.format("[%s]%s", gift.gameName, gift.name));
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
 		// 思考:
@@ -286,8 +287,8 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		if (type == TYPE_NORMAL_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_normal, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_title);
-			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
+			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
 			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
 			viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
@@ -295,8 +296,8 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		} else if (type == TYPE_LIMIT_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_title);
-			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
+			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
 			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
 			viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
@@ -312,8 +313,8 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 					viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 				case TYPE_LIMIT_FINISHED:
 					viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_title);
-					viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
+					viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 					viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
 					break;
 				default:

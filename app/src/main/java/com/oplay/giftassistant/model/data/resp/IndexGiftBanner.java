@@ -1,0 +1,15 @@
+package com.oplay.giftassistant.model.data.resp;
+
+import java.io.Serializable;
+
+/**
+ * Created by zsigui on 15-12-28.
+ */
+public class IndexGiftBanner implements Serializable {
+
+	// 轮播图url
+	public String url;
+
+	// 游戏名，后期可能会有跳转需要，用于跳转对应论坛
+	// public String gameName;
+}

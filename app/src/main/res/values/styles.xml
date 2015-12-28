@@ -144,11 +144,24 @@
         <item name="android:text">@string/st_index_gift_all</item>
     </style>
 
+	<style name="DefaultTextView.Text.Note">
+		<item name="android:textSize">10sp</item>
+		<item name="android:textColor">@color/co_index_module_text</item>
+		<item name="android:layout_centerVertical">true</item>
+	</style>
+
 
     <style name="DefaultRecyclerView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+	<style name = "DefaultListView">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:divider">@color/co_divider_bg</item>
+		<item name="android:dividerHeight">1dp</item>
+	</style>
 
     <style name="IndexIconLayout">
         <item name="android:layout_width">@dimen/di_index_hoz_module_icon_diameter</item>

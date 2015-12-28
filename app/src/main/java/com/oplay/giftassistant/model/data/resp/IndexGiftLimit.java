@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexLimitGift implements Serializable{
+public class IndexGiftLimit implements Serializable{
 
 	public String name;
 	public String gameName;

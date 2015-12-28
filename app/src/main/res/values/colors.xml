@@ -27,6 +27,7 @@
 	<color name = "co_stroke_bg">#e4e4e4</color>
 
 	<color name = "co_btn_red">#f85454</color>
+	<color name = "co_btn_green">#20c585</color>
 	<color name = "co_btn_orange">#ffaa17</color>
 	<color name = "co_btn_grey">#c9c9c9</color>
 

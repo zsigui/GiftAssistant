@@ -66,8 +66,15 @@
                     style="@style/IndexModuleTitleLayout">
 
                     <TextView
+		                    android:id="@+id/tv_limit"
                         style="@style/DefaultTextView.Header"
                         android:text="@string/st_index_gift_limit"/>
+
+	                <TextView
+			                android:id="@+id/tv_limit_hint"
+			                style="@style/DefaultTextView.Text"
+			                android:layout_toRightOf="@+id/tv_limit"
+			                android:paddingLeft="8dp"/>
 
                     <TextView style="@style/DefaultTextView.More"/>
 
@@ -92,8 +99,7 @@
                 <RelativeLayout
                     android:id="@+id/rl_new_all"
                     style="@style/IndexModuleTitleLayout"
-                    android:layout_marginTop="7dp"
-                    android:background="@color/co_white">
+                    android:layout_marginTop="7dp">
 
                     <TextView
                         style="@style/DefaultTextView.Header"
@@ -108,15 +114,10 @@
                     android:layout_height="1dp"
                     android:background="@color/co_divider_bg"/>
 
-                <com.oplay.giftassistant.ui.widget.NestedListView
-                    android:id="@+id/rv_new_content"
-                    style="@style/DefaultRecyclerView"
-                    android:layout_height="wrap_content"
-                    android:minHeight="95dp"
-                    android:divider="@color/co_divider_bg"
-                    android:dividerHeight="1dp"
-                    android:paddingBottom="0dp"
-                    android:paddingTop="0dp"/>
+	            <com.oplay.giftassistant.ui.widget.NestedListView
+			            android:id="@+id/rv_new_content"
+			            style="@style/DefaultListView"
+			            android:minHeight="95dp" />
             </LinearLayout>
 
         </LinearLayout>

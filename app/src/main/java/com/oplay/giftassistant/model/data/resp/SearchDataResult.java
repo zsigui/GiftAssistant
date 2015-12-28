@@ -1,10 +1,8 @@
 package com.oplay.giftassistant.model.data.resp;
 
 import com.google.gson.annotations.SerializedName;
-import com.oplay.giftassistant.model.GameModel;
-import com.oplay.giftassistant.model.GiftModel;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 搜索结果返回的数据类型
@@ -17,8 +15,8 @@ public class SearchDataResult {
 	public String keyword;
 
 	@SerializedName("games")
-	public List<GameModel> gameList;
+	public ArrayList<IndexGameNew> games;
 
 	@SerializedName("gifts")
-	public List<GiftModel> giftList;
+	public ArrayList<IndexGiftNew> gifts;
 }

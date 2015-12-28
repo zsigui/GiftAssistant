@@ -138,6 +138,10 @@ public class SplashActivity extends BaseAppCompatActivity {
 			}
 		}
 		AccountManager.getInstance().setUser(user);
+
+		// 从服务器获取一些显示配置,存入SP,获取不到从SP取或者默认显示
+		mApp.setAllowDownload(true);
+
 		mApp.setGlobalInit(true);
 	}
 }
