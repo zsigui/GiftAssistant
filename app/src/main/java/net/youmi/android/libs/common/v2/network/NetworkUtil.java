@@ -2,14 +2,25 @@ package net.youmi.android.libs.common.v2.network;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.dns.Message;
 import net.youmi.android.libs.common.dns.SimpleResolver;
 import net.youmi.android.libs.common.v2.download.core.DownloadUtil;
 import net.youmi.android.libs.common.v2.network.core.BaseHttpRequesterModel;
 import net.youmi.android.libs.common.v2.network.core.HttpRequesterFactory;
+
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 
 import java.net.HttpURLConnection;
 import java.net.Inet4Address;
@@ -36,82 +47,82 @@ public class NetworkUtil {
 	 * @return
 	 */
 	public static String getFinalDestUrl(Context context, String rawUrl) {
-		//		if (Build.VERSION.SDK_INT < 9) {
-		//			return getFinalDestUrlByHttpClient(context, rawUrl, 5);
-		//		} else {
-		return getFinalDestUrlByHttpURLConnection(context, rawUrl, 5);
-		//		}
+		if (Build.VERSION.SDK_INT < 9) {
+			return getFinalDestUrlByHttpClient(context, rawUrl, 5);
+		} else {
+			return getFinalDestUrlByHttpURLConnection(context, rawUrl, 5);
+		}
 	}
 
-	//	/**
-	//	 * 获取最终的url地址(循环遍历301/302)
-	//	 *
-	//	 * @param rawUrl
-	//	 * @param loopMaxTimes 最大遍历次数，不然坑爹一点的话会无限循环重定向 (A->B->A)
-	//	 *
-	//	 * @return
-	//	 */
-	//	public static String getFinalDestUrlByHttpClient(Context context, String rawUrl, int loopMaxTimes) {
-	//		if (Basic_StringUtil.isNullOrEmpty(rawUrl)) {
-	//			return null;
-	//		}
-	//		int count = 0;
-	//		if (DLog.isNetLog) {
-	//			DLog.td(DLog.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
-	//		}
-	//
-	//		DefaultHttpClient httpClient = null;
-	//		HttpGet httpget = null;
-	//
-	//		try {
-	//			// 因为这里生成的httpclient是已经开启了重定向处理的，所以需要传入一个值来获取其中的状态
-	//			httpClient = HttpRequesterFactory.newHttpClient(context);
-	//			httpget = new HttpGet(rawUrl);
-	//
-	//			// httpContext会在execute中传入，记录请求中的一些状态信息，如：记录重定向的信息
-	//			HttpContext httpContext = new BasicHttpContext();
-	//			httpClient.execute(httpget, httpContext);
-	//
-	//			HttpHost targetHost = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-	//			HttpUriRequest realRequest = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
-	//			String finalUrl = targetHost.getHostName() + realRequest.getURI().toString();
-	//			if (!finalUrl.startsWith("http://")) {
-	//				finalUrl = "http://" + finalUrl;
-	//			}
-	//			if (DLog.isNetLog) {
-	//				DLog.td(DLog.mNetTag, NetworkUtil.class, "最终url:%s", finalUrl);
-	//			}
-	//			return finalUrl;
-	//
-	//		} catch (Exception e) {
-	//			if (DLog.isNetLog) {
-	//				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//			}
-	//		} finally {
-	//			try {
-	//				if (httpget != null) {
-	//					httpget.abort();
-	//				}
-	//			} catch (Exception e) {
-	//				if (DLog.isNetLog) {
-	//					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//				}
-	//			}
-	//			try {
-	//				// 至此，HttpClient的实例已经不再需要时，可以使用连接管理器关闭
-	//				if (httpClient != null) {
-	//					httpClient.getConnectionManager().shutdown();
-	//				}
-	//			} catch (Exception e) {
-	//				if (DLog.isNetLog) {
-	//					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//				}
-	//
-	//			}
-	//		}
-	//
-	//		return rawUrl;
-	//	}
+	/**
+	 * 获取最终的url地址(循环遍历301/302)
+	 *
+	 * @param rawUrl
+	 * @param loopMaxTimes 最大遍历次数，不然坑爹一点的话会无限循环重定向 (A->B->A)
+	 *
+	 * @return
+	 */
+	public static String getFinalDestUrlByHttpClient(Context context, String rawUrl, int loopMaxTimes) {
+		if (Basic_StringUtil.isNullOrEmpty(rawUrl)) {
+			return null;
+		}
+		int count = 0;
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
+		}
+
+		DefaultHttpClient httpClient = null;
+		HttpGet httpget = null;
+
+		try {
+			// 因为这里生成的httpclient是已经开启了重定向处理的，所以需要传入一个值来获取其中的状态
+			httpClient = HttpRequesterFactory.newHttpClient(context);
+			httpget = new HttpGet(rawUrl);
+
+			// httpContext会在execute中传入，记录请求中的一些状态信息，如：记录重定向的信息
+			HttpContext httpContext = new BasicHttpContext();
+			httpClient.execute(httpget, httpContext);
+
+			HttpHost targetHost = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+			HttpUriRequest realRequest = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+			String finalUrl = targetHost.getHostName() + realRequest.getURI().toString();
+			if (!finalUrl.startsWith("http://")) {
+				finalUrl = "http://" + finalUrl;
+			}
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", finalUrl);
+			}
+			return finalUrl;
+
+		} catch (Exception e) {
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+			}
+		} finally {
+			try {
+				if (httpget != null) {
+					httpget.abort();
+				}
+			} catch (Exception e) {
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+				}
+			}
+			try {
+				// 至此，HttpClient的实例已经不再需要时，可以使用连接管理器关闭
+				if (httpClient != null) {
+					httpClient.getConnectionManager().shutdown();
+				}
+			} catch (Exception e) {
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+				}
+
+			}
+		}
+
+		return rawUrl;
+	}
 
 	/**
 	 * 获取最终的url地址(循环遍历301/302)
@@ -126,8 +137,8 @@ public class NetworkUtil {
 			return null;
 		}
 		int count = 0;
-		if (DLog.isNetLog) {
-			DLog.td(DLog.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
 		}
 		String currentUrl = rawUrl;
 		while (count < loopMaxTimes) {
@@ -149,20 +160,20 @@ public class NetworkUtil {
 				case HttpURLConnection.HTTP_SEE_OTHER:  //303
 				case 307:                               //307
 					currentUrl = httpURLConnection.getHeaderField("Location");
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
 					}
 					break;
 				default:
 					httpURLConnection.disconnect();
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
 					}
 					return currentUrl;
 				}
 			} catch (Exception e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 				}
 			} finally {
 				try {
@@ -170,8 +181,8 @@ public class NetworkUtil {
 						httpURLConnection.disconnect();
 					}
 				} catch (Exception e) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 					}
 				}
 			}
@@ -201,52 +212,52 @@ public class NetworkUtil {
 				return matcher2.group(matcher2.groupCount());
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 			}
 		}
 		return null;
 	}
 
-	//	/**
-	//	 * 从http 请求结果中提取出文件名字
-	//	 *
-	//	 * @param response
-	//	 * @param destUrl
-	//	 *
-	//	 * @return
-	//	 */
-	//	public static String getFileNameFromHttpResponse(HttpResponse response, String destUrl) {
-	//		String fileName = null;
-	//		try {
-	//			// 提取文件名等等
-	//			Header[] headers = response.getHeaders("Content-Disposition");
-	//
-	//			// 从Content-Disposition中获取fileName
-	//			if (headers != null && headers.length > 0) {
-	//				for (Header header : headers) {
-	//					if (header != null) {
-	//						fileName = getFileNameFromContentDisposition(header.getValue());
-	//						if (!Basic_StringUtil.isNullOrEmpty(fileName)) {
-	//							break;
-	//						}
-	//						fileName = null;
-	//					}
-	//				}
-	//			}
-	//
-	//			// 如果不行就从请求的url中获取
-	//			if (fileName == null) {
-	//				fileName = getFileNameFromHttpUrl(destUrl);
-	//			}
-	//
-	//		} catch (Throwable e) {
-	//			if (DLog.isNetLog) {
-	//				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//			}
-	//		}
-	//		return fileName;
-	//	}
+	/**
+	 * 从http 请求结果中提取出文件名字
+	 *
+	 * @param response
+	 * @param destUrl
+	 *
+	 * @return
+	 */
+	public static String getFileNameFromHttpResponse(HttpResponse response, String destUrl) {
+		String fileName = null;
+		try {
+			// 提取文件名等等
+			Header[] headers = response.getHeaders("Content-Disposition");
+
+			// 从Content-Disposition中获取fileName
+			if (headers != null && headers.length > 0) {
+				for (Header header : headers) {
+					if (header != null) {
+						fileName = getFileNameFromContentDisposition(header.getValue());
+						if (!Basic_StringUtil.isNullOrEmpty(fileName)) {
+							break;
+						}
+						fileName = null;
+					}
+				}
+			}
+
+			// 如果不行就从请求的url中获取
+			if (fileName == null) {
+				fileName = getFileNameFromHttpUrl(destUrl);
+			}
+
+		} catch (Throwable e) {
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+			}
+		}
+		return fileName;
+	}
 
 	/**
 	 * 从http请求url中获取文件名字(仅仅是截获最后一个'/'后的字符串)
@@ -268,8 +279,8 @@ public class NetworkUtil {
 				return path.substring(index + 1);
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 			}
 		}
 		return null;
@@ -297,8 +308,8 @@ public class NetworkUtil {
 				return matcher.group(matcher.groupCount());
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 			}
 		}
 		return null;
@@ -353,7 +364,7 @@ public class NetworkUtil {
 	//
 	//		} catch (Throwable e) {
 	//			if (Debug_SDK.isNetLog) {
-	//				DLog.te(DLog.mNetTag, Util_Network_HttpUtil.class, e);
+	//				Debug_SDK.te(Debug_SDK.mNetTag, Util_Network_HttpUtil.class, e);
 	//			}
 	//		}
 	//		return false;
@@ -395,71 +406,71 @@ public class NetworkUtil {
 	//
 	//		} catch (Throwable e) {
 	//			if (Debug_SDK.isNetLog) {
-	//				DLog.te(DLog.mNetTag, Util_Network_HttpUtil.class, e);
+	//				Debug_SDK.te(Debug_SDK.mNetTag, Util_Network_HttpUtil.class, e);
 	//			}
 	//		}
 	//		return false;
 	//	}
 
 	public static long getContentLength(Context context, String url) {
-		//		if (Build.VERSION.SDK_INT < 9) {
-		//			return getContentLengthByHttpClient(context, url);
-		//		} else {
-		return getContentLengthByHttpURLConnection(context, url, 5);
-		//		}
+		if (Build.VERSION.SDK_INT < 9) {
+			return getContentLengthByHttpClient(context, url);
+		} else {
+			return getContentLengthByHttpURLConnection(context, url, 5);
+		}
 
 	}
 
-	//	/**
-	//	 * 获取服务器上目标文件的长度(支持传入从重定向地址)
-	//	 *
-	//	 * @param context
-	//	 * @param url
-	//	 *
-	//	 * @return
-	//	 */
-	//	public static long getContentLengthByHttpClient(Context context, String url) {
-	//		DefaultHttpClient client = null;
-	//		HttpGet get = null;
-	//		try {
-	//			if (url == null) {
-	//				return -1;
-	//			}
-	//			client = HttpRequesterFactory.newHttpClient(context);
-	//			get = new HttpGet(url);
-	//			HttpResponse response = client.execute(get);
-	//			int code = response.getStatusLine().getStatusCode();
-	//			if (code >= 200 && code < 300) {
-	//				return response.getEntity().getContentLength();
-	//			}
-	//
-	//		} catch (Throwable e) {
-	//			if (DLog.isNetLog) {
-	//				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//			}
-	//		} finally {
-	//			try {
-	//				if (get != null) {
-	//					get.abort();
-	//				}
-	//			} catch (Throwable e) {
-	//				if (DLog.isNetLog) {
-	//					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//				}
-	//			}
-	//
-	//			try {
-	//				if (client != null) {
-	//					client.getConnectionManager().shutdown();
-	//				}
-	//			} catch (Throwable e) {
-	//				if (DLog.isNetLog) {
-	//					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
-	//				}
-	//			}
-	//		}
-	//		return -1;
-	//	}
+	/**
+	 * 获取服务器上目标文件的长度(支持传入从重定向地址)
+	 *
+	 * @param context
+	 * @param url
+	 *
+	 * @return
+	 */
+	public static long getContentLengthByHttpClient(Context context, String url) {
+		DefaultHttpClient client = null;
+		HttpGet get = null;
+		try {
+			if (url == null) {
+				return -1;
+			}
+			client = HttpRequesterFactory.newHttpClient(context);
+			get = new HttpGet(url);
+			HttpResponse response = client.execute(get);
+			int code = response.getStatusLine().getStatusCode();
+			if (code >= 200 && code < 300) {
+				return response.getEntity().getContentLength();
+			}
+
+		} catch (Throwable e) {
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+			}
+		} finally {
+			try {
+				if (get != null) {
+					get.abort();
+				}
+			} catch (Throwable e) {
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+				}
+			}
+
+			try {
+				if (client != null) {
+					client.getConnectionManager().shutdown();
+				}
+			} catch (Throwable e) {
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
+				}
+			}
+		}
+		return -1;
+	}
 
 	/**
 	 * 获取服务器上目标文件的长度(支持传入从重定向地址)
@@ -474,8 +485,8 @@ public class NetworkUtil {
 			return -1;
 		}
 		int count = 0;
-		if (DLog.isNetLog) {
-			DLog.td(DLog.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "原始url:%s", rawUrl);
 		}
 		String currentUrl = rawUrl;
 		while (count < loopMaxTimes) {
@@ -497,22 +508,22 @@ public class NetworkUtil {
 				case HttpURLConnection.HTTP_SEE_OTHER:  //303
 				case 307:                               //307
 					currentUrl = httpURLConnection.getHeaderField("Location");
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
 					}
 					break;
 				default:
 					long contentLength = httpURLConnection.getContentLength();
 					httpURLConnection.disconnect();
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
-						DLog.td(DLog.mNetTag, NetworkUtil.class, "最终ContentLength:%d", contentLength);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
+						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终ContentLength:%d", contentLength);
 					}
 					return contentLength;
 				}
 			} catch (Exception e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 				}
 			} finally {
 				try {
@@ -520,8 +531,8 @@ public class NetworkUtil {
 						httpURLConnection.disconnect();
 					}
 				} catch (Exception e) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 					}
 				}
 			}
@@ -565,8 +576,8 @@ public class NetworkUtil {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 			}
 		}
 		return false;
@@ -615,15 +626,15 @@ public class NetworkUtil {
 					}
 					return sb.substring(0, sb.length() - 1);
 				} catch (Exception e) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 					}
 
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkUtil.class, e);
 			}
 		}
 		return null;
@@ -642,8 +653,8 @@ public class NetworkUtil {
 			String ip = InetAddress.getByAddress(sr.send(query).getAddr()).getHostAddress();
 			return url.replaceFirst(host, ip);
 		} catch (Exception e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, DownloadUtil.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, DownloadUtil.class, e);
 			}
 		}
 		return null;

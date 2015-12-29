@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.download.storer;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_File;
 
 import java.io.File;
@@ -166,13 +166,13 @@ public abstract class AbsDownloadDir {
 
 				// 1. 先检查有没有超期了
 				if (isFileTimeOut(file)) {
-					if (DLog.isDownloadLog) {
-						DLog.td(DLog.mDownloadTag, this, "文件[%s]已经过期,准备删除", file.getAbsolutePath());
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "文件[%s]已经过期,准备删除", file.getAbsolutePath());
 					}
 					// 文件超期就删除
 					boolean result = Util_System_File.delete(file);
-					if (DLog.isDownloadLog) {
-						DLog.td(DLog.mDownloadTag, this, "文件[%s]删除%s", file.getAbsolutePath(), result ? "成功" : "失败");
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "文件[%s]删除%s", file.getAbsolutePath(), result ? "成功" : "失败");
 					}
 					continue;
 				}
@@ -190,8 +190,8 @@ public abstract class AbsDownloadDir {
 
 			// 使用链接将文件进行排序，文件比较旧的排在前面，如果超过目录缓存的总大小，删除排在前面的文件。
 			Iterator<File> iterator = fileList.iterator();
-			if (DLog.isDownloadLog) {
-				DLog.td(DLog.mDownloadTag, this, "准备删除旧的但未过时的文件");
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.td(Debug_SDK.mDownloadTag, this, "准备删除旧的但未过时的文件");
 			}
 
 			int a = 10000;
@@ -205,18 +205,18 @@ public abstract class AbsDownloadDir {
 					iterator.remove();
 					countLen -= gfFile.length();
 
-					if (DLog.isDownloadLog) {
-						DLog.td(DLog.mDownloadTag, this, "准备删除旧的但未过时的文件[%s]", gfFile.getPath());
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "准备删除旧的但未过时的文件[%s]", gfFile.getPath());
 					}
 					// 删除旧的文件
 					boolean isSuccess = Util_System_File.delete(gfFile);
-					if (DLog.isDownloadLog) {
-						DLog.ti(DLog.mDownloadTag, this, "%s删除旧的但未过时的文件[%s]删除%s", isSuccess ? "成功" : "失败",
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "%s删除旧的但未过时的文件[%s]删除%s", isSuccess ? "成功" : "失败",
 								gfFile.getAbsolutePath());
 					}
 				} catch (Throwable e) {
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, this, e);
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 				--a;
@@ -226,8 +226,8 @@ public abstract class AbsDownloadDir {
 			}
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 		return false;
@@ -266,8 +266,8 @@ public abstract class AbsDownloadDir {
 				}
 				return 1;
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 
 			}
@@ -363,7 +363,7 @@ public abstract class AbsDownloadDir {
 	//			return true;
 	//		} catch (Throwable e) {
 	//			if (Debug_SDK.isDownloadLog) {
-	//				DLog.te(DLog.mDownloadTag, this, e);
+	//				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 	//			}
 	//		}
 	//		return false;

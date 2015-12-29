@@ -1,8 +1,7 @@
 package net.youmi.android.libs.common.global.model;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.os.BatteryManager;
-
-import net.youmi.android.libs.common.debug.DLog;
 
 public class Model_Battery {
 
@@ -24,14 +23,13 @@ public class Model_Battery {
 	 * <li>{@link android.os.BatteryManager#BATTERY_PLUGGED_USB} USB充电</li>
 	 * <li>{@link android.os.BatteryManager#BATTERY_PLUGGED_WIRELESS} 无线充电</li>
 	 * </ul>
-	 *
 	 * @see
 	 */
 	public int inChargeType;
 
 	@Override
 	public String toString() {
-		if (DLog.isDebug) {
+		if (Debug_SDK.isDebug) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("Model_Battery [\n  currentBatteryPercent=");
 			builder.append(currentBatteryPercent);

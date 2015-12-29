@@ -2,13 +2,11 @@ package net.youmi.android.libs.common.util;
 
 import android.os.Handler;
 import android.os.Looper;
-
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Util_System_Runtime {
 
 	private static Util_System_Runtime mInstance;
-
 	private Handler mUiHandler;
 
 	private Util_System_Runtime() {
@@ -21,8 +19,8 @@ public class Util_System_Runtime {
 				mInstance = new Util_System_Runtime();
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Runtime.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Runtime.class, e);
 			}
 		}
 		return mInstance;
@@ -32,8 +30,8 @@ public class Util_System_Runtime {
 		try {
 			return Looper.myLooper() == Looper.getMainLooper();
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Runtime.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Runtime.class, e);
 			}
 		}
 		return false;
@@ -46,8 +44,8 @@ public class Util_System_Runtime {
 			}
 			return mUiHandler.post(runnable);
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Runtime.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Runtime.class, e);
 			}
 		}
 		return false;
@@ -55,10 +53,11 @@ public class Util_System_Runtime {
 
 	/**
 	 * 延迟指定时间之后执行任务
-	 *
-	 * @param runnable     要执行的任务
-	 * @param delayTime_ms 要延迟的毫秒数
-	 *
+	 * 
+	 * @param runnable
+	 *            要执行的任务
+	 * @param delayTime_ms
+	 *            要延迟的毫秒数
 	 * @return
 	 */
 	public boolean runInUiThreadDelayed_ms(Runnable runnable, long delayTime_ms) {
@@ -68,8 +67,8 @@ public class Util_System_Runtime {
 			}
 			return mUiHandler.postDelayed(runnable, delayTime_ms);
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Runtime.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Runtime.class, e);
 			}
 		}
 		return false;

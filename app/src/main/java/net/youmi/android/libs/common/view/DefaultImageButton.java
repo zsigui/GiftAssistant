@@ -1,5 +1,7 @@
 package net.youmi.android.libs.common.view;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.util.Util_Res_Base64_Parser;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -9,21 +11,20 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.widget.ImageButton;
 
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.util.Util_Res_Base64_Parser;
-
 /**
  * 默认ImageButotn(可以通过base64码构造bitmap)
- *
+ * 
  * @author zhitaocai edit on 2014-7-2
+ * 
  */
 public class DefaultImageButton extends ImageButton {
 
 	/**
 	 * 传入bitmap的base64码
-	 *
+	 * 
 	 * @param context
-	 * @param bitmapBase64 可用|不可用状态下的图标
+	 * @param bitmapBase64
+	 *            可用|不可用状态下的图标
 	 */
 	public DefaultImageButton(Context context, String bitmapBase64) {
 		super(context);
@@ -35,15 +36,15 @@ public class DefaultImageButton extends ImageButton {
 				initStates(drawable, drawable);
 			}
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}
 
 	/**
 	 * 传入id生成按钮
-	 *
+	 * 
 	 * @param context
 	 * @param dfImgResID
 	 */
@@ -54,20 +55,24 @@ public class DefaultImageButton extends ImageButton {
 			Drawable drawable = context.getResources().getDrawable(dfImgResID);
 			initStates(drawable, drawable);
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}
 
 	/**
 	 * 初始化按钮
-	 *
+	 * 
 	 * @param context
-	 * @param dfImgResID_en        可用状态下的默认图标，用于替换
-	 * @param bitmapBase64_able    可用状态下的图标
-	 * @param dfImgResID_disen     不可用状态下的默认图标,用于替换
-	 * @param bitmapBase64_disable 不可用状态下的图标
+	 * @param dfImgResID_en
+	 *            可用状态下的默认图标，用于替换
+	 * @param bitmapBase64_able
+	 *            可用状态下的图标
+	 * @param dfImgResID_disen
+	 *            不可用状态下的默认图标,用于替换
+	 * @param bitmapBase64_disable
+	 *            不可用状态下的图标
 	 */
 	public DefaultImageButton(Context context, String bitmapBase64_able, String bitmapBase64_disable) {
 		super(context);
@@ -89,20 +94,24 @@ public class DefaultImageButton extends ImageButton {
 			initStates(drawable_en, drawable_disen);
 
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}
 
 	/**
 	 * 初始化按钮
-	 *
+	 * 
 	 * @param context
-	 * @param dfImgResID_able    可用状态下的默认图标，用于替换
-	 * @param bitmapBase64_en    可用状态下的图标
-	 * @param dfImgResID_disable 不可用状态下的默认图标,用于替换
-	 * @param bitmapBase64_disen 不可用状态下的图标
+	 * @param dfImgResID_able
+	 *            可用状态下的默认图标，用于替换
+	 * @param bitmapBase64_en
+	 *            可用状态下的图标
+	 * @param dfImgResID_disable
+	 *            不可用状态下的默认图标,用于替换
+	 * @param bitmapBase64_disen
+	 *            不可用状态下的图标
 	 */
 	public DefaultImageButton(Context context, int dfImgResID_able, int dfImgResID_disable) {
 		super(context);
@@ -115,8 +124,8 @@ public class DefaultImageButton extends ImageButton {
 			initStates(drawable_en, drawable_disen);
 
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 
@@ -124,7 +133,7 @@ public class DefaultImageButton extends ImageButton {
 
 	/**
 	 * 设置按钮按下和未按下时的状态
-	 *
+	 * 
 	 * @param enableDrawable
 	 * @param disenableDrawable
 	 */
@@ -133,23 +142,23 @@ public class DefaultImageButton extends ImageButton {
 		try {
 			setImageDrawable(new ImageDrawable(enableDrawable, disenableDrawable));
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 
 		try {
 			setBackgroundDrawable(new BackgroundDrawable());
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}
 
 	/**
 	 * 设置按钮按下时和未按下时的图标选择
-	 *
+	 * 
 	 * @author zhitaocai
 	 */
 	private class ImageDrawable extends StateListDrawable {
@@ -165,7 +174,7 @@ public class DefaultImageButton extends ImageButton {
 
 	/**
 	 * 设置按钮按下时和未按下时的背景颜色
-	 *
+	 * 
 	 * @author zhitaocai
 	 */
 	private class BackgroundDrawable extends StateListDrawable {

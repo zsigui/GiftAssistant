@@ -32,17 +32,17 @@ public class SDKBuild extends YmLibBuild {
 	/**
 	 * 无积分sdk版本号 e.g 411
 	 */
-	public final static int NORMAL_SDK_VERSION_CODE = 530;
+	public final static int NORMAL_SDK_VERSION_CODE = 531;
 
 	/**
 	 * 无积分sdk版本名 e.g "411"
 	 */
-	public final static String NORMAL_SDK_VERSION_NAME = "530";
+	public final static String NORMAL_SDK_VERSION_NAME = "531";
 
 	/**
 	 * 无积分sdk的版本名，用于在init的时候输出log用 e.g "4.1.1"
 	 */
-	public final static String NORMAL_SDK_VERSION_NAME_FOR_LOG = "5.3.0";
+	public final static String NORMAL_SDK_VERSION_NAME_FOR_LOG = "5.3.1";
 
 	/**
 	 * 获取较大的sdk版本号

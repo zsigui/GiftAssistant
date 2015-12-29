@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class FileChecker {
 
 	public static void logAll_PreString_PublicMethod(Object object, String preMethodString) {
-		if (DLog.isDebug) {
+		if (Debug_SDK.isDebug) {
 
 			try {
 				long start = System.currentTimeMillis();
@@ -28,7 +28,7 @@ public class FileChecker {
 				} else {
 					classNameString = object.getClass().getName();
 				}
-				DLog.ti("test_", object, classNameString);
+				Debug_SDK.ti("test_", object, classNameString);
 
 				Class<?> c = Class.forName(classNameString);
 				Method[] methods = c.getMethods();
@@ -40,20 +40,20 @@ public class FileChecker {
 				}
 				for (int i = 0; i < temp.size(); ++i) {
 					if (i != temp.size() - 1) {
-						DLog.tv("test_", object, "┣━━ %s", temp.get(i));
+						Debug_SDK.tv("test_", object, "┣━━ %s", temp.get(i));
 					} else {
-						DLog.tv("test_", object, "┗━━ %s", temp.get(i));
+						Debug_SDK.tv("test_", object, "┗━━ %s", temp.get(i));
 					}
 				}
-				DLog.tv("test_", object, "┗━━ 总耗时: %d ms", System.currentTimeMillis() - start);
+				Debug_SDK.tv("test_", object, "┗━━ 总耗时: %d ms", System.currentTimeMillis() - start);
 			} catch (Exception e) {
-				DLog.te("test_", object, e);
+				Debug_SDK.te("test_", object, e);
 			}
 		}
 	}
 
 	public static void diff(Object obj1, Object obj2, String preMethodString) {
-		if (DLog.isDebug) {
+		if (Debug_SDK.isDebug) {
 
 			HashMap<String, String> map1 = getClassData(obj1, preMethodString);
 			HashMap<String, String> map2 = getClassData(obj2, preMethodString);
@@ -65,28 +65,28 @@ public class FileChecker {
 				String methodContent = entry.getValue();
 
 				boolean isPass = false;
-				if (map2.containsKey(methodName) && map2.containsValue(methodContent) &&
-				    map2.get(methodName).equals(methodContent)) {
-					DLog.ti("test_", obj1, "true ━━ %s ", methodName);
+				if (map2.containsKey(methodName) && map2.containsValue(methodContent) && map2.get(methodName).equals
+						(methodContent)) {
+					Debug_SDK.ti("test_", obj1, "true ━━ %s ", methodName);
 					isPass = true;
 				} else {
-					DLog.te("test_", obj1, "false ━━ %s", methodName);
+					Debug_SDK.te("test_", obj1, "false ━━ %s", methodName);
 				}
-				DLog.tv("test_", obj1, "     ┗━ src: %s : %s", methodName, methodContent);
-				DLog.tv("test_", obj1, "     ┗━ aft: %s : %s", methodName, map2.get(methodName));
-				if (!isPass) {
-					DLog.te("test_", obj1, "校验失败");
+					Debug_SDK.tv("test_", obj1, "     ┗━ src: %s : %s", methodName, methodContent);
+					Debug_SDK.tv("test_", obj1, "     ┗━ aft: %s : %s", methodName, map2.get(methodName));
+				if (!isPass){
+					Debug_SDK.te("test_", obj1, "校验失败");
 					return;
 				}
 			}
-			DLog.ti("test_", obj1, "校验通过");
+			Debug_SDK.ti("test_", obj1, "校验通过");
 
 		}
 
 	}
 
 	public static HashMap<String, String> getClassData(Object object, String preMethodString) {
-		if (DLog.isDebug) {
+		if (Debug_SDK.isDebug) {
 
 			try {
 				String classNameString;
@@ -105,7 +105,7 @@ public class FileChecker {
 				}
 				return map;
 			} catch (Exception e) {
-				DLog.te("test_", object, e);
+				Debug_SDK.te("test_", object, e);
 			}
 		}
 		return null;

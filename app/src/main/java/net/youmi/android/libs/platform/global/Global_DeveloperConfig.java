@@ -3,7 +3,7 @@ package net.youmi.android.libs.platform.global;
 import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 import net.youmi.android.libs.platform.PlatformConstant;
 import net.youmi.android.libs.platform.SDKBuild;
@@ -118,16 +118,16 @@ public class Global_DeveloperConfig {
 				if (mAppId == null) {
 					mAppId = Global_SharePreferences
 							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, KEY_SALT_APPID, null);
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class,
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
 								"get appid from sharedpreferences:" + mAppId);
 					}
 				} else {
 					if (mAppId.length() <= 0) {
 						mAppId = Global_SharePreferences
 								.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, KEY_SALT_APPID, null);
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class,
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
 									"get appid from sharedpreferences:" + mAppId);
 						}
 					}
@@ -167,8 +167,8 @@ public class Global_DeveloperConfig {
 								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, appid,
 										KEY_SALT_APPID);
 
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class, "设置Appid:%s", appid);
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "设置Appid:%s", appid);
 						}
 					}
 				}
@@ -198,8 +198,8 @@ public class Global_DeveloperConfig {
 					mAppSecret = Global_SharePreferences
 							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure, KEY_SALT_APPSecure,
 									null);
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class,
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
 								"get appsecret from sharedpreferences:" + mAppSecret);
 					}
 				}
@@ -232,8 +232,8 @@ public class Global_DeveloperConfig {
 						Global_SharePreferences
 								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure, secret,
 										KEY_SALT_APPSecure);
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class, "设置AppSec:%s", mAppSecret);
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "设置AppSec:%s", mAppSecret);
 						}
 					}
 				}
@@ -365,7 +365,7 @@ public class Global_DeveloperConfig {
 	 * 30000-65535开发者可以自由使用
 	 *
 	 * @param context
-	 * @param channel
+	 * @param secret
 	 */
 	public static void setChannelID(Context context, int channel) {
 		try {
@@ -385,8 +385,8 @@ public class Global_DeveloperConfig {
 				boolean isSuccess = Global_SharePreferences
 						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_CHN, mYoumiChannelId + "",
 								KEY_SALT_CHN);
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_DeveloperConfig.class, "set channel id:%d file save:%b",
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "set channel id:%d file save:%b",
 							mYoumiChannelId, isSuccess);
 				}
 			}
@@ -423,7 +423,7 @@ public class Global_DeveloperConfig {
 				boolean isSuccess = Global_SharePreferences
 						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_SCHN, mShieldChannelId + "",
 								KEY_SALT_SCHN);
-				if (DLog.isGlobalLog) {
+				if (Debug_SDK.isGlobalLog) {
 				}
 			}
 		} catch (Throwable e) {
@@ -477,8 +477,8 @@ public class Global_DeveloperConfig {
 	// try {
 	// mYoumiChannelId = Util_System_Package.getIntFromMetaData(context,
 	// getKEY_ANDROIDMANIFEST_CHANNEL(), 0);
-	// if (DLog.isGlobalLog) {
-	// DLog.td(DLog.mGlobalTag,
+	// if (Debug_SDK.isGlobalLog) {
+	// Debug_SDK.td(Debug_SDK.mGlobalTag,
 	// Global_DeveloperConfig.class,
 	// "channel id:%d", mYoumiChannelId);
 	// }

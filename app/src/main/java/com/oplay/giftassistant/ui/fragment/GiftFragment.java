@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
+import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.socks.library.KLog;
@@ -153,15 +155,12 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 			}
 			s = getArguments().getSerializable(KEY_NEW);
 			if (s != null) {
-				KLog.e("mNewData  = " + (ArrayList<IndexGiftNew>) s);
-				KLog.e("mNewData.size  = " + ((ArrayList<IndexGiftNew>) s).size());
 				mNewAdapter.setData((ArrayList<IndexGiftNew>) s);
 			}
 		}
 
 		mLikeView.setAdapter(mLikeAdapter);
 		mLimitView.setAdapter(mLimitAdapter);
-		KLog.e("mNewData.count  = " + mNewAdapter.getCount());
 		mNewView.setAdapter(mNewAdapter);
 
 		mIsPrepared = true;
@@ -209,12 +208,12 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void lazyLoad() {
-		KLog.d(AppDebugConfig.TAG_APP, "load");
 		mIsLoading = true;
 	}
 
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 			case R.id.rl_like_all:
 				showToast("猜你喜欢被点击");
@@ -223,10 +222,14 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);*/
 				break;
 			case R.id.rl_limit_all:
-				showToast("今日限量被点击");
+				intent = new Intent(getContext(), GiftListActivity.class);
+				intent.putExtra(GiftListActivity.KEY_TYPE, 1);
+				getContext().startActivity(intent);
 				break;
 			case R.id.rl_new_all:
-				showToast("新鲜出炉被点击");
+				intent = new Intent(getContext(), GiftListActivity.class);
+				intent.putExtra(GiftListActivity.KEY_TYPE, 2);
+				getContext().startActivity(intent);
 				break;
 		}
 	}

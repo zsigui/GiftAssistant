@@ -7,7 +7,7 @@ import net.youmi.android.libs.common.basic.Basic_Properties;
 import net.youmi.android.libs.common.basic.Basic_Random;
 import net.youmi.android.libs.common.coder.Coder_CECoder;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo_Simulator;
 import net.youmi.android.libs.platform.PlatformConstant;
@@ -103,8 +103,8 @@ public class Global_Runtime_ClientId {
 			cid = toValidationCid(cidSrcString);// 加上校验码
 
 		} else {
-			// if (DLog.isGlobalLog) {
-			// DLog.ti(DLog.mGlobalTag, this, "cid成功过程(原始字符串):[%s%s%s%s]", imei, imsi,
+			// if (Debug_SDK.isGlobalLog) {
+			// Debug_SDK.ti(Debug_SDK.mGlobalTag, this, "cid成功过程(原始字符串):[%s%s%s%s]", imei, imsi,
 			// bd, keyWord);
 			// }
 
@@ -112,14 +112,14 @@ public class Global_Runtime_ClientId {
 			// 注意有两个参数是使用temp的，它们与收集到的参数有可能不一样。
 			String cidStr = Coder_Md5.md5(imei + imsi + bd + keyWord);
 
-			// if (DLog.isGlobalLog) {
-			// DLog.td(DLog.mGlobalTag, this, "cid成功过程(md5):[%s]", cidStr);
+			// if (Debug_SDK.isGlobalLog) {
+			// Debug_SDK.td(Debug_SDK.mGlobalTag, this, "cid成功过程(md5):[%s]", cidStr);
 			// }
 
 			String cidSrcString = Coder_CECoder.converHexTo64_GwRule(cidStr.substring(7, 25));
 
-			// if (DLog.isGlobalLog) {
-			// DLog.td(DLog.mGlobalTag, this, "cid成功过程(提取字符串):[%s]",
+			// if (Debug_SDK.isGlobalLog) {
+			// Debug_SDK.td(Debug_SDK.mGlobalTag, this, "cid成功过程(提取字符串):[%s]",
 			// cidStr.substring(7, 25));
 			// }
 
@@ -224,8 +224,8 @@ public class Global_Runtime_ClientId {
 			return srcCid + Character.toString(Coder_CECoder.converDecimalTo64(index));
 
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_ClientId.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_ClientId.class, e);
 			}
 		}
 
@@ -233,8 +233,8 @@ public class Global_Runtime_ClientId {
 	}
 
 	public String getCid() {
-		if (DLog.isGlobalLog) {
-			DLog.td(DLog.mGlobalTag, this, "cid:%s", cid);
+		if (Debug_SDK.isGlobalLog) {
+			Debug_SDK.td(Debug_SDK.mGlobalTag, this, "cid:%s", cid);
 		}
 		return cid;
 	}

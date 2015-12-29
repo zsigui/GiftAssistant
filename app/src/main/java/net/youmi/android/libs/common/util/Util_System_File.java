@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.util;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,9 +37,9 @@ public class Util_System_File {
 			}
 
 			if (destFilePermission != null) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "chmod file: %s permission is %s", file.getAbsolutePath(),
-							destFilePermission);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "chmod file: %s permission is %s",
+							file.getAbsolutePath(), destFilePermission);
 				}
 
 				StringBuilder sb = new StringBuilder(100);
@@ -47,14 +47,14 @@ public class Util_System_File {
 				String cmd = sb.toString();
 				Runtime.getRuntime().exec(cmd);
 
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "chmod cmd is:[%s]", destFilePermission);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "chmod cmd is:[%s]", destFilePermission);
 				}
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		}
 		return false;
@@ -73,52 +73,52 @@ public class Util_System_File {
 		try {
 
 			if (srcFile == null || destFile == null) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "move file failed: src file or dest file is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file or dest file is null");
 				}
 				return false;
 			}
 
 			if (!srcFile.exists()) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "move file failed: src file is exists == false");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file is exists == false");
 				}
 				return false;
 			}
 
 			if (srcFile.renameTo(destFile)) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "move file success: srcFile.renameTo destFile");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file success: srcFile.renameTo destFile");
 				}
 				return true;
 			}
 
 			if (cp(srcFile, destFile)) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_File.class, "move file: copy file success");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: copy file success");
 				}
 
 				try {
 					// 删除原始文件
 					if (srcFile.delete()) {
-						if (DLog.isUtilLog) {
-							DLog.td(DLog.mUtilTag, Util_System_File.class, "move file: delete src file success");
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file success");
 						}
 					} else {
-						if (DLog.isUtilLog) {
-							DLog.td(DLog.mUtilTag, Util_System_File.class, "move file: delete src file failed");
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file failed");
 						}
 					}
 				} catch (Throwable e) {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 					}
 				}
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		}
 
@@ -161,8 +161,8 @@ public class Util_System_File {
 				fileNameDest = destFile.getAbsolutePath();
 
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 				}
 			}
 
@@ -182,8 +182,8 @@ public class Util_System_File {
 			return true;
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		} finally {
 			try {
@@ -191,8 +191,8 @@ public class Util_System_File {
 					fos.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 				}
 			}
 
@@ -201,16 +201,17 @@ public class Util_System_File {
 					fis.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 				}
 			}
 
-			if (DLog.isUtilLog) {
+			if (Debug_SDK.isUtilLog) {
 				long nt = System.currentTimeMillis();
 				long span = nt - startTime;
-				DLog.td(DLog.mUtilTag, Util_System_File.class, "copy file from [%s] to [%s] , length is [%d] B , cost [%d] ms",
-						fileNameSrc, fileNameDest, fileLen, span);
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class,
+						"copy file from [%s] to [%s] , length is [%d] B , cost [%d] ms", fileNameSrc, fileNameDest, fileLen,
+						span);
 			}
 		}
 		return false;
@@ -258,8 +259,8 @@ public class Util_System_File {
 			return true;
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		} finally {
 			try {
@@ -267,8 +268,8 @@ public class Util_System_File {
 					outputStream.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 				}
 			}
 			try {
@@ -276,8 +277,8 @@ public class Util_System_File {
 					inputStream.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 				}
 			}
 		}
@@ -301,11 +302,11 @@ public class Util_System_File {
 			if (file.exists()) {
 				if (file.isFile()) {
 					boolean isSuccess = file.delete();
-					if (DLog.isUtilLog) {
+					if (Debug_SDK.isUtilLog) {
 						if (isSuccess) {
-							DLog.ti(DLog.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
+							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
 						} else {
-							DLog.te(DLog.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
 						}
 					}
 					return isSuccess;
@@ -316,11 +317,11 @@ public class Util_System_File {
 						}
 					}
 					boolean isSuccess = file.delete();
-					if (DLog.isUtilLog) {
+					if (Debug_SDK.isUtilLog) {
 						if (isSuccess) {
-							DLog.ti(DLog.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
+							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
 						} else {
-							DLog.te(DLog.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
 						}
 					}
 					return isSuccess;
@@ -330,8 +331,8 @@ public class Util_System_File {
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_Zip.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, e);
 			}
 		}
 		return false;
@@ -357,8 +358,8 @@ public class Util_System_File {
 
 			// 如果不存在父目录的话, 自动补全所有的根目录,然后创建
 			if (!file.getParentFile().exists()) {
-				if (DLog.isUtilLog) {
-					DLog.tw(DLog.mUtilTag, Util_System_File.class, "当前文件：%s不存在父目录，将补全", file.getAbsoluteFile());
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.tw(Debug_SDK.mUtilTag, Util_System_File.class, "当前文件：%s不存在父目录，将补全", file.getAbsoluteFile());
 				}
 				String[] filePathParts = file.getPath().split(File.separator);
 				StringBuilder parentDirPath = new StringBuilder();
@@ -367,27 +368,27 @@ public class Util_System_File {
 					// File parentDirFile = new File(parentDirPath.toString());
 					// if (!parentDirFile.exists()) {
 					// if (Debug_SDK.isUtilLog) {
-					// DLog.te(DLog.mUtilTag, Util_Zip.class, "路径:%s 不存在任何内容",
+					// Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, "路径:%s 不存在任何内容",
 					// parentDirFile.getAbsoluteFile());
 					// }
 					// // boolean chmodResult = chmod(parentDirFile.getParentFile(), "777");
 					// // if (Debug_SDK.isUtilLog) {
-					// // DLog.te(DLog.mUtilTag, Util_Zip.class, "修改 %s 权限 %s", parentDirFile.getParent(),
+					// // Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, "修改 %s 权限 %s", parentDirFile.getParent(),
 					// // chmodResult ? "成功" : "失败");
 					// // }
 					// boolean result = parentDirFile.mkdir();
 					// if (Debug_SDK.isUtilLog) {
-					// DLog.te(DLog.mUtilTag, Util_Zip.class, "目录%s 创建 %s",
+					// Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, "目录%s 创建 %s",
 					// parentDirFile.getAbsoluteFile(), result ? "成功" : "失败");
 					// }
 					// } else {
 					// // boolean chmodResult = chmod(parentDirFile, "777");
 					// // if (Debug_SDK.isUtilLog) {
-					// // DLog.te(DLog.mUtilTag, Util_Zip.class, "修改 %s 权限 %s", parentDirFile.getParent(),
+					// // Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, "修改 %s 权限 %s", parentDirFile.getParent(),
 					// // chmodResult ? "成功" : "失败");
 					// // }
 					// if (Debug_SDK.isUtilLog) {
-					// DLog.te(DLog.mUtilTag, Util_Zip.class, "路径:%s 存在 是%s",
+					// Debug_SDK.te(Debug_SDK.mUtilTag, Util_Zip.class, "路径:%s 存在 是%s",
 					// parentDirFile.getAbsoluteFile(),
 					// parentDirFile.isFile() ? "文件" : parentDirFile.isDirectory() ? "目录" : "其他");
 					// }
@@ -395,21 +396,23 @@ public class Util_System_File {
 				}
 				File parentDirFile = new File(parentDirPath.toString());
 				if (!parentDirFile.exists()) {
-					if (DLog.isUtilLog) {
-						DLog.tw(DLog.mUtilTag, Util_System_File.class, "路径:%s,不存在任何内容", parentDirFile.getAbsoluteFile());
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK
+								.tw(Debug_SDK.mUtilTag, Util_System_File.class, "路径:%s,不存在任何内容", parentDirFile.getAbsoluteFile
+										());
 					}
 				}
 				boolean result = parentDirFile.mkdirs();
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_System_File.class, "补全父目录%s %s", parentDirFile.getAbsoluteFile(),
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "补全父目录%s %s", parentDirFile.getAbsoluteFile(),
 							result ? "成功" : "失败");
 				}
 			}
 			file.createNewFile();
 			return file;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		}
 		return null;
@@ -439,8 +442,8 @@ public class Util_System_File {
 			int len = 0;
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_File.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, e);
 			}
 		}
 		return false;

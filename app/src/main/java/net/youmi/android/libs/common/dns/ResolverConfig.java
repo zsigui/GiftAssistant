@@ -15,9 +15,7 @@ import java.util.StringTokenizer;
 public class ResolverConfig {
 
 	private String[] servers = null;
-
 	private Name[] searchlist = null;
-
 	private int ndots = -1;
 
 	private static ResolverConfig currentConfig;
@@ -27,12 +25,10 @@ public class ResolverConfig {
 	}
 
 	public ResolverConfig() {
-		if (findProperty()) {
+		if (findProperty())
 			return;
-		}
-		if (findSunJVM()) {
+		if (findSunJVM())
 			return;
-		}
 		if (servers == null || searchlist == null) {
 			String OS = System.getProperty("os.name");
 			String vendor = System.getProperty("java.vendor");
@@ -43,9 +39,8 @@ public class ResolverConfig {
 	}
 
 	private void addServer(String server, List list) {
-		if (list.contains(server)) {
+		if (list.contains(server))
 			return;
-		}
 		list.add(server);
 	}
 
@@ -57,9 +52,8 @@ public class ResolverConfig {
 			e.printStackTrace();
 			return;
 		}
-		if (list.contains(name)) {
+		if (list.contains(name))
 			return;
-		}
 		list.add(name);
 	}
 
@@ -76,18 +70,15 @@ public class ResolverConfig {
 	}
 
 	private void configureFromLists(List lserver, List lsearch) {
-		if (servers == null && lserver.size() > 0) {
+		if (servers == null && lserver.size() > 0)
 			servers = (String[]) lserver.toArray(new String[0]);
-		}
-		if (searchlist == null && lsearch.size() > 0) {
+		if (searchlist == null && lsearch.size() > 0)
 			searchlist = (Name[]) lsearch.toArray(new Name[0]);
-		}
 	}
 
 	private void configureNdots(int lndots) {
-		if (ndots < 0 && lndots > 0) {
+		if (ndots < 0 && lndots > 0)
 			ndots = lndots;
-		}
 	}
 
 	private boolean findProperty() {
@@ -99,17 +90,15 @@ public class ResolverConfig {
 		prop = System.getProperty("dns.server");
 		if (prop != null) {
 			st = new StringTokenizer(prop, ",");
-			while (st.hasMoreTokens()) {
+			while (st.hasMoreTokens())
 				addServer(st.nextToken(), lserver);
-			}
 		}
 
 		prop = System.getProperty("dns.search");
 		if (prop != null) {
 			st = new StringTokenizer(prop, ",");
-			while (st.hasMoreTokens()) {
+			while (st.hasMoreTokens())
 				addSearch(st.nextToken(), lsearch);
-			}
 		}
 		configureFromLists(lserver, lsearch);
 		return (servers != null && searchlist != null);
@@ -133,7 +122,8 @@ public class ResolverConfig {
 			resConf = open.invoke(null, noObjects);
 
 			// lserver_tmp = resConf.nameservers();
-			Method nameservers = resConfClass.getMethod("nameservers", noClasses);
+			Method nameservers = resConfClass.getMethod("nameservers",
+					noClasses);
 			lserver_tmp = (List) nameservers.invoke(resConf, noObjects);
 
 			// lsearch_tmp = resConf.searchlist();
@@ -143,22 +133,19 @@ public class ResolverConfig {
 			return false;
 		}
 
-		if (lserver_tmp.size() == 0) {
+		if (lserver_tmp.size() == 0)
 			return false;
-		}
 
 		if (lserver_tmp.size() > 0) {
 			Iterator it = lserver_tmp.iterator();
-			while (it.hasNext()) {
+			while (it.hasNext())
 				addServer((String) it.next(), lserver);
-			}
 		}
 
 		if (lsearch_tmp.size() > 0) {
 			Iterator it = lsearch_tmp.iterator();
-			while (it.hasNext()) {
+			while (it.hasNext())
 				addSearch((String) it.next(), lsearch);
-			}
 		}
 		configureFromLists(lserver, lsearch);
 		return true;
@@ -191,21 +178,17 @@ public class ResolverConfig {
 				} else if (line.startsWith("domain")) {
 					StringTokenizer st = new StringTokenizer(line);
 					st.nextToken(); /* skip domain */
-					if (!st.hasMoreTokens()) {
+					if (!st.hasMoreTokens())
 						continue;
-					}
-					if (lsearch.isEmpty()) {
+					if (lsearch.isEmpty())
 						addSearch(st.nextToken(), lsearch);
-					}
 				} else if (line.startsWith("search")) {
-					if (!lsearch.isEmpty()) {
+					if (!lsearch.isEmpty())
 						lsearch.clear();
-					}
 					StringTokenizer st = new StringTokenizer(line);
 					st.nextToken(); /* skip search */
-					while (st.hasMoreTokens()) {
+					while (st.hasMoreTokens())
 						addSearch(st.nextToken(), lsearch);
-					}
 				} else if (line.startsWith("options")) {
 					StringTokenizer st = new StringTokenizer(line);
 					st.nextToken(); /* skip options */
@@ -235,17 +218,18 @@ public class ResolverConfig {
 		ArrayList lserver = new ArrayList();
 		ArrayList lsearch = new ArrayList();
 		try {
-			Class SystemProperties = Class.forName("android.os.SystemProperties");
-			Method method = SystemProperties.getMethod("get", new Class[] { String.class });
-			final String[] netdns = new String[] {
-					"net.dns1", "net.dns2", "net.dns3", "net.dns4"
-			};
+			Class SystemProperties = Class
+					.forName("android.os.SystemProperties");
+			Method method = SystemProperties.getMethod("get",
+					new Class[] { String.class });
+			final String[] netdns = new String[] { "net.dns1", "net.dns2",
+					"net.dns3", "net.dns4" };
 			for (int i = 0; i < netdns.length; i++) {
 				Object[] args = new Object[] { netdns[i] };
 				String v = (String) method.invoke(null, args);
-				if (v != null && (v.matches(re1) || v.matches(re2)) && !lserver.contains(v)) {
+				if (v != null && (v.matches(re1) || v.matches(re2))
+						&& !lserver.contains(v))
 					lserver.add(v);
-				}
 			}
 		} catch (Exception e) {
 			// ignore resolutely
@@ -253,34 +237,26 @@ public class ResolverConfig {
 		configureFromLists(lserver, lsearch);
 	}
 
-	/**
-	 * Returns all located servers
-	 */
+	/** Returns all located servers */
 	public String[] servers() {
 		return servers;
 	}
 
-	/**
-	 * Returns the first located server
-	 */
+	/** Returns the first located server */
 	public String server() {
-		if (servers == null) {
+		if (servers == null)
 			return null;
-		}
 		return servers[0];
 	}
 
-	/**
-	 * Returns all entries in the located search path
-	 */
+	/** Returns all entries in the located search path */
 	public Name[] searchPath() {
 		return searchlist;
 	}
 
 	public int ndots() {
-		if (ndots < 0) {
+		if (ndots < 0)
 			return 1;
-		}
 		return ndots;
 	}
 

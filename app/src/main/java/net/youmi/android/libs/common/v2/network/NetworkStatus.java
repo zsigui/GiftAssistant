@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Permission;
 
 /**
@@ -44,8 +44,8 @@ public class NetworkStatus {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkStatus.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkStatus.class, e);
 			}
 		}
 
@@ -71,8 +71,8 @@ public class NetworkStatus {
 					if (activeNetworkInfo.isAvailable()) {
 						switch (activeNetworkInfo.getType()) {
 						case ConnectivityManager.TYPE_WIFI: // wifi网络
-							if (DLog.isNetLog) {
-								DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为wifi网络");
+							if (Debug_SDK.isNetLog) {
+								Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为wifi网络");
 							}
 							return APN.APN_WIFI;
 						case ConnectivityManager.TYPE_MOBILE: // 手机网络
@@ -96,8 +96,8 @@ public class NetworkStatus {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkStatus.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkStatus.class, e);
 			}
 		}
 		return APN.APN_UNKNOW;
@@ -119,8 +119,8 @@ public class NetworkStatus {
 	public static int getNetworkType(Context context) {
 		// 不具有连接网络权限
 		if (!Util_System_Permission.isWith_INTERNET_Permission(context)) {
-			if (DLog.isNetLog) {
-				DLog.tw(DLog.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.tw(Debug_SDK.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
 						"android.permission.INTERNET");
 			}
 		}
@@ -128,16 +128,16 @@ public class NetworkStatus {
 		// 1、判断是否允许程序访问有关GSM网络信息
 		// 不具有访问GSM网络权限
 		if (!Util_System_Permission.isWith_ACCESS_NETWORK_STATE_Permission(context)) {
-			if (DLog.isNetLog) {
-				DLog.tw(DLog.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.tw(Debug_SDK.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
 						"android.permission.ACCESS_NETWORK_STATE");
 			}
 		}
 		// 2、判断是否允许程序访问Wi-Fi网络状态信息,经过测试，不需要检测这个权限也可以获取到网络信息,包括当前是wifi网络也可以判断出来，但是不配置的话就不能使用wifi网络
 		// 不具有访问WIFI网络权限
 		if (!Util_System_Permission.isWith_ACCESS_WIFI_STATE_Permission(context)) {
-			if (DLog.isNetLog) {
-				DLog.tw(DLog.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.tw(Debug_SDK.mNetTag, NetworkStatus.class, "Please Add \"%s\" To AndroidManifest.xml",
 						"android.permission.ACCESS_WIFI_STATE");
 			}
 		}
@@ -150,8 +150,8 @@ public class NetworkStatus {
 			if (activeNetworkInfo != null) {
 				// 网络不可用
 				if (!activeNetworkInfo.isAvailable()) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, NetworkStatus.class, "当前网络不可用");
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络不可用");
 					}
 					return Type.TYPE_UNKNOWN;
 				}
@@ -161,13 +161,13 @@ public class NetworkStatus {
 					// 判断当前网络类型
 					switch (activeNetworkInfo.getType()) {
 					case ConnectivityManager.TYPE_WIFI: // wifi网络
-						if (DLog.isNetLog) {
-							DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为wifi网络");
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为wifi网络");
 						}
 						return Type.TYPE_WIFI;
 					case ConnectivityManager.TYPE_MOBILE: // 手机网络
-						if (DLog.isNetLog) {
-							DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为手机网络");
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为手机网络");
 						}
 						try {
 							// 判断手机网络类型
@@ -177,8 +177,8 @@ public class NetworkStatus {
 							case TelephonyManager.NETWORK_TYPE_1xRTT: // 50-100kbps,
 							case TelephonyManager.NETWORK_TYPE_EDGE: // 50-100kbps,移动2G网络，基于gprs的，2.75代
 							case TelephonyManager.NETWORK_TYPE_GPRS: // 100kbps,联通2G网络，基于gsm，2.5代
-								if (DLog.isNetLog) {
-									DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为2G网络");
+								if (Debug_SDK.isNetLog) {
+									Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为2G网络");
 								}
 								return Type.TYPE_2G;
 
@@ -191,29 +191,29 @@ public class NetworkStatus {
 							case TelephonyManager.NETWORK_TYPE_HSUPA: // 1-23Mbps,基于WCDMA联通3G网络（3.5G）——高速上行，一般部署在重要城市，应用于R6
 							case TelephonyManager.NETWORK_TYPE_EHRPD: // 1-2Mbps,电信3G网络
 							case TelephonyManager.NETWORK_TYPE_HSPAP: // 10-20Mbps,也称HSPA+，目前全球最快的WCDMA商用网络
-								if (DLog.isNetLog) {
-									DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为3G网络");
+								if (Debug_SDK.isNetLog) {
+									Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为3G网络");
 								}
 								return Type.TYPE_3G;
 
 							case TelephonyManager.NETWORK_TYPE_LTE: // 10+Mbps,3G到4G的一个过渡，准4G网络
-								if (DLog.isNetLog) {
-									DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为4G网络");
+								if (Debug_SDK.isNetLog) {
+									Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为4G网络");
 								}
 								return Type.TYPE_4G;
 
 							case TelephonyManager.NETWORK_TYPE_UNKNOWN: // 未知网络
 								return Type.TYPE_UNKNOWN;
 							default:
-								if (DLog.isNetLog) {
-									DLog.ti(DLog.mNetTag, NetworkStatus.class, "当前网络为3G网络");
+								if (Debug_SDK.isNetLog) {
+									Debug_SDK.ti(Debug_SDK.mNetTag, NetworkStatus.class, "当前网络为3G网络");
 								}
 								return Type.TYPE_3G;
 							}
 
 						} catch (Exception e) {
-							if (DLog.isNetLog) {
-								DLog.te(DLog.mNetTag, NetworkStatus.class, e);
+							if (Debug_SDK.isNetLog) {
+								Debug_SDK.te(Debug_SDK.mNetTag, NetworkStatus.class, e);
 							}
 						}
 						return Type.TYPE_3G;
@@ -223,8 +223,8 @@ public class NetworkStatus {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, NetworkStatus.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, NetworkStatus.class, e);
 			}
 		}
 		return Type.TYPE_UNKNOWN;

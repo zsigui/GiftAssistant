@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.pool.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -39,8 +39,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public boolean remove(Object o) {
 		boolean result = super.remove(o);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了remove(o)");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了remove(o)");
 		}
 		return result;
 	}
@@ -48,16 +48,16 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public void clear() {
 		super.clear();
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了clear()");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了clear()");
 		}
 	}
 
 	@Override
 	public boolean add(T t) {
 		boolean result = super.add(t);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了add(t)");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了add(t)");
 		}
 		return result;
 	}
@@ -65,8 +65,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public T remove() {
 		T t = super.remove();
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了remove()");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了remove()");
 		}
 		return t;
 	}
@@ -74,8 +74,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public boolean offer(T t, long timeout, TimeUnit unit) throws InterruptedException {
 		boolean result = super.offer(t, timeout, unit);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了offer(t, timeout, unit)");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了offer(t, timeout, unit)");
 		}
 		return result;
 	}
@@ -83,14 +83,14 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public boolean offer(T t) {
 		boolean result = super.offer(t);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了offer(t) 当前size %d", size());
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了offer(t) 当前size %d", size());
 		}
 		// 只有size大于0 才表示真的有任务加入到队列中了
 		if (size() > 0) {
 			if (mAbsListenerNotifier != null) {
-				if (DLog.isDownloadLog && isLogOpen) {
-					DLog.td(DLog.mDownloadTag, this, "准备通知各个监听者，有新的任务加入到等待队列中，当前等待任务数量 %d", size());
+				if (Debug_SDK.isDownloadLog && isLogOpen) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "准备通知各个监听者，有新的任务加入到等待队列中，当前等待任务数量 %d", size());
 				}
 				mAbsListenerNotifier.onNotifyOffer(t, size());
 			}
@@ -100,18 +100,18 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 
 	@Override
 	public T take() throws InterruptedException {
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了super.take()之前 size %d", size());
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了super.take()之前 size %d", size());
 		}
 		int beforeTakeQueueSize = size();
 		T t = super.take();
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了super.take()之后 size %d", size());
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了super.take()之后 size %d", size());
 		}
 		if (beforeTakeQueueSize > 0) {
 			if (mAbsListenerNotifier != null) {
-				if (DLog.isDownloadLog && isLogOpen) {
-					DLog.td(DLog.mDownloadTag, this, "通知监听者，有任务从等待队列中提出到线程池中进行执行，提取出任务后，等待队列中长度%d", size());
+				if (Debug_SDK.isDownloadLog && isLogOpen) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "通知监听者，有任务从等待队列中提出到线程池中进行执行，提取出任务后，等待队列中长度%d", size());
 				}
 				mAbsListenerNotifier.onNotifyTake(t, size());
 			}
@@ -122,8 +122,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public T poll(long timeout, TimeUnit unit) throws InterruptedException {
 		T t = super.poll(timeout, unit);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了poll(timeout, unit)");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了poll(timeout, unit)");
 		}
 		return t;
 	}
@@ -131,8 +131,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public T poll() {
 		T t = super.poll();
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了poll()");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了poll()");
 		}
 		return t;
 	}
@@ -140,8 +140,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public T peek() {
 		T t = super.peek();
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了peek()");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了peek()");
 		}
 		return t;
 	}
@@ -149,8 +149,8 @@ public abstract class AbsLinkedBlockingQueue<T> extends LinkedBlockingQueue<T> {
 	@Override
 	public void put(T t) throws InterruptedException {
 		super.put(t);
-		if (DLog.isDownloadLog && isLogOpen) {
-			DLog.td(DLog.mDownloadTag, this, "调用了put(t)");
+		if (Debug_SDK.isDownloadLog && isLogOpen) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "调用了put(t)");
 		}
 	}
 }

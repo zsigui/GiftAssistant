@@ -10,5 +10,6 @@ public class IndexGiftLike implements Serializable{
 	public String name;
 	public int newGiftCount;
 	public int hasGiftCount;
+	public int playCount;
 	public String img;
 }

@@ -1,7 +1,5 @@
 package net.youmi.android.libs.common.coder;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,6 +16,8 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
+
 public class Coder_DES {
 
 	private Key mKey;
@@ -27,8 +27,8 @@ public class Coder_DES {
 		try {
 			return new Coder_DES(psw);
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		}
 		return null;
@@ -43,9 +43,8 @@ public class Coder_DES {
 
 	/**
 	 * 对输入byte[]进行加密，输出byte[]
-	 *
+	 * 
 	 * @param toEncrypt
-	 *
 	 * @return
 	 */
 	public byte[] encrypt(byte[] toEncrypt) {
@@ -60,8 +59,8 @@ public class Coder_DES {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 			try {
@@ -69,8 +68,8 @@ public class Coder_DES {
 					out.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 			try {
@@ -78,8 +77,8 @@ public class Coder_DES {
 					is.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 		}
@@ -88,9 +87,8 @@ public class Coder_DES {
 
 	/**
 	 * 对输入byte[]进行加密，输出byte[]
-	 *
+	 * 
 	 * @param toDecrypt
-	 *
 	 * @return
 	 */
 	public byte[] decrypt(byte[] toDecrypt) {
@@ -105,8 +103,8 @@ public class Coder_DES {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 			try {
@@ -114,8 +112,8 @@ public class Coder_DES {
 					out.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 			try {
@@ -123,8 +121,8 @@ public class Coder_DES {
 					is.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 		}
@@ -133,9 +131,11 @@ public class Coder_DES {
 
 	/**
 	 * 对输入流进行加密，并保存在输出流中
-	 *
-	 * @param is_toEncrypt 要加密的文件
-	 * @param out_dest     加密后存放的文件名
+	 * 
+	 * @param is_toEncrypt
+	 *            要加密的文件
+	 * @param out_dest
+	 *            加密后存放的文件名
 	 */
 	public boolean encrypt(InputStream is_toEncrypt, OutputStream out_dest) {
 
@@ -155,8 +155,8 @@ public class Coder_DES {
 
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 			try {
@@ -164,8 +164,8 @@ public class Coder_DES {
 					cis.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -176,9 +176,11 @@ public class Coder_DES {
 
 	/**
 	 * 对输入流采用DES算法进行解密
-	 *
-	 * @param is_toDecrypt 输入流
-	 * @param out_dest     输出流
+	 * 
+	 * @param is_toDecrypt
+	 *            输入流
+	 * @param out_dest
+	 *            输出流
 	 */
 	public boolean decrypt(InputStream is_toDecrypt, OutputStream out_dest) {
 
@@ -197,8 +199,8 @@ public class Coder_DES {
 
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 			try {
@@ -206,8 +208,8 @@ public class Coder_DES {
 					cos.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -217,9 +219,11 @@ public class Coder_DES {
 
 	/**
 	 * 文件file进行加密并保存目标文件destFile中
-	 *
-	 * @param file     要加密的文件
-	 * @param destFile 加密后存放的文件名
+	 * 
+	 * @param file
+	 *            要加密的文件
+	 * @param destFile
+	 *            加密后存放的文件名
 	 */
 	public boolean encrypt(File file, File destFile) {
 
@@ -242,8 +246,8 @@ public class Coder_DES {
 
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 
@@ -252,8 +256,8 @@ public class Coder_DES {
 					out.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -262,8 +266,8 @@ public class Coder_DES {
 					cis.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -272,8 +276,8 @@ public class Coder_DES {
 					is.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -284,9 +288,11 @@ public class Coder_DES {
 
 	/**
 	 * 文件采用DES算法解密文件
-	 *
-	 * @param file 已加密的文件
-	 * @param dest 解密后存放的文件
+	 * 
+	 * @param file
+	 *            已加密的文件
+	 * @param dest
+	 *            解密后存放的文件
 	 */
 	public boolean decrypt(File file, File dest) {
 		InputStream is = null;
@@ -307,8 +313,8 @@ public class Coder_DES {
 
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 			}
 		} finally {
 
@@ -317,8 +323,8 @@ public class Coder_DES {
 					out.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -327,8 +333,8 @@ public class Coder_DES {
 					cos.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 
@@ -337,8 +343,8 @@ public class Coder_DES {
 					is.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_DES.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_DES.class, e);
 				}
 			}
 		}

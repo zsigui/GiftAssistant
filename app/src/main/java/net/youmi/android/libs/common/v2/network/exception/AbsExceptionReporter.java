@@ -4,7 +4,7 @@ import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
 import net.youmi.android.libs.common.v2.network.NetworkStatus;
 import net.youmi.android.libs.common.v2.network.NetworkUtil;
@@ -86,8 +86,8 @@ public abstract class AbsExceptionReporter implements Runnable {
 						Basic_JSONUtil.putString(jo, "req-header", reqObj.toString());
 					}
 				} catch (Throwable e) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, this, e);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 					}
 				}
 
@@ -105,8 +105,8 @@ public abstract class AbsExceptionReporter implements Runnable {
 						Basic_JSONUtil.putString(jo, "rsp-header", rspObj.toString());
 					}
 				} catch (Throwable e) {
-					if (DLog.isNetLog) {
-						DLog.te(DLog.mNetTag, this, e);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 					}
 				}
 				Basic_JSONUtil.putInt(jo, "exception", mBaseHttpResponseModel.getClientException());
@@ -144,8 +144,8 @@ public abstract class AbsExceptionReporter implements Runnable {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, this, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 			}
 		}
 	}

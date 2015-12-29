@@ -1,19 +1,22 @@
 package net.youmi.android.libs.common.util;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
-import net.youmi.android.libs.common.debug.DLog;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import android.util.Log;
 
 public class RootHelper {
 
@@ -49,7 +52,7 @@ public class RootHelper {
 	// return true;
 	// } catch (Throwable e) {
 	// if (Debug_SDK.isUtilLog) {
-	// DLog.te(DLog.mUtilTag, RootHelper.class, e);
+	// Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 	// }
 	// }
 	// return false;
@@ -69,7 +72,7 @@ public class RootHelper {
 	// }
 	// } catch (IOException e) {
 	// if (Debug_SDK.isUtilLog) {
-	// DLog.te(DLog.mUtilTag, RootHelper.class, e);
+	// Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 	// }
 	// } finally {
 	// if (p != null) {
@@ -109,8 +112,8 @@ public class RootHelper {
 					dos.close();
 				}
 			} catch (Exception e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, RootHelper.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 				}
 			}
 			try {
@@ -118,8 +121,8 @@ public class RootHelper {
 					process.destroy();
 				}
 			} catch (Exception e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, RootHelper.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 				}
 			}
 			try {
@@ -127,8 +130,8 @@ public class RootHelper {
 					os.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, RootHelper.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 				}
 			}
 		}
@@ -151,8 +154,8 @@ public class RootHelper {
 			oj = process.exitValue();
 			return 0;
 		} catch (Exception e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, RootHelper.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 			}
 
 		} finally {
@@ -161,8 +164,8 @@ public class RootHelper {
 					dos.close();
 				}
 			} catch (Exception e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, RootHelper.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 				}
 			}
 			try {
@@ -170,8 +173,8 @@ public class RootHelper {
 					process.destroy();
 				}
 			} catch (Exception e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, RootHelper.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 				}
 
 			}
@@ -181,7 +184,7 @@ public class RootHelper {
 
 	/**
 	 * 判断当前手机是否有ROOT权限
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isRoot() {
@@ -227,8 +230,8 @@ public class RootHelper {
 				execRootCmd("pm uninstall " + ai.packageName);
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, RootHelper.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, RootHelper.class, e);
 			}
 
 		}

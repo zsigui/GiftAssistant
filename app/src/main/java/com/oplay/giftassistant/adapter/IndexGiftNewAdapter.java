@@ -14,13 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,9 +79,6 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d("mData = " + (mData != null) + ", " + (getCount()));
-		}
 		return getCount() == 0 ? null : mData.get(position);
 	}
 
@@ -152,10 +149,6 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 
 		ViewHolder viewHolder;
 		int type = getItemViewType(position);
-
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_APP, "view_type = " + type);
-		}
 
 		// inflate 页面，设置 holder
 		if (convertView == null) {
@@ -248,7 +241,8 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 	 * 设置几个类型下的通用配置
 	 */
 	private void setCommonField(ViewHolder viewHolder, final IndexGiftNew gift) {
-		ImageLoader.getInstance().displayImage(gift.img, viewHolder.ivIcon, Global.IMAGE_OPTIONS);
+		ImageAware imageAware = new ImageViewAware(viewHolder.ivIcon, false);
+		ImageLoader.getInstance().displayImage(gift.img, imageAware, Global.IMAGE_OPTIONS);
 		viewHolder.tvTitle.setText(String.format("[%s]%s", gift.gameName, gift.name));
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
 		// 思考:

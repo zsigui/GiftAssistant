@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,8 +123,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, "保存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 					}
 				}
 				ContentValues values = new ContentValues();
@@ -138,18 +138,18 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 					res = insert(db, TB_NAME, values);
 				}
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 				closeDb(db);
 			}
 
-			if (DLog.isCacheLog) {
+			if (Debug_SDK.isCacheLog) {
 				// 如果写入成功就统计耗时看看
 				if (res) {
 					int cost = (int) (System.currentTimeMillis() - start);
-					DLog.td(DLog.mCacheTag, this, "[key:%s]写入数据库成功: %d毫秒， 字节长度：%d ", key, cost, blob.length);
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "[key:%s]写入数据库成功: %d毫秒， 字节长度：%d ", key, cost, blob.length);
 				}
 			}
 
@@ -167,8 +167,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 */
 	public boolean saveCacheList(List<Cache_Model> list) {
 		if (list == null || list.size() == 0) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, "列表为空，缓存失败");
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, "列表为空，缓存失败");
 			}
 			return false;
 		}
@@ -185,8 +185,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, "保存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 					}
 				}
 
@@ -234,8 +234,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				db.setTransactionSuccessful();
 				return true;
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 				try {
@@ -243,17 +243,16 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 						db.endTransaction();
 					}
 				} catch (Throwable e1) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, e1);
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, e1);
 					}
 				} finally {
 					closeDb(db);
 				}
-				if (DLog.isCacheLog) {
+				if (Debug_SDK.isCacheLog) {
 					int cost = (int) (System.currentTimeMillis() - start);
-					DLog.td(DLog.mCacheTag, this, "缓存写入数据库(多个),花费时间:%d毫秒，总长度:%d,总缓存个数：%d|%d，成功个数:%d", cost, countLen, list
-									.size(),
-							num, res);
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "缓存写入数据库(多个),花费时间:%d毫秒，总长度:%d,总缓存个数：%d|%d，成功个数:%d", cost, countLen,
+							list.size(), num, res);
 				}
 			}
 		}
@@ -272,8 +271,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, "保存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 					}
 				}
 
@@ -293,8 +292,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				return keys.toArray(rtKeys);
 
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 				closeCursor(cursor);
@@ -320,8 +319,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, "保存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 					}
 				}
 				cursor = db.query(TB_NAME, null, LABEL_KEY + "=?", new String[] { key }, null, null, null);
@@ -332,32 +331,32 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 					if ((expires > 0) && (expires < nt)) {
 						result = null;
 						// 缓存超时，这里应该删除缓存
-						if (DLog.isCacheLog) {
-							DLog.td(DLog.mCacheTag, this, "缓存超时:%d<%d", expires, nt);
+						if (Debug_SDK.isCacheLog) {
+							Debug_SDK.td(Debug_SDK.mCacheTag, this, "缓存超时:%d<%d", expires, nt);
 						}
 
 						try {
 							// 删除缓存
 							deleteCacheByCacheKey(key);
 						} catch (Throwable e) {
-							if (DLog.isCacheLog) {
-								DLog.te(DLog.mCacheTag, this, e);
+							if (Debug_SDK.isCacheLog) {
+								Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 							}
 						}
 					}
 				}
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 
 				closeCursor(cursor);
 				checkDb(db);
 
-				if (DLog.isCacheLog) {
+				if (Debug_SDK.isCacheLog) {
 					int cost = (int) (System.currentTimeMillis() - start);
-					DLog.td(DLog.mCacheTag, this, "从数据库中读取缓存[key:%s]: %d毫秒, 缓存大小: %d字节", key, cost,
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "从数据库中读取缓存[key:%s]: %d毫秒, 缓存大小: %d字节", key, cost,
 							result != null ? result.length : 0);
 				}
 			}
@@ -375,7 +374,7 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	// db = getWritableDatabase();
 	// if (!checkDb(db)) {
 	// if (Debug_SDK.isCacheLog) {
-	// DLog.te(DLog.mCacheTag, this, "保存失败, 当前数据库不可用");
+	// Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 	// }
 	// }
 	//
@@ -399,19 +398,19 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.te(DLog.mCacheTag, this, "移除过期缓存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.te(Debug_SDK.mCacheTag, this, "移除过期缓存失败, 当前数据库不可用");
 					}
 				}
 				long currentTime = System.currentTimeMillis();
 				int count = db.delete(TB_NAME, LABEL_EXPIRES + "<? and " + LABEL_EXPIRES + ">?",
 						new String[] { Long.toString(currentTime), "-1" });
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "删除数据库超期的缓存，成功删除数量:%d", count);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "删除数据库超期的缓存，成功删除数量:%d", count);
 				}
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 				closeDb(db);
@@ -434,20 +433,20 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			try {
 				db = getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isCacheLog) {
-						DLog.td(DLog.mCacheTag, this, "移除指定的键值缓存失败, 当前数据库不可用");
+					if (Debug_SDK.isCacheLog) {
+						Debug_SDK.td(Debug_SDK.mCacheTag, this, "移除指定的键值缓存失败, 当前数据库不可用");
 					}
 				}
 				ret = db.delete(TB_NAME, LABEL_KEY + " =? ", new String[] { key }) > 0;
 
 			} catch (Throwable e) {
-				if (DLog.isCacheLog) {
-					DLog.te(DLog.mCacheTag, this, e);
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 				}
 			} finally {
 				checkDb(db);
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "删除指定缓存:%s", ret ? "成功" : "失败");
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "删除指定缓存:%s", ret ? "成功" : "失败");
 				}
 			}
 		}
@@ -498,8 +497,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			cursor = db.query(tbName, null, field + "=?", new String[] { value }, null, null, null);
 			res = cursor.moveToFirst();
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		} finally {
 			closeCursor(cursor);
@@ -521,15 +520,15 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	private boolean update(SQLiteDatabase db, String tbName, ContentValues values, String whereClause, String whereArgs) {
 		try {
 			long err = db.update(tbName, values, whereClause + "=?", new String[] { whereArgs });
-			if (DLog.isCacheLog) {
-				DLog.td(DLog.mCacheTag, this, "更新数量 ：%d", err);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.td(Debug_SDK.mCacheTag, this, "更新数量 ：%d", err);
 			}
 			if (err > 0) {
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -549,8 +548,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 			long err = db.insert(tbName, null, values);
 			return err > 0;
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -581,8 +580,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				cursor.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 	}
@@ -598,8 +597,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				db.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 	}

@@ -1,17 +1,16 @@
 package net.youmi.android.libs.common.coder;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Coder_UrlCoder {
 
 	/**
 	 * urldecode
-	 *
+	 * 
 	 * @param src
-	 *
 	 * @return
 	 */
 	public static String urlDecode(String src) {
@@ -22,8 +21,8 @@ public class Coder_UrlCoder {
 			String str = URLDecoder.decode(src, "UTF-8");
 			return str;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_UrlCoder.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_UrlCoder.class, e);
 			}
 			return "";
 		}
@@ -31,9 +30,8 @@ public class Coder_UrlCoder {
 
 	/**
 	 * urlencode
-	 *
+	 * 
 	 * @param src
-	 *
 	 * @return
 	 */
 	public static String urlEncode(String src) {
@@ -46,8 +44,8 @@ public class Coder_UrlCoder {
 			}
 			return str;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_UrlCoder.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_UrlCoder.class, e);
 			}
 			return "";
 		}

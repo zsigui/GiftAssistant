@@ -1,7 +1,7 @@
 package net.youmi.android.libs.common.v2.pool.core;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,16 +54,16 @@ public class BaseThreadFactory implements ThreadFactory {
 			}
 			thread.setPriority(mThreadPriority);
 		} catch (Exception e) {
-			if (DLog.isPoolLog) {
-				DLog.te(DLog.mPoolTag, this, e);
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.te(Debug_SDK.mPoolTag, this, e);
 			}
 		} finally {
-			if (DLog.isPoolLog) {
+			if (Debug_SDK.isPoolLog) {
 				if (thread == null) {
-					DLog.tw(DLog.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程失败 线程名字:%s", mPoolCounter.get(), mPoolName,
+					Debug_SDK.tw(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程失败 线程名字:%s", mPoolCounter.get(), mPoolName,
 							mThreadCounter.get(), threadName);
 				} else {
-					DLog.ti(DLog.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程成功 线程名字:%s", mPoolCounter.get(), mPoolName,
+					Debug_SDK.ti(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程成功 线程名字:%s", mPoolCounter.get(), mPoolName,
 							mThreadCounter.get(), threadName);
 				}
 			}

@@ -7,11 +7,11 @@ import java.io.OutputStream;
  * <p>
  * A base64 decoding output stream.
  * </p>
- * <p/>
+ * 
  * <p>
  * It encodes in base64 everything passed to the stream, and it puts the encoded data into the underlying stream.
  * </p>
- *
+ * 
  * @author Carlo Pelliccia
  */
 class Coder_Common_Base64_Base64OutputStream extends OutputStream {
@@ -45,12 +45,13 @@ class Coder_Common_Base64_Base64OutputStream extends OutputStream {
 	 * <p>
 	 * It builds a base64 encoding output stream writing the encoded data in the given underlying stream.
 	 * </p>
-	 * <p/>
+	 * 
 	 * <p>
 	 * The encoded data is wrapped to a new line (with a CRLF sequence) every 76 bytes sent to the underlying stream.
 	 * </p>
-	 *
-	 * @param outputStream The underlying stream.
+	 * 
+	 * @param outputStream
+	 *            The underlying stream.
 	 */
 	public Coder_Common_Base64_Base64OutputStream(OutputStream outputStream) {
 		this(outputStream, 76);
@@ -60,14 +61,16 @@ class Coder_Common_Base64_Base64OutputStream extends OutputStream {
 	 * <p>
 	 * It builds a base64 encoding output stream writing the encoded data in the given underlying stream.
 	 * </p>
-	 * <p/>
+	 * 
 	 * <p>
 	 * The encoded data is wrapped to a new line (with a CRLF sequence) every <em>wrapAt</em> bytes sent to the
 	 * underlying stream. If the <em>wrapAt</em> supplied value is less than 1 the encoded data will not be wrapped.
 	 * </p>
-	 *
-	 * @param outputStream The underlying stream.
-	 * @param wrapAt       The max line length for encoded data. If less than 1 no wrap is applied.
+	 * 
+	 * @param outputStream
+	 *            The underlying stream.
+	 * @param wrapAt
+	 *            The max line length for encoded data. If less than 1 no wrap is applied.
 	 */
 	public Coder_Common_Base64_Base64OutputStream(OutputStream outputStream, int wrapAt) {
 		this.outputStream = outputStream;
@@ -103,10 +106,10 @@ class Coder_Common_Base64_Base64OutputStream extends OutputStream {
 			}
 			char b1 = Coder_Common_Base64_Base64Shared.chars.charAt((buffer << 8) >>> 26);
 			char b2 = Coder_Common_Base64_Base64Shared.chars.charAt((buffer << 14) >>> 26);
-			char b3 = (bytecounter < 2) ? Coder_Common_Base64_Base64Shared.pad :
-					Coder_Common_Base64_Base64Shared.chars.charAt((buffer << 20) >>> 26);
-			char b4 = (bytecounter < 3) ? Coder_Common_Base64_Base64Shared.pad :
-					Coder_Common_Base64_Base64Shared.chars.charAt((buffer << 26) >>> 26);
+			char b3 = (bytecounter < 2) ? Coder_Common_Base64_Base64Shared.pad : Coder_Common_Base64_Base64Shared.chars
+					.charAt((buffer << 20) >>> 26);
+			char b4 = (bytecounter < 3) ? Coder_Common_Base64_Base64Shared.pad : Coder_Common_Base64_Base64Shared.chars
+					.charAt((buffer << 26) >>> 26);
 			outputStream.write(b1);
 			outputStream.write(b2);
 			outputStream.write(b3);

@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.v2.network.core;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * HttpClient网络请求基础抽象类
@@ -63,8 +63,8 @@ public abstract class AbsHttpRequester {
 	 */
 	public synchronized void request() {
 
-		if (DLog.isNetLog) {
-			DLog.ti(DLog.mNetTag, this, "======请求信息======\n%s", mBaseHttpRequesterModel.toString());
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.ti(Debug_SDK.mNetTag, this, "======请求信息======\n%s", mBaseHttpRequesterModel.toString());
 		}
 		long startTime = System.currentTimeMillis();
 		mBaseHttpResponseModel.setStartRequestTimestamp_ms(startTime);
@@ -75,8 +75,8 @@ public abstract class AbsHttpRequester {
 		mBaseHttpResponseModel.setResponseTimestamp_ms(endTime);
 		mBaseHttpResponseModel.setTotalTimes_ms(endTime - startTime);
 
-		if (DLog.isNetLog) {
-			DLog.ti(DLog.mNetTag, this, "======返回信息======\n%s", mBaseHttpResponseModel.toString());
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.ti(Debug_SDK.mNetTag, this, "======返回信息======\n%s", mBaseHttpResponseModel.toString());
 		}
 	}
 

@@ -7,15 +7,14 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
-
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Permission;
 import net.youmi.android.libs.common.util.Util_System_Service;
 
 /**
  * 一个System Alert类型的View, 可漂浮于任何窗口上方<br/>
  * need permission [android.permission.SYSTEM_ALERT_WINDOW] 用WindowManager需要管理addView和removeView
- *
+ * 
  * @author CsHeng
  * @author Jen
  * @date 2013-2-16
@@ -24,11 +23,9 @@ import net.youmi.android.libs.common.util.Util_System_Service;
 public class DefaultPopupWindowLayout implements AnimationListener {
 
 	private WindowManager mWindowManager;
-
 	private WindowManager.LayoutParams mWmParams;
 
 	private LinearLayout mPopupLinearLayout;// container to supply view that
-
 	// play animations
 	private View mPopupView;// View that play animations
 
@@ -37,7 +34,8 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 		mWmParams = new WindowManager.LayoutParams();
 
 		// mWmParams.flags=WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING;//test
-		mWmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		mWmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+				| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 		mWmParams.gravity = gravity;// Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		mWmParams.x = 0;
 		mWmParams.y = 0;
@@ -60,8 +58,8 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 			mWindowManager.addView(mPopupLinearLayout, mWmParams);
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 		return false;
@@ -72,8 +70,8 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 			mWindowManager.removeView(mPopupLinearLayout);
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 		return false;
@@ -81,7 +79,7 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 
 	/**
 	 * Play Animation, should call after addView()
-	 *
+	 * 
 	 * @param anim
 	 */
 	public void playAnimation(Animation anim) {
@@ -97,8 +95,8 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 			anim.setAnimationListener(this);
 			mPopupView.startAnimation(anim);
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}
@@ -108,8 +106,8 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 		try {
 			removeFromWindow();
 		} catch (Throwable e) {
-			if (DLog.isUiLog) {
-				DLog.te(DLog.mUiTag, this, e);
+			if (Debug_SDK.isUiLog) {
+				Debug_SDK.te(Debug_SDK.mUiTag, this, e);
 			}
 		}
 	}

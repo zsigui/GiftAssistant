@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.network.exception;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import org.json.JSONObject;
 
@@ -12,9 +12,9 @@ import java.net.InetAddress;
  * @author zhitao
  * @since 2015-09-10 17:20
  */
-class UDPSocketSender {
+public class UDPSocketSender {
 
-	static void send(JSONObject jsonObject, String monitor_host, int monitor_port) {
+	public static void send(JSONObject jsonObject, String monitor_host, int monitor_port) {
 
 		try {
 			DatagramSocket socket = new DatagramSocket(monitor_port);
@@ -24,8 +24,8 @@ class UDPSocketSender {
 			socket.send(packet);
 			socket.close();
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, UDPSocketSender.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, UDPSocketSender.class, e);
 			}
 		}
 	}

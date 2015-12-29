@@ -2,15 +2,13 @@ package net.youmi.android.libs.common.cache;
 
 /**
  * 缓存Model类
- *
+ * 
  * @author jen
  */
 public class Cache_Model {
 
 	private String mKey;
-
 	private byte[] mData;
-
 	private long mValidTime_ms;
 
 	public Cache_Model(String key, byte[] data, long validTime_ms) {

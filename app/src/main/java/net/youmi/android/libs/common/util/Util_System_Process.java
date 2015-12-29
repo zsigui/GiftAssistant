@@ -1,16 +1,16 @@
 package net.youmi.android.libs.common.util;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
+
 /**
  * 执行外部命令
- *
+ * 
  * @author zhitao
  * @date 2015-5-5 下午3:39:44
  */
@@ -29,9 +29,9 @@ public class Util_System_Process {
 
 	/**
 	 * ［sync］执行命令
-	 *
-	 * @param params eg: "/system/bin/ping", "-c", "4", "-s", "100","www.qiujuer.net"
-	 *
+	 * 
+	 * @param params
+	 *            eg: "/system/bin/ping", "-c", "4", "-s", "100","www.qiujuer.net"
 	 * @return errstream重定向到inputstream的标准输入流的字符串
 	 */
 	public static String execute(String... params) {
@@ -50,8 +50,8 @@ public class Util_System_Process {
 		OutputStream out = null;
 
 		try {
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Process.class, "--准备创建process");
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--准备创建process");
 			}
 
 			// 几种创建process的实例方式
@@ -59,8 +59,8 @@ public class Util_System_Process {
 			// process = new ProcessBuilder().command(params).start();
 			// process = Runtime.getRuntime().exec(params);
 
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Process.class, "--创建process成功");
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--创建process成功");
 			}
 
 			err = process.getErrorStream();
@@ -79,7 +79,7 @@ public class Util_System_Process {
 
 			// 因为已经见errstream重定向到inputstream，所以这里就不用读取errstream了
 			// if (Debug_SDK.isUtilLog) {
-			// DLog.td(DLog.mUtilTag, Util_System_Process.class, "--开始读errstream");
+			// Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--开始读errstream");
 			// }
 			// 关于err和in 输入流的使用，其实更建议分开线程读取，或者直接价将errstream重定向到标准输入流解决
 			// 一直写入errstream，不要让errstream的缓冲区满了，不然阻塞在waitFor那里
@@ -89,8 +89,8 @@ public class Util_System_Process {
 			isr = new InputStreamReader(in);
 			br = new BufferedReader(isr);
 
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Process.class, "--开始读inputstream");
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--开始读inputstream");
 			}
 			String s;
 			if ((s = br.readLine()) != null) {
@@ -107,21 +107,21 @@ public class Util_System_Process {
 				}
 			}
 
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Process.class, "--waitfor之前");
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--waitfor之前");
 			}
 
 			process.waitFor();
-			if (DLog.isUtilLog) {
+			if (Debug_SDK.isUtilLog) {
 				StringBuilder sb1 = new StringBuilder();
 				for (String param : params) {
 					sb1.append(param).append(" ");
 				}
-				DLog.td(DLog.mUtilTag, Util_System_Process.class, "--执行命令：%s 结束", sb1.toString());
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--执行命令：%s 结束", sb1.toString());
 			}
 		} catch (Exception e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 			}
 		} finally {
 			closeAllStream(out, err, in, isr, br);
@@ -136,8 +136,8 @@ public class Util_System_Process {
 			return null;
 
 		} else {
-			if (DLog.isUtilLog) {
-				DLog.ti(DLog.mUtilTag, Util_System_Process.class, sb.toString());
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_Process.class, sb.toString());
 			}
 			return sb.toString();
 		}
@@ -145,71 +145,72 @@ public class Util_System_Process {
 
 	/**
 	 * 关闭所有流
-	 *
-	 * @param out      输出流
-	 * @param err      错误流
-	 * @param in       输入流
-	 * @param isReader 输入流封装
-	 * @param bReader  输入流封装
+	 * 
+	 * @param out
+	 *            输出流
+	 * @param err
+	 *            错误流
+	 * @param in
+	 *            输入流
+	 * @param isReader
+	 *            输入流封装
+	 * @param bReader
+	 *            输入流封装
 	 */
 	private static void closeAllStream(OutputStream out, InputStream err, InputStream in, InputStreamReader isReader,
 			BufferedReader bReader) {
-		if (out != null) {
+		if (out != null)
 			try {
 				out.close();
 			} catch (IOException e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 				}
 			}
-		}
-		if (err != null) {
+		if (err != null)
 			try {
 				err.close();
 			} catch (IOException e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 				}
 			}
-		}
-		if (in != null) {
+		if (in != null)
 			try {
 				in.close();
 			} catch (IOException e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 				}
 			}
-		}
-		if (isReader != null) {
+		if (isReader != null)
 			try {
 				isReader.close();
 			} catch (IOException e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 				}
 			}
-		}
-		if (bReader != null) {
+		if (bReader != null)
 			try {
 				bReader.close();
 			} catch (IOException e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Process.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Process.class, e);
 				}
 			}
-		}
 	}
 
 	/**
 	 * 通过Android底层实现进程关闭
-	 *
-	 * @param process 进程
+	 * 
+	 * @param process
+	 *            进程
 	 */
 	private static void killProcess(Process process) {
 		int pid = getProcessId(process);
-		if (DLog.isUtilLog) {
-			DLog.td(DLog.mUtilTag, Util_System_Process.class, "--pid ： %d", pid);
+		if (Debug_SDK.isUtilLog) {
+			Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--pid ： %d", pid);
 		}
 		if (pid != 0) {
 			try {
@@ -226,9 +227,9 @@ public class Util_System_Process {
 
 	/**
 	 * 获取进程的ID
-	 *
-	 * @param process 进程
-	 *
+	 * 
+	 * @param process
+	 *            进程
 	 * @return
 	 */
 	private static int getProcessId(Process process) {
@@ -245,21 +246,22 @@ public class Util_System_Process {
 
 	/**
 	 * 销毁进程
-	 *
-	 * @param process 进程
+	 * 
+	 * @param process
+	 *            进程
 	 */
 	private static void processDestroy(Process process) {
 		if (process != null) {
 			try {
 				// 判断是否正常退出
 				if (process.exitValue() != 0) {
-					if (DLog.isUtilLog) {
-						DLog.td(DLog.mUtilTag, Util_System_Process.class, "--非正常退出,准备kill");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--非正常退出,准备kill");
 					}
 					killProcess(process);
 				} else {
-					if (DLog.isUtilLog) {
-						DLog.td(DLog.mUtilTag, Util_System_Process.class, "--正常退出");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Process.class, "--正常退出");
 					}
 
 				}

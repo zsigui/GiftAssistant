@@ -1,11 +1,11 @@
 package net.youmi.android.libs.common.cache;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 
 /**
  * 保存字符串的代理缓存类
- *
+ * 
  * @author zhitaocai edit on 2014-6-27
  */
 public class Proxy_String_CacheManger {
@@ -31,11 +31,10 @@ public class Proxy_String_CacheManger {
 
 	/**
 	 * 保存缓存
-	 *
+	 * 
 	 * @param key
 	 * @param value
 	 * @param validTime_ms
-	 *
 	 * @return
 	 */
 	public boolean saveCache(String key, String value, long validTime_ms) {
@@ -46,8 +45,8 @@ public class Proxy_String_CacheManger {
 			byte[] buff = value.getBytes(Global_Charsets.UTF_8);
 			return mCacheManager.saveCache(key, buff, validTime_ms, mEncryptType);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -55,10 +54,9 @@ public class Proxy_String_CacheManger {
 
 	/**
 	 * 获取缓存
-	 *
+	 * 
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public String getCache(String key, String defaultValue) {
@@ -76,8 +74,8 @@ public class Proxy_String_CacheManger {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return defaultValue;
@@ -103,8 +101,8 @@ public class Proxy_String_CacheManger {
 		try {
 			return mCacheManager.getDbHelper().getKeys();
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return null;

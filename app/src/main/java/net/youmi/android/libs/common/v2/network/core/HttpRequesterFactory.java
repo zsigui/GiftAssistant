@@ -4,15 +4,36 @@ import android.content.Context;
 import android.os.Build;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
 import net.youmi.android.libs.common.v2.network.NetworkStatus;
+
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.ProtocolException;
+import org.apache.http.client.RedirectHandler;
+import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -103,8 +124,8 @@ public class HttpRequesterFactory {
 
 		// 为运营商的wap网络设置代理
 		String apn = NetworkStatus.getApn(context);
-		if (DLog.isNetLog) {
-			DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "构造HttpURLConnection中：当前APN：%s", apn);
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpURLConnection中：当前APN：%s", apn);
 		}
 		Proxy proxy = null;
 		SocketAddress sa = null;
@@ -117,8 +138,9 @@ public class HttpRequesterFactory {
 		}
 		if (sa != null) {
 			proxy = new Proxy(Proxy.Type.HTTP, sa);
-			if (DLog.isNetLog) {
-				DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "构造HttpURLConnection中：成功设置 %s 代理 %s", apn, proxy.toString());
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpURLConnection中：成功设置 %s 代理 %s", apn,
+						proxy.toString());
 			}
 		}
 
@@ -168,163 +190,163 @@ public class HttpRequesterFactory {
 		return httpUrlConnection;
 	}
 
-//	/**
-//	 * 创建DefaultHttpClient
-//	 * 从连接池中取连接的超时时间:1秒 (v2版本：5秒 -> 1秒)
-//	 * 设置http超时，即通过网络与服务器建立连接的超时时间:5秒 (v2版本：30秒 -> ５秒)
-//	 * 设置socket超时，即即从服务器获取响应数据需要等待的时间:5秒 (v2版本：30秒 -> 10秒)
-//	 *
-//	 * @param context
-//	 *
-//	 * @return
-//	 */
-//	public static DefaultHttpClient newHttpClient(Context context) {
-//		return newHttpClient(context, null, TIMEOUT_GET_CONNECTION_FROM_POOL, TCP_CONNECTION_TIME_OUT,
-//				SOCKET_CONNECTION_TIME_OUT);
-//	}
-//
-//	/**
-//	 * 创建DefaultHttpClient
-//	 * 从连接池中取连接的超时时间:1秒 (v2版本：5秒 -> 1秒)
-//	 * 设置http超时，即通过网络与服务器建立连接的超时时间:5秒 (v2版本：30秒 -> ５秒)
-//	 * 设置socket超时，即即从服务器获取响应数据需要等待的时间:5秒 (v2版本：30秒 -> 10秒)
-//	 *
-//	 * @param context
-//	 * @param userAgent
-//	 *
-//	 * @return
-//	 */
-//	public static DefaultHttpClient newHttpClient(Context context, String userAgent) {
-//		return newHttpClient(context, userAgent, TIMEOUT_GET_CONNECTION_FROM_POOL, TCP_CONNECTION_TIME_OUT,
-//				SOCKET_CONNECTION_TIME_OUT);
-//	}
-//
-//	/**
-//	 * 创建DefaultHttpClient
-//	 *
-//	 * @param context
-//	 * @param userAgent                    自定义的userAgent，可以不传，不传的话，会用sdk默认构造的userAgent
-//	 * @param getFromConnManagerTimeOut_ms 从连接池中取连接的超时时间(毫秒)
-//	 * @param tcpConnectionTimeOut_ms      设置tcp连接超时，即通过网络与服务器建立连接的超时时间(毫秒)
-//	 * @param socketConnectionTimeout_ms   设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
-//	 *
-//	 * @return
-//	 */
-//	public static DefaultHttpClient newHttpClient(Context context, String userAgent, long getFromConnManagerTimeOut_ms,
-//			int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms) {
-//
-//		BasicHttpParams params = new BasicHttpParams();
-//
-//		// 从连接池中取连接的超时时间(毫秒)
-//		ConnManagerParams.setTimeout(params, getFromConnManagerTimeOut_ms);
-//
-//		// 设置http超时，即通过网络与服务器建立连接的超时时间(毫秒)
-//		HttpConnectionParams.setConnectionTimeout(params, tcpConnectionTimeOut_ms);
-//
-//		// 设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
-//		HttpConnectionParams.setSoTimeout(params, socketConnectionTimeout_ms);
-//
-//		// 设置处理自动处理重定向
-//		HttpClientParams.setRedirecting(params, true);
-//
-//		// 设置userAgent
-//		if (Basic_StringUtil.isNullOrEmpty(userAgent)) {
-//			HttpProtocolParams.setUserAgent(params, getmUserAgent());
-//		} else {
-//			String temp = userAgent.trim();
-//			HttpProtocolParams.setUserAgent(params, temp);
-//		}
-//
-//		// 设置utf-8(待测试)
-//		// HttpProtocolParams.setContentCharset(params, "utf-8");
-//
-//		// 设置utf-8(待测试)
-//		// HttpProtocolParams.setHttpElementCharset(params, "utf-8");
-//
-//		// 为运营商的wap网络设置代理
-//		String apn = NetworkStatus.getApn(context);
-//		if (DLog.isNetLog) {
-//			DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：当前APN：%s", apn);
-//		}
-//		if (apn.equals(NetworkStatus.APN.APN_CMWAP) || apn.equals(NetworkStatus.APN.APN_3GWAP) ||
-//		    apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
-//
-//			//			当我们使用的是中国移动的手机网络时，下面方法可以直接获取得到10.0.0.172，80端口
-//			//			String hostName = Proxy.getDefaultHost();
-//			//			int port = Proxy.getDefaultPort();
-//			HttpHost proxy = new HttpHost("10.0.0.172", 80, null);
-//			params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-//			if (DLog.isNetLog) {
-//				DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：需要设置 %s 代理 %s : %d", apn, proxy.getHostName(),
-//						proxy.getPort());
-//			}
-//		}
-//
-//		if (apn.equals(NetworkStatus.APN.APN_CTWAP)) {
-//			HttpHost proxy = new HttpHost("10.0.0.200", 80, null);
-//			params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-//			if (DLog.isNetLog) {
-//				DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：需要设置 %s 代理 %s : %d", apn, proxy.getHostName(),
-//						proxy.getPort());
-//			}
-//		}
-//
-//		// 设置HttpClient支持HTTP和HTTPS两种模式
-//		SchemeRegistry schReg = new SchemeRegistry();
-//		schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-//		//		schReg.register(new Scheme("https", SSLSocketFactory
-//		//				.getSocketFactory(), 443));
-//
-//		// 使用线程安全的连接管理来创建HttpClient
-//		ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, schReg);
-//
-//		DefaultHttpClient httpClient = new DefaultHttpClient(ccm, params);
-//
-//		// 设置重定向处理，目的是获得重定向后的地址
-//		httpClient.setRedirectHandler(new RedirectHandler() {
-//
-//			@Override
-//			public boolean isRedirectRequested(HttpResponse response, HttpContext context) {
-//				int statusCode = response.getStatusLine().getStatusCode();
-//				if (DLog.isNetLog) {
-//					DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "StatusCode : %d", statusCode);
-//				}
-//
-//				if (//statusCode == HttpStatus.SC_MULTIPLE_CHOICES ||
-//						statusCode == HttpStatus.SC_MOVED_PERMANENTLY ||
-//						statusCode == HttpStatus.SC_MOVED_TEMPORARILY ||
-//						statusCode == HttpStatus.SC_SEE_OTHER || statusCode == HttpStatus.SC_TEMPORARY_REDIRECT) {
-//					// 此处重定向处理
-//					return true;
-//				}
-//				return false;
-//			}
-//
-//			@Override
-//			public URI getLocationURI(HttpResponse response, HttpContext context) throws ProtocolException {
-//
-//				Header header = response.getFirstHeader("Location");
-//				if (header == null) {
-//					header = response.getFirstHeader("location");
-//					if (header == null) {
-//						return null;
-//					}
-//				}
-//
-//				String url = header.getValue();
-//				if (DLog.isNetLog) {
-//					DLog.td(DLog.mNetTag, HttpRequesterFactory.class, "处理重定向url，获取Location:%s", url);
-//				}
-//
-//				if (url == null) {
-//					return null;
-//				}
-//				return URI.create(url);
-//			}
-//		});
-//
-//		return httpClient;
-//	}
+	/**
+	 * 创建DefaultHttpClient
+	 * 从连接池中取连接的超时时间:1秒 (v2版本：5秒 -> 1秒)
+	 * 设置http超时，即通过网络与服务器建立连接的超时时间:5秒 (v2版本：30秒 -> ５秒)
+	 * 设置socket超时，即即从服务器获取响应数据需要等待的时间:5秒 (v2版本：30秒 -> 10秒)
+	 *
+	 * @param context
+	 *
+	 * @return
+	 */
+	public static DefaultHttpClient newHttpClient(Context context) {
+		return newHttpClient(context, null, TIMEOUT_GET_CONNECTION_FROM_POOL, TCP_CONNECTION_TIME_OUT,
+				SOCKET_CONNECTION_TIME_OUT);
+	}
+
+	/**
+	 * 创建DefaultHttpClient
+	 * 从连接池中取连接的超时时间:1秒 (v2版本：5秒 -> 1秒)
+	 * 设置http超时，即通过网络与服务器建立连接的超时时间:5秒 (v2版本：30秒 -> ５秒)
+	 * 设置socket超时，即即从服务器获取响应数据需要等待的时间:5秒 (v2版本：30秒 -> 10秒)
+	 *
+	 * @param context
+	 * @param userAgent
+	 *
+	 * @return
+	 */
+	public static DefaultHttpClient newHttpClient(Context context, String userAgent) {
+		return newHttpClient(context, userAgent, TIMEOUT_GET_CONNECTION_FROM_POOL, TCP_CONNECTION_TIME_OUT,
+				SOCKET_CONNECTION_TIME_OUT);
+	}
+
+	/**
+	 * 创建DefaultHttpClient
+	 *
+	 * @param context
+	 * @param userAgent                    自定义的userAgent，可以不传，不传的话，会用sdk默认构造的userAgent
+	 * @param getFromConnManagerTimeOut_ms 从连接池中取连接的超时时间(毫秒)
+	 * @param tcpConnectionTimeOut_ms      设置tcp连接超时，即通过网络与服务器建立连接的超时时间(毫秒)
+	 * @param socketConnectionTimeout_ms   设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
+	 *
+	 * @return
+	 */
+	public static DefaultHttpClient newHttpClient(Context context, String userAgent, long getFromConnManagerTimeOut_ms,
+			int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms) {
+
+		BasicHttpParams params = new BasicHttpParams();
+
+		// 从连接池中取连接的超时时间(毫秒)
+		ConnManagerParams.setTimeout(params, getFromConnManagerTimeOut_ms);
+
+		// 设置http超时，即通过网络与服务器建立连接的超时时间(毫秒)
+		HttpConnectionParams.setConnectionTimeout(params, tcpConnectionTimeOut_ms);
+
+		// 设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
+		HttpConnectionParams.setSoTimeout(params, socketConnectionTimeout_ms);
+
+		// 设置处理自动处理重定向
+		HttpClientParams.setRedirecting(params, true);
+
+		// 设置userAgent
+		if (Basic_StringUtil.isNullOrEmpty(userAgent)) {
+			HttpProtocolParams.setUserAgent(params, getmUserAgent());
+		} else {
+			String temp = userAgent.trim();
+			HttpProtocolParams.setUserAgent(params, temp);
+		}
+
+		// 设置utf-8(待测试)
+		// HttpProtocolParams.setContentCharset(params, "utf-8");
+
+		// 设置utf-8(待测试)
+		// HttpProtocolParams.setHttpElementCharset(params, "utf-8");
+
+		// 为运营商的wap网络设置代理
+		String apn = NetworkStatus.getApn(context);
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：当前APN：%s", apn);
+		}
+		if (apn.equals(NetworkStatus.APN.APN_CMWAP) || apn.equals(NetworkStatus.APN.APN_3GWAP) ||
+		    apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
+
+			//			当我们使用的是中国移动的手机网络时，下面方法可以直接获取得到10.0.0.172，80端口
+			//			String hostName = Proxy.getDefaultHost();
+			//			int port = Proxy.getDefaultPort();
+			HttpHost proxy = new HttpHost("10.0.0.172", 80, null);
+			params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：需要设置 %s 代理 %s : %d", apn,
+						proxy.getHostName(), proxy.getPort());
+			}
+		}
+
+		if (apn.equals(NetworkStatus.APN.APN_CTWAP)) {
+			HttpHost proxy = new HttpHost("10.0.0.200", 80, null);
+			params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：需要设置 %s 代理 %s : %d", apn,
+						proxy.getHostName(), proxy.getPort());
+			}
+		}
+
+		// 设置HttpClient支持HTTP和HTTPS两种模式
+		SchemeRegistry schReg = new SchemeRegistry();
+		schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+		//		schReg.register(new Scheme("https", SSLSocketFactory
+		//				.getSocketFactory(), 443));
+
+		// 使用线程安全的连接管理来创建HttpClient
+		ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, schReg);
+
+		DefaultHttpClient httpClient = new DefaultHttpClient(ccm, params);
+
+		// 设置重定向处理，目的是获得重定向后的地址
+		httpClient.setRedirectHandler(new RedirectHandler() {
+
+			@Override
+			public boolean isRedirectRequested(HttpResponse response, HttpContext context) {
+				int statusCode = response.getStatusLine().getStatusCode();
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "StatusCode : %d", statusCode);
+				}
+
+				if (//statusCode == HttpStatus.SC_MULTIPLE_CHOICES ||
+						statusCode == HttpStatus.SC_MOVED_PERMANENTLY ||
+						statusCode == HttpStatus.SC_MOVED_TEMPORARILY ||
+						statusCode == HttpStatus.SC_SEE_OTHER || statusCode == HttpStatus.SC_TEMPORARY_REDIRECT) {
+					// 此处重定向处理
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public URI getLocationURI(HttpResponse response, HttpContext context) throws ProtocolException {
+
+				Header header = response.getFirstHeader("Location");
+				if (header == null) {
+					header = response.getFirstHeader("location");
+					if (header == null) {
+						return null;
+					}
+				}
+
+				String url = header.getValue();
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "处理重定向url，获取Location:%s", url);
+				}
+
+				if (url == null) {
+					return null;
+				}
+				return URI.create(url);
+			}
+		});
+
+		return httpClient;
+	}
 
 	/**
 	 * 获取UserAgent
@@ -377,8 +399,8 @@ public class HttpRequesterFactory {
 				mUserAgent = sb.toString();
 
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, HttpRequesterFactory.class, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, HttpRequesterFactory.class, e);
 				}
 				return "";
 			}
@@ -400,8 +422,8 @@ public class HttpRequesterFactory {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, HttpRequesterFactory.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, HttpRequesterFactory.class, e);
 			}
 		}
 	}

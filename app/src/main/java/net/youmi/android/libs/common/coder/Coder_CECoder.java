@@ -1,7 +1,7 @@
 package net.youmi.android.libs.common.coder;
 
 import net.youmi.android.libs.common.basic.Basic_Random;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.UnsupportedEncodingException;
 
@@ -215,8 +215,8 @@ public class Coder_CECoder {
 			}
 			return buffer.toString();
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_CECoder.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_CECoder.class, e);
 			}
 		}
 
@@ -264,8 +264,8 @@ public class Coder_CECoder {
 				return dic[i];
 			}
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_CECoder.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_CECoder.class, e);
 			}
 		}
 

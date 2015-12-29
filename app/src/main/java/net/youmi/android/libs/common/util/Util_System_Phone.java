@@ -1,9 +1,8 @@
 package net.youmi.android.libs.common.util;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.content.Context;
 import android.telephony.TelephonyManager;
-
-import net.youmi.android.libs.common.debug.DLog;
 
 public class Util_System_Phone {
 
@@ -17,8 +16,8 @@ public class Util_System_Phone {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Phone.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Phone.class, e);
 			}
 		}
 		return false;

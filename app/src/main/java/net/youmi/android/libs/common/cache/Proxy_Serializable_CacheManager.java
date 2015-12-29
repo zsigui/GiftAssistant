@@ -1,19 +1,19 @@
 package net.youmi.android.libs.common.cache;
 
-import android.content.Context;
-
-import net.youmi.android.libs.common.coder.Coder_GZIP_PBE;
-import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.global.Global_Charsets;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import net.youmi.android.libs.common.coder.Coder_GZIP_PBE;
+import net.youmi.android.libs.common.coder.Coder_Md5;
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.global.Global_Charsets;
+import android.content.Context;
+
 /**
  * 将序列化对象变成Json字符串保存到缓存中，已经反序列化字符串获取json对象
- *
+ * 
  * @author zhitaocai edit on 2014-6-27
+ * 
  */
 public class Proxy_Serializable_CacheManager {
 
@@ -34,14 +34,14 @@ public class Proxy_Serializable_CacheManager {
 		try {
 
 			if (list == null) {
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "list == null");
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "list == null");
 				}
 				return false;
 			}
 			if (list.length == 0) {
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "list.length == 0");
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "list.length == 0");
 				}
 				return false;
 			}
@@ -71,8 +71,8 @@ public class Proxy_Serializable_CacheManager {
 			return mStringCacheManager.getDbHelper().saveCacheList(cacheList);
 
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -90,8 +90,8 @@ public class Proxy_Serializable_CacheManager {
 			String jsonValue = value.serialize();
 			return mStringCacheManager.saveCache(key, jsonValue, value.getValidCacheTime_ms());
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -100,8 +100,8 @@ public class Proxy_Serializable_CacheManager {
 	public boolean getCache(Interface_Serializable serializable) {
 		try {
 			if (serializable == null) {
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "serializable is null");
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "serializable is null");
 				}
 				return false;
 			}
@@ -109,8 +109,8 @@ public class Proxy_Serializable_CacheManager {
 			String key = serializable.getCacheKey();
 			String json = mStringCacheManager.getCache(key, null);
 			if (json == null) {
-				if (DLog.isCacheLog) {
-					DLog.td(DLog.mCacheTag, this, "json is null");
+				if (Debug_SDK.isCacheLog) {
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "json is null");
 				}
 				return false;
 			}
@@ -118,8 +118,8 @@ public class Proxy_Serializable_CacheManager {
 			return serializable.deserialize(json);
 
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return false;
@@ -133,8 +133,8 @@ public class Proxy_Serializable_CacheManager {
 		try {
 			return Coder_Md5.md5(src);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return src;
@@ -152,8 +152,8 @@ public class Proxy_Serializable_CacheManager {
 		try {
 			return mStringCacheManager.getDbHelper().getKeys();
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, this, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, this, e);
 			}
 		}
 		return null;

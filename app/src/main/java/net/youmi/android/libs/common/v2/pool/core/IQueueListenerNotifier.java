@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.pool.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.ArrayList;
 
@@ -23,8 +23,8 @@ public class IQueueListenerNotifier<T> {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 			}
 		}
 		return false;
@@ -34,8 +34,8 @@ public class IQueueListenerNotifier<T> {
 		try {
 			return mListeners.remove(listener);
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 			}
 		}
 		return false;
@@ -51,14 +51,14 @@ public class IQueueListenerNotifier<T> {
 				try {
 					listener.onOffer(t, currentWaitQueueLength);
 				} catch (Throwable e) {
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 			}
 		}
 	}
@@ -73,14 +73,14 @@ public class IQueueListenerNotifier<T> {
 				try {
 					listener.onTake(t, currentWaitQueueLength);
 				} catch (Throwable e) {
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, IQueueListenerNotifier.class, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, IQueueListenerNotifier.class, e);
 			}
 		}
 	}

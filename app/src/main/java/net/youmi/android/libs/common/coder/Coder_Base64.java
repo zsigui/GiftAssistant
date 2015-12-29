@@ -2,15 +2,7 @@ package net.youmi.android.libs.common.coder;
 
 import net.youmi.android.libs.common.global.Global_Charsets;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 public class Coder_Base64 {
 

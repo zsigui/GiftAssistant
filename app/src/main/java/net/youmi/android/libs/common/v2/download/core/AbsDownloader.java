@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.v2.download.core;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus;
 import net.youmi.android.libs.common.v2.download.base.IDownloader;
@@ -95,7 +95,8 @@ public abstract class AbsDownloader implements Runnable {
 	protected abstract boolean isSupportMultiProgressDownload();
 
 	/**
-	 * @param context               一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
+	 * @param context
+	 * @param absDownloadDir        一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
@@ -130,47 +131,6 @@ public abstract class AbsDownloader implements Runnable {
 			throw new NullPointerException("core null");
 		}
 	}
-
-	/**
-	 * @param context             一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
-	 * @param fileDownloadTask    下载任务描述数据模型
-	 * @param absDownloadNotifier 下载状态监听观察者管理器
-	 *
-	 * @throws NullPointerException
-	 * @throws java.io.IOException
-	 */
-	public AbsDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier) throws NullPointerException, IOException {
-		this(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, null);
-	}
-
-	/**
-	 * @param context               一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
-	 * @param fileDownloadTask      下载任务描述数据模型
-	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
-	 * @throws NullPointerException
-	 * @throws java.io.IOException
-	 */
-	public AbsDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			IFileAvailableChecker iFileAvailableChecker) throws NullPointerException, IOException {
-		this(context, absDownloadDir, fileDownloadTask, null, iFileAvailableChecker);
-	}
-
-	/**
-	 * @param context               一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
-	 * @param fileDownloadTask      下载任务描述数据模型
-	 * @param absDownloadNotifier   下载状态监听观察者管理器
-	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
-	 * @throws NullPointerException
-	 * @throws java.io.IOException
-	 */
-	public AbsDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask)
-			throws NullPointerException, IOException {
-		this(context, absDownloadDir, fileDownloadTask, null, null);
-	}
-
 	//	@Override
 	//	public boolean equals(Object o) {
 	//		return o != null && o.hashCode() == this.hashCode();
@@ -232,8 +192,8 @@ public abstract class AbsDownloader implements Runnable {
 	 */
 	protected void change2DownloadInit() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DownloadInit===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadInit===");
 		}
 		try {
 			// 1.检查参数是否有效
@@ -289,8 +249,8 @@ public abstract class AbsDownloader implements Runnable {
 			change2DownloadBeforeStart_FileLock();
 			
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			change2DownloadFailed(new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_UNKOWN, e));
 		}
@@ -298,8 +258,8 @@ public abstract class AbsDownloader implements Runnable {
 	
 	protected void change2DestFileAlreadyExist() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DestFileAlreadyExist===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DestFileAlreadyExist===");
 		}
 
 		// 如果目标存储文件是一个目录，返回失败
@@ -337,8 +297,8 @@ public abstract class AbsDownloader implements Runnable {
 			// 检查下载缓存文件是否被其他进程使用中，是的话就不采用网络下载，
 			// 而是监听文件的长度来实现共享下载进度
 			if (DownloadUtil.isFileUsingByOtherProgress(mFileDownloadTask.getTempFile())) {
-				if (DLog.isDownloadLog) {
-					DLog.ti(DLog.mDownloadTag, this, "===DownloadBeforeStart_FileLock===");
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadBeforeStart_FileLock===");
 				}
 
 				// 通知一下当前任务可能被其他进程下载中，稍后将开始
@@ -348,18 +308,18 @@ public abstract class AbsDownloader implements Runnable {
 
 				// 这里坐等一段时间，然后在检查文件是否还在被其他进程使用
 				// 主要是为了区分究竟是正的被其他进程使用，还是任务刚刚被停止
-				if (DLog.isDownloadLog) {
-					DLog.ti(DLog.mDownloadTag, this, "文件处于文件锁中 %d s 之后进行下载逻辑", DownloadUtil.LOCK_INTERVAL_ms / 1000);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "文件处于文件锁中 %d s 之后进行下载逻辑", DownloadUtil.LOCK_INTERVAL_ms / 1000);
 				}
 				try {
 					Thread.sleep(DownloadUtil.LOCK_INTERVAL_ms);
 				} catch (Throwable e) {
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, this, e);
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
-				if (DLog.isDownloadLog) {
-					DLog.ti(DLog.mDownloadTag, this, "已过 %d s", DownloadUtil.LOCK_INTERVAL_ms / 1000);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "已过 %d s", DownloadUtil.LOCK_INTERVAL_ms / 1000);
 				}
 
 				// 如果过了一段时间之后还是处于文件锁，就表示该文件被其他进程读写或者下载中，因此通过共享文件大小来模拟下载，而不在请求网络下载
@@ -383,8 +343,8 @@ public abstract class AbsDownloader implements Runnable {
 
 	protected void change2DownloadStart() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DownloadStart===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadStart===");
 		}
 
 		// 通知监听者们下载开始了
@@ -397,8 +357,8 @@ public abstract class AbsDownloader implements Runnable {
 
 	protected void change2Downloading() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===Downloading===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===Downloading===");
 		}
 
 		// 如果有传入监听者的话
@@ -452,8 +412,8 @@ public abstract class AbsDownloader implements Runnable {
 							if (!mIsRunning) {
 								break;
 							}
-							if (DLog.isDownloadLog) {
-								DLog.ti(DLog.mDownloadTag, this, "下载中:%d%% 速度: %d KB/s 已下载: %d KB", percent,
+							if (Debug_SDK.isDownloadLog) {
+								Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "下载中:%d%% 速度: %d KB/s 已下载: %d KB", percent,
 										increase / mFileDownloadTask.getIntervalTime_ms(), completeLength / 1024);
 							}
 
@@ -462,8 +422,8 @@ public abstract class AbsDownloader implements Runnable {
 									.onNotifyDownloadProgressUpdate(mFileDownloadTask, downloadFileFinalLength, completeLength,
 											percent, increase, mFileDownloadTask.getIntervalTime_ms());
 						} catch (Throwable e) {
-							if (DLog.isDownloadLog) {
-								DLog.ti(DLog.mDownloadTag, this, e);
+							if (Debug_SDK.isDownloadLog) {
+								Debug_SDK.ti(Debug_SDK.mDownloadTag, this, e);
 							}
 						}
 					}
@@ -495,8 +455,8 @@ public abstract class AbsDownloader implements Runnable {
 	
 	protected void change2DownloadSuccessed() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DownloadSuccess===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadSuccess===");
 		}
 
 		// 如果下载成功之后，检查最终文件有效性
@@ -521,8 +481,8 @@ public abstract class AbsDownloader implements Runnable {
 	
 	protected void change2DownloadFailed(FinalDownloadStatus finalDownloadStatus) {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DownloadFailed===\n \n%s", finalDownloadStatus.toString());
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadFailed===\n \n%s", finalDownloadStatus.toString());
 		}
 
 		// 这里后续可以实现异常上报
@@ -539,8 +499,8 @@ public abstract class AbsDownloader implements Runnable {
 	
 	protected void change2DownloadStop() {
 
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===DownloadStop===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===DownloadStop===");
 		}
 
 		// 这里创建一个结果，用于同步调用download方法时回调的结果
@@ -552,8 +512,8 @@ public abstract class AbsDownloader implements Runnable {
 				mAbsDownloadNotifier.onNotifyDownloadStop(mFileDownloadTask, mIDownloader.getDownloadFileFinalLength(),
 						mIDownloader.getCompleteLength(), mIDownloader.getDownloadPercent());
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.ti(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 		}
@@ -563,8 +523,8 @@ public abstract class AbsDownloader implements Runnable {
 	 * 多进程下载监听原理:通过观察文件的状态来监控(共享)其下载进度。
 	 */
 	protected void change2ObserveOtherProgressDownloading() {
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "===ObserveOtherProgressDownloading===");
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "===ObserveOtherProgressDownloading===");
 		}
 
 		int maxTimes = 3;
@@ -591,8 +551,8 @@ public abstract class AbsDownloader implements Runnable {
 					++count;
 					if (count <= maxTimes) {
 						downloadFileFinalLength = NetworkUtil.getContentLength(mContext, mFileDownloadTask.getRawDownloadUrl());
-						if (DLog.isDownloadLog) {
-							DLog.td(DLog.mDownloadTag, this, "第%d次从网络中获取文件长度 = %d", count, downloadFileFinalLength);
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK.td(Debug_SDK.mDownloadTag, this, "第%d次从网络中获取文件长度 = %d", count, downloadFileFinalLength);
 						}
 						if (downloadFileFinalLength <= 0) {
 							continue;
@@ -625,8 +585,8 @@ public abstract class AbsDownloader implements Runnable {
 					// 更新上一次的回调时间
 					mLastRecordNotifyTime_ms = System.currentTimeMillis();
 
-					if (DLog.isDownloadLog) {
-						DLog.ti(DLog.mDownloadTag, this, "多进程下载中:%d%% 速度: %d KB/s 已下载: %d KB", percent,
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "多进程下载中:%d%% 速度: %d KB/s 已下载: %d KB", percent,
 								increase / mFileDownloadTask.getIntervalTime_ms(), completeLength / 1024);
 					}
 
@@ -637,8 +597,8 @@ public abstract class AbsDownloader implements Runnable {
 
 				}
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 		}

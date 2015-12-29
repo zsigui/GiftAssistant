@@ -9,7 +9,7 @@ import android.telephony.TelephonyManager;
 import net.youmi.android.libs.common.CommonConstant;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_RC4;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Permission;
 import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 import net.youmi.android.libs.common.util.Util_System_Service;
@@ -110,8 +110,8 @@ public class Global_Runtime_SystemInfo {
 				return mLocaleLanguage;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -137,8 +137,8 @@ public class Global_Runtime_SystemInfo {
 				return mAndroidId;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -203,8 +203,8 @@ public class Global_Runtime_SystemInfo {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return imei;
@@ -257,8 +257,8 @@ public class Global_Runtime_SystemInfo {
 				return method.invoke(subInfo).toString();
 			}
 		} catch (Exception e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -276,8 +276,8 @@ public class Global_Runtime_SystemInfo {
 			TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			return telephonyManager.getSimSerialNumber();
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return null;
@@ -392,8 +392,8 @@ public class Global_Runtime_SystemInfo {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -415,8 +415,8 @@ public class Global_Runtime_SystemInfo {
 				return bssid;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -438,8 +438,8 @@ public class Global_Runtime_SystemInfo {
 				return ssid;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return "";
@@ -546,8 +546,8 @@ public class Global_Runtime_SystemInfo {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		if (Basic_StringUtil.isNullOrEmpty(mManufacturer)) {
@@ -589,8 +589,8 @@ public class Global_Runtime_SystemInfo {
 					mOperatorName = telephonyManager.getNetworkOperatorName();
 				}
 			} catch (Throwable e) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 				}
 			}
 		}
@@ -614,8 +614,8 @@ public class Global_Runtime_SystemInfo {
 				return telephonyManager.getPhoneType();
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return TelephonyManager.PHONE_TYPE_NONE;
@@ -635,8 +635,8 @@ public class Global_Runtime_SystemInfo {
 				return telephonyManager.getNetworkType();
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 
@@ -701,8 +701,9 @@ public class Global_Runtime_SystemInfo {
 							googleAdId = aid.toString();
 						}
 					} catch (Throwable e) {
-						if (DLog.isGlobalLog) {
-							DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "没有反射到google " + "adid，这里不开启错误的输出");
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class,
+									"没有反射到google " + "adid，这里不开启错误的输出");
 						}
 					}
 				}
@@ -747,16 +748,19 @@ public class Global_Runtime_SystemInfo {
 				// 然后创建文件
 				toSaveFile = new File(dir.getAbsoluteFile() + "/" + fileName);
 				if (!toSaveFile.exists()) {
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件不存在", toSaveFile.getAbsolutePath());
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件不存在",
+								toSaveFile.getAbsolutePath());
 					}
 					if (toSaveFile.createNewFile()) {
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件创建成功", toSaveFile.getAbsolutePath());
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件创建成功",
+									toSaveFile.getAbsolutePath());
 						}
 					} else {
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件创建失败", toSaveFile.getAbsolutePath());
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "%s文件创建失败",
+									toSaveFile.getAbsolutePath());
 						}
 					}
 				} else {
@@ -766,8 +770,9 @@ public class Global_Runtime_SystemInfo {
 				}
 			} else {
 				toSaveFile = context.getFileStreamPath(fileName);
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "sd卡不可写，创建文件%s", toSaveFile.getAbsolutePath());
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "sd卡不可写，创建文件%s",
+							toSaveFile.getAbsolutePath());
 				}
 				if (toSaveFile.exists()) {
 					// 如果文件已经存在就暂时先当已经写入过内容，结束
@@ -783,14 +788,14 @@ public class Global_Runtime_SystemInfo {
 				bw = new BufferedWriter(fw);
 				bw.write(encodeStr);
 				bw.flush();
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "字符串%s（加密后：%s）已经成功写入文件%s中", toSaveStr, encodeStr,
-							toSaveFile.getAbsolutePath());
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "字符串%s（加密后：%s）已经成功写入文件%s中", toSaveStr,
+							encodeStr, toSaveFile.getAbsolutePath());
 				}
 				return true;
 			} catch (Throwable e) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 				}
 			} finally {
 				try {
@@ -798,8 +803,8 @@ public class Global_Runtime_SystemInfo {
 						fw.close();
 					}
 				} catch (Throwable e) {
-					if (DLog.isGlobalLog) {
-						DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 					}
 				}
 				try {
@@ -807,14 +812,14 @@ public class Global_Runtime_SystemInfo {
 						bw.close();
 					}
 				} catch (Throwable e) {
-					if (DLog.isGlobalLog) {
-						DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		}
 		return false;
@@ -845,8 +850,9 @@ public class Global_Runtime_SystemInfo {
 					         "cache/".trim() + fileName);
 			// 如果sd卡中获取不到这个文件
 			if (!toGetFile.exists()) {
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "sd 卡中没有文件%s", toGetFile.getAbsolutePath());
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "sd 卡中没有文件%s",
+							toGetFile.getAbsolutePath());
 				}
 				toGetFile = context.getFileStreamPath(fileName);
 				isNeedToReWriteToSdCard = true;
@@ -867,9 +873,9 @@ public class Global_Runtime_SystemInfo {
 					String toDecodeStr = br.readLine();
 					if (!Basic_StringUtil.isNullOrEmpty(toDecodeStr)) {
 						String result = Coder_RC4.RC4(toDecodeStr, psw);
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, "从文件%s中获取到字符串%s", toGetFile.getPath(),
-									result);
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "从文件%s中获取到字符串%s",
+									toGetFile.getPath(), result);
 						}
 						result = Basic_StringUtil.getNotEmptyStringElseReturnNull(result);
 
@@ -886,8 +892,8 @@ public class Global_Runtime_SystemInfo {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 			}
 		} finally {
 			try {
@@ -895,8 +901,8 @@ public class Global_Runtime_SystemInfo {
 					fr.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 				}
 			}
 			try {
@@ -904,8 +910,8 @@ public class Global_Runtime_SystemInfo {
 					br.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo.class, e);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, e);
 				}
 			}
 		}

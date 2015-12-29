@@ -3,14 +3,13 @@ package net.youmi.android.libs.common.util;
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
-
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Util_System_SDCard_Util {
 
 	/**
 	 * 判断sd卡是否可读
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean IsSdCardCanRead() {
@@ -24,7 +23,7 @@ public class Util_System_SDCard_Util {
 
 	/**
 	 * 判断sd卡是否可写
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean IsSdCardCanWrite(Context context) {
@@ -39,8 +38,8 @@ public class Util_System_SDCard_Util {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, e);
 			}
 		}
 		return false;
@@ -50,8 +49,8 @@ public class Util_System_SDCard_Util {
 		try {
 
 			if (IsSdCardCanWrite(context)) {
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard 可写");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard 可写");
 				}
 
 				String path = Environment.getExternalStorageDirectory().getPath();
@@ -69,30 +68,29 @@ public class Util_System_SDCard_Util {
 					availableSize = Math.abs(availableSize);
 				}
 
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_System_SDCard_Util.class,
-							"sdcard:" + path + ",可用容量:" + availableSize + ",需求容量:" + limtSpace + ",可用块:" + availaBlock +
-							",每块容量:" + blocSize);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard:" + path + ",可用容量:"
+							+ availableSize + ",需求容量:" + limtSpace + ",可用块:" + availaBlock + ",每块容量:" + blocSize);
 				}
 
 				if (availableSize >= limtSpace) {
-					if (DLog.isUtilLog) {
-						DLog.ti(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard容量充足");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard容量充足");
 					}
 					return true;
 				} else {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard容量不足");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard容量不足");
 					}
 				}
 			} else {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard不可写");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard不可写");
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, e);
 			}
 
 		}
@@ -118,8 +116,8 @@ public class Util_System_SDCard_Util {
 
 			return availableSize;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, e);
 			}
 
 		}
@@ -129,15 +127,15 @@ public class Util_System_SDCard_Util {
 
 	/**
 	 * 获取sdcard根目录
-	 *
+	 * 
 	 * @return
 	 */
 	public static String getSdcardRootPath() {
 		try {
 			return Environment.getExternalStorageDirectory().getPath();
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, e);
 			}
 		}
 		return null;
@@ -148,8 +146,8 @@ public class Util_System_SDCard_Util {
 
 			if (IsSdCardCanWrite(context)) {
 
-				if (DLog.isUtilLog) {
-					DLog.tw(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard可写");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.tw(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard可写");
 				}
 
 				String path = Environment.getExternalStorageDirectory().getPath();
@@ -170,13 +168,13 @@ public class Util_System_SDCard_Util {
 				return availableSize;
 
 			} else {
-				if (DLog.isUtilLog) {
-					DLog.tw(DLog.mUtilTag, Util_System_SDCard_Util.class, "sdcard不可写");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.tw(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, "sdcard不可写");
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_SDCard_Util.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_SDCard_Util.class, e);
 			}
 		}
 		return 0;

@@ -1,22 +1,23 @@
 package net.youmi.android.libs.common.cache;
 
 import net.youmi.android.libs.common.coder.Coder_GZIP_PBE;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 缓存加解密管理器
- *
+ * 
  * @author zhitaocai edit on 2014-6-27
+ * 
  */
 public class Cache_Security_Manager {
 
 	/**
 	 * 加密value
-	 *
+	 * 
 	 * @param buffToEncrypt
 	 * @param psw
-	 * @param encryptType   {@link net.youmi.android.libs.common.cache.Cache_Security_Type}
-	 *
+	 * @param encryptType
+	 *            {@link net.youmi.android.libs.common.cache.Cache_Security_Type}
 	 * @return
 	 */
 	public static byte[] encryptValue(byte[] buffToEncrypt, String psw, int encryptType) {
@@ -38,8 +39,8 @@ public class Cache_Security_Manager {
 				break;
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Cache_Security_Manager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Cache_Security_Manager.class, e);
 			}
 		}
 		return result;
@@ -47,11 +48,11 @@ public class Cache_Security_Manager {
 
 	/**
 	 * 解密value
-	 *
+	 * 
 	 * @param buffToDecrypt
 	 * @param psw
-	 * @param encryptType   {@link net.youmi.android.libs.common.cache.Cache_Security_Type}
-	 *
+	 * @param encryptType
+	 *            {@link net.youmi.android.libs.common.cache.Cache_Security_Type}
 	 * @return
 	 */
 	public static byte[] decryptValue(byte[] buffToDecrypt, String psw, int encryptType) {
@@ -74,8 +75,8 @@ public class Cache_Security_Manager {
 				break;
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Cache_Security_Manager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Cache_Security_Manager.class, e);
 			}
 		}
 		return result;

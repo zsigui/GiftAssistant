@@ -1,8 +1,5 @@
 package net.youmi.android.libs.common.coder;
 
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.global.Global_Charsets;
-
 import java.security.Key;
 import java.util.Random;
 
@@ -12,12 +9,15 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.global.Global_Charsets;
+
 public class Coder_PBE {
 
 	/**
 	 * 支持以下任意一种算法
 	 * <p/>
-	 * <p/>
+	 * 
 	 * <pre>
 	 * PBEWithMD5AndDES
 	 * PBEWithMD5AndTripleDES
@@ -29,9 +29,8 @@ public class Coder_PBE {
 
 	/**
 	 * 盐初始化
-	 *
+	 * 
 	 * @return
-	 *
 	 * @throws Throwable
 	 */
 	public static byte[] initSalt() throws Throwable {
@@ -43,11 +42,9 @@ public class Coder_PBE {
 
 	/**
 	 * 转换密钥<br>
-	 *
+	 * 
 	 * @param password
-	 *
 	 * @return
-	 *
 	 * @throws Throwable
 	 */
 	private static Key toKey(String password) throws Throwable {
@@ -60,13 +57,14 @@ public class Coder_PBE {
 
 	/**
 	 * 加密
-	 *
-	 * @param data     数据
-	 * @param password 密码
-	 * @param salt     盐
-	 *
+	 * 
+	 * @param data
+	 *            数据
+	 * @param password
+	 *            密码
+	 * @param salt
+	 *            盐
 	 * @return
-	 *
 	 * @throws Throwable
 	 */
 	public static byte[] encrypt(byte[] data, String password, byte[] salt) throws Throwable {
@@ -82,10 +80,12 @@ public class Coder_PBE {
 	}
 
 	/**
-	 * @param toEncrypt 加密原始串
-	 * @param password  密码
-	 * @param salt      盐
-	 *
+	 * @param toEncrypt
+	 *            加密原始串
+	 * @param password
+	 *            密码
+	 * @param salt
+	 *            盐
 	 * @return
 	 */
 	public static String encryptToBase64String(String toEncrypt, String password, byte[] salt) {
@@ -93,18 +93,20 @@ public class Coder_PBE {
 		try {
 			return new String(Coder_Base64.encode(encrypt(toEncrypt.getBytes(), password, salt)), Global_Charsets.UTF_8);
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_PBE.class, e);
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * @param toEncrypt 加密原始串
-	 * @param password  密码
-	 * @param salt      盐
-	 *
+	 * @param toEncrypt
+	 *            加密原始串
+	 * @param password
+	 *            密码
+	 * @param salt
+	 *            盐
 	 * @return
 	 */
 	public static String encryptToBase64String(byte[] toEncrypt, String password, byte[] salt) {
@@ -112,8 +114,8 @@ public class Coder_PBE {
 		try {
 			return new String(Coder_Base64.encode(encrypt(toEncrypt, password, salt)), Global_Charsets.UTF_8);
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_PBE.class, e);
 			}
 		}
 		return null;
@@ -121,13 +123,14 @@ public class Coder_PBE {
 
 	/**
 	 * 解密
-	 *
-	 * @param data     数据
-	 * @param password 密码
-	 * @param salt     盐
-	 *
+	 * 
+	 * @param data
+	 *            数据
+	 * @param password
+	 *            密码
+	 * @param salt
+	 *            盐
 	 * @return
-	 *
 	 * @throws Throwable
 	 */
 	public static byte[] decrypt(byte[] data, String password, byte[] salt) throws Throwable {
@@ -145,8 +148,8 @@ public class Coder_PBE {
 			return new String(buff);
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_PBE.class, e);
 			}
 		}
 		return null;
@@ -158,8 +161,8 @@ public class Coder_PBE {
 			byte[] buff = decrypt(data, password, salt);
 			return buff;
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_PBE.class, e);
 			}
 		}
 		return null;

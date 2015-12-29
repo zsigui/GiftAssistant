@@ -58,7 +58,10 @@ public class SplashActivity extends BaseAppCompatActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
+	}
 
+	@Override
+	protected void processLogic() {
 		if (!mApp.isGlobalInit()) {
 
 			mFirstInitTime = System.currentTimeMillis();
@@ -102,11 +105,11 @@ public class SplashActivity extends BaseAppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
 			mLastClickTime = System.currentTimeMillis();
 			mApp.exit();
 			finish();
+			System.exit(0);
 		}
 	}
 

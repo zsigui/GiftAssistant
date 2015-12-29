@@ -1,8 +1,8 @@
 package net.youmi.android.libs.common.basic;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 import java.util.Random;
+
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Basic_Random {
 
@@ -24,9 +24,9 @@ public class Basic_Random {
 
 	/**
 	 * 创建一个随机数字组成的字符串
-	 *
-	 * @param num 字符串的长度
-	 *
+	 * 
+	 * @param num
+	 *            字符串的长度
 	 * @return
 	 */
 	public final static String createRandom_Number_String(int num) {
@@ -47,8 +47,8 @@ public class Basic_Random {
 			return sb.toString();
 
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_Random.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_Random.class, e);
 			}
 		}
 

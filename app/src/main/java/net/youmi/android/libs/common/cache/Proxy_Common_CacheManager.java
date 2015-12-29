@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.cache;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 公共缓存类
@@ -28,8 +28,8 @@ public class Proxy_Common_CacheManager {
 						new Proxy_String_CacheManger(DEFAULT_PSW_COMMON, Proxy_DB_Cache_Helper.getCommonDBInstance(context));
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 	}
@@ -41,8 +41,8 @@ public class Proxy_Common_CacheManager {
 						Proxy_DB_Cache_Helper.getCommonDBInstance(context));
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 	}
@@ -62,8 +62,8 @@ public class Proxy_Common_CacheManager {
 			initStringCacheManager(context);
 			return mStringCacheManger.saveCache(key, value, validTime_ms);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return false;
@@ -85,8 +85,8 @@ public class Proxy_Common_CacheManager {
 			String v = value ? "1" : "0";
 			return mStringCacheManger.saveCache(key, v, validTime_ms);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return false;
@@ -97,8 +97,8 @@ public class Proxy_Common_CacheManager {
 			initSerializableCacheManager(context);
 			return mSerializableCacheManager.saveCache(serializable);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return false;
@@ -118,8 +118,8 @@ public class Proxy_Common_CacheManager {
 			initStringCacheManager(context);
 			return mStringCacheManger.getCache(key, defaultValue);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return defaultValue;
@@ -138,8 +138,8 @@ public class Proxy_Common_CacheManager {
 			initSerializableCacheManager(context);
 			return mSerializableCacheManager.getCache(serializable);
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return false;
@@ -171,8 +171,8 @@ public class Proxy_Common_CacheManager {
 				return false;
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_Common_CacheManager.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_Common_CacheManager.class, e);
 			}
 		}
 		return dfValue;

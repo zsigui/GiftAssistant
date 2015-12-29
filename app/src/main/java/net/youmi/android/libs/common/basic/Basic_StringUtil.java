@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.basic;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 
 import java.io.ByteArrayOutputStream;
@@ -33,8 +33,8 @@ public class Basic_StringUtil {
 			}
 			return false;
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return true;
@@ -55,8 +55,8 @@ public class Basic_StringUtil {
 			str = str.trim();
 			return str;
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return "";
@@ -87,8 +87,8 @@ public class Basic_StringUtil {
 			return str;
 
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return null;
@@ -104,8 +104,8 @@ public class Basic_StringUtil {
 			Matcher matcher = pattern.matcher(str);
 			return matcher.matches();
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return false;
@@ -116,8 +116,8 @@ public class Basic_StringUtil {
 			String res = context.getString(resourceId);
 			return res;
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return null;
@@ -128,8 +128,8 @@ public class Basic_StringUtil {
 			String res = context.getString(resourceId, formatargs);
 			return res;
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return null;
@@ -139,8 +139,8 @@ public class Basic_StringUtil {
 		try {
 			return String.format("%,d", bignum);
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return String.valueOf(bignum);
@@ -160,8 +160,8 @@ public class Basic_StringUtil {
 			String p2 = origin.substring(index);
 			return p1 + pre + p2;
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return originUri;
@@ -190,8 +190,8 @@ public class Basic_StringUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return null;
@@ -210,8 +210,8 @@ public class Basic_StringUtil {
 				return baos.toString(Global_Charsets.UTF_8);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		} finally {
 			try {
@@ -219,8 +219,8 @@ public class Basic_StringUtil {
 					os.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isBasicLog) {
-					DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+				if (Debug_SDK.isBasicLog) {
+					Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 				}
 			}
 
@@ -229,8 +229,8 @@ public class Basic_StringUtil {
 					baos.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isBasicLog) {
-					DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+				if (Debug_SDK.isBasicLog) {
+					Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 				}
 			}
 		}
@@ -253,8 +253,8 @@ public class Basic_StringUtil {
 				return m.replaceAll("").trim();
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_StringUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
 			}
 		}
 		return null;

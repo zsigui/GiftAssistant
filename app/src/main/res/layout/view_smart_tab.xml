@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ogaclejapan.smarttablayout.SmartTabLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app ="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/tab_layout"
+		android:layout_width = "match_parent"
+		android:layout_height = "@dimen/di_tabs_common_bg_height"
+		android:paddingBottom="0dp"
+		android:background="@color/co_tabs_common_bg"
+		app:stl_defaultTabTextColor="@color/co_white"
+		app:stl_defaultTabTextSize="14sp"
+		app:stl_distributeEvenly="true"
+		app:stl_dividerThickness="0dp"
+		app:stl_indicatorThickness="3dp"
+		app:stl_indicatorColor="@color/co_tabs_indicator_common_bg"/>

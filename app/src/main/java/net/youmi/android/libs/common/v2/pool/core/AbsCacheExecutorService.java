@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.pool.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.List;
 import java.util.concurrent.SynchronousQueue;
@@ -36,13 +36,13 @@ public abstract class AbsCacheExecutorService {
 	public void execute(Runnable runnable) {
 		try {
 			mExecutorService.execute(runnable);
-			if (DLog.isPoolLog) {
-				DLog.ti(DLog.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:下载任务提交成功 hashcode = %d",
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.ti(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:下载任务提交成功 hashcode = %d",
 						mBaseThreadFactory.getPoolName(), runnable == null ? 0 : runnable.hashCode());
 			}
 		} catch (Exception e) {
-			if (DLog.isPoolLog) {
-				DLog.te(DLog.mPoolTag, AbsCacheExecutorService.class, e);
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.te(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, e);
 			}
 		}
 	}
@@ -60,14 +60,14 @@ public abstract class AbsCacheExecutorService {
 
 			// 可以在调用 shutdown 或者 shutdownNow之后，通过方法isTermination来判断线程池中的任务是否都已经停止了
 
-			if (DLog.isPoolLog) {
-				DLog.tw(DLog.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:关闭线程池并返回还没有执行的任务，当前有%d个任务还没有被执行",
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.tw(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:关闭线程池并返回还没有执行的任务，当前有%d个任务还没有被执行",
 						mBaseThreadFactory.getPoolName(), list.size());
 			}
 			return list;
 		} catch (Exception e) {
-			if (DLog.isPoolLog) {
-				DLog.te(DLog.mPoolTag, AbsCacheExecutorService.class, e);
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.te(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, e);
 			}
 			return null;
 		}
@@ -81,12 +81,13 @@ public abstract class AbsCacheExecutorService {
 	public void interrupt() {
 		try {
 			mBaseThreadFactory.interrupt();
-			if (DLog.isPoolLog) {
-				DLog.tw(DLog.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:中断阻塞中的线程", mBaseThreadFactory.getPoolName());
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.tw(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, "【%s线程池消息】:中断阻塞中的线程",
+						mBaseThreadFactory.getPoolName());
 			}
 		} catch (Exception e) {
-			if (DLog.isPoolLog) {
-				DLog.te(DLog.mPoolTag, AbsCacheExecutorService.class, e);
+			if (Debug_SDK.isPoolLog) {
+				Debug_SDK.te(Debug_SDK.mPoolTag, AbsCacheExecutorService.class, e);
 			}
 		}
 	}

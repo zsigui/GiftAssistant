@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.v2.download.base;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
 import net.youmi.android.libs.common.v2.network.NetworkStatus;
 
@@ -98,8 +98,8 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 			int mRunCounter = 0;
 			while (mIsRunning) {
 				++mRunCounter;
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "===第[%d]次下载===", mRunCounter);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "===第[%d]次下载===", mRunCounter);
 				}
 
 				// 从第二次可重试下载开始，要检查一下网络情况
@@ -107,14 +107,14 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 
 					if (!NetworkStatus.isNetworkAvailable(mContext)) {
 
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "当前网络不可用，等待[%d]毫秒后再次检查网络状态", mRetryIntervalTime_ms);
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "当前网络不可用，等待[%d]毫秒后再次检查网络状态", mRetryIntervalTime_ms);
 						}
 						try {
 							Thread.sleep(mRetryIntervalTime_ms);
 						} catch (Throwable e) {
-							if (DLog.isDownloadLog) {
-								DLog.te(DLog.mDownloadTag, this, e);
+							if (Debug_SDK.isDownloadLog) {
+								Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 							}
 						}
 
@@ -124,14 +124,14 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 
 							// 如果网络还是不行，则判断是否是否已经达到重试上限
 							if (mRunCounter >= mMaxRetryTimes) {
-								if (DLog.isDownloadLog) {
-									DLog.te(DLog.mDownloadTag, this, "当前网络不可用，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
+								if (Debug_SDK.isDownloadLog) {
+									Debug_SDK.te(Debug_SDK.mDownloadTag, this, "当前网络不可用，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
 								}
 								// 由于网络不成功导致的重试，达到最大限定次数后取消，同时标记为下载失败
 								return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_REACH_MAX_DOWNLOAD_TIMES);
 							}
-							if (DLog.isDownloadLog) {
-								DLog.ti(DLog.mDownloadTag, this, "当前网络不可用");
+							if (Debug_SDK.isDownloadLog) {
+								Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "当前网络不可用");
 							}
 
 							// 如果还没有达最大次数就进行下一次循环
@@ -154,22 +154,22 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 				} else if (finalDownloadStatus.getDownloadStatusCode() >= 150 &&
 				           finalDownloadStatus.getDownloadStatusCode() <= 199) {
 					// 不可重试的下载失败类型
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, this, "不可重试下载失败\n%s", finalDownloadStatus.toString());
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, "不可重试下载失败\n%s", finalDownloadStatus.toString());
 					}
 					return finalDownloadStatus;
 
 				} else if (finalDownloadStatus.getDownloadStatusCode() >= 100 &&
 				           finalDownloadStatus.getDownloadStatusCode() <= 149) {
 					// 可重试的下载失败类型
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, this, "可重试下载失败\n%s", finalDownloadStatus.toString());
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, "可重试下载失败\n%s", finalDownloadStatus.toString());
 					}
 
 					// 如果网络还是不行，则判断是否是否已经达到重试上限
 					if (mRunCounter >= mMaxRetryTimes) {
-						if (DLog.isDownloadLog) {
-							DLog.te(DLog.mDownloadTag, this, "下载失败，属于不可重试类型失败，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载失败，属于不可重试类型失败，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
 						}
 						return finalDownloadStatus;
 					}
@@ -183,8 +183,8 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_UNKOWN, e);
 		} finally {

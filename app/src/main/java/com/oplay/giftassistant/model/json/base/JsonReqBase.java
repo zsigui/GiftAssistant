@@ -40,6 +40,7 @@ public class JsonReqBase<T> implements Serializable{
 	@SerializedName("chn")
 	public int chn;
 
+	// 采用url，默认0，此处实际可废弃
 	@SerializedName("cmd")
 	public int cmd;
 

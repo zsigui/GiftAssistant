@@ -4,18 +4,19 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Service;
 
 import java.lang.reflect.Method;
 
 /**
  * 获取imsi，为了避免类累赘，特意从{@link net.youmi.android.libs.common.global.Global_Runtime_SystemInfo}中抽取出来单独写
- * <p/>
+ * <p>
  * 本类不对外使用，要获取imsi的话，请调用{@link net.youmi.android.libs.common.global.Global_Runtime_SystemInfo}中的方法
- *
+ * 
  * @author zhitaocai
  * @since 2014-5-21
+ * 
  */
 class Global_Runtime_SystemInfo_IMSI {
 
@@ -25,11 +26,10 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 获取imsi地址
-	 * <p/>
+	 * <p>
 	 * 如果是双卡双待机，则先返回卡1的IMSI，如果卡1的获取失败，则返回卡2的IMSI，如果都拿不到就返回空串""
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	static String getImsi(Context context) {
@@ -44,9 +44,8 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 获取卡1的IMSI 如果获取失败则返回空串
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	static String getFirstImsi(Context context) {
@@ -61,9 +60,8 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 获取卡2的IMSI 如果获取失败则返回空串（亲测在荣耀3C手机上可以获取）
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	static String getSecondImsi(Context context) {
@@ -78,9 +76,8 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 初始化卡1的imsi
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String initFirstImsi(Context context) {
@@ -90,8 +87,8 @@ class Global_Runtime_SystemInfo_IMSI {
 				return formatImsi(telephonyManager.getSubscriberId());
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, e);
 			}
 		}
 		return null;
@@ -99,9 +96,8 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 初始化卡2的imsi （待测试）
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String initSecondImsi(Context context) {
@@ -123,8 +119,8 @@ class Global_Runtime_SystemInfo_IMSI {
 				return imsi;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, e);
 			}
 		}
 		return imsi;
@@ -132,9 +128,8 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 对初步获取出来的imsi进行格式化
-	 *
+	 * 
 	 * @param imsiStr
-	 *
 	 * @return
 	 */
 	private static String formatImsi(String imsiStr) {
@@ -151,16 +146,15 @@ class Global_Runtime_SystemInfo_IMSI {
 
 	/**
 	 * 利用反射获取 MTK平台手机 卡2 IMSI
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String tryToGetImsiFromMTK(Context context) {
 		String imsi = null;
 		try {
 			Class<?>[] resources = new Class<?>[] {
-					int.class
+				int.class
 			};
 			Integer resourcesId = new Integer(1);
 			TelephonyManager tm = Util_System_Service.getTelephonyManager(context);
@@ -171,25 +165,24 @@ class Global_Runtime_SystemInfo_IMSI {
 			}
 		} catch (Throwable e) {
 			imsi = null;
-			//			if (Debug_SDK.isGlobalLog) {
-			//				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[mtk平台]反射获取第二个imsi失败，不输出e");
-			//			}
+//			if (Debug_SDK.isGlobalLog) {
+//				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[mtk平台]反射获取第二个imsi失败，不输出e");
+//			}
 		}
 		return formatImsi(imsi);
 	}
 
 	/**
 	 * 利用反射获取高通平台手机 卡2 IMSI
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String tryToGetImsiFromQCOM(Context context) {
 		String imsi = null;
 		try {
 			Class<?>[] resources = new Class<?>[] {
-					int.class
+				int.class
 			};
 			Integer resourcesId = new Integer(1);
 			TelephonyManager tm = Util_System_Service.getTelephonyManager(context);
@@ -200,18 +193,17 @@ class Global_Runtime_SystemInfo_IMSI {
 			}
 		} catch (Throwable e) {
 			imsi = null;
-			//			if (Debug_SDK.isGlobalLog) {
-			//				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[高通平台]反射获取第二个imsi失败，不输出e");
-			//			}
+//			if (Debug_SDK.isGlobalLog) {
+//				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[高通平台]反射获取第二个imsi失败，不输出e");
+//			}
 		}
 		return formatImsi(imsi);
 	}
 
 	/**
 	 * 利用反射获取展讯平台手机 卡2 IMSI
-	 *
+	 * 
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String tryToGetImsiFromSpreadtrum(Context context) {
@@ -229,9 +221,9 @@ class Global_Runtime_SystemInfo_IMSI {
 			}
 		} catch (Throwable e) {
 			imsi = null;
-			//			if (Debug_SDK.isGlobalLog) {
-			//				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[展讯平台]反射获取第二个imsi失败，不输出e");
-			//			}
+//			if (Debug_SDK.isGlobalLog) {
+//				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_IMSI.class, "[展讯平台]反射获取第二个imsi失败，不输出e");
+//			}
 		}
 		return formatImsi(imsi);
 	}

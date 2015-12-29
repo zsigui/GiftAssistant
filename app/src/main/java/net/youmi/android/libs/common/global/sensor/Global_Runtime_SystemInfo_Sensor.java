@@ -7,7 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class Global_Runtime_SystemInfo_Sensor {
 			int size = allSensors.size();
 			StringBuilder sb = new StringBuilder();
 			sb.append(String.format("<---当前获取到%d个传感器--->\n", size));
-			if (DLog.isGlobalLog) {
+			if (Debug_SDK.isGlobalLog) {
 				for (Sensor sensor : allSensors) {
 					sb.append("\n  ");
 					sb.append("\n  名称:").append(sensor.getName());
@@ -56,13 +56,15 @@ public class Global_Runtime_SystemInfo_Sensor {
 					sb.append("\n  传感器的最大值：").append(sensor.getMaximumRange());
 					sb.append("\n  最小延迟时间：").append(sensor.getMinDelay());
 				}
-				DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "<------当前获取到%d个传感器\n%s\n------>", size,
-						sb.toString());
+				Debug_SDK
+						.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "<------当前获取到%d个传感器\n%s\n------>",
+								size,
+								sb.toString());
 			}
 			return sb.toString();
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 			}
 		}
 		return null;
@@ -166,7 +168,7 @@ public class Global_Runtime_SystemInfo_Sensor {
 			return null;
 		}
 		String sensorTips = "";
-		if (DLog.isGlobalLog) {
+		if (Debug_SDK.isGlobalLog) {
 			switch (sensorType) {
 			case Sensor.TYPE_ACCELEROMETER:
 				sensorTips = "加速度";
@@ -184,8 +186,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 		// 只获取最近30组数据
 		if (list.size() >= CAPACITY) {
 			try {
-				if (DLog.isGlobalLog) {
-					DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器目前数据长度多于%d个，需要删减*****",
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器目前数据长度多于%d个，需要删减*****",
 							sensorTips, CAPACITY);
 				}
 				List<SensorModel> temp = new ArrayList<SensorModel>();
@@ -196,12 +198,13 @@ public class Global_Runtime_SystemInfo_Sensor {
 			} catch (Exception e) {
 			}
 		}
-		if (DLog.isGlobalLog) {
-			DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器最近%d组数据*****", sensorTips, CAPACITY);
+		if (Debug_SDK.isGlobalLog) {
+			Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器最近%d组数据*****", sensorTips,
+					CAPACITY);
 			for (int i = 0; i < list.size(); ++i) {
 				SensorModel model = list.get(i);
 				if (model != null) {
-					DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, model.toString());
+					Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, model.toString());
 				}
 			}
 		}
@@ -273,12 +276,12 @@ public class Global_Runtime_SystemInfo_Sensor {
 			// SENSOR_DELAY_GAME：匹配游戏
 			// SENSOR_DELAY_FASTEST.：匹配所能达到的最快
 			sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
-			if (DLog.isGlobalLog) {
-				DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功注册sensor : %d", sensorType);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功注册sensor : %d", sensorType);
 			}
 		} else {
-			if (DLog.isGlobalLog) {
-				DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "不存在sensor ： %d", sensorType);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "不存在sensor ： %d", sensorType);
 			}
 		}
 	}
@@ -293,8 +296,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 		if (sensorManager != null) {
 			if (sensorEventListener != null) {
 				sensorManager.unregisterListener(sensorEventListener);
-				if (DLog.isGlobalLog) {
-					DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功移除所有的sensor");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功移除所有的sensor");
 				}
 			}
 		}
@@ -344,17 +347,18 @@ public class Global_Runtime_SystemInfo_Sensor {
 						mGyroscopeSensorFlag = false;
 					}
 
-					if (DLog.isGlobalLog) {
+					if (Debug_SDK.isGlobalLog) {
 						if (count % 2 == 0) {
-							DLog.ti(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "===== 第 %d 秒 =====", count / 2);
+							Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "===== 第 %d 秒 =====",
+									count / 2);
 						}
 					}
 					count++;
 				}
 			}, 0, 500);
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 			}
 		}
 	}
@@ -372,8 +376,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 			mAccelerateSensorFlag = true;
 			mGyroscopeSensorFlag = true;
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 			}
 		}
 	}
@@ -388,8 +392,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 	private static void startSelfCloseLifeTimer(final Context context) {
 		try {
 			if (mLifeTimer != null) {
-				if (DLog.isGlobalLog) {
-					DLog.tv(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "当前已经有自结束定时器");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.tv(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "当前已经有自结束定时器");
 				}
 				return;
 			}
@@ -404,15 +408,15 @@ public class Global_Runtime_SystemInfo_Sensor {
 						mLifeTimer.purge();
 						mLifeTimer = null;
 					} catch (Throwable e) {
-						if (DLog.isGlobalLog) {
-							DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 						}
 					}
 				}
 			}, LIFE_TIME);
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 			}
 		}
 	}
@@ -457,8 +461,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 					return;
 				}
 				float lux = event.values[0];
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "光线感应器: lux -> %f", lux);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "光线感应器: lux -> %f", lux);
 				}
 				try {
 					SensorModel lightModel = new SensorModel();
@@ -466,8 +470,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 					lightModel.v0 = new BigDecimal(event.values[0]).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 					LightSensorDBManager.getInstance(mContext).add(lightModel);
 				} catch (Throwable e) {
-					if (DLog.isGlobalLog) {
-						DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 					}
 				}
 				mLightSensorFlag = true;
@@ -479,7 +483,7 @@ public class Global_Runtime_SystemInfo_Sensor {
 			// float la_Y = event.values[1];
 			// float la_Z = event.values[2];
 			// if (Debug_SDK.isGlobalLog) {
-			// DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+			// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
 			// "线性加速感应器原始数据(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", la_X, la_Y, la_Z);
 			// }
 			// break;
@@ -497,8 +501,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 				float a_X = event.values[0];
 				float a_Y = event.values[1];
 				float a_Z = event.values[2];
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
 							"加速度感应器原始数据(取小数点后三位)：X-> %.3f     Y-> %.3f     Z-> %.3f", a_X, a_Y, a_Z);
 				}
 				try {
@@ -511,8 +515,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 					AccelerationSensorDBManager.getInstance(mContext).add(accelerateModel);
 
 				} catch (Throwable e) {
-					if (DLog.isGlobalLog) {
-						DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 					}
 				}
 				// final float alpha = 0.8f;
@@ -528,14 +532,14 @@ public class Global_Runtime_SystemInfo_Sensor {
 				//
 				//
 				// if (Debug_SDK.isGlobalLog) {
-				// DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_20150111.class,
+				// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_20150111.class,
 				// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", linear_acceleration_X,
 				// linear_acceleration_Y, linear_acceleration_Z);
 				// }
 				// a_X -= SensorManager.GRAVITY_EARTH;
 				// a_Y -= SensorManager.GRAVITY_EARTH;
 				// if (Debug_SDK.isGlobalLog) {
-				// DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+				// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
 				// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", a_X, a_X, a_Z);
 				// }
 
@@ -550,8 +554,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 				float axisX = event.values[0];
 				float axisY = event.values[1];
 				float axisZ = event.values[2];
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
 							"陀螺仪原始数据(取小数点后三位)：axisX-> %.3f     axisY-> %.3f     axisZ-> %.3f", axisX, axisY, axisZ);
 				}
 				try {
@@ -563,8 +567,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 					GyroscopeSensorDBManager.getInstance(mContext).add(gyroscopeModel);
 
 				} catch (Throwable e) {
-					if (DLog.isGlobalLog) {
-						DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
 					}
 				}
 				// // 根据陀螺仪采样数据计算出此次事件间隔的偏移量后，它将与当前旋转向量相乘

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.download.core.AbsDownloader;
 import net.youmi.android.libs.common.v2.download.listener.IDownloadListener;
 import net.youmi.android.libs.common.v2.download.listener.IFileAvailableChecker;
@@ -15,7 +15,6 @@ import net.youmi.android.libs.common.v2.pool.core.AbsCacheExecutorService;
 import net.youmi.android.libs.common.v2.pool.core.IExecuteListener;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -94,11 +93,20 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 	public abstract AbsCacheExecutorService newAbsCacheExecutorService();
 
 	/**
-	 * 设置用的下载实体类
+	 * 子类new一个下载的实体类，该类继承自 {@link net.youmi.android.libs.common.v2.download.core.AbsDownloader}
+	 *
+	 * @param context
+	 * @param absDownloadDir        一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
+	 * @param fileDownloadTask      下载任务描述数据模型
+	 * @param absDownloadNotifier   下载状态监听观察者管理器
+	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
 	 *
 	 * @return
 	 */
-	public abstract Class getDownloaderClass();
+	public abstract AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask
+			fileDownloadTask,
+			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+			throws NullPointerException, IOException;
 
 	/**
 	 * 返回下载目录
@@ -135,35 +143,19 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 		// 检查任务是否在执行中
 		try {
 			if (mTask_Downloader.keySet().contains(fileDownloadTask)) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载管理器[%s]:当前任务[%d]已经在执行中", this.getClass().getSimpleName(),
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载管理器[%s]:当前任务[%d]已经在执行中", this.getClass().getSimpleName(),
 							fileDownloadTask.hashCode());
 				}
 				return true;
 			} else {
 
 				AbsDownloader mAbsDownloader;
-				Class cls = getDownloaderClass();
 				if (isCallBack) {
-					Class[] paramTypes = {
-							Context.class, AbsDownloadDir.class, FileDownloadTask.class, AbsDownloadNotifier.class,
-							IFileAvailableChecker.class
-					};
-					Object[] params = { mApplicationContext, mAbsDownloadDir, fileDownloadTask, mAbsDownloadNotifier, this };
-					Constructor con = cls.getConstructor(paramTypes);
-					mAbsDownloader = (AbsDownloader) con.newInstance(params);
-					//								AbsDownloader mAbsDownloader =
-					//										new DefaultSDKDownloader(mContext, mAbsDownloadDir,
-					// fileDownloadTask,
-					//				mAbsDownloadNotifier, this);
-
+					mAbsDownloader =
+							newDownloader(mApplicationContext, mAbsDownloadDir, fileDownloadTask, mAbsDownloadNotifier, this);
 				} else {
-					Class[] paramTypes = {
-							Context.class, AbsDownloadDir.class, FileDownloadTask.class, IFileAvailableChecker.class
-					};
-					Object[] params = { mApplicationContext, mAbsDownloadDir, fileDownloadTask, this };
-					Constructor con = cls.getConstructor(paramTypes);
-					mAbsDownloader = (AbsDownloader) con.newInstance(params);
+					mAbsDownloader = newDownloader(mApplicationContext, mAbsDownloadDir, fileDownloadTask, null, this);
 				}
 
 				// 如果任务没有在执行中的话，就创建一个下载任务并加入到线程池中执行
@@ -181,14 +173,14 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 				//				try {
 				//					mTask_Downloader.put(fileDownloadTask, mAbsDownloader);
 				//					if (Debug_SDK.isDownloadLog) {
-				//						DLog.tw(DLog.mDownloadTag, this, "==================================");
-				//						DLog.td(DLog.mDownloadTag, this, "下载管理器[%s]:添加下载任务[%d] %s", this.getClass()
+				//						Debug_SDK.tw(Debug_SDK.mDownloadTag, this, "==================================");
+				//						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载管理器[%s]:添加下载任务[%d] %s", this.getClass()
 				// .getSimpleName(),
 				//								fileDownloadTask.hashCode(), fileDownloadTask.getRawDownloadUrl());
 				//					}
 				//				} catch (Throwable e) {
 				//					if (Debug_SDK.isDownloadLog) {
-				//						DLog.te(DLog.mDownloadTag, this, e);
+				//						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				//					}
 				//				}
 
@@ -197,8 +189,8 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			return false;
 		}
@@ -217,15 +209,15 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 				// 检查任务是否处于队列中，如果是的话就只需要从缓冲队列中移除该任务即可，而不用stopdownload
 				// 因为缓冲队列中的任务是还没有执行的
 				AbsDownloader downloader = mTask_Downloader.get(fileDownloadTask);
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "任务正在执行中，准备停止任务");
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "任务正在执行中，准备停止任务");
 				}
 				downloader.stopDownload();
 			}
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			return false;
 		}
@@ -275,8 +267,8 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 		return true;
@@ -293,8 +285,8 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 		try {
 			return mAbsDownloadNotifier.registerListener(iDownloadListener);
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			return false;
 		}
@@ -311,8 +303,8 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 		try {
 			return mAbsDownloadNotifier.removeListener(iDownloadListener);
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 			return false;
 		}
@@ -331,16 +323,16 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 			FileDownloadTask absFileDownloadTask = absDownloader.getFileDownloadTask();
 			if (absFileDownloadTask != null) {
 				mTask_Downloader.put(absFileDownloadTask, absDownloader);
-				if (DLog.isDownloadLog) {
-					DLog.tw(DLog.mDownloadTag, this, "==================================");
-					DLog.ti(DLog.mDownloadTag, this, "下载管理器[%s]:添加下载任务[%d] %s", this.getClass().getSimpleName(),
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.tw(Debug_SDK.mDownloadTag, this, "==================================");
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "下载管理器[%s]:添加下载任务[%d] %s", this.getClass().getSimpleName(),
 							absFileDownloadTask.hashCode(), absFileDownloadTask.getRawDownloadUrl());
 				}
 
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -358,14 +350,14 @@ public abstract class AbsCachedDownloadManager implements IFileAvailableChecker,
 			FileDownloadTask fileDownloadTask = absDownloader.getFileDownloadTask();
 			if (fileDownloadTask != null) {
 				mTask_Downloader.remove(fileDownloadTask);
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载管理器[%s]:移除下载任务[%d] %s", this.getClass().getSimpleName(),
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载管理器[%s]:移除下载任务[%d] %s", this.getClass().getSimpleName(),
 							fileDownloadTask.hashCode(), fileDownloadTask.getRawDownloadUrl());
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}

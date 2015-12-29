@@ -69,4 +69,6 @@ public class IndexGiftNew implements Serializable{
     public int totalCount;
 	// 已淘号次数
 	public int searchCount;
+	// 礼包使用期限
+	public String useDeadline;
 }

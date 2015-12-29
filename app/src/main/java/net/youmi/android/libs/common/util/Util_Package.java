@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,8 +41,8 @@ public class Util_Package {
 		if (Build.VERSION.SDK_INT < 21) {
 			ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 			ComponentName cn = activityManager.getRunningTasks(1).get(0).topActivity;
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s", cn.getPackageName());
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s", cn.getPackageName());
 			}
 			return cn.getPackageName();
 		}
@@ -67,8 +67,8 @@ public class Util_Package {
 
 			ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 			final List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Package.class, "##当前运行中的进程有%d个",
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前运行中的进程有%d个",
 						processInfos == null ? 0 : processInfos.size());
 			}
 			if (processInfos == null || processInfos.isEmpty()) {
@@ -76,11 +76,11 @@ public class Util_Package {
 			}
 			for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
 				if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-					if (DLog.isUtilLog) {
-						DLog.td(DLog.mUtilTag, Util_System_Package.class, "##当前顶端进程id:%d 进程名：%s", processInfo.pid,
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端进程id:%d 进程名：%s", processInfo.pid,
 								processInfo.processName);
 						for (String pkgName : processInfo.pkgList) {
-							DLog.td(DLog.mUtilTag, Util_System_Package.class, "####当前顶端进程可能包名：%s", pkgName);
+							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "####当前顶端进程可能包名：%s", pkgName);
 						}
 					}
 					return processInfo.pkgList;
@@ -135,8 +135,8 @@ public class Util_Package {
 			Method queryUsageStatsMethod = UsageStatsManagerClass.getMethod("queryUsageStats", int.class, long.class, long
 					.class);
 			List list = (List) queryUsageStatsMethod.invoke(UsageStatsManagerObject, 4, time - time_ms, time);
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, Util_System_Package.class, "反射结果:获取最近 %d ms内的应用信息有%d个", time_ms,
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "反射结果:获取最近 %d ms内的应用信息有%d个", time_ms,
 						list == null ? 0 : list.size());
 			}
 			if (list != null && !list.isEmpty()) {
@@ -154,8 +154,8 @@ public class Util_Package {
 						}
 						runningTask.put(Long.valueOf(temp.toString()), obj);
 					} catch (Throwable e) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 
 						}
 					}
@@ -165,14 +165,14 @@ public class Util_Package {
 
 					Object temp = getPackageNameMethod.invoke(runningTask.get(runningTask.lastKey()));
 					topPackageName = temp == null ? null : temp.toString();
-					if (DLog.isUtilLog) {
-						DLog.td(DLog.mUtilTag, Util_System_Package.class, "##(反射方法获取)当前顶端应用包名:%s", topPackageName);
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##(反射方法获取)当前顶端应用包名:%s", topPackageName);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 
 			}
 		}
@@ -204,13 +204,13 @@ public class Util_Package {
 	//					}
 	//					topPackageName = runningTask.get(runningTask.lastKey()).getPackageName();
 	//					if (Debug_SDK.isUtilLog) {
-	//						DLog.td(DLog.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s", topPackageName);
+	//						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s", topPackageName);
 	//					}
 	//				}
 	//
 	//			} catch (Throwable e) {
 	//				if (Debug_SDK.isUtilLog) {
-	//					DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+	//					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 	//
 	//				}
 	//			}
@@ -330,12 +330,12 @@ public class Util_Package {
 				if (getSystemPackageName(context).contains(uid)) {
 					continue;
 				}
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "==========");
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "cgroup:" + cgroup);
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "cmdline:" + cmdline);
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "pid:" + pid);
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "uid:" + uid);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "==========");
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "cgroup:" + cgroup);
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "cmdline:" + cmdline);
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "pid:" + pid);
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "uid:" + uid);
 				}
 
 				//				int appId = uid - AID_APP;
@@ -357,17 +357,18 @@ public class Util_Package {
 					oomScoreAdjString = "0";
 				}
 				int oomScoreAdj = Integer.parseInt(oomScoreAdjString);
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "oom_score_adj:" + oomScoreAdj);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "oom_score_adj:" + oomScoreAdj);
 				}
+
 
 				String oomAdjString = read(String.format("/proc/%d/oom_adj", pid));
 				if (Basic_StringUtil.isNullOrEmpty(oomAdjString)) {
 					oomAdjString = "0";
 				}
 				int oomAdj = Integer.parseInt(oomAdjString);
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "oom_adj:" + oomAdj);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "oom_adj:" + oomAdj);
 				}
 
 				// 获取最终分数
@@ -376,8 +377,8 @@ public class Util_Package {
 					oomScoreString = "0";
 				}
 				int oomscore = Integer.parseInt(oomScoreString);
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_Package.class, "oom_score:" + oomscore);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_Package.class, "oom_score:" + oomscore);
 				}
 
 				// 一般来说，前台运行的第三方app的oom_store值不会为0的
@@ -401,13 +402,13 @@ public class Util_Package {
 				}
 
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_Package.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_Package.class, e);
 				}
 			}
 		}
-		if (DLog.isUtilLog) {
-			DLog.td(DLog.mUtilTag, Util_Package.class, "当前顶端包名:%s", foregroundProcess);
+		if (Debug_SDK.isUtilLog) {
+			Debug_SDK.td(Debug_SDK.mUtilTag, Util_Package.class, "当前顶端包名:%s", foregroundProcess);
 		}
 		return foregroundProcess;
 	}
@@ -438,8 +439,8 @@ public class Util_Package {
 					}
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_Package.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_Package.class, e);
 				}
 				mSystemPackageUidList = Collections.emptyList();
 			}
@@ -465,8 +466,8 @@ public class Util_Package {
 				return sb.toString();
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_Package.class, e);
 			}
 		} finally {
 			try {
@@ -474,8 +475,8 @@ public class Util_Package {
 					reader.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_Package.class, e);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_Package.class, e);
 				}
 			}
 		}

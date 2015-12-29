@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.global;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Global_Final_Common_Millisecond {
 
@@ -28,18 +28,15 @@ public class Global_Final_Common_Millisecond {
 	 * 1周的毫秒数:7天*24小时*60分钟*60秒*1000毫秒
 	 */
 	public static final long oneWeek_ms = 7 * oneDay_ms;
-
 	/**
 	 * 1个月的毫秒数:31天*24小时*60分钟*60秒*1000毫秒
 	 */
 	public static final long oneMonth_ms = 31 * oneDay_ms;
 
 	/**
-	 * @param @param  time_ms
+	 * @param @param time_ms
 	 * @param @return 传入参数名字
-	 *
 	 * @return String 返回类型
-	 *
 	 * @Title: getTimeString
 	 * @Description:将毫秒转换为时间字符串：XX天XX小时XX分钟
 	 * @date 2012-8-22 下午9:36:25
@@ -71,19 +68,17 @@ public class Global_Final_Common_Millisecond {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Final_Common_Millisecond.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Final_Common_Millisecond.class, e);
 			}
 		}
 		return timeText;
 	}
 
 	/**
-	 * @param @param  time_ms，time_ms小于0的时候，xxx时间前，大于o的时候是xxx时间后
+	 * @param @param time_ms，time_ms小于0的时候，xxx时间前，大于o的时候是xxx时间后
 	 * @param @return 传入参数名字
-	 *
 	 * @return String 返回类型
-	 *
 	 * @Title: getRoughTime
 	 * @Description:返回粗略时间字符串
 	 * @date 2012-9-10 下午4:54:44

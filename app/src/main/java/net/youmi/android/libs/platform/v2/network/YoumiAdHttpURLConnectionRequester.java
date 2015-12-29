@@ -2,7 +2,7 @@ package net.youmi.android.libs.platform.v2.network;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.network.core.BaseHttpRequesterModel;
 import net.youmi.android.libs.common.v2.network.httpurlconnection.DefaultHttpURLConnectionRequester;
 import net.youmi.android.libs.platform.PlatformConstant;
@@ -37,8 +37,8 @@ public class YoumiAdHttpURLConnectionRequester extends DefaultHttpURLConnectionR
 			Global_Runtime_ClientId cid = new Global_Runtime_ClientId(mApplicationContext);
 			httpURLConnection.addRequestProperty(PlatformConstant.get_HEADER_CID(), cid.getCid());
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, this, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 			}
 		}
 	}

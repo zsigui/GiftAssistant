@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.util.zip.decompress;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
@@ -74,12 +74,12 @@ public class UnZip implements Runnable {
 		int totalCount = 0; // 解压的总条目数量
 		int failCount = 0; // 解压过程中解压失败的条目计数器
 		try {
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, this, "待解压zip文件: %s  name:%s", mZipFile.getPath(), mZipFile.getName());
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, this, "待解压zip文件: %s  name:%s", mZipFile.getPath(), mZipFile.getName());
 			}
 			File destDir = new File(mDestDirPath);
-			if (DLog.isUtilLog) {
-				DLog.td(DLog.mUtilTag, this, "解压缩目录: %s", destDir.getPath());
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.td(Debug_SDK.mUtilTag, this, "解压缩目录: %s", destDir.getPath());
 			}
 			// 然后尝试清空解压缩目录，然后最后需要重新创建这个目录
 			Util_System_File.delete(destDir);
@@ -104,7 +104,7 @@ public class UnZip implements Runnable {
 				File file = new File(mDestDirPath, zeName);
 
 				// if (Debug_SDK.isUtilLog) {
-				// DLog.td(DLog.mUtilTag, this,
+				// Debug_SDK.td(Debug_SDK.mUtilTag, this,
 				// "条目：%s %s， 条目最后存放的位置：%s", ze.getName(),
 				// ze.isDirectory() ? "是目录" : "不是目录", file.getPath());
 				// }
@@ -126,9 +126,9 @@ public class UnZip implements Runnable {
 					}
 					// if (Debug_SDK.isUtilLog) {
 					// if (isSuccess) {
-					// DLog.td(DLog.mUtilTag, this, "  == 创建目录成功");
+					// Debug_SDK.td(Debug_SDK.mUtilTag, this, "  == 创建目录成功");
 					// } else {
-					// DLog.te(DLog.mUtilTag, this, "  == 创建目录失败");
+					// Debug_SDK.te(Debug_SDK.mUtilTag, this, "  == 创建目录失败");
 					// }
 					// }
 					continue;
@@ -139,7 +139,7 @@ public class UnZip implements Runnable {
 					File temp = Util_System_File.getVaildFile(file);
 					if (temp != null && temp.exists() && temp.isFile()) {
 						// if (Debug_SDK.isUtilLog) {
-						// DLog.td(DLog.mUtilTag, this,
+						// Debug_SDK.td(Debug_SDK.mUtilTag, this,
 						// "  == 创建文件成功");
 						// }
 						os = new BufferedOutputStream(new FileOutputStream(temp));
@@ -152,13 +152,13 @@ public class UnZip implements Runnable {
 						}
 					} else {
 						// if (Debug_SDK.isUtilLog) {
-						// DLog.te(DLog.mUtilTag, this,
+						// Debug_SDK.te(Debug_SDK.mUtilTag, this,
 						// "  == 创建文件失败");
 						// }
 					}
 				} catch (Exception e) {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, this, e);
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, this, e);
 					}
 					++failCount;
 				} finally {
@@ -167,8 +167,8 @@ public class UnZip implements Runnable {
 							is.close();
 						}
 					} catch (Throwable e2) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, this, e2);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, this, e2);
 						}
 					}
 					try {
@@ -176,15 +176,15 @@ public class UnZip implements Runnable {
 							os.close();
 						}
 					} catch (Throwable e2) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, this, e2);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, this, e2);
 						}
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, this, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, this, e);
 			}
 			isUnZipSuccess = false;
 			publishUnZipError();
@@ -194,8 +194,8 @@ public class UnZip implements Runnable {
 					zfile.close();
 				}
 			} catch (Throwable e2) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, this, e2);
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, this, e2);
 				}
 			}
 			if (isUnZipSuccess) {

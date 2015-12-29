@@ -1,10 +1,12 @@
 /**
+ * 
  * project: OPlay
- * <p/>
- * <p/>
+ *
+ * 
  * ========================================================================
  * amend date			amend user			amend reason
- * 2013-2-16			    CsHeng
+ * 2013-2-16			    CsHeng		
+ * 		
  */
 package net.youmi.android.libs.common.animator;
 
@@ -18,44 +20,46 @@ import android.view.animation.TranslateAnimation;
 
 /**
  * 放点动画资源
- *
+ * 
  * @author CsHeng
  * @date 2013-2-16
- *
+ * 
  */
 public class Anim_Generator {
 
 	/**
 	 * 坠落回拉动画-进场
-	 *
+	 * 
 	 * @param context
 	 * @param inDuration
 	 * @return
 	 */
 	public static Animation getDownReverse_In(Context context, int inDuration) {
-		Animation comeInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
-				Animation.RELATIVE_TO_PARENT, Animation.INFINITE, Animation.RELATIVE_TO_PARENT, 0);
+		Animation comeInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0,
+				Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, Animation.INFINITE,
+				Animation.RELATIVE_TO_PARENT, 0);
 		comeInAnimation.setDuration(inDuration);
 		return comeInAnimation;
 	}
 
 	/**
 	 * 坠落回拉动画-出场
-	 *
+	 * 
 	 * @param context
 	 * @param outDuration
 	 * @return
 	 */
 	public static Animation getDownReverse_Out(Context context, int outDuration) {
-		Animation comeOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
-				Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, Animation.INFINITE);
+		Animation comeOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0,
+				Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT,
+				Animation.INFINITE);
 		comeOutAnimation.setDuration(outDuration);
 		return comeOutAnimation;
 	}
 
 	/**
 	 * 从上而下坠落回拉动画
-	 *
+	 * 
 	 * @param context
 	 * @param inDuration
 	 *            动画渐入时长
@@ -67,8 +71,8 @@ public class Anim_Generator {
 	 */
 	public static AnimationSet getDownReverse(Context context, int inDuration, int duration, int outDuration) {
 		AnimationSet animationSet = new AnimationSet(true); // shareInterpolator
-		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context, android.R.anim
-				.accelerate_decelerate_interpolator));
+		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context,
+				android.R.anim.accelerate_decelerate_interpolator));
 		Animation comeInAnimation = getDownReverse_In(context, inDuration);
 		comeInAnimation.setFillAfter(true);
 
@@ -82,14 +86,14 @@ public class Anim_Generator {
 
 	/**
 	 * 渐入渐出动画-进场
-	 *
+	 * 
 	 * @return
 	 */
 	public static Animation getCenterScale_In(Context context, int inDuration) {
 
 		AnimationSet animationSet = new AnimationSet(false); // shareInterpolator
-		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context, android.R.anim
-				.accelerate_decelerate_interpolator));
+		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context,
+				android.R.anim.accelerate_decelerate_interpolator));
 		Animation comeInAnimation = new AlphaAnimation(0.5f, 1f);
 		comeInAnimation.setDuration(inDuration);
 		comeInAnimation.setFillAfter(true);
@@ -112,7 +116,7 @@ public class Anim_Generator {
 
 	/**
 	 * 渐入渐出动画-出场
-	 *
+	 * 
 	 * @return
 	 */
 	public static Animation getCenterScale_Out(Context context, int outDuration) {
@@ -131,7 +135,7 @@ public class Anim_Generator {
 
 	/**
 	 * 渐入，停止，渐出动画
-	 *
+	 * 
 	 * @param context
 	 * @param inDuration
 	 *            动画渐入时长
@@ -143,8 +147,8 @@ public class Anim_Generator {
 	 */
 	public static AnimationSet getCenterScale(Context context, int inDuration, int duration, int outDuration) {
 		AnimationSet animationSet = new AnimationSet(false); // shareInterpolator
-		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context, android.R.anim
-				.accelerate_decelerate_interpolator));
+		animationSet.setInterpolator(AnimationUtils.loadInterpolator(context,
+				android.R.anim.accelerate_decelerate_interpolator));
 		Animation comeInAnimation = new AlphaAnimation(0.5f, 1f);
 		comeInAnimation.setDuration(inDuration);
 		comeInAnimation.setFillAfter(true);

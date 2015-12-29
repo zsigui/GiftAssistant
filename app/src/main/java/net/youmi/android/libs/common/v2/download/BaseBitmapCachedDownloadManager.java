@@ -5,16 +5,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus;
+import net.youmi.android.libs.common.v2.download.core.AbsDownloader;
 import net.youmi.android.libs.common.v2.download.core.DefaultSDKDownloader;
 import net.youmi.android.libs.common.v2.download.executor.DefaultDownloadCacheExecutorService;
+import net.youmi.android.libs.common.v2.download.listener.IFileAvailableChecker;
 import net.youmi.android.libs.common.v2.download.listener.IMaxPriorityDownloadListener;
 import net.youmi.android.libs.common.v2.download.listener.ImageDownloadListener;
 import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
 import net.youmi.android.libs.common.v2.download.notify.AbsDownloadNotifier;
 import net.youmi.android.libs.common.v2.download.notify.DefaultDownloadNotifier;
 import net.youmi.android.libs.common.v2.download.notify.ImageDownloadNotifier;
+import net.youmi.android.libs.common.v2.download.storer.AbsDownloadDir;
 import net.youmi.android.libs.common.v2.pool.core.AbsCacheExecutorService;
 
 import java.io.File;
@@ -70,13 +73,21 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	}
 
 	/**
-	 * 设置用的下载实体类
+	 * 子类new一个下载的实体类，该类继承自 {@link net.youmi.android.libs.common.v2.download.core.AbsDownloader}
+	 *
+	 * @param context
+	 * @param absDownloadDir        一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
+	 * @param fileDownloadTask      下载任务描述数据模型
+	 * @param absDownloadNotifier   下载状态监听观察者管理器
+	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
 	 *
 	 * @return
 	 */
 	@Override
-	public Class getDownloaderClass() {
-		return DefaultSDKDownloader.class;
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
+			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+			throws NullPointerException, IOException {
+		return new DefaultSDKDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
 	}
 
 	public void registerImageDownloadListener(ImageDownloadListener imageDownloadListener) {
@@ -129,8 +140,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 			loadBitmapFromNetwork(rawUrl);
 
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -145,8 +156,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 			FileDownloadTask task = new FileDownloadTask(rawUrl);
 			download(task, true);
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -161,8 +172,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 			FileDownloadTask task = new FileDownloadTask(rawUrl);
 			download(task, false);
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -178,8 +189,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 		try {
 			File storeFile = getDownloadDir().newDownloadStoreFile(url, null);
 			if (storeFile.exists()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "[%s]图片存在于文件中，可用!", url);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "[%s]图片存在于文件中，可用!", url);
 				}
 
 				Bitmap bm = BitmapFactory.decodeFile(storeFile.getAbsolutePath());
@@ -189,8 +200,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 		return null;
@@ -214,13 +225,13 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 					if (srb != null) {
 						Bitmap bm = srb.get();
 						if (bm != null && !bm.isRecycled()) {
-							if (DLog.isDownloadLog) {
-								DLog.td(DLog.mDownloadTag, this, "[%s]图片存在于内存缓存中，立即返回!", url);
+							if (Debug_SDK.isDownloadLog) {
+								Debug_SDK.td(Debug_SDK.mDownloadTag, this, "[%s]图片存在于内存缓存中，立即返回!", url);
 							}
 							return bm;
 						}
-						if (DLog.isDownloadLog) {
-							DLog.td(DLog.mDownloadTag, this, "[%s]图片存在于内存缓存中，但已被系统recycled，删除引用!", url);
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK.td(Debug_SDK.mDownloadTag, this, "[%s]图片存在于内存缓存中，但已被系统recycled，删除引用!", url);
 						}
 					}
 
@@ -229,8 +240,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 		return null;
@@ -261,8 +272,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 				mCacheTableBitmaps.clear();
 
 			} catch (Exception e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 				return false;
 			}
@@ -294,8 +305,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 		return false;
@@ -387,8 +398,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 */
 	@Override
 	public boolean onFileAlreadyExist(FileDownloadTask fileDownloadTask) {
-		if (DLog.isDownloadLog) {
-			DLog.td(DLog.mDownloadTag, this, "图片已存在于文件缓存中:%s", fileDownloadTask.getRawDownloadUrl());
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.td(Debug_SDK.mDownloadTag, this, "图片已存在于文件缓存中:%s", fileDownloadTask.getRawDownloadUrl());
 		}
 		return onDownloadSuccess(fileDownloadTask);
 	}

@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.network.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.dns.Message;
 import net.youmi.android.libs.common.dns.SimpleResolver;
 import net.youmi.android.libs.common.global.Global_Charsets;
@@ -159,14 +159,14 @@ public class BaseHttpRequesterModel {
 			return new URI(mRequestUrl).getHost();
 			//			URI uri = new URI(mRequestUrl);
 			//			if (Debug_SDK.isNetLog) {
-			//				DLog.te(DLog.mNetTag, this, "getHost() : %s", uri.getHost());
-			//				DLog.te(DLog.mNetTag, this, "getRawPath() : %s", uri.getRawPath());
-			//				DLog.te(DLog.mNetTag, this, "getPath() : %s", uri.getPath());
-			//				DLog.te(DLog.mNetTag, this, "getQuery() : %s", uri.getQuery());
-			//				DLog.te(DLog.mNetTag, this, "getRawQuery() : %s", uri.getRawQuery());
-			//				DLog.te(DLog.mNetTag, this, "getScheme() : %s", uri.getScheme());
-			//				DLog.te(DLog.mNetTag, this, "getSchemeSpecificPart() : %s", uri.getSchemeSpecificPart());
-			//				DLog.te(DLog.mNetTag, this, "getRawSchemeSpecificPart() : %s", uri
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getHost() : %s", uri.getHost());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getRawPath() : %s", uri.getRawPath());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getPath() : %s", uri.getPath());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getQuery() : %s", uri.getQuery());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getRawQuery() : %s", uri.getRawQuery());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getScheme() : %s", uri.getScheme());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getSchemeSpecificPart() : %s", uri.getSchemeSpecificPart());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getRawSchemeSpecificPart() : %s", uri
 			// .getRawSchemeSpecificPart());
 			//			}
 
@@ -180,7 +180,7 @@ public class BaseHttpRequesterModel {
 			//				}
 			//			}
 		} catch (Exception e) {
-			if (DLog.isDebug) {
+			if (Debug_SDK.isDebug) {
 				e.printStackTrace();
 			}
 		}
@@ -202,7 +202,7 @@ public class BaseHttpRequesterModel {
 			//				}
 			//			}
 		} catch (Exception e) {
-			if (DLog.isDebug) {
+			if (Debug_SDK.isDebug) {
 				e.printStackTrace();
 			}
 		}
@@ -224,7 +224,7 @@ public class BaseHttpRequesterModel {
 			//				}
 			//			}
 		} catch (Exception e) {
-			if (DLog.isDebug) {
+			if (Debug_SDK.isDebug) {
 				e.printStackTrace();
 			}
 		}
@@ -258,8 +258,8 @@ public class BaseHttpRequesterModel {
 			return true;
 
 		} catch (Exception e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, this, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 			}
 		}
 
@@ -269,7 +269,7 @@ public class BaseHttpRequesterModel {
 	@Override
 	public String toString() {
 
-		if (DLog.isNetLog) {
+		if (Debug_SDK.isNetLog) {
 			try {
 				final StringBuilder sb = new StringBuilder("BaseHttpRequesterModel {\n");
 				sb.append("  mRequestUrl=\"").append(mRequestUrl).append('\"').append("\n");
@@ -285,8 +285,8 @@ public class BaseHttpRequesterModel {
 				sb.append('}');
 				return sb.toString();
 			} catch (Exception e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 		}

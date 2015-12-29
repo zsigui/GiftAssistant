@@ -1,8 +1,8 @@
 package net.youmi.android.libs.common.global;
 
-import net.youmi.android.libs.common.basic.Basic_StringUtil;
-
 import java.io.UnsupportedEncodingException;
+
+import net.youmi.android.libs.common.basic.Basic_StringUtil;
 
 public class Global_Charsets {
 
@@ -10,32 +10,26 @@ public class Global_Charsets {
 	 * 8 位 UCS 转换格式
 	 */
 	public static final String UTF_8 = "UTF-8";
-
 	/**
 	 * 16 位 UCS 转换格式，字节顺序由可选的字节顺序标记来标识
 	 */
 	public static final String UTF_16 = "UTF-16";
-
 	/**
 	 * ISO 拉丁字母表 No.1，也叫作 ISO-LATIN-1
 	 */
 	public static final String ISO_8859_1 = "ISO-8859-1";
-
 	/**
 	 * 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块
 	 */
 	public static final String US_ASCII = "US-ASCII";
-
 	/**
 	 * 16 位 UCS 转换格式，Big Endian（最低地址存放高位字节）字节顺序
 	 */
 	public static final String UTF_16BE = "UTF-16BE";
-
 	/**
 	 * 16 位 UCS 转换格式，Little-endian（最高地址存放低位字节）字节顺序
 	 */
 	public static final String UTF_16LE = "UTF-16LE";
-
 	/**
 	 * 中文超大字符集
 	 */
@@ -43,7 +37,7 @@ public class Global_Charsets {
 
 	/**
 	 * 改变编码字符集
-	 *
+	 * 
 	 * @author zhitaocai
 	 * @since 2014-05-22
 	 */
@@ -107,12 +101,12 @@ public class Global_Charsets {
 
 		/**
 		 * 将字符串编码转换为指定的编码方式
-		 *
-		 * @param str        待转换编码的字符串
-		 * @param newCharset 目标编码
-		 *
+		 * 
+		 * @param str
+		 *            待转换编码的字符串
+		 * @param newCharset
+		 *            目标编码
 		 * @return
-		 *
 		 * @throws java.io.UnsupportedEncodingException
 		 */
 		public static String changeCharset(String str, String newCharset) throws UnsupportedEncodingException {
@@ -121,17 +115,18 @@ public class Global_Charsets {
 
 		/**
 		 * 将字符串编码转换为指定的编码方式
-		 *
-		 * @param str        待转换编码的字符串
-		 * @param oldCharset 原编码
-		 * @param newCharset 目标编码
-		 *
+		 * 
+		 * @param str
+		 *            待转换编码的字符串
+		 * @param oldCharset
+		 *            原编码
+		 * @param newCharset
+		 *            目标编码
 		 * @return 新编码后的字符串或者null
-		 *
 		 * @throws java.io.UnsupportedEncodingException
 		 */
-		public static String changeCharset(String str, String oldCharset, String newCharset) throws
-				UnsupportedEncodingException {
+		public static String changeCharset(String str, String oldCharset, String newCharset)
+				throws UnsupportedEncodingException {
 			if (!Basic_StringUtil.isNullOrEmpty(str)) {
 				if (Basic_StringUtil.isNullOrEmpty(newCharset)) {
 					return null;
@@ -149,12 +144,10 @@ public class Global_Charsets {
 
 		/**
 		 * 将字节数组转换为指定编码的字符串
-		 *
+		 * 
 		 * @param data
 		 * @param newCharset
-		 *
 		 * @return
-		 *
 		 * @throws java.io.UnsupportedEncodingException
 		 */
 		public static String changeCharset(byte[] input, String newCharset) throws UnsupportedEncodingException {

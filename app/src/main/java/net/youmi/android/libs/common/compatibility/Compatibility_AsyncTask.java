@@ -1,10 +1,9 @@
 package net.youmi.android.libs.common.compatibility;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Build;
-
-import net.youmi.android.libs.common.debug.DLog;
 
 public class Compatibility_AsyncTask {
 
@@ -17,8 +16,8 @@ public class Compatibility_AsyncTask {
 				task.execute(params);
 			}
 		} catch (Throwable e) {
-			if (DLog.isCompatLog) {
-				DLog.te(DLog.mCompatTag, Compatibility_AsyncTask.class, e);
+			if (Debug_SDK.isCompatLog) {
+				Debug_SDK.te(Debug_SDK.mCompatTag, Compatibility_AsyncTask.class, e);
 			}
 		}
 	}

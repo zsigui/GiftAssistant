@@ -26,6 +26,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+	useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -34,7 +36,6 @@ dependencies {
 	compile 'com.android.support:design:23.1.1'
 	compile 'com.android.support:appcompat-v7:23.1.1'
 	compile 'com.android.support:recyclerview-v7:23.1.1'
-	compile 'com.android.support:design:23.1.1'
 	compile 'cn.bingoogolapple:bga-refreshlayout:1.1.2@aar'
 	compile 'cn.bingoogolapple:bga-banner:2.0.3@aar'
 	compile 'cn.bingoogolapple:bga-adapter:1.0.8@aar'
@@ -49,4 +50,6 @@ dependencies {
 	compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 	compile 'com.nolanlawson:supersaiyan-scrollview:1.2.0@aar'
     compile 'com.makeramen:roundedimageview:2.2.1'
+	compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
+	compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
 }

@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 import java.util.List;
@@ -30,8 +30,8 @@ public class Util_System_Package {
 		try {
 			return context.getPackageManager().getApplicationLabel(context.getApplicationInfo()).toString();
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return "";
@@ -48,8 +48,8 @@ public class Util_System_Package {
 			}
 			
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return false;
@@ -67,9 +67,9 @@ public class Util_System_Package {
 			}
 			
 		} catch (Throwable e) {
-			//			if (Debug_SDK.isUtilLog) {
-			//				DLog.te(DLog.mUtilTag, Util_System_Package.class, "包名检索结果：没有找到包名%s", packageName);
-			//			}
+//			if (Debug_SDK.isUtilLog) {
+//				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "包名检索结果：没有找到包名%s", packageName);
+//			}
 		}
 		return false;
 		
@@ -87,8 +87,8 @@ public class Util_System_Package {
 		try {
 			
 			if (packageName == null) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Package.class, "包名为空!");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "包名为空!");
 				}
 				return null;
 			}
@@ -125,16 +125,16 @@ public class Util_System_Package {
 						}
 						
 					} catch (Throwable e) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 						}
 					}
 				}
 			}
 			
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		
@@ -148,8 +148,8 @@ public class Util_System_Package {
 			}
 			return context.getPackageManager().getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return null;
@@ -160,15 +160,15 @@ public class Util_System_Package {
 			
 			if (packageName == null) {
 				
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_Package.class, "getPackageInfo,packagename is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,packagename is null");
 				}
 				return null;
 			}
 			PackageManager pm = context.getPackageManager();
 			if (pm == null) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_Package.class, "getPackageInfo,getPackageManager is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,getPackageManager is null");
 				}
 				return null;
 			}
@@ -176,15 +176,15 @@ public class Util_System_Package {
 			PackageInfo pi = pm.getPackageInfo(packageName, 0);
 			
 			if (pi == null) {
-				if (DLog.isUtilLog) {
-					DLog.td(DLog.mUtilTag, Util_System_Package.class, "getPackageInfo,PackageInfo is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,PackageInfo is null");
 				}
 			}
 			
 			return pi;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, "获取包名[%s]信息失败", packageName);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "获取包名[%s]信息失败", packageName);
 			}
 		}
 		return null;
@@ -216,29 +216,29 @@ public class Util_System_Package {
 								return str;
 							}
 						} else {
-							if (DLog.isUtilLog) {
-								DLog.te(DLog.mUtilTag, Util_System_Package.class, "String is null");
+							if (Debug_SDK.isUtilLog) {
+								Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "String is null");
 							}
 						}
 					} else {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Package.class, "obj is null");
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "obj is null");
 						}
 					}
 				} else {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, Util_System_Package.class, "metaDatas is null");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "metaDatas is null");
 					}
 				}
 			} else {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Package.class, "applicationInfo is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "applicationInfo is null");
 				}
 			}
 			
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return dfValue;
@@ -269,29 +269,29 @@ public class Util_System_Package {
 							double d = Double.parseDouble(intString);
 							return (int) d;
 						} else {
-							if (DLog.isUtilLog) {
-								DLog.te(DLog.mUtilTag, Util_System_Package.class, "intString is null");
+							if (Debug_SDK.isUtilLog) {
+								Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "intString is null");
 							}
 						}
 					} else {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Package.class, "obj is null");
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "obj is null");
 						}
 					}
 				} else {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, Util_System_Package.class, "metaDatas is null");
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "metaDatas is null");
 					}
 				}
 			} else {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Package.class, "applicationInfo is null");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "applicationInfo is null");
 				}
 			}
 			
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return dfValue;
@@ -312,8 +312,8 @@ public class Util_System_Package {
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			return intent;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return null;
@@ -329,8 +329,8 @@ public class Util_System_Package {
 				context.startActivity(intent);
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		
@@ -342,8 +342,8 @@ public class Util_System_Package {
 			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
 			context.startActivity(uninstallIntent);
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 	}
@@ -368,11 +368,13 @@ public class Util_System_Package {
 				return Coder_Md5.md5(signature[0].toByteArray());
 			}
 		} catch (Exception e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Package.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
 		return null;
 	}
+
+
 
 }

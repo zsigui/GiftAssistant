@@ -13,10 +13,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Encrypt data with key.
-	 *
+	 * 
 	 * @param data
 	 * @param key
-	 *
 	 * @return
 	 */
 	public static final byte[] encrypt(byte[] data, byte[] key) {
@@ -28,10 +27,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Decrypt data with key.
-	 *
+	 * 
 	 * @param data
 	 * @param key
-	 *
 	 * @return
 	 */
 	public static final byte[] decrypt(byte[] data, byte[] key) {
@@ -43,10 +41,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Encrypt data with key.
-	 *
+	 * 
 	 * @param v
 	 * @param k
-	 *
 	 * @return
 	 */
 	private static final int[] encrypt(int[] v, int[] k) {
@@ -79,10 +76,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Decrypt data with key.
-	 *
+	 * 
 	 * @param v
 	 * @param k
-	 *
 	 * @return
 	 */
 	private static final int[] decrypt(int[] v, int[] k) {
@@ -116,10 +112,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Convert byte array to int array.
-	 *
+	 * 
 	 * @param data
 	 * @param includeLength
-	 *
 	 * @return
 	 */
 	private static final int[] toIntArray(byte[] data, boolean includeLength) {
@@ -141,10 +136,9 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Convert int array to byte array.
-	 *
+	 * 
 	 * @param data
 	 * @param includeLength
-	 *
 	 * @return
 	 */
 	private static final byte[] toByteArray(int[] data, boolean includeLength) {

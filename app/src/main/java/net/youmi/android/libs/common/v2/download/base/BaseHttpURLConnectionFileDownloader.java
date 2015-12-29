@@ -3,11 +3,14 @@ package net.youmi.android.libs.common.v2.download.base;
 import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
 import net.youmi.android.libs.common.v2.network.NetworkUtil;
 import net.youmi.android.libs.common.v2.network.core.HttpRequesterFactory;
+
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.ConnectionPoolTimeoutException;
 
 import java.io.File;
 import java.io.InputStream;
@@ -162,7 +165,7 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 			// 文件最终的长度= 当前文件长度 + 本次下载长度
 			mDownloadFileFinalLength = start + contentLength;
 
-			if (DLog.isDownloadLog) {
+			if (Debug_SDK.isDownloadLog) {
 				StringBuilder sb = new StringBuilder(256);
 				sb.append("本次下载信息:");
 				sb.append("\n * 原始下载url:").append(mFileDownloadTask.getRawDownloadUrl());
@@ -171,7 +174,7 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 				sb.append("\n * 本次下载的长度(ContentLength):").append(contentLength);
 				sb.append("\n * 目标下载文件路径:").append(mFileDownloadTask.getTempFile().getAbsolutePath());
 				sb.append("\n * 起始下载位置:").append(start);
-				DLog.td(DLog.mDownloadTag, this, "\n%s", sb.toString());
+				Debug_SDK.td(Debug_SDK.mDownloadTag, this, "\n%s", sb.toString());
 			}
 
 			// 设置文件的写入起点
@@ -207,7 +210,7 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 			if (mIsRunning) {
 				return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_DOWNLOADFLIE_CHANGE);
 			} else {
-				if (DLog.isDownloadLog) {
+				if (Debug_SDK.isDownloadLog) {
 					StringBuilder sb = new StringBuilder(256);
 					sb.append("下载被停止:");
 					sb.append("\n * 原始下载url:").append(mFileDownloadTask.getRawDownloadUrl());
@@ -216,7 +219,7 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					sb.append("\n * 文件当前长度:").append(mFileDownloadTask.getTempFile().length());
 					sb.append("\n * 文件下载完的预计长度:").append(mDownloadFileFinalLength);
 					sb.append("\n * 停止时，已完成的进度百分比:").append(getDownloadPercent());
-					DLog.td(DLog.mDownloadTag, this, sb.toString());
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, sb.toString());
 				}
 				// 这里后续可以考虑在更早的地方判断mIsRunning来判断是否被用户停止了下载任务
 				return new FinalDownloadStatus(FinalDownloadStatus.Code.STOP);
@@ -228,8 +231,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 
 			String hostIpArrayString = NetworkUtil.request4HostIp(mFileDownloadTask.getRawDownloadUrl());
 			if (!Basic_StringUtil.isNullOrEmpty(hostIpArrayString)) {
-				if (DLog.isOfferLog) {
-					DLog.te(DLog.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask.getRawDownloadUrl(),
+				if (Debug_SDK.isOfferLog) {
+					Debug_SDK.te(Debug_SDK.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask.getRawDownloadUrl(),
 							hostIpArrayString);
 				}
 
@@ -242,10 +245,9 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					if (hostIp.startsWith("127.")) {
 						// 如果是127.开头的ip，就采用dns解析获取真实的ip
 						String newUrl = NetworkUtil.getReallyIpAddress(mFileDownloadTask.getRawDownloadUrl());
-						if (DLog.isOfferLog) {
-							DLog.te(DLog.mOfferTag, this, "进入DNS解析后\n原始url: %s\n新的url: %s", mFileDownloadTask
-											.getRawDownloadUrl(),
-									newUrl);
+						if (Debug_SDK.isOfferLog) {
+							Debug_SDK.te(Debug_SDK.mOfferTag, this, "进入DNS解析后\n原始url: %s\n新的url: %s",
+									mFileDownloadTask.getRawDownloadUrl(), newUrl);
 						}
 						if (Basic_StringUtil.isNullOrEmpty(newUrl)) {
 							continue;
@@ -253,8 +255,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 
 						mFileDownloadTask.setDestDownloadUrl(newUrl);
 						isNeedToAnalysRealIpFromHTTPDNS = true;
-						if (DLog.isOfferLog) {
-							DLog.te(DLog.mOfferTag, this, "下一次重新下载将采用替换后的ip地址进行请求");
+						if (Debug_SDK.isOfferLog) {
+							Debug_SDK.te(Debug_SDK.mOfferTag, this, "下一次重新下载将采用替换后的ip地址进行请求");
 						}
 						break;
 					}
@@ -262,13 +264,13 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 			}
 
 			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_UNKNOWN, e);
-//		} catch (ConnectionPoolTimeoutException e) {
-//			// 从ConnectionManager管理的连接池中取出连接超时
-//			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_UNKNOWN, e);
-//
-//		} catch (ConnectTimeoutException e) {
-//			// 网络与服务器建立连接超时
-//			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_UNKNOWN, e);
+		} catch (ConnectionPoolTimeoutException e) {
+			// 从ConnectionManager管理的连接池中取出连接超时
+			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_UNKNOWN, e);
+
+		} catch (ConnectTimeoutException e) {
+			// 网络与服务器建立连接超时
+			return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_UNKNOWN, e);
 
 		} catch (SocketTimeoutException e) {
 			// 请求超时
@@ -305,8 +307,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					httpURLConnection.disconnect();
 				}
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 
@@ -318,8 +320,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					inputStream.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 
@@ -328,8 +330,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					accessFile.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 			

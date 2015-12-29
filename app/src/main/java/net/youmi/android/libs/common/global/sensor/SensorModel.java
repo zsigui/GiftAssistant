@@ -1,8 +1,8 @@
 package net.youmi.android.libs.common.global.sensor;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 import java.text.SimpleDateFormat;
+
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class SensorModel {
 
@@ -22,7 +22,7 @@ public class SensorModel {
 
 	@Override
 	public String toString() {
-		if (DLog.isGlobalLog) {
+		if (Debug_SDK.isGlobalLog) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("mGenerateTime=");
 			builder.append(mGenerateTime);

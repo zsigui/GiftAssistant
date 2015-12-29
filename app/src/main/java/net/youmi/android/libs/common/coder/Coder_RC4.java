@@ -1,14 +1,14 @@
 package net.youmi.android.libs.common.coder;
 
-import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.global.Global_Charsets;
-
 import java.io.UnsupportedEncodingException;
+
+import net.youmi.android.libs.common.basic.Basic_StringUtil;
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.global.Global_Charsets;
 
 /**
  * RC4加解密
- *
+ * 
  * @author zhitaocai
  * @since 2014-5-20
  */
@@ -36,9 +36,8 @@ public class Coder_RC4 {
 			int[] iS = new int[256];
 			byte[] iK = new byte[256];
 
-			for (int i = 0; i < 256; i++) {
+			for (int i = 0; i < 256; i++)
 				iS[i] = i;
-			}
 
 			int j = 1;
 
@@ -75,15 +74,15 @@ public class Coder_RC4 {
 			try {
 				return Global_Charsets.Change.toUTF_8(result);
 			} catch (UnsupportedEncodingException e) {
-				if (DLog.isCoderLog) {
-					DLog.te(DLog.mCoderTag, Coder_RC4.class, e);
+				if (Debug_SDK.isCoderLog) {
+					Debug_SDK.te(Debug_SDK.mCoderTag, Coder_RC4.class, e);
 				}
 			}
 			return result;
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_RC4.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_RC4.class, e);
 			}
 		}
 

@@ -1,9 +1,10 @@
 package net.youmi.android.libs.platform.v2.network;
 
 import android.content.Context;
+import android.os.Build;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 import net.youmi.android.libs.common.v2.global.GlobalCacheExecutor;
 import net.youmi.android.libs.common.v2.network.NetworkUtil;
@@ -95,7 +96,12 @@ public class YoumiAdHttpRequester {
 			baseHttpRequesterModel.setExtraHeaders(extraHeaders);
 			baseHttpRequesterModel.setEncodingCharset(charset);
 
-			AbsHttpRequester requester = new YoumiAdHttpURLConnectionRequester(context, baseHttpRequesterModel);
+			AbsHttpRequester requester;
+			if (Build.VERSION.SDK_INT < 9) {
+				requester = new YoumiAdHttpClientRequester(context, baseHttpRequesterModel);
+			} else {
+				requester = new YoumiAdHttpURLConnectionRequester(context, baseHttpRequesterModel);
+			}
 
 			// 如果本次请求有传入标识，那么发起请求之前，将本次请求加入到缓存列表中
 			if (!Basic_StringUtil.isNullOrEmpty(identify)) {
@@ -153,8 +159,8 @@ public class YoumiAdHttpRequester {
 								nec));
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, YoumiAdHttpRequester.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, YoumiAdHttpRequester.class, e);
 			}
 		}
 
@@ -206,7 +212,12 @@ public class YoumiAdHttpRequester {
 			baseHttpRequesterModel.setPostDataByteArray(postDataByteArray);
 			baseHttpRequesterModel.setPostDataMap(postDataMap);
 
-			AbsHttpRequester requester = new YoumiAdHttpURLConnectionRequester(context, baseHttpRequesterModel);
+			AbsHttpRequester requester;
+			if (Build.VERSION.SDK_INT < 9) {
+				requester = new YoumiAdHttpClientRequester(context, baseHttpRequesterModel);
+			} else {
+				requester = new YoumiAdHttpURLConnectionRequester(context, baseHttpRequesterModel);
+			}
 
 			// 发起请求
 			requester.request();
@@ -260,8 +271,8 @@ public class YoumiAdHttpRequester {
 
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, YoumiAdHttpRequester.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, YoumiAdHttpRequester.class, e);
 			}
 		}
 		return null;
@@ -286,8 +297,8 @@ public class YoumiAdHttpRequester {
 			headerValueList.add(headerVaule);
 			map.put(headerName, headerValueList);
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, YoumiAdHttpRequester.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, YoumiAdHttpRequester.class, e);
 			}
 		}
 	}

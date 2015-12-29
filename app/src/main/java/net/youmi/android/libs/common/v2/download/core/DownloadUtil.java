@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.download.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 
@@ -57,8 +57,8 @@ public class DownloadUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, DownloadUtil.class, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, DownloadUtil.class, e);
 			}
 		}
 		return false;

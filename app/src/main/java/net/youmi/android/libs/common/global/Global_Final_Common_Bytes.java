@@ -8,7 +8,6 @@ public class Global_Final_Common_Bytes {
 	 * 1B=1个byte
 	 */
 	public static final long B = 1;
-
 	/**
 	 * 1KB=1024*byte
 	 */

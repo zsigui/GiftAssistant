@@ -24,8 +24,8 @@ import java.io.IOException;
 public class DefaultSDKDownloader extends AbsDownloader {
 
 	/**
-	 * @param context               一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
-	 * @param absDownloadDir        下载目录
+	 * @param context
+	 * @param absDownloadDir        一个带有自定义规则的下载目录(如：目录是否会自动清理，目录下的文件命名规范等)
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效

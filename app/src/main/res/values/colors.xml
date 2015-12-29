@@ -31,6 +31,10 @@
 	<color name = "co_btn_orange">#ffaa17</color>
 	<color name = "co_btn_grey">#c9c9c9</color>
 
+	<color name = "co_tabs_indicator_common_bg">#ffaa17</color>
+	<color name = "co_tabs_common_bg">#F85454</color>
+	<color name = "co_tabs_common_text_unchecked">#FFD2D2</color>
+
 	<!-- 主页面 -->
 	<color name="co_title_bar_bg" >#74684957</color>
 	<color name = "co_title_bar_tv_bg">#FFFFFF</color>

@@ -47,7 +47,6 @@ public class SearchActivity extends BaseAppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		processLogic();
 	}
 
 
@@ -57,8 +56,8 @@ public class SearchActivity extends BaseAppCompatActivity {
 		mSearchLayout = getViewById(R.id.sl_search);
 	}
 
-
-	private void processLogic() {
+	@Override
+	protected void processLogic() {
 		obtainHistoryData();
 		mEngine = mApp.getRetrofit().create(SearchEngine.class);
 		mSearchLayout.setCanGetFocus(true);
@@ -134,7 +133,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 			mHistoryFragment = HistoryFragment.newInstance(data, isHistory);
 		}
 		mHistoryFragment.updateData(data, isHistory);
-		reattachFrag(R.id.fl_search_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
 	}
 
 	/**
@@ -147,7 +146,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 			mResultFragment = ResultFragment.newInstance();
 		}
 		mResultFragment.updateData(data);
-		reattachFrag(R.id.fl_search_container, mResultFragment, mResultFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mResultFragment, mResultFragment.getClass().getSimpleName());
 	}
 
 	/**
@@ -157,7 +156,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 		if (mEmptySearchFragment == null) {
 			mEmptySearchFragment = EmptySearchFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_search_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 		if (mNetErrorFragment == null) {
 			mNetErrorFragment = NetErrorFragment.newInstance();
 		}
-        reattachFrag(R.id.fl_search_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+        reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
 	}
 
 	public void sendSearchRequest(String keyword) {
@@ -185,7 +184,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 			saveHistoryData(keyword);
             mLastSearchKey = keyword;
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				displayLoadingUI(R.id.fl_search_container);
+				displayLoadingUI(R.id.fl_container);
 				mEngine.getSearchData(keyword).enqueue(new Callback<JsonRespSearchData>() {
 					@Override
 					public void onResponse(Response<JsonRespSearchData> response, Retrofit retrofit) {

@@ -10,7 +10,7 @@ import android.provider.Settings;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.model.Model_Battery;
 import net.youmi.android.libs.common.util.Util_System_Service;
 
@@ -40,8 +40,8 @@ public class Global_Runtime_SystemInfo_Extend {
 				return Settings.Global.getInt(context.getContentResolver(), "adb_enabled", 0) > 0;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
 			}
 		}
 		return false;
@@ -98,16 +98,17 @@ public class Global_Runtime_SystemInfo_Extend {
 			// List<String> temp = RootHelper.execRootCmd("cat /sys/class/power_supply/battery/serial_number");
 			// for (String result : temp) {
 			// if (Debug_SDK.isGlobalLog) {
-			// DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_20150111.class, "电池序列号:%s", result);
+			// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_20150111.class, "电池序列号:%s", result);
 			// }
 			// }
 
-			if (DLog.isGlobalLog) {
-				DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "电池序列号:%s \n%s", "", batteryInfo.toString());
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "电池序列号:%s \n%s", "",
+						batteryInfo.toString());
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
 			}
 		}
 		return batteryInfo;
@@ -128,8 +129,8 @@ public class Global_Runtime_SystemInfo_Extend {
 			}
 			return desc;
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
 			}
 		}
 		return null;
@@ -153,8 +154,9 @@ public class Global_Runtime_SystemInfo_Extend {
 			m.setAccessible(true);
 			Object result = m.invoke(c, key);
 			if (result != null) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "getprop %s : %s", key, result.toString());
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "getprop %s : %s", key,
+							result.toString());
 				}
 				return result.toString();
 			}
@@ -246,9 +248,9 @@ public class Global_Runtime_SystemInfo_Extend {
 							}
 						}
 						pidArray[--count] = appProcessInfo.pid;
-						if (DLog.isGlobalLog) {
-							DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "收录包名：%s - 数组位置：%d - pid：%d", pkg,
-									count, appProcessInfo.pid);
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class,
+									"收录包名：%s - 数组位置：%d - pid：%d", pkg, count, appProcessInfo.pid);
 						}
 						break;
 					}
@@ -267,14 +269,14 @@ public class Global_Runtime_SystemInfo_Extend {
 				sb.append(pid);
 			}
 			mMd5SyatemPkgPid = Coder_Md5.md5(sb.toString());
-			if (DLog.isGlobalLog) {
-				DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "排序后pid：%s md5：%s", sb.toString(),
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "排序后pid：%s md5：%s", sb.toString(),
 						mMd5SyatemPkgPid);
 			}
 			return mMd5SyatemPkgPid;
 		} catch (Exception e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, e);
 			}
 		}
 		return null;

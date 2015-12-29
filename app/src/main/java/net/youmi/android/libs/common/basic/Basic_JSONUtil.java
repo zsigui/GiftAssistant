@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.basic;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,8 +20,8 @@ public class Basic_JSONUtil {
 			}
 			return new JSONObject(json);
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return null;
@@ -34,8 +34,8 @@ public class Basic_JSONUtil {
 			}
 			return new JSONArray(json);
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return null;
@@ -44,11 +44,10 @@ public class Basic_JSONUtil {
 	/**
 	 * 从jsonObject中获取String,<br/>
 	 * 如果获取的结果为null或空串，则返回defaultValue
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static String getString(JSONObject obj, String key, String defaultValue) {
@@ -64,8 +63,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -77,8 +76,8 @@ public class Basic_JSONUtil {
 				return obj.getBoolean(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -87,11 +86,10 @@ public class Basic_JSONUtil {
 	/**
 	 * 从json数组中获取string <br/>
 	 * 如果获取的结果为null或空串，则返回defaultValue
-	 *
+	 * 
 	 * @param ary
 	 * @param index
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static String getString(JSONArray ary, int index, String defaultValue) {
@@ -109,8 +107,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -118,11 +116,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从jsonObject中获取int
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static int getInt(JSONObject obj, String key, int defaultValue) {
@@ -131,8 +128,8 @@ public class Basic_JSONUtil {
 				return obj.getInt(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -140,11 +137,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从JSONArray中获取int
-	 *
+	 * 
 	 * @param ary
 	 * @param index
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static int getInt(JSONArray ary, int index, int defaultValue) {
@@ -155,8 +151,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -164,11 +160,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从jsonObject中获取long
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static long getLong(JSONObject obj, String key, long defaultValue) {
@@ -177,8 +172,8 @@ public class Basic_JSONUtil {
 				return obj.getLong(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -186,11 +181,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从jsonObject中获取double
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static double getDouble(JSONObject obj, String key, double defaultValue) {
@@ -199,8 +193,8 @@ public class Basic_JSONUtil {
 				return obj.getDouble(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -208,11 +202,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从JSONArray中获取long
-	 *
+	 * 
 	 * @param ary
 	 * @param index
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static long getLong(JSONArray ary, int index, long defaultValue) {
@@ -223,8 +216,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -232,11 +225,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从jsonObject中获取JsonObject
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static JSONObject getJsonObject(JSONObject obj, String key, JSONObject defaultValue) {
@@ -245,8 +237,8 @@ public class Basic_JSONUtil {
 				return obj.getJSONObject(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -254,11 +246,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从JSONArray中获取int
-	 *
+	 * 
 	 * @param ary
 	 * @param index
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static JSONObject getJsonObject(JSONArray ary, int index, JSONObject defaultValue) {
@@ -269,8 +260,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -278,11 +269,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从jsonObject中获取JsonArray
-	 *
+	 * 
 	 * @param obj
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static JSONArray getJsonArray(JSONObject obj, String key, JSONArray defaultValue) {
@@ -291,8 +281,8 @@ public class Basic_JSONUtil {
 				return obj.getJSONArray(key);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -300,11 +290,10 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 从JSONArray中获取int
-	 *
+	 * 
 	 * @param ary
 	 * @param index
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static JSONArray getJsonArray(JSONArray ary, int index, JSONArray defaultValue) {
@@ -315,8 +304,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 		return defaultValue;
@@ -324,7 +313,6 @@ public class Basic_JSONUtil {
 
 	/**
 	 * 写入int到jsonobject
-	 *
 	 * @param jo
 	 * @param key
 	 * @param value
@@ -335,15 +323,14 @@ public class Basic_JSONUtil {
 				jo.put(key, value);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 	}
 
 	/**
 	 * 写入long到jsonobject
-	 *
 	 * @param jo
 	 * @param key
 	 * @param value
@@ -354,15 +341,14 @@ public class Basic_JSONUtil {
 				jo.put(key, value);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 	}
 	
 	/**
 	 * 写入string到jsonobject
-	 *
 	 * @param jo
 	 * @param key
 	 * @param value
@@ -377,8 +363,8 @@ public class Basic_JSONUtil {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 	}
@@ -389,15 +375,14 @@ public class Basic_JSONUtil {
 				jo.put(key, object);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 	}
 
 	/**
 	 * 写入jsonObject到jsonobject
-	 *
 	 * @param jo
 	 * @param key
 	 * @param value
@@ -408,8 +393,8 @@ public class Basic_JSONUtil {
 				jo.put(key, value);
 			}
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_JSONUtil.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_JSONUtil.class, e);
 			}
 		}
 	}

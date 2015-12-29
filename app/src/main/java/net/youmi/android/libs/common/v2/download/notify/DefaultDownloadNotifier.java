@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.download.notify;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus;
 import net.youmi.android.libs.common.v2.download.listener.IDownloadListener;
 import net.youmi.android.libs.common.v2.download.listener.IMaxPriorityDownloadListener;
@@ -49,23 +49,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载前，文件处于文件锁中：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载前，文件处于文件锁中：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadBeforeStart_FileLock(fileDownloadTask);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -88,23 +90,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载开始：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载开始：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadStart(fileDownloadTask);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -135,24 +139,26 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载中：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载中：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadProgressUpdate(fileDownloadTask, totalLength, completeLength, percent, speedBytes,
 								intervalTime_ms);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -175,23 +181,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载成功：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载成功：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadSuccess(fileDownloadTask);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -214,23 +222,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载文件已经存在于本地中：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载文件已经存在于本地中：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onFileAlreadyExist(fileDownloadTask);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -254,23 +264,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载失败：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载失败：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadFailed(fileDownloadTask, finalDownloadStatus);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}
@@ -296,23 +308,25 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 		try {
 			final List<IDownloadListener> list = getListeners();
 			if (list != null && !list.isEmpty()) {
-				if (DLog.isDownloadLog) {
-					DLog.td(DLog.mDownloadTag, this, "下载暂停：当前共有[%d]个监听者要处理", list.size());
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.td(Debug_SDK.mDownloadTag, this, "下载暂停：当前共有[%d]个监听者要处理", list.size());
 				}
 				for (int i = 0; i < list.size(); ++i) {
 					try {
-						if (DLog.isDownloadLog) {
-							DLog.ti(DLog.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName());
+						if (Debug_SDK.isDownloadLog) {
+							Debug_SDK
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+											());
 						}
 						list.get(i).onDownloadStop(fileDownloadTask, totalLength, completeLength, percent);
 					} catch (Throwable e) {
-						DLog.te(DLog.mDownloadTag, this, e);
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 					}
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, e);
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 			}
 		}
 	}

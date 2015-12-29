@@ -4,33 +4,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Util_System_Intent_Network {
 
 	public static void wirelessSetting(Context context) {
 		try {
-			context.startActivity(
-					new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+			context.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS)
+					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent_Network.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent_Network.class, e);
 			}
 		}
 	}
 
 	/**
 	 * 获取打开url的Intent
-	 *
+	 * 
 	 * @param context
-	 * @param browserPackageName 可为null
-	 * @param browserActivity    可为null
+	 * @param browserPackageName
+	 *            可为null
+	 * @param browserActivity
+	 *            可为null
 	 * @param url
-	 *
 	 * @return
 	 */
-	public static Intent getToWebUrlIntent(Context context, String browserPackageName, String browserActivity, String url) {
+	public static Intent getToWebUrlIntent(Context context, String browserPackageName, String browserActivity,
+			String url) {
 
 		Intent intent = null;
 		try {
@@ -50,8 +51,8 @@ public class Util_System_Intent_Network {
 						}
 
 					} catch (Throwable e) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Intent_Network.class, e);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent_Network.class, e);
 						}
 					}
 
@@ -64,8 +65,8 @@ public class Util_System_Intent_Network {
 						intent.setData(Uri.parse(url));
 
 					} catch (Throwable e) {
-						if (DLog.isUtilLog) {
-							DLog.te(DLog.mUtilTag, Util_System_Intent_Network.class, e);
+						if (Debug_SDK.isUtilLog) {
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent_Network.class, e);
 						}
 					}
 				}
@@ -79,8 +80,8 @@ public class Util_System_Intent_Network {
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent_Network.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent_Network.class, e);
 			}
 		}
 		return intent;

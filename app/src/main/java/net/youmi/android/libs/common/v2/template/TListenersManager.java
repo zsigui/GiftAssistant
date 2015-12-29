@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.template;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,8 @@ public abstract class TListenersManager<T> {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, this, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 			}
 		}
 		return false;
@@ -55,8 +55,8 @@ public abstract class TListenersManager<T> {
 				return list.remove(listener);
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, this, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 			}
 		}
 		return false;

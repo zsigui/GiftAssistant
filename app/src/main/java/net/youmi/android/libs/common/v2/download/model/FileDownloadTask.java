@@ -4,7 +4,7 @@ import android.util.SparseArray;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 
@@ -128,34 +128,34 @@ final public class FileDownloadTask {
 	 */
 	public boolean isValid() {
 		if (Basic_StringUtil.isNullOrEmpty(mRawDownloadUrl)) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, "下载任务无效：原始下载地址无效");
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载任务无效：原始下载地址无效");
 			}
 			return false;
 		}
 		// 因为一开始是不能确定最终下载地址的，所以这里代码注释
 		//		if (Basic_StringUtil.isNullOrEmpty(mDestDownloadUrl)) {
 		//			if (Debug_SDK.isDownloadLog) {
-		//				DLog.te(DLog.mDownloadTag,this, "最终下载地址无效");
+		//				Debug_SDK.te(Debug_SDK.mDownloadTag,this, "最终下载地址无效");
 		//			}
 		//			return false;
 		//		}
 		if (hashCode() == 0) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, "下载任务无效：hashcode = 0");
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载任务无效：hashcode = 0");
 			}
 			return false;
 		}
 		if (mTempFile == null) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, "下载任务无效：缓存文件对象为空，需要先调用 setTempFile");
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载任务无效：缓存文件对象为空，需要先调用 setTempFile");
 			}
 			return false;
 		}
 
 		if (mStoreFile == null) {
-			if (DLog.isDownloadLog) {
-				DLog.te(DLog.mDownloadTag, this, "下载任务无效：最终存储文件对象为空，需要先调用 setStoreFile");
+			if (Debug_SDK.isDownloadLog) {
+				Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载任务无效：最终存储文件对象为空，需要先调用 setStoreFile");
 			}
 			return false;
 		}
@@ -163,8 +163,8 @@ final public class FileDownloadTask {
 		if (mIFileDownloadTaskExtendObjectSparseArray != null) {
 			for (int i = 0; i < mIFileDownloadTaskExtendObjectSparseArray.size(); ++i) {
 				if (!mIFileDownloadTaskExtendObjectSparseArray.valueAt(i).isExtendObjectValid()) {
-					if (DLog.isDownloadLog) {
-						DLog.te(DLog.mDownloadTag, this, "下载任务无效：第%d个扩展对象value无效", i);
+					if (Debug_SDK.isDownloadLog) {
+						Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载任务无效：第%d个扩展对象value无效", i);
 					}
 					return false;
 				}
@@ -214,8 +214,8 @@ final public class FileDownloadTask {
 	 */
 	public void setDestDownloadUrl(String destDownloadUrl) {
 		mDestDownloadUrl = destDownloadUrl;
-		if (DLog.isDownloadLog) {
-			DLog.ti(DLog.mDownloadTag, this, "修改了最终下载地址后参数模型状态：\n%s", this.toString());
+		if (Debug_SDK.isDownloadLog) {
+			Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "修改了最终下载地址后参数模型状态：\n%s", this.toString());
 		}
 	}
 
@@ -341,7 +341,7 @@ final public class FileDownloadTask {
 
 	@Override
 	public String toString() {
-		if (DLog.isDownloadLog) {
+		if (Debug_SDK.isDownloadLog) {
 			try {
 				final StringBuilder sb = new StringBuilder("FileDownloadTask {\n");
 				sb.append("  mRawDownloadUrl=\"").append(mRawDownloadUrl).append('\"').append("\n");
@@ -356,8 +356,8 @@ final public class FileDownloadTask {
 				sb.append('}');
 				return sb.toString();
 			} catch (Throwable e) {
-				if (DLog.isDownloadLog) {
-					DLog.te(DLog.mDownloadTag, this, e);
+				if (Debug_SDK.isDownloadLog) {
+					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
 		}

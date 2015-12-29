@@ -93,6 +93,12 @@
         <item name="android:background">@color/co_white</item>
     </style>
 
+	<style name="DefaultRelativeLayout">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:background">@color/co_white</item>
+	</style>
+
     <style name="IndexModuleTitleLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/di_index_hoz_module_title_height</item>

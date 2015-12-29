@@ -5,7 +5,7 @@ import android.content.Context;
 import net.youmi.android.libs.common.CommonConstant;
 import net.youmi.android.libs.common.basic.Basic_Random;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.network.NetworkStatus;
 
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * @author mosida created on 2013-6-17
  * @author zhitaocai edit on 2014-5-15
  */
-class ExceptionSocketSender {
+public class ExceptionSocketSender {
 
 	/**
 	 * 异常上报地址 exrep.youmi.net
@@ -54,7 +54,7 @@ class ExceptionSocketSender {
 
 	private String mSendType = "udp";
 
-	ExceptionSocketSender(Context context) {
+	public ExceptionSocketSender(Context context) {
 		mContext = context;
 	}
 
@@ -68,13 +68,13 @@ class ExceptionSocketSender {
 	 * @return
 	 */
 	boolean isNeedToSend() {
-		if (DLog.isNetLog) {
-			DLog.ti(DLog.mNetTag, ExceptionSocketSender.class, "触发异常上报：判断是否上报本次异常");
+		if (Debug_SDK.isNetLog) {
+			Debug_SDK.ti(Debug_SDK.mNetTag, ExceptionSocketSender.class, "触发异常上报：判断是否上报本次异常");
 		}
 
 		if (Basic_StringUtil.isNullOrEmpty(monitor_host)) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, ExceptionSocketSender.class, "触发异常上报信息：host is null!");
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, ExceptionSocketSender.class, "触发异常上报信息：host is null!");
 			}
 			return false;
 		}
@@ -111,15 +111,15 @@ class ExceptionSocketSender {
 		return false;
 	}
 
-	void send(JSONObject jsonObject) {
+	public void send(JSONObject jsonObject) {
 
 		if (jsonObject == null) {
 			return;
 		}
 		try {
-			if (DLog.isNetLog) {
-				DLog.ti(DLog.mNetTag, ExceptionSocketSender.class, "触发异常上报：准备上报");
-				DLog.ti(DLog.mNetTag, ExceptionSocketSender.class, "触发异常上报：上报方式:%s", mSendType);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.ti(Debug_SDK.mNetTag, ExceptionSocketSender.class, "触发异常上报：准备上报");
+				Debug_SDK.ti(Debug_SDK.mNetTag, ExceptionSocketSender.class, "触发异常上报：上报方式:%s", mSendType);
 			}
 			if (mSendType.equals("udp")) {
 				UDPSocketSender.send(jsonObject, monitor_host, monitor_port);
@@ -127,8 +127,8 @@ class ExceptionSocketSender {
 				TCPSocketSender.send(jsonObject, monitor_host, monitor_port);
 			}
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, ExceptionSocketSender.class, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, ExceptionSocketSender.class, e);
 			}
 		}
 	}

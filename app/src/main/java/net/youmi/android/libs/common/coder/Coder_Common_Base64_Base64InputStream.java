@@ -7,13 +7,13 @@ import java.io.InputStream;
  * <p>
  * A base64 encoding input stream.
  * </p>
- * <p/>
+ * 
  * <p>
  * A <em>Base64InputStream</em> reads from an underlying stream which is supposed to be a base64 encoded stream.
  * <em>Base64InputStream</em> decodes the data read from the underlying stream and returns the decoded bytes to the
  * caller.
  * </p>
- *
+ * 
  * @author Carlo Pelliccia
  */
 class Coder_Common_Base64_Base64InputStream extends InputStream {
@@ -42,8 +42,9 @@ class Coder_Common_Base64_Base64InputStream extends InputStream {
 	 * <p>
 	 * It builds a base64 decoding input stream.
 	 * </p>
-	 *
-	 * @param inputStream The underlying stream, from which the encoded data is read.
+	 * 
+	 * @param inputStream
+	 *            The underlying stream, from which the encoded data is read.
 	 */
 	public Coder_Common_Base64_Base64InputStream(InputStream inputStream) {
 		this.inputStream = inputStream;

@@ -1,8 +1,8 @@
 package net.youmi.android.libs.common.v2.global;
 
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.v2.pool.DefaultCacheExecutorService;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.pool.core.AbsCacheExecutorService;
+import net.youmi.android.libs.common.v2.pool.DefaultCacheExecutorService;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ public class GlobalCacheExecutor {
 		try {
 			mCachedThreadPool.execute(task);
 		} catch (Exception e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, GlobalCacheExecutor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, GlobalCacheExecutor.class, e);
 			}
 		}
 	}
@@ -38,8 +38,8 @@ public class GlobalCacheExecutor {
 		try {
 			return mCachedThreadPool.shutdownNow();
 		} catch (Exception e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, GlobalCacheExecutor.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, GlobalCacheExecutor.class, e);
 			}
 		}
 		return null;

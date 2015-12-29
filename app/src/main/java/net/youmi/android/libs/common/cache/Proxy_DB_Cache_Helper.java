@@ -2,7 +2,7 @@ package net.youmi.android.libs.common.cache;
 
 import android.content.Context;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 缓存代理工具类 这些数据库的名字先不要改动
@@ -34,8 +34,8 @@ public class Proxy_DB_Cache_Helper extends Base_DB_Cache_Helper {
 				mInstance_Common = new Proxy_DB_Cache_Helper(context, DB_NAME_COMMON, DB_VERSION_COMMON);
 			}
 		} catch (Throwable e) {
-			if (DLog.isCacheLog) {
-				DLog.te(DLog.mCacheTag, Proxy_DB_Cache_Helper.class, e);
+			if (Debug_SDK.isCacheLog) {
+				Debug_SDK.te(Debug_SDK.mCacheTag, Proxy_DB_Cache_Helper.class, e);
 			}
 		}
 		return mInstance_Common;

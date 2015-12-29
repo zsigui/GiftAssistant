@@ -1,6 +1,6 @@
 package net.youmi.android.libs.common.v2.network.core;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.List;
 import java.util.Map;
@@ -171,7 +171,7 @@ public class BaseHttpResponseModel {
 
 	@Override
 	public String toString() {
-		if (DLog.isNetLog) {
+		if (Debug_SDK.isNetLog) {
 			try {
 				final StringBuilder sb = new StringBuilder("BaseHttpResponseModel {\n");
 				sb.append("  mIsFinishResponse=").append(mIsFinishResponse).append("\n");
@@ -189,8 +189,8 @@ public class BaseHttpResponseModel {
 				sb.append('}');
 				return sb.toString();
 			} catch (Exception e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 		}

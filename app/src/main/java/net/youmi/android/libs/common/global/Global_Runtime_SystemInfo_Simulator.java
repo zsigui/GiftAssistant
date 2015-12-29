@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.util.List;
 
@@ -48,8 +48,8 @@ public class Global_Runtime_SystemInfo_Simulator {
 	public final static boolean isEmulator(Context context) {
 		try {
 			if (("unknown".equals(Build.BOARD)) && ("generic".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND))) {
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
 				}
 				mSimulatorType = 1;
 				return true;
@@ -61,8 +61,8 @@ public class Global_Runtime_SystemInfo_Simulator {
 
 				// 模拟器
 				if ("sdk".equals(deviceName)) {
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
 					}
 					mSimulatorType = 1;
 					return true;
@@ -70,8 +70,9 @@ public class Global_Runtime_SystemInfo_Simulator {
 
 				// 谷歌地图模拟器
 				if ("google_sdk".equals(deviceName)) {
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is google map emulator");
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
+								"device is google map emulator");
 					}
 					mSimulatorType = 1;
 					return true;
@@ -103,8 +104,8 @@ public class Global_Runtime_SystemInfo_Simulator {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
 			}
 		}
 		return false;
@@ -124,14 +125,16 @@ public class Global_Runtime_SystemInfo_Simulator {
 		try {
 			if (("unknown".equals(Build.BOARD)) && ("vbox86p".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND)) &&
 			    ("test-keys".equals(Build.TAGS))) {
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Genymotion " + "emulator");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK
+							.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Genymotion " +
+							                                                                     "emulator");
 				}
 				return true;
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
 			}
 		}
 		return false;
@@ -149,15 +152,16 @@ public class Global_Runtime_SystemInfo_Simulator {
 			if (!Basic_StringUtil.isNullOrEmpty(Build.MODEL)) {
 				String deviceName = Build.MODEL.trim().toLowerCase();
 				if (deviceName.contains("tiantian")) {
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Tiantian emulator");
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
+								"device is Tiantian emulator");
 					}
 					return true;
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
 			}
 		}
 		return false;
@@ -177,15 +181,16 @@ public class Global_Runtime_SystemInfo_Simulator {
 		try {
 			if (Basic_StringUtil.isNullOrEmpty(Build.MODEL)) {
 				if (("Droid4X".equals(Build.DEVICE)) && ("test-keys".equals(Build.TAGS)) && (Build.MODEL.contains("Droid4X"))) {
-					if (DLog.isGlobalLog) {
-						DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Droid4X emulator");
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
+								"device is Droid4X emulator");
 					}
 					return true;
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
 			}
 		}
 		return false;
@@ -259,12 +264,12 @@ public class Global_Runtime_SystemInfo_Simulator {
 			}
 			// long et = System.currentTimeMillis();
 			// if (Debug_SDK.isGlobalLog) {
-			// DLog.td(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
+			// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
 			// "判断是否为BlueStacks模拟器，起始时间：%d ms 结束时间:%d ms, 用时： %d ms", st, et, et - st);
 			// }
 		} catch (Exception e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, e);
 			}
 		}
 

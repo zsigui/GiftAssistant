@@ -1,12 +1,9 @@
 package net.youmi.android.libs.common.location;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.location.*;
 import android.os.Bundle;
-
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Listener_Location_AdLocationListener implements LocationListener {
 
@@ -22,8 +19,9 @@ public class Listener_Location_AdLocationListener implements LocationListener {
 
 			if (location != null) {
 				if (location.getLatitude() != 0 || location.getLongitude() != 0) {
-					if (DLog.isLocationLog) {
-						DLog.td(DLog.mLocationTag, this, "监听到坐标: %f - %f", location.getLatitude(), location.getLongitude());
+					if (Debug_SDK.isLocationLog) {
+						Debug_SDK.td(Debug_SDK.mLocationTag, this, "监听到坐标: %f - %f", location.getLatitude(),
+								location.getLongitude());
 					}
 					Proxy_Manager_Location_AdLocationManager.getInstance(mContext).setLocation(location);
 					removeUpdates();// 取消监听
@@ -31,8 +29,8 @@ public class Listener_Location_AdLocationListener implements LocationListener {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isLocationLog) {
-				DLog.te(DLog.mLocationTag, this, e);
+			if (Debug_SDK.isLocationLog) {
+				Debug_SDK.te(Debug_SDK.mLocationTag, this, e);
 			}
 		}
 
@@ -45,8 +43,8 @@ public class Listener_Location_AdLocationListener implements LocationListener {
 				manager.removeUpdates(this);
 			}
 		} catch (Throwable e) {
-			if (DLog.isLocationLog) {
-				DLog.te(DLog.mLocationTag, this, e);
+			if (Debug_SDK.isLocationLog) {
+				Debug_SDK.te(Debug_SDK.mLocationTag, this, e);
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package net.youmi.android.libs.common;
 
 /**
  * !!! 请不要随便更改包名和类名
- * <p/>
+ *
  * 通用基础类库通用字符串明文保存类
  * <p/>
  * 本类在构建广告sdk的时候会进行字符串加密替换处理，因此需要遵循下面的一些规则
@@ -27,6 +27,7 @@ public class CommonConstant {
 		return "m929bb76e8110d1a70260af57b446ebc";
 	}
 
+
 	public static String get_CacheFileName_Imei() {
 		return "i42d45df023jnkdd93la483f9xGFKXI";
 	}
@@ -38,6 +39,7 @@ public class CommonConstant {
 	public static String get_CacheFileName_PSW() {
 		return "pY32nlkjdf0xik2ljso0d9fi21LOI23";
 	}
+
 
 	public static String get_Url_ErrorReport() {
 		return "exrep.youmi.net";
@@ -58,5 +60,6 @@ public class CommonConstant {
 	public static String get_DatabaseName_DefaultTableName() {
 		return "slx93hldx";
 	}
+
 
 }

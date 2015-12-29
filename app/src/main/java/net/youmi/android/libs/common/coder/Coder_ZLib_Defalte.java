@@ -13,9 +13,9 @@ public class Coder_ZLib_Defalte {
 
 	/**
 	 * 压缩
-	 *
-	 * @param data 待压缩数据
-	 *
+	 * 
+	 * @param data
+	 *            待压缩数据
 	 * @return byte[] 压缩后的数据
 	 */
 	public static byte[] compress(byte[] data) {
@@ -50,9 +50,12 @@ public class Coder_ZLib_Defalte {
 
 	/**
 	 * 压缩
-	 *
-	 * @param data 待压缩数据
-	 * @param os   输出流
+	 * 
+	 * @param data
+	 *            待压缩数据
+	 * 
+	 * @param os
+	 *            输出流
 	 */
 	public static void compress(byte[] data, OutputStream os) {
 		DeflaterOutputStream dos = new DeflaterOutputStream(os);
@@ -70,9 +73,9 @@ public class Coder_ZLib_Defalte {
 
 	/**
 	 * 解压缩
-	 *
-	 * @param data 待压缩的数据
-	 *
+	 * 
+	 * @param data
+	 *            待压缩的数据
 	 * @return byte[] 解压缩后的数据
 	 */
 	public static byte[] decompress(byte[] data) {
@@ -107,9 +110,9 @@ public class Coder_ZLib_Defalte {
 
 	/**
 	 * 解压缩
-	 *
-	 * @param is 输入流
-	 *
+	 * 
+	 * @param is
+	 *            输入流
 	 * @return byte[] 解压缩后的数据
 	 */
 	public static byte[] decompress(InputStream is) {

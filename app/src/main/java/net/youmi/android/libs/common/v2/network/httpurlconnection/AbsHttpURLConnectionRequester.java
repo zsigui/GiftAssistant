@@ -3,12 +3,14 @@ package net.youmi.android.libs.common.v2.network.httpurlconnection;
 import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 import net.youmi.android.libs.common.v2.network.core.AbsHttpRequester;
 import net.youmi.android.libs.common.v2.network.core.BaseHttpRequesterModel;
 import net.youmi.android.libs.common.v2.network.core.HttpRequestExceptionCode;
 import net.youmi.android.libs.common.v2.network.core.HttpRequesterFactory;
+
+import org.apache.http.conn.ConnectTimeoutException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -47,7 +49,6 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 	/**
 	 * 请求之前的钩子，如:子类可以为 httpRequestBase 添加额外的头部
 	 *
-	 * @param httpRequestBase
 	 */
 	protected abstract void beforeRequest(HttpURLConnection httpURLConnection);
 
@@ -60,8 +61,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 		try {
 			mHttpURLConnection.disconnect();
 		} catch (Throwable e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, this, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 			}
 		}
 	}
@@ -98,8 +99,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 					}
 				}
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 
@@ -128,8 +129,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 					}
 					String params = sb.toString().substring(0, sb.length() - 1);
 					String afterURLEncode = URLEncoder.encode(params, Global_Charsets.UTF_8);
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, this, "[POST]原始请求参数:%s urlencode后:%s", params, afterURLEncode);
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, this, "[POST]原始请求参数:%s urlencode后:%s", params, afterURLEncode);
 					}
 
 					os.write(afterURLEncode.getBytes(mBaseHttpRequesterModel.getEncodingCharset()));
@@ -148,8 +149,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 				}
 			}
 
-			if (DLog.isNetLog) {
-				DLog.td(DLog.mNetTag, this, "[%s] %s", mBaseHttpRequesterModel.getRequestType(),
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.td(Debug_SDK.mNetTag, this, "[%s] %s", mBaseHttpRequesterModel.getRequestType(),
 						mBaseHttpRequesterModel.getRequestUrl());
 			}
 
@@ -168,38 +169,38 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 				// 设置httpcode
 				mBaseHttpResponseModel.setHttpCode(mHttpURLConnection.getResponseCode());
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 			try {
 				// 设置状态信息
 				mBaseHttpResponseModel.setHttpReasonPhrase(mHttpURLConnection.getResponseMessage());
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 			try {
 				// 设置返回头部信息
 				mBaseHttpResponseModel.setHeaders(mHttpURLConnection.getHeaderFields());
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 
 			try {
 				// 设置返回结果的contentlength
-				if (DLog.isNetLog) {
-					DLog.td(DLog.mNetTag, this, "ContentLength:%d, ContentType:%s, ContentEncoding:%s",
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.td(Debug_SDK.mNetTag, this, "ContentLength:%d, ContentType:%s, ContentEncoding:%s",
 							mHttpURLConnection.getContentLength(), mHttpURLConnection.getContentType(),
 							mHttpURLConnection.getContentEncoding());
 				}
 				mBaseHttpResponseModel.setContentLength(mHttpURLConnection.getContentLength());
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 
@@ -209,13 +210,13 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 				if (!Basic_StringUtil.isNullOrEmpty(contentEncoding) &&
 				    contentEncoding.toLowerCase(Locale.US).contains("gzip") && inputStream != null) {
 					inputStream = new GZIPInputStream(inputStream);
-					if (DLog.isNetLog) {
-						DLog.td(DLog.mNetTag, this, "初始化inputStrrem为GZIPInputStream");
+					if (Debug_SDK.isNetLog) {
+						Debug_SDK.td(Debug_SDK.mNetTag, this, "初始化inputStrrem为GZIPInputStream");
 					}
 				}
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 
@@ -242,13 +243,13 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 			String rspString = new String(buffer, mBaseHttpRequesterModel.getEncodingCharset());
 			mBaseHttpResponseModel.setResponseString(rspString);
 
-			if (DLog.isNetLog) {
-				DLog.ti(DLog.mNetTag, this, "返回字符串[长度:%d]:%s", buffer.length, rspString);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.ti(Debug_SDK.mNetTag, this, "返回字符串[长度:%d]:%s", buffer.length, rspString);
 			}
 
-			//		} catch (ConnectTimeoutException e) {
-			//			// 网络与服务器建立连接超时
-			//			setException(HttpRequestExceptionCode.ConnectTimeoutException, e);
+		} catch (ConnectTimeoutException e) {
+			// 网络与服务器建立连接超时
+			setException(HttpRequestExceptionCode.ConnectTimeoutException, e);
 
 		} catch (SocketTimeoutException e) {
 			// 请求超时
@@ -257,10 +258,6 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 		} catch (UnknownHostException e) {
 			// 网络没有打开或者没有配置网络权限的时候会1抛出这个异常
 			setException(HttpRequestExceptionCode.UnknownHostException, e);
-
-			//		} catch (HttpHostConnectException e) {
-			//			// 网络没有打开或者没有配置网络权限的时候会1抛出这个异常
-			//			setException(HttpRequestExceptionCode.HttpHostConnectException, e);
 
 		} catch (SocketException e) {
 			// 请求被关闭
@@ -276,8 +273,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 					mHttpURLConnection.disconnect();
 				}
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 			try {
@@ -285,8 +282,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 					baos.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 			try {
@@ -294,8 +291,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 					inputStream.close();
 				}
 			} catch (Throwable e) {
-				if (DLog.isNetLog) {
-					DLog.te(DLog.mNetTag, this, e);
+				if (Debug_SDK.isNetLog) {
+					Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 				}
 			}
 		}

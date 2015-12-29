@@ -52,7 +52,7 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 	 * Method invoked prior to executing the given Runnable in the
 	 * given thread.  This method is invoked by thread {@code t} that
 	 * will execute task {@code r}, and may be used to re-initialize
-	 * ThreadLocals, or to onSearch logging.
+	 * ThreadLocals, or to perform logging.
 	 * <p/>
 	 * <p>This implementation does nothing, but may be customized in
 	 * subclasses. Note: To properly nest multiple overridings, subclasses
@@ -65,7 +65,7 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 	@Override
 	protected void beforeExecute(Thread t, Runnable r) {
 		//		if (Debug_SDK.isDownloadLog) {
-		//			DLog.tv(DLog.mDownloadTag, this, "准备执行任务 %d ", r.hashCode());
+		//			Debug_SDK.tv(Debug_SDK.mDownloadTag, this, "准备执行任务 %d ", r.hashCode());
 		//		}
 		if (mIExecuteListener != null) {
 			mIExecuteListener.beforeExecute(t, r);
@@ -123,7 +123,7 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 		super.afterExecute(r, t);
 
 		//		if (Debug_SDK.isDownloadLog) {
-		//			DLog.tv(DLog.mDownloadTag, this, "任务执行完毕 %d ", r.hashCode());
+		//			Debug_SDK.tv(Debug_SDK.mDownloadTag, this, "任务执行完毕 %d ", r.hashCode());
 		//		}
 
 		//		if (t == null && r instanceof Future<?>) {

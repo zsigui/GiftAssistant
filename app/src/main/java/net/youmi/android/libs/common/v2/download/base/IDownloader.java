@@ -56,7 +56,6 @@ public interface IDownloader {
 	 * 是否被停止，只有调用了{@link #stop()}才会变为true，而调用了{@link #download()}之后就会变为false
 	 *
 	 * @return
-	 *
 	 * @see net.youmi.android.libs.common.v2.download.base.IDownloader#isRunning
 	 */
 	boolean isStop();

@@ -1,22 +1,21 @@
 package net.youmi.android.libs.common.util;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.os.Environment;
 import android.os.StatFs;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 /**
  * App私有存储目录容量相关
- *
+ * 
  * @author zhitaocai edit on 2014-7-15
+ * 
  */
 public class Util_System_DataDirUtil {
 
 	/**
 	 * 检查应用内data目录是否还有足够的空间
-	 *
+	 * 
 	 * @param limtSpace
-	 *
 	 * @return
 	 */
 	public static boolean IsDataDirEnoughSpace(long limtSpace) {
@@ -34,25 +33,25 @@ public class Util_System_DataDirUtil {
 			if (availableSize < 0) {
 				availableSize = Math.abs(availableSize);
 			}
-			if (DLog.isUtilLog) {
-				DLog.ti(DLog.mUtilTag, Util_System_DataDirUtil.class,
-						"data:" + "可用容量:" + availableSize + ",需求容量:" + limtSpace + ",可用块:" + availaBlock + ",每块容量:" + blocSize);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, "data:" + "可用容量:" + availableSize
+						+ ",需求容量:" + limtSpace + ",可用块:" + availaBlock + ",每块容量:" + blocSize);
 			}
 
 			if (availableSize >= limtSpace) {
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_System_DataDirUtil.class, "data存储空间充足");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, "data存储空间充足");
 				}
 				return true;
 			} else {
-				if (DLog.isUtilLog) {
-					DLog.ti(DLog.mUtilTag, Util_System_DataDirUtil.class, "data存储空间不足");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, "data存储空间不足");
 				}
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_DataDirUtil.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, e);
 			}
 		}
 
@@ -79,8 +78,8 @@ public class Util_System_DataDirUtil {
 
 			return availableSize;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_DataDirUtil.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, e);
 			}
 		}
 
@@ -89,15 +88,15 @@ public class Util_System_DataDirUtil {
 
 	/**
 	 * 获取私有app目录
-	 *
+	 * 
 	 * @return /data
 	 */
 	public static String getDataDirRootPath() {
 		try {
 			return Environment.getDataDirectory().getPath();
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_DataDirUtil.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, e);
 			}
 		}
 		return null;
@@ -105,7 +104,7 @@ public class Util_System_DataDirUtil {
 
 	/**
 	 * 返回当前应用内目录可用空间大小
-	 *
+	 * 
 	 * @return
 	 */
 	public static long getAvailableSize() {
@@ -129,8 +128,8 @@ public class Util_System_DataDirUtil {
 			return availableSize;
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_DataDirUtil.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_DataDirUtil.class, e);
 			}
 		}
 		return 0;

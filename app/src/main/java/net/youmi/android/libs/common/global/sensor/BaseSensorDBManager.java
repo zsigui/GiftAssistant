@@ -1,21 +1,21 @@
 package net.youmi.android.libs.common.global.sensor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.youmi.android.libs.common.debug.DLog;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 只记录墙上的广告的包名状态
- *
+ * 
  * @author zhitaocai
  * @author zhitaocai edit on 2014-7-8
+ * 
  */
 abstract class BaseSensorDBManager {
 
@@ -32,9 +32,8 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 检查数据库是否可以使用。
-	 *
+	 * 
 	 * @param db
-	 *
 	 * @return
 	 */
 	private boolean checkDb(SQLiteDatabase db) {
@@ -50,15 +49,15 @@ abstract class BaseSensorDBManager {
 				cursor.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog && isLogOpen) {
-				DLog.te(DLog.mGlobalTag, this, e);
+			if (Debug_SDK.isGlobalLog && isLogOpen) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 			}
 		}
 	}
 
 	/**
 	 * 关闭数据库
-	 *
+	 * 
 	 * @param db
 	 */
 	private void closeDb(SQLiteDatabase db) {
@@ -67,8 +66,8 @@ abstract class BaseSensorDBManager {
 				db.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog && isLogOpen) {
-				DLog.te(DLog.mGlobalTag, this, e);
+			if (Debug_SDK.isGlobalLog && isLogOpen) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 			}
 		}
 	}
@@ -76,11 +75,10 @@ abstract class BaseSensorDBManager {
 	/**
 	 * 1、如果数据库没有记录就添加 <br>
 	 * 2、如果数据库有记录就返回失败
-	 *
+	 * 
 	 * @param model
-	 *
 	 * @return true 成功添加到数据库 <br>
-	 * false 没有成功添加到数据库
+	 *         false 没有成功添加到数据库
 	 */
 	boolean add(SensorModel model) {
 		if (model == null) {
@@ -93,8 +91,8 @@ abstract class BaseSensorDBManager {
 			try {
 				db = mDbHelper.getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.te(DLog.mGlobalTag, this, "添加传感器数据到数据库失败，数据库不可用");
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, this, "添加传感器数据到数据库失败，数据库不可用");
 					}
 					return false;
 				}
@@ -114,18 +112,20 @@ abstract class BaseSensorDBManager {
 				}
 
 				if (-1 == insertResult) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.te(DLog.mGlobalTag, this, "添加传感器数据到数据库[%s]失败 : %s", mDbHelper.getDbName(), model.toString());
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, this, "添加传感器数据到数据库[%s]失败 : %s", mDbHelper.getDbName(),
+								model.toString());
 					}
 					return false;
 				}
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.td(DLog.mGlobalTag, this, "添加传感器数据到数据库[%s]成功 : %s", mDbHelper.getDbName(), model.toString());
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, this, "添加传感器数据到数据库[%s]成功 : %s", mDbHelper.getDbName(),
+							model.toString());
 				}
 				return true;
 			} catch (Throwable e) {
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.te(DLog.mGlobalTag, this, e);
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 				}
 				return false;
 			} finally {
@@ -136,7 +136,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 根据指定包名删除记录
-	 *
+	 * 
 	 * @param pn
 	 */
 	boolean deleteAll() {
@@ -145,25 +145,25 @@ abstract class BaseSensorDBManager {
 			try {
 				db = mDbHelper.getWritableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.te(DLog.mGlobalTag, this, "删除数据失败，数据库不可用");
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, this, "删除数据失败，数据库不可用");
 					}
 					return false;
 				}
 
 				// 表名， where， whereValues
 				if (0 != db.delete(BaseSensorDBHelper.TABLE_NAME, null, null)) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.td(DLog.mGlobalTag, this, "删除所有数据成功");
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, this, "删除所有数据成功");
 					}
 					return true;
 				}
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.te(DLog.mGlobalTag, this, "删除所有数据失败");
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, this, "删除所有数据失败");
 				}
 			} catch (SQLException e) {
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.te(DLog.mGlobalTag, this, e);
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 				}
 			} finally {
 				closeDb(db);
@@ -175,7 +175,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 查询所有记录的所有数据
-	 *
+	 * 
 	 * @return List<PnModel>
 	 */
 	List<SensorModel> queryAll() {
@@ -188,17 +188,18 @@ abstract class BaseSensorDBManager {
 
 				db = mDbHelper.getReadableDatabase();
 				if (!checkDb(db)) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.te(DLog.mGlobalTag, this, "查询所有数据失败，数据库不可用");
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.te(Debug_SDK.mGlobalTag, this, "查询所有数据失败，数据库不可用");
 					}
 					return null;
 				}
 
 				// cursor = db.rawQuery("SELECT * FROM " + PnDBHelper.TABLE_NAME, null);
-				cursor = db.query(BaseSensorDBHelper.TABLE_NAME, null, null, null, null, null, BaseSensorDBHelper.GENERATE_TIME);
+				cursor = db.query(BaseSensorDBHelper.TABLE_NAME, null, null, null, null, null,
+						BaseSensorDBHelper.GENERATE_TIME);
 				if (0 == cursor.getCount()) {
-					if (DLog.isGlobalLog && isLogOpen) {
-						DLog.ti(DLog.mGlobalTag, this, "查询所有数据失败，没有查到记录，数据库可能为空");
+					if (Debug_SDK.isGlobalLog && isLogOpen) {
+						Debug_SDK.ti(Debug_SDK.mGlobalTag, this, "查询所有数据失败，没有查到记录，数据库可能为空");
 					}
 					return null;
 				}
@@ -206,8 +207,8 @@ abstract class BaseSensorDBManager {
 				while (cursor.moveToNext()) {
 					try {
 						SensorModel model = new SensorModel();
-						model.mGenerateTime =
-								Long.valueOf(cursor.getString(cursor.getColumnIndex(BaseSensorDBHelper.GENERATE_TIME)));
+						model.mGenerateTime = Long.valueOf(cursor.getString(cursor
+								.getColumnIndex(BaseSensorDBHelper.GENERATE_TIME)));
 						model.v0 = cursor.getFloat(cursor.getColumnIndex(BaseSensorDBHelper.SENSORVALUE_0));
 						model.v1 = cursor.getFloat(cursor.getColumnIndex(BaseSensorDBHelper.SENSORVALUE_1));
 						model.v2 = cursor.getFloat(cursor.getColumnIndex(BaseSensorDBHelper.SENSORVALUE_2));
@@ -216,19 +217,20 @@ abstract class BaseSensorDBManager {
 						model.v5 = cursor.getFloat(cursor.getColumnIndex(BaseSensorDBHelper.SENSORVALUE_5));
 						lists.add(model);
 					} catch (Throwable e) {
-						if (DLog.isGlobalLog && isLogOpen) {
-							DLog.te(DLog.mGlobalTag, this, e);
+						if (Debug_SDK.isGlobalLog && isLogOpen) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 						}
 					}
 				}
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.td(DLog.mGlobalTag, this, "查询所有数据结束，数据库记录数量：%d ，最后列表数量：%d", cursor.getCount(), lists.size());
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, this, "查询所有数据结束，数据库记录数量：%d ，最后列表数量：%d", cursor.getCount(),
+							lists.size());
 				}
 				return lists;
 
 			} catch (Exception e) {
-				if (DLog.isGlobalLog && isLogOpen) {
-					DLog.te(DLog.mGlobalTag, this, e);
+				if (Debug_SDK.isGlobalLog && isLogOpen) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, this, e);
 				}
 			} finally {
 				closeCursor(cursor);

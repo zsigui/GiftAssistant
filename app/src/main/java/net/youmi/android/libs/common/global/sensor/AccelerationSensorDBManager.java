@@ -6,9 +6,10 @@ import net.youmi.android.libs.common.CommonConstant;
 
 /**
  * 只记录墙上的广告的包名状态
- *
+ * 
  * @author zhitaocai
  * @author zhitaocai edit on 2014-7-8
+ * 
  */
 class AccelerationSensorDBManager extends BaseSensorDBManager {
 

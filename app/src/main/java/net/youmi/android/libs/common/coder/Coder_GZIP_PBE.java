@@ -1,7 +1,8 @@
 package net.youmi.android.libs.common.coder;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.coder.Coder_PBE;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
 
 import java.io.ByteArrayInputStream;
@@ -11,21 +12,21 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * 加密：先使用gzip压缩加密内容，然后使用PBE加密,最后的将盐放前面，密文放后面
- * <p/>
+ * <p>
  * 解密：加密反之
- *
+ * 
  * @author zhitaocai
+ * 
  */
 public class Coder_GZIP_PBE {
 
 	/**
 	 * 先使用gzip压缩加密内容，然后使用PBE加密
-	 * <p/>
+	 * <p>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 *
+	 * 
 	 * @param valueToEncrypt
 	 * @param psw
-	 *
 	 * @return
 	 */
 	public static byte[] encryptFromString(String valueToEncrypt, String psw) {
@@ -36,8 +37,8 @@ public class Coder_GZIP_PBE {
 			}
 			return encrypt(valueToEncrypt.getBytes(Global_Charsets.UTF_8), psw);
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		}
 		return null;
@@ -46,12 +47,11 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先使用gzip压缩加密内容，然后使用PBE加密
-	 * <p/>
+	 * <p>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 *
+	 * 
 	 * @param buffToEncrypt
 	 * @param psw
-	 *
 	 * @return
 	 */
 	public static byte[] encrypt(byte[] buffToEncrypt, String psw) {
@@ -112,8 +112,8 @@ public class Coder_GZIP_PBE {
 			return result.toByteArray();
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		} finally {
 			// if (Debug_SDK.isCoderLog) {
@@ -122,7 +122,7 @@ public class Coder_GZIP_PBE {
 			// long t_pbe = nt_end_PBE - nt_begin_PBE;
 			// long t_gzip = nt_end_gzip - nt_begin_gzip;
 			//
-			// DLog.td(DLog.mCoderTag, Coder_GZIP_PBE.class,
+			// Debug_SDK.td(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class,
 			// "GZIP加密,源长度[%d字节],总花费时间:[%d毫秒],GZIP压缩:[%d毫秒],GZIP结果:[%d字节],PBE加密:[%d毫秒],PBE结果:[%d字节]", len_src,
 			// t_all, t_gzip, len_test_after_gzip, t_pbe, len_test_after_PBE);
 			// }
@@ -136,12 +136,11 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先读取8位盐，然后使用PBE解密后面的内容最后使用GZIP解压缩
-	 * <p/>
+	 * <p>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 *
+	 * 
 	 * @param buffToDecrypt
 	 * @param psw
-	 *
 	 * @return
 	 */
 	public static String decryptToString(byte[] buffToDecrypt, String psw) {
@@ -151,8 +150,8 @@ public class Coder_GZIP_PBE {
 				return new String(buff, Global_Charsets.UTF_8);
 			}
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		}
 		return null;
@@ -161,12 +160,11 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先读取8位盐，然后使用PBE解密后面的内容最后使用GZIP解压缩
-	 * <p/>
+	 * <p>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 *
+	 * 
 	 * @param buffToDecrypt
 	 * @param psw
-	 *
 	 * @return
 	 */
 	public static byte[] decrypt(byte[] buffToDecrypt, String psw) {
@@ -228,8 +226,8 @@ public class Coder_GZIP_PBE {
 			return result.toByteArray();
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		} finally {
 
@@ -239,7 +237,7 @@ public class Coder_GZIP_PBE {
 			// long t_all = end - begin;
 			// long t_pbe = nt_end_PBE - nt_begin_PBE;
 			// long t_gzip = nt_end_gzip - nt_begin_gzip;
-			// DLog.td(DLog.mCoderTag, Coder_GZIP_PBE.class,
+			// Debug_SDK.td(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class,
 			// "GZIP解密,源长度:[%d字节],总花费时间:[%d毫秒],PBE解密:[%d毫秒],PBE结果:[%d字节],Gzip解压:[%d毫秒],gzip结果:[%d字节]",
 			// len_src, t_all, t_pbe, len_test_after_PBE, t_gzip, len_test_after_gzip);
 			// }
@@ -258,8 +256,8 @@ public class Coder_GZIP_PBE {
 				bais.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		} finally {
 			bais = null;
@@ -272,8 +270,8 @@ public class Coder_GZIP_PBE {
 				baos.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		} finally {
 			baos = null;
@@ -286,8 +284,8 @@ public class Coder_GZIP_PBE {
 				gzipIs.close();
 			}
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_GZIP_PBE.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_GZIP_PBE.class, e);
 			}
 		} finally {
 			gzipIs = null;

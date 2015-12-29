@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Environment;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 
 public abstract class Basic_SQLiteOpenHelper {
@@ -86,8 +86,8 @@ public abstract class Basic_SQLiteOpenHelper {
 		}
 
 		if (mIsInitializing) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, "getWritableDatabase called recursively");
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "getWritableDatabase called recursively");
 			}
 			return null;
 		}
@@ -99,8 +99,8 @@ public abstract class Basic_SQLiteOpenHelper {
 		// lock on the read-only database, which shuts out other users.
 
 		if (mDbFilePath == null) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, "db path is null");
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "db path is null");
 			}
 			return null;
 		}
@@ -124,8 +124,8 @@ public abstract class Basic_SQLiteOpenHelper {
 					db.setVersion(mNewVersion);
 					db.setTransactionSuccessful();
 				} catch (Throwable e) {
-					if (DLog.isDebug) {
-						DLog.de(mTag, e);
+					if (Debug_SDK.isDebug) {
+						Debug_SDK.de(mTag, e);
 					}
 				} finally {
 					db.endTransaction();
@@ -136,8 +136,8 @@ public abstract class Basic_SQLiteOpenHelper {
 			success = true;
 			return db;
 		} catch (Throwable e) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, e);
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, e);
 			}
 		} finally {
 
@@ -163,8 +163,8 @@ public abstract class Basic_SQLiteOpenHelper {
 			}
 		}
 
-		if (DLog.isDebug) {
-			DLog.de(mTag, "Exception on getWritableDatabase");
+		if (Debug_SDK.isDebug) {
+			Debug_SDK.de(mTag, "Exception on getWritableDatabase");
 		}
 
 		return null;
@@ -185,8 +185,8 @@ public abstract class Basic_SQLiteOpenHelper {
 		}
 
 		if (mIsInitializing) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, "getReadableDatabase called recursively");
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "getReadableDatabase called recursively");
 			}
 			return null;
 		}
@@ -199,14 +199,14 @@ public abstract class Basic_SQLiteOpenHelper {
 			}
 
 		} catch (SQLiteException e) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, "Couldn't open " + mDbFilePath + " for writing (will try read-only):", e);
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "Couldn't open " + mDbFilePath + " for writing (will try read-only):", e);
 			}
 		}
 
 		if (mDbFilePath == null) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, "dbPath is null ,error ,on getReadableDatabse");
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "dbPath is null ,error ,on getReadableDatabse");
 			}
 			return null;
 		}
@@ -227,14 +227,14 @@ public abstract class Basic_SQLiteOpenHelper {
 
 			onOpen(db);
 
-			if (DLog.isDebug) {
-				DLog.de(mTag, "Opened " + mDbFilePath + " in read-only mode");
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, "Opened " + mDbFilePath + " in read-only mode");
 			}
 			mDatabase = db;
 			return mDatabase;
 		} catch (Throwable e) {
-			if (DLog.isDebug) {
-				DLog.de(mTag, e);
+			if (Debug_SDK.isDebug) {
+				Debug_SDK.de(mTag, e);
 			}
 		} finally {
 			try {
@@ -255,8 +255,8 @@ public abstract class Basic_SQLiteOpenHelper {
 		try {
 
 			if (mIsInitializing) {
-				if (DLog.isDebug) {
-					DLog.de(mTag, "Closed during initialization");
+				if (Debug_SDK.isDebug) {
+					Debug_SDK.de(mTag, "Closed during initialization");
 				}
 				return;
 			}

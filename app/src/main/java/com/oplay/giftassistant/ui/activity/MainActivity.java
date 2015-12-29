@@ -15,6 +15,7 @@ import android.widget.CheckedTextView;
 import com.litesuits.common.utils.PackageUtil;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
@@ -87,7 +88,6 @@ public class MainActivity extends BaseAppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sInstance = this;
-		processLogic();
 	}
 
 	protected void initView() {
@@ -109,12 +109,13 @@ public class MainActivity extends BaseAppCompatActivity {
 		}
 	}
 
+	@Override
 	protected void processLogic() {
 		for (CheckedTextView ctv : mCtvs) {
 			ctv.setOnClickListener(this);
 		}
 
-		mEngine = mApp.getRetrofit().create(NetEngine.class);
+		mEngine = Global.getNetEngine();
 
 		// 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
 		setCurSelected(mCurrentIndex);
@@ -132,7 +133,7 @@ public class MainActivity extends BaseAppCompatActivity {
 			if (mHasGiftData) {
 				displayGiftUI();
 			} else {
-				displayLoadingUI(R.id.fl_main_container);
+				displayLoadingUI(R.id.fl_container);
 				initGiftData();
 			}
 		} else {
@@ -156,7 +157,7 @@ public class MainActivity extends BaseAppCompatActivity {
 			mGiftFragment.updateLimitData(mGiftData.limit);
 			mGiftFragment.updateNewData(mGiftData.news);
 		}
-		reattachFrag(R.id.fl_main_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
 	}
 
 
@@ -164,7 +165,7 @@ public class MainActivity extends BaseAppCompatActivity {
 		if (mMoocRecyclerViewFragment == null) {
 			mMoocRecyclerViewFragment = MoocRecyclerViewFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_main_container, mMoocRecyclerViewFragment,
+		reattachFrag(R.id.fl_container, mMoocRecyclerViewFragment,
 				mMoocRecyclerViewFragment.getClass().getSimpleName());
 	}
 
@@ -172,7 +173,7 @@ public class MainActivity extends BaseAppCompatActivity {
 		if (mGiftFragment == null) {
 			mGiftFragment = GiftFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_main_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
 	}
 
 	@Override
@@ -366,7 +367,7 @@ public class MainActivity extends BaseAppCompatActivity {
 
 	private void displayNetworkErrUI() {
 		// 先暂时显示，后面需要修改
-		reattachFrag(R.id.fl_main_container, NetErrorFragment.newInstance(), NetErrorFragment.class.getSimpleName());
+		reattachFrag(R.id.fl_container, NetErrorFragment.newInstance(), NetErrorFragment.class.getSimpleName());
 	}
 
 	@Override

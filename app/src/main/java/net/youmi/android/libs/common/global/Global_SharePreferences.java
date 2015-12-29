@@ -1,35 +1,38 @@
 package net.youmi.android.libs.common.global;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import net.youmi.android.libs.common.coder.Coder_Base64;
 import net.youmi.android.libs.common.coder.Coder_PBE;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  * 全局SharedPreferences控制
  * <p>
  * 存储的内容经过PBE加密，外部使用时，注意加锁，可以参考platform类库中的Global_DeveloperConfig.java文件的使用
  * </p>
- *
+ * 
  * @author zhitaocai edit on 2014-5-14
+ * 
  */
 public class Global_SharePreferences {
 
 	/**
 	 * 将指定字符串加密并保存到sp文件中
-	 *
+	 * 
 	 * @param context
-	 * @param spFileName        sp文件名
-	 * @param key_toSave_String 键
-	 * @param toSave_String     值
-	 * @param key_salt          盐（PBE）
-	 *
+	 * @param spFileName
+	 *            sp文件名
+	 * @param key_toSave_String
+	 *            键
+	 * @param toSave_String
+	 *            值
+	 * @param key_salt
+	 *            盐（PBE）
 	 * @return
 	 */
-	public static boolean saveEncodeStringToSharedPreferences(Context context, String spFileName, String key_toSave_String,
-			String toSave_String, String key_salt) {
+	public static boolean saveEncodeStringToSharedPreferences(Context context, String spFileName,
+			String key_toSave_String, String toSave_String, String key_salt) {
 		boolean result = false;
 
 		try {
@@ -48,19 +51,20 @@ public class Global_SharePreferences {
 				editor.putString(key_toSave_String, encodeString);
 				result = editor.commit();
 
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_SharePreferences.class, "save data:\nv: %s  ,k: %s  ,psw: %s", encodeString,
-							saltString, psw);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_SharePreferences.class,
+							"save data:\nv: %s  ,k: %s  ,psw: %s", encodeString, saltString, psw);
 				}
 			} else {
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_SharePreferences.class, "save data:\nen==null || saltValue==null");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_SharePreferences.class,
+							"save data:\nen==null || saltValue==null");
 				}
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_SharePreferences.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_SharePreferences.class, e);
 			}
 		}
 
@@ -69,13 +73,16 @@ public class Global_SharePreferences {
 
 	/**
 	 * 从sp文件获取指定的字符串(解密)
-	 *
+	 * 
 	 * @param context
-	 * @param spFileName       sp文件名
-	 * @param key_toGet_String 键
-	 * @param key_salt         盐（PBE）
-	 * @param defaultValue     默认取出值
-	 *
+	 * @param spFileName
+	 *            sp文件名
+	 * @param key_toGet_String
+	 *            键
+	 * @param key_salt
+	 *            盐（PBE）
+	 * @param defaultValue
+	 *            默认取出值
 	 * @return
 	 */
 	public static String getStringFromSharedPreferences(Context context, String spFileName, String key_toGet_String,
@@ -91,16 +98,16 @@ public class Global_SharePreferences {
 			}
 			String toDecodeString = sp.getString(key_toGet_String, null);
 			if (toDecodeString == null) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_SharePreferences.class, "enValue is null");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_SharePreferences.class, "enValue is null");
 				}
 				return defaultValue;
 			}
 
 			String saltValue = sp.getString(key_salt, null);
 			if (saltValue == null) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_SharePreferences.class, "saltValue is null");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_SharePreferences.class, "saltValue is null");
 				}
 				return defaultValue;
 			}
@@ -108,8 +115,8 @@ public class Global_SharePreferences {
 			byte[] salt = Coder_Base64.decode(saltValue.getBytes());
 
 			if (salt == null) {
-				if (DLog.isGlobalLog) {
-					DLog.te(DLog.mGlobalTag, Global_SharePreferences.class, "salt is null");
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.te(Debug_SDK.mGlobalTag, Global_SharePreferences.class, "salt is null");
 				}
 				return defaultValue;
 			}
@@ -118,8 +125,8 @@ public class Global_SharePreferences {
 			String toGetString = Coder_PBE.decryptFromBase64String(toDecodeString, psw, salt);
 			if (toGetString != null) {
 				toGetString = toGetString.trim();
-				if (DLog.isGlobalLog) {
-					DLog.td(DLog.mGlobalTag, Global_SharePreferences.class, "decode value : %s", toGetString);
+				if (Debug_SDK.isGlobalLog) {
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_SharePreferences.class, "decode value : %s", toGetString);
 				}
 				if (toGetString.length() <= 0) {
 					return defaultValue;
@@ -128,8 +135,8 @@ public class Global_SharePreferences {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isGlobalLog) {
-				DLog.te(DLog.mGlobalTag, Global_SharePreferences.class, e);
+			if (Debug_SDK.isGlobalLog) {
+				Debug_SDK.te(Debug_SDK.mGlobalTag, Global_SharePreferences.class, e);
 			}
 		}
 		return defaultValue;

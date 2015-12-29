@@ -49,32 +49,32 @@ public class NetworkExceptionConfig {
 	 */
 	private String mCaller = "SDK";
 
-	//	/**
-	//	 * 异常上报地址
-	//	 */
-	//	private String mExceptionReportHost;
-	//
-	//	/**
-	//	 * 获取异常上报的地址
-	//	 * 如果没有调用过set 方法，那么默认是返回exrep.youmi.net 为广告sdk的上报地址
-	//	 *
-	//	 * @return
-	//	 */
-	//	public String getExceptionReportHost() {
-	//		if (Basic_StringUtil.isNullOrEmpty(mExceptionReportHost)) {
-	//			mExceptionReportHost = CommonConstant.get_Url_ErrorReport();
-	//		}
-	//		return mExceptionReportHost;
-	//	}
-	//
-	//	/**
-	//	 * 设置默认的异常上报地址
-	//	 *
-	//	 * @param exceptionReportHost
-	//	 */
-	//	public void setExceptionReportHost(String exceptionReportHost) {
-	//		mExceptionReportHost = exceptionReportHost;
-	//	}
+//	/**
+//	 * 异常上报地址
+//	 */
+//	private String mExceptionReportHost;
+//
+//	/**
+//	 * 获取异常上报的地址
+//	 * 如果没有调用过set 方法，那么默认是返回exrep.youmi.net 为广告sdk的上报地址
+//	 *
+//	 * @return
+//	 */
+//	public String getExceptionReportHost() {
+//		if (Basic_StringUtil.isNullOrEmpty(mExceptionReportHost)) {
+//			mExceptionReportHost = CommonConstant.get_Url_ErrorReport();
+//		}
+//		return mExceptionReportHost;
+//	}
+//
+//	/**
+//	 * 设置默认的异常上报地址
+//	 *
+//	 * @param exceptionReportHost
+//	 */
+//	public void setExceptionReportHost(String exceptionReportHost) {
+//		mExceptionReportHost = exceptionReportHost;
+//	}
 
 	String getCaller() {
 		return mCaller;

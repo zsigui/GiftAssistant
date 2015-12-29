@@ -1,26 +1,25 @@
 package net.youmi.android.libs.common.util;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 
-import net.youmi.android.libs.common.debug.DLog;
-
 /**
  * 组件检查类
- *
+ * 
  * @author zhitaocai edit on 2014-7-15
+ * 
  */
 public class Util_System_Component {
 
 	/**
 	 * 判断Activity是否存在
-	 *
+	 * 
 	 * @param context
 	 * @param activityClass
-	 *
 	 * @return
 	 */
 	public static boolean isActivityExist(Context context, Class<?> activityClass) {
@@ -32,10 +31,9 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Activity是否存在。
-	 *
+	 * 
 	 * @param context
 	 * @param activityClassName
-	 *
 	 * @return
 	 */
 	public static boolean isActivityExist(Context context, String activityClassName) {
@@ -43,8 +41,8 @@ public class Util_System_Component {
 			ActivityInfo ai = getActivityInfo(context, activityClassName);
 			return ai != null;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Component.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Component.class, e);
 			}
 		}
 		return false;
@@ -52,10 +50,9 @@ public class Util_System_Component {
 
 	/**
 	 * 获取ActivityInfo。
-	 *
+	 * 
 	 * @param context
 	 * @param activityClassName
-	 *
 	 * @return
 	 */
 	public static ActivityInfo getActivityInfo(Context context, String activityClassName) {
@@ -64,7 +61,8 @@ public class Util_System_Component {
 				return null;
 			}
 
-			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(),
+					PackageManager.GET_ACTIVITIES);
 			if (pi == null) {
 				return null;
 			}
@@ -83,8 +81,8 @@ public class Util_System_Component {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Component.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Component.class, e);
 			}
 		}
 		return null;
@@ -94,10 +92,9 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Service是否存在
-	 *
+	 * 
 	 * @param context
 	 * @param serviceClass
-	 *
 	 * @return
 	 */
 	public static boolean isServiceExist(Context context, Class<?> serviceClass) {
@@ -109,10 +106,9 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Service是否存在。
-	 *
+	 * 
 	 * @param context
 	 * @param serviceClassName
-	 *
 	 * @return
 	 */
 	public static boolean isServiceExist(Context context, String serviceClassName) {
@@ -120,8 +116,8 @@ public class Util_System_Component {
 			ServiceInfo si = getServiceInfo(context, serviceClassName);
 			return si != null;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Component.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Component.class, e);
 			}
 		}
 		return false;
@@ -129,10 +125,9 @@ public class Util_System_Component {
 
 	/**
 	 * 获取ServiceInfo。
-	 *
+	 * 
 	 * @param context
 	 * @param serviceClassName
-	 *
 	 * @return
 	 */
 	public static ServiceInfo getServiceInfo(Context context, String serviceClassName) {
@@ -141,7 +136,8 @@ public class Util_System_Component {
 				return null;
 			}
 
-			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SERVICES);
+			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(),
+					PackageManager.GET_SERVICES);
 			if (pi == null) {
 				return null;
 			}
@@ -160,8 +156,8 @@ public class Util_System_Component {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Component.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Component.class, e);
 			}
 		}
 		return null;
@@ -171,10 +167,9 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Receiver是否存在
-	 *
+	 * 
 	 * @param context
 	 * @param receiverClass
-	 *
 	 * @return
 	 */
 	public static boolean isReceiverExist(Context context, Class<?> receiverClass) {
@@ -186,10 +181,9 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Receiver是否存在。
-	 *
+	 * 
 	 * @param context
 	 * @param receiverClassName
-	 *
 	 * @return
 	 */
 	public static boolean isReceiverExist(Context context, String receiverClassName) {
@@ -199,10 +193,9 @@ public class Util_System_Component {
 
 	/**
 	 * 通过Recevier的类名获取Receiver
-	 *
+	 * 
 	 * @param context
 	 * @param receiverClassName
-	 *
 	 * @return
 	 */
 	public static ActivityInfo getReceiverInfo(Context context, String receiverClassName) {
@@ -213,7 +206,8 @@ public class Util_System_Component {
 				return null;
 			}
 
-			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_RECEIVERS);
+			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(),
+					PackageManager.GET_RECEIVERS);
 			if (pi == null) {
 				return null;
 			}
@@ -232,8 +226,8 @@ public class Util_System_Component {
 				}
 			}
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Component.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Component.class, e);
 			}
 		}
 		return null;

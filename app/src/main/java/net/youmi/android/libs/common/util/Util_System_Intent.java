@@ -1,16 +1,17 @@
 package net.youmi.android.libs.common.util;
 
+import java.util.List;
+import net.youmi.android.libs.common.basic.Basic_StringUtil;
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-
-import net.youmi.android.libs.common.basic.Basic_StringUtil;
-import net.youmi.android.libs.common.debug.DLog;
-
-import java.util.List;
+import android.os.Parcelable;
+import android.util.Log;
 
 public class Util_System_Intent {
 
@@ -27,8 +28,8 @@ public class Util_System_Intent {
 			context.startActivity(startIntent);
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 		return false;
@@ -56,38 +57,10 @@ public class Util_System_Intent {
 			context.startActivity(intent);
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
-		return false;
-	}
-
-	public static boolean startActivityByPackageName(Context context, String packageName) {
-		return startActivityByPackageName(context, packageName, -1);
-	}
-
-	public static boolean startActivityByPackageName(Context context, String packageName, int flags) {
-		try {
-			PackageManager pm = context.getPackageManager();
-			if (pm != null) {
-				Intent intent = pm.getLaunchIntentForPackage(packageName);
-				if (intent != null) {
-					if (flags >= 0) {
-						intent.addFlags(flags);
-					}
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(intent);
-					return true;
-				}
-			}
-
-		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
-			}
-		}
-
 		return false;
 	}
 
@@ -102,8 +75,8 @@ public class Util_System_Intent {
 			context.startService(intent);
 			return true;
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 		return false;
@@ -120,10 +93,32 @@ public class Util_System_Intent {
 			return context.stopService(intent);
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
+		return false;
+	}
+
+	public static boolean startActivityByPackageName(Context context, String packageName, int flags) {
+		try {
+			PackageManager pm = context.getPackageManager();
+			if (pm != null) {
+				Intent intent = pm.getLaunchIntentForPackage(packageName);
+				if (intent != null) {
+					intent.addFlags(flags);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+					return true;
+				}
+			}
+
+		} catch (Throwable e) {
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
+			}
+		}
+
 		return false;
 	}
 
@@ -139,21 +134,42 @@ public class Util_System_Intent {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 		return null;
 	}
 
+	public static boolean startActivityByPackageName(Context context, String packageName) {
+		try {
+			PackageManager pm = context.getPackageManager();
+			if (pm != null) {
+				Intent intent = pm.getLaunchIntentForPackage(packageName);
+
+				if (intent != null) {
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+					return true;
+				}
+			}
+
+		} catch (Throwable e) {
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * 发送广播事件
-	 *
+	 * 
 	 * @param context
 	 * @param uri
 	 * @param flags
 	 * @param receiverPermission
-	 *
 	 * @return
 	 */
 	public static boolean sendBroadcastByUri(Context context, String uri, int flags, String receiverPermission) {
@@ -173,8 +189,8 @@ public class Util_System_Intent {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 
@@ -183,13 +199,12 @@ public class Util_System_Intent {
 
 	/**
 	 * 根据包名创建App的快捷方式
-	 *
+	 * 
 	 * @param context
 	 * @param packageName
-	 *
 	 * @return
 	 */
-	public static boolean createAppShortcut(Context context, String packageName) {
+	public static boolean createShortcut_forApp(Context context, String packageName) {
 		try {
 
 			if (context == null) {
@@ -197,8 +212,8 @@ public class Util_System_Intent {
 			}
 
 			if (!Util_System_Permission.isWith_INSTALL_SHORTCUT_Permission(context)) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Intent.class, "不具有创建快捷方式的权限");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, "不具有创建快捷方式的权限");
 				}
 				return false;
 			}
@@ -206,8 +221,8 @@ public class Util_System_Intent {
 			Model_App_Launch_Info app_Info = Util_System_Package.getAppLaunchInfo(context, packageName);
 
 			if (app_Info == null) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Intent.class, "获取Model_App_Launch_Info失败");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, "获取Model_App_Launch_Info失败");
 				}
 				return false;
 			}
@@ -232,14 +247,14 @@ public class Util_System_Intent {
 				try {
 					localContext = context.createPackageContext(packageName, 3);
 				} catch (Throwable e) {
-					if (DLog.isUtilLog) {
-						DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+					if (Debug_SDK.isUtilLog) {
+						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 					}
 				}
 			}
 			if (localContext != null) {
-				Intent.ShortcutIconResource localShortcutIconResource =
-						Intent.ShortcutIconResource.fromContext(localContext, icon);
+				Intent.ShortcutIconResource localShortcutIconResource = Intent.ShortcutIconResource.fromContext(
+						localContext, icon);
 				intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, localShortcutIconResource);
 			}
 
@@ -248,112 +263,40 @@ public class Util_System_Intent {
 			return true;
 
 		} catch (Throwable e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 		return false;
 
 	}
 
-//	/**
-//	 * 创建网页快捷方式
-//	 *
-//	 * @param context
-//	 * @param shortCutName
-//	 * @param webPageUrl
-//	 * @param icon
-//	 *
-//	 * @return
-//	 */
-//	@SuppressLint("NewApi")
-//	public static boolean createWebPageShortcut(Context context, String shortCutName, String webPageUrl, String icon) {
-//		try {
-//			if (context == null) {
-//				return false;
-//			}
-//
-//			if (!Util_System_Permission.isWith_INSTALL_SHORTCUT_Permission(context)) {
-//				if (DLog.isUtilLog) {
-//					DLog.te(DLog.mUtilTag, Util_System_Intent.class, "不具有创建快捷方式的权限");
-//				}
-//				return false;
-//			}
-//			if (Basic_StringUtil.isNullOrEmpty(shortCutName)) {
-//				shortCutName = "网页";
-//			}
-//
-//			Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//
-//			intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
-//			intent.putExtra("duplicate", false);
-//
-//			Bitmap bp = IconLoader.syncLoadBitmap(context, icon);
-//
-//			intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bp);
-//			// 分别使用UC，QQ，百度浏览器，否则就使用默认浏览器
-//			String browserPackageName = "";
-//			String browserActivity = "";
-//			if (Util_System_Package.isPakcageInstall(context, "com.UCMobile")) {
-//				browserPackageName = "com.UCMobile";
-//				browserActivity = "com.UCMobile.main.UCMobile";
-//			} else if (Util_System_Package.isPakcageInstall(context, "com.tencent.mtt")) {
-//				browserPackageName = "com.tencent.mtt";
-//				browserActivity = "com.tencent.mtt.MainActivity";
-//			} else if (Util_System_Package.isPakcageInstall(context, "com.baidu.browser.apps")) {
-//				browserPackageName = "com.baidu.browser.apps";
-//				browserActivity = "com.baidu.browser.framework.BdBrowserActivity";
-//			}
-//
-//			Intent launcherIntent =
-//					Util_System_Intent_Network.getToWebUrlIntent(context, browserPackageName, browserActivity, webPageUrl);
-//
-//			intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launcherIntent);
-//
-//			context.sendBroadcast(intent);
-//
-//			return true;
-//
-//		} catch (Exception e) {
-//			if (DLog.isUtilLog) {
-//				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
-//			}
-//		}
-//		return false;
-//
-//	}
-
-	/**
-	 * 创建网页快捷方式
-	 *
-	 * @param context
-	 * @param shortCutName  快捷方式名称
-	 * @param webPageUrl    快捷方式说对应的页面地址
-	 * @param icon          快捷方式图标
-	 *
-	 * @return
-	 */
-	public static boolean createWebPageShortcut(Context context, String shortCutName, String webPageUrl, Bitmap iconBm) {
+	// 涉及下载icon操作，请求在异步线程中使用。
+	@SuppressLint("NewApi")
+	public static boolean createShortcut_forWeb(Context context, String name, String url, String icon) {
 		try {
 			if (context == null) {
 				return false;
 			}
 
 			if (!Util_System_Permission.isWith_INSTALL_SHORTCUT_Permission(context)) {
-				if (DLog.isUtilLog) {
-					DLog.te(DLog.mUtilTag, Util_System_Intent.class, "不具有创建快捷方式的权限");
+				if (Debug_SDK.isUtilLog) {
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, "不具有创建快捷方式的权限");
 				}
 				return false;
 			}
-			if (Basic_StringUtil.isNullOrEmpty(shortCutName)) {
-				shortCutName = "网页";
+			if (Basic_StringUtil.isNullOrEmpty(name)) {
+				name = "网页";
 			}
 
 			Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 
-			intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
+			intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
 			intent.putExtra("duplicate", false);
-			intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, iconBm);
+
+			Bitmap bp = IconLoader.syncLoadBitmap(context, icon);
+
+			intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bp);
 			// 分别使用UC，QQ，百度浏览器，否则就使用默认浏览器
 			String browserPackageName = "";
 			String browserActivity = "";
@@ -368,8 +311,8 @@ public class Util_System_Intent {
 				browserActivity = "com.baidu.browser.framework.BdBrowserActivity";
 			}
 
-			Intent launcherIntent =
-					Util_System_Intent_Network.getToWebUrlIntent(context, browserPackageName, browserActivity, webPageUrl);
+			Intent launcherIntent = Util_System_Intent_Network.getToWebUrlIntent(context, browserPackageName,
+					browserActivity, url);
 
 			intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launcherIntent);
 
@@ -378,8 +321,8 @@ public class Util_System_Intent {
 			return true;
 
 		} catch (Exception e) {
-			if (DLog.isUtilLog) {
-				DLog.te(DLog.mUtilTag, Util_System_Intent.class, e);
+			if (Debug_SDK.isUtilLog) {
+				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);
 			}
 		}
 		return false;

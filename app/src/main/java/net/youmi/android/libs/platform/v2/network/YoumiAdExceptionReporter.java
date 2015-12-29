@@ -3,7 +3,7 @@ package net.youmi.android.libs.platform.v2.network;
 import android.content.Context;
 
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.v2.network.core.BaseHttpRequesterModel;
 import net.youmi.android.libs.common.v2.network.core.BaseHttpResponseModel;
 import net.youmi.android.libs.common.v2.network.exception.AbsExceptionReporter;
@@ -41,8 +41,8 @@ class YoumiAdExceptionReporter extends AbsExceptionReporter {
 
 			Basic_JSONUtil.putString(jo, "app".trim() + "id", Global_DeveloperConfig.getAppID(mContext));
 		} catch (Exception e) {
-			if (DLog.isNetLog) {
-				DLog.te(DLog.mNetTag, this, e);
+			if (Debug_SDK.isNetLog) {
+				Debug_SDK.te(Debug_SDK.mNetTag, this, e);
 			}
 		}
 	}

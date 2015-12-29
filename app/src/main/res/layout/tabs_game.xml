@@ -3,7 +3,7 @@
     android:id="@+id/ll_tabs_home_game"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/di_tabs_game_ll"
+    android:layout_height="@dimen/di_tabs_common_bg_height"
     android:background="@color/co_tab_index_bg"
     android:orientation="horizontal">
 

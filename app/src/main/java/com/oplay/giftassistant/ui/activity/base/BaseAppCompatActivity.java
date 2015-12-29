@@ -46,7 +46,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
             }
             initMenu(mToolbar);
         }
+	    processLogic();
     }
+
+	protected abstract void processLogic();
 
 	/**
 	 * this will be called before {@code super.onCreate()} when you override {@code onCreate()} method <br />
@@ -108,24 +111,18 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     }
 
 	protected void replaceFrag(@IdRes int id, Fragment newFrag) {
-		Fragment f = getSupportFragmentManager().findFragmentById(id);
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		if (f != null) {
-			ft.replace(id, newFrag);
-		} else {
-			ft.add(id, newFrag);
-		}
-		ft.commit();
+		reattachFrag(id, newFrag, newFrag.getClass().getSimpleName());
 	}
 
 	protected void replaceFrag(@IdRes int id, Fragment newFrag, String tag) {
 		Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (f != null) {
-			ft.replace(id, newFrag);
+			ft.replace(id, newFrag, tag);
 		} else {
-			ft.add(id, newFrag);
+			ft.add(id, newFrag, tag);
 		}
+		ft.show(newFrag);
 		ft.commit();
 	}
 
@@ -168,4 +165,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	    }
         reattachFrag(resId, mLoadingFragment, LoadingFragment.class.getSimpleName());
     }
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.finish();
+	}
 }

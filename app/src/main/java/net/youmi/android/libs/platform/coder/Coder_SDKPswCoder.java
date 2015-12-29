@@ -1,11 +1,11 @@
 package net.youmi.android.libs.platform.coder;
 
+import java.io.ByteArrayOutputStream;
+
 import net.youmi.android.libs.common.basic.Basic_Converter;
 import net.youmi.android.libs.common.coder.Coder_Md5;
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.global.Global_Charsets;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * 有米加密算法
@@ -18,8 +18,10 @@ public class Coder_SDKPswCoder {
 	/**
 	 * 加密
 	 * 
-	 * @param toEncode 原文
-	 * @param key 密钥
+	 * @param string
+	 *            $str 原文
+	 * @param string
+	 *            $key 密钥
 	 * @return string
 	 */
 	public static String encode(String toEncode, String key) {
@@ -148,8 +150,8 @@ public class Coder_SDKPswCoder {
 			return new String(baos.toByteArray(), Global_Charsets.UTF_8);
 
 		} catch (Throwable e) {
-			if (DLog.isCoderLog) {
-				DLog.te(DLog.mCoderTag, Coder_SDKPswCoder.class, e);
+			if (Debug_SDK.isCoderLog) {
+				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_SDKPswCoder.class, e);
 			}
 		}
 		return null;

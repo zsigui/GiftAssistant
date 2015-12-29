@@ -1,12 +1,11 @@
 package net.youmi.android.libs.common.basic;
 
-import net.youmi.android.libs.common.debug.DLog;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 public class Basic_Converter {
 
 	// static final String UpperCaseHex = "0123456789ABCDEF";
 	public static final String LowerCaseHex = "0123456789abcdef";
-
 	// static final char HEX_DIGITS_UPPERCASE[]=UpperCaseHex.toCharArray();
 	public static final char HEX_DIGITS_LOWERCASE[] = LowerCaseHex.toCharArray();
 
@@ -18,7 +17,8 @@ public class Basic_Converter {
 	/**
 	 * 加密之后的字符集
 	 */
-	private static final char dic64[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-".toCharArray();
+	private static final char dic64[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
+			.toCharArray();
 
 	// /** 把指定的十六进制字符串转换为64进制字符串 */
 	// final static String converHexTo64(String str) {
@@ -66,17 +66,17 @@ public class Basic_Converter {
 	 * </p>
 	 * java的byte是-127到128之间<br/>
 	 * 0~F十六进制字符表示的范围是0到15<br/>
-	 *
-	 * @param c 0~F 十六进制字符
-	 *
+	 * 
+	 * @param c
+	 *            0~F 十六进制字符
 	 * @return 0~15
 	 */
 	public static byte hexCharToByte(char c) {
 		try {
 			c = Character.toLowerCase(c);
 		} catch (Throwable e) {
-			if (DLog.isBasicLog) {
-				DLog.te(DLog.mBasicTag, Basic_Converter.class, e);
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_Converter.class, e);
 			}
 		}
 		return (byte) LowerCaseHex.indexOf(c);
@@ -84,9 +84,8 @@ public class Basic_Converter {
 
 	/**
 	 * 将byte转换为hex String
-	 *
+	 * 
 	 * @param b
-	 *
 	 * @return
 	 */
 	public static String bytesToHexString(byte[] b) {

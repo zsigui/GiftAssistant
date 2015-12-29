@@ -1,14 +1,12 @@
 package net.youmi.android.libs.common.location;
 
+import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.util.Util_System_Permission;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 
-import net.youmi.android.libs.common.debug.DLog;
-import net.youmi.android.libs.common.util.Util_System_Permission;
-
 public class Proxy_Manager_Location_AdLocationManager {
-
 	/**
 	 * 当前Location
 	 */
@@ -20,7 +18,6 @@ public class Proxy_Manager_Location_AdLocationManager {
 	private static Listener_Location_AdLocationListener mLocationListener;
 
 	private static Proxy_Manager_Location_AdLocationManager mInstance;
-
 	private Context mContext;
 
 	public Proxy_Manager_Location_AdLocationManager(Context context) {
@@ -34,8 +31,8 @@ public class Proxy_Manager_Location_AdLocationManager {
 				mInstance = new Proxy_Manager_Location_AdLocationManager(context);
 			}
 		} catch (Throwable e) {
-			if (DLog.isLocationLog) {
-				DLog.te(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
+			if (Debug_SDK.isLocationLog) {
+				Debug_SDK.te(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
 			}
 		}
 		return mInstance;
@@ -43,29 +40,31 @@ public class Proxy_Manager_Location_AdLocationManager {
 
 	/**
 	 * 初始化Location 需要被调用
-	 *
+	 * 
 	 * @param context
 	 */
 	private void initLocation(Context context) {
 		try {
 			if (mLocation != null) {
-				if (DLog.isLocationLog) {
-					DLog.td(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, "location: %f - %f",
-							mLocation.getLatitude(), mLocation.getLongitude());
+				if (Debug_SDK.isLocationLog) {
+					Debug_SDK.td(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class,
+							"location: %f - %f", mLocation.getLatitude(), mLocation.getLongitude());
 				}
 				return;// 已经有坐标，便不再更新了
 			}
 
-			if ((!Util_System_Permission.isWith_ACCESS_COARSE_LOCATION_Permission(context)) &&
-			    (!Util_System_Permission.isWith_ACCESS_FINE_LOCATION_Permission(context))) {
-				if (DLog.isLocationLog) {
-					DLog.td(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, "权限不足，无法获取地理位置信息");
+			if ((!Util_System_Permission.isWith_ACCESS_COARSE_LOCATION_Permission(context))
+					&& (!Util_System_Permission.isWith_ACCESS_FINE_LOCATION_Permission(context))) {
+				if (Debug_SDK.isLocationLog) {
+					Debug_SDK.td(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class,
+							"权限不足，无法获取地理位置信息");
 				}
 				// 权限不足
 				return;
 			}
 
-			final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			final LocationManager locationManager = (LocationManager) context
+					.getSystemService(Context.LOCATION_SERVICE);
 
 			if (locationManager == null) {
 				return;
@@ -79,16 +78,16 @@ public class Proxy_Manager_Location_AdLocationManager {
 					if (location.getLongitude() != 0 || location.getLatitude() != 0) {
 
 						setLocation(location);
-						if (DLog.isLocationLog) {
-							DLog.td(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, "从基站中获取location: %f - %f",
-									location.getLatitude(), location.getLongitude());
+						if (Debug_SDK.isLocationLog) {
+							Debug_SDK.td(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class,
+									"从基站中获取location: %f - %f", location.getLatitude(), location.getLongitude());
 						}
 						return;
 					}
 				}
 			} catch (Throwable e) {
-				if (DLog.isLocationLog) {
-					DLog.te(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
+				if (Debug_SDK.isLocationLog) {
+					Debug_SDK.te(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
 				}
 			}
 
@@ -205,15 +204,15 @@ public class Proxy_Manager_Location_AdLocationManager {
 			// }
 
 		} catch (Throwable e) {
-			if (DLog.isLocationLog) {
-				DLog.te(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
+			if (Debug_SDK.isLocationLog) {
+				Debug_SDK.te(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
 			}
 		}
 	}
 
 	/**
 	 * 当initLocation获取到结果时，进行设置，并且保存到缓存中
-	 *
+	 * 
 	 * @param location
 	 */
 	public void setLocation(Location location) {
@@ -231,20 +230,20 @@ public class Proxy_Manager_Location_AdLocationManager {
 			}
 
 		} catch (Throwable e) {
-			if (DLog.isLocationLog) {
-				DLog.te(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
+			if (Debug_SDK.isLocationLog) {
+				Debug_SDK.te(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, e);
 			}
 		}
 	}
 
 	/**
 	 * 获取经纬度
-	 *
+	 * 
 	 * @return
 	 */
 	public Location getLocation() {
-		if (DLog.isLocationLog) {
-			DLog.te(DLog.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, "当前Location: %f - %f",
+		if (Debug_SDK.isLocationLog) {
+			Debug_SDK.te(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class, "当前Location: %f - %f",
 					mLocation.getLatitude(), mLocation.getLongitude());
 		}
 		if (mLocation != null) {
