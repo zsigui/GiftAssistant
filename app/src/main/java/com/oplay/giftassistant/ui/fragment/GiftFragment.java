@@ -216,10 +216,12 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 		Intent intent;
 		switch (v.getId()) {
 			case R.id.rl_like_all:
-				showToast("猜你喜欢被点击");
-	            /*Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra("", mLikeDatas);
-                startActivity(intent);*/
+	            intent = new Intent(getActivity(), GiftListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(GiftListActivity.KEY_TYPE, 3);
+                bundle.putSerializable(GiftListActivity.KEY_GIFT_LIKE_DATA, (Serializable) mLikeAdapter.getDatas());
+                intent.putExtras(bundle);
+                startActivity(intent);
 				break;
 			case R.id.rl_limit_all:
 				intent = new Intent(getContext(), GiftListActivity.class);

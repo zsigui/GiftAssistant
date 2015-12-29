@@ -2,8 +2,10 @@ package com.oplay.giftassistant.engine;
 
 import com.oplay.giftassistant.model.DataModel;
 import com.oplay.giftassistant.model.UserModel;
+import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
+import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.JsonRespLimitGift;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
@@ -43,4 +45,12 @@ public interface NetEngine {
 	 */
 	@POST("api/index/gift/new/all")
 	Call<JsonRespLimitGift> obtainGiftNew(@Body JsonReqBase<String> reqData);
+
+    /**
+     * 获取 礼包详情 页面的数据
+     */
+    @POST("api/index/gift/detail")
+    Call<JsonRespBase<IndexGiftNew>> obtainGiftDetail(@Body JsonReqBase<ReqGiftDetail> reqData);
+
+
 }

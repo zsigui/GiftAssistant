@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout style="@style/IndexListItemLayout"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:id="@+id/rl_item"
+    style="@style/IndexListItemLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/rl_icon"
         style="@style/IndexIconLayout">
 
         <com.makeramen.roundedimageview.RoundedImageView
-            android:id = "@+id/iv_icon"
+            android:id="@+id/iv_icon"
             style="@style/DefaultImageView.Icon"
-            android:src = "@drawable/test"
-            app:riv_corner_radius="15dp"
-            app:riv_border_width="1dip"
+            android:src="@drawable/test"
             app:riv_border_color="@color/co_stroke_bg"
+            app:riv_border_width="1dip"
+            app:riv_corner_radius="15dp"
             app:riv_oval="false"/>
 
         <com.makeramen.roundedimageview.RoundedImageView
@@ -22,20 +24,20 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="1dp"
-            android:src= "@drawable/shape_rect_tag_orange"
+            android:src="@drawable/shape_rect_tag_orange"
+            app:riv_corner_radius_bottom_left="10dp"
             app:riv_corner_radius_bottom_right="10dp"
             app:riv_corner_radius_top_right="10dp"
-            app:riv_corner_radius_bottom_left="10dp"
             app:riv_oval="false"/>
 
         <TextView
             style="@style/DefaultTextView"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
+            android:paddingBottom="3dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="3dp"
-            android:paddingBottom="3dp"
             android:text="5款礼包"
             android:textColor="@color/co_white"
             android:textSize="10sp"/>
