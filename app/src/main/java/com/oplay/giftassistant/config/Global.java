@@ -19,7 +19,8 @@ public class Global {
 			.showImageOnFail(R.drawable.ic_img_fail)
 			.showImageOnLoading(R.drawable.ic_img_loading)
 			.bitmapConfig(Bitmap.Config.RGB_565)
-			.delayBeforeLoading(100)
+			.cacheInMemory(true)
+			.cacheOnDisk(true)
 			.build();
 
 	public static NetEngine getNetEngine() {

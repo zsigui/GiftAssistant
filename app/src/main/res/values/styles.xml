@@ -127,6 +127,22 @@
         <item name="android:singleLine">true</item>
     </style>
 
+	<style name = "DefaultTextView.Detail">
+		<item name = "android:gravity">left|center_vertical</item>
+		<item name = "android:layout_width">match_parent</item>
+		<item name = "android:textColor">@color/co_index_module_text</item>
+		<item name = "android:textSize">13sp</item>
+	</style>
+
+	<style name = "DefaultTextView.DetailTitle">
+		<item name = "android:gravity">left|center_vertical</item>
+		<item name = "android:layout_width">match_parent</item>
+		<item name = "android:textColor">@color/co_btn_red</item>
+		<item name = "android:textSize">14sp</item>
+		<item name = "android:layout_marginTop">25dp</item>
+		<item name = "android:layout_marginBottom">15dp</item>
+	</style>
+
     <style name="DefaultTextView.More">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textSize">12sp</item>

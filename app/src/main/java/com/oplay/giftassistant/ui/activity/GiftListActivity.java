@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.activity;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
@@ -43,8 +42,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void initView() {
+		setContentView(R.layout.activity_common_with_back);
+
 		if(getIntent() != null) {
 			type = getIntent().getIntExtra(KEY_TYPE, 0);
 			if (type == 0) {
@@ -52,13 +52,6 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				giftName = getIntent().getStringExtra(KEY_GIFT_NAME);
 			}
 		}
-		displayLoadingUI(R.id.fl_container);
-	}
-
-
-	@Override
-	protected void initView() {
-		setContentView(R.layout.activity_common_with_back);
 	}
 
 	@Override
@@ -80,6 +73,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void processLogic() {
+		displayLoadingUI(R.id.fl_container);
+
 		mEngine = Global.getNetEngine();
 		loadData();
 	}
@@ -88,9 +83,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (type == 0) {
+				if (type == 1) {
 					loadLimitGiftData();
-				} else if (type == 1){
+				} else if (type == 2){
 					loadNewGiftData();
 				} else {
 					loadGiftDetailData();
