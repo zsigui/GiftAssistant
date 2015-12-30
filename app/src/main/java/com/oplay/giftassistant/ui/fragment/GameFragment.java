@@ -1,6 +1,9 @@
 package com.oplay.giftassistant.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -15,6 +18,7 @@ public class GameFragment extends BaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_games);
+
     }
 
     @Override
@@ -31,4 +35,21 @@ public class GameFragment extends BaseFragment {
     protected void lazyLoad() {
 
     }
+
+	public class IndexGamePagerAdapter extends FragmentPagerAdapter {
+
+		public IndexGamePagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return null;
+		}
+
+		@Override
+		public int getCount() {
+			return 0;
+		}
+	}
 }

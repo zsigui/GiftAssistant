@@ -33,7 +33,7 @@ public class GiftListContainerFragment extends BaseFragment{
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_limit);
+		setContentView(R.layout.fragment_gift_list_container);
 		mPager = getViewById(R.id.vp_container);
 		mTabLayout = getViewById(R.id.tab_layout);
 	}

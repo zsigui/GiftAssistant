@@ -79,7 +79,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_remain_text"
+        android:id="@+id/tv_new_text"
         style="@style/DefaultTextView.Text"
         android:layout_width="match_parent"
         android:layout_alignTop="@+id/ll_money"

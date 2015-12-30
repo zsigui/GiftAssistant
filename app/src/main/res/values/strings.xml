@@ -16,6 +16,13 @@
     <string name="st_gift_search" >淘号</string>
     <string name="st_gift_wait_seize" >坐等抢号</string>
     <string name="st_gift_seize" >抢号</string>
+	<!-- 礼包详情 -->
+	<string name="st_gift_consume">消耗</string>
+	<string name="st_gift_content">▌礼包内容</string>
+	<string name="st_gift_deadline">▌礼包使用期限</string>
+	<string name="st_gift_note">▌礼包兑换方式</string>
+	<string name="st_gift_hint">▌特别说明</string>
+    <string name="st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回积分或者偶玩豆，请理解虚拟物品的特殊性！</string>
 	<!-- 游戏状态 -->
     <string name="st_game_download" >下载</string>
 

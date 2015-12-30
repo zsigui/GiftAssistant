@@ -1,161 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:orientation = "vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+	<ScrollView
+			android:layout_width = "match_parent"
+			android:layout_height = "0dp"
+			android:layout_weight = "1" >
 
-        <RelativeLayout
-            style="@style/DefaultRelativeLayout"
-            android:paddingBottom="20dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="18dp"
-            android:paddingTop="15dp">
+		<LinearLayout
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:orientation = "vertical" >
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/test"
-                app:riv_border_color="@color/co_stroke_bg"
-                app:riv_border_width="1dip"
-                app:riv_corner_radius="20dp"
-                app:riv_oval="false"/>
+			<RelativeLayout
+					style = "@style/DefaultRelativeLayout"
+					android:paddingBottom = "20dp"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
+					android:paddingTop = "15dp" >
 
-            <ImageView
-                android:id="@+id/iv_limit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/iv_icon"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@id/iv_icon"
-                android:src="@drawable/ic_score"/>
+				<com.makeramen.roundedimageview.RoundedImageView
+						android:id = "@+id/iv_icon"
+						android:layout_width = "70dp"
+						android:layout_height = "70dp"
+						android:scaleType = "centerCrop"
+						android:src = "@drawable/test"
+						app:riv_border_color = "@color/co_stroke_bg"
+						app:riv_border_width = "1dip"
+						app:riv_corner_radius = "20dp"
+						app:riv_oval = "false" />
 
-            <TextView
-                android:id="@+id/tv_name"
-                style="@style/DefaultTextView.Header"
-                android:layout_width="match_parent"
-                android:layout_alignTop="@+id/iv_icon"
-                android:layout_marginTop="6dp"
-                android:layout_toRightOf="@+id/iv_limit"
-                android:paddingLeft="4dp"
-                android:text="[暴打魏蜀吴]新手礼包"/>
+				<ImageView
+						android:id = "@+id/iv_limit"
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_marginLeft = "18dp"
+						android:layout_alignParentTop = "true"
+						android:layout_marginTop = "8dp"
+						android:layout_toRightOf = "@id/iv_icon"
+						android:src = "@drawable/ic_score" />
 
-            <TextView
-                android:id="@+id/tv_consume"
-                style="@style/DefaultTextView.Text"
-                android:layout_below="@+id/tv_name"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/iv_icon"
-                android:text="消耗"/>
+				<TextView
+						android:id = "@+id/tv_name"
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "match_parent"
+						android:layout_marginTop = "6dp"
+						android:layout_alignParentTop = "true"
+						android:layout_toRightOf = "@+id/iv_limit"
+						android:paddingLeft = "4dp"
+						android:text = "[暴打魏蜀吴]新手礼包" />
 
-            <TextView
-                android:id="@+id/tv_score"
-                style="@style/DefaultTextView.Text"
-                android:layout_alignTop="@+id/tv_consume"
-                android:layout_toRightOf="@id/tv_consume"
-                android:drawableLeft="@drawable/ic_score"
-                android:drawablePadding="4dp"
-                android:text="2000"/>
+				<TextView
+						android:id = "@+id/tv_consume"
+						style = "@style/DefaultTextView.Text"
+						android:layout_below = "@+id/tv_name"
+						android:layout_marginLeft = "18dp"
+						android:layout_marginRight = "5dp"
+						android:layout_marginTop = "10dp"
+						android:layout_toRightOf = "@+id/iv_icon"
+						android:text = "@string/st_gift_consume" />
 
-            <TextView
-                android:id="@+id/tv_or"
-                style="@style/DefaultTextView.Text"
-                android:layout_alignTop="@+id/tv_consume"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@id/tv_score"
-                android:text="@string/st_gift_or"/>
+				<TextView
+						android:id = "@+id/tv_score"
+						style = "@style/DefaultTextView.Text"
+						android:layout_alignTop = "@+id/tv_consume"
+						android:layout_toRightOf = "@id/tv_consume"
+						android:drawableLeft = "@drawable/ic_score"
+						android:drawablePadding = "4dp"
+						android:text = "2000" />
 
-            <TextView
-                android:id="@+id/tv_bean"
-                style="@style/DefaultTextView.Text"
-                android:layout_alignTop="@+id/tv_consume"
-                android:layout_toRightOf="@id/tv_or"
-                android:drawableLeft="@drawable/ic_bean"
-                android:drawablePadding="4dp"
-                android:text="10"/>
+				<TextView
+						android:id = "@+id/tv_or"
+						style = "@style/DefaultTextView.Text"
+						android:layout_alignTop = "@+id/tv_consume"
+						android:layout_marginLeft = "5dp"
+						android:layout_marginRight = "5dp"
+						android:layout_toRightOf = "@id/tv_score"
+						android:text = "@string/st_gift_or" />
 
-            <TextView
-                android:id="@+id/tv_remain"
-                style="@style/DefaultTextView.Text"
-                android:layout_below="@+id/tv_consume"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="7dp"
-                android:layout_toRightOf="@+id/iv_icon"
-                android:text="剩余 5个"/>
-        </RelativeLayout>
+				<TextView
+						android:id = "@+id/tv_bean"
+						style = "@style/DefaultTextView.Text"
+						android:layout_alignTop = "@+id/tv_consume"
+						android:layout_toRightOf = "@id/tv_or"
+						android:drawableLeft = "@drawable/ic_bean"
+						android:drawablePadding = "4dp"
+						android:text = "10" />
 
-        <LinearLayout
-            style="@style/IndexModuleLayout"
-            android:layout_height="0dp"
-            android:layout_marginTop="6dp"
-            android:layout_weight="1"
-            android:paddingBottom="30dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="18dp">
+				<TextView
+						android:id = "@+id/tv_new"
+						style = "@style/DefaultTextView.Text"
+						android:layout_below = "@+id/tv_consume"
+						android:layout_marginLeft = "18dp"
+						android:layout_marginTop = "7dp"
+						android:layout_toRightOf = "@+id/iv_icon"
+						android:text = "剩余 5个" />
+			</RelativeLayout >
 
-            <TextView
-                style="@style/DefaultTextView.DetailTitle"
-                android:text="▌礼包内容"/>
+			<LinearLayout
+					style = "@style/IndexModuleLayout"
+					android:layout_height = "0dp"
+					android:layout_marginTop = "6dp"
+					android:layout_weight = "1"
+					android:paddingBottom = "30dp"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp" >
 
-            <TextView
-                android:id="@+id/tv_content"
-                style="@style/DefaultTextView.Detail"
-                android:singleLine="false"
-                android:text="30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠"/>
+				<TextView
+						style = "@style/DefaultTextView.DetailTitle"
+						android:text = "@string/st_gift_content" />
 
-            <TextView
-                style="@style/DefaultTextView.DetailTitle"
-                android:text="▌礼包使用期限"/>
+				<TextView
+						android:id = "@+id/tv_content"
+						style = "@style/DefaultTextView.Detail"
+						android:singleLine = "false"
+						android:text = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠" />
 
-            <TextView
-                android:id="@+id/tv_deadline"
-                style="@style/DefaultTextView.Detail"
-                android:text="2015.12.10 12:00 ~ 2016.12.10 12:00"/>
+				<TextView
+						style = "@style/DefaultTextView.DetailTitle"
+						android:text = "@string/st_gift_deadline" />
 
-            <TextView
-                style="@style/DefaultTextView.DetailTitle"
-                android:text="▌礼包兑换方式"/>
+				<TextView
+						android:id = "@+id/tv_deadline"
+						style = "@style/DefaultTextView.Detail"
+						android:text = "2015.12.10 12:00 ~ 2016.12.10 12:00" />
 
-            <TextView
-                style="@style/DefaultTextView.Detail"
-                android:singleLine="false"
-                android:text="[1] 点击主界面右下角“设置”按钮\n[2] 点击“兑换礼包”"/>
+				<TextView
+						style = "@style/DefaultTextView.DetailTitle"
+						android:text = "@string/st_gift_note" />
 
-            <TextView
-                style="@style/DefaultTextView.DetailTitle"
-                android:text="▌特别说明"
-                android:textColor="@color/co_btn_orange"/>
+				<TextView
+						android:id = "@+id/tv_note"
+						style = "@style/DefaultTextView.Detail"
+						android:singleLine = "false" />
 
-            <TextView
-                android:id="@+id/tv_note"
-                style="@style/DefaultTextView.Detail"
-                android:singleLine="false"
-                android:text="此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回积分或者偶玩豆，请理解虚拟物品的特殊性！"/>
+				<TextView
+						style = "@style/DefaultTextView.DetailTitle"
+						android:text = "@string/st_gift_hint"
+						android:textColor = "@color/co_btn_orange" />
 
-        </LinearLayout>
+				<TextView
+						style = "@style/DefaultTextView.Detail"
+						android:singleLine = "false"
+						android:text = "@string/st_gift_hint_content" />
 
+			</LinearLayout >
 
-        <TextView
-            android:id="@+id/btn_send"
-            style="@style/DefaultTextView"
-            android:layout_width="200dp"
-            android:layout_height="@dimen/di_btn_height"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/selector_btn_red"
-            android:text="@string/st_gift_seize"
-            android:textColor="@color/co_white"/>
+		</LinearLayout >
+	</ScrollView >
 
-    </LinearLayout>
-</ScrollView>
+	<TextView
+			android:id = "@+id/btn_send"
+			style = "@style/DefaultTextView"
+			android:layout_width = "200dp"
+			android:layout_height = "@dimen/di_btn_bigger_height"
+			android:layout_gravity = "center"
+			android:layout_marginBottom = "15dp"
+			android:layout_marginTop = "15dp"
+			android:background = "@drawable/selector_btn_bigger_red"
+			android:text = "@string/st_gift_seize"
+			android:textColor = "@color/co_white" />
+
+</LinearLayout >

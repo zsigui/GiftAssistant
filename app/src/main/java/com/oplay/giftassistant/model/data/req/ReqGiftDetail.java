@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model.data.req;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @date 2015/12/29
  */
 public class ReqGiftDetail implements Serializable{
-    public String giftName;
-    public String gameName;
+
+	@SerializedName("plan_id")
+	public int id;
 }

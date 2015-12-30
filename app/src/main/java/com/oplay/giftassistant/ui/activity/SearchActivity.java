@@ -230,14 +230,14 @@ public class SearchActivity extends BaseAppCompatActivity {
 		@Override
 		public void onSearchCleared() {
             // 取消上一轮搜索
-            mEngine.getSearchPromt(mLastSearchKey).cancel();
+            mEngine.getSearchPrompt(mLastSearchKey).cancel();
 			displayHistoryUI(mHistoryData, true);
 		}
 
 		@Override
 		public void onSearchPromptPerform(String keyword) {
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				mEngine.getSearchPromt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
+				mEngine.getSearchPrompt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
 					@Override
 					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
 						if (response.code() == 200) {

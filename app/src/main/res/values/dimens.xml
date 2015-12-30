@@ -32,6 +32,11 @@
 	<dimen name = "di_btn_padding_left_right" >14dp</dimen>
 	<dimen name = "di_btn_height" >28dp</dimen>
 
+	<dimen name = "di_btn_bigger_radius" >20dp</dimen>
+	<dimen name = "di_btn_bigger_padding_top_bottom" >0dp</dimen>
+	<dimen name = "di_btn_bigger_padding_left_right" >20dp</dimen>
+	<dimen name = "di_btn_bigger_height" >40dp</dimen>
+
 
 	<!-- 主页-礼包页面 -->
 	<dimen name = "di_index_hoz_module_title_height" >38dp</dimen >

@@ -46,19 +46,19 @@
         android:textColor="@color/co_index_module_icon_gift_bg"/>
 
     <TextView
-        android:id="@+id/tv_remain_text"
+        android:id="@+id/tv_new_text"
         style="@style/DefaultTextView.Text"
         android:layout_below="@+id/tv_name"
         android:layout_marginTop="8dp"
         android:text="剩余"/>
 
     <TextView
-        android:id="@+id/tv_remain"
+        android:id="@+id/tv_new"
         style="@style/DefaultTextView.Text"
         android:layout_below="@+id/tv_name"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="7dp"
-        android:layout_toRightOf="@+id/tv_remain_text"
+        android:layout_toRightOf="@+id/tv_new_text"
         android:background="@drawable/shape_rect_remain_bg"
         android:text="123"
         android:textColor="@color/co_white"/>

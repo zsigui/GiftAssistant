@@ -12,6 +12,6 @@ import java.util.List;
  */
 public class ReqIndexGift implements Serializable {
 
-	@SerializedName("app_name")
+	@SerializedName("games")
 	public List<String> appNames;
 }

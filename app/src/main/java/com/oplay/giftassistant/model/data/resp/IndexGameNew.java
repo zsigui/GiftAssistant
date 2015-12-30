@@ -16,7 +16,7 @@ public class IndexGameNew {
 	// 最新礼包名
 	public String giftName;
 	// 游戏大小，MB
-	public float size;
+	public String size;
 	// 下载地址
 	public String downloadUrl;
 	// 下载验签地址

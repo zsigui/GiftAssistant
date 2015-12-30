@@ -52,4 +52,5 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
 	compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
 	compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
+	compile 'com.github.lawloretienne:quickreturn:0.0.3'
 }

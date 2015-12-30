@@ -43,7 +43,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         this(context, orientation, Color.BLACK, 1);
     }
 
-    public DividerItemDecoration(Context context, int orientation, @ColorInt int dividerColor, int dividerSize) {
+    public DividerItemDecoration(Context context, int orientation, int dividerColor, int dividerSize) {
         this.mOrientation = orientation;
         if(orientation != LinearLayoutManager.VERTICAL && orientation != LinearLayoutManager.HORIZONTAL){
             throw new IllegalArgumentException("请传入正确的参数") ;

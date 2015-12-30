@@ -21,38 +21,38 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
  */
 public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftLimit> {
 
-    public IndexGiftLimitAdapter(RecyclerView recyclerView) {
-        super(recyclerView, R.layout.item_index_gift_limit);
-    }
+	public IndexGiftLimitAdapter(RecyclerView recyclerView) {
+		super(recyclerView, R.layout.item_index_gift_limit);
+	}
 
-    public IndexGiftLimitAdapter(RecyclerView recyclerView, List<IndexGiftLimit> data) {
-        super(recyclerView, R.layout.item_index_gift_limit);
-        this.mDatas = data;
-    }
+	public IndexGiftLimitAdapter(RecyclerView recyclerView, List<IndexGiftLimit> data) {
+		super(recyclerView, R.layout.item_index_gift_limit);
+		this.mDatas = data;
+	}
 
-    @Override
-    protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftLimit giftLimitGame) {
-        bgaViewHolderHelper.setText(R.id.tv_game_name, giftLimitGame.gameName);
-        bgaViewHolderHelper.setText(R.id.tv_name, giftLimitGame.name);
-        bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(giftLimitGame.remainCount));
-        ImageLoader.getInstance().displayImage(giftLimitGame.img, bgaViewHolderHelper.<ImageView>getView(R.id
-                .iv_icon), Global.IMAGE_OPTIONS);
-        bgaViewHolderHelper.getView(R.id.rl_item).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mRecyclerView.getContext(), GiftListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(GiftListActivity.KEY_TYPE, 0);
-                intent.putExtra(GiftListActivity.KEY_GAME_NAME, giftLimitGame.gameName);
-                intent.putExtra(GiftListActivity.KEY_GIFT_NAME, giftLimitGame.name);
-                mRecyclerView.getContext().startActivity(intent);
-            }
-        });
+	@Override
+	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftLimit o) {
+		bgaViewHolderHelper.setText(R.id.tv_game_name, o.gameName);
+		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
+		bgaViewHolderHelper.setText(R.id.tv_new, String.valueOf(o.remainCount));
+		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id
+				.iv_icon), Global.IMAGE_OPTIONS);
+		bgaViewHolderHelper.getView(R.id.rl_item).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mRecyclerView.getContext(), GiftListActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(GiftListActivity.KEY_TYPE, 0);
+				intent.putExtra(GiftListActivity.KEY_DETAIL_ID, o.id);
+				intent.putExtra(GiftListActivity.KEY_DETAIL_NAME, String.format("[%s]%s", o.gameName, o.name));
+				mRecyclerView.getContext().startActivity(intent);
+			}
+		});
 
-    }
+	}
 
-    public void updateData(List<IndexGiftLimit> data) {
-        this.mDatas = data;
-        notifyDataSetChanged();
-    }
+	public void updateData(List<IndexGiftLimit> data) {
+		this.mDatas = data;
+		notifyDataSetChanged();
+	}
 }

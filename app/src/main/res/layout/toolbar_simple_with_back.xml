@@ -25,10 +25,7 @@
 			android:layout_width = "match_parent"
 			android:layout_height = "?actionBarSize"
 			android:gravity = "center_vertical"
-			android:paddingLeft = "14dp"
-			android:paddingRight = "@dimen/spacing_block"
 			android:singleLine = "true"
-			android:text = "@string/toolbar_title"
 			android:textColor = "@android:color/white"
 			android:textSize = "@dimen/di_tool_bar_title_size" />
 

@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model.data.resp;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
 public class IndexGiftBanner implements Serializable {
 
 	// 轮播图url
+	@SerializedName("url")
 	public String url;
 
 	// 游戏名，后期可能会有跳转需要，用于跳转对应论坛

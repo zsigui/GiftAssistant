@@ -53,7 +53,7 @@ public class GiftDetailFragment extends BaseFragment{
         tvScore = getViewById(R.id.tv_score);
         tvOr = getViewById(R.id.tv_or);
         tvBean = getViewById(R.id.tv_bean);
-        tvRemain = getViewById(R.id.tv_remain);
+        tvRemain = getViewById(R.id.tv_new);
         tvContent = getViewById(R.id.tv_content);
         tvDeadline = getViewById(R.id.tv_deadline);
         tvNote = getViewById(R.id.tv_note);
@@ -98,7 +98,7 @@ public class GiftDetailFragment extends BaseFragment{
                 tvScore.setText(String.valueOf(gift.score));
                 tvBean.setText(String.valueOf(gift.bean));
             }
-            tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='ffaa17'>%d个</font>", gift.remainCount)));
+            tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>", gift.remainCount)));
             tvContent.setText(gift.content);
             tvDeadline.setText(gift.useDeadline);
             tvNote.setText(gift.note);

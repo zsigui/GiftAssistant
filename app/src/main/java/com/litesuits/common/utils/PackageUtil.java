@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.litesuits.common.assist.Check;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,19 @@ public class PackageUtil {
     public static final int APP_INSTALL_AUTO = 0;
     public static final int APP_INSTALL_INTERNAL = 1;
     public static final int APP_INSTALL_EXTERNAL = 2;
+
+	public static List<String> getInstalledAppName(Context context) {
+		List<String> appNames = new ArrayList<>();
+		List<PackageInfo> pInfos = PackageUtil.getInstalledPackages(context);
+		for (PackageInfo pInfo : pInfos) {
+			ApplicationInfo appInfo = pInfo.applicationInfo;
+			if (appInfo != null && !((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
+				// 有信息，且非系统应用
+				appNames.add(context.getPackageManager().getApplicationLabel(appInfo).toString());
+			}
+		}
+		return appNames;
+	}
 
     /**
      * 调用系统安装应用

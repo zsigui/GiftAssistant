@@ -42,7 +42,7 @@ public class GiftListDataFragment extends BaseFragment implements BGARefreshLayo
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_limit_list);
+		setContentView(R.layout.fragment_gift_list_data);
 		mRefreshLayout = getViewById(R.id.srl_limit);
 		mDataView = getViewById(R.id.lv_limit);
 	}

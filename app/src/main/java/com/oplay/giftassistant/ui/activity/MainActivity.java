@@ -1,8 +1,6 @@
 package com.oplay.giftassistant.ui.activity;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +12,7 @@ import android.widget.CheckedTextView;
 
 import com.litesuits.common.utils.PackageUtil;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.engine.NetEngine;
@@ -34,7 +33,6 @@ import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -200,22 +198,6 @@ public class MainActivity extends BaseAppCompatActivity {
 	}
 
 	/**
-	 * 获取所有已安装的非系统应用应用名
-	 */
-	private List<String> getInstalledAppName() {
-		List<String> appNames = new ArrayList<>();
-		List<PackageInfo> pInfos = PackageUtil.getInstalledPackages(getApplicationContext());
-		for (PackageInfo pInfo : pInfos) {
-			ApplicationInfo appInfo = pInfo.applicationInfo;
-			if (appInfo != null && !((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
-				// 有信息，且非系统应用
-				appNames.add(getPackageManager().getApplicationLabel(appInfo).toString());
-			}
-		}
-		return appNames;
-	}
-
-	/**
 	 * 启动的时候初始化礼包界面数据
 	 */
 	public void initGiftData() {
@@ -233,7 +215,7 @@ public class MainActivity extends BaseAppCompatActivity {
 					e.printStackTrace();
 				}
 				ReqIndexGift data = new ReqIndexGift();
-				data.appNames = getInstalledAppName();
+				data.appNames = PackageUtil.getInstalledAppName(getApplicationContext());
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
 				mEngine.obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
@@ -288,6 +270,9 @@ public class MainActivity extends BaseAppCompatActivity {
 
 		IndexGiftNew ngift = new IndexGiftNew();
 		ngift.gameName = "全民神将-攻城战";
+		ngift.id = 335;
+		ngift.status = GiftTypeUtil.STATUS_SEIZE;
+		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
 		ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ngift.name = "至尊礼包";
 		ngift.isLimit = 1;
@@ -302,6 +287,9 @@ public class MainActivity extends BaseAppCompatActivity {
 		newData.add(ngift);
 		IndexGiftNew ng2 = new IndexGiftNew();
 		ng2.gameName = "鬼吹灯之挖挖乐";
+		ng2.id = 336;
+		ng2.status = GiftTypeUtil.STATUS_FINISHED;
+		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
 		ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 		ng2.name = "高级礼包";
 		ng2.isLimit = 0;
@@ -316,10 +304,12 @@ public class MainActivity extends BaseAppCompatActivity {
 		newData.add(ng2);
 		IndexGiftNew ng3 = new IndexGiftNew();
 		ng3.gameName = "兽人战争";
+		ng3.id = 337;
+		ng3.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
+		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 		ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";
 		ng3.isLimit = 0;
-		ng3.bean = -1;
 		ng3.score = 1500;
 		ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
 		ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;
@@ -331,8 +321,8 @@ public class MainActivity extends BaseAppCompatActivity {
 		for (int i = 0; i < 10; i++) {
 			IndexGiftLike game = new IndexGiftLike();
 			game.name = "口袋妖怪复刻";
-			game.hasGiftCount = 10 - i;
-			game.newGiftCount = i;
+			game.totalCount = 10 - i;
+			game.newCount = i;
 			game.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
 			likeData.add(game);
 			IndexGiftLimit gift = new IndexGiftLimit();
@@ -343,10 +333,12 @@ public class MainActivity extends BaseAppCompatActivity {
 			limitData.add(gift);
 			IndexGiftNew ng = new IndexGiftNew();
 			ng.gameName = "逍遥西游";
+			ng.id = i;
+			ng.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
+			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 			ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 			ng.name = "普通礼包";
 			ng.isLimit = 0;
-			ng.bean = -1;
 			ng.score = (int)(Math.random() * 100) * 10;
 			ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
 			ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
