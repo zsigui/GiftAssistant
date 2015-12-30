@@ -227,17 +227,17 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	}
 
 	private void displayGiftLikeUI(ArrayList<IndexGiftLike> data) {
-		reattachFrag(R.id.fl_container, GiftLikeListFragment.newInstance(data),
+		replaceFrag(R.id.fl_container, GiftLikeListFragment.newInstance(data),
 				GiftLikeListFragment.class.getSimpleName());
 	}
 
 	private void displayGiftDetailUI(IndexGiftNew data) {
-		reattachFrag(R.id.fl_container, GiftDetailFragment.newInstance(data),
+		replaceFrag(R.id.fl_container, GiftDetailFragment.newInstance(data),
 				GiftDetailFragment.class.getSimpleName());
 	}
 
 	private void displayGiftNewUI(ArrayList<ArrayList<IndexGiftNew>> data) {
-		reattachFrag(R.id.fl_container, GiftListContainerFragment.newInstance(data),
+		replaceFrag(R.id.fl_container, GiftListContainerFragment.newInstance(data),
 				GiftListContainerFragment.class.getSimpleName());
 	}
 
@@ -248,7 +248,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		if (mNetErrorFragment == null) {
 			mNetErrorFragment = NetErrorFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+		replaceFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
 	}
 
 

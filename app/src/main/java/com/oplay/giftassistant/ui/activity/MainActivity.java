@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -25,8 +24,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftassistant.ui.fragment.GameFragment;
 import com.oplay.giftassistant.ui.fragment.GiftFragment;
-import com.oplay.giftassistant.ui.fragment.MoocRecyclerViewFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.oplay.giftassistant.ui.widget.search.SearchLayout;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -50,7 +49,7 @@ public class MainActivity extends BaseAppCompatActivity {
 	private CheckedTextView[] mCtvs;
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
-	private Fragment mMoocRecyclerViewFragment;
+	private GameFragment mGameFragment;
 	// 当前选项卡下标
 	private int mCurrentIndex = 0;
 
@@ -160,11 +159,10 @@ public class MainActivity extends BaseAppCompatActivity {
 
 
 	private void displayGameUI() {
-		if (mMoocRecyclerViewFragment == null) {
-			mMoocRecyclerViewFragment = MoocRecyclerViewFragment.newInstance();
+		if (mGameFragment == null) {
+			mGameFragment = GameFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_container, mMoocRecyclerViewFragment,
-				mMoocRecyclerViewFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mGameFragment, mGameFragment.getClass().getSimpleName());
 	}
 
 	private void displayGiftUI() {
@@ -339,7 +337,7 @@ public class MainActivity extends BaseAppCompatActivity {
 			ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 			ng.name = "普通礼包";
 			ng.isLimit = 0;
-			ng.score = (int)(Math.random() * 100) * 10;
+			ng.score = (int) (Math.random() * 100) * 10;
 			ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
 			ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
 			ng.searchCount = 0;

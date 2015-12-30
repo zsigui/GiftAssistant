@@ -7,10 +7,10 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameSuperFragment extends BaseFragment {
+public class GameNoticeFragment extends BaseFragment{
 
-	public static GameSuperFragment newInstance() {
-		return new GameSuperFragment();
+	public static GameNoticeFragment newInstance() {
+		return new GameNoticeFragment();
 	}
 
 	@Override

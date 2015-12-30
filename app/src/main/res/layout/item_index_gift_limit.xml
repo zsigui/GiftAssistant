@@ -19,7 +19,7 @@
             app:riv_corner_radius="15dp"
             app:riv_oval="false"/>
 
-        <TextView
+        <!--<TextView
             style="@style/DefaultTextView"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
@@ -27,7 +27,7 @@
             android:background="@drawable/shape_rect_icon_tap"
             android:text="1款礼包"
             android:textColor="@color/co_white"
-            android:textSize="10sp"/>
+            android:textSize="10sp"/>-->
     </RelativeLayout>
 
     <TextView
