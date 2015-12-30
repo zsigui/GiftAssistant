@@ -23,7 +23,6 @@ import com.oplay.giftassistant.ui.fragment.GiftListContainerFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.socks.library.KLog;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit.Callback;
@@ -38,7 +37,6 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	public static final String KEY_TYPE = "key_data_type";
 	public static final String KEY_DETAIL_ID = "key_detail_id";
 	public static final String KEY_DETAIL_NAME = "key_detail_name";
-	public static final String KEY_GIFT_LIKE_DATA = "key_gift_like_data";
 
 	private NetEngine mEngine;
 	private NetErrorFragment mNetErrorFragment;
@@ -49,7 +47,6 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	private int type = 0;
 	private int detailId;
 	private String detailName;
-	private ArrayList<IndexGiftLike> giftData;
 
 
 	@Override
@@ -62,11 +59,6 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			if (type == 0) {
 				detailId = getIntent().getIntExtra(KEY_DETAIL_ID, 0);
 				detailName = getIntent().getStringExtra(KEY_DETAIL_NAME);
-			} else if (type == 3) {
-				Serializable s = getIntent().getSerializableExtra(KEY_GIFT_LIKE_DATA);
-				if (s != null) {
-					giftData = (ArrayList<IndexGiftLike>) s;
-				}
 			}
 		}
 	}

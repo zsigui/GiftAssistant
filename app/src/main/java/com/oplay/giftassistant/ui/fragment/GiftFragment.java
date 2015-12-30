@@ -87,6 +87,7 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+        KLog.d();
 		setContentView(R.layout.fragment_gifts);
 
 		mScrollView = getViewById(R.id.sv_container);
@@ -103,6 +104,7 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void setListener() {
+        KLog.d();
 		mLikeBar.setOnClickListener(this);
 		mLimitBar.setOnClickListener(this);
 		mNewBar.setOnClickListener(this);
@@ -111,7 +113,7 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-
+        KLog.d();
 		// 设置Banner
 		views = new ArrayList<>(3);
 		for (int i = 0; i < 3; i++) {
@@ -135,10 +137,6 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 		// 加载数据
 
 		if (getArguments() != null) {
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_FRAG, "getArguments = " + getArguments());
-			}
-
 
 			Serializable s;
 			s = getArguments().getSerializable(KEY_BANNER);
@@ -208,7 +206,7 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void lazyLoad() {
-		mIsLoading = true;
+        KLog.d();
 	}
 
 	@Override
@@ -219,7 +217,6 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 	            intent = new Intent(getActivity(), GiftListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(GiftListActivity.KEY_TYPE, 3);
-                bundle.putSerializable(GiftListActivity.KEY_GIFT_LIKE_DATA, (Serializable) mLikeAdapter.getDatas());
                 intent.putExtras(bundle);
                 startActivity(intent);
 				break;

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
+import com.socks.library.KLog;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -123,7 +124,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			ft.add(id, newFrag, tag);
 		}
 		ft.show(newFrag);
-		ft.commit();
+		ft.commitAllowingStateLoss();
 	}
 
 	/**
@@ -136,6 +137,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	 * @param tag 当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
 	 */
 	protected void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
+        long s = System.currentTimeMillis();
+        long s2 = s;
+        KLog.e("1 = " + s);
 		Fragment f = getSupportFragmentManager().findFragmentById(id);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (f != null && f == newFrag) {
@@ -151,7 +155,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			ft.attach(newFrag);
 		}
 		ft.show(newFrag);
-		ft.commit();
+		ft.commitAllowingStateLoss();
 	}
 
 	/**
