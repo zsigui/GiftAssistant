@@ -162,15 +162,18 @@ public class MainActivity extends BaseAppCompatActivity {
 		if (mGameFragment == null) {
 			mGameFragment = GameFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_container, mGameFragment, mGameFragment.getClass().getSimpleName());
+		reshowFrag(R.id.fl_container, mGameFragment, mGameFragment.getClass().getSimpleName(),
+				mGiftFragment.getClass().getSimpleName());
 	}
 
 	private void displayGiftUI() {
 		if (mGiftFragment == null) {
 			mGiftFragment = GiftFragment.newInstance();
 		}
-		reattachFrag(R.id.fl_container, mGiftFragment, mGiftFragment.getClass().getSimpleName());
+		reshowFrag(R.id.fl_container, mGiftFragment, mGiftFragment.getClass().getSimpleName(),
+				mGameFragment.getClass().getSimpleName());
 	}
+
 
 	@Override
 	public void onClick(View v) {

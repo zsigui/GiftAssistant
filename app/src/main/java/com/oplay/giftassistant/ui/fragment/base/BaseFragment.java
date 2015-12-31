@@ -26,9 +26,12 @@ public abstract class BaseFragment extends BaseFragmentLog {
 	protected boolean mIsPrepared = false;
 	// 用于判断是否已经处于加载中
 	protected boolean mIsLoading = false;
+	// 用于判断是否可以显示UI，避免延迟加载而Activity已经finished出现崩溃
+	protected boolean mCanShowUI = false;
 	// 用于避免重复加载
 	protected boolean mHasData = false;
 	private String mFragName;
+
 
     @Override
     public void onAttach(Context context) {

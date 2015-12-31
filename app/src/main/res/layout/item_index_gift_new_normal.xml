@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/rl_item"
+    android:id="@+id/rl_recommend"
     style="@style/IndexListItemLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:paddingRight="@dimen/di_index_hoz_module_margin_left">
 
-    <RelativeLayout
-        android:id="@+id/rl_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@color/co_transparent">
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/iv_icon"
-            style="@style/DefaultImageView.Icon"
-            android:src="@drawable/test"
-            app:riv_border_color="@color/co_stroke_bg"
-            app:riv_border_width="1dip"
-            app:riv_corner_radius="15dp"
-            app:riv_oval="false"/>
-    </RelativeLayout>
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id="@+id/iv_icon"
+			style="@style/DefaultImageView.Icon"
+			app:riv_border_color="@color/co_stroke_bg"
+			app:riv_border_width="@dimen/di_common_icon_border_size"
+			app:riv_corner_radius="@dimen/di_common_icon_diameter_radius"
+			app:riv_oval="false"/>
 
     <ImageView
         android:id="@+id/iv_limit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rl_icon"
+        android:layout_alignTop="@+id/iv_icon"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/rl_icon"
+        android:layout_toRightOf="@+id/iv_icon"
         android:contentDescription="@null"
         android:visibility="gone"/>
 
@@ -38,7 +30,7 @@
         android:id="@+id/tv_name"
         style="@style/DefaultTextView.Header"
         android:layout_width="match_parent"
-        android:layout_alignTop="@+id/rl_icon"
+        android:layout_alignTop="@+id/iv_icon"
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="4dp"
         android:layout_toLeftOf="@+id/ll_send"
@@ -54,7 +46,7 @@
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="8dp"
         android:layout_toLeftOf="@+id/ll_send"
-        android:layout_toRightOf="@+id/rl_icon"
+        android:layout_toRightOf="@+id/iv_icon"
         android:gravity="center_vertical"
         android:text="30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠"/>
 
@@ -66,7 +58,7 @@
         android:layout_below="@+id/tv_play"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/rl_icon"
+        android:layout_toRightOf="@+id/iv_icon"
         android:drawableLeft="@drawable/ic_score"
         android:drawablePadding="4dp"
         android:gravity="center_vertical"

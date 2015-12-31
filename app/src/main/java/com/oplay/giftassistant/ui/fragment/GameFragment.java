@@ -44,13 +44,20 @@ public class GameFragment extends BaseFragment {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 	    mPager.setAdapter(new IndexGamePagerAdapter(getChildFragmentManager()));
+	    mPager.setOffscreenPageLimit(2);
 	    mTabLayout.setViewPager(mPager);
 	    mPager.setCurrentItem(0);
     }
 
     @Override
     protected void lazyLoad() {
+		new Thread(new Runnable() {
 
+			@Override
+			public void run() {
+
+			}
+		}).start();
     }
 
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {

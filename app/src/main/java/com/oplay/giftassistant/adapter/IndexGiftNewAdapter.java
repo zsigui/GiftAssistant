@@ -22,7 +22,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.ui.activity.GiftListActivity;
+import com.oplay.giftassistant.ui.activity.DetailActivity;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
@@ -127,13 +127,13 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 			viewHolder.pbPercent.setProgress(percent);
 
 		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE) {
-			if (gift.bean == -1) {
+			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
 				// 只用积分
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);
 				viewHolder.tvOr.setVisibility(View.GONE);
 				viewHolder.tvBean.setVisibility(View.GONE);
-			} else if (gift.score == -1) {
+			} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
 				// 只用偶玩豆
 				viewHolder.tvBean.setText(String.valueOf(gift.bean));
 				viewHolder.tvBean.setVisibility(View.VISIBLE);
@@ -209,10 +209,9 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, GiftListActivity.class);
-				intent.putExtra(GiftListActivity.KEY_TYPE, 0);
-				intent.putExtra(GiftListActivity.KEY_DETAIL_ID, gift.id);
-				intent.putExtra(GiftListActivity.KEY_DETAIL_NAME, name);
+				Intent intent = new Intent(mContext, DetailActivity.class);
+				intent.putExtra(DetailActivity.KEY_DETAIL_ID, gift.id);
+				intent.putExtra(DetailActivity.KEY_DETAIL_NAME, name);
 				mContext.startActivity(intent);
 			}
 		});
@@ -242,7 +241,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
 			viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
 			viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_item);
+			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
@@ -253,7 +252,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 			viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
 			viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
 			viewHolder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_text);
-			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_item);
+			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 		} else {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_disabled, parent, false);
 			switch (type) {
@@ -268,7 +267,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
 					viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 					viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-					viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_item);
+					viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 					break;
 				default:
 					throw new IllegalStateException("type is not support! " + type);

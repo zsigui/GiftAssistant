@@ -1,0 +1,144 @@
+<cn.bingoogolapple.refreshlayout.BGARefreshLayout
+		android:id = "@+id/rlContent"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:background = "@color/co_transparent" >
+
+	<ScrollView
+			android:id = "@+id/sv_container"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:background = "@color/co_transparent"
+			android:orientation = "vertical" >
+
+		<LinearLayout
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:orientation = "vertical" >
+
+			<!-- 广告屏 -->
+			<include
+					layout = "@layout/view_banner"
+					style = "@style/Banner" />
+
+			<!-- 热门手游模块 -->
+			<LinearLayout
+					style = "@style/IndexModuleLayout" >
+
+				<RelativeLayout
+						android:id = "@+id/rl_hot_all"
+						style = "@style/IndexModuleTitleLayout"
+						android:clickable = "true" >
+
+					<TextView
+							style = "@style/DefaultTextView.Header"
+							android:text = "@string/st_index_gift_like" />
+
+					<TextView style = "@style/DefaultTextView.More" />
+
+				</RelativeLayout >
+
+				<View style="@style/DividerView"/>
+
+				<android.support.v7.widget.RecyclerView
+						android:id = "@+id/rv_hot_content"
+						style = "@style/DefaultRecyclerView"
+						android:paddingTop="5dp"
+						android:paddingBottom="5dp"
+						android:layout_height = "304dp" />
+
+			</LinearLayout >
+
+			<!-- 大图模块 -->
+			<RelativeLayout
+					android:id="@+id/rl_recommend"
+					style = "@style/IndexModuleLayout"
+					android:background = "@color/co_transparent"
+					android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+				<ImageView
+						android:id = "@+id/iv_big_pic"
+						android:src = "@drawable/test_map"
+						android:contentDescription="@null"
+						android:scaleType="centerCrop"
+						android:layout_width = "match_parent"
+						android:layout_height = "200dp" />
+
+				<RelativeLayout
+						android:id = "@+id/rl_big_all"
+						android:layout_below = "@+id/iv_big_pic"
+						android:background = "@color/co_white"
+						android:layout_height = "50dp"
+						style = "@style/DefaultRelativeLayout" >
+
+					<TextView
+							android:id = "@+id/tv_name"
+							android:layout_marginLeft = "92dp"
+							style = "@style/DefaultTextView.Header"
+							android:maxWidth = "140dp"
+							android:text = "拳皇98终极之战OL" />
+
+					<TextView
+							android:id = "@+id/tv_size"
+							style = "@style/DefaultTextView.Text"
+							android:paddingLeft = "5dp"
+							android:layout_toRightOf = "@+id/tv_name"
+							android:text = "12.3M" />
+
+					<TextView
+							android:id = "@+id/tv_download"
+							style = "@style/ButtonText"
+							android:text = "下载"
+							android:layout_marginLeft = "16dp"
+							android:layout_marginRight = "16dp"
+							android:layout_alignParentRight = "true"
+							android:layout_centerVertical = "true"
+							android:background = "@drawable/selector_btn_green" />
+
+				</RelativeLayout >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						android:id = "@+id/iv_icon"
+						android:src = "@drawable/test"
+						style = "@style/DefaultImageView.Icon"
+						android:layout_alignParentBottom = "true"
+						android:layout_marginLeft = "14dp"
+						android:layout_marginBottom = "10dp"
+						app:riv_border_color = "@color/co_stroke_bg"
+						app:riv_border_width = "@dimen/di_common_icon_border_size"
+						app:riv_corner_radius = "@dimen/di_common_icon_diameter_radius"
+						app:riv_oval = "false" />
+
+			</RelativeLayout >
+
+			<!-- 新鲜出炉模块 -->
+			<LinearLayout
+					style = "@style/IndexModuleLayout"
+					android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+				<RelativeLayout
+						android:id = "@+id/rl_new_all"
+						style = "@style/IndexModuleTitleLayout" >
+
+					<TextView
+							style = "@style/DefaultTextView.Header"
+							android:text = "新游推荐" />
+
+					<TextView style = "@style/DefaultTextView.More" />
+
+				</RelativeLayout >
+
+				<View style="@style/DividerView"/>
+
+				<com.oplay.giftassistant.ui.widget.NestedListView
+						android:id = "@+id/rv_new_content"
+						style = "@style/DefaultListView"
+						android:minHeight = "95dp" />
+			</LinearLayout >
+
+		</LinearLayout >
+	</ScrollView >
+
+</cn.bingoogolapple.refreshlayout.BGARefreshLayout >

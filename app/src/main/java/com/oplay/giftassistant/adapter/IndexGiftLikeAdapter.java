@@ -40,7 +40,7 @@ public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike> 
 		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon),
 				Global.IMAGE_OPTIONS);
         if (AssistantApp.getInstance().isAllowDownload()) {
-            bgaViewHolderHelper.getView(R.id.rl_item).setOnClickListener(new View.OnClickListener() {
+            bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 去到游戏

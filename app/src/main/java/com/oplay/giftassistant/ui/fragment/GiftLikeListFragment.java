@@ -39,7 +39,7 @@ public class GiftLikeListFragment extends BaseFragment {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_gift_list_like_container);
+		setContentView(R.layout.fragment_refresh_rv_container);
 		rvData = getViewById(R.id.rv_container);
 	}
 

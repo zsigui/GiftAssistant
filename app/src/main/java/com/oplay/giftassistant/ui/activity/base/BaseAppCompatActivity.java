@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
-import com.socks.library.KLog;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -119,11 +118,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (f != null) {
-			ft.replace(id, newFrag, tag);
+			ft.show(f);
 		} else {
-			ft.add(id, newFrag, tag);
+			ft.replace(id, newFrag, tag);
 		}
-		ft.show(newFrag);
 		ft.commitAllowingStateLoss();
 	}
 
@@ -137,9 +135,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	 * @param tag 当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
 	 */
 	protected void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
-        long s = System.currentTimeMillis();
-        long s2 = s;
-        KLog.e("1 = " + s);
 		Fragment f = getSupportFragmentManager().findFragmentById(id);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (f != null && f == newFrag) {
@@ -155,6 +150,21 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			ft.attach(newFrag);
 		}
 		ft.show(newFrag);
+		ft.commitAllowingStateLoss();
+	}
+
+	public void reshowFrag(@IdRes int id, Fragment newFrag, String newTag, String oldTag) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Fragment f = getSupportFragmentManager().findFragmentByTag(oldTag);
+		if (f != null && !f.isHidden()) {
+			ft.hide(f);
+		}
+		f = getSupportFragmentManager().findFragmentByTag(newTag);
+		if (f != null) {
+			ft.show(f);
+		} else {
+			ft.add(id, newFrag, newTag);
+		}
 		ft.commitAllowingStateLoss();
 	}
 

@@ -1,6 +1,6 @@
 package com.oplay.giftassistant.adapter;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,21 +13,43 @@ import com.oplay.giftassistant.util.ToastUtil;
 
 import java.util.ArrayList;
 
-import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewAdapter;
+import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
 import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
- * Created by zsigui on 15-12-28.
+ * Created by zsigui on 15-12-31.
  */
-public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> {
+public class GameNoticeAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 
-	public IndexGameNewAdapter(Context context) {
-		super(context, R.layout.item_index_game_new);
+	public GameNoticeAdapter(RecyclerView recyclerView) {
+		super(recyclerView, R.layout.item_index_game_notice);
+	}
+
+	public GameNoticeAdapter(RecyclerView recyclerView, ArrayList<IndexGameNew> data) {
+		this(recyclerView);
+		this.mDatas = data;
 	}
 
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGameNew o) {
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
+		String tagUrl = "drawable://";
+		switch (i) {
+			case 0:
+				tagUrl += R.drawable.ic_tag_first;
+				break;
+			case 1:
+				tagUrl += R.drawable.ic_tag_second;
+				break;
+			case 2:
+				tagUrl += R.drawable.ic_tag_third;
+				break;
+			default:
+				tagUrl += R.drawable.ic_tag_other;
+		}
+		ImageLoader.getInstance().displayImage("drawable://" + R.drawable.ic_tag_first,
+				bgaViewHolderHelper.<ImageView>getView(R.id.iv_tag),
+				Global.IMAGE_OPTIONS);
 		if (o.playCount < 10000) {
 			bgaViewHolderHelper.setText(R.id.tv_play,
 					Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
@@ -38,7 +60,7 @@ public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> {
 		}
 		if (o.newCount > 0) {
 			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-		}else {
+		} else {
 			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
 		}
 		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
@@ -64,10 +86,5 @@ public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> {
 				ToastUtil.showShort("游戏 " + o.name + " 开始下载");
 			}
 		});
-	}
-
-	public void updateData(ArrayList<IndexGameNew> games) {
-		this.mDatas = games;
-		notifyDataSetChanged();
 	}
 }

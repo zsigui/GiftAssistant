@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:id = "@+id/rl_recommend"
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:padding = "8dp"
+                android:background = "@drawable/selector_opacity_05" >
+
+	<RelativeLayout
+			android:id="@+id/rl_icon"
+			android:layout_width="@dimen/di_game_icon_layout_diameter"
+			android:layout_height="@dimen/di_game_icon_layout_diameter"
+			android:layout_centerHorizontal="true"
+			android:background="@color/co_transparent">
+
+		<com.makeramen.roundedimageview.RoundedImageView
+				android:id="@+id/iv_icon"
+				style="@style/DefaultImageView.Icon"
+				app:riv_border_color="@color/co_stroke_bg"
+				app:riv_border_width="@dimen/di_common_icon_border_size"
+				app:riv_corner_radius="@dimen/di_common_icon_diameter_radius"
+				android:layout_margin = "@dimen/di_game_icon_margin"
+				app:riv_oval="false"/>
+
+		<ImageView
+				android:id = "@+id/iv_gift"
+				android:layout_alignParentRight = "true"
+				android:contentDescription="@null"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:src = "@drawable/ic_gift" />
+	</RelativeLayout>
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_below = "@+id/rl_icon"
+			android:layout_marginTop = "6dp"
+			android:layout_centerHorizontal = "true"
+			android:text = "刀塔传奇" />
+
+	<TextView
+			android:id = "@+id/tv_download"
+			style = "@style/ButtonText"
+			android:layout_centerHorizontal = "true"
+			android:layout_marginTop = "6dp"
+			android:layout_below = "@+id/tv_name"
+			android:text = "下载"
+			android:background = "@drawable/selector_btn_green" />
+
+</RelativeLayout >

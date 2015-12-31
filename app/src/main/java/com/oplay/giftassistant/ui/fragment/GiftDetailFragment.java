@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -77,17 +78,17 @@ public class GiftDetailFragment extends BaseFragment{
             ImageLoader.getInstance().displayImage(gift.img, ivIcon, Global.IMAGE_OPTIONS);
             tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
             if (gift.isLimit == 1) {
-                ivLimit.setVisibility(View.GONE);
+                ivLimit.setVisibility(View.VISIBLE);
                 tvName.setPadding(DensityUtil.dip2px(getContext(), 4), 0, 0, 0);
             } else {
                 ivLimit.setVisibility(View.GONE);
                 tvName.setPadding(DensityUtil.dip2px(getContext(), 18), 0, 0, 0);
             }
-            if (gift.bean == -1) {
+            if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
                 tvBean.setVisibility(View.GONE);
                 tvOr.setVisibility(View.GONE);
                 tvScore.setText(String.valueOf(gift.score));
-            } else if (gift.score == -1) {
+            } else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
                 tvScore.setVisibility(View.GONE);
                 tvOr.setVisibility(View.GONE);
                 tvBean.setText(String.valueOf(gift.bean));

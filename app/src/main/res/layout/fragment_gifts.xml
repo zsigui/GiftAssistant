@@ -19,19 +19,16 @@
             android:orientation="vertical">
 
             <!-- 广告屏 -->
-            <include
-                layout="@layout/view_banner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/di_banner_height"
-                android:layout_marginBottom="6dp"
-                android:layout_marginTop="6dp"/>
+	        <include
+			        layout = "@layout/view_banner"
+			        style = "@style/Banner" />
 
             <!-- 猜你喜欢模块 -->
             <LinearLayout
                 style="@style/IndexModuleLayout">
 
                 <RelativeLayout
-                    android:id="@+id/rl_like_all"
+                    android:id="@+id/rl_hot_all"
                     style="@style/IndexModuleTitleLayout"
                     android:background="@color/co_white"
                     android:clickable="true">
@@ -44,10 +41,7 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/co_divider_bg"/>
+                <View style="@style/DividerView"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_like_content"
@@ -59,7 +53,7 @@
             <!-- 限量礼包模块 -->
             <LinearLayout
                 style="@style/IndexModuleLayout"
-                android:layout_marginTop="7dp">
+                android:layout_marginTop="@dimen/di_index_module_gap">
 
                 <RelativeLayout
                     android:id="@+id/rl_limit_all"
@@ -81,9 +75,7 @@
                 </RelativeLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/co_divider_bg"/>
+                    style="@style/DividerView"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_limit_content"
@@ -94,7 +86,7 @@
             <!-- 新鲜出炉模块 -->
             <LinearLayout
                 style="@style/IndexModuleLayout"
-                android:layout_marginTop="7dp">
+                android:layout_marginTop="@dimen/di_index_module_gap">
 
                 <RelativeLayout
                     android:id="@+id/rl_new_all"
@@ -109,10 +101,7 @@
 
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/co_divider_bg"/>
+                <View style="@style/DividerView"/>
 
 	            <com.oplay.giftassistant.ui.widget.NestedListView
 			            android:id="@+id/rv_new_content"

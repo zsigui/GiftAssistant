@@ -87,12 +87,11 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-        KLog.d();
 		setContentView(R.layout.fragment_gifts);
 
 		mScrollView = getViewById(R.id.sv_container);
 		mBanner = getViewById(R.id.banner);
-		mLikeBar = getViewById(R.id.rl_like_all);
+		mLikeBar = getViewById(R.id.rl_hot_all);
 		mLikeView = getViewById(R.id.rv_like_content);
 		mLimitBar = getViewById(R.id.rl_limit_all);
 		mLimitView = getViewById(R.id.rv_limit_content);
@@ -104,7 +103,6 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void setListener() {
-        KLog.d();
 		mLikeBar.setOnClickListener(this);
 		mLimitBar.setOnClickListener(this);
 		mNewBar.setOnClickListener(this);
@@ -113,7 +111,6 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-        KLog.d();
 		// 设置Banner
 		views = new ArrayList<>(3);
 		for (int i = 0; i < 3; i++) {
@@ -206,14 +203,14 @@ public class GiftFragment extends BaseFragment implements View.OnClickListener {
 
 	@Override
 	protected void lazyLoad() {
-        KLog.d();
+
 	}
 
 	@Override
 	public void onClick(View v) {
 		Intent intent;
 		switch (v.getId()) {
-			case R.id.rl_like_all:
+			case R.id.rl_hot_all:
 	            intent = new Intent(getActivity(), GiftListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(GiftListActivity.KEY_TYPE, 3);

@@ -50,7 +50,7 @@ public class GiftLikeListAdapter extends BGARecyclerViewAdapter<IndexGiftLike> {
 				String.format("今日新增<font color='#ffaa17'>%d</font>款", o.newCount)));
 		ImageLoader.getInstance().displayImage(o.img, (ImageView)bgaViewHolderHelper.getView(R.id.iv_icon));
 		if (AssistantApp.getInstance().isAllowDownload()) {
-			bgaViewHolderHelper.getView(R.id.rl_item).setOnClickListener(new View.OnClickListener() {
+			bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//
