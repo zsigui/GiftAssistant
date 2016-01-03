@@ -8,7 +8,7 @@ import com.oplay.giftassistant.adapter.GameNoticeAdapter;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
-import com.oplay.giftassistant.model.data.resp.OneTypeGameList;
+import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -61,9 +61,9 @@ public class GameTypeFragment extends BaseFragment{
 		mIsLoading = true;
 		mPage.data.page = mNextPage;
 		Global.getNetEngine().obtainIndexGameNotice(mPage)
-				.enqueue(new Callback<JsonRespBase<OneTypeGameList<IndexGameNew>>>() {
+				.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<OneTypeGameList<IndexGameNew>>> response, Retrofit
+					public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
 							retrofit) {
 
 					}

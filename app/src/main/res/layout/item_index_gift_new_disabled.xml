@@ -43,7 +43,7 @@
         android:id="@+id/tv_count"
         style="@style/DefaultTextView.Text"
         android:layout_below="@+id/tv_play"
-        android:layout_marginLeft="7dp"
+        android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@+id/iv_icon"
         android:text="@null"

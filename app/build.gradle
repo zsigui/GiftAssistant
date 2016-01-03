@@ -53,4 +53,5 @@ dependencies {
 	compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
 	compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
 	compile 'com.github.lawloretienne:quickreturn:0.0.3'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 }

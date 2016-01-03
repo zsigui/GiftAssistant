@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_simple_with_back" />
+
+    <RelativeLayout
+        android:id="@+id/rl_push"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="接受推送消息"/>
+
+        <include layout="@layout/view_toggle" />
+
+    </RelativeLayout>
+
+    <View style="@style/DividerView"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_auto_delete"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="安装完成后自动删除安装包"/>
+
+        <include layout="@layout/view_toggle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_update"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:layout_marginTop="@dimen/di_index_module_gap"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="自动检查版本更新"/>
+
+        <include layout="@layout/view_toggle" />
+
+    </RelativeLayout>
+
+    <View style="@style/DividerView"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_version"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="当前版本号"/>
+
+        <TextView
+            style="@style/DefaultTextView.Text"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:text="v1.0"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_clear"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:layout_marginTop="@dimen/di_index_module_gap"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="清除缓存"/>
+
+        <TextView
+            style="@style/DefaultTextView.Text"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:text="〉"/>
+
+    </RelativeLayout>
+
+    <View style="@style/DividerView"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_feedback"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="意见反馈"/>
+
+        <TextView
+            style="@style/DefaultTextView.Text"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:text="〉"/>
+
+    </RelativeLayout>
+
+    <View style="@style/DividerView"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_about"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="关于礼包酷"/>
+
+        <TextView
+            style="@style/DefaultTextView.Text"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:text="〉"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_logout"
+        style="@style/IndexModuleTitleLayout"
+        android:background="@drawable/selector_white_module"
+        android:layout_marginTop="@dimen/di_index_module_gap"
+        android:clickable="true">
+
+        <TextView
+            style="@style/DefaultTextView.Header"
+            android:text="退出当前账号"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

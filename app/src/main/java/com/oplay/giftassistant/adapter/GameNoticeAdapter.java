@@ -75,11 +75,11 @@ public class GameNoticeAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon),
 				Global.IMAGE_OPTIONS);
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ToastUtil.showShort("跳转游戏 " + o.name + " 详情页面");
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                ToastUtil.showShort("跳转游戏 " + o.name + " 详情页面");
+            }
+        });
 		bgaViewHolderHelper.getView(R.id.tv_download).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -87,4 +87,9 @@ public class GameNoticeAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 			}
 		});
 	}
+
+    public void updateData(ArrayList<IndexGameNew> data) {
+        this.mDatas = data;
+        notifyDataSetChanged();
+    }
 }

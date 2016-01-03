@@ -67,6 +67,12 @@ public class CircleProgress extends View {
     }
 
     @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        startAnim();
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int defaultSize = getResources().getDimensionPixelSize(R.dimen.default_circle_view_size);
         int width = getDefaultSize(defaultSize, widthMeasureSpec);

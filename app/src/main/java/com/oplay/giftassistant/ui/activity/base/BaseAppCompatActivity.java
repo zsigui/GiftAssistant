@@ -3,6 +3,7 @@ package com.oplay.giftassistant.ui.activity.base;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
+import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -27,8 +29,11 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     protected AssistantApp mApp;
     private SweetAlertDialog mLoadingDialog;
     private Toolbar mToolbar;
+    protected boolean mNeedWorkCallback = false;
 	protected LoadingFragment mLoadingFragment;
-
+    // 封装加载和等待等页面的管理器对象
+    protected LoadAndRetryViewManager mViewManager;
+    protected boolean mIsLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,17 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
     protected void initMenu(@NonNull Toolbar toolbar) {}
 
+    @SuppressWarnings("unchecked")
     protected <V extends View> V getViewById(@IdRes int id) {
-        View child = findViewById(id);
-        return (child != null ? (V)child : null);
+        if (mViewManager == null) {
+            View child = findViewById(id);
+            return (child != null ? (V) child : null);
+        } else {
+            return getViewById(mViewManager.getContentView(), id);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     protected <V extends View> V getViewById(View v, @IdRes int id) {
         View child = v.findViewById(id);
         return (child != null ? (V)child : null);
@@ -85,6 +96,11 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
                 tv.setText(title);
             }
         }
+    }
+
+    protected void initViewManger(@LayoutRes int layoutResID) {
+        mViewManager = LoadAndRetryViewManager.generate(this, layoutResID);
+        setContentView(mViewManager.getContainer());
     }
 
     public void showLoadingDialog() {
@@ -182,6 +198,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	@Override
 	public void onBackPressed() {
+        this.mNeedWorkCallback = false;
 		super.onBackPressed();
 		this.finish();
 	}

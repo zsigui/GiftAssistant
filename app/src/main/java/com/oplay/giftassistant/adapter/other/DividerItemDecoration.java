@@ -2,7 +2,6 @@ package com.oplay.giftassistant.adapter.other;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
@@ -11,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+
+import com.oplay.giftassistant.R;
 
 /**
  * @author JackieZhuang
@@ -40,7 +41,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint ;
 
     public DividerItemDecoration(Context context,int orientation) {
-        this(context, orientation, Color.BLACK, 1);
+        this(context, orientation, context.getResources().getColor(R.color.co_divider_bg), 1);
     }
 
     public DividerItemDecoration(Context context, int orientation, int dividerColor, int dividerSize) {

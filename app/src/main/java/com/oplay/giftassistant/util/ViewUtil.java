@@ -20,9 +20,14 @@ public class ViewUtil {
         return (child != null ? (V)child : null);
     }
 
-	public static void initRefreshLayout(Context context, BGARefreshLayout refreshLayout) {
-		BGAMeiTuanRefreshViewHolder refreshViewHolder = new BGAMeiTuanRefreshViewHolder(context, true);
+    public static void initRefreshLayout(Context context, BGARefreshLayout refreshLayout) {
+        initRefreshLayout(context, refreshLayout, true);
+    }
+
+	public static void initRefreshLayout(Context context, BGARefreshLayout refreshLayout, boolean loadMore) {
+		BGAMeiTuanRefreshViewHolder refreshViewHolder = new BGAMeiTuanRefreshViewHolder(context, loadMore);
 		refreshViewHolder.setLoadingMoreText("加载更多中...");
+        refreshViewHolder.setLoadMoreBackgroundDrawableRes(R.drawable.ic_more);
 		refreshViewHolder.setPullDownImageResource(R.mipmap.bga_refresh_mt_pull_down);
 		refreshViewHolder.setRefreshingAnimResId(R.anim.bga_refresh_mt_refreshing);
 		refreshViewHolder.setChangeToReleaseRefreshAnimResId(R.anim.bga_refresh_mt_change_to_release_refresh);

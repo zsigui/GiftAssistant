@@ -3,6 +3,7 @@
 
 	<color name = "co_transparent">#00000000</color>
 	<color name = "co_white">#FFFFFF</color>
+	<color name = "co_white_pressed">#999999</color>
 	<color name = "co_black">#000000</color>
 
     <color name = "co_opacity_05" >#0D000000</color >
@@ -31,6 +32,8 @@
 	<color name = "co_btn_orange">#ffaa17</color>
 	<color name = "co_btn_grey">#c9c9c9</color>
 
+	<color name = "co_dialog_title">#20C585</color>
+
 	<color name = "co_tabs_indicator_common_bg">#ffaa17</color>
 	<color name = "co_tabs_common_bg">#F85454</color>
 	<color name = "co_tabs_common_text_unchecked">#FFD2D2</color>
@@ -38,6 +41,9 @@
 	<!-- 主页面 -->
 	<color name="co_title_bar_bg" >#74684957</color>
 	<color name = "co_title_bar_tv_bg">#FFFFFF</color>
+
+    <!-- 设置 - 我的礼包 -->
+    <color name="co_gift_code_bg">#F0F0F0</color>
 
     <color name="co_tab_index_text_normal">#BBBBBB</color>
     <color name="co_tab_index_text_selected">#F85454</color>

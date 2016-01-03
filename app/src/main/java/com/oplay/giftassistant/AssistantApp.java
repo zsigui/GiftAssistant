@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SoundPlayer;
 import com.socks.library.KLog;
 
@@ -63,9 +64,17 @@ public class AssistantApp extends Application {
         initImageLoader();
         KLog.init(true);
 	    initRetrofit();
+        initLoadingView();
     }
 
-	public static AssistantApp getInstance() {
+    private void initLoadingView() {
+        LoadAndRetryViewManager.DEFAULT_EMPTY_VIEW_ID = R.layout.fragment_empty_search;
+        LoadAndRetryViewManager.DEFAULT_LOAD_VIEW_ID = R.layout.fragment_data_loading;
+        // 加载失败，错误或者重试
+        LoadAndRetryViewManager.DEFAULT_ERROR_RETRY_VIEW_ID = R.layout.fragment_error_net;
+    }
+
+    public static AssistantApp getInstance() {
         return sInstance;
     }
 

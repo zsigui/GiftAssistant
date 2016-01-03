@@ -163,7 +163,7 @@ public class MainActivity extends BaseAppCompatActivity {
 			mGameFragment = GameFragment.newInstance();
 		}
 		reshowFrag(R.id.fl_container, mGameFragment, mGameFragment.getClass().getSimpleName(),
-				mGiftFragment.getClass().getSimpleName());
+                GiftFragment.class.getSimpleName());
 	}
 
 	private void displayGiftUI() {
@@ -171,7 +171,7 @@ public class MainActivity extends BaseAppCompatActivity {
 			mGiftFragment = GiftFragment.newInstance();
 		}
 		reshowFrag(R.id.fl_container, mGiftFragment, mGiftFragment.getClass().getSimpleName(),
-				mGameFragment.getClass().getSimpleName());
+				GameFragment.class.getSimpleName());
 	}
 
 

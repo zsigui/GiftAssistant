@@ -6,16 +6,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
+ * 分页返回数据对象
+ *
  * Created by zsigui on 15-12-31.
  */
-public class OneTypeGameList<T> implements Serializable{
+public class OneTypeDataList<T> implements Serializable{
 
 	@SerializedName("")
 	public ArrayList<T> data;
 
 	public int page;
 
-	public int pageSize;
+	public int pageSize = 10;
 
 	public int isEndPage;
 }

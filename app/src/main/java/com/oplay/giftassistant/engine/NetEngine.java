@@ -8,8 +8,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.model.data.resp.OneTypeGameList;
-import com.oplay.giftassistant.model.json.JsonRespLimitGift;
+import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
+import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.POST;
+import retrofit.http.Url;
 
 /**
  * Created by zsigui on 15-12-16.
@@ -40,13 +41,13 @@ public interface NetEngine {
 	 * 获取 首页-礼包-每日限量礼包 页面的数据
 	 */
 	@POST("api/index/gift/limit/all")
-	Call<JsonRespLimitGift> obtainGiftLimit(@Body JsonReqBase<String> reqData);
+	Call<JsonRespGiftList> obtainGiftLimit(@Body JsonReqBase<String> reqData);
 
 	/**
 	 * 获取 首页-礼包-新鲜出炉礼包 页面的数据
 	 */
 	@POST("api/index/gift/new/all")
-	Call<JsonRespLimitGift> obtainGiftNew(@Body JsonReqBase<String> reqData);
+	Call<JsonRespGiftList> obtainGiftNew(@Body JsonReqBase<String> reqData);
 
     /**
      * 获取 礼包详情 页面的数据
@@ -64,5 +65,9 @@ public interface NetEngine {
 	 * 获取 首页-游戏-榜单 页面的数据
 	 */
 	@POST("api/index/game/notice")
-	Call<JsonRespBase<OneTypeGameList<IndexGameNew>>> obtainIndexGameNotice(@Body JsonReqBase<ReqPageData> reqData);
+	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainIndexGameNotice(@Body JsonReqBase<ReqPageData> reqData);
+
+    @POST
+    Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainIndexGiftList(@Url String url, @Body
+                                                                          JsonReqBase<ReqPageData> reqData);
 }

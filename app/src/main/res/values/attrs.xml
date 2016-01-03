@@ -38,4 +38,19 @@
         <attr name="arrowPosition"
               format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="ToggleButton">
+        <attr name="tb_borderWidth" format="dimension">
+        </attr>
+        <attr name="tb_offBorderColor" format="reference|color">
+        </attr>
+        <attr name="tb_offColor" format="reference|color">
+        </attr>
+        <attr name="tb_onColor" format="reference|color">
+        </attr>
+        <attr name="tb_spotColor" format="reference|color">
+        </attr>
+        <attr name="tb_animate" format="reference|boolean">
+        </attr>
+    </declare-styleable>
 </resources>

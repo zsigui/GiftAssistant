@@ -64,6 +64,8 @@
 	<dimen name = "di_game_icon_layout_diameter">74dp</dimen>
 	<dimen name = "di_game_icon_margin">2dp</dimen>
 
+    <!-- 个人设置 页面 -->
+
 	<!-- ToolBar -->
 	<dimen name = "di_search_item_history" >45dp</dimen >
 

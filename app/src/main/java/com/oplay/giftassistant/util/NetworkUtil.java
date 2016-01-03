@@ -44,19 +44,6 @@ public class NetworkUtil {
 
 		public int value;
 	}
-	//
-	//public enum NetSubType {
-	//    None(1),
-	//    Mobile(2),
-	//    Wifi(4),
-	//    Other(8);
-	//
-	//    NetType(int value) {
-	//        this.value = value;
-	//    }
-	//
-	//    public int value;
-	//}
 
 	/**
 	 * 获取ConnectivityManager

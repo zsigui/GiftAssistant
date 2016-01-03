@@ -51,13 +51,6 @@ public class GameFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-			}
-		}).start();
     }
 
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {

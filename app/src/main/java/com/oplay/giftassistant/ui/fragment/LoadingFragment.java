@@ -52,8 +52,8 @@ public class LoadingFragment extends BaseFragment {
 	}
 
 	@Override
-	protected void onUserInVisible() {
-		super.onUserInVisible();
+	protected void onUserInvisible() {
+		super.onUserInvisible();
 		stopAnim();
 	}
 

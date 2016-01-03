@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cn.bingoogolapple.refreshlayout.BGARefreshLayout
-		android:id="@+id/rlContent"
+		android:id="@+id/srl_layout"
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
