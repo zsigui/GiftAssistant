@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.engine;
 
+import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
@@ -28,46 +29,51 @@ public interface NetEngine {
 	/**
 	 * 获取 首页-礼包 页面的数据
 	 */
-	@POST("gift_index")
+	@POST(NetUrl.GIFT_GET_INDEX)
 	Call<JsonRespBase<IndexGift>> obtainIndexGift(@Body JsonReqBase<ReqIndexGift> reqData);
 
 	/**
 	 * 获取 首页-礼包-猜你喜欢 页面的数据
 	 */
-	@POST("guess_you_like_list")
+	@POST(NetUrl.GIFT_GET_ALL_LIKE)
 	Call<JsonRespBase<ArrayList<IndexGiftLike>>> obtainGiftLike(@Body JsonReqBase<ReqIndexGift> reqData);
 
 	/**
 	 * 获取 首页-礼包-每日限量礼包 页面的数据
 	 */
-	@POST("api/index/gift/limit/all")
+	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
 	Call<JsonRespGiftList> obtainGiftLimit(@Body JsonReqBase<String> reqData);
 
 	/**
 	 * 获取 首页-礼包-新鲜出炉礼包 页面的数据
 	 */
-	@POST("api/index/gift/new/all")
+	@POST(NetUrl.GIFT_GET_ALL_NEW)
 	Call<JsonRespGiftList> obtainGiftNew(@Body JsonReqBase<String> reqData);
 
     /**
      * 获取 礼包详情 页面的数据
      */
-    @POST("api/index/gift/detail")
+    @POST(NetUrl.GIFT_GET_DETAIL)
     Call<JsonRespBase<IndexGiftNew>> obtainGiftDetail(@Body JsonReqBase<ReqGiftDetail> reqData);
 
 	/**
 	 * 获取 首页-游戏-精品 页面的数据
 	 */
-	@POST("api/index/game/super")
+	@POST(NetUrl.GAME_GET_INDEX_SUPER)
 	Call<JsonRespBase<IndexGameSuper>> obtainIndexGameSuper(@Body JsonReqBase<String> reqData);
 
 	/**
-	 * 获取 首页-游戏-榜单 页面的数据
+	 * 获取 礼包 单列表数据
 	 */
-	@POST("api/index/game/notice")
-	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainIndexGameNotice(@Body JsonReqBase<ReqPageData> reqData);
-
     @POST
-    Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainIndexGiftList(@Url String url, @Body
-                                                                          JsonReqBase<ReqPageData> reqData);
+    Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainGiftList(@Url String url, @Body
+    JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 获取 游戏 单列表数据
+	 */
+	@POST
+	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainGameList(@Url String url, @Body
+	JsonReqBase<ReqPageData> reqData);
+
 }

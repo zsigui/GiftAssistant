@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content" >
+
+	<LinearLayout
+			android:orientation = "vertical"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent" >
+
+		<TextView
+				style = "@style/DefaultTextView.FeedBack"
+				android:text = "@string/st_feedback_type_title" />
+
+		<RadioButton
+				android:id = "@+id/rb_function"
+				style = "@style/DefaultRadioButton.FeedBack"
+				android:text = "@string/st_feedback_type_function"
+				android:checked = "true" />
+
+		<View style = "@style/DividerView" />
+
+		<RadioButton
+				android:id = "@+id/rb_pay"
+				style = "@style/DefaultRadioButton.FeedBack"
+				android:text = "@string/st_feedback_type_pay" />
+
+		<View style = "@style/DividerView" />
+
+		<RadioButton
+				android:id = "@+id/rb_other"
+				style = "@style/DefaultRadioButton.FeedBack"
+				android:text = "@string/st_feedback_type_other" />
+
+		<TextView
+				style = "@style/DefaultTextView.FeedBack"
+				android:text = "@string/st_feedback_content_title" />
+
+		<LinearLayout
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:background = "@color/co_white"
+				android:padding = "12dp"
+				android:orientation = "vertical" >
+
+			<TextView
+					android:id = "@+id/tv_content"
+					style = "@style/DefaultTextView.FeedBackContent"
+					android:hint="@string/st_feedback_content_hint"/>
+
+			<TextView
+					android:id = "@+id/tv_content_count"
+					style = "@style/DefaultTextView.Text"
+					android:layout_gravity = "right"
+					android:textSize = "12sp"
+					android:text = "0/500" />
+		</LinearLayout >
+
+		<TextView
+				style = "@style/DefaultTextView.FeedBack"
+				android:text = "@string/st_feedback_phone_title" />
+
+		<TextView
+				android:id = "@+id/tv_phone"
+				style = "@style/DefaultTextView.FeedBack"
+				android:background = "@color/co_white"
+				android:textColorHint = "@color/co_common_thin_text"
+				android:textColor = "@color/co_black"
+				android:hint = "@string/st_feedback_phone_hint" />
+
+		<LinearLayout
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:background = "@color/co_common_setting_bg"
+				android:gravity = "center" >
+
+			<TextView
+					android:id = "@+id/btn_send"
+					style = "@style/DefaultTextView"
+					android:layout_width = "200dp"
+					android:layout_height = "@dimen/di_btn_bigger_height"
+					android:layout_gravity = "center"
+					android:layout_marginBottom = "25dp"
+					android:layout_marginTop = "20dp"
+					android:background = "@drawable/selector_btn_bigger_red"
+					android:text = "@string/st_feedback_btn"
+					android:textColor = "@color/co_white" />
+		</LinearLayout >
+	</LinearLayout >
+</ScrollView >

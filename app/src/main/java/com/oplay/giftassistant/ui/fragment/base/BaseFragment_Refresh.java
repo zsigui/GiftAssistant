@@ -2,6 +2,8 @@ package com.oplay.giftassistant.ui.fragment.base;
 
 import com.oplay.giftassistant.util.ToastUtil;
 
+import java.util.ArrayList;
+
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 /**
@@ -9,8 +11,9 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
  * @email zsigui@foxmail.com
  * @date 2016/1/3
  */
-public abstract class BaseFragment_Refresh extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate{
+public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate{
 
+	protected ArrayList<DataType> mData;
     protected BGARefreshLayout mRefreshLayout;
     protected boolean mIsRefresh = false;
     protected boolean mIsLoadMore = false;
@@ -39,4 +42,52 @@ public abstract class BaseFragment_Refresh extends BaseFragment implements BGARe
 
     protected void loadMoreData() {
     }
+
+	protected void lazyLoadInitConfig() {
+		mIsLoading = true;
+		if (!mIsRefresh) {
+			mViewManager.showLoading();
+			mHasData = false;
+		}
+	}
+
+	protected void lazyLoadFailEnd() {
+		if (!mIsRefresh) {
+			mViewManager.showErrorRetry();
+			mHasData = false;
+		} else {
+			ToastUtil.showShort("刷新请求出错");
+		}
+		mIsLoading = mIsRefresh = false;
+		mRefreshLayout.endRefreshing();
+	}
+
+	protected void lazyLoadSuccessEnd() {
+		mViewManager.showContent();
+		mHasData = true;
+		mIsLoading = mIsRefresh = false;
+		mRefreshLayout.endRefreshing();
+	}
+
+	protected void setLoadState(Object data, int isEndPage) {
+		if (isEndPage == 1 || data == null) {
+			// 无更多不再请求加载
+			mNoMoreLoad = true;
+			mRefreshLayout.setIsShowLoadingMoreView(false);
+		} else {
+			mNoMoreLoad = false;
+			mRefreshLayout.setIsShowLoadingMoreView(true);
+		}
+	}
+
+	protected void moreLoadSuccessEnd() {
+		mIsLoadMore = false;
+		mRefreshLayout.endLoadingMore();
+	}
+
+	protected void moreLoadFailEnd() {
+		mIsLoadMore = false;
+		mRefreshLayout.endLoadingMore();
+		showToast("异常，加载失败");
+	}
 }

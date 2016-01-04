@@ -1,21 +1,26 @@
 package com.oplay.giftassistant;
 
 import android.app.Application;
-import android.graphics.Bitmap;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SoundPlayer;
@@ -65,6 +70,7 @@ public class AssistantApp extends Application {
         KLog.init(true);
 	    initRetrofit();
         initLoadingView();
+	    initDrawerImageLoader();
     }
 
     private void initLoadingView() {
@@ -103,9 +109,31 @@ public class AssistantApp extends Application {
 	private void initRetrofit() {
 		mGson = new Gson();
 		mRetrofit = new Retrofit.Builder()
-				.baseUrl(Global.BASE_URL)
+				.baseUrl(NetUrl.URL_BASE)
 				.addConverterFactory(GsonConverterFactory.create(mGson))
 				.build();
+	}
+
+	private void initDrawerImageLoader() {
+		DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+			@Override
+			public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_APP, "drawer uri = " + uri.getPath());
+				}
+				ImageLoader.getInstance().displayImage(uri.getPath(), imageView, Global.IMAGE_OPTIONS);
+			}
+
+			@Override
+			public void cancel(ImageView imageView) {
+				ImageLoader.getInstance().cancelDisplayTask(imageView);
+			}
+
+			@Override
+			public Drawable placeholder(Context ctx) {
+				return super.placeholder(ctx);
+			}
+		});
 	}
 
     /**
@@ -113,20 +141,17 @@ public class AssistantApp extends Application {
      */
     private void initImageLoader() {
         try {
-            final DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .cacheOnDisk(true)
-                    .cacheInMemory(true)
-                    .imageScaleType(ImageScaleType.EXACTLY)
-                    .bitmapConfig(Bitmap.Config.ARGB_8888)
-                    .build();
+            final DisplayImageOptions options = Global.IMAGE_OPTIONS;
             final File cacheDir = StorageUtils.getOwnCacheDirectory(this, IMG_PATH);
             final long maxAgeTimeInSeconds = 7 * 24 * 60 * 60;   // 7 days cache
             final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                    .threadPoolSize(5)
+                    .threadPoolSize(3)
                     .denyCacheImageMultipleSizesInMemory()
                     .memoryCache(new WeakMemoryCache())
                     .diskCache(new LimitedAgeDiskCache(cacheDir, maxAgeTimeInSeconds))
                     .defaultDisplayImageOptions(options) // default
+		            .memoryCacheSize(5 * 1024 * 1024)   // memory cache size 5M
+		            .diskCacheSize(100 * 1024 * 1024)   // disk cache size 100M
                     .threadPriority(Thread.NORM_PRIORITY - 2)
                     .build();
             ImageLoader.getInstance().init(config);

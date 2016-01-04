@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,28 +10,73 @@ import java.io.Serializable;
 public class UserModel implements Serializable{
 
 	/**
-	 * 用户昵称
+	 * 登陆类型
 	 */
-	public String username;
+	@SerializedName("login_type")
+	public int loginType;
+
 	/**
-	 * 用户头像url
+	 * 用户第三方id (手机登录才有)
 	 */
-	public String img;
+	@SerializedName("openid")
+	public int openId;
+
 	/**
-	 * 手机号码，跟偶玩账号惟一捆绑
+	 * 用户id
 	 */
-	public String phone;
+	@SerializedName("user_id")
+	public int uid;
+
 	/**
 	 * session,用于进行请求访问
 	 */
 	public String session;
-	/**
-	 * 用户id
-	 */
-	public int uid;
-	/**
-	 * session的超时时间戳
-	 */
-	public long sessionExpired;
 
+	/**
+	 * 用户名 (偶玩账号)
+	 */
+	@SerializedName("username")
+	public String username;
+
+	/**
+	 * 用户昵称
+	 */
+	@SerializedName("nick")
+	public String nick;
+
+	/**
+	 * 用户头像url
+	 */
+	@SerializedName("user_img")
+	public String img;
+
+	/**
+	 * 手机号码，绑定的手机号
+	 */
+	@SerializedName("mobile")
+	public String phone;
+
+	/**
+	 * 用户积分
+	 */
+	@SerializedName("points")
+	public int score;
+
+	/**
+	 * 偶玩豆
+	 */
+	@SerializedName("mili")
+	public int bean;
+
+	/**
+	 * 拥有礼包数目
+	 */
+	@SerializedName("gift_count")
+	public int giftCount;
+
+	/**
+	 * session超时时间
+	 */
+	@SerializedName("session_expire")
+	public long sessionExpired;
 }

@@ -48,6 +48,10 @@
 	    <activity
 			    android:name=".ui.activity.DetailActivity"
 			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+	    <activity
+			    android:name=".ui.activity.GameListActivity"
+			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
     </application>
 
 </manifest>

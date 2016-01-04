@@ -28,7 +28,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
     protected AssistantApp mApp;
     private SweetAlertDialog mLoadingDialog;
-    private Toolbar mToolbar;
+	protected Toolbar mToolbar;
     protected boolean mNeedWorkCallback = false;
 	protected LoadingFragment mLoadingFragment;
     // 封装加载和等待等页面的管理器对象
@@ -45,6 +45,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
         initView();
         mToolbar = getViewById(R.id.toolbar);
         if (mToolbar != null) {
+	        setSupportActionBar(mToolbar);
             final View backIcon = mToolbar.findViewById(R.id.iv_bar_back);
             if (backIcon != null) {
                 backIcon.setOnClickListener(this);

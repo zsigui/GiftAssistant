@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:orientation = "vertical" >
+
+	<LinearLayout
+			android:orientation = "horizontal"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:gravity = "center_vertical"
+			android:padding = "16dp"
+			android:background = "@color/co_white" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "我当前拥有的积分:  " />
+
+		<CheckedTextView
+				style = "@style/DefaultTextView.Header"
+				android:drawableLeft = "@drawable/ic_score"
+				android:textColor = "@color/co_tabs_common_bg"
+				android:drawablePadding = "3dp"
+				android:text = "100" />
+
+	</LinearLayout >
+
+	<com.andexert.expandablelayout.library.ExpandableLayoutListView
+
+			android:id = "@+id/lv_container"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:divider = "@color/co_divider_bg"
+			android:dividerHeight = "1dp" />
+</LinearLayout >

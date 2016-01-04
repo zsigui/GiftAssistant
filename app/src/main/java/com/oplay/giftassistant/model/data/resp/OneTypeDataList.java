@@ -12,12 +12,15 @@ import java.util.ArrayList;
  */
 public class OneTypeDataList<T> implements Serializable{
 
-	@SerializedName("")
+	@SerializedName("data")
 	public ArrayList<T> data;
 
+	@SerializedName("page_id")
 	public int page;
 
+	@SerializedName("page_size")
 	public int pageSize = 10;
 
+	@SerializedName("is_end_page")
 	public int isEndPage;
 }

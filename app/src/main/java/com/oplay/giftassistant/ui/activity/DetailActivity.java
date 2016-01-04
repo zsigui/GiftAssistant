@@ -12,7 +12,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.GiftDetailFragment;
+import com.oplay.giftassistant.ui.fragment.gift.GiftDetailFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.socks.library.KLog;
 

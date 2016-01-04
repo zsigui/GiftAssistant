@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.bingoogolapple.refreshlayout.BGARefreshLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/srl_layout"
+		android:orientation = "vertical"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:background = "@color/co_transparent" >
+
+	<ListView
+			android:id = "@+id/rv_container"
+			android:background = "@color/co_white"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:dividerHeight="@dimen/di_divider_height"
+			android:divider="@color/co_divider_bg"/>
+</cn.bingoogolapple.refreshlayout.BGARefreshLayout >

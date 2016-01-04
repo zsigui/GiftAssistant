@@ -36,10 +36,12 @@
             android:layout_weight="1"/>
 
 	    <LinearLayout
+			    android:id="@+id/ll_gift_count"
 			    android:layout_height = "@dimen/di_tool_bar_profile_diameter"
 			    android:background="@drawable/shape_toolbar_right"
 			    android:layout_width = "wrap_content"
 			    android:layout_marginLeft="7dp"
+			    android:clickable="true"
 			    android:gravity="center_vertical" >
 
 		    <ImageView

@@ -84,7 +84,7 @@
         android:layout_toLeftOf="@+id/ll_send"
         android:layout_toRightOf="@+id/tv_percent"
         android:max="100"
-        android:progressDrawable="@drawable/shape_progress_bar"/>
+        android:progressDrawable="@drawable/shape_progress_bar_orange"/>
 
     <LinearLayout
         android:id="@+id/ll_send"

@@ -12,7 +12,6 @@ import com.oplay.giftassistant.engine.NetEngine;
  */
 public class Global {
 	private static NetEngine sNetEngine;
-	public static final String BASE_URL = "http://172.16.3.59:8987/";
 
 	public static final DisplayImageOptions IMAGE_OPTIONS = new DisplayImageOptions.Builder()
 			.showImageForEmptyUri(R.drawable.ic_img_empty)

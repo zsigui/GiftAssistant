@@ -18,8 +18,8 @@ import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.GiftLikeListFragment;
-import com.oplay.giftassistant.ui.fragment.GiftListFragment;
+import com.oplay.giftassistant.ui.fragment.gift.GiftLikeListFragment;
+import com.oplay.giftassistant.ui.fragment.gift.GiftMutilDayFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -37,11 +37,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
 
     public static final String KEY_TYPE = "key_data_type";
 
+	public static final int TYPE_LIMIT = 1;
+	public static final int TYPE_LIKE = 2;
+	public static final int TYPE_NEW = 3;
+
+
     private NetEngine mEngine;
     private NetErrorFragment mNetErrorFragment;
-    // 1 今日限量礼包
-    // 2 新鲜出炉礼包
-    // 3 猜你喜欢
     private int type = 0;
 
 
@@ -51,7 +53,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_common_with_back);
 
         if (getIntent() != null) {
-            type = getIntent().getIntExtra(KEY_TYPE, 0);
+            type = getIntent().getIntExtra(KEY_TYPE, TYPE_LIKE);
         }
     }
 
@@ -59,13 +61,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
     protected void initMenu(@NonNull Toolbar toolbar) {
         super.initMenu(toolbar);
         switch (type) {
-            case 1:
+            case TYPE_LIMIT:
                 setBarTitle("今日限量礼包");
                 break;
-            case 2:
+            case TYPE_NEW:
                 setBarTitle("新鲜出炉礼包");
                 break;
-            case 3:
+            case TYPE_LIKE:
                 setBarTitle("猜你喜欢");
                 break;
         }
@@ -88,11 +90,11 @@ public class GiftListActivity extends BaseAppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (type == 1) {
+                if (type == TYPE_LIMIT) {
                     loadLimitGiftData();
-                } else if (type == 2) {
+                } else if (type == TYPE_NEW) {
                     loadNewGiftData();
-                } else if (type == 3) {
+                } else if (type == TYPE_LIKE) {
                     loadLikeGiftData();
                 }
             }
@@ -118,7 +120,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
                     return;
                 }
                 mIsLoading = false;
-                if (response != null && response.code() == 200) {
+                if (response != null && response.isSuccess()) {
                     displayGiftLikeUI(response.body().getData());
                     return;
                 }
@@ -154,7 +156,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
                     return;
                 }
                 mIsLoading = false;
-                if (response != null && response.code() == 200) {
+                if (response != null && response.isSuccess()) {
                     displayGiftNewUI(response.body().getData());
                     return;
                 }
@@ -190,7 +192,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
                     return;
                 }
                 mIsLoading = false;
-                if (response != null && response.code() == 200) {
+                if (response != null && response.isSuccess()) {
                     displayGiftLimitUI(response.body().getData());
                     return;
                 }
@@ -220,13 +222,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
     }
 
     private void displayGiftLimitUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
-        replaceFrag(R.id.fl_container, GiftListFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT),
-                GiftListFragment.class.getSimpleName());
+        replaceFrag(R.id.fl_container, GiftMutilDayFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT_BY_PAGE),
+                GiftMutilDayFragment.class.getSimpleName());
     }
 
     private void displayGiftNewUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
-        replaceFrag(R.id.fl_container, GiftListFragment.newInstance(data, NetUrl.GIFT_GET_ALL_NEW),
-                GiftListFragment.class.getSimpleName());
+        replaceFrag(R.id.fl_container, GiftMutilDayFragment.newInstance(data, NetUrl.GIFT_GET_ALL_NEW_BY_PAGE),
+                GiftMutilDayFragment.class.getSimpleName());
     }
 
     /**

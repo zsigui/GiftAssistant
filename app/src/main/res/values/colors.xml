@@ -1,52 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources >
 
-	<color name = "co_transparent">#00000000</color>
-	<color name = "co_white">#FFFFFF</color>
-	<color name = "co_white_pressed">#999999</color>
-	<color name = "co_black">#000000</color>
+	<color name = "co_transparent" >#00000000</color >
+	<color name = "co_white" >#FFFFFF</color >
+	<color name = "co_white_pressed" >#999999</color >
+	<color name = "co_black" >#000000</color >
 
-    <color name = "co_opacity_05" >#0D000000</color >
-    <color name = "co_opacity_20" >#33000000</color >
-    <color name = "co_opacity_30" >#4D000000</color >
-    <color name = "co_opacity_50" >#80000000</color >
-    <color name = "co_opacity_70" >#B3000000</color >
-    <color name = "co_opacity_80" >#CC000000</color >
+	<color name = "co_opacity_05" >#0D000000</color >
+	<color name = "co_opacity_20" >#33000000</color >
+	<color name = "co_opacity_30" >#4D000000</color >
+	<color name = "co_opacity_50" >#80000000</color >
+	<color name = "co_opacity_70" >#B3000000</color >
+	<color name = "co_opacity_80" >#CC000000</color >
 
-    <!-- 主题通用颜色 -->
-	<color name = "co_status_bar_bg">#df4b4b</color>
-	<color name = "co_tool_bar_bg">#f85454</color>
-	<color name = "co_tool_bar_item_bg">#d54848</color>
-	<color name = "co_search_bar_hint">#F7A5A5</color>
+	<!-- 主题通用颜色 -->
+	<color name = "co_status_bar_bg" >#df4b4b</color >
+	<color name = "co_tool_bar_bg" >#f85454</color >
+	<color name = "co_tool_bar_item_bg" >#d54848</color >
+	<color name = "co_search_bar_hint" >#F7A5A5</color >
 
-	<color name = "co_common_bg">#e7e7e7</color>
-	<color name = "co_index_module_header">#333333</color>
-	<color name = "co_index_module_text">#888888</color>
-	<color name = "co_index_module_add_text">#ff8543</color>
-	<color name = "co_index_module_icon_gift_bg">#ffaa17</color>
-	<color name = "co_divider_bg">#dcdcdc</color>
-	<color name = "co_stroke_bg">#e4e4e4</color>
+	<color name = "co_common_bg" >#e7e7e7</color >
+	<color name = "co_common_setting_bg" >#F1F1F1</color >
+	<color name = "co_common_thin_text" >#888888</color >
 
-	<color name = "co_btn_red">#f85454</color>
-	<color name = "co_btn_green">#20c585</color>
-	<color name = "co_btn_orange">#ffaa17</color>
-	<color name = "co_btn_grey">#c9c9c9</color>
+	<color name = "co_index_module_header" >#333333</color >
+	<color name = "co_index_module_add_text" >#ff8543</color >
+	<color name = "co_index_module_icon_gift_bg" >#ffaa17</color >
+	<color name = "co_divider_bg" >#dcdcdc</color >
+	<color name = "co_stroke_bg" >#e4e4e4</color >
 
-	<color name = "co_dialog_title">#20C585</color>
+	<color name = "co_btn_red" >#f85454</color >
+	<color name = "co_btn_green" >#20c585</color >
+	<color name = "co_btn_orange" >#ffaa17</color >
+	<color name = "co_btn_grey" >#c9c9c9</color >
 
-	<color name = "co_tabs_indicator_common_bg">#ffaa17</color>
-	<color name = "co_tabs_common_bg">#F85454</color>
-	<color name = "co_tabs_common_text_unchecked">#FFD2D2</color>
+	<color name = "co_dialog_title" >#20C585</color >
+
+	<color name = "co_tabs_indicator_common_bg" >#ffaa17</color >
+	<color name = "co_tabs_common_bg" >#F85454</color >
+	<color name = "co_tabs_common_text_unchecked" >#FFD2D2</color >
 
 	<!-- 主页面 -->
-	<color name="co_title_bar_bg" >#74684957</color>
-	<color name = "co_title_bar_tv_bg">#FFFFFF</color>
+	<color name = "co_title_bar_bg" >#74684957</color >
+	<color name = "co_title_bar_tv_bg" >#FFFFFF</color >
 
-    <!-- 设置 - 我的礼包 -->
-    <color name="co_gift_code_bg">#F0F0F0</color>
+	<!-- 设置 - 我的礼包 -->
+	<color name = "co_gift_code_bg" >#F0F0F0</color >
 
-    <color name="co_tab_index_text_normal">#BBBBBB</color>
-    <color name="co_tab_index_text_selected">#F85454</color>
-    <color name="co_tab_index_bg">#f7f7f7</color>
+	<color name = "co_tab_index_text_normal" >#BBBBBB</color >
+	<color name = "co_tab_index_text_selected" >#F85454</color >
+	<color name = "co_tab_index_bg" >#f7f7f7</color >
 
-</resources>
+	<!-- 设置 - 积分任务 -->
+	<color name = "co_get_green" >#26C687</color >
+	<color name = "co_lost_red" >#F85454</color >
+</resources >

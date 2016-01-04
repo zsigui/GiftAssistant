@@ -38,4 +38,20 @@
     <string name="st_tabs_game_hot">热门游戏</string>
     <string name="st_tabs_game_week">本周热榜</string>
     <string name="st_tabs_game_feature">期待榜</string>
+
+	<!-- 设置 - 意见反馈 -->
+	<string name="st_feedback_type_title">反馈类型(必选)</string>
+	<string name="st_feedback_type_function">功能/礼包问题</string>
+	<string name="st_feedback_type_pay">充值/消费问题</string>
+	<string name="st_feedback_type_other">其他问题</string>
+	<string name="st_feedback_content_title">反馈内容(必填)</string>
+	<string name="st_feedback_content_hint">您反馈的内容对我们很重要噢！（500字以内）</string>
+	<string name="st_feedback_phone_title">联系方式</string>
+	<string name="st_feedback_phone_hint">您的QQ号/手机号</string>
+	<string name="st_feedback_btn">提交反馈</string>
+
+	<!-- 关于 -->
+	<string name="st_about_update">检查更新</string>
+	<string name="st_about_update_text">当前已是最新版本 〉</string>
+	<string name="st_about_qq">官方QQ群</string>
 </resources>
