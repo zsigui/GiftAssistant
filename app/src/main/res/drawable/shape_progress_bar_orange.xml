@@ -8,7 +8,7 @@
                 android:bottomRightRadius="4dp"
                 android:topLeftRadius="4dp"
                 android:topRightRadius="4dp"/>
-            <solid android:color="#c9c9c9"/>
+            <solid android:color="@color/co_btn_grey"/>
         </shape>
     </item>
     <!-- progress -->
@@ -34,7 +34,7 @@
                     android:bottomRightRadius="4dp"
                     android:topLeftRadius="4dp"
                     android:topRightRadius="4dp"/>
-                <solid android:color="#c9c9c9"/>
+                <solid android:color="@color/co_btn_grey"/>
             </shape>
         </clip>
     </item>

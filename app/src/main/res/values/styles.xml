@@ -4,7 +4,7 @@
 	<!-- Base application theme. -->
 	<!-- <style name = "AppTheme" parent = "Theme.AppCompat.Light.NoActionBar" > -->
 	<style name = "AppTheme" parent = "MaterialDrawerTheme.Light" >
-		<item name = "colorPrimary" >@color/co_tool_bar_bg</item >
+		<item name = "colorPrimary" >@color/co_common_app_main_bg</item >
 		<item name = "colorPrimaryDark" >@color/co_status_bar_bg</item >
 		<item name = "colorAccent" >@color/co_tool_bar_item_bg</item >
 
@@ -61,7 +61,7 @@
 	</style >
 
 	<style name = "ToolbarStyle" >
-		<item name = "android:background" >@color/co_tool_bar_bg</item >
+		<item name = "android:background" >@color/co_common_app_main_bg</item >
 	</style >
 
 	<style name = "ToolbarNavigationButtonStyle" parent = "Widget.AppCompat.Toolbar.Button.Navigation" >
@@ -120,6 +120,10 @@
 		<item name = "android:clickable" >true</item >
 	</style >
 
+	<style name = "IndexModuleTitleLayout.Bigger" >
+		<item name = "android:layout_height" >@dimen/di_module_bigger_height</item >
+	</style >
+
 	<style name = "IndexListItemLayout" >
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >wrap_content</item >
@@ -142,7 +146,7 @@
 	<style name = "DefaultTextView.Detail" >
 		<item name = "android:gravity" >left|center_vertical</item >
 		<item name = "android:layout_width" >match_parent</item >
-		<item name = "android:textColor" >@color/co_common_thin_text</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:textSize" >13sp</item >
 	</style >
 
@@ -155,10 +159,22 @@
 		<item name = "android:layout_marginBottom" >15dp</item >
 	</style >
 
+	<style name = "DefaultTextView.NormalBtn" >
+		<item name = "android:layout_width" >wrap_content</item >
+		<item name = "android:layout_height" >@dimen/di_btn_height</item >
+		<item name = "android:textColor" >@color/co_white</item >
+	</style >
+
+	<style name = "DefaultTextView.BiggerBtn" >
+		<item name = "android:layout_width" >wrap_content</item >
+		<item name = "android:layout_height" >@dimen/di_btn_bigger_height</item >
+		<item name = "android:textColor" >@color/co_white</item >
+	</style >
+
 	<style name = "DefaultTextView.More" >
 		<item name = "android:layout_alignParentRight" >true</item >
 		<item name = "android:textSize" >12sp</item >
-		<item name = "android:textColor" >@color/co_common_thin_text</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:layout_centerVertical" >true</item >
 		<item name = "android:drawableRight" >@drawable/ic_more</item >
 		<item name = "android:drawablePadding" >6dp</item >
@@ -167,20 +183,20 @@
 
 	<style name = "DefaultTextView.Header" >
 		<item name = "android:gravity" >left|center_vertical</item >
-		<item name = "android:textColor" >@color/co_index_module_header</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
 		<item name = "android:layout_centerVertical" >true</item >
 	</style >
 
 	<style name = "DefaultTextView.Text" >
 		<item name = "android:textSize" >12sp</item >
-		<item name = "android:textColor" >@color/co_common_thin_text</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:layout_centerVertical" >true</item >
 		<item name = "android:text" >@string/st_index_gift_all</item >
 	</style >
 
 	<style name = "DefaultTextView.Text.Note" >
 		<item name = "android:textSize" >10sp</item >
-		<item name = "android:textColor" >@color/co_common_thin_text</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:layout_centerVertical" >true</item >
 	</style >
 
@@ -250,7 +266,7 @@
 	<!-- 意见反馈 -->
 	<style name = "DefaultRadioButton.FeedBack" >
 		<item name = "android:textSize" >14sp</item >
-		<item name = "android:textColor" >@color/co_black</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
 		<item name = "android:background" >@color/co_white</item >
 		<item name = "android:button" >@null</item >
 		<item name = "android:drawableLeft" >@drawable/ic_toolbar_gift</item >
@@ -262,12 +278,11 @@
 
 	<style name = "DefaultTextView.FeedBack" >
 		<item name = "android:layout_width" >match_parent</item >
+		<item name = "android:layout_height">@dimen/di_module_bigger_height</item>
 		<item name = "android:gravity" >left|center_vertical</item >
 		<item name = "android:paddingLeft" >12dp</item >
-		<item name = "android:paddingTop" >12dp</item >
-		<item name = "android:paddingBottom" >12dp</item >
-		<item name = "android:textColor" >@color/co_common_thin_text</item >
-		<item name = "android:background" >@color/co_common_setting_bg</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
+		<item name = "android:background" >@color/co_common_content_bg</item >
 	</style >
 
 	<style name = "DefaultTextView.FeedBackContent" >
@@ -275,9 +290,22 @@
 		<item name = "android:layout_height">120dp</item>
 		<item name = "android:gravity" >left</item >
 		<item name = "android:singleLine" >false</item >
-		<item name = "android:textColor" >@color/co_black</item >
-		<item name = "android:textColorHint" >@color/co_common_thin_text</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
+		<item name = "android:textColorHint" >@color/co_common_text_second</item >
 		<item name = "android:background" >@color/co_transparent</item >
 		<item name = "android:paddingBottom">10dp</item>
 	</style >
+
+	<!-- 我的钱包 -->
+	<style name = "DefaultTextView.WalletMoney">
+		<item name = "android:textColor">@color/co_white</item>
+		<item name = "android:textSize">24sp</item>
+		<item name = "android:paddingTop">8dp</item>
+		<item name = "android:shadowDx">1</item>
+		<item name = "android:shadowDy">3</item>
+		<item name = "android:shadowRadius">1</item>
+		<item name = "android:shadowColor">@color/co_opacity_30</item>
+		<item name = "android:textStyle">bold</item>
+		<item name = "android:typeface">monospace</item>
+	</style>
 </resources >

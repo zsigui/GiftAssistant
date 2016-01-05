@@ -76,4 +76,59 @@ public class NetUrl {
 	 * 游戏详情
 	 */
 	public static final String GAME_GET_DETAIL = "default";
+
+	/**
+	 * 用户退出
+	 */
+	public static final String USER_LOGOUT = "api/account/logout_account";
+
+	/**
+	 * 更新Session
+	 */
+	public static final String USER_UPDATE_SESSION = "default";
+
+	/**
+	 * 手机登录-第一步
+	 */
+	public static final String USER_PHONE_LOGIN_FIRST = "api/account/get_phone_verification_code_for_login";
+
+	/**
+	 * 手机登录-第二步
+	 */
+	public static final String USER_PHONE_LOGIN_SECOND = "api/account/login_account_by_phone_verification_code";
+
+	/**
+	 * 偶玩账号登录
+	 */
+	public static final String USER_OUWAN_LOGIN = "api/account/login_account_by_ouwan";
+
+	/**
+	 * 获取用户个人信息
+	 */
+	public static final String USER_GET_INFO = "defaul";
+
+	/**
+	 * 修改用户昵称
+	 */
+	public static final String USER_MODIFY_NICK = "api/account/modify_account_nick";
+
+	/**
+	 * 修改绑定手机-第一步
+	 */
+	public static final String USER_MODIFY_PHONE_FIRST = "api/account/modify_account_bind_mobile_step_1";
+
+	/**
+	 * 修改绑定手机-第二步
+	 */
+	public static final String USER_MODIFY_PHONE_SECOND = "api/account/modify_account_bind_mobile_step_2";
+
+	/**
+	 * 修改绑定手机-第三歩
+	 */
+	public static final String USER_MODIFY_PHONE_THIRD = "api/account/modify_account_bind_mobile_step_3";
+
+	/**
+	 * 修改绑定手机-第四步
+	 */
+	public static final String USER_MODIFY_PHONE_FOUR = "api/account/modify_account_bind_mobile_step_4";
 }

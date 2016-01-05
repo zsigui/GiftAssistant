@@ -91,7 +91,7 @@
 			android:background = "@color/co_transparent"
 			android:gravity = "center" >
 
-		<TextView
+		<com.oplay.giftassistant.ui.widget.button.GiftButton
 				android:id = "@+id/btn_send"
 				style = "@style/DefaultTextView"
 				android:layout_height = "@dimen/di_btn_height"

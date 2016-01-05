@@ -4,20 +4,19 @@
               android:orientation = "vertical"
               android:layout_width = "match_parent"
               android:layout_height = "match_parent"
-              android:background = "@color/co_common_setting_bg" >
+              android:background = "@color/co_common_content_bg" >
 
 	<LinearLayout
 			android:layout_width = "match_parent"
-			android:gravity="center"
+			android:gravity = "center"
 			android:layout_height = "200dp"
-			android:orientation="vertical">
+			android:orientation = "vertical" >
 
 		<com.makeramen.roundedimageview.RoundedImageView
 				android:id = "@+id/iv_icon"
-				android:layout_width="90dp"
-				android:layout_height="90dp"
-				android:scaleType="centerCrop"
-				android:layout_paddingTop="10dp"
+				android:layout_width = "90dp"
+				android:layout_height = "90dp"
+				android:scaleType = "centerCrop"
 				app:riv_border_color = "@color/co_stroke_bg"
 				app:riv_border_width = "@dimen/di_common_icon_border_size"
 				app:riv_corner_radius = "@dimen/di_common_icon_diameter_radius"
@@ -25,49 +24,49 @@
 				app:riv_oval = "false" />
 
 		<TextView
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:textColor="@color/co_common_thin_text"
-				android:layout_marginTop="15dp"
-				android:text="礼包酷V1.0"/>
+				android:layout_height = "wrap_content"
+				android:layout_width = "wrap_content"
+				android:textColor = "@color/co_common_text_second"
+				android:layout_marginTop = "15dp"
+				android:text = "礼包酷V1.0" />
 
 	</LinearLayout >
 
 	<RelativeLayout
-			android:id="@+id/rl_update"
-			style="@style/IndexModuleTitleLayout"
-			android:background="@drawable/selector_white_module"
-			android:clickable="true">
+			android:id = "@+id/rl_update"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:background = "@drawable/selector_white_module"
+			android:clickable = "true" >
 
 		<TextView
-				style="@style/DefaultTextView.Header"
-				android:text="@string/st_about_update"/>
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_about_update" />
 
 		<TextView
-				style="@style/DefaultTextView.Text"
-				android:layout_alignParentRight="true"
-				android:textSize="14sp"
-				android:text="@string/st_about_update_text"/>
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:textSize = "14sp"
+				android:text = "@string/st_about_update_text" />
 
-	</RelativeLayout>
+	</RelativeLayout >
 
 	<RelativeLayout
-			android:id="@+id/rl_qq"
-			style="@style/IndexModuleTitleLayout"
-			android:background="@drawable/selector_white_module"
-			android:layout_marginTop="1dp"
-			android:clickable="true">
+			android:id = "@+id/rl_qq"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:background = "@drawable/selector_white_module"
+			android:layout_marginTop = "1dp"
+			android:clickable = "true" >
 
 		<TextView
-				style="@style/DefaultTextView.Header"
-				android:text="@string/st_about_qq"/>
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_about_qq" />
 
 		<TextView
-				style="@style/DefaultTextView.Text"
-				android:layout_alignParentRight="true"
-				android:paddingRight="10dp"
-				android:text="〉"/>
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:textSize = "14sp"
+				android:text = "445477 〉" />
 
-	</RelativeLayout>
+	</RelativeLayout >
 
 </LinearLayout >

@@ -1,57 +1,76 @@
-<resources>
-    <string name="app_name">GiftAssistant</string>
-    <string name="action_settings">Settings</string>
+<resources >
+	<string name = "app_name" >GiftAssistant</string >
+	<string name = "action_settings" >Settings</string >
 
-    <!-- ToolBar -->
-    <string name="toolbar_title">默认</string>
-    <!-- -->
-    <string name="err_setting">去设置</string>
-    <!--礼包 -->
-    <string name="st_search_hint">搜索游戏和礼包</string>
-    <string name="st_search_history_clear">清空所有搜索记录</string>
-    <!-- 礼包状态 -->
-    <string name="st_gift_or" >或</string>
-    <string name="st_gift_finished" >已结束</string>
-    <string name="st_gift_wait_search" >坐等淘号</string>
-    <string name="st_gift_search" >淘号</string>
-    <string name="st_gift_wait_seize" >坐等抢号</string>
-    <string name="st_gift_seize" >抢号</string>
+	<!-- ToolBar -->
+	<string name = "toolbar_title" >默认</string >
+	<!-- -->
+	<string name = "err_setting" >去设置</string >
+	<!--礼包 -->
+	<string name = "st_search_hint" >搜索游戏和礼包</string >
+	<string name = "st_search_history_clear" >清空所有搜索记录</string >
+	<!-- 礼包状态 -->
+	<string name = "st_gift_or" >或</string >
+	<string name = "st_gift_finished" >已结束</string >
+	<string name = "st_gift_wait_search" >坐等淘号</string >
+	<string name = "st_gift_search" >淘号</string >
+	<string name = "st_gift_wait_seize" >坐等抢号</string >
+	<string name = "st_gift_seize" >抢号</string >
 	<!-- 礼包详情 -->
-	<string name="st_gift_consume">消耗</string>
-	<string name="st_gift_content">▌礼包内容</string>
-	<string name="st_gift_deadline">▌礼包使用期限</string>
-	<string name="st_gift_note">▌礼包兑换方式</string>
-	<string name="st_gift_hint">▌特别说明</string>
-    <string name="st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回积分或者偶玩豆，请理解虚拟物品的特殊性！</string>
+	<string name = "st_gift_consume" >消耗</string >
+	<string name = "st_gift_content" >▌礼包内容</string >
+	<string name = "st_gift_deadline" >▌礼包使用期限</string >
+	<string name = "st_gift_note" >▌礼包兑换方式</string >
+	<string name = "st_gift_hint" >▌特别说明</string >
+	<string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回积分或者偶玩豆，请理解虚拟物品的特殊性！</string >
 	<!-- 游戏状态 -->
-    <string name="st_game_download" >下载</string>
 
 
-    <string name="st_tabs_home_gift">礼包</string>
-    <string name="st_tabs_index_game">游戏</string>
+	<string name = "st_tabs_home_gift" >礼包</string >
+	<string name = "st_tabs_index_game" >游戏</string >
 
-    <string name="st_index_gift_all">全部</string>
-    <string name="st_index_gift_like">猜你喜欢</string>
-    <string name="st_index_gift_limit">今日限量</string>
-    <string name="st_index_gift_new">新鲜出炉</string>
+	<string name = "st_index_gift_all" >全部</string >
+	<string name = "st_index_gift_like" >猜你喜欢</string >
+	<string name = "st_index_gift_limit" >今日限量</string >
+	<string name = "st_index_gift_new" >新鲜出炉</string >
 
-    <string name="st_tabs_game_hot">热门游戏</string>
-    <string name="st_tabs_game_week">本周热榜</string>
-    <string name="st_tabs_game_feature">期待榜</string>
+	<string name = "st_tabs_game_hot" >热门游戏</string >
+	<string name = "st_tabs_game_week" >本周热榜</string >
+	<string name = "st_tabs_game_feature" >期待榜</string >
 
 	<!-- 设置 - 意见反馈 -->
-	<string name="st_feedback_type_title">反馈类型(必选)</string>
-	<string name="st_feedback_type_function">功能/礼包问题</string>
-	<string name="st_feedback_type_pay">充值/消费问题</string>
-	<string name="st_feedback_type_other">其他问题</string>
-	<string name="st_feedback_content_title">反馈内容(必填)</string>
-	<string name="st_feedback_content_hint">您反馈的内容对我们很重要噢！（500字以内）</string>
-	<string name="st_feedback_phone_title">联系方式</string>
-	<string name="st_feedback_phone_hint">您的QQ号/手机号</string>
-	<string name="st_feedback_btn">提交反馈</string>
+	<string name = "st_feedback_type_title" >反馈类型(必选)</string >
+	<string name = "st_feedback_type_function" >功能/礼包问题</string >
+	<string name = "st_feedback_type_pay" >充值/消费问题</string >
+	<string name = "st_feedback_type_other" >其他问题</string >
+	<string name = "st_feedback_content_title" >反馈内容(必填)</string >
+	<string name = "st_feedback_content_hint" >您反馈的内容对我们很重要噢！（500字以内）</string >
+	<string name = "st_feedback_phone_title" >联系方式</string >
+	<string name = "st_feedback_phone_hint" >您的QQ号/手机号</string >
+	<string name = "st_feedback_btn" >提交反馈</string >
 
-	<!-- 关于 -->
-	<string name="st_about_update">检查更新</string>
-	<string name="st_about_update_text">当前已是最新版本 〉</string>
-	<string name="st_about_qq">官方QQ群</string>
-</resources>
+	<!-- 设置 - 关于 -->
+	<string name = "st_about_update" >检查更新</string >
+	<string name = "st_about_update_text" >当前已是最新版本 〉</string >
+	<string name = "st_about_qq" >官方QQ群</string >
+
+	<!-- 设置 - 我的钱包 -->
+	<string name = "st_wallet_title">我的钱包</string>
+	<string name = "st_score_title" >积分余额</string >
+	<string name = "st_bean_title" >偶玩豆余额</string >
+	<string name = "st_score_detail" >积分明细</string >
+	<string name = "st_bean_detail" >偶玩豆明细</string >
+	<string name = "st_wallet_get_score" >免费赚积分</string >
+	<string name = "st_wallet_get_bean" >充值偶玩豆</string >
+
+	<!-- 下载状态 -->
+	<string name = "st_game_download">下载</string>
+	<string name = "st_game_pause">暂停</string>
+	<string name = "st_game_continue">继续</string>
+	<string name = "st_game_retry">重试</string>
+	<string name = "st_game_install">安装</string>
+	<string name = "st_game_open">打开</string>
+	<string name = "st_game_update">更新</string>
+
+
+</resources >

@@ -12,7 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.SPConfig;
-import com.oplay.giftassistant.config.account.AccountManager;
+import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.model.MobileInfoModel;
 import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
@@ -141,6 +141,8 @@ public class SplashActivity extends BaseAppCompatActivity {
 			}
 		}
 		AccountManager.getInstance().setUser(user);
+		// 每次登录请求一次更新用户状态和数据
+		AccountManager.getInstance().updateUserSession();
 
 		// 从服务器获取一些显示配置,存入SP,获取不到从SP取或者默认显示
 		mApp.setAllowDownload(true);

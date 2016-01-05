@@ -66,14 +66,14 @@
 				android:id = "@+id/tv_phone"
 				style = "@style/DefaultTextView.FeedBack"
 				android:background = "@color/co_white"
-				android:textColorHint = "@color/co_common_thin_text"
+				android:textColorHint = "@color/co_common_text_second"
 				android:textColor = "@color/co_black"
 				android:hint = "@string/st_feedback_phone_hint" />
 
 		<LinearLayout
 				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
-				android:background = "@color/co_common_setting_bg"
+				android:background = "@color/co_common_content_bg"
 				android:gravity = "center" >
 
 			<TextView

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android = "http://schemas.android.com/apk/res/android" >
+
+	<item android:drawable = "@drawable/shape_progress_bar_download_grey" android:state_enabled = "false" />
+	<item android:drawable = "@drawable/shape_progress_bar_download_green" android:state_enabled = "true" />
+</selector >

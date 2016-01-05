@@ -33,7 +33,7 @@ public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> {
 					Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
 		} else {
 			bgaViewHolderHelper.setText(R.id.tv_play,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f</font>在玩",
+					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
 							(float) o.playCount / 10000)));
 		}
 		if (o.newCount > 0) {

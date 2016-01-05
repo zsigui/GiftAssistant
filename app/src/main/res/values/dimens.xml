@@ -47,6 +47,8 @@
 	<dimen name = "di_btn_bigger_height" >40dp</dimen>
 
 
+	<dimen name = "di_module_bigger_height" >48dp</dimen >
+
 	<!-- 主页-礼包页面 -->
 	<dimen name = "di_module_icon_diameter">80dp</dimen>
 
@@ -65,6 +67,8 @@
 	<dimen name = "di_game_icon_margin">2dp</dimen>
 
     <!-- 个人设置 页面 -->
+	<!-- 我的钱包 -->
+	<dimen name = "di_wallet_header_height">113dp</dimen>
 
 	<!-- ToolBar -->
 	<dimen name = "di_search_item_history" >45dp</dimen >

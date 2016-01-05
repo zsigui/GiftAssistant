@@ -32,10 +32,6 @@ public class DetailActivity extends BaseAppCompatActivity {
     public static final String KEY_DETAIL_NAME = "key_detail_name";
 
     private NetErrorFragment mNetErrorFragment;
-    // 0 礼包详情
-    // 1 今日限量礼包
-    // 2 新鲜出炉礼包
-    // 3 猜你喜欢
     private int detailId;
     private String detailName;
 
@@ -191,10 +187,5 @@ public class DetailActivity extends BaseAppCompatActivity {
     private void displayGiftDetailUI(IndexGiftNew data) {
         replaceFrag(R.id.fl_container, GiftDetailFragment.newInstance(data),
                 GiftDetailFragment.class.getSimpleName());
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

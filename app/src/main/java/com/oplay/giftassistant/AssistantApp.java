@@ -42,11 +42,16 @@ public class AssistantApp extends Application {
     private Retrofit mRetrofit;
 	private Gson mGson;
 
-    // 是否下载完成自动安装
-    private boolean mShouldAutoInstall = false;
     // 是否安装完成自动删除
     private boolean mShouldAutoDeleteApk = false;
-    private boolean mIsAutoMsgToast = false;
+	// 是否自动检查版本更新
+	private boolean mShouldAutoCheckUpdate = true;
+	// 是否推送消息
+	private boolean mShouldPushMsg = true;
+
+	// 以下暂无
+    // 是否下载完成自动安装
+    private boolean mShouldAutoInstall = false;
     // 是否开启省流模式
     private boolean mIsSaveFlow = false;
     // 是否启用下载完成提示音
@@ -121,6 +126,7 @@ public class AssistantApp extends Application {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_APP, "drawer uri = " + uri.getPath());
 				}
+				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				ImageLoader.getInstance().displayImage(uri.getPath(), imageView, Global.IMAGE_OPTIONS);
 			}
 
@@ -164,7 +170,24 @@ public class AssistantApp extends Application {
         }
     }
 
-    public boolean isShouldAutoInstall() {
+
+	public boolean isShouldAutoCheckUpdate() {
+		return mShouldAutoCheckUpdate;
+	}
+
+	public void setShouldAutoCheckUpdate(boolean shouldAutoCheckUpdate) {
+		mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
+	}
+
+	public boolean isShouldPushMsg() {
+		return mShouldPushMsg;
+	}
+
+	public void setShouldPushMsg(boolean shouldPushMsg) {
+		mShouldPushMsg = shouldPushMsg;
+	}
+
+	public boolean isShouldAutoInstall() {
         return mShouldAutoInstall;
     }
 
@@ -180,13 +203,6 @@ public class AssistantApp extends Application {
         mShouldAutoDeleteApk = shouldAutoDeleteApk;
     }
 
-    public boolean isAutoMsgToast() {
-        return mIsAutoMsgToast;
-    }
-
-    public void setIsAutoMsgToast(boolean isAutoMsgToast) {
-        mIsAutoMsgToast = isAutoMsgToast;
-    }
 
     public boolean isSaveFlow() {
         return mIsSaveFlow;

@@ -3,7 +3,7 @@
     <!--<style name = "AppBaseTheme" parent = "Theme.AppCompat.Light.NoActionBar" >-->
 	<style name = "AppBaseTheme" parent="MaterialDrawerTheme.Light" >
         <!-- set the tool bar and status bar background -->
-        <item name="colorPrimary">@color/co_tool_bar_bg</item>
+        <item name="colorPrimary">@color/co_common_app_main_bg</item>
         <item name="colorPrimaryDark">@color/co_status_bar_bg</item>
         <item name="colorAccent">@color/co_tool_bar_item_bg</item>
 

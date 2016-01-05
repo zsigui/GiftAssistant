@@ -23,6 +23,7 @@ import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.activity.DetailActivity;
+import com.oplay.giftassistant.ui.widget.button.GiftButton;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
@@ -285,7 +286,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		ImageView ivIcon;
 		TextView tvTitle;
 		TextView tvContent;
-		TextView btnSend;
+		GiftButton btnSend;
 		TextView tvScore;
 		TextView tvOr;
 		TextView tvBean;

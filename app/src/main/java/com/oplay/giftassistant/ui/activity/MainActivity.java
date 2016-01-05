@@ -21,7 +21,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.account.AccountManager;
+import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -35,6 +35,15 @@ import com.oplay.giftassistant.util.ToastUtil;
  * @date 2015/12/13
  */
 public class MainActivity extends BaseAppCompatActivity {
+
+	private static final int ID_SETTING = 0;
+	private static final int ID_TASK = 1;
+	private static final int ID_WALLET = 2;
+	private static final int ID_GIFTS = 3;
+	private static final int ID_DOWNLOAD = 4;
+	private static final int ID_ABOUT = 5;
+	private static final int ID_FEEDBACK = 6;
+
 
 	private long mLastClickTime = 0;
 	// 底部Tabs
@@ -88,13 +97,30 @@ public class MainActivity extends BaseAppCompatActivity {
 		}
 		mDrawerHeader = new AccountHeaderBuilder()
 				.withActivity(this)
-				.withHeaderBackground(R.color.co_tool_bar_bg)
+				.withHeaderBackground(R.color.co_common_app_main_bg)
 				.addProfiles(profile)
+				.withProfileImagesClickable(true)
+				.withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
+					@Override
+					public boolean onProfileImageClick(View view, IProfile iProfile, boolean b) {
+						if (AccountManager.getInstance().isLogin()) {
+							ToastUtil.showShort("已经登录，跳转个人信息页面");
+						} else {
+							ToastUtil.showShort("未登录，跳转登录页面");
+						}
+						return true;
+					}
+
+					@Override
+					public boolean onProfileImageLongClick(View view, IProfile iProfile, boolean b) {
+						return false;
+					}
+				})
 				.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 					@Override
 					public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
-						// 切换
-						return false;
+
+						return true;
 					}
 				})
 				.withSavedInstance(savedInstanceState)
@@ -106,13 +132,21 @@ public class MainActivity extends BaseAppCompatActivity {
 				.withHasStableIds(true)
 				.withAccountHeader(mDrawerHeader)
 				.addDrawerItems(
-						new PrimaryDrawerItem().withName("我的礼包").withSelectable(true).withIdentifier(1).withIcon
+						new PrimaryDrawerItem().withName("我的礼包").withSelectable(true).withIdentifier(ID_GIFTS).withIcon
 								(GoogleMaterial.Icon.gmd_ac_unit),
-						new PrimaryDrawerItem().withName("个人设置").withSelectable(true).withIdentifier(2).withIcon
+						new PrimaryDrawerItem().withName("个人设置").withSelectable(true).withIdentifier(ID_SETTING).withIcon
 								(GoogleMaterial.Icon.gmd_account_balance),
 						new DividerDrawerItem(),
-						new PrimaryDrawerItem().withName("意见反馈").withSelectable(true).withIdentifier(3).withIcon
-								(GoogleMaterial.Icon.gmd_feedback))
+						new PrimaryDrawerItem().withName("意见反馈").withSelectable(true).withIdentifier(ID_FEEDBACK).withIcon
+								(GoogleMaterial.Icon.gmd_feedback),
+						new PrimaryDrawerItem().withName("我的钱包").withSelectable(true).withIdentifier(ID_WALLET).withIcon
+								(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("下载管理").withSelectable(true).withIdentifier(ID_DOWNLOAD).withIcon
+								(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("积分任务").withSelectable(true).withIdentifier(ID_TASK).withIcon
+								(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("关于礼包酷").withSelectable(true).withIdentifier(ID_ABOUT).withIcon
+								(GoogleMaterial.Icon.gmd_settings_input_svideo))
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
@@ -123,14 +157,26 @@ public class MainActivity extends BaseAppCompatActivity {
 								return false;
 							}
 							switch (drawerItem.getIdentifier()) {
-								case 1:
+								case ID_GIFTS:
 									ToastUtil.showShort("跳转 我的礼包 界面");
 									break;
-								case 2:
+								case ID_SETTING:
 									ToastUtil.showShort("跳转 个人设置 界面");
 									break;
-								case 3:
+								case ID_FEEDBACK:
 									ToastUtil.showShort("跳转 意见反馈 界面");
+									break;
+								case ID_ABOUT:
+									ToastUtil.showShort("跳转 关于 界面");
+									break;
+								case ID_TASK:
+									ToastUtil.showShort("跳转 积分任务 界面");
+									break;
+								case ID_WALLET:
+									ToastUtil.showShort("跳转 我的钱包 界面");
+									break;
+								case ID_DOWNLOAD:
+									ToastUtil.showShort("跳转 下载管理 界面");
 									break;
 							}
 							return true;

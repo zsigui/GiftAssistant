@@ -10,5 +10,5 @@
         android:left="5dp"
         android:right="5dp"
         android:top="3dp"/>
-    <solid android:color="@color/co_index_module_icon_gift_bg"/>
+    <solid android:color="@color/co_common_app_second_bg_orange"/>
 </shape>

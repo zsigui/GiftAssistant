@@ -74,9 +74,4 @@ public class UserModel implements Serializable{
 	@SerializedName("gift_count")
 	public int giftCount;
 
-	/**
-	 * session超时时间
-	 */
-	@SerializedName("session_expire")
-	public long sessionExpired;
 }

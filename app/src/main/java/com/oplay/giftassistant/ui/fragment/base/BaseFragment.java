@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.IntentUtil;
@@ -20,7 +21,8 @@ import com.oplay.giftassistant.util.IntentUtil;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public abstract class BaseFragment extends BaseFragmentLog {
+public abstract class BaseFragment extends BaseFragmentLog implements ObserverManager.OnDownloadListener,
+		ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener, ObserverManager.MsgUpdateListener{
     protected String TAG;
     protected AssistantApp mApp;
     protected View mContentView;
@@ -182,19 +184,40 @@ public abstract class BaseFragment extends BaseFragmentLog {
 		Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
 	}
 
-	protected void showLoadingDialog() {
-		mActivity.showLoadingDialog();
-	}
-
-	protected void dismissLoadingDialog() {
-		if (isVisible()) {
-			mActivity.hideLoadingDialog();
-		}
-	}
 
     @Override
     public void onDestroyView() {
         mCanShowUI = false;
         super.onDestroyView();
     }
+
+	@Override
+	public void onGiftUpdate() {
+
+	}
+
+	@Override
+	public void onMsgUpdate() {
+
+	}
+
+	@Override
+	public void onDownloadStart(String url) {
+
+	}
+
+	@Override
+	public void onProgressUpdate(String url, float downloadSize, float totalSize, float rate) {
+
+	}
+
+	@Override
+	public void onDownloadFinished(String url) {
+
+	}
+
+	@Override
+	public void onUserUpdate() {
+
+	}
 }

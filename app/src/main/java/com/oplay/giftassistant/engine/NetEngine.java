@@ -1,14 +1,20 @@
 package com.oplay.giftassistant.engine;
 
 import com.oplay.giftassistant.config.NetUrl;
+import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
+import com.oplay.giftassistant.model.data.req.ReqLogin;
+import com.oplay.giftassistant.model.data.req.ReqModifyAvater;
+import com.oplay.giftassistant.model.data.req.ReqModifyNick;
+import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
+import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
@@ -76,4 +82,40 @@ public interface NetEngine {
 	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainGameList(@Url String url, @Body
 	JsonReqBase<ReqPageData> reqData);
 
+
+	/* ---------------- 用户接口  ---------------- */
+
+	/**
+	 * 注销登录
+	 */
+	@POST(NetUrl.USER_LOGOUT)
+	Call<Void> logout(@Body JsonReqBase<Object> reqData);
+
+	/**
+	 * 更新session，保持登录态情况下，每次启动APP进行验证
+	 */
+	@POST(NetUrl.USER_UPDATE_SESSION)
+	Call<JsonRespBase<UserModel>> updateSession(@Body JsonReqBase<Object> reqData);
+
+	/**
+	 * 修改手机号码，需要进行多歩
+	 */
+	@POST
+	Call<JsonRespBase<ModifyPhone>> modifyPhone(@Url String url, @Body JsonReqBase<ReqModifyPhone> reqData);
+
+	/**
+	 * 登录，分为 手机号码登录 和 偶玩账号登录
+	 */
+	@POST
+	Call<JsonRespBase<UserModel>> login(@Url String url, @Body JsonReqBase<ReqLogin> reqData);
+
+	/**
+	 * 修改用户昵称
+	 */
+	Call<JsonReqBase<UserModel>> modifyUserNick(@Body JsonReqBase<ReqModifyNick> reqData);
+
+	/**
+	 * 修改用户头像
+	 */
+	Call<JsonReqBase<UserModel>> modifyUserAvater(@Body JsonReqBase<ReqModifyAvater> reqData);
 }

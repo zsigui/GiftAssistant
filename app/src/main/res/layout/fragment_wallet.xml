@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_wallet_header_height"
+			android:orientation = "horizontal"
+			android:gravity="center_vertical"
+			android:background = "@color/co_common_app_main_bg" >
+
+		<LinearLayout
+				android:layout_width = "0dp"
+				android:layout_weight = "1"
+				android:layout_height = "wrap_content"
+				android:gravity="center_horizontal"
+				android:orientation = "vertical" >
+
+			<TextView
+					android:id = "@+id/tv_score_title"
+					style = "@style/DefaultTextView"
+					android:drawableLeft = "@drawable/ic_toolbar_gift"
+					android:textColor = "@color/co_wallet_header_text"
+					android:text = "@string/st_score_title"
+					android:drawablePadding = "4dp" />
+
+			<TextView
+					android:id = "@+id/tv_score"
+					style = "@style/DefaultTextView.WalletMoney"
+					android:text = "600" />
+		</LinearLayout >
+
+		<LinearLayout
+				android:layout_width = "0dp"
+				android:layout_weight = "1"
+				android:layout_height = "wrap_content"
+				android:gravity="center_horizontal"
+				android:orientation = "vertical" >
+
+			<TextView
+					android:id = "@+id/tv_bean_title"
+					style = "@style/DefaultTextView"
+					android:drawableLeft = "@drawable/ic_toolbar_gift"
+					android:textColor = "@color/co_wallet_header_text"
+					android:text = "@string/st_bean_title"
+					android:drawablePadding = "4dp" />
+
+			<TextView
+					android:id = "@+id/tv_bean"
+					style = "@style/DefaultTextView.WalletMoney"
+					android:text = "500" />
+		</LinearLayout >
+	</LinearLayout >
+
+	<View
+			android:layout_width = "match_parent"
+			android:layout_height = "12dp"
+			android:background="@color/co_common_content_bg"/>
+
+	<RelativeLayout
+			android:id="@+id/rl_clear"
+			style="@style/IndexModuleTitleLayout.Bigger"
+			android:background="@drawable/selector_white_module"
+			android:clickable="true">
+
+		<TextView
+				style="@style/DefaultTextView.Header"
+				android:text="@string/st_score_detail"/>
+
+		<TextView
+				style="@style/DefaultTextView.Text"
+				android:layout_alignParentRight="true"
+				android:paddingRight="10dp"
+				android:textStyle="bold"
+				android:text="〉"/>
+
+	</RelativeLayout>
+	<View style="@style/DividerView"/>
+
+	<RelativeLayout
+			android:id="@+id/rl_feedback"
+			style="@style/IndexModuleTitleLayout.Bigger"
+			android:background="@drawable/selector_white_module"
+			android:clickable="true">
+
+		<TextView
+				style="@style/DefaultTextView.Header"
+				android:text="@string/st_bean_detail"/>
+
+		<TextView
+				style="@style/DefaultTextView.Text"
+				android:layout_alignParentRight="true"
+				android:paddingRight="10dp"
+				android:textStyle="bold"
+				android:text="〉"/>
+
+	</RelativeLayout>
+
+	<View
+			android:layout_width = "match_parent"
+			android:layout_height = "0dp"
+			android:layout_weight="1"
+			android:background="@color/co_common_content_bg"/>
+	<LinearLayout
+			android:background="@color/co_white"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:paddingTop="10dp"
+			android:paddingBottom="10dp"
+			android:gravity="center"
+			android:orientation="horizontal">
+		<TextView
+				android:id = "@+id/btn_get_score"
+				style = "@style/DefaultTextView.BiggerBtn"
+				android:layout_width = "135dp"
+				android:layout_marginRight="20dp"
+				android:background = "@drawable/selector_btn_bigger_green_border"
+				android:text = "@string/st_wallet_get_score"
+				android:textColor = "@color/co_btn_green" />
+		<TextView
+				android:id = "@+id/btn_get_bean"
+				style = "@style/DefaultTextView.BiggerBtn"
+				android:layout_width = "135dp"
+				android:background = "@drawable/selector_btn_bigger_green"
+				android:text = "@string/st_wallet_get_bean" />
+
+	</LinearLayout >
+
+</LinearLayout >

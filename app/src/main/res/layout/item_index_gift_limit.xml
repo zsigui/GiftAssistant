@@ -27,7 +27,7 @@
         android:layout_below="@+id/tv_game_name"
         android:layout_marginTop="1dp"
         android:text="VIP礼包"
-        android:textColor="@color/co_index_module_icon_gift_bg"/>
+        android:textColor="@color/co_common_app_second_bg_orange"/>
 
     <TextView
         android:id="@+id/tv_new_text"

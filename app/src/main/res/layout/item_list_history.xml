@@ -20,7 +20,7 @@
 			android:id = "@+id/tv_search_text"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
-            android:textColor="@color/co_index_module_header"
+            android:textColor="@color/co_common_text_main"
 			android:paddingLeft = "10dp"
 			android:paddingRight = "10dp"
 			android:textSize = "18sp" />

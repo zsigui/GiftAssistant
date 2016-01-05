@@ -19,7 +19,7 @@
             android:paddingLeft="16dp"
             android:paddingTop="10dp"
             android:text="提示"
-            android:textColor="@color/co_dialog_title"/>
+            android:textColor="@color/co_common_app_second_bg_green"/>
 
         <View style="@style/DividerView"/>
 

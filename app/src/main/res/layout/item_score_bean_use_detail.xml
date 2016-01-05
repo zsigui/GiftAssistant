@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:orientation = "horizontal"
               android:layout_width = "match_parent"
-              android:layout_height = "wrap_content"
+              android:layout_height = "66dp"
               android:background = "@color/co_white"
               android:gravity="center_vertical"
-              android:padding = "15dp" >
+              android:paddingRight = "@dimen/di_index_hoz_module_icon_gap"
+              android:paddingLeft = "@dimen/di_index_hoz_module_margin_left" >
 
 	<LinearLayout
 			android:orientation = "vertical"
