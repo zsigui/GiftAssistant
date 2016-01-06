@@ -55,7 +55,7 @@ public class GiftDetailFragment extends BaseFragment{
         tvOr = getViewById(R.id.tv_or);
         tvBean = getViewById(R.id.tv_bean);
         tvRemain = getViewById(R.id.tv_new);
-        tvContent = getViewById(R.id.tv_content);
+        tvContent = getViewById(R.id.et_content);
         tvDeadline = getViewById(R.id.tv_deadline);
         tvNote = getViewById(R.id.tv_note);
         btnSend = getViewById(R.id.btn_send);

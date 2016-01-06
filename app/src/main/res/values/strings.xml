@@ -38,7 +38,11 @@
 	<string name = "st_tabs_game_week" >本周热榜</string >
 	<string name = "st_tabs_game_feature" >期待榜</string >
 
+	<!-- 设置 -->
+	<string name = "st_setting_title">设置</string>
+
 	<!-- 设置 - 意见反馈 -->
+	<string name = "st_feedback_title">意见反馈</string>
 	<string name = "st_feedback_type_title" >反馈类型(必选)</string >
 	<string name = "st_feedback_type_function" >功能/礼包问题</string >
 	<string name = "st_feedback_type_pay" >充值/消费问题</string >
@@ -50,8 +54,10 @@
 	<string name = "st_feedback_btn" >提交反馈</string >
 
 	<!-- 设置 - 关于 -->
+	<string name = "st_about_title">关于礼包酷</string>
 	<string name = "st_about_update" >检查更新</string >
-	<string name = "st_about_update_text" >当前已是最新版本 〉</string >
+	<string name = "st_about_update_text" >当前已是最新版本</string >
+	<string name = "st_about_wait_update_text" >待更新版本版本: %s</string >
 	<string name = "st_about_qq" >官方QQ群</string >
 
 	<!-- 设置 - 我的钱包 -->
@@ -63,7 +69,12 @@
 	<string name = "st_wallet_get_score" >免费赚积分</string >
 	<string name = "st_wallet_get_bean" >充值偶玩豆</string >
 
-	<!-- 下载状态 -->
+	<!-- 设置 - 积分任务 -->
+	<string name = "st_task_title">积分任务</string>
+	<string name = "st_task_btn_to_do">去完成</string>
+	<string name = "st_task_btn_finished">已完成</string>
+
+	<!-- 设置 - 下载状态 -->
 	<string name = "st_game_download">下载</string>
 	<string name = "st_game_pause">暂停</string>
 	<string name = "st_game_continue">继续</string>
@@ -72,5 +83,13 @@
 	<string name = "st_game_open">打开</string>
 	<string name = "st_game_update">更新</string>
 
+	<!-- 设置 - 我的礼包 -->
+	<string name = "st_my_gift_title">我的礼包</string>
 
+
+	<!-- 弹窗 -->
+	<string name= "st_dialog_hint_title">提示</string>
+	<string name= "st_btn_confirm">确认</string>
+	<string name= "st_btn_cancel">取消</string>
+	<string name= "st_content_clear_cache">确认要清除缓存吗?</string>
 </resources >

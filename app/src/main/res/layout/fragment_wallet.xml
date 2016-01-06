@@ -4,6 +4,8 @@
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 
+	<include layout="@layout/view_toolbar_for_fullscreen" />
+
 	<LinearLayout
 			android:layout_width = "match_parent"
 			android:layout_height = "@dimen/di_wallet_header_height"
@@ -54,15 +56,10 @@
 		</LinearLayout >
 	</LinearLayout >
 
-	<View
-			android:layout_width = "match_parent"
-			android:layout_height = "12dp"
-			android:background="@color/co_common_content_bg"/>
-
 	<RelativeLayout
-			android:id="@+id/rl_clear"
+			android:id="@+id/rl_score_detail"
 			style="@style/IndexModuleTitleLayout.Bigger"
-			android:background="@drawable/selector_white_module"
+			android:layout_marginTop="12dp"
 			android:clickable="true">
 
 		<TextView
@@ -80,9 +77,8 @@
 	<View style="@style/DividerView"/>
 
 	<RelativeLayout
-			android:id="@+id/rl_feedback"
+			android:id="@+id/rl_bean_detail"
 			style="@style/IndexModuleTitleLayout.Bigger"
-			android:background="@drawable/selector_white_module"
 			android:clickable="true">
 
 		<TextView
@@ -101,8 +97,7 @@
 	<View
 			android:layout_width = "match_parent"
 			android:layout_height = "0dp"
-			android:layout_weight="1"
-			android:background="@color/co_common_content_bg"/>
+			android:layout_weight="1"/>
 	<LinearLayout
 			android:background="@color/co_white"
 			android:layout_width = "match_parent"

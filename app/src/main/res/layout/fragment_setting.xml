@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:orientation = "vertical"
-              android:background = "@color/co_common_content_bg"
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 
-	<include layout = "@layout/toolbar_simple_with_back" />
+	<include layout="@layout/view_toolbar_for_fullscreen" />
 
 	<RelativeLayout
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -26,7 +24,6 @@
 
 	<RelativeLayout
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -41,7 +38,6 @@
 
 	<RelativeLayout
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:layout_marginTop = "@dimen/di_index_module_gap"
 			android:clickable = "true" >
 
@@ -59,7 +55,6 @@
 
 	<RelativeLayout
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -100,7 +95,6 @@
 	<RelativeLayout
 			android:id = "@+id/rl_feedback"
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -121,7 +115,6 @@
 	<RelativeLayout
 			android:id = "@+id/rl_about"
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -140,7 +133,6 @@
 	<RelativeLayout
 			android:id = "@+id/rl_logout"
 			style = "@style/IndexModuleTitleLayout.Bigger"
-			android:background = "@drawable/selector_white_module"
 			android:layout_marginTop = "@dimen/di_index_module_gap"
 			android:visibility = "gone"
 			android:clickable = "true" >

@@ -21,6 +21,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
@@ -132,54 +133,53 @@ public class MainActivity extends BaseAppCompatActivity {
 				.withHasStableIds(true)
 				.withAccountHeader(mDrawerHeader)
 				.addDrawerItems(
-						new PrimaryDrawerItem().withName("我的礼包").withSelectable(true).withIdentifier(ID_GIFTS).withIcon
-								(GoogleMaterial.Icon.gmd_ac_unit),
-						new PrimaryDrawerItem().withName("个人设置").withSelectable(true).withIdentifier(ID_SETTING).withIcon
-								(GoogleMaterial.Icon.gmd_account_balance),
+						new PrimaryDrawerItem().withName("我的礼包").withSelectable(false).withIdentifier(ID_GIFTS)
+								.withIcon
+										(GoogleMaterial.Icon.gmd_ac_unit),
+						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(ID_SETTING)
+								.withIcon
+										(GoogleMaterial.Icon.gmd_account_balance),
 						new DividerDrawerItem(),
-						new PrimaryDrawerItem().withName("意见反馈").withSelectable(true).withIdentifier(ID_FEEDBACK).withIcon
-								(GoogleMaterial.Icon.gmd_feedback),
-						new PrimaryDrawerItem().withName("我的钱包").withSelectable(true).withIdentifier(ID_WALLET).withIcon
-								(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("下载管理").withSelectable(true).withIdentifier(ID_DOWNLOAD).withIcon
-								(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("积分任务").withSelectable(true).withIdentifier(ID_TASK).withIcon
-								(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("关于礼包酷").withSelectable(true).withIdentifier(ID_ABOUT).withIcon
+						new PrimaryDrawerItem().withName("我的钱包").withSelectable(false).withIdentifier(ID_WALLET)
+								.withIcon
+										(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("下载管理").withSelectable(false).withIdentifier(ID_DOWNLOAD)
+								.withIcon
+										(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("积分任务").withSelectable(false).withIdentifier(ID_TASK).withIcon
 								(GoogleMaterial.Icon.gmd_settings_input_svideo))
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
 						if (drawerItem != null) {
-							if (drawerItem.getIdentifier() != 3 && !AccountManager.getInstance().isLogin()) {
-								ToastUtil.showShort("跳转登录界面");
-								// close drawer
+							/*if (drawerItem.getIdentifier() != ID_SETTING
+									&& drawerItem.getIdentifier() != ID_DOWNLOAD
+									&& !AccountManager.getInstance().isLogin()) {
+								Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+								intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
+								startActivity(intent);
 								return false;
-							}
+							}*/
+							Intent intent = new Intent(MainActivity.this, SettingActivity.class);
 							switch (drawerItem.getIdentifier()) {
 								case ID_GIFTS:
-									ToastUtil.showShort("跳转 我的礼包 界面");
+									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
 									break;
 								case ID_SETTING:
-									ToastUtil.showShort("跳转 个人设置 界面");
-									break;
-								case ID_FEEDBACK:
-									ToastUtil.showShort("跳转 意见反馈 界面");
-									break;
-								case ID_ABOUT:
-									ToastUtil.showShort("跳转 关于 界面");
+									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SETTING);
 									break;
 								case ID_TASK:
-									ToastUtil.showShort("跳转 积分任务 界面");
+									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SCORE_TASK);
 									break;
 								case ID_WALLET:
-									ToastUtil.showShort("跳转 我的钱包 界面");
+									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
 									break;
 								case ID_DOWNLOAD:
-									ToastUtil.showShort("跳转 下载管理 界面");
+									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
 									break;
 							}
-							return true;
+							startActivity(intent);
+							return false;
 						}
 						// don't close drawer
 						return true;

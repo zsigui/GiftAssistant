@@ -3,7 +3,7 @@
 
 	<color name = "co_transparent" >#00000000</color >
 	<color name = "co_white" >#FFFFFF</color >
-	<color name = "co_white_pressed" >#999999</color >
+	<color name = "co_white_pressed" >#E1E1E1</color >
 	<color name = "co_black" >#000000</color >
 
 	<color name = "co_opacity_05" >#0D000000</color >

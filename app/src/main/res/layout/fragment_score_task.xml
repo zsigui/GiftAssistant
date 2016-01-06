@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
 		android:orientation = "vertical" >
+
+	<include layout = "@layout/view_toolbar_for_fullscreen" />
 
 	<LinearLayout
 			android:orientation = "horizontal"
@@ -26,11 +29,183 @@
 
 	</LinearLayout >
 
-	<com.andexert.expandablelayout.library.ExpandableLayoutListView
-
-			android:id = "@+id/lv_container"
+	<ScrollView
+			xmlns:android = "http://schemas.android.com/apk/res/android"
 			android:layout_width = "match_parent"
-			android:layout_height = "match_parent"
-			android:divider = "@color/co_divider_bg"
-			android:dividerHeight = "1dp" />
+			android:layout_height = "wrap_content" >
+
+
+		<LinearLayout
+				android:orientation = "vertical"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content" >
+
+			<TextView
+					android:id="@+id/tv_new"
+					style = "@style/DefaultTextView.FeedBack"
+					android:text = "新手任务(0/3)" />
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="设置头像"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						android:id="@+id/tv_set_avator"
+						style = "@style/DefaultTextView.Score"
+						android:text="+5"/>
+
+				<TextView
+						android:id = "@+id/btn_set_avator"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="设置昵称"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						android:id="@+id/tv_set_nick"
+						style = "@style/DefaultTextView.Score"
+						android:text="+5"/>
+
+				<TextView
+						android:id = "@+id/btn_set_nick"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						android:id="@+id/tv_bind"
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="绑定偶玩账号"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						style = "@style/DefaultTextView.Score"
+						android:text="+20"/>
+
+				<TextView
+						android:id = "@+id/btn_bind"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+			<TextView
+					android:id="@+id/tv_day"
+					style = "@style/DefaultTextView.FeedBack"
+					android:text = "每日任务(0/3)" />
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="每日登录"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						style = "@style/DefaultTextView.Score"
+						android:text="+5"/>
+
+				<TextView
+						android:id = "@+id/btn_day_login"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						android:id="@+id/tv_con_login"
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="连续7天登录(2/7)"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						style = "@style/DefaultTextView.Score"
+						android:text="+70"/>
+
+				<TextView
+						android:id = "@+id/btn_con_login"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+			<LinearLayout
+					style="@style/IndexModuleLayout.Score" >
+
+				<com.makeramen.roundedimageview.RoundedImageView
+						style = "@style/DefaultImageView.Score"
+						android:src = "@drawable/test_code"
+						app:riv_oval = "true" />
+
+				<TextView
+						android:id="@+id/tv_share_normal"
+						style = "@style/DefaultTextView.Header"
+						android:layout_width = "0dp"
+						android:layout_weight = "1"
+						android:text="分享普通礼包"/>
+
+				<com.oplay.giftassistant.ui.widget.ScoreText
+						style = "@style/DefaultTextView.Score"
+						android:text="+10"/>
+
+				<TextView
+						android:id = "@+id/btn_share_normal"
+						style = "@style/DefaultTextView.NormalBtn"
+						android:background="@drawable/selector_btn_red"
+						android:text = "@string/st_task_btn_to_do"/>
+			</LinearLayout >
+
+		</LinearLayout >
+	</ScrollView >
+
 </LinearLayout >

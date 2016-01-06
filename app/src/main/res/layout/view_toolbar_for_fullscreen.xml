@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "@dimen/di_tool_bar_bg_height"
+		android:gravity = "center_vertical"
+		android:orientation="horizontal"
+		android:background="@color/co_common_app_main_bg">
+
+	<ImageView
+			android:id = "@+id/iv_bar_back"
+			android:layout_width = "@dimen/di_tool_bar_bg_height"
+			android:layout_height = "@dimen/di_tool_bar_bg_height"
+			android:background = "@drawable/selector_opacity_05"
+			android:scaleType = "centerInside"
+			android:src = "@drawable/ic_bar_back" />
+
+
+	<TextView
+			android:id = "@+id/tv_bar_title"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_tool_bar_bg_height"
+			android:gravity = "center_vertical"
+			android:singleLine = "true"
+			android:textColor = "@android:color/white"
+			android:textSize = "@dimen/di_tool_bar_title_size" />
+
+
+</LinearLayout >

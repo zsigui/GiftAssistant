@@ -60,6 +60,7 @@ public class DetailActivity extends BaseAppCompatActivity {
     }
 
     public void loadData() {
+	    mNeedWorkCallback = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -75,7 +76,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         if (mNetErrorFragment == null) {
             mNetErrorFragment = NetErrorFragment.newInstance();
         }
-        replaceFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+        replaceFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName(), false);
     }
 
 
@@ -186,6 +187,6 @@ public class DetailActivity extends BaseAppCompatActivity {
 
     private void displayGiftDetailUI(IndexGiftNew data) {
         replaceFrag(R.id.fl_container, GiftDetailFragment.newInstance(data),
-                GiftDetailFragment.class.getSimpleName());
+                GiftDetailFragment.class.getSimpleName(), false);
     }
 }

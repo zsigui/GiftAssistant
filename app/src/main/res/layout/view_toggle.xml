@@ -6,8 +6,8 @@
     android:layout_centerVertical="true"
     android:layout_width="50dp"
     app:tb_onColor="#20C585"
-    app:tb_offColor="#FFFFFF"
+    app:tb_offColor="#C9C9C9"
     app:tb_spotColor="#FFFFFF"
     app:tb_offBorderColor="#C9C9C9"
-    app:tb_borderWidth="1dp"
+    app:tb_borderWidth="0.5dp"
     android:layout_height="20dp" />

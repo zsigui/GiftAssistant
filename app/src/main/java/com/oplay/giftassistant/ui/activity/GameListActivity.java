@@ -11,7 +11,7 @@ import com.oplay.giftassistant.ui.fragment.game.GameListFragment;
 /**
  * Created by zsigui on 16-1-4.
  */
-public class GameListActivity extends BaseAppCompatActivity{
+public class GameListActivity extends BaseAppCompatActivity {
 
 	public static String KEY_TYPE = "key_type";
 	public static String KEY_SEARCH = "key_search";
@@ -57,13 +57,14 @@ public class GameListActivity extends BaseAppCompatActivity{
 	protected void processLogic() {
 		switch (type) {
 			case TYPE_GAME_NEW:
-				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_NEW, mSearchKey));
+				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_NEW, mSearchKey), false);
 				break;
 			case TYPE_GAME_HOT:
-				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_HOT, mSearchKey));
+				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_HOT, mSearchKey), false);
 				break;
 			case TYPE_GAME_SEARCH:
-				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_SEARCH, mSearchKey));
+				replaceFrag(R.id.fl_container, GameListFragment.newInstance(NetUrl.GAME_GET_SEARCH, mSearchKey),
+						false);
 				break;
 		}
 	}

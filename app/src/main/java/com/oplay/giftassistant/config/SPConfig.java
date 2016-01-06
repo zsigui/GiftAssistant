@@ -28,4 +28,14 @@ public class SPConfig {
     /* 获取搜索记录 */
     public static final String SP_SEARCH_FILE = "12341bbedf";
     public static final String KEY_SEARCH_INDEX = "index_search_history";
+
+	/* 全局设置记录 */
+	public static final String SP_APP_CONFIG_FILE = "aaaa";
+	public static final String KEY_AUTO_CHECK_UPDATE = "auto_check_update";
+	public static final String KEY_AUTO_DELETE_APK = "auto_delete_apk";
+	public static final String KEY_ACCEPT_PUSH = "auto_accept_push";
+	public static final String KEY_AUTO_INSTALL = "auto_install_apk";
+	public static final String KEY_IS_ALLOW_DOWNLOAD = "allow_download";
+	public static final String KEY_IS_SAVE_FLOW = "save_flow";
+	public static final String KEY_IS_PLAY_DOWNLOAD_COMPLETE = "play_sound_on_download_complete";
 }

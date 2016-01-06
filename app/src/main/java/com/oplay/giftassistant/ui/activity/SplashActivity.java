@@ -121,6 +121,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 			return;
 		}
 
+		mApp.initAppConfig();
 		// 初始化设备状态
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(getApplicationContext());
@@ -144,8 +145,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 
-		// 从服务器获取一些显示配置,存入SP,获取不到从SP取或者默认显示
-		mApp.setAllowDownload(true);
 
 		mApp.setGlobalInit(true);
 	}

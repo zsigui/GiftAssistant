@@ -25,8 +25,8 @@
 
 				<com.makeramen.roundedimageview.RoundedImageView
 						android:id = "@+id/iv_icon"
-						android:layout_width = "70dp"
-						android:layout_height = "70dp"
+						android:layout_width = "@dimen/di_module_icon_diameter"
+						android:layout_height = "@dimen/di_module_icon_diameter"
 						android:scaleType = "centerCrop"
 						android:src = "@drawable/test"
 						app:riv_border_color = "@color/co_stroke_bg"
@@ -115,7 +115,7 @@
 						android:text = "@string/st_gift_content" />
 
 				<TextView
-						android:id = "@+id/tv_content"
+						android:id = "@+id/et_content"
 						style = "@style/DefaultTextView.Detail"
 						android:singleLine = "false"
 						android:text = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠" />

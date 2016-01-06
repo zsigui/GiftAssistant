@@ -218,17 +218,17 @@ public class GiftListActivity extends BaseAppCompatActivity {
 
     private void displayGiftLikeUI(ArrayList<IndexGiftLike> data) {
         replaceFrag(R.id.fl_container, GiftLikeListFragment.newInstance(data),
-                GiftLikeListFragment.class.getSimpleName());
+                GiftLikeListFragment.class.getSimpleName(), false);
     }
 
     private void displayGiftLimitUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
         replaceFrag(R.id.fl_container, GiftMutilDayFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT_BY_PAGE),
-                GiftMutilDayFragment.class.getSimpleName());
+                GiftMutilDayFragment.class.getSimpleName(), false);
     }
 
     private void displayGiftNewUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
         replaceFrag(R.id.fl_container, GiftMutilDayFragment.newInstance(data, NetUrl.GIFT_GET_ALL_NEW_BY_PAGE),
-                GiftMutilDayFragment.class.getSimpleName());
+                GiftMutilDayFragment.class.getSimpleName(), false);
     }
 
     /**

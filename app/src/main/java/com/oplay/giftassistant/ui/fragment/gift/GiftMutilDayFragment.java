@@ -44,7 +44,7 @@ public class GiftMutilDayFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_gift_list_container);
+        setContentView(R.layout.fragment_vp_container);
         mPager = getViewById(R.id.vp_container);
         mTabLayout = getViewById(R.id.tab_layout);
     }

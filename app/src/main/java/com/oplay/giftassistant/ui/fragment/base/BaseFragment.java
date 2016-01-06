@@ -21,12 +21,13 @@ import com.oplay.giftassistant.util.IntentUtil;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public abstract class BaseFragment extends BaseFragmentLog implements ObserverManager.OnDownloadListener,
-		ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener, ObserverManager.MsgUpdateListener{
-    protected String TAG;
-    protected AssistantApp mApp;
-    protected View mContentView;
-    protected BaseAppCompatActivity mActivity;
+public abstract class BaseFragment extends BaseFragmentLog implements View.OnClickListener,
+		ObserverManager.OnDownloadListener, ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener,
+		ObserverManager.MsgUpdateListener {
+	protected String TAG;
+	protected AssistantApp mApp;
+	protected View mContentView;
+	protected BaseAppCompatActivity mActivity;
 	// 用于判断是否初始化结束
 	protected boolean mIsPrepared = false;
 	// 用于判断是否已经处于加载中
@@ -35,39 +36,39 @@ public abstract class BaseFragment extends BaseFragmentLog implements ObserverMa
 	protected boolean mCanShowUI = false;
 	// 用于避免重复加载
 	protected boolean mHasData = false;
-    // 封装加载和等待等页面的管理器对象
-    protected LoadAndRetryViewManager mViewManager;
+	// 封装加载和等待等页面的管理器对象
+	protected LoadAndRetryViewManager mViewManager;
 	private String mFragName;
 
-    protected LoadAndRetryViewManager.OnRetryListener mRetryListener =  new LoadAndRetryViewManager.OnRetryListener() {
-        @Override
-        public void onRetry(View retryView) {
-            View iv = getViewById(retryView, R.id.v_err);
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHasData = false;
-                    lazyLoad();
-                }
-            });
-            View tv = getViewById(retryView, R.id.v_wifi);
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    IntentUtil.judgeWifiSetting(getContext());
-                }
-            });
+	protected LoadAndRetryViewManager.OnRetryListener mRetryListener = new LoadAndRetryViewManager.OnRetryListener() {
+		@Override
+		public void onRetry(View retryView) {
+			View iv = getViewById(retryView, R.id.v_err);
+			iv.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mHasData = false;
+					lazyLoad();
+				}
+			});
+			View tv = getViewById(retryView, R.id.v_wifi);
+			tv.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					IntentUtil.judgeWifiSetting(getContext());
+				}
+			});
 
-        }
-    };
+		}
+	};
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        TAG = this.getClass().getSimpleName();
-        mApp = AssistantApp.getInstance();
-        mActivity = (BaseAppCompatActivity) context;
-    }
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		TAG = this.getClass().getSimpleName();
+		mApp = AssistantApp.getInstance();
+		mActivity = (BaseAppCompatActivity) context;
+	}
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -93,27 +94,27 @@ public abstract class BaseFragment extends BaseFragmentLog implements ObserverMa
 		return mContentView;
 	}
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (!mIsPrepared) {
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		if (!mIsPrepared) {
 
-            if (mViewManager != null) {
-                mViewManager.setOnRetryListener(mRetryListener);
-            }
-            setListener();
-            processLogic(savedInstanceState);
-        }
-        mIsPrepared = true;
-        lazyLoad();
-    }
+			if (mViewManager != null) {
+				mViewManager.setOnRetryListener(mRetryListener);
+			}
+			setListener();
+			processLogic(savedInstanceState);
+		}
+		mIsPrepared = true;
+		lazyLoad();
+	}
 
-    protected void initViewManger(@LayoutRes int layoutResID) {
-        mViewManager = LoadAndRetryViewManager.generate(getContext(), layoutResID);
-        mContentView = mViewManager.getContainer();
-    }
+	protected void initViewManger(@LayoutRes int layoutResID) {
+		mViewManager = LoadAndRetryViewManager.generate(getContext(), layoutResID);
+		mContentView = mViewManager.getContainer();
+	}
 
-    protected void setContentView(@LayoutRes int layoutResID) {
+	protected void setContentView(@LayoutRes int layoutResID) {
 		mContentView = LayoutInflater.from(mApp).inflate(layoutResID, null);
 	}
 
@@ -158,7 +159,10 @@ public abstract class BaseFragment extends BaseFragmentLog implements ObserverMa
 	/**
 	 * 当fragment不可见时，会调用该方法，可重载实现网络中断任务操作
 	 */
-	protected void onUserInvisible(){};
+	protected void onUserInvisible() {
+	}
+
+	;
 
 	/**
 	 * 查找View
@@ -169,27 +173,32 @@ public abstract class BaseFragment extends BaseFragmentLog implements ObserverMa
 	 */
 	@SuppressWarnings("unchecked")
 	protected <VT extends View> VT getViewById(@IdRes int id) {
-        if (mViewManager != null && mViewManager.getContentView() != null) {
-            return getViewById(mViewManager.getContentView(), id);
-        }
+		if (mViewManager != null && mViewManager.getContentView() != null) {
+			return getViewById(mViewManager.getContentView(), id);
+		}
 		return (VT) mContentView.findViewById(id);
 	}
 
-    @SuppressWarnings("unchecked")
-    protected <VT extends View> VT getViewById(View contentView, @IdRes int id) {
-        return (VT) contentView.findViewById(id);
-    }
+	@SuppressWarnings("unchecked")
+	protected <VT extends View> VT getViewById(View contentView, @IdRes int id) {
+		return (VT) contentView.findViewById(id);
+	}
 
 	protected void showToast(String text) {
 		Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
 	}
 
 
-    @Override
-    public void onDestroyView() {
-        mCanShowUI = false;
-        super.onDestroyView();
-    }
+	@Override
+	public void onDestroyView() {
+		mCanShowUI = false;
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onClick(View v) {
+
+	}
 
 	@Override
 	public void onGiftUpdate() {
