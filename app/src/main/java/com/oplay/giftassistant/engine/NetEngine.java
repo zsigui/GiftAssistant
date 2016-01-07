@@ -16,6 +16,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
+import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
@@ -112,10 +113,21 @@ public interface NetEngine {
 	/**
 	 * 修改用户昵称
 	 */
-	Call<JsonReqBase<UserModel>> modifyUserNick(@Body JsonReqBase<ReqModifyNick> reqData);
+	@POST(NetUrl.USER_MODIFY_NICK)
+	Call<JsonRespBase<UserModel>> modifyUserNick(@Body JsonReqBase<ReqModifyNick> reqData);
 
 	/**
 	 * 修改用户头像
 	 */
-	Call<JsonReqBase<UserModel>> modifyUserAvater(@Body JsonReqBase<ReqModifyAvater> reqData);
+	@POST(NetUrl.USER_MODIFY_AVATAR)
+	Call<JsonRespBase<UserModel>> modifyUserAvater(@Body JsonReqBase<ReqModifyAvater> reqData);
+
+
+	/* ---------------- 积分接口  ---------------- */
+
+	/**
+	 * 获取积分任务
+	 */
+	@POST(NetUrl.SCORE_GET_TASK)
+	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<Void> reqData);
 }

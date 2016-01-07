@@ -69,8 +69,8 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mRefreshLayout.endRefreshing();
 	}
 
-	protected void setLoadState(Object data, int isEndPage) {
-		if (isEndPage == 1 || data == null) {
+	protected void setLoadState(Object data, boolean isEndPage) {
+		if (isEndPage || data == null) {
 			// 无更多不再请求加载
 			mNoMoreLoad = true;
 			mRefreshLayout.setIsShowLoadingMoreView(false);

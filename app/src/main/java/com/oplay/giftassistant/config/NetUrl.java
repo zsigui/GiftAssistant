@@ -5,7 +5,7 @@ package com.oplay.giftassistant.config;
  */
 public class NetUrl {
 
-    public static final String URL_BASE = "http://172.16.3.59/";
+	public static final String URL_BASE = "http://172.16.3.59/";
 
 	/**
 	 * 礼包首页
@@ -20,22 +20,22 @@ public class NetUrl {
 	/**
 	 * 每日限量-全部
 	 */
-    public static final String GIFT_GET_ALL_LIMIT = "day_limit_list";
+	public static final String GIFT_GET_ALL_LIMIT = "day_limit_list";
 
 	/**
 	 * 每日限量-某日某页
 	 */
-    public static final String GIFT_GET_ALL_LIMIT_BY_PAGE = "day_limit_list_by_page";
+	public static final String GIFT_GET_ALL_LIMIT_BY_PAGE = "day_limit_list_by_page";
 
 	/**
 	 * 每日新增-全部
 	 */
-    public static final String GIFT_GET_ALL_NEW = "day_new_list";
+	public static final String GIFT_GET_ALL_NEW = "day_new_list";
 
 	/**
 	 * 每日新增-某日某页
 	 */
-    public static final String GIFT_GET_ALL_NEW_BY_PAGE = "day_new_list_by_page";
+	public static final String GIFT_GET_ALL_NEW_BY_PAGE = "day_new_list_by_page";
 
 	/**
 	 * 礼包详情
@@ -77,6 +77,8 @@ public class NetUrl {
 	 */
 	public static final String GAME_GET_DETAIL = "default";
 
+	/* 用户接口 */
+
 	/**
 	 * 用户退出
 	 */
@@ -85,7 +87,7 @@ public class NetUrl {
 	/**
 	 * 更新Session
 	 */
-	public static final String USER_UPDATE_SESSION = "default";
+	public static final String USER_UPDATE_SESSION = "api/account/change_login_session";
 
 	/**
 	 * 手机登录-第一步
@@ -113,6 +115,11 @@ public class NetUrl {
 	public static final String USER_MODIFY_NICK = "api/account/modify_account_nick";
 
 	/**
+	 * 修改用户头像
+	 */
+	public static final String USER_MODIFY_AVATAR = "defaul";
+
+	/**
 	 * 修改绑定手机-第一步
 	 */
 	public static final String USER_MODIFY_PHONE_FIRST = "api/account/modify_account_bind_mobile_step_1";
@@ -131,4 +138,28 @@ public class NetUrl {
 	 * 修改绑定手机-第四步
 	 */
 	public static final String USER_MODIFY_PHONE_FOUR = "api/account/modify_account_bind_mobile_step_4";
+
+	/**
+	 * 获取已抢礼包
+	 */
+	public static final String USER_GIFT_SEIZED = "default";
+
+	/**
+	 * 获取已淘礼包
+	 */
+	public static final String USER_GIFT_SEARCHED = "default";
+
+	/**
+	 * 获取已过期礼包
+	 */
+	public static final String USER_GIFT_OVERTIME = "default";
+
+
+
+	/* 积分接口 */
+
+	/**
+	 * 获取积分任务
+	 */
+	public static final String SCORE_GET_TASK = "api/mission/get_points_mission_list";
 }

@@ -10,12 +10,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class FeedBackFragment extends BaseFragment_FullScreen implements TextWatcher {
+public class FeedBackFragment extends BaseFragment_WithName implements TextWatcher {
 
 	private RadioButton rbFunction;
 	private RadioButton rbPay;
@@ -51,7 +51,7 @@ public class FeedBackFragment extends BaseFragment_FullScreen implements TextWat
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		setTitleBar(R.string.st_feedback_title);
+		//setTitleBar(R.string.st_feedback_title);
 	}
 
 	@Override

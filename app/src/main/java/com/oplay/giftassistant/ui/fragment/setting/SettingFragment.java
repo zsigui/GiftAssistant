@@ -13,7 +13,7 @@ import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.DecryptDataModel;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.widget.ToggleButton;
 import com.oplay.giftassistant.util.DataClearUtil;
@@ -27,7 +27,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-5.
  */
-public class SettingFragment extends BaseFragment_FullScreen implements View.OnClickListener {
+public class SettingFragment extends BaseFragment_WithName implements View.OnClickListener {
 
 	private ToggleButton mBtnPush;
 	private ToggleButton mBtnAutoDelete;
@@ -69,7 +69,7 @@ public class SettingFragment extends BaseFragment_FullScreen implements View.OnC
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		setTitleBar(R.string.st_setting_title);
+		//setTitleBar(R.string.st_setting_title);
 		if (mApp.isShouldPushMsg())
 			mBtnPush.toggleOn();
 		else
@@ -154,7 +154,7 @@ public class SettingFragment extends BaseFragment_FullScreen implements View.OnC
 
 					@Override
 					public void onConfirm() {
-						((BaseAppCompatActivity)getActivity()).showLoadingDialog();
+						((BaseAppCompatActivity) getActivity()).showLoadingDialog();
 						new Thread(new Runnable() {
 							@Override
 							public void run() {
@@ -162,8 +162,8 @@ public class SettingFragment extends BaseFragment_FullScreen implements View.OnC
 										Global.EXTERNAL_CACHE));
 								DataClearUtil.cleanExternalCache(getContext());
 								DataClearUtil.cleanInternalCache(getContext());
-								((BaseAppCompatActivity)getActivity()).hideLoadingDialog();
-								((BaseAppCompatActivity)getActivity()).showSuccessHint("清除缓存成功");
+								((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+								((BaseAppCompatActivity) getActivity()).showSuccessHint("清除缓存成功");
 							}
 						}).start();
 						dialog.dismiss();
@@ -172,14 +172,16 @@ public class SettingFragment extends BaseFragment_FullScreen implements View.OnC
 				dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 				break;
 			case R.id.rl_feedback:
-				((BaseAppCompatActivity) getActivity()).replaceFrag(R.id.fl_container, FeedBackFragment.newInstance());
+				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
+						.newInstance(), getResources().getString(R.string.st_feedback_title));
 				break;
 			case R.id.rl_about:
-				((BaseAppCompatActivity) getActivity()).replaceFrag(R.id.fl_container, AboutFragment.newInstance());
+				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, AboutFragment
+						.newInstance(), getResources().getString(R.string.st_about_title));
 				break;
 			case R.id.rl_logout:
 				// 调用登出接口，但不关心结果
-				new Thread(new Runnable() {
+				Global.THREAD_POOL.execute(new Runnable() {
 					@Override
 					public void run() {
 						Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
@@ -192,7 +194,7 @@ public class SettingFragment extends BaseFragment_FullScreen implements View.OnC
 							}
 						});
 					}
-				}).start();
+				});
 				AccountManager.getInstance().setUser(null);
 				break;
 		}

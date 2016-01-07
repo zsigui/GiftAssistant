@@ -21,6 +21,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.socks.library.KLog;
 
@@ -36,6 +37,8 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	protected AssistantApp mApp;
 	protected Toolbar mToolbar;
+	private TextView tvTitle;
+
 	private SweetAlertDialog mLoadingDialog;
 	protected boolean mNeedWorkCallback = false;
 	protected LoadingFragment mLoadingFragment;
@@ -99,19 +102,16 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	}
 
 	public void setBarTitle(@StringRes int res) {
-		if (mToolbar != null) {
-			TextView tv = getViewById(mToolbar, R.id.tv_bar_title);
-			if (tv != null) {
-				tv.setText(res);
-			}
-		}
+		setBarTitle(getResources().getString(res));
 	}
 
 	public void setBarTitle(String title) {
 		if (mToolbar != null) {
-			TextView tv = getViewById(mToolbar, R.id.tv_bar_title);
-			if (tv != null) {
-				tv.setText(title);
+			if (tvTitle == null) {
+				tvTitle = getViewById(mToolbar, R.id.tv_bar_title);
+			}
+			if (tvTitle != null) {
+				tvTitle.setText(title);
 			}
 		}
 	}
@@ -126,6 +126,12 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		if (v.getId() == R.id.iv_bar_back) {
 			popOrExit();
 		}
+	}
+
+	public void replaceFragWithTitle(@IdRes int id, BaseFragment_WithName newFrag, String title) {
+		newFrag.setTitleName(title);
+		replaceFrag(id, newFrag);
+		setBarTitle(title);
 	}
 
 	public void replaceFrag(@IdRes int id, Fragment newFrag) {
@@ -263,6 +269,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	public void popOrExit() {
 		if (!popFrag() && !isFinishing()) {
 			finish();
+		} else {
+			if (getTopFragment() instanceof BaseFragment_WithName) {
+				setBarTitle(((BaseFragment_WithName) getTopFragment()).getTitleName());
+			}
 		}
 	}
 

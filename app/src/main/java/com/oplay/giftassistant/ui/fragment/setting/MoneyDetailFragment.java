@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 
 /**
  *
@@ -12,10 +12,10 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
  *
  * Created by zsigui on 16-1-6.
  */
-public class MoneyDetailFragment extends BaseFragment_FullScreen {
+public class MoneyDetailFragment extends BaseFragment_WithName {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_webview_with_toolbar);
+		setContentView(R.layout.fragment_webview);
 	}
 
 	@Override
@@ -33,12 +33,7 @@ public class MoneyDetailFragment extends BaseFragment_FullScreen {
 			showToast("错误传递类型");
 			return;
 		}
-
-		if (type == KeyConfig.TYPE_ID_DETAIL_SCORE) {
-			setTitleBar(R.string.st_score_detail);
-		} else if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
-			setTitleBar(R.string.st_bean_detail);
-		}
+		// do something
 	}
 
 	@Override

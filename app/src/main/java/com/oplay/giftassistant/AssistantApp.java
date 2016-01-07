@@ -124,11 +124,8 @@ public class AssistantApp extends Application {
 		DrawerImageLoader.init(new AbstractDrawerImageLoader() {
 			@Override
 			public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_APP, "drawer uri = " + uri.getPath());
-				}
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				ImageLoader.getInstance().displayImage(uri.getPath(), imageView, Global.IMAGE_OPTIONS);
+				ImageLoader.getInstance().displayImage(uri.toString(), imageView, Global.IMAGE_OPTIONS);
 			}
 
 			@Override
@@ -138,7 +135,7 @@ public class AssistantApp extends Application {
 
 			@Override
 			public Drawable placeholder(Context ctx) {
-				return super.placeholder(ctx);
+				return ctx.getResources().getDrawable(R.drawable.ic_img_default);
 			}
 		});
 	}

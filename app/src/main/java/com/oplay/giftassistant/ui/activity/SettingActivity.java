@@ -1,8 +1,5 @@
 package com.oplay.giftassistant.ui.activity;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
-
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
@@ -22,13 +19,15 @@ import com.socks.library.KLog;
 public class SettingActivity extends BaseAppCompatActivity {
 
 	private int mType;
+
 	@Override
 	protected void initView() {
-		handleRedirect();
+		setContentView(R.layout.activity_common_with_back);
 	}
 
 	@Override
 	protected void processLogic() {
+		handleRedirect();
 	}
 
 	private void handleRedirect() {
@@ -49,23 +48,26 @@ public class SettingActivity extends BaseAppCompatActivity {
 			return;
 		}
 
-		setContentView(R.layout.activity_fullscreen);
-		switch (mType){
+		switch (mType) {
 			case KeyConfig.TYPE_ID_SETTING:
-				replaceFrag(R.id.fl_container, SettingFragment.newInstance());
+				replaceFragWithTitle(R.id.fl_container, SettingFragment.newInstance(), getResources().getString(R
+						.string.st_setting_title));
 				break;
 			case KeyConfig.TYPE_ID_WALLET:
-				replaceFrag(R.id.fl_container, WalletFragment.newInstance());
+				replaceFragWithTitle(R.id.fl_container, WalletFragment.newInstance(), getResources().getString(R
+						.string.st_wallet_title));
 				break;
 			case KeyConfig.TYPE_ID_DOWNLOAD:
-				replaceFrag(R.id.fl_container, DownloadFragment.newInstance());
+				replaceFragWithTitle(R.id.fl_container, DownloadFragment.newInstance(),
+						getResources().getString(R.string.st_download_title));
 				break;
 			case KeyConfig.TYPE_ID_SCORE_TASK:
-				replaceFrag(R.id.fl_container, TaskFragment.newInstance());
+				replaceFragWithTitle(R.id.fl_container, TaskFragment.newInstance(), getResources().getString(R.string
+						.st_task_title));
 				break;
 			case KeyConfig.TYPE_ID_MY_GIFT_CODE:
-				setContentView(R.layout.activity_common_with_back);
-				replaceFrag(R.id.fl_container, MyGiftFragment.newInstance());
+				replaceFragWithTitle(R.id.fl_container, MyGiftFragment.newInstance(),
+						getResources().getString(R.string.st_my_gift_title));
 				break;
 			default:
 				if (AppDebugConfig.IS_FRAG_DEBUG) {
@@ -75,14 +77,6 @@ public class SettingActivity extends BaseAppCompatActivity {
 		}
 	}
 
-
-	@Override
-	protected void initMenu(@NonNull Toolbar toolbar) {
-		super.initMenu(toolbar);
-		if (mType == KeyConfig.TYPE_ID_MY_GIFT_CODE) {
-			setBarTitle(R.string.st_my_gift_title);
-		}
-	}
 
 	@Override
 	public void popOrExit() {

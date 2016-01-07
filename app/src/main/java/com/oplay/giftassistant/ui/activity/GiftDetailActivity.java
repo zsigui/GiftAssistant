@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
+import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
@@ -25,7 +25,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-31.
  */
-public class DetailActivity extends BaseAppCompatActivity {
+public class GiftDetailActivity extends BaseAppCompatActivity {
 
 
     public static final String KEY_DETAIL_ID = "key_detail_id";
@@ -127,7 +127,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         ng1.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
         ng1.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
         ng1.name = "至尊礼包";
-        ng1.isLimit = 1;
+        ng1.isLimit = true;
         ng1.bean = 30;
         ng1.score = 3000;
         ng1.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
@@ -146,7 +146,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         ng2.priceType = GiftTypeUtil.PAY_TYPE_BEAN;
         ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
         ng2.name = "高级礼包";
-        ng2.isLimit = 1;
+        ng2.isLimit = true;
         ng2.bean = 30;
         ng2.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
         ng2.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
@@ -165,7 +165,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
         ng3.name = "高级礼包";
         ng3.useDeadline = "2015.12.09 9:30 ~ 2016.12.09 9:30";
-        ng3.isLimit = 0;
+        ng3.isLimit = false;
         ng3.score = 1500;
         ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
         ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;

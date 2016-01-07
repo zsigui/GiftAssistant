@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/co_transparent"
     android:paddingLeft="@dimen/di_index_hoz_module_margin_left"
     android:paddingRight="@dimen/di_index_hoz_module_margin_left">
 
@@ -37,7 +38,7 @@
         android:text="[暴打魏蜀吴]新手礼包"/>
 
     <TextView
-        android:id="@+id/tv_play"
+        android:id="@+id/tv_content"
         style="@style/DefaultTextView.Text"
         android:layout_width="match_parent"
         android:layout_below="@+id/tv_name"
@@ -48,9 +49,9 @@
         android:text="30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠"/>
 
     <TextView
-        android:id="@+id/tv_count"
+        android:id="@+id/tv_deadline"
         style="@style/DefaultTextView.Text"
-        android:layout_below="@+id/tv_play"
+        android:layout_below="@+id/tv_content"
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@+id/iv_icon"

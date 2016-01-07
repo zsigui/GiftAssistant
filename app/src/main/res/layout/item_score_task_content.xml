@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-              xmlns:app = "http://schemas.android.com/apk/res-auto"
-              android:orientation = "horizontal"
-              android:layout_width = "match_parent"
-              android:layout_height = "wrap_content"
-              android:gravity="center_vertical"
-              android:padding="16dp"
-              android:background = "@color/co_white" >
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		style = "@style/IndexModuleLayout.Score" >
 
 	<com.makeramen.roundedimageview.RoundedImageView
-			android:id = "@+id/iv_profile"
-			style = "@style/DefaultImageView.Icon"
-			android:layout_width = "@dimen/di_tool_bar_profile_diameter"
-			android:layout_height = "@dimen/di_tool_bar_profile_diameter"
-			android:layout_marginRight = "@dimen/di_tool_bar_profile_margin_right"
-			android:clickable = "true"
+			android:id="@+id/iv_icon"
+			style = "@style/DefaultImageView.Score"
 			android:src = "@drawable/test_code"
 			app:riv_oval = "true" />
+
 	<TextView
-			style="@style/DefaultTextView.Header"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:text="设置头像"/>
-	<CheckedTextView
-			style="@style/DefaultTextView.Header"
-			android:drawableLeft="@drawable/ic_score"
-			android:textColor="@color/co_get_green"
-			android:text="+5"/>
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "0dp"
+			android:layout_weight = "1"
+			android:text = "设置头像" />
+
+	<com.oplay.giftassistant.ui.widget.ScoreText
+			android:id = "@+id/st_score"
+			style = "@style/DefaultTextView.Score"
+			android:text = "+5" />
+
 	<TextView
-			android:id = "@+id/btn_send"
-			style = "@style/DefaultTextView"
-			android:layout_height = "@dimen/di_btn_height"
+			android:id = "@+id/btn_todo"
+			style = "@style/DefaultTextView.NormalBtn"
 			android:background = "@drawable/selector_btn_red"
-			android:layout_marginLeft="15dp"
-			android:text = "@string/st_gift_seize"
-			android:textColor = "@color/co_white" />
+			android:text = "@string/st_task_btn_to_do" />
 </LinearLayout >

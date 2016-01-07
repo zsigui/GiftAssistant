@@ -14,6 +14,8 @@ import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
 import com.litesuits.common.assist.Check;
+import com.oplay.giftassistant.config.AppDebugConfig;
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,10 +38,17 @@ public class PackageUtil {
 		List<String> appNames = new ArrayList<>();
 		List<PackageInfo> pInfos = PackageUtil.getInstalledPackages(context);
 		for (PackageInfo pInfo : pInfos) {
-			ApplicationInfo appInfo = pInfo.applicationInfo;
-			if (appInfo != null && !((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
-				// 有信息，且非系统应用
-				appNames.add(context.getPackageManager().getApplicationLabel(appInfo).toString());
+			try {
+				// try 捕捉可能的禁止获取信息导致的异常
+				ApplicationInfo appInfo = pInfo.applicationInfo;
+				if (appInfo != null && !((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
+					// 有信息，且非系统应用
+					appNames.add(context.getPackageManager().getApplicationLabel(appInfo).toString());
+				}
+			} catch (Throwable e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_UTIL, e);
+				}
 			}
 		}
 		return appNames;

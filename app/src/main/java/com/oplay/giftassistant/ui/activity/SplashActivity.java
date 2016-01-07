@@ -18,6 +18,7 @@ import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.util.CommonUtil;
 import com.oplay.giftassistant.util.SPUtil;
+import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -43,8 +44,14 @@ public class SplashActivity extends BaseAppCompatActivity {
 		public void run() {
 			long initDuration = System.currentTimeMillis() - mFirstInitTime;
 			long minSplashDuration = 1234;
-			long maxInitDuration = 2500;
-			if ((mApp.isGlobalInit() && initDuration > minSplashDuration) ||  initDuration > maxInitDuration) {
+			long maxInitDuration = 4000;
+			if (initDuration > maxInitDuration) {
+				ToastUtil.showShort("初始化失败");
+				mApp.exit();
+				SplashActivity.this.finish();
+				return;
+			}
+			if ((mApp.isGlobalInit() && initDuration > minSplashDuration)) {
 				judgeToMain();
 			} else {
 				doInit();
@@ -141,11 +148,29 @@ public class SplashActivity extends BaseAppCompatActivity {
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
+		user = initUser();
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
-		AccountManager.getInstance().updateUserSession();
+		// AccountManager.getInstance().updateUserSession();
 
 
 		mApp.setGlobalInit(true);
+	}
+
+	private UserModel initUser() {
+		// 创建测试用户
+		UserModel u = new UserModel();
+		u.username = "zsigui";
+		u.score = 150;
+		u.bean = 10;
+		u.giftCount = 1;
+		u.loginType = 1;
+		u.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
+		u.nick = "Jackie";
+		u.openId = 1200024455;
+		u.session = "ABBEF54787545F";
+		u.phone = "18826401111";
+		u.uid = 11124444;
+		return u;
 	}
 }

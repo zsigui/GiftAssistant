@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
+import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -77,7 +77,7 @@ public class GiftDetailFragment extends BaseFragment{
             IndexGiftNew gift = (IndexGiftNew) s;
             ImageLoader.getInstance().displayImage(gift.img, ivIcon, Global.IMAGE_OPTIONS);
             tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
-            if (gift.isLimit == 1) {
+            if (gift.isLimit) {
                 ivLimit.setVisibility(View.VISIBLE);
                 tvName.setPadding(DensityUtil.dip2px(getContext(), 4), 0, 0, 0);
             } else {

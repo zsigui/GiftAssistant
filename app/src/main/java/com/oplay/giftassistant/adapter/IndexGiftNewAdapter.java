@@ -19,10 +19,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
+import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.ui.activity.DetailActivity;
+import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
@@ -210,9 +210,9 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, DetailActivity.class);
-				intent.putExtra(DetailActivity.KEY_DETAIL_ID, gift.id);
-				intent.putExtra(DetailActivity.KEY_DETAIL_NAME, name);
+				Intent intent = new Intent(mContext, GiftDetailActivity.class);
+				intent.putExtra(GiftDetailActivity.KEY_DETAIL_ID, gift.id);
+				intent.putExtra(GiftDetailActivity.KEY_DETAIL_NAME, name);
 				mContext.startActivity(intent);
 			}
 		});

@@ -2,12 +2,12 @@ package com.oplay.giftassistant.ui.fragment.setting;
 
 import android.os.Bundle;
 
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class DownloadFragment extends BaseFragment_FullScreen {
+public class DownloadFragment extends BaseFragment_WithName {
 
 
 	public static DownloadFragment newInstance() {

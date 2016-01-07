@@ -4,9 +4,9 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 
 /**
- * Created by zsigui on 16-1-6.
+ * Created by zsigui on 16-1-7.
  */
-public class LoginActivity extends BaseAppCompatActivity {
+public class GameDetailActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 

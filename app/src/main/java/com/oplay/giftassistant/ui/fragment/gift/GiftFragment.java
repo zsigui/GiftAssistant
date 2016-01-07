@@ -17,7 +17,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
-import com.oplay.giftassistant.adapter.util.GiftTypeUtil;
+import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
@@ -334,7 +334,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
 		ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ngift.name = "至尊礼包";
-		ngift.isLimit = 1;
+		ngift.isLimit = true;
 		ngift.bean = 30;
 		ngift.score = 3000;
 		ngift.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
@@ -351,7 +351,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
 		ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 		ng2.name = "高级礼包";
-		ng2.isLimit = 0;
+		ng2.isLimit = false;
 		ng2.bean = 30;
 		ng2.score = 3000;
 		ng2.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
@@ -368,7 +368,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 		ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";
-		ng3.isLimit = 0;
+		ng3.isLimit = false;
 		ng3.score = 1500;
 		ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
 		ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;
@@ -397,7 +397,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 			ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 			ng.name = "普通礼包";
-			ng.isLimit = 0;
+			ng.isLimit = false;
 			ng.score = (int) (Math.random() * 100) * 10;
 			ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
 			ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;

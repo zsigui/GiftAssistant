@@ -10,6 +10,7 @@ import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
+import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
@@ -91,7 +92,8 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                 @Override
                                 public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
                                         retrofit) {
-                                    if (response != null && response.isSuccess()) {
+                                    if (response != null && response.isSuccess() &&
+		                                    response.body().getCode() == StatusCode.SUCCESS) {
                                         lazyLoadSuccessEnd();
                                         OneTypeDataList<IndexGameNew> backObj = response.body().getData();
                                         setLoadState(backObj.data, backObj.isEndPage);
@@ -136,7 +138,8 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                     @Override
                                     public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
                                             retrofit) {
-                                        if (response != null && response.isSuccess()) {
+                                        if (response != null && response.isSuccess() &&
+		                                        response.body().getCode() == StatusCode.SUCCESS) {
 	                                        moreLoadSuccessEnd();
                                             OneTypeDataList<IndexGameNew> backObj = response.body().getData();
                                             setLoadState(backObj.data, backObj.isEndPage);
@@ -196,7 +199,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
             obj.data.add(game);
         }
         obj.page = 1;
-        obj.isEndPage = 0;
+        obj.isEndPage = false;
         return obj;
     }
 
@@ -216,7 +219,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
             obj.data.add(game);
         }
         obj.page = mLastPage + 1;
-        obj.isEndPage = (int)(Math.random() * 2);
+        obj.isEndPage = true;
         return obj;
     }
 }

@@ -9,7 +9,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
-import com.oplay.giftassistant.ui.activity.DetailActivity;
+import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 
 import java.util.List;
 
@@ -40,10 +40,10 @@ public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftLimit
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mRecyclerView.getContext(), DetailActivity.class);
+				Intent intent = new Intent(mRecyclerView.getContext(), GiftDetailActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(DetailActivity.KEY_DETAIL_ID, o.id);
-				intent.putExtra(DetailActivity.KEY_DETAIL_NAME, String.format("[%s]%s", o.gameName, o.name));
+				intent.putExtra(GiftDetailActivity.KEY_DETAIL_ID, o.id);
+				intent.putExtra(GiftDetailActivity.KEY_DETAIL_NAME, String.format("[%s]%s", o.gameName, o.name));
 				mRecyclerView.getContext().startActivity(intent);
 			}
 		});

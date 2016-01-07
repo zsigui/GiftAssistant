@@ -1,12 +1,18 @@
-package com.oplay.giftassistant.ui.fragment.gift;
+package com.oplay.giftassistant.ui.fragment.setting;
 
 import android.os.Bundle;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
+import com.oplay.giftassistant.adapter.MyGiftListAdapter;
+import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.config.NetUrl;
+import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
@@ -15,8 +21,8 @@ import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ViewUtil;
+import com.socks.library.KLog;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit.Callback;
@@ -24,43 +30,28 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * 显示限量礼包数据的Fragment<br/>
- * 具备下拉刷新(由于数据已最新，不具备实际意义),上拉加载(显示更多同日期数据)<br/>
- * <br/>
- * Created by zsigui on 15-12-29.
+ * Created by zsigui on 16-1-7.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh {
+public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
-	private static final String KEY_DATA = "key_news_data";
-	private static final String KEY_URL = "key_url";
-	private static final String KEY_DATE = "key_date";
-
-	private ListView mDataView;
-	private ArrayList<IndexGiftNew> mData;
+	private RecyclerView mDataView;
+	private MyGiftListAdapter mAdapter;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 	private String mUrl;
-	private String mDate;
-	private IndexGiftNewAdapter mAdapter;
 
-	public static GiftListDataFragment newInstance() {
-		return new GiftListDataFragment();
-	}
-
-	public static GiftListDataFragment newInstance(ArrayList<IndexGiftNew> data, String date, String url) {
-		GiftListDataFragment fragment = new GiftListDataFragment();
+	public static MyGiftListFragment newInstance(String url) {
+		MyGiftListFragment fragment = new MyGiftListFragment();
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(KEY_DATA, data);
-		bundle.putString(KEY_URL, url);
-		bundle.putString(KEY_DATE, date);
+		bundle.putString(KeyConfig.KEY_URL, url);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_gift_list_data);
+		initViewManger(R.layout.fragment_refresh_rv_container);
 		mRefreshLayout = getViewById(R.id.srl_layout);
-		mDataView = getViewById(R.id.lv_container);
+		mDataView = getViewById(R.id.rv_container);
 	}
 
 	@Override
@@ -75,25 +66,58 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
 		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
-		mAdapter = new IndexGiftNewAdapter(getContext());
+		mAdapter = new MyGiftListAdapter(mDataView);
 		if (getArguments() != null) {
-			Serializable s = getArguments().getSerializable(KEY_DATA);
-			if (s != null) {
-				mData = (ArrayList<IndexGiftNew>) s;
-				mAdapter.setData(mData);
-				mHasData = true;
-				mLastPage = 1;
-			}
-			mUrl = getArguments().getString(KEY_URL);
-			mDate = getArguments().getString(KEY_DATE);
+			mUrl = getArguments().getString(KeyConfig.KEY_URL);
 		}
+		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 		mDataView.setAdapter(mAdapter);
 		mRefreshLayout.setPullDownRefreshEnable(false);
 	}
 
 	@Override
 	protected void lazyLoad() {
+		lazyLoadInitConfig();
 
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (NetworkUtil.isConnected(getContext())) {
+					mReqPageObj.data.page = 1;
+					Global.getNetEngine().obtainGiftList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
+							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
+								                       Retrofit
+										retrofit) {
+									if (response != null && response.isSuccess() &&
+											response.body().getCode() == StatusCode.SUCCESS) {
+										lazyLoadSuccessEnd();
+										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+										setLoadState(backObj.data, backObj.isEndPage);
+										updateData(backObj.data);
+										return;
+									}
+									lazyLoadFailEnd();
+								}
+
+								@Override
+								public void onFailure(Throwable t) {
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(AppDebugConfig.TAG_FRAG, t);
+									}
+									// lazyLoadFailEnd();
+									OneTypeDataList<IndexGiftNew> backObj = initStashMoreRefreshData();
+									setLoadState(backObj.data, backObj.isEndPage);
+									updateData(backObj.data);
+								}
+							});
+				} else {
+					mViewManager.showErrorRetry();
+				}
+			}
+		});
 	}
 
 	/**
@@ -105,7 +129,6 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 			return;
 		}
 		mIsLoadMore = true;
-		mReqPageObj.data.date = mDate;
 		mReqPageObj.data.page = mLastPage + 1;
 		new Thread(new Runnable() {
 			@Override
@@ -119,13 +142,13 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 							@Override
 							public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 							                       Retrofit
-									retrofit) {
+									                       retrofit) {
 
-								if (response != null && response.isSuccess()) {
+								if (response != null && response.isSuccess() &&
+										response.body().getCode() == StatusCode.SUCCESS) {
 									moreLoadSuccessEnd();
 									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 									setLoadState(backObj.data, backObj.isEndPage);
-									addMoreData(backObj.data);
 									return;
 								}
 								moreLoadFailEnd();
@@ -146,6 +169,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 	}
 
 	public void updateData(ArrayList<IndexGiftNew> data) {
+		mViewManager.showContent();
 		mHasData = true;
 		mData = data;
 		mAdapter.updateData(mData);
@@ -180,6 +204,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 			ng.remainCount = 100;
 			ng.totalCount = 100;
 			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
+			ng.code = "12341k23j4k1j23k";
 			obj.data.add(ng);
 		}
 		return obj;

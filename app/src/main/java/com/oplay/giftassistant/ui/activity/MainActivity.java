@@ -20,11 +20,15 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
+import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
 import com.oplay.giftassistant.ui.fragment.gift.GiftFragment;
 import com.oplay.giftassistant.ui.widget.search.SearchLayout;
@@ -35,20 +39,14 @@ import com.oplay.giftassistant.util.ToastUtil;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class MainActivity extends BaseAppCompatActivity {
-
-	private static final int ID_SETTING = 0;
-	private static final int ID_TASK = 1;
-	private static final int ID_WALLET = 2;
-	private static final int ID_GIFTS = 3;
-	private static final int ID_DOWNLOAD = 4;
-	private static final int ID_ABOUT = 5;
-	private static final int ID_FEEDBACK = 6;
+public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener{
 
 
 	private long mLastClickTime = 0;
 	// 底部Tabs
 	private CheckedTextView[] mCtvs;
+	private ImageView ivProfile;
+	private TextView tvGiftCount;
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
@@ -59,12 +57,12 @@ public class MainActivity extends BaseAppCompatActivity {
 	// 侧边栏
 	private Drawer mDrawer;
 	private AccountHeader mDrawerHeader;
-	private boolean mIsOpen = false;
+	private IProfile mProfile;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mUser = AccountManager.getInstance().getUser();
 		createDrawer(savedInstanceState);
 	}
 
@@ -75,31 +73,19 @@ public class MainActivity extends BaseAppCompatActivity {
 		mCtvs = new CheckedTextView[2];
 		mCtvs[0] = ctvGift;
 		mCtvs[1] = ctvGame;
-
-
+		if (!AssistantApp.getInstance().isAllowDownload()) {
+			ctvGame.setVisibility(View.GONE);
+		}
 	}
 
 	private void createDrawer(Bundle savedInstanceState) {
-		final IProfile profile;
 		// 可以根据需要添加当前和候选
 		// 比如历史登录过账号
-		if (!AccountManager.getInstance().isLogin()) {
-			profile = new ProfileDrawerItem()
-					.withName("未知")
-					.withIcon(R.drawable.test_code)
-					.withIdentifier(100);
-		} else {
-			UserModel user = AccountManager.getInstance().getUser();
-			profile = new ProfileDrawerItem()
-					.withName(TextUtils.isEmpty(user.username) ? user.phone : user.username)
-					.withEmail(user.phone)
-					.withIcon(user.img)
-					.withIdentifier(100);
-		}
+		updateProfile();
 		mDrawerHeader = new AccountHeaderBuilder()
 				.withActivity(this)
 				.withHeaderBackground(R.color.co_common_app_main_bg)
-				.addProfiles(profile)
+				.addProfiles(mProfile)
 				.withProfileImagesClickable(true)
 				.withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
 					@Override
@@ -109,19 +95,12 @@ public class MainActivity extends BaseAppCompatActivity {
 						} else {
 							ToastUtil.showShort("未登录，跳转登录页面");
 						}
-						return true;
+						return false;
 					}
 
 					@Override
 					public boolean onProfileImageLongClick(View view, IProfile iProfile, boolean b) {
 						return false;
-					}
-				})
-				.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-					@Override
-					public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
-
-						return true;
 					}
 				})
 				.withSavedInstance(savedInstanceState)
@@ -133,48 +112,42 @@ public class MainActivity extends BaseAppCompatActivity {
 				.withHasStableIds(true)
 				.withAccountHeader(mDrawerHeader)
 				.addDrawerItems(
-						new PrimaryDrawerItem().withName("我的礼包").withSelectable(false).withIdentifier(ID_GIFTS)
-								.withIcon
-										(GoogleMaterial.Icon.gmd_ac_unit),
-						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(ID_SETTING)
-								.withIcon
-										(GoogleMaterial.Icon.gmd_account_balance),
+						new PrimaryDrawerItem().withName("我的礼包").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_MY_GIFT_CODE).withIcon(GoogleMaterial.Icon.gmd_ac_unit),
+						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_SETTING).withIcon(GoogleMaterial.Icon.gmd_account_balance),
 						new DividerDrawerItem(),
-						new PrimaryDrawerItem().withName("我的钱包").withSelectable(false).withIdentifier(ID_WALLET)
-								.withIcon
-										(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("下载管理").withSelectable(false).withIdentifier(ID_DOWNLOAD)
-								.withIcon
-										(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("积分任务").withSelectable(false).withIdentifier(ID_TASK).withIcon
-								(GoogleMaterial.Icon.gmd_settings_input_svideo))
+						new PrimaryDrawerItem().withName("我的钱包").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_WALLET).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("积分任务").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_SCORE_TASK).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo))
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
 						if (drawerItem != null) {
-							/*if (drawerItem.getIdentifier() != ID_SETTING
-									&& drawerItem.getIdentifier() != ID_DOWNLOAD
+							if (drawerItem.getIdentifier() != KeyConfig.TYPE_ID_SETTING
+									&& drawerItem.getIdentifier() !=  KeyConfig.TYPE_ID_DOWNLOAD
 									&& !AccountManager.getInstance().isLogin()) {
 								Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 								intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
 								startActivity(intent);
 								return false;
-							}*/
+							}
 							Intent intent = new Intent(MainActivity.this, SettingActivity.class);
 							switch (drawerItem.getIdentifier()) {
-								case ID_GIFTS:
+								case KeyConfig.TYPE_ID_MY_GIFT_CODE:
 									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
 									break;
-								case ID_SETTING:
+								case KeyConfig.TYPE_ID_SETTING:
 									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SETTING);
 									break;
-								case ID_TASK:
+								case KeyConfig.TYPE_ID_SCORE_TASK:
 									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SCORE_TASK);
 									break;
-								case ID_WALLET:
+								case KeyConfig.TYPE_ID_WALLET:
 									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
 									break;
-								case ID_DOWNLOAD:
+								case KeyConfig.TYPE_ID_DOWNLOAD:
 									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
 									break;
 							}
@@ -191,7 +164,26 @@ public class MainActivity extends BaseAppCompatActivity {
 		//当侧边栏项太多时可通过以下代码缓存，以保证滑动时顺畅
 		//RecyclerViewCacheUtil.getInstance().withCacheSize(2).init(mDrawer);
 
-		mDrawerHeader.setActiveProfile(100);
+		if (AssistantApp.getInstance().isAllowDownload()) {
+			mDrawer.addItem(new PrimaryDrawerItem().withName("下载管理").withSelectable(false).withIdentifier(KeyConfig
+					.TYPE_ID_DOWNLOAD).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo));
+		}
+		mDrawerHeader.setActiveProfile(KeyConfig.TYPE_ID_PROFILE);
+	}
+
+	private void updateProfile() {
+		if (!AccountManager.getInstance().isLogin()) {
+			mProfile = new ProfileDrawerItem()
+					.withName("未登录")
+					.withIcon(R.drawable.ic_img_default)
+					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
+		} else {
+			mProfile = new ProfileDrawerItem()
+					.withName(TextUtils.isEmpty(mUser.nick) ? mUser.username : mUser.nick)
+					.withEmail(mUser.phone)
+					.withIcon(mUser.img)
+					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
+		}
 	}
 
 	@Override
@@ -201,21 +193,35 @@ public class MainActivity extends BaseAppCompatActivity {
 		super.onSaveInstanceState(outState);
 	}
 
+
 	@Override
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
 		SearchLayout searchLayout = getViewById(toolbar, R.id.sl_search);
 		searchLayout.setCanGetFocus(false);
 		searchLayout.setOnClickListener(this);
-		ImageView ivProfile = getViewById(toolbar, R.id.iv_profile);
+		ivProfile = getViewById(toolbar, R.id.iv_profile);
 		ivProfile.setOnClickListener(this);
-		getViewById(toolbar, R.id.ll_gift_count).setOnClickListener(this);
-		((TextView) getViewById(toolbar, R.id.tv_gift_count)).setText(mUser == null ? "?" : String.valueOf(mUser
-				.giftCount));
+		tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
+		getViewById(R.id.ll_gift_count).setOnClickListener(this);
+		updateToolBar();
+	}
+
+	private void updateToolBar() {
+		if (AccountManager.getInstance().isLogin()) {
+			mUser = AccountManager.getInstance().getUser();
+			tvGiftCount.setText(String.valueOf(mUser.giftCount));
+			ImageLoader.getInstance().displayImage(mUser.img, ivProfile);
+		} else {
+			ImageLoader.getInstance().displayImage("drawable://" + R.drawable.ic_img_default, ivProfile);
+			tvGiftCount.setText("?");
+		}
 	}
 
 	@Override
 	protected void processLogic() {
+		ObserverManager.getInstance().addUserUpdateListener(this);
+
 		for (CheckedTextView ctv : mCtvs) {
 			ctv.setOnClickListener(this);
 		}
@@ -265,6 +271,7 @@ public class MainActivity extends BaseAppCompatActivity {
 				return;
 			}
 		}
+		Intent intent;
 		switch (v.getId()) {
 			case R.id.ctv_gift:
 				setCurSelected(0);
@@ -273,7 +280,7 @@ public class MainActivity extends BaseAppCompatActivity {
 				setCurSelected(1);
 				break;
 			case R.id.sl_search:
-				Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+				intent = new Intent(MainActivity.this, SearchActivity.class);
 				startActivity(intent);
 				break;
 			case R.id.iv_profile:
@@ -284,10 +291,27 @@ public class MainActivity extends BaseAppCompatActivity {
 				}
 				break;
 			case R.id.ll_gift_count:
-				if (!AccountManager.getInstance().isLogin()) {
-					ToastUtil.showShort("跳转 登录 页面");
+				if (AccountManager.getInstance().isLogin()) {
+					intent = new Intent(MainActivity.this, SettingActivity.class);
+					intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
+					startActivity(intent);
 				} else {
-					ToastUtil.showShort("跳转 我的礼包 页面");
+					final ConfirmDialog dialog = ConfirmDialog.newInstance();
+					dialog.setContent("还没登录，是否跳转登录页面");
+					dialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+						@Override
+						public void onCancel() {
+							dialog.dismiss();
+						}
+
+						@Override
+						public void onConfirm() {
+							Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+							startActivity(intent);
+							dialog.dismiss();
+						}
+					});
+					dialog.show(getSupportFragmentManager(), ConfirmDialog.class.getSimpleName());
 				}
 				break;
 		}
@@ -310,4 +334,11 @@ public class MainActivity extends BaseAppCompatActivity {
 		}
 	}
 
+	@Override
+	public void onUserUpdate() {
+		mUser = AccountManager.getInstance().getUser();
+		updateToolBar();
+		updateProfile();
+		mDrawerHeader.updateProfile(mProfile);
+	}
 }

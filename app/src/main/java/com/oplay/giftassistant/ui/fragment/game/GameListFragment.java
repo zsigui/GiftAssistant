@@ -190,7 +190,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 			obj.data.add(game);
 		}
 		obj.page = 1;
-		obj.isEndPage = 0;
+		obj.isEndPage = false;
 		return obj;
 	}
 
@@ -210,7 +210,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 			obj.data.add(game);
 		}
 		obj.page = mLastPage + 1;
-		obj.isEndPage = (int)(Math.random() * 2);
+		obj.isEndPage = true;
 		return obj;
 	}
 }

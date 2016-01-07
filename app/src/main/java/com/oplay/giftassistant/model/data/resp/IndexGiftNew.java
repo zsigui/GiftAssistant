@@ -24,9 +24,9 @@ public class IndexGiftNew implements Serializable{
     // 游戏图标
     @SerializedName("icon")
 	public String img;
-    // 是否为限量礼包,，是1，否0
+    // 是否为限量礼包
     @SerializedName("is_limit")
-    public int isLimit;
+    public boolean isLimit = false;
 	// 礼包状态 0 删除， 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束， 6 下架 (0, 6状态不关注)
 	@SerializedName("status")
 	public int status;
@@ -60,4 +60,7 @@ public class IndexGiftNew implements Serializable{
     // 使用说明
 	@SerializedName("note")
     public String note;
+	// 礼包码
+	@SerializedName("code")
+	public String code;
 }

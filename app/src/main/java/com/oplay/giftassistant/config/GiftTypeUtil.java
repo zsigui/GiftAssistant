@@ -1,4 +1,4 @@
-package com.oplay.giftassistant.adapter.util;
+package com.oplay.giftassistant.config;
 
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 
@@ -39,7 +39,7 @@ public class GiftTypeUtil {
 	public static final int PAY_TYPE_BOTN = 3;
 
 	public static int getItemViewType(IndexGiftNew gift) {
-        if (gift.isLimit == 1) {
+        if (gift.isLimit) {
 	        // 珍贵礼包 状态判断
 	        switch (gift.status) {
 		        case STATUS_WAIT_SEIZE:

@@ -1,5 +1,9 @@
 package com.oplay.giftassistant.util;
 
+import com.oplay.giftassistant.config.AppDebugConfig;
+import com.socks.library.KLog;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,5 +33,21 @@ public class DateUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
 		Date date = new Date(System.currentTimeMillis());
 		return sdf.format(getDate(date, day));
+	}
+
+	/**
+	 * 判断所给日期字符串时间是否为今天
+	 */
+	public static boolean isToday(String date) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+			String before = sdf.format(sdf.parse(date));
+			return before.equals(sdf.format(new Date(System.currentTimeMillis())));
+		} catch (ParseException e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_UTIL, e);
+			}
+		}
+		return false;
 	}
 }

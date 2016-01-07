@@ -22,5 +22,5 @@ public class OneTypeDataList<T> implements Serializable{
 	public int pageSize = 10;
 
 	@SerializedName("is_end_page")
-	public int isEndPage;
+	public boolean isEndPage;
 }

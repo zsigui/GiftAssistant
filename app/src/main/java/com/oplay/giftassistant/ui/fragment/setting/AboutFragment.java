@@ -8,11 +8,12 @@ import android.widget.TextView;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.model.DecryptDataModel;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class AboutFragment extends BaseFragment_FullScreen {
+public class AboutFragment extends BaseFragment_WithName {
 
 	private RelativeLayout rlUpdate;
 	private RelativeLayout rlQQ;
@@ -42,7 +43,6 @@ public class AboutFragment extends BaseFragment_FullScreen {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		setTitleBar(R.string.st_about_title);
 		tvUpdate.setText(String.format(getResources().getString(R.string.st_about_wait_update_text), "V2.0"));
 		tvVersion.setText("礼包酷 " + DecryptDataModel.SDK_VER_NAME);
 		tvQQ.setText("459100875");

@@ -1,5 +1,10 @@
 package com.oplay.giftassistant.manager;
 
+import android.app.Activity;
+import android.app.Fragment;
+
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 
 /**
@@ -31,6 +36,7 @@ public class ObserverManager {
 	private ArrayList<OnDownloadListener> mDownloadObservers = new ArrayList<>();
 
 	public void addUserUpdateListener(UserUpdateListener observer) {
+		KLog.e(observer);
 		if (observer == null) return;
 		mUserObservers.add(observer);
 	}
@@ -57,6 +63,14 @@ public class ObserverManager {
 	public void notifyUserUpdate() {
 		for (UserUpdateListener observer : mUserObservers) {
 			if (observer != null) {
+				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
+					// 当为fragment且正被移除出界面，不更新，正确？
+					return;
+				}
+				if (observer instanceof Activity && (((Activity)observer).isFinishing())) {
+					// 当Activity即将被销毁，无须更新
+					return;
+				}
 				observer.onUserUpdate();
 			}
 		}
@@ -65,6 +79,14 @@ public class ObserverManager {
 	public void notifyGiftUpdate() {
 		for (GiftUpdateListener observer : mGiftObservers) {
 			if (observer != null) {
+				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
+					// 当为fragment且正被移除出界面，不更新，正确？
+					return;
+				}
+				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
+					// 当Activity即将被销毁，无须更新
+					return;
+				}
 				observer.onGiftUpdate();
 			}
 		}
@@ -73,6 +95,14 @@ public class ObserverManager {
 	public void notifyMsgUpdate() {
 		for (MsgUpdateListener observer : mMsgObservers) {
 			if (observer != null) {
+				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
+					// 当为fragment且正被移除出界面，不更新，正确？
+					return;
+				}
+				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
+					// 当Activity即将被销毁，无须更新
+					return;
+				}
 				observer.onMsgUpdate();
 			}
 		}
