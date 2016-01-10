@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-              android:orientation = "vertical"
-              android:background="@color/co_white"
-              android:layout_width = "match_parent"
-              android:layout_height = "match_parent" >
+<ScrollView xmlns:android = "http://schemas.android.com/apk/res/android"
+            android:orientation = "vertical"
+            android:background="@color/co_transparent"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content" >
 
-	<TextView
-			android:textColor="@color/co_black"
-			android:text="尚未实现，敬请期待"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content" />
-</LinearLayout >
+	<LinearLayout
+			android:orientation = "vertical"
+			android:background = "@color/co_transparent"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content" >
+
+		<android.support.v7.widget.RecyclerView
+				android:id="@+id/rv_type"
+				android:background="@color/co_white"
+				android:paddingTop="5dp"
+				android:paddingBottom="5dp"
+				android:layout_width = "match_parent"
+				android:layout_height = "218dp" />
+		
+		<View
+				android:layout_width = "match_parent"
+				android:layout_height = "@dimen/di_index_module_gap"
+				android:background="@color/co_common_content_bg"/>
+
+		<android.support.v7.widget.RecyclerView
+				android:id="@+id/rv_tag"
+				android:background="@color/co_white"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content" />
+	</LinearLayout >
+</ScrollView >

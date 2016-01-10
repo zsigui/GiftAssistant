@@ -31,6 +31,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 	public T convert(ResponseBody value) throws IOException {
 		try {
 			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), cmd);
+			KLog.e("response = " + json);
 			return gson.fromJson(json, type);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {

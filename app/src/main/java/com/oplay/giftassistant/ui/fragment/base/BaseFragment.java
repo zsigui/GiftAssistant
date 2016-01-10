@@ -106,6 +106,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 			processLogic(savedInstanceState);
 		}
 		mIsPrepared = true;
+		mCanShowUI = true;
 		lazyLoad();
 	}
 

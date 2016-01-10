@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              xmlns:app = "http://schemas.android.com/apk/res-auto"
+              android:id="@+id/ll_item"
+              android:orientation = "vertical"
+              android:gravity = "center_horizontal"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content" >
+
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			style = "@style/DefaultImageView.Icon"
+			android:src = "@drawable/test_code"
+			app:riv_oval = "true" />
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_marginTop = "5dp"/>
+
+</LinearLayout >

@@ -5,7 +5,7 @@ package com.oplay.giftassistant.config;
  */
 public class NetUrl {
 
-	public static final String URL_BASE = "http://172.16.3.59/";
+	public static final String URL_BASE = "http://172.16.3.68:7000/";
 
 	/**
 	 * 礼包首页
@@ -76,6 +76,11 @@ public class NetUrl {
 	 * 游戏详情
 	 */
 	public static final String GAME_GET_DETAIL = "default";
+
+	/**
+	 * 获取某类游戏
+	 */
+	public static final String GAME_GET_TYPE = "default";
 
 	/* 用户接口 */
 

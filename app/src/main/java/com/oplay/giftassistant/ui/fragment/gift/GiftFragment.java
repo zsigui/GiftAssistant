@@ -20,6 +20,7 @@ import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftBanner;
@@ -31,6 +32,7 @@ import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.ui.widget.NestedListView;
+import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -163,7 +165,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			}
 			s = getArguments().getSerializable(KEY_LIMIT);
 			if (s != null) {
-				mLimitAdapter.setDatas((ArrayList<IndexGiftLimit>) s);
+				mLimitAdapter.setDatas((ArrayList<IndexGiftNew>) s);
 			}
 			s = getArguments().getSerializable(KEY_NEW);
 			if (s != null) {
@@ -212,11 +214,14 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 				Global.getNetEngine().obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
 					public void onResponse(Response<JsonRespBase<IndexGift>> response, Retrofit retrofit) {
+						mIsLoading = false;
 						if (response != null && response.isSuccess()) {
-							// 获取数据成功
-							lazyLoadSuccessEnd();
-							updateData(response.body().getData());
-							return;
+							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+								// 获取数据成功
+								lazyLoadSuccessEnd();
+								updateData(response.body().getData());
+								return;
+							}
 						}
 						lazyLoadFailEnd();
 					}
@@ -226,9 +231,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.e(t);
 						}
+						mIsLoading = false;
 						//lazyLoadFailEnd();
-						mViewManager.showContent();
-						mHasData = true;
 						updateData(initStashGiftData());
 					}
 				});
@@ -240,9 +244,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	/* 更新控件数据 start */
 
 	public void updateData(IndexGift data) {
+		KLog.e(data);
 		if (data == null) {
 			return;
 		}
+		mViewManager.showContent();
+		mHasData = true;
 		mGiftData = data;
 		updateBanners(data.banner);
 		updateLikeData(data.like);
@@ -262,7 +269,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mLikeAdapter.updateData(likeData);
 	}
 
-	public void updateLimitData(ArrayList<IndexGiftLimit> limitData) {
+	public void updateLimitData(ArrayList<IndexGiftNew> limitData) {
 		if (limitData == null) {
 			return;
 		}
@@ -313,7 +320,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mHasData = true;
 		// 先暂时使用缓存数据假定
 		ArrayList<IndexGiftBanner> bannerData = new ArrayList<IndexGiftBanner>();
-		ArrayList<IndexGiftLimit> limitData = new ArrayList<IndexGiftLimit>();
+		ArrayList<IndexGiftNew> limitData = new ArrayList<IndexGiftNew>();
 		ArrayList<IndexGiftLike> likeData = new ArrayList<IndexGiftLike>();
 		ArrayList<IndexGiftNew> newData = new ArrayList<IndexGiftNew>();
 
@@ -337,8 +344,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ngift.isLimit = true;
 		ngift.bean = 30;
 		ngift.score = 3000;
-		ngift.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-		ngift.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+		ngift.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
+		ngift.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 1);
 		ngift.searchCount = 0;
 		ngift.remainCount = 10;
 		ngift.totalCount = 10;
@@ -354,8 +361,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng2.isLimit = false;
 		ng2.bean = 30;
 		ng2.score = 3000;
-		ng2.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-		ng2.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+		ng2.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -3);
+		ng2.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -1);
 		ng2.searchCount = 0;
 		ng2.remainCount = 159;
 		ng2.totalCount = 350;
@@ -370,8 +377,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng3.name = "高级礼包";
 		ng3.isLimit = false;
 		ng3.score = 1500;
-		ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
-		ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;
+		ng3.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
+		ng3.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
 		ng3.searchCount = 355;
 		ng3.remainCount = 0;
 		ng3.totalCount = 350;
@@ -384,7 +391,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			game.newCount = i;
 			game.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
 			likeData.add(game);
-			IndexGiftLimit gift = new IndexGiftLimit();
+			IndexGiftNew gift = new IndexGiftNew();
 			gift.gameName = "少年三国志";
 			gift.name = "传奇礼包";
 			gift.img = "http://owan-img.ymapp.com/app/b6/41/8113/icon/icon_1431085220.png_140_140_100.png";
@@ -399,8 +406,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			ng.name = "普通礼包";
 			ng.isLimit = false;
 			ng.score = (int) (Math.random() * 100) * 10;
-			ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-			ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
+			ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
+			ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
 			ng.searchCount = 0;
 			ng.remainCount = 100;
 			ng.totalCount = 100;

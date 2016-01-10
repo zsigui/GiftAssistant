@@ -3,8 +3,6 @@ package com.oplay.giftassistant.manager;
 import android.app.Activity;
 import android.app.Fragment;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 
 /**
@@ -36,7 +34,6 @@ public class ObserverManager {
 	private ArrayList<OnDownloadListener> mDownloadObservers = new ArrayList<>();
 
 	public void addUserUpdateListener(UserUpdateListener observer) {
-		KLog.e(observer);
 		if (observer == null) return;
 		mUserObservers.add(observer);
 	}

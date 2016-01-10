@@ -10,6 +10,8 @@ public class KeyConfig {
 	public static final String KEY_TYPE = "key_type";
 	public static final String KEY_DATA = "key_data";
 	public static final String KEY_URL = "key_url";
+	public static final String KEY_SEARCH = "key_search";
+	public static final String KEY_NAME = "key_name";
 
 	/* result code */
 	public static final int SUCCESS = 0;
@@ -27,12 +29,22 @@ public class KeyConfig {
 	public static final int TYPE_ID_MSG = 0x109;
 	public static final int TYPE_ID_PROFILE = 0x110;
 
-
 	/* login activity */
 	public static final int TYPE_ID_LOGIN_MAIN = 0x111;
 	public static final int TYPE_ID_OUWAN_LOGIN = 0x112;
 	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x113;
 	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x114;
+
+
+	/* game list activity */
+	// 新游推荐
+	public static final int TYPE_ID_GAME_NEW = 0x201;
+	// 特定类型游戏
+	public static final int TYPE_ID_GAME_TYPE = 0x202;
+	// 热门游戏
+	public static final int TYPE_ID_GAME_HOT = 0x203;
+	// 游戏搜索
+	public static final int TYPE_ID_GAME_SEARCH = 0x204;
 
 
 	/* task fragment */

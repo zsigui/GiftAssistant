@@ -11,6 +11,7 @@ import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
+import com.oplay.giftassistant.model.data.resp.IndexGameType;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
@@ -33,6 +34,7 @@ import retrofit.http.Url;
  */
 public interface NetEngine {
 
+	/* -------------- 礼包接口 --------------- */
 	/**
 	 * 获取 首页-礼包 页面的数据
 	 */
@@ -64,24 +66,31 @@ public interface NetEngine {
     Call<JsonRespBase<IndexGiftNew>> obtainGiftDetail(@Body JsonReqBase<ReqGiftDetail> reqData);
 
 	/**
-	 * 获取 首页-游戏-精品 页面的数据
-	 */
-	@POST(NetUrl.GAME_GET_INDEX_SUPER)
-	Call<JsonRespBase<IndexGameSuper>> obtainIndexGameSuper(@Body JsonReqBase<String> reqData);
-
-	/**
 	 * 获取 礼包 单列表数据
 	 */
     @POST
     Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainGiftList(@Url String url, @Body
     JsonReqBase<ReqPageData> reqData);
 
+	/* -------------- 游戏接口 --------------- */
 	/**
-	 * 获取 游戏 单列表数据
+	 * 获取 首页-游戏-精品 页面的数据
+	 */
+	@POST(NetUrl.GAME_GET_INDEX_SUPER)
+	Call<JsonRespBase<IndexGameSuper>> obtainIndexGameSuper(@Body JsonReqBase<String> reqData);
+
+	/**
+	 * 获取 游戏 单列表数据，用于显示游戏列表数据
 	 */
 	@POST
 	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainGameList(@Url String url, @Body
 	JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 获取 游戏 - 分类 界面
+	 */
+	@POST(NetUrl.GAME_GET_INDEX_TYPE)
+	Call<JsonRespBase<IndexGameType>> obtainIndexGameType(@Body JsonReqBase<Void> reqData);
 
 
 	/* ---------------- 用户接口  ---------------- */

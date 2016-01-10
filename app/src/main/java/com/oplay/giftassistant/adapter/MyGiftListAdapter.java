@@ -3,6 +3,7 @@ package com.oplay.giftassistant.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -10,8 +11,13 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
+import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
+import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.DensityUtil;
+import com.oplay.giftassistant.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -23,8 +29,14 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
  */
 public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 
+	private OnItemClickListener<IndexGiftNew> mItemClickListener;
+
 	public MyGiftListAdapter(RecyclerView recyclerView) {
 		super(recyclerView, R.layout.item_list_my_gift);
+	}
+
+	public void setItemClickListener(OnItemClickListener<IndexGiftNew> itemClickListener) {
+		mItemClickListener = itemClickListener;
 	}
 
 	@Override
@@ -37,12 +49,13 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.GONE);
 			bgaViewHolderHelper.getView(R.id.tv_name).setPadding(DensityUtil.dip2px(mContext, 7), 0, 0, 0);
 		}
-		ImageLoader.getInstance().displayImage(o.img, (ImageView)bgaViewHolderHelper.getView(R.id.iv_icon));
+		ImageLoader.getInstance().displayImage(o.img, (ImageView) bgaViewHolderHelper.getView(R.id.iv_icon));
 		bgaViewHolderHelper.setText(R.id.tv_content, o.content);
-		bgaViewHolderHelper.setText(R.id.tv_deadline, "有效期: " + o.useDeadline);
+		bgaViewHolderHelper.setText(R.id.tv_deadline, DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm") + " ~ "
+				+ DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm"));
 		bgaViewHolderHelper.setText(R.id.tv_gift_code,
 				Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", o.code)));
-		if ((int)(Math.random()*2) == 0) {
+		if ((int) (Math.random() * 2) == 0) {
 			bgaViewHolderHelper.getView(R.id.btn_copy).setEnabled(false);
 			bgaViewHolderHelper.setText(R.id.btn_copy, "已结束");
 		} else {
@@ -52,10 +65,21 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 				@Override
 				public void onClick(View v) {
 					ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-					cmb.setPrimaryClip(ClipData.newPlainText("", o.code));
+					cmb.setPrimaryClip(ClipData.newPlainText("礼包码", o.code));
+					ToastUtil.showShort("已复制");
 				}
 			});
 		}
+		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mRecyclerView.getContext(), GiftDetailActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(KeyConfig.KEY_DATA, o.id);
+				intent.putExtra(KeyConfig.KEY_NAME, String.format("[%s]%s", o.gameName, o.name));
+				mRecyclerView.getContext().startActivity(intent);
+			}
+		});
 	}
 
 	public void updateData(ArrayList<IndexGiftNew> data) {

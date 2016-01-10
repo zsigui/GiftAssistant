@@ -34,7 +34,7 @@
 
 					<TextView
 							style = "@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_like" />
+							android:text = "@string/st_tabs_game_hot" />
 
 					<TextView style = "@style/DefaultTextView.More" />
 
@@ -47,7 +47,7 @@
 						style = "@style/DefaultRecyclerView"
 						android:paddingTop="5dp"
 						android:paddingBottom="5dp"
-						android:layout_height = "304dp" />
+						android:layout_height = "310dp" />
 
 			</LinearLayout >
 

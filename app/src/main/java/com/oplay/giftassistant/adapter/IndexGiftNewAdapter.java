@@ -2,8 +2,6 @@ package com.oplay.giftassistant.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -21,16 +19,15 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
+import com.oplay.giftassistant.util.DensityUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by zsigui on 15-12-24.
@@ -112,6 +109,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		final IndexGiftNew gift = mData.get(position);
 
 		setCommonField(viewHolder, gift);
+		viewHolder.btnSend.setState(type);
 		// 设置数据和按键状态
 		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE) {
 
@@ -151,34 +149,31 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 			viewHolder.tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>",
 					gift.remainCount)));
 		} else {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 			switch (type) {
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 					// 由于数量关系，限量礼包暂时没有等待抢号功能(由服务端状态排除)
 					// 此部分逻辑一般不会执行
-					setDisabledField(viewHolder, R.string.st_gift_wait_seize, false, R.drawable.selector_btn_red,
-							View.VISIBLE, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-									sdf.format(new Date(gift.seizeTime)))));
+					setDisabledField(viewHolder, View.VISIBLE,
+							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-					setDisabledField(viewHolder, R.string.st_gift_finished, false, R.drawable.selector_btn_red,
-							View.GONE, null);
+				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+					setDisabledField(viewHolder, View.GONE, null);
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-					setDisabledField(viewHolder, R.string.st_gift_wait_seize, false, R.drawable.selector_btn_orange,
-							View.VISIBLE, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-									sdf.format(new Date(gift.seizeTime)))));
+					setDisabledField(viewHolder, View.VISIBLE,
+							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-					setDisabledField(viewHolder, R.string.st_gift_wait_search, false, R.drawable.selector_btn_orange,
-							View.VISIBLE, Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
-									sdf.format(new Date(gift.searchTime)))));
+					setDisabledField(viewHolder, View.VISIBLE,
+							Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift.searchTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-					setDisabledField(viewHolder, R.string.st_gift_search, true, R.drawable.selector_btn_orange,
-							View.VISIBLE, Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次",
-									gift.searchCount)));
+				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+					setDisabledField(viewHolder, View.VISIBLE,
+							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift.searchCount)));
 					break;
 				default:
 					throw new IllegalStateException("type is not support! " + type);
@@ -196,6 +191,12 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		ImageLoader.getInstance().displayImage(gift.img, imageAware, Global.IMAGE_OPTIONS);
 		final String name = String.format("[%s]%s", gift.gameName, gift.name);
 		viewHolder.tvTitle.setText(name);
+		if (gift.isLimit) {
+			viewHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_limit_tag, 0, 0, 0);
+			viewHolder.tvTitle.setCompoundDrawablePadding(DensityUtil.dip2px(mContext, 4));
+		} else {
+			viewHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		}
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
 		// 思考:
 		// 1.是否需要设置定时闹钟Alarm通知主页数据重新刷新(比如开抢？)
@@ -211,18 +212,14 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(mContext, GiftDetailActivity.class);
-				intent.putExtra(GiftDetailActivity.KEY_DETAIL_ID, gift.id);
-				intent.putExtra(GiftDetailActivity.KEY_DETAIL_NAME, name);
+				intent.putExtra(KeyConfig.KEY_DATA, gift.id);
+				intent.putExtra(KeyConfig.KEY_NAME, name);
 				mContext.startActivity(intent);
 			}
 		});
 	}
 
-	public void setDisabledField(ViewHolder viewHolder, @StringRes int btnText, boolean btnEnabled,
-	                             @DrawableRes int btnBg, int tvVisibility, Spanned tvText) {
-		viewHolder.btnSend.setText(btnText);
-		viewHolder.btnSend.setEnabled(btnEnabled);
-		viewHolder.btnSend.setBackgroundResource(btnBg);
+	public void setDisabledField(ViewHolder viewHolder, int tvVisibility, Spanned tvText) {
 		viewHolder.tvCount.setVisibility(tvVisibility);
 		viewHolder.tvCount.setText(tvText);
 	}
@@ -260,6 +257,9 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:

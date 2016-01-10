@@ -65,6 +65,10 @@
 
 	<dimen name = "di_game_icon_layout_diameter">74dp</dimen>
 	<dimen name = "di_game_icon_margin">2dp</dimen>
+	<!-- 主页-游戏-分类 -->
+	<dimen name = "di_game_tag_radius">2dp</dimen>
+	<dimen name = "di_game_tag_padding_top_bottom">3dp</dimen>
+	<dimen name = "di_game_tag_padding_left_right">18dp</dimen>
 
     <!-- 个人设置 页面 -->
 	<!-- 我的钱包 -->

@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
+import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 
 import java.util.List;
@@ -19,22 +20,22 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftLimit> {
+public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 
 	public IndexGiftLimitAdapter(RecyclerView recyclerView) {
 		super(recyclerView, R.layout.item_index_gift_limit);
 	}
 
-	public IndexGiftLimitAdapter(RecyclerView recyclerView, List<IndexGiftLimit> data) {
+	public IndexGiftLimitAdapter(RecyclerView recyclerView, List<IndexGiftNew> data) {
 		super(recyclerView, R.layout.item_index_gift_limit);
 		this.mDatas = data;
 	}
 
 	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftLimit o) {
+	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftNew o) {
 		bgaViewHolderHelper.setText(R.id.tv_game_name, o.gameName);
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		bgaViewHolderHelper.setText(R.id.tv_new, String.valueOf(o.remainCount));
+		bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(o.remainCount));
 		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id
 				.iv_icon), Global.IMAGE_OPTIONS);
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
@@ -42,15 +43,15 @@ public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftLimit
 			public void onClick(View v) {
 				Intent intent = new Intent(mRecyclerView.getContext(), GiftDetailActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(GiftDetailActivity.KEY_DETAIL_ID, o.id);
-				intent.putExtra(GiftDetailActivity.KEY_DETAIL_NAME, String.format("[%s]%s", o.gameName, o.name));
+				intent.putExtra(KeyConfig.KEY_DATA, o.id);
+				intent.putExtra(KeyConfig.KEY_NAME, String.format("[%s]%s", o.gameName, o.name));
 				mRecyclerView.getContext().startActivity(intent);
 			}
 		});
 
 	}
 
-	public void updateData(List<IndexGiftLimit> data) {
+	public void updateData(List<IndexGiftNew> data) {
 		this.mDatas = data;
 		notifyDataSetChanged();
 	}

@@ -24,6 +24,9 @@ public class IndexGiftNew implements Serializable{
     // 游戏图标
     @SerializedName("icon")
 	public String img;
+	// 礼包获取类型 0 未抢 1 抢号 2 淘号
+	@SerializedName("code_type")
+	public int seizeStatus;
     // 是否为限量礼包
     @SerializedName("is_limit")
     public boolean isLimit = false;
@@ -41,10 +44,10 @@ public class IndexGiftNew implements Serializable{
     public int bean;
     // 开抢时间戳
 	@SerializedName("start_time")
-    public long seizeTime;
+    public String seizeTime;
     // 开淘时间戳
 	@SerializedName("tao_time")
-    public long searchTime;
+    public String searchTime;
     // 剩余礼包数量
 	@SerializedName("remain_count")
     public int remainCount;
@@ -54,11 +57,14 @@ public class IndexGiftNew implements Serializable{
 	// 已淘号次数
 	@SerializedName("tao_count")
 	public int searchCount;
-	// 礼包使用期限
-	@SerializedName("use_time")
-	public String useDeadline;
-    // 使用说明
-	@SerializedName("note")
+	// 使用开始时间
+	@SerializedName("use_start_time")
+	public String useStartTime;
+	// 使用结束时间
+	@SerializedName("use_end_time")
+	public String useEndTime;
+    // 特别说明
+	@SerializedName("remark")
     public String note;
 	// 礼包码
 	@SerializedName("code")

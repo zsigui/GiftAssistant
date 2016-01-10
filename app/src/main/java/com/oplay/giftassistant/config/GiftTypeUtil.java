@@ -8,7 +8,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-    public static final int TYPE_COUNT = 8;
+    public static final int TYPE_COUNT = 11;
 
     // 限量礼包类型，可抢，limit
     public static final int TYPE_LIMIT_SEIZE = 0;
@@ -26,6 +26,12 @@ public class GiftTypeUtil {
     public static final int TYPE_NORMAL_WAIT_SEARCH = 6;
 	// 正常礼包类型，已结束, disabled
 	public static final int TYPE_NORMAL_FINISHED = 7;
+	// 限量礼包类型，已抢号，disabled
+	public static final int TYPE_LIMIT_SEIZED = 8;
+	// 正常礼包类型，已淘号，normal
+	public static final int TYPE_NORMAL_SEARCHED = 9;
+	// 限量礼包类型，已抢完, disabled
+	public static final int TYPE_LIMIT_EMPTY = 10;
 
 	// 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束
 	public static final int STATUS_WAIT_SEIZE = 1;
@@ -37,34 +43,49 @@ public class GiftTypeUtil {
 	public static final int PAY_TYPE_SCORE = 1;
 	public static final int PAY_TYPE_BEAN = 2;
 	public static final int PAY_TYPE_BOTN = 3;
+	// 0 未抢 1 已抢 2 已淘
+	public static final int SEIZE_TYPE_NEVER = 0;
+	public static final int SEIZE_TYPE_SEIZED = 1;
+	public static final int SEIZE_TYPE_SEARCHED = 2;
 
 	public static int getItemViewType(IndexGiftNew gift) {
-        if (gift.isLimit) {
-	        // 珍贵礼包 状态判断
-	        switch (gift.status) {
-		        case STATUS_WAIT_SEIZE:
-			        return TYPE_LIMIT_WAIT_SEIZE;
-		        case STATUS_SEIZE:
-			        return TYPE_LIMIT_SEIZE;
-		        case STATUS_FINISHED:
-			        return TYPE_LIMIT_FINISHED;
-	        }
-        } // if finished
-        else {
-	        switch (gift.status) {
-		        case STATUS_WAIT_SEIZE:
-			        return TYPE_NORMAL_WAIT_SEIZE;
-		        case STATUS_SEIZE:
-			        return TYPE_NORMAL_SEIZE;
-		        case STATUS_SEARCH:
-			        return TYPE_NORMAL_SEARCH;
-		        case STATUS_WAIT_SEARCH:
-			        return TYPE_NORMAL_WAIT_SEARCH;
-		        case STATUS_FINISHED:
-			        // 礼包到期，会显示结束
-			        return TYPE_NORMAL_FINISHED;
-	        }
-        } // else finished
+		if (gift.seizeStatus != SEIZE_TYPE_NEVER) {
+			switch (gift.seizeStatus) {
+				case SEIZE_TYPE_SEIZED:
+					return TYPE_LIMIT_SEIZED;
+				case SEIZE_TYPE_SEARCHED:
+					return TYPE_NORMAL_SEARCHED;
+			}
+		} else {
+			if (gift.isLimit) {
+				// 珍贵礼包 状态判断
+				switch (gift.status) {
+					case STATUS_WAIT_SEIZE:
+						return TYPE_LIMIT_WAIT_SEIZE;
+					case STATUS_SEIZE:
+						return TYPE_LIMIT_SEIZE;
+					case STATUS_WAIT_SEARCH:
+						return TYPE_LIMIT_EMPTY;
+					case STATUS_FINISHED:
+						return TYPE_LIMIT_FINISHED;
+				}
+			} // if finished
+			else {
+				switch (gift.status) {
+					case STATUS_WAIT_SEIZE:
+						return TYPE_NORMAL_WAIT_SEIZE;
+					case STATUS_SEIZE:
+						return TYPE_NORMAL_SEIZE;
+					case STATUS_SEARCH:
+						return TYPE_NORMAL_SEARCH;
+					case STATUS_WAIT_SEARCH:
+						return TYPE_NORMAL_WAIT_SEARCH;
+					case STATUS_FINISHED:
+						// 礼包到期，会显示结束
+						return TYPE_NORMAL_FINISHED;
+				}
+			} // else finished
+		}
 		throw new IllegalArgumentException("Wrong type of the gift status");
     }
 }

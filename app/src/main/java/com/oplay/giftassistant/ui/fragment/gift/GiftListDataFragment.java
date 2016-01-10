@@ -13,6 +13,7 @@ import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
@@ -174,8 +175,8 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 			ng.name = "普通礼包";
 			ng.isLimit = false;
 			ng.score = (int) (Math.random() * 100) * 10;
-			ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-			ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
+			ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
+			ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
 			ng.searchCount = 0;
 			ng.remainCount = 100;
 			ng.totalCount = 100;

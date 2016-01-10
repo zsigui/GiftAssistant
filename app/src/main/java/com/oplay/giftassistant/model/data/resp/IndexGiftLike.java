@@ -33,6 +33,10 @@ public class IndexGiftLike implements Serializable{
 	@SerializedName("apk_size")
 	public String size;
 
+	// 游戏实际大小(字节)
+	@SerializedName("apk_filesize")
+	public long fileSize;
+
 	// 游戏ICON
 	@SerializedName("icon")
 	public String img;

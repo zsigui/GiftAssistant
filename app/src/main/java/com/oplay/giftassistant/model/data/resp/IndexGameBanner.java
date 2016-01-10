@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class IndexGameBanner implements Serializable {
 
 	// 轮播图url
-	@SerializedName("url")
+	@SerializedName("img")
 	public String url;
 
 	// 游戏名，后期可能会有跳转需要，用于跳转对应论坛

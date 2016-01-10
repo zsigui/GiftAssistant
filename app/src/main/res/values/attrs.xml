@@ -53,4 +53,8 @@
         <attr name="tb_animate" format="reference|boolean">
         </attr>
     </declare-styleable>
+
+	<declare-styleable name = "GiftButton">
+		<attr name = "gb_isBigger" format="boolean"/>
+	</declare-styleable>
 </resources>

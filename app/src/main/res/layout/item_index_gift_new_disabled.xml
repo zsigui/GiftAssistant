@@ -1,71 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/rl_recommend"
-    style="@style/IndexListItemLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:paddingRight="@dimen/di_index_hoz_module_margin_left">
-	
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/iv_icon"
-        style="@style/DefaultImageView.Icon"
-        app:riv_border_color="@color/co_stroke_bg"
-        app:riv_border_width="@dimen/di_common_icon_border_size"
-        app:riv_corner_radius="@dimen/di_common_icon_diameter_radius"
-        app:riv_oval="false"/>
+		android:id = "@+id/rl_recommend"
+		style = "@style/IndexListItemLayout"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:paddingRight = "@dimen/di_index_hoz_module_margin_left" >
 
-    <TextView
-        android:id="@+id/tv_name"
-        style="@style/DefaultTextView.Header"
-        android:layout_width="match_parent"
-        android:layout_alignTop="@+id/iv_icon"
-        android:layout_marginLeft="@dimen/di_index_item_margin_left"
-        android:layout_marginTop="4dp"
-        android:layout_toLeftOf="@+id/ll_send"
-        android:layout_toRightOf="@+id/iv_icon"
-        android:gravity="center_vertical"
-        android:text="[暴打魏蜀吴]新手礼包"/>
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			style = "@style/DefaultImageView.Icon"
+			app:riv_border_color = "@color/co_stroke_bg"
+			app:riv_border_width = "@dimen/di_common_icon_border_size"
+			app:riv_corner_radius = "@dimen/di_common_icon_diameter_radius"
+			app:riv_oval = "false" />
 
-    <TextView
-        android:id="@+id/tv_play"
-        style="@style/DefaultTextView.Text"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/tv_name"
-        android:layout_marginLeft="@dimen/di_index_item_margin_left"
-        android:layout_marginTop="8dp"
-        android:layout_toLeftOf="@+id/ll_send"
-        android:layout_toRightOf="@+id/iv_icon"
-        android:gravity="center_vertical"
-        android:text="30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠"/>
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "match_parent"
+			android:layout_alignTop = "@+id/iv_icon"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "4dp"
+			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_toRightOf = "@+id/iv_icon"
+			android:drawableLeft = "@drawable/ic_limit_tag"
+			android:drawablePadding = "4dp"
+			android:text = "[暴打魏蜀吴]新手礼包" />
 
-    <TextView
-        android:id="@+id/tv_count"
-        style="@style/DefaultTextView.Text"
-        android:layout_below="@+id/tv_play"
-        android:layout_marginLeft="@dimen/di_index_item_margin_left"
-        android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/iv_icon"
-        android:text="@null"
-        android:visibility="gone"/>
+	<TextView
+			android:id = "@+id/tv_play"
+			style = "@style/DefaultTextView.Text"
+			android:layout_width = "match_parent"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "8dp"
+			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_toRightOf = "@+id/iv_icon"
+			android:gravity = "center_vertical"
+			android:text = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠" />
+
+	<TextView
+			android:id = "@+id/tv_count"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_play"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/iv_icon"
+			android:text = "@null"
+			android:visibility = "gone" />
 
 
-    <LinearLayout
-        android:id="@+id/ll_send"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/di_index_hoz_module_margin_left"
-        android:background="@color/co_transparent"
-        android:gravity="center">
+	<LinearLayout
+			android:id = "@+id/ll_send"
+			android:layout_width = "wrap_content"
+			android:layout_height = "70dp"
+			android:layout_alignParentRight = "true"
+			android:layout_marginLeft = "@dimen/di_index_hoz_module_margin_left"
+			android:background = "@color/co_transparent"
+			android:gravity = "center" >
 
-        <com.oplay.giftassistant.ui.widget.button.GiftButton
-            android:id="@+id/btn_send"
-            style="@style/DefaultTextView"
-            android:layout_height="@dimen/di_btn_height"
-            android:background="@drawable/selector_btn_orange"
-            android:enabled="false"
-            android:text="@string/st_gift_finished"
-            android:textColor="@color/co_white"/>
-    </LinearLayout>
-</RelativeLayout>
+		<com.oplay.giftassistant.ui.widget.button.GiftButton
+				android:id = "@+id/btn_send"
+				style = "@style/DefaultTextView"
+				android:layout_height = "@dimen/di_btn_height"
+				android:background = "@drawable/selector_btn_orange"
+				android:enabled = "false"
+				android:text = "@string/st_gift_finished"
+				android:textColor = "@color/co_white" />
+	</LinearLayout >
+</RelativeLayout >

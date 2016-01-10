@@ -16,6 +16,7 @@ import com.oplay.giftassistant.adapter.IndexGameHotAdapter;
 import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.model.data.resp.IndexGameBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
@@ -26,7 +27,6 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -78,7 +78,6 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
     protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_game_super);
 
-        mRefreshLayout = getViewById(R.id.srl_layout);
         mScrollView = getViewById(R.id.sv_container);
         mBanner = getViewById(R.id.banner);
         mHotBar = getViewById(R.id.rl_hot_all);
@@ -99,7 +98,6 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
         mHotBar.setOnClickListener(this);
         mNewBar.setOnClickListener(this);
         mRecommendDownload.setOnClickListener(this);
-        mRefreshLayout.setDelegate(this);
     }
 
     @Override
@@ -117,9 +115,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
         GridLayoutManager glm = new GridLayoutManager(getContext(), 4);
         mHotView.setLayoutManager(glm);
 
-        ViewUtil.initRefreshLayout(getContext(), mRefreshLayout, false);
 
-        mRefreshLayout.setIsShowLoadingMoreView(false);
         mIsPrepared = mNoMoreLoad = true;
     }
 
@@ -199,7 +195,6 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                                 public void onResponse(Response<JsonRespBase<IndexGameSuper>> response,
                                                        Retrofit retrofit) {
                                     mIsLoading = mIsRefresh = false;
-                                    mRefreshLayout.endRefreshing();
                                     if (response != null && response.isSuccess()) {
                                         mHasData = true;
                                         updateData(response.body().getData());
@@ -212,7 +207,6 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                                 @Override
                                 public void onFailure(Throwable t) {
                                     mIsLoading = mIsRefresh = false;
-                                    mRefreshLayout.endRefreshing();
                                     //mViewManager.showErrorRetry();
                                     updateData(initStashData());
                                 }
@@ -230,7 +224,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
         switch (v.getId()) {
             case R.id.rl_hot_all:
 	            intent = new Intent(getContext(), GameListActivity.class);
-	            intent.putExtra(GameListActivity.KEY_TYPE, GameListActivity.TYPE_GAME_HOT);
+	            intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_HOT);
 	            getContext().startActivity(intent);
                 break;
             case R.id.rl_recommend:
@@ -238,7 +232,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                 break;
             case R.id.rl_new_all:
 	            intent = new Intent(getContext(), GameListActivity.class);
-	            intent.putExtra(GameListActivity.KEY_TYPE, GameListActivity.TYPE_GAME_NEW);
+	            intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_NEW);
 	            getContext().startActivity(intent);
                 break;
             case R.id.tv_download:

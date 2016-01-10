@@ -9,6 +9,7 @@ import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
+import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.engine.NetEngine;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
@@ -21,6 +22,7 @@ import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.gift.GiftLikeListFragment;
 import com.oplay.giftassistant.ui.fragment.gift.GiftMutilDayFragment;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
+import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -121,8 +123,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
                 }
                 mIsLoading = false;
                 if (response != null && response.isSuccess()) {
-                    displayGiftLikeUI(response.body().getData());
-                    return;
+	                if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+		                displayGiftLikeUI(response.body().getData());
+		                return;
+	                }
+	                if (AppDebugConfig.IS_DEBUG) {
+		                KLog.d(AppDebugConfig.TAG_APP, response.body().getCode() + " - " + response.body().getMsg());
+	                }
                 }
                 displayNetworkErrUI();
             }
@@ -157,8 +164,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
                 }
                 mIsLoading = false;
                 if (response != null && response.isSuccess()) {
-                    displayGiftNewUI(response.body().getData());
-                    return;
+	                if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+		                displayGiftNewUI(response.body().getData());
+		                return;
+	                }
+	                if (AppDebugConfig.IS_DEBUG) {
+		                KLog.d(AppDebugConfig.TAG_APP, response.body().getCode() + " - " + response.body().getMsg());
+	                }
                 }
                 // 加载错误页面也行
                 displayNetworkErrUI();
@@ -193,8 +205,13 @@ public class GiftListActivity extends BaseAppCompatActivity {
                 }
                 mIsLoading = false;
                 if (response != null && response.isSuccess()) {
-                    displayGiftLimitUI(response.body().getData());
-                    return;
+	                if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+		                displayGiftLimitUI(response.body().getData());
+		                return;
+	                }
+	                if (AppDebugConfig.IS_DEBUG) {
+		                KLog.d(AppDebugConfig.TAG_APP, response.body().getCode() + " - " + response.body().getMsg());
+	                }
                 }
                 // 加载错误页面也行
                 displayNetworkErrUI();
@@ -267,8 +284,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ngift.isLimit = true;
             ngift.bean = 30;
             ngift.score = 3000;
-            ngift.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-            ngift.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+            ngift.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
+            ngift.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
             ngift.searchCount = 0;
             ngift.remainCount = 10;
             ngift.totalCount = 10;
@@ -284,8 +301,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ng2.isLimit = false;
             ng2.bean = 30;
             ng2.score = 3000;
-            ng2.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-            ng2.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+            ng2.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 1);
+            ng2.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -1);
             ng2.searchCount = 0;
             ng2.remainCount = 159;
             ng2.totalCount = 350;
@@ -300,8 +317,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ng3.name = "高级礼包";
             ng3.isLimit = false;
             ng3.score = 1500;
-            ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
-            ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;
+            ng3.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 6);;
+            ng3.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
             ng3.searchCount = 355;
             ng3.remainCount = 0;
             ng3.totalCount = 350;
@@ -317,8 +334,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
                 ng.name = "普通礼包";
                 ng.isLimit = false;
                 ng.score = (int) (Math.random() * 100) * 10;
-                ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-                ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
+                ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
+                ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
                 ng.searchCount = 0;
                 ng.remainCount = 100;
                 ng.totalCount = 100;
@@ -349,8 +366,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ngift.isLimit = true;
             ngift.bean = 30;
             ngift.score = 3000;
-            ngift.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-            ngift.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+            ngift.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 8);;
+            ngift.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -4);;
             ngift.searchCount = 0;
             ngift.remainCount = 10;
             ngift.totalCount = 10;
@@ -366,8 +383,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ng2.isLimit = false;
             ng2.bean = 30;
             ng2.score = 3000;
-            ng2.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-            ng2.seizeTime = System.currentTimeMillis() - 1000 * 60 * 10;
+            ng2.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -3);;
+            ng2.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -7);;
             ng2.searchCount = 0;
             ng2.remainCount = 159;
             ng2.totalCount = 350;
@@ -382,8 +399,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
             ng3.name = "高级礼包";
             ng3.isLimit = false;
             ng3.score = 1500;
-            ng3.searchTime = System.currentTimeMillis() - 1000 * 60 * 30;
-            ng3.seizeTime = System.currentTimeMillis() - 1000 * 60 * 60;
+            ng3.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
+            ng3.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
             ng3.searchCount = 355;
             ng3.remainCount = 0;
             ng3.totalCount = 350;
@@ -399,8 +416,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
                 ng.name = "普通礼包";
                 ng.isLimit = false;
                 ng.score = (int) (Math.random() * 100) * 10;
-                ng.searchTime = System.currentTimeMillis() + 1000 * 60 * 60;
-                ng.seizeTime = System.currentTimeMillis() + 1000 * 30 * 30;
+                ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);;
+                ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 0);;
                 ng.searchCount = 0;
                 ng.remainCount = 100;
                 ng.totalCount = 100;

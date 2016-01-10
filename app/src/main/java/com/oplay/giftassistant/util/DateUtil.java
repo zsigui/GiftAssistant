@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.util;
 
+import android.text.TextUtils;
+
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.socks.library.KLog;
 
@@ -14,6 +16,22 @@ import java.util.TimeZone;
  * Created by zsigui on 15-12-29.
  */
 public class DateUtil {
+
+	public static String formatTime(String timeStr, String format) {
+		if (TextUtils.isEmpty(timeStr))
+			return null;
+		String result = null;
+		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+		try {
+			result = sdf.format(sdf.parse(timeStr));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return (result == null?
+				(timeStr.length() > format.length() ? timeStr.substring(0, format.length()): timeStr)
+				: result);
+	}
+
 	public static Date getDate(Date curDate, int day) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 		Calendar calendar = Calendar.getInstance();

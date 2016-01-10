@@ -28,9 +28,11 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	private static final String KEY_URL = "key_data_url";
 	private static final String KEY_SEARCH = "key_data_search";
+	private static final String KEY_TAG_ID = "key_tag_id";
 
 	private String mUrl;
 	private String mSearchKey;
+	private int mTagId = -1;
 
 	private JsonReqBase<ReqPageData> mReqPageObj;
 	private IndexGameNewAdapter mAdapter;
@@ -41,6 +43,14 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 		Bundle bundle = new Bundle();
 		bundle.putString(KEY_URL, url);
 		bundle.putString(KEY_SEARCH, searchKey);
+		return fragment;
+	}
+
+	public static GameListFragment newInstance(String url, int tagId) {
+		GameListFragment fragment = new GameListFragment();
+		Bundle bundle = new Bundle();
+		bundle.putString(KEY_URL, url);
+		bundle.putInt(KEY_TAG_ID, tagId);
 		return fragment;
 	}
 
@@ -66,8 +76,13 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 		if (getArguments() != null) {
 			mUrl = getArguments().getString(KEY_URL);
 			mSearchKey = getArguments().getString(KEY_SEARCH);
+			mTagId = getArguments().getInt(KEY_TAG_ID, -1);
 		}
-		mReqPageObj.data.searchKey = mSearchKey;
+		if (mTagId == -1) {
+			mReqPageObj.data.searchKey = mSearchKey;
+		} else {
+			mReqPageObj.data.searchKey = String.valueOf(mTagId);
+		}
 
 		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		mAdapter = new IndexGameNewAdapter(getContext());

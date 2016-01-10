@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model.data.resp;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -8,11 +10,15 @@ import java.util.ArrayList;
  */
 public class IndexGift implements Serializable {
 
+	@SerializedName("banner")
 	public ArrayList<IndexGiftBanner> banner;
 
+	@SerializedName("like")
 	public ArrayList<IndexGiftLike> like;
 
-	public ArrayList<IndexGiftLimit> limit;
+	@SerializedName("limit")
+	public ArrayList<IndexGiftNew> limit;
 
+	@SerializedName("new")
 	public ArrayList<IndexGiftNew> news;
 }

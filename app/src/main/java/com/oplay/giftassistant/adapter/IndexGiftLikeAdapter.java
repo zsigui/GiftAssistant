@@ -34,7 +34,7 @@ public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike> 
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftLike o) {
 		bgaViewHolderHelper.setText(R.id.tv_game_name, o.name);
-		bgaViewHolderHelper.setText(R.id.tv_new, String.valueOf(o.newCount));
+		bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(o.newCount));
 		bgaViewHolderHelper.setText(R.id.tv_count, String.format("%d款礼包", o.totalCount));
 		// n款礼包
 		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon),

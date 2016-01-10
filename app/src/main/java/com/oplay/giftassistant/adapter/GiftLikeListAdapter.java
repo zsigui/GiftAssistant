@@ -46,7 +46,7 @@ public class GiftLikeListAdapter extends BGARecyclerViewAdapter<IndexGiftLike> {
 		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
 		bgaViewHolderHelper.setText(R.id.tv_count, Html.fromHtml(
 				String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
-		bgaViewHolderHelper.setText(R.id.tv_new, Html.fromHtml(
+		bgaViewHolderHelper.setText(R.id.tv_remain, Html.fromHtml(
 				String.format("今日新增<font color='#ffaa17'>%d</font>款", o.newCount)));
 		ImageLoader.getInstance().displayImage(o.img, (ImageView)bgaViewHolderHelper.getView(R.id.iv_icon));
 		if (AssistantApp.getInstance().isAllowDownload()) {

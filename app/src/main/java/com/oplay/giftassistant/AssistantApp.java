@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
@@ -113,7 +114,9 @@ public class AssistantApp extends Application {
 
 
 	private void initRetrofit() {
-		mGson = new Gson();
+		mGson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd HH:mm")
+				.create();
 		mRetrofit = new Retrofit.Builder()
 				.baseUrl(NetUrl.URL_BASE)
 				.addConverterFactory(GsonConverterFactory.create(mGson))
