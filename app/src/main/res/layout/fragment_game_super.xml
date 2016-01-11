@@ -1,4 +1,4 @@
-<cn.bingoogolapple.refreshlayout.BGARefreshLayout
+<com.oplay.giftassistant.ui.widget.RefreshLayout
 		android:id = "@+id/srl_layout"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		xmlns:app = "http://schemas.android.com/apk/res-auto"
@@ -6,7 +6,7 @@
 		android:layout_height = "match_parent"
 		android:background = "@color/co_transparent" >
 
-	<ScrollView
+	<android.support.v4.widget.NestedScrollView
 			android:id = "@+id/sv_container"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
@@ -40,7 +40,7 @@
 
 				</RelativeLayout >
 
-				<View style="@style/DividerView"/>
+				<View style="@style/HDividerView"/>
 
 				<android.support.v7.widget.RecyclerView
 						android:id = "@+id/rv_hot_content"
@@ -130,7 +130,7 @@
 
 				</RelativeLayout >
 
-				<View style="@style/DividerView"/>
+				<View style="@style/HDividerView"/>
 
 				<com.oplay.giftassistant.ui.widget.NestedListView
 						android:id = "@+id/rv_new_content"
@@ -139,6 +139,6 @@
 			</LinearLayout >
 
 		</LinearLayout >
-	</ScrollView >
+	</android.support.v4.widget.NestedScrollView >
 
-</cn.bingoogolapple.refreshlayout.BGARefreshLayout >
+</com.oplay.giftassistant.ui.widget.RefreshLayout >

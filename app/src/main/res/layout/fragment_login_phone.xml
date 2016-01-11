@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:paddingTop = "@dimen/di_login_padding_top"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+	<LinearLayout
+			android:orientation = "horizontal"
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+		<AutoCompleteTextView
+				android:id = "@+id/et_input"
+				style = "@style/DefaultTextView.Login"
+				android:hint = "@string/st_login_phone_hint" />
+
+		<TextView
+				android:id = "@+id/tv_clear"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:clickable = "true"
+				android:layout_marginRight = "5dp"
+				android:visibility = "gone"
+				android:background = "@drawable/ic_input_clear" />
+	</LinearLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<LinearLayout
+			android:orientation = "horizontal"
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+		<EditText
+				android:id = "@+id/et_phone_code"
+				style = "@style/DefaultTextView.Login"
+				android:inputType="number"
+				android:hint = "@string/st_login_phone_code_hint" />
+
+		<View style = "@style/VDividerView" />
+
+		<TextView
+				android:id = "@+id/tv_send_code"
+				style = "@style/DefaultTextView.LoginPoint"
+				android:layout_marginLeft = "10dp"
+				android:layout_height = "match_parent"
+				android:textColor = "@color/co_btn_green"
+				android:text = "@string/st_login_phone_send_code" />
+	</LinearLayout >
+
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:paddingLeft = "@dimen/di_login_padding_left_right"
+			android:paddingTop = "@dimen/di_login_padding_gap" >
+
+		<CheckedTextView
+				android:id = "@+id/ctv_law"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:checked = "true"
+				android:background = "@drawable/selector_item_check" />
+
+		<TextView
+				style = "@style/DefaultTextView.Text"
+				android:textSize = "10sp"
+				android:paddingLeft = "5dp"
+				android:paddingRight = "5dp"
+				android:text = "@string/st_login_law_a" />
+
+		<TextView
+				android:id = "@+id/tv_law"
+				style = "@style/DefaultTextView.LoginPoint"
+				android:textSize = "10sp"
+				android:clickable = "true"
+				android:text = "@string/st_login_law_b" />
+	</LinearLayout >
+
+	<TextView
+			android:id = "@+id/btn_send"
+			android:layout_marginLeft = "@dimen/di_login_padding_gap"
+			android:layout_marginRight = "@dimen/di_login_padding_gap"
+			android:layout_marginTop = "@dimen/di_login_padding_gap"
+			style = "@style/DefaultTextView.BiggerBtn"
+			android:background = "@drawable/selector_btn_bigger_red"
+			android:layout_width = "match_parent"
+			android:text = "@string/st_login_btn_text" />
+
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:paddingRight = "@dimen/di_login_padding_left_right"
+			android:paddingTop = "@dimen/di_login_padding_gap" >
+
+		<TextView
+				style = "@style/DefaultTextView.Text"
+				android:textSize = "12sp"
+				android:gravity = "right"
+				android:layout_weight = "1"
+				android:layout_width = "0dp"
+				android:text = "@string/st_login_has_ouwan_a" />
+
+		<TextView
+				android:id = "@+id/tv_another_login"
+				style = "@style/DefaultTextView.LoginPoint"
+				android:textSize = "12sp"
+				android:clickable = "true"
+				android:text = "@string/st_login_has_ouwan_b" />
+	</LinearLayout >
+
+</LinearLayout >

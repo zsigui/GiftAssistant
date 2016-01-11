@@ -9,7 +9,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
-import com.oplay.giftassistant.model.UserModel;
+import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -62,7 +62,7 @@ public class WalletFragment extends BaseFragment_WithName {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		UserModel user = AccountManager.getInstance().getUser();
+		UserInfo user = AccountManager.getInstance().getUserInfo();
 		tvScore.setText(String.valueOf(user.score));
 		tvBean.setText(String.valueOf(user.bean));
 	}

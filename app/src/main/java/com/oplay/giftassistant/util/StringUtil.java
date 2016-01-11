@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by zsigui on 15-12-25.
@@ -95,6 +96,19 @@ public class StringUtil {
 			return false;
 		}
 
+	}
+
+	/**
+	 * 账号密码输入字符串过滤
+	 */
+	public static String stringFilter(String text) throws PatternSyntaxException {
+		String returnStr = "";
+		for (char c : text.toCharArray()) {
+			if (c > 32 & c <= 126) {
+				returnStr += c;
+			}
+		}
+		return returnStr;
 	}
 
 }

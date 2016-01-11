@@ -14,7 +14,9 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.model.MobileInfoModel;
-import com.oplay.giftassistant.model.UserModel;
+import com.oplay.giftassistant.model.data.resp.UserInfo;
+import com.oplay.giftassistant.model.data.resp.UserModel;
+import com.oplay.giftassistant.model.data.resp.UserSession;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.util.CommonUtil;
 import com.oplay.giftassistant.util.SPUtil;
@@ -148,10 +150,9 @@ public class SplashActivity extends BaseAppCompatActivity {
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
-		user = initUser();
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
-		// AccountManager.getInstance().updateUserSession();
+		AccountManager.getInstance().updateUserSession();
 
 
 		mApp.setGlobalInit(true);
@@ -160,17 +161,22 @@ public class SplashActivity extends BaseAppCompatActivity {
 	private UserModel initUser() {
 		// 创建测试用户
 		UserModel u = new UserModel();
-		u.username = "zsigui";
-		u.score = 150;
-		u.bean = 10;
-		u.giftCount = 1;
-		u.loginType = 1;
-		u.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
-		u.nick = "Jackie";
-		u.openId = 1200024455;
-		u.session = "ABBEF54787545F";
-		u.phone = "18826401111";
-		u.uid = 11124444;
+		UserInfo userInfo = new UserInfo();
+		userInfo.username = "zsigui";
+		userInfo.score = 150;
+		userInfo.bean = 10;
+		userInfo.giftCount = 1;
+		userInfo.loginType = 1;
+		userInfo.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
+		userInfo.nick = "Jackie";
+		userInfo.uid = 11124444;
+		userInfo.phone = "18826401111";
+		UserSession session = new UserSession();
+		session.openId = "1200024455";
+		session.session = "ABBEF54787545F";
+		session.uid = 11124444;
+		u.userInfo = userInfo;
+		u.userSession = session;
 		return u;
 	}
 }

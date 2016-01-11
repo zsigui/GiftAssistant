@@ -164,7 +164,7 @@
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >@dimen/di_btn_height</item >
 		<item name = "android:textColor" >@color/co_white</item >
-		<item name = "android:clickable">true</item>
+		<item name = "android:clickable" >true</item >
 	</style >
 
 	<style name = "DefaultTextView.BiggerBtn" >
@@ -246,9 +246,15 @@
 		<item name = "android:layout_height" >@dimen/di_module_icon_diameter</item >
 	</style >
 
-	<style name = "DividerView" >
+	<style name = "HDividerView" >
 		<item name = "android:layout_width" >match_parent</item >
 		<item name = "android:layout_height" >@dimen/di_divider_height</item >
+		<item name = "android:background" >@color/co_divider_bg</item >
+	</style >
+
+	<style name = "VDividerView" >
+		<item name = "android:layout_width" >@dimen/di_divider_height</item >
+		<item name = "android:layout_height" >match_parent</item >
 		<item name = "android:background" >@color/co_divider_bg</item >
 	</style >
 
@@ -280,7 +286,7 @@
 
 	<style name = "DefaultTextView.FeedBack" >
 		<item name = "android:layout_width" >match_parent</item >
-		<item name = "android:layout_height">@dimen/di_module_bigger_height</item>
+		<item name = "android:layout_height" >@dimen/di_module_bigger_height</item >
 		<item name = "android:gravity" >left|center_vertical</item >
 		<item name = "android:paddingLeft" >12dp</item >
 		<item name = "android:textColor" >@color/co_common_text_second</item >
@@ -288,45 +294,45 @@
 
 	<style name = "DefaultTextView.FeedBackContent" >
 		<item name = "android:layout_width" >match_parent</item >
-		<item name = "android:layout_height">120dp</item>
+		<item name = "android:layout_height" >120dp</item >
 		<item name = "android:gravity" >left</item >
 		<item name = "android:singleLine" >false</item >
 		<item name = "android:textColor" >@color/co_common_text_main</item >
 		<item name = "android:textColorHint" >@color/co_common_text_second</item >
 		<item name = "android:background" >@color/co_transparent</item >
-		<item name = "android:paddingBottom">10dp</item>
+		<item name = "android:paddingBottom" >10dp</item >
 	</style >
 
 	<!-- 我的钱包 -->
-	<style name = "DefaultTextView.WalletMoney">
-		<item name = "android:textColor">@color/co_white</item>
-		<item name = "android:textSize">24sp</item>
-		<item name = "android:paddingTop">8dp</item>
-		<item name = "android:shadowDx">1</item>
-		<item name = "android:shadowDy">3</item>
-		<item name = "android:shadowRadius">1</item>
-		<item name = "android:shadowColor">@color/co_opacity_30</item>
-		<item name = "android:textStyle">bold</item>
-		<item name = "android:typeface">monospace</item>
-	</style>
+	<style name = "DefaultTextView.WalletMoney" >
+		<item name = "android:textColor" >@color/co_white</item >
+		<item name = "android:textSize" >24sp</item >
+		<item name = "android:paddingTop" >8dp</item >
+		<item name = "android:shadowDx" >1</item >
+		<item name = "android:shadowDy" >3</item >
+		<item name = "android:shadowRadius" >1</item >
+		<item name = "android:shadowColor" >@color/co_opacity_30</item >
+		<item name = "android:textStyle" >bold</item >
+		<item name = "android:typeface" >monospace</item >
+	</style >
 
 	<!-- 积分任务 -->
-	<style name = "IndexModuleLayout.Score">
-		<item name = "android:layout_height">73dp</item>
-		<item name = "android:paddingLeft">16dp</item>
-		<item name = "android:paddingRight">16dp</item>
-		<item name = "android:gravity">center_vertical</item>
-		<item name = "android:orientation">horizontal</item>
-		<item name = "android:clickable">true</item>
-		<item name = "android:background">@drawable/selector_white_module</item>
-		<item name = "android:layout_marginTop">1dp</item>
-	</style>
+	<style name = "IndexModuleLayout.Score" >
+		<item name = "android:layout_height" >73dp</item >
+		<item name = "android:paddingLeft" >16dp</item >
+		<item name = "android:paddingRight" >16dp</item >
+		<item name = "android:gravity" >center_vertical</item >
+		<item name = "android:orientation" >horizontal</item >
+		<item name = "android:clickable" >true</item >
+		<item name = "android:background" >@drawable/selector_white_module</item >
+		<item name = "android:layout_marginTop" >1dp</item >
+	</style >
 
-	<style name = "DefaultImageView.Score">
-		<item name = "android:layout_width">52dp</item>
-		<item name = "android:layout_height">52dp</item>
-		<item name = "android:layout_marginRight">@dimen/material_drawer_item_profile_icon_padding_right</item>
-	</style>
+	<style name = "DefaultImageView.Score" >
+		<item name = "android:layout_width" >52dp</item >
+		<item name = "android:layout_height" >52dp</item >
+		<item name = "android:layout_marginRight" >@dimen/material_drawer_item_profile_icon_padding_right</item >
+	</style >
 
 	<style name = "DefaultTextView.Score" >
 		<item name = "android:layout_width" >45dp</item >
@@ -342,5 +348,44 @@
 		<item name = "android:background" >@color/co_transparent</item >
 		<item name = "android:windowBackground" >@color/co_transparent</item >
 		<item name = "android:backgroundDimEnabled" >true</item >
+	</style >
+
+	<!-- 登录 -->
+	<style name = "AccountEditor" >
+		<item name = "android:popupBackground" >@color/co_common_content_bg</item >
+		<item name = "android:dropDownAnchor" >@null</item >
+		<item name = "android:layout_width" >match_parent</item >
+		<item name = "android:layout_height" >38dp</item >
+		<item name = "android:background" >@color/co_white</item >
+		<item name = "android:textColorHint" >@color/co_common_text_second</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
+		<item name = "android:textSize" >16dp</item >
+		<item name = "android:singleLine" >true</item >
+		<item name = "android:gravity" >bottom</item >_
+		<!--<item name = "android:paddingLeft" >@dimen/spacing_block</item >-->
+		<item name = "android:paddingRight" >4dp</item >
+		<item name = "android:textCursorDrawable" >@null</item >
+		<item name = "android:cursorVisible" >true</item >
+	</style >
+
+	<style name = "IndexModuleTitleLayout.Bigger.LoginInput" >
+		<item name = "android:gravity" >center_vertical</item >
+		<item name = "android:paddingLeft" >@dimen/di_login_padding_left_right</item >
+		<item name = "android:paddingRight" >8dp</item >
+	</style >
+
+	<style name = "DefaultTextView.Login" >
+		<item name = "android:layout_width" >0dp</item >
+		<item name = "android:layout_height" >wrap_content</item >
+		<item name = "android:layout_weight" >1</item >
+		<item name = "android:gravity" >left</item >
+		<item name = "android:paddingRight" >@dimen/di_login_padding_left_right</item >
+		<item name = "android:textColor">@color/co_common_text_main</item>
+		<item name = "android:textColorHint">@color/co_common_text_second</item>
+		<item name = "android:background" >@color/co_transparent</item >
+	</style >
+
+	<style name = "DefaultTextView.LoginPoint" >
+		<item name = "android:textColor" >@color/co_btn_green</item >
 	</style >
 </resources >

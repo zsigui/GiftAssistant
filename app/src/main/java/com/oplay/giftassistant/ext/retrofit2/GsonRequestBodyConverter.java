@@ -2,6 +2,7 @@ package com.oplay.giftassistant.ext.retrofit2;
 
 import com.google.gson.Gson;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;
+import com.socks.library.KLog;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
@@ -28,6 +29,7 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
 	@Override public RequestBody convert(T value) throws IOException {
 		String json = gson.toJson(value, type);
+		KLog.d("request = " + json);
 		int cmd = getCmdByJson(json);
 		byte[] data = NetDataEncrypt.getInstance().encrypt(json, cmd);
 		return RequestBody.create(MEDIA_TYPE, data);

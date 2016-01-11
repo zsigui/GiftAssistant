@@ -40,8 +40,8 @@
 						style = "@style/DefaultTextView.Header"
 						android:layout_width = "match_parent"
 						android:layout_marginTop = "6dp"
-						android:layout_marginLeft = "18dp"
-						android:layout_alignParentTop = "true"
+						android:layout_marginLeft = "14dp"
+						android:layout_alignTop="@+id/iv_icon"
 						android:layout_toRightOf = "@+id/iv_icon"
 						android:drawableLeft = "@drawable/ic_limit_tag"
 						android:drawablePadding = "4dp"
@@ -51,7 +51,7 @@
 						android:id = "@+id/tv_consume"
 						style = "@style/DefaultTextView.Text"
 						android:layout_below = "@+id/tv_name"
-						android:layout_marginLeft = "18dp"
+						android:layout_marginLeft = "14dp"
 						android:layout_marginRight = "5dp"
 						android:layout_marginTop = "10dp"
 						android:layout_toRightOf = "@+id/iv_icon"
@@ -88,7 +88,7 @@
 						android:id = "@+id/tv_remain"
 						style = "@style/DefaultTextView.Text"
 						android:layout_below = "@+id/tv_consume"
-						android:layout_marginLeft = "18dp"
+						android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
 						android:layout_marginTop = "7dp"
 						android:layout_toRightOf = "@+id/iv_icon"
 						android:text = "剩余 5个" />
@@ -104,7 +104,6 @@
 						android:layout_toLeftOf = "@+id/ll_send"
 						android:layout_toRightOf = "@+id/tv_remain"
 						android:max = "100"
-						android:visibility="gone"
 						android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
 				<TextView
@@ -112,7 +111,7 @@
 						style = "@style/DefaultTextView.Text"
 						android:layout_height = "33dp"
 						android:layout_width = "244dp"
-						android:layout_marginLeft = "18dp"
+						android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
 						android:layout_marginRight = "5dp"
 						android:layout_toRightOf = "@+id/iv_icon"
 						android:layout_toLeftOf = "@+id/btn_copy"
@@ -120,8 +119,8 @@
 						android:background = "@color/co_gift_code_bg"
 						android:gravity = "left|center_vertical"
 						android:paddingLeft = "10dp"
-						android:paddingRight = "10dp"
-						android:visibility="gone" />
+						android:visibility="gone"
+						android:paddingRight = "10dp"/>
 
 				<TextView
 						android:id = "@+id/btn_copy"
@@ -131,9 +130,9 @@
 						android:layout_alignTop = "@+id/tv_gift_code"
 						android:layout_marginLeft = "10dp"
 						android:layout_marginTop = "1dp"
+						android:visibility="gone"
 						android:background = "@drawable/selector_btn_red"
 						android:text = "复制"
-						android:visibility="gone"
 						android:textColor = "@color/co_white" />
 
 			</RelativeLayout >
@@ -193,11 +192,12 @@
 	<com.oplay.giftassistant.ui.widget.button.GiftButton
 			android:id = "@+id/btn_send"
 			style = "@style/DefaultTextView"
-			app:gb_isBigger="true"
+			app:gb_isBigger = "true"
 			android:layout_width = "200dp"
 			android:layout_height = "@dimen/di_btn_bigger_height"
-			android:layout_marginTop="8dp"
-			android:layout_marginBottom="8dp"
+			android:background = "@drawable/selector_btn_bigger_green"
+			android:layout_marginTop = "8dp"
+			android:layout_marginBottom = "8dp"
 			android:layout_gravity = "center"
 			android:text = "@string/st_gift_seize"
 			android:textColor = "@color/co_white" />

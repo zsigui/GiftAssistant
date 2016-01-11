@@ -59,15 +59,17 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	@Override
 	protected void setListener() {
+		/*mRefreshLayout.setOnRefreshListener(this);
+		mRefreshLayout.setOnLoadListener(this);*/
 		mRefreshLayout.setDelegate(this);
 	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
+		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
-		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), llm.getOrientation());
@@ -108,7 +110,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	                                if (AppDebugConfig.IS_DEBUG) {
 		                                KLog.e(AppDebugConfig.TAG_FRAG, t);
 	                                }
-	                                // lazyLoadFailEnd();
+	                                lazyLoadFailEnd();
                                     OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
                                     setLoadState(backObj.data, backObj.isEndPage);
                                     updateData(backObj.data);

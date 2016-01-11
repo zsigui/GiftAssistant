@@ -29,7 +29,7 @@
         android:layout_marginRight = "10dp"
         android:clickable="true"
         android:visibility="gone"
-        android:background = "@drawable/ic_search_cancel"
+        android:background = "@drawable/ic_input_clear"
         android:contentDescription = "@null"/>
 
     <TextView

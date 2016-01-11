@@ -1,7 +1,6 @@
 package com.oplay.giftassistant.engine;
 
 import com.oplay.giftassistant.config.NetUrl;
-import com.oplay.giftassistant.model.UserModel;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.req.ReqLogin;
@@ -18,6 +17,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
+import com.oplay.giftassistant.model.data.resp.UpdateSesion;
+import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
@@ -105,7 +106,7 @@ public interface NetEngine {
 	 * 更新session，保持登录态情况下，每次启动APP进行验证
 	 */
 	@POST(NetUrl.USER_UPDATE_SESSION)
-	Call<JsonRespBase<UserModel>> updateSession(@Body JsonReqBase<Object> reqData);
+	Call<JsonRespBase<UpdateSesion>> updateSession(@Body JsonReqBase<Object> reqData);
 
 	/**
 	 * 修改手机号码，需要进行多歩

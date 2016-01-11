@@ -7,7 +7,6 @@ import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
@@ -15,6 +14,7 @@ import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.IntentUtil;
+import com.oplay.giftassistant.util.ToastUtil;
 
 /**
  * @author micle
@@ -186,7 +186,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	protected void showToast(String text) {
-		Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
+		ToastUtil.showShort(text);
 	}
 
 

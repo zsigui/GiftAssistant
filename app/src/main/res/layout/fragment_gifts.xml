@@ -41,7 +41,7 @@
 
 				</RelativeLayout >
 
-				<View style = "@style/DividerView" />
+				<View style = "@style/HDividerView" />
 
 				<android.support.v7.widget.RecyclerView
 						android:id = "@+id/rv_like_content"
@@ -75,7 +75,7 @@
 				</RelativeLayout >
 
 				<View
-						style = "@style/DividerView" />
+						style = "@style/HDividerView" />
 
 				<android.support.v7.widget.RecyclerView
 						android:id = "@+id/rv_limit_content"
@@ -100,7 +100,7 @@
 
 				</RelativeLayout >
 
-				<View style = "@style/DividerView" />
+				<View style = "@style/HDividerView" />
 
 				<com.oplay.giftassistant.ui.widget.NestedListView
 						android:id = "@+id/rv_new_content"

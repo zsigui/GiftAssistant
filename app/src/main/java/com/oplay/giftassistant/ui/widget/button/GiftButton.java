@@ -30,10 +30,11 @@ public class GiftButton extends TextView{
 		TypedArray t = context.obtainStyledAttributes(attrs, R.styleable.GiftButton, defStyleAttr, 0);
 		mBiggerButton = t.getBoolean(R.styleable.GiftButton_gb_isBigger, false);
 		t.recycle();
+		setRedBg();
 	}
 
 	public void setState(int state) {
-		setEnabled(true);
+		setEnabled(false);
 		setOrangeBg();
 		switch (state) {
 			case GiftTypeUtil.TYPE_NORMAL_FINISHED :
@@ -44,53 +45,49 @@ public class GiftButton extends TextView{
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE :
 				setText(R.string.st_gift_wait_seize);
-				setEnabled(false);
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCHED :
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH :
 				setText(R.string.st_gift_search);
+				setEnabled(true);
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE :
 				setText(R.string.st_gift_seize);
-				break;
-			case GiftTypeUtil.TYPE_LIMIT_SEIZED :
-				setText(R.string.st_gift_seized);
-				setEnabled(false);
-				break;
-			case GiftTypeUtil.TYPE_LIMIT_EMPTY :
-				setText(R.string.st_gift_empty);
-				setEnabled(false);
-				break;
-			case GiftTypeUtil.TYPE_LIMIT_FINISHED :
-				setText(R.string.st_gift_finished);
-				setEnabled(false);
-				break;
-			case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE :
-				setText(R.string.st_gift_wait_seize);
-				setEnabled(false);
+				setEnabled(true);
 				break;
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE :
 				setText(R.string.st_gift_seize);
-				setBackgroundResource(R.drawable.selector_btn_red);
 				setRedBg();
+				setEnabled(true);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_SEIZED :
+				setText(R.string.st_gift_seized);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_EMPTY :
+				setText(R.string.st_gift_empty);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_FINISHED :
+				setText(R.string.st_gift_finished);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE :
+				setText(R.string.st_gift_wait_seize);
 				break;
 		}
-		invalidate();
 	}
 
 	private void setOrangeBg() {
 		if (mBiggerButton) {
-			setBackgroundResource(R.drawable.selector_btn_orange);
-		} else {
 			setBackgroundResource(R.drawable.selector_btn_bigger_orange);
+		} else {
+			setBackgroundResource(R.drawable.selector_btn_orange);
 		}
 	}
 
 	private void setRedBg() {
 		if (mBiggerButton) {
-			setBackgroundResource(R.drawable.selector_btn_red);
-		} else {
 			setBackgroundResource(R.drawable.selector_btn_bigger_red);
+		} else {
+			setBackgroundResource(R.drawable.selector_btn_red);
 		}
 	}
 }

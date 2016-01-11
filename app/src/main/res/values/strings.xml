@@ -1,7 +1,10 @@
 <resources >
-	<string name = "app_name" >GiftAssistant</string >
-	<string name = "action_settings" >Settings</string >
+	<string name = "app_name" >礼包酷</string >
 
+
+	<!-- refresh view -->
+	<string name = "st_view_loading_more">加载中&#8230;</string>
+	<string name = "st_view_loading">抢号中，请稍后&#8230;</string>
 	<!-- ToolBar -->
 	<string name = "toolbar_title" >默认</string >
 	<!-- -->
@@ -89,6 +92,24 @@
 
 	<!-- 设置 - 我的礼包 -->
 	<string name = "st_my_gift_title">我的礼包</string>
+
+	<!-- 登录 -->
+	<string name = "st_login_phone_title">登录礼包酷</string>
+	<string name = "st_login_ouwan_title">偶玩账号登录</string>
+	<string name = "st_login_phone_hint">请输入手机号</string>
+	<string name = "st_login_phone_code_hint">请输入短信验证码</string>
+	<string name = "st_login_ouwan_user_hint">请输入偶玩账号</string>
+	<string name = "st_login_ouwan_pwd_hint">请输入密码</string>
+	<string name = "st_login_phone_send_code">发送验证码</string>
+	<string name = "st_login_phone_resend_code">重新发送(%ds)</string>
+	<string name = "st_login_law_a">我已阅读并同意</string>
+	<string name = "st_login_law_b">使用条款和隐私政策</string>
+	<string name = "st_login_has_ouwan_a">已有偶玩账号? 用</string>
+	<string name = "st_login_has_ouwan_b">偶玩账号登录</string>
+	<string name = "st_login_no_ouwan_a">没有偶玩账号? 用</string>
+	<string name = "st_login_no_ouwan_b">手机账号登录</string>
+	<string name = "st_login_forget_pwd">忘记密码</string>
+	<string name = "st_login_btn_text">登 录</string>
 
 
 	<!-- 弹窗 -->

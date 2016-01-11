@@ -1,60 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources >
 
-    <declare-styleable name="ScaleView">
-        <attr name="measureByHeight" format="boolean"></attr>
-        <attr name="fraction" format="float"></attr>
-    </declare-styleable>
+	<declare-styleable name = "ScaleView" >
+		<attr name = "measureByHeight" format = "boolean" ></attr >
+		<attr name = "fraction" format = "float" ></attr >
+	</declare-styleable >
 
-	<declare-styleable name="ViewIndicator">
-		<attr name="triggerColor" format="color|reference"></attr>
-		<attr name="normalColor" format="color"></attr>
-		<attr name="triggerSize" format="dimension"></attr>
-		<attr name="normalSize" format="dimension"></attr>
-		<attr name="needSlipTag" format="boolean"></attr>
-		<attr name="slipTagColor" format="color"></attr>
-		<attr name="slipTagSize" format="dimension"></attr>
-	</declare-styleable>
+	<declare-styleable name = "ViewIndicator" >
+		<attr name = "triggerColor" format = "color|reference" ></attr >
+		<attr name = "normalColor" format = "color" ></attr >
+		<attr name = "triggerSize" format = "dimension" ></attr >
+		<attr name = "normalSize" format = "dimension" ></attr >
+		<attr name = "needSlipTag" format = "boolean" ></attr >
+		<attr name = "slipTagColor" format = "color" ></attr >
+		<attr name = "slipTagSize" format = "dimension" ></attr >
+	</declare-styleable >
 
 	<!-- the setting attributes of the Loading CircleProgress -->
 	<declare-styleable name = "CircleProgress" >
-		<attr name="color1" format="reference|color"/>
-		<attr name="color2" format="reference|color"/>
-		<attr name="color3" format="reference|color"/>
-	</declare-styleable>
+		<attr name = "color1" format = "reference|color" />
+		<attr name = "color2" format = "reference|color" />
+		<attr name = "color3" format = "reference|color" />
+	</declare-styleable >
 
-    <declare-styleable name="ShapeLayout">
-        <attr name="shape_src"
-              format="reference"/>
-    </declare-styleable>
-    
-    <declare-styleable name="RoundedLayout">
-        <attr name="rl_radius" format="dimension" />
-    </declare-styleable>
-    
-    <declare-styleable name="TopInnerArrowLayout">
-        <attr name="arrowSize"
-              format="dimension"/>
-        <attr name="arrowPosition"
-              format="float"/>
-    </declare-styleable>
+	<declare-styleable name = "ShapeLayout" >
+		<attr name = "shape_src"
+		      format = "reference" />
+	</declare-styleable >
 
-    <declare-styleable name="ToggleButton">
-        <attr name="tb_borderWidth" format="dimension">
-        </attr>
-        <attr name="tb_offBorderColor" format="reference|color">
-        </attr>
-        <attr name="tb_offColor" format="reference|color">
-        </attr>
-        <attr name="tb_onColor" format="reference|color">
-        </attr>
-        <attr name="tb_spotColor" format="reference|color">
-        </attr>
-        <attr name="tb_animate" format="reference|boolean">
-        </attr>
-    </declare-styleable>
+	<declare-styleable name = "RoundedLayout" >
+		<attr name = "rl_radius" format = "dimension" />
+	</declare-styleable >
 
-	<declare-styleable name = "GiftButton">
-		<attr name = "gb_isBigger" format="boolean"/>
-	</declare-styleable>
-</resources>
+	<declare-styleable name = "TopInnerArrowLayout" >
+		<attr name = "arrowSize"
+		      format = "dimension" />
+		<attr name = "arrowPosition"
+		      format = "float" />
+	</declare-styleable >
+
+	<declare-styleable name = "ToggleButton" >
+		<attr name = "tb_borderWidth" format = "dimension" >
+		</attr >
+		<attr name = "tb_offBorderColor" format = "reference|color" >
+		</attr >
+		<attr name = "tb_offColor" format = "reference|color" >
+		</attr >
+		<attr name = "tb_onColor" format = "reference|color" >
+		</attr >
+		<attr name = "tb_spotColor" format = "reference|color" >
+		</attr >
+		<attr name = "tb_animate" format = "reference|boolean" >
+		</attr >
+	</declare-styleable >
+
+	<declare-styleable name = "GiftButton" >
+		<attr name = "gb_isBigger" format = "boolean" />
+	</declare-styleable >
+
+	<declare-styleable name = "PasswordTextView" >
+		<attr name = "ptv_hint" format = "string|reference" />
+	</declare-styleable >
+</resources >

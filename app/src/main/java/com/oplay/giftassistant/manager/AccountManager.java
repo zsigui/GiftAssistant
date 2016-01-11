@@ -5,13 +5,21 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.oplay.giftassistant.AssistantApp;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.model.UserModel;
+import com.oplay.giftassistant.config.SPConfig;
+import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.model.data.resp.UpdateSesion;
+import com.oplay.giftassistant.model.data.resp.UserInfo;
+import com.oplay.giftassistant.model.data.resp.UserModel;
+import com.oplay.giftassistant.model.data.resp.UserSession;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;
+import com.socks.library.KLog;
+
+import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -25,7 +33,8 @@ public class AccountManager {
 
 	private static AccountManager manager;
 
-	private AccountManager(){}
+	private AccountManager() {
+	}
 
 	private Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -49,20 +58,57 @@ public class AccountManager {
 		mUser = user;
 		// 当用户变化，需要进行通知
 		ObserverManager.getInstance().notifyUserUpdate();
+		if (user != null) {
+			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
+		} else {
+			NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
+		}
 		// 如果再更新状态过程中用户退出登录，直接取消重试
 		mHandler.removeCallbacks(mUpdateSessionTask);
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				// 写入SP中
+				String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
+				Global_SharePreferences.saveEncodeStringToSharedPreferences(AssistantApp.getInstance().getApplicationContext(),
+						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, userJson, SPConfig.SALT_USER_INFO);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, "save to sp : " + userJson);
+				}
+			}
+		});
 	}
 
 	public boolean isLogin() {
 		return (mUser != null
-				&& !TextUtils.isEmpty(mUser.session)
-				&& mUser.uid != 0);
+				&& !TextUtils.isEmpty(getUserSesion().session)
+				&& getUserInfo().uid != 0);
+	}
+
+	public UserInfo getUserInfo() {
+		return mUser == null ? null : mUser.userInfo;
+	}
+
+	public UserSession getUserSesion() {
+		return mUser == null ? null : mUser.userSession;
 	}
 
 	public void updateUserSession() {
 		if (isLogin()) {
-			NetDataEncrypt.getInstance().initDecryptDataModel(mUser.uid, mUser.session);
+			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
 			mHandler.postAtFrontOfQueue(mUpdateSessionTask);
+		}
+	}
+
+	public void updateUserInfo() {
+		if (isLogin()) {
+			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
+			Global.THREAD_POOL.execute(new Runnable() {
+				@Override
+				public void run() {
+
+				}
+			});
 		}
 	}
 
@@ -72,17 +118,20 @@ public class AccountManager {
 		public void run() {
 			if (NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
 				Global.getNetEngine().updateSession(new JsonReqBase<Object>())
-						.enqueue(new Callback<JsonRespBase<UserModel>>() {
+						.enqueue(new Callback<JsonRespBase<UpdateSesion>>() {
 
 							@Override
-							public void onResponse(Response<JsonRespBase<UserModel>> response,
+							public void onResponse(Response<JsonRespBase<UpdateSesion>> response,
 							                       Retrofit retrofit) {
 								if (response != null && response.isSuccess()) {
-									mUpdateSessionRetryTime = 0;
-									setUser(response.body().getData());
-								} else {
-									retryJudge();
+									if(response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+										mUpdateSessionRetryTime = 0;
+										mUser.userSession.session = response.body().getData().session;
+										return;
+									}
+
 								}
+								retryJudge();
 							}
 
 							@Override
@@ -98,16 +147,9 @@ public class AccountManager {
 	};
 
 	private void retryJudge() {
-		ToastUtil.showShort("网络连接失败");
 		if (mUpdateSessionRetryTime < 3) {
 			// 请求失败, 5秒后再请求
 			mHandler.postAtTime(mUpdateSessionTask, 5000);
-		} else if (mUpdateSessionRetryTime < 10){
-			// 10次以内, 10秒后再请求
-			mHandler.postAtTime(mUpdateSessionTask, 10 * 1000);
-		} else if (mUpdateSessionRetryTime < 60) {
-			// 60次，1分钟后请求
-			mHandler.postAtTime(mUpdateSessionTask, 60 * 1000);
 		}
 		mUpdateSessionRetryTime++;
 	}

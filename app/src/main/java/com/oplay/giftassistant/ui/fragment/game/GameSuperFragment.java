@@ -2,12 +2,12 @@ package com.oplay.giftassistant.ui.fragment.game;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -17,13 +17,14 @@ import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.model.data.resp.IndexGameBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.GameListActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -40,12 +41,12 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameSuperFragment extends BaseFragment_Refresh implements View.OnClickListener {
+public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.OnClickListener {
 
     private List<View> views;
     private IndexGameNew mRecommendData;
 
-    private ScrollView mScrollView;
+    private NestedScrollView mScrollView;
     // 活动图，5张
     private BGABanner mBanner;
 
@@ -78,6 +79,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
     protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_game_super);
 
+	    mRefreshLayout = getViewById(R.id.srl_layout);
         mScrollView = getViewById(R.id.sv_container);
         mBanner = getViewById(R.id.banner);
         mHotBar = getViewById(R.id.rl_hot_all);
@@ -98,6 +100,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
         mHotBar.setOnClickListener(this);
         mNewBar.setOnClickListener(this);
         mRecommendDownload.setOnClickListener(this);
+	    mRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -114,7 +117,6 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
         // 设置RecyclerView的LayoutManager
         GridLayoutManager glm = new GridLayoutManager(getContext(), 4);
         mHotView.setLayoutManager(glm);
-
 
         mIsPrepared = mNoMoreLoad = true;
     }
@@ -179,11 +181,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
     @Override
     protected void lazyLoad() {
-        mIsLoading = true;
-        if (!mIsRefresh) {
-            mViewManager.showLoading();
-            mHasData = false;
-        }
+	    lazyLoadInitConfig();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -194,25 +192,25 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                                 @Override
                                 public void onResponse(Response<JsonRespBase<IndexGameSuper>> response,
                                                        Retrofit retrofit) {
-                                    mIsLoading = mIsRefresh = false;
                                     if (response != null && response.isSuccess()) {
-                                        mHasData = true;
-                                        updateData(response.body().getData());
-                                        return;
+	                                    if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+		                                    lazyLoadSuccessEnd();
+		                                    updateData(response.body().getData());
+		                                    return;
+	                                    }
                                     }
                                     // 出错
-                                    mViewManager.showErrorRetry();
+	                                lazyLoadFailEnd();
                                 }
 
                                 @Override
                                 public void onFailure(Throwable t) {
-                                    mIsLoading = mIsRefresh = false;
-                                    //mViewManager.showErrorRetry();
+                                    lazyLoadFailEnd();
                                     updateData(initStashData());
                                 }
                             });
                 } else {
-                    mViewManager.showErrorRetry();
+	                lazyLoadFailEnd();
                 }
             }
         }).start();

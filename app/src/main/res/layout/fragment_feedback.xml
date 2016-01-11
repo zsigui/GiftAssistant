@@ -34,14 +34,14 @@
 						android:text = "@string/st_feedback_type_function"
 						android:checked = "true" />
 
-				<View style = "@style/DividerView" />
+				<View style = "@style/HDividerView" />
 
 				<RadioButton
 						android:id = "@+id/rb_pay"
 						style = "@style/DefaultRadioButton.FeedBack"
 						android:text = "@string/st_feedback_type_pay" />
 
-				<View style = "@style/DividerView" />
+				<View style = "@style/HDividerView" />
 
 				<RadioButton
 						android:id = "@+id/rb_other"

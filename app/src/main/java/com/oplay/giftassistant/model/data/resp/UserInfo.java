@@ -1,37 +1,24 @@
-package com.oplay.giftassistant.model;
+package com.oplay.giftassistant.model.data.resp;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 /**
- * Created by zsigui on 15-12-16.
+ * Created by zsigui on 16-1-11.
  */
-public class UserModel implements Serializable{
+public class UserInfo implements Serializable {
 
 	/**
 	 * 登陆类型
 	 */
 	@SerializedName("login_type")
 	public int loginType;
-
-	/**
-	 * 用户第三方id (手机登录才有)
-	 */
-	@SerializedName("openid")
-	public int openId;
-
 	/**
 	 * 用户id
 	 */
 	@SerializedName("user_id")
 	public int uid;
-
-	/**
-	 * session,用于进行请求访问
-	 */
-	public String session;
-
 	/**
 	 * 用户名 (偶玩账号)
 	 */
@@ -73,5 +60,4 @@ public class UserModel implements Serializable{
 	 */
 	@SerializedName("gift_count")
 	public int giftCount;
-
 }

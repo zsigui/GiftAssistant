@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		android:orientation = "vertical" >
+
+	<View style = "@style/HDividerView" />
+
+	<LinearLayout
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
+			android:orientation = "horizontal" >
+
+		<CheckedTextView
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
+				android:drawableLeft = "@drawable/selector_item_circle_check" />
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:drawableLeft = "@drawable/ic_score"
+				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
+				android:text = "积分支付" />
+	</LinearLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<LinearLayout
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
+			android:orientation = "horizontal" >
+
+		<CheckedTextView
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
+				android:drawableLeft = "@drawable/selector_item_circle_check" />
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:drawableLeft = "@drawable/ic_bean"
+				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
+				android:text = "偶玩豆支付" />
+	</LinearLayout >
+
+	<View style = "@style/HDividerView" />
+</LinearLayout >

@@ -56,15 +56,6 @@ public class ReqLogin {
 	 * @return 设置成功返回true, 空值/格式不符合/加密失败返回false
 	 */
 	public boolean setOuwanUser(String username, String password) {
-		String userRegex = "";
-		String pwdRegex = "";
-		if (!StringUtil.matches(username, userRegex, false)
-				|| !StringUtil.matches(password, pwdRegex, false)) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_APP, "src : username = " + this.username + ", password = " + password);
-			}
-			return false;
-		}
 		this.username = username.toLowerCase();
 		this.password = Coder_Md5.md5(Coder_Md5.md5(password) + this.username);
 		if (this.password.length() == 0) {
@@ -81,7 +72,7 @@ public class ReqLogin {
 	 * 第一步获取验证码的时候调用
 	 */
 	public boolean setPhoneUser(String phone) {
-		String phoneRegex = "";
+		String phoneRegex = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 		if (!StringUtil.matches(phone, phoneRegex, false)) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "src : phone = " + this.phone);
@@ -97,7 +88,7 @@ public class ReqLogin {
 	 * 第二步登录的是否调用
 	 */
 	public boolean setPhoneUser(String phone, String code) {
-		String phoneRegex = "";
+		String phoneRegex = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 		if (!StringUtil.matches(phone, phoneRegex, false)
 				|| TextUtils.isEmpty(code)) {
 			if (AppDebugConfig.IS_DEBUG) {

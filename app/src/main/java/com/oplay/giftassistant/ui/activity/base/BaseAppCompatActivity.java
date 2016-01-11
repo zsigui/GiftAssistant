@@ -134,6 +134,13 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		setBarTitle(title);
 	}
 
+	public void replaceFragWithTitle(@IdRes int id, BaseFragment_WithName newFrag, String title,
+	                                 boolean isAddToBackStack) {
+		newFrag.setTitleName(title);
+		replaceFrag(id, newFrag, isAddToBackStack);
+		setBarTitle(title);
+	}
+
 	public void replaceFrag(@IdRes int id, Fragment newFrag) {
 		replaceFrag(id, newFrag, newFrag.getClass().getSimpleName(), true);
 	}

@@ -57,4 +57,8 @@ public class JsonRespBase<T> implements Serializable {
 	public String toString() {
 		return "c : " + mCode + ", m : " + mMsg + ", data : " + mData;
 	}
+
+	public String error() {
+		return "c : " + mCode + ", m : " + mMsg;
+	}
 }

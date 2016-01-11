@@ -30,6 +30,8 @@ public class AppDebugConfig {
 
 	public static final String TAG_ENCRYPT = "data_encrypt_debug";
 
+	public static final String TAG_MANAGER = "data_manager_debug";
+
 
 
 

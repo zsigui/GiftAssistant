@@ -127,7 +127,7 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		tvScore.setText(String.valueOf(AccountManager.getInstance().getUser().score));
+		tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
 	}
@@ -212,7 +212,7 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 			if (mission.id.equals(id)) {
 				mission.completeTime++;
 				mission.lastCompleteTime = DateUtil.getDate("yyyy-MM-dd", 0);
-				AccountManager.getInstance().getUser().score += mission.rewardScore;
+				AccountManager.getInstance().getUserInfo().score += mission.rewardScore;
 				return;
 			}
 		}
@@ -379,7 +379,7 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 	@Override
 	public void onUserUpdate() {
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
-			tvScore.setText(AccountManager.getInstance().getUser().score);
+			tvScore.setText(AccountManager.getInstance().getUserInfo().score);
 		}
 	}
 

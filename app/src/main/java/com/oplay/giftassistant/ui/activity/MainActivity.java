@@ -26,7 +26,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
-import com.oplay.giftassistant.model.UserModel;
+import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -53,7 +53,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 当前选项卡下标
 	private int mCurrentIndex = 0;
 
-	private UserModel mUser;
+	private UserInfo mUser;
 	// 侧边栏
 	private Drawer mDrawer;
 	private AccountHeader mDrawerHeader;
@@ -90,10 +90,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				.withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
 					@Override
 					public boolean onProfileImageClick(View view, IProfile iProfile, boolean b) {
+						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 						if (AccountManager.getInstance().isLogin()) {
 							ToastUtil.showShort("已经登录，跳转个人信息页面");
 						} else {
-							ToastUtil.showShort("未登录，跳转登录页面");
+							intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
+							startActivity(intent);
 						}
 						return false;
 					}
@@ -114,13 +116,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				.addDrawerItems(
 						new PrimaryDrawerItem().withName("我的礼包").withSelectable(false).withIdentifier(KeyConfig
 								.TYPE_ID_MY_GIFT_CODE).withIcon(GoogleMaterial.Icon.gmd_ac_unit),
-						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_SETTING).withIcon(GoogleMaterial.Icon.gmd_account_balance),
 						new DividerDrawerItem(),
 						new PrimaryDrawerItem().withName("我的钱包").withSelectable(false).withIdentifier(KeyConfig
 								.TYPE_ID_WALLET).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo),
 						new PrimaryDrawerItem().withName("积分任务").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_SCORE_TASK).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo))
+								.TYPE_ID_SCORE_TASK).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo),
+						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_SETTING).withIcon(GoogleMaterial.Icon.gmd_account_balance))
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
@@ -128,6 +130,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 							if (drawerItem.getIdentifier() != KeyConfig.TYPE_ID_SETTING
 									&& drawerItem.getIdentifier() !=  KeyConfig.TYPE_ID_DOWNLOAD
 									&& !AccountManager.getInstance().isLogin()) {
+								ToastUtil.showShort("请先登录");
 								Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 								intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
 								startActivity(intent);
@@ -209,7 +212,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private void updateToolBar() {
 		if (AccountManager.getInstance().isLogin()) {
-			mUser = AccountManager.getInstance().getUser();
+			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
 			ImageLoader.getInstance().displayImage(mUser.img, ivProfile);
 		} else {
@@ -336,7 +339,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	public void onUserUpdate() {
-		mUser = AccountManager.getInstance().getUser();
+		mUser = AccountManager.getInstance().getUserInfo();
 		updateToolBar();
 		updateProfile();
 		mDrawerHeader.updateProfile(mProfile);

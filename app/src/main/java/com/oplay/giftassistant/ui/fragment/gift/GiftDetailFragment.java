@@ -119,16 +119,16 @@ public class GiftDetailFragment extends BaseFragment {
 		}
 		int state = GiftTypeUtil.getItemViewType(mData);
 
-		tvConsume.setVisibility(View.GONE);
-		tvBean.setVisibility(View.GONE);
 		tvOr.setVisibility(View.GONE);
-		tvScore.setVisibility(View.GONE);
 		tvRemain.setVisibility(View.GONE);
 		pbPercent.setVisibility(View.GONE);
+		tvBean.setVisibility(View.GONE);
 		tvCode.setVisibility(View.GONE);
 		btnCopy.setVisibility(View.GONE);
+		tvScore.setVisibility(View.GONE);
 
 		if (mData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
+			tvConsume.setVisibility(View.VISIBLE);
 			if (mData.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
 				tvScore.setVisibility(View.VISIBLE);
 				tvScore.setText(String.valueOf(mData.score));
@@ -153,7 +153,7 @@ public class GiftDetailFragment extends BaseFragment {
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 					int progress = mData.remainCount * 100 / mData.totalCount;
-					tvRemain.setText(Html.fromHtml(String.format("剩余%d%", progress)));
+					tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
 					pbPercent.setVisibility(View.VISIBLE);
 					pbPercent.setProgress(progress);
 					break;
