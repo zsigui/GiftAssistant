@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-              android:layout_width = "260dp"
-              android:layout_height = "wrap_content"
-              android:background = "@color/co_white"
+              android:layout_height = "match_parent"
+              android:layout_width="match_parent"
               android:orientation = "vertical" >
 
-	<TextView
-			android:id = "@+id/tv_title"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:paddingBottom = "10dp"
-			android:paddingLeft = "16dp"
-			android:paddingTop = "10dp"
-			android:text = "@string/st_dialog_hint_title"
-			android:textColor = "@color/co_common_app_second_bg_green" />
-
-	<View style = "@style/HDividerView" />
-
-	<TextView
-			android:id = "@+id/tv_content"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:padding = "16dp"
-			android:singleLine = "false"
-			android:textColor = "@color/co_black" />
-
-	<LinearLayout
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:gravity = "center"
-			android:orientation = "horizontal"
-			android:padding = "16dp" >
+	<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	              android:layout_width = "260dp"
+	              android:layout_height = "wrap_content"
+	              android:background = "@color/co_white"
+	              android:orientation = "vertical" >
 
 		<TextView
-				android:id = "@+id/btn_cancel"
-				style = "@style/ButtonText"
-				android:layout_width = "90dp"
-				android:layout_marginRight = "8dp"
-				android:background = "@drawable/shape_rect_btn_grey"
-				android:text = "@string/st_btn_cancel" />
+				android:id = "@+id/tv_title"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingBottom = "10dp"
+				android:paddingLeft = "16dp"
+				android:paddingTop = "10dp"
+				android:text = "@string/st_dialog_hint_title"
+				android:textColor = "@color/co_common_app_second_bg_green" />
+
+		<View style = "@style/HDividerView" />
 
 		<TextView
-				android:id = "@+id/btn_confirm"
-				style = "@style/ButtonText"
-				android:layout_width = "90dp"
-				android:layout_marginLeft = "8dp"
-				android:background = "@drawable/selector_btn_green"
-				android:text = "@string/st_btn_confirm" />
+				android:id = "@+id/tv_content"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:padding = "16dp"
+				android:singleLine = "false"
+				android:textColor = "@color/co_black" />
+
+		<LinearLayout
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:gravity = "center"
+				android:orientation = "horizontal"
+				android:padding = "16dp" >
+
+			<TextView
+					android:id = "@+id/btn_cancel"
+					style = "@style/ButtonText"
+					android:layout_width = "90dp"
+					android:layout_marginRight = "8dp"
+					android:background = "@drawable/shape_rect_btn_grey"
+					android:text = "@string/st_dialog_btn_cancel" />
+
+			<TextView
+					android:id = "@+id/btn_confirm"
+					style = "@style/ButtonText"
+					android:layout_width = "90dp"
+					android:layout_marginLeft = "8dp"
+					android:background = "@drawable/selector_btn_green"
+					android:text = "@string/st_dialog_btn_confirm" />
+		</LinearLayout >
+
 	</LinearLayout >
 
 </LinearLayout >

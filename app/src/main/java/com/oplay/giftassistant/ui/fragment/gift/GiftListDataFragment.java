@@ -76,7 +76,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
 		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
-		mAdapter = new IndexGiftNewAdapter(getContext());
+		mAdapter = new IndexGiftNewAdapter(getActivity());
 		if (getArguments() != null) {
 			Serializable s = getArguments().getSerializable(KEY_DATA);
 			if (s != null) {

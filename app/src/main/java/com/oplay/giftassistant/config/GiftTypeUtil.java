@@ -40,9 +40,10 @@ public class GiftTypeUtil {
 	public static final int STATUS_SEARCH = 4;
 	public static final int STATUS_FINISHED = 5;
 	// 1 积分， 2 偶玩豆， 3 积分或偶玩豆
+	public static final int PAY_TYPE_NONE = 0;
 	public static final int PAY_TYPE_SCORE = 1;
 	public static final int PAY_TYPE_BEAN = 2;
-	public static final int PAY_TYPE_BOTN = 3;
+	public static final int PAY_TYPE_BOTH = 3;
 	// 0 未抢 1 已抢 2 已淘
 	public static final int SEIZE_TYPE_NEVER = 0;
 	public static final int SEIZE_TYPE_SEIZED = 1;

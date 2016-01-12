@@ -175,7 +175,7 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 									}
 									showToast("发送失败 - " + (response.body() == null ?
 											"解析异常" : response.body().getMsg()));
-
+									return;
 								}
 								showToast("发送失败 - 解析异常");
 							}

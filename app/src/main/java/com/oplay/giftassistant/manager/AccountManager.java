@@ -117,7 +117,7 @@ public class AccountManager {
 		@Override
 		public void run() {
 			if (NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
-				Global.getNetEngine().updateSession(new JsonReqBase<Object>())
+				Global.getNetEngine().updateSession(new JsonReqBase<String>("0"))
 						.enqueue(new Callback<JsonRespBase<UpdateSesion>>() {
 
 							@Override
@@ -136,6 +136,9 @@ public class AccountManager {
 
 							@Override
 							public void onFailure(Throwable t) {
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.e(AppDebugConfig.TAG_MANAGER, t);
+								}
 								retryJudge();
 							}
 						});

@@ -22,6 +22,7 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.socks.library.KLog;
 
@@ -39,7 +40,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	protected Toolbar mToolbar;
 	private TextView tvTitle;
 
-	private SweetAlertDialog mLoadingDialog;
+	private LoadingDialog mLoadingDialog;
 	protected boolean mNeedWorkCallback = false;
 	protected LoadingFragment mLoadingFragment;
 	// 封装加载和等待等页面的管理器对象
@@ -352,31 +353,33 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	}
 
 	public void showLoadingDialog() {
+		showLoadingDialog(getResources().getString(R.string.st_view_loading_more));
+	}
+
+	public void showLoadingDialog(final String loadText) {
 		if (isMainThread()) {
 			if (mLoadingDialog == null) {
-				mLoadingDialog = new SweetAlertDialog(BaseAppCompatActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-				mLoadingDialog.setCancelable(true);
-				mLoadingDialog.setTitleText("操作执行中...");
+				mLoadingDialog = LoadingDialog.newInstance();
 			}
-			mLoadingDialog.show();
+			mLoadingDialog.setLoadText(loadText);
+			mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
 		} else {
 			mHandler.post(new Runnable() {
 				@Override
 				public void run() {
 					if (mLoadingDialog == null) {
-						mLoadingDialog = new SweetAlertDialog(BaseAppCompatActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-						mLoadingDialog.setCancelable(true);
-						mLoadingDialog.setTitleText("操作执行中...");
+						mLoadingDialog = LoadingDialog.newInstance();
 					}
-					mLoadingDialog.show();
+					mLoadingDialog.setLoadText(loadText);
+					mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
 				}
 			});
 		}
 	}
 
 	public void hideLoadingDialog() {
-		if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-			mLoadingDialog.dismiss();
+		if (mLoadingDialog != null) {
+			mLoadingDialog.dismissAllowingStateLoss();
 		}
 	}
 }

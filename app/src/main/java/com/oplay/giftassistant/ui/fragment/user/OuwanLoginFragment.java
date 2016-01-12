@@ -121,17 +121,12 @@ public class OuwanLoginFragment extends BaseFragment_WithName {
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				/*if (!NetworkUtil.isConnected(getContext())) {
+				if (!NetworkUtil.isConnected(getContext())) {
 					hideLoading();
 					showToast("网络连接失败");
 					return;
-				}*/
-				KLog.e(NetworkUtil.getConnectedType(getContext()));
-				KLog.e(NetworkUtil.isConnectedOrConnecting(getContext()));
-				KLog.e(NetworkUtil.isAvailable(getContext()));
-				KLog.e(NetworkUtil.isConnected(getContext()));
-
-				Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_SECOND, new JsonReqBase<ReqLogin>(login))
+				}
+				Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login))
 						.enqueue(new Callback<JsonRespBase<UserModel>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
@@ -145,6 +140,7 @@ public class OuwanLoginFragment extends BaseFragment_WithName {
 									}
 									showToast("登录失败 - " + (response.body() == null ?
 											"解析异常" : response.body().getMsg()));
+									return;
 
 								}
 								showToast("登录失败 - 网络异常");

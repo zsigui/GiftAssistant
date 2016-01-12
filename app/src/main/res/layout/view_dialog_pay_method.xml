@@ -1,44 +1,51 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content"
+		android:paddingTop = "@dimen/di_dialog_content_padding"
 		android:orientation = "vertical" >
 
 	<View style = "@style/HDividerView" />
 
 	<LinearLayout
+			android:id="@+id/ll_pay_score"
 			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
 			android:orientation = "horizontal" >
 
 		<CheckedTextView
+				android:id="@+id/ctv_check_score"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
 				android:drawableLeft = "@drawable/selector_item_circle_check" />
 
 		<TextView
+				android:id="@+id/tv_pay_score"
 				style = "@style/DefaultTextView.Header"
-				android:drawableLeft = "@drawable/ic_score"
+				android:drawableLeft = "@drawable/selector_score"
 				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
-				android:text = "积分支付" />
+				android:text = "@string/st_dialog_pay_score" />
 	</LinearLayout >
 
 	<View style = "@style/HDividerView" />
 
 	<LinearLayout
+			android:id="@+id/ll_pay_bean"
 			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
 			android:orientation = "horizontal" >
 
 		<CheckedTextView
+				android:id="@+id/ctv_check_bean"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
 				android:drawableLeft = "@drawable/selector_item_circle_check" />
 
 		<TextView
+				android:id="@+id/tv_pay_bean"
 				style = "@style/DefaultTextView.Header"
-				android:drawableLeft = "@drawable/ic_bean"
+				android:drawableLeft = "@drawable/selector_bean"
 				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
-				android:text = "偶玩豆支付" />
+				android:text = "@string/st_dialog_pay_bean" />
 	</LinearLayout >
 
 	<View style = "@style/HDividerView" />

@@ -252,7 +252,7 @@ public class GiftDetailFragment extends BaseFragment {
 		ng1.gameName = "全民神将-攻城战";
 		ng1.id = 335;
 		ng1.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
-		ng1.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
+		ng1.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
 		ng1.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ng1.name = "至尊礼包";
 		ng1.isLimit = true;

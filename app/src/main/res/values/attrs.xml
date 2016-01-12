@@ -57,8 +57,4 @@
 	<declare-styleable name = "GiftButton" >
 		<attr name = "gb_isBigger" format = "boolean" />
 	</declare-styleable >
-
-	<declare-styleable name = "PasswordTextView" >
-		<attr name = "ptv_hint" format = "string|reference" />
-	</declare-styleable >
 </resources >

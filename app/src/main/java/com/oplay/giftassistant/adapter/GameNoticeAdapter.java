@@ -47,7 +47,7 @@ public class GameNoticeAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 			default:
 				tagUrl += R.drawable.ic_tag_other;
 		}
-		ImageLoader.getInstance().displayImage("drawable://" + R.drawable.ic_tag_first,
+		ImageLoader.getInstance().displayImage(tagUrl,
 				bgaViewHolderHelper.<ImageView>getView(R.id.iv_tag),
 				Global.IMAGE_OPTIONS);
 		if (o.playCount < 10000) {

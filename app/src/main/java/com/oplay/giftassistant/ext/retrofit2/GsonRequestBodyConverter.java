@@ -30,8 +30,8 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 	@Override public RequestBody convert(T value) throws IOException {
 		String json = gson.toJson(value, type);
 		KLog.d("request = " + json);
-		int cmd = getCmdByJson(json);
-		byte[] data = NetDataEncrypt.getInstance().encrypt(json, cmd);
+		/*int cmd = getCmdByJson(json);*/
+		byte[] data = NetDataEncrypt.getInstance().encrypt(json, 0);
 		return RequestBody.create(MEDIA_TYPE, data);
 	}
 

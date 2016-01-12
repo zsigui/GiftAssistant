@@ -23,18 +23,17 @@ public class ScoreText extends TextView{
 
 	public ScoreText(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		setStateEnable(true);
+		setStateEnable(false);
 	}
 
 
 
 	public void setStateEnable(boolean enable) {
 		setCompoundDrawablePadding(DensityUtil.dip2px(getContext(), 1));
+		setCompoundDrawablesWithIntrinsicBounds(R.drawable.selector_score_mid, 0, 0, 0);
 		if (enable) {
-			setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score, 0, 0, 0);
 			setTextColor(getResources().getColor(R.color.co_btn_green));
 		} else {
-			setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_score, 0, 0, 0);
 			setTextColor(getResources().getColor(R.color.co_btn_grey));
 		}
 	}

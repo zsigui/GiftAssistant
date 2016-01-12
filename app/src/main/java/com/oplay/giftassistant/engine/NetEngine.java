@@ -8,6 +8,7 @@ import com.oplay.giftassistant.model.data.req.ReqModifyAvater;
 import com.oplay.giftassistant.model.data.req.ReqModifyNick;
 import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
+import com.oplay.giftassistant.model.data.req.ReqPayCode;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.data.resp.IndexGameType;
@@ -16,14 +17,13 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
+import com.oplay.giftassistant.model.data.resp.PayCode;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
 import com.oplay.giftassistant.model.data.resp.UpdateSesion;
 import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-
-import java.util.ArrayList;
 
 import retrofit.Call;
 import retrofit.http.Body;
@@ -46,7 +46,7 @@ public interface NetEngine {
 	 * 获取 首页-礼包-猜你喜欢 页面的数据
 	 */
 	@POST(NetUrl.GIFT_GET_ALL_LIKE)
-	Call<JsonRespBase<ArrayList<IndexGiftLike>>> obtainGiftLike(@Body JsonReqBase<ReqIndexGift> reqData);
+	Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> obtainGiftLike(@Body JsonReqBase<ReqIndexGift> reqData);
 
 	/**
 	 * 获取 首页-礼包-每日限量礼包 页面的数据
@@ -72,6 +72,12 @@ public interface NetEngine {
     @POST
     Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainGiftList(@Url String url, @Body
     JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 支付 抢夺礼包码
+	 */
+	@POST
+	Call<JsonRespBase<PayCode>> payGiftCode(@Url String url, @Body JsonReqBase<ReqPayCode> reqData);
 
 	/* -------------- 游戏接口 --------------- */
 	/**
@@ -106,7 +112,7 @@ public interface NetEngine {
 	 * 更新session，保持登录态情况下，每次启动APP进行验证
 	 */
 	@POST(NetUrl.USER_UPDATE_SESSION)
-	Call<JsonRespBase<UpdateSesion>> updateSession(@Body JsonReqBase<Object> reqData);
+	Call<JsonRespBase<UpdateSesion>> updateSession(@Body JsonReqBase<String> reqData);
 
 	/**
 	 * 修改手机号码，需要进行多歩

@@ -14,9 +14,9 @@ import retrofit.http.Query;
  */
 public interface SearchEngine {
 
-    @GET("search")
+    @GET("gift_search")
     Call<JsonRespSearchPrompt> getSearchPrompt(@Query("keyword") String keyword);
 
-	@GET("search")
+	@GET("gift_search")
 	Call<JsonRespSearchData> getSearchData(@Query("keyword") String keyword);
 }

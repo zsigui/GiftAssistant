@@ -147,7 +147,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mLimitView.setLayoutManager(llmLimit);
 		mLikeAdapter = new IndexGiftLikeAdapter(mLikeView);
 		mLimitAdapter = new IndexGiftLimitAdapter(mLimitView);
-		mNewAdapter = new IndexGiftNewAdapter(getContext());
+		mNewAdapter = new IndexGiftNewAdapter(getActivity());
 		mRefreshLayout.setIsShowLoadingMoreView(false);
 
 		// 加载数据
@@ -338,12 +338,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ngift.gameName = "全民神将-攻城战";
 		ngift.id = 335;
 		ngift.status = GiftTypeUtil.STATUS_SEIZE;
-		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
+		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
 		ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ngift.name = "至尊礼包";
 		ngift.isLimit = true;
-		ngift.bean = 30;
-		ngift.score = 3000;
+		ngift.bean = 5;
+		ngift.score = 5;
 		ngift.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
 		ngift.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 1);
 		ngift.searchCount = 0;
@@ -355,12 +355,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng2.gameName = "鬼吹灯之挖挖乐";
 		ng2.id = 336;
 		ng2.status = GiftTypeUtil.STATUS_FINISHED;
-		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTN;
+		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
 		ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 		ng2.name = "高级礼包";
 		ng2.isLimit = false;
 		ng2.bean = 30;
-		ng2.score = 3000;
+		ng2.score = 5;
 		ng2.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -3);
 		ng2.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -1);
 		ng2.searchCount = 0;
@@ -376,7 +376,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";
 		ng3.isLimit = false;
-		ng3.score = 1500;
+		ng3.score = 10;
 		ng3.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
 		ng3.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
 		ng3.searchCount = 355;

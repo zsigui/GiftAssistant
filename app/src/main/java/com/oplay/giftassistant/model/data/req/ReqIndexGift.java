@@ -14,4 +14,10 @@ public class ReqIndexGift implements Serializable {
 
 	@SerializedName("games")
 	public List<String> appNames;
+
+	@SerializedName("page_id")
+	public int pageId = 0;
+
+	@SerializedName("page_size")
+	public int pageSize = 10;
 }

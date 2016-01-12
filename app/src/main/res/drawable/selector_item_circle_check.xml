@@ -4,4 +4,5 @@
 	<item android:drawable="@drawable/ic_item_circle_checked" android:state_selected="true" />
 	<item android:drawable="@drawable/ic_item_circle_checked" android:state_pressed="true" />
 	<item android:drawable="@drawable/ic_item_circle_normal" />
+	<item android:drawable="@drawable/ic_item_circle_normal" android:state_enabled="false" />
 </selector >
