@@ -28,15 +28,15 @@
 	<TextView
 			android:id = "@+id/tv_remain"
 			style = "@style/DefaultTextView.Text"
-			android:paddingLeft="@dimen/di_dialog_content_padding"
-			android:paddingBottom="@dimen/di_dialog_content_padding"
-			android:paddingRight="@dimen/di_dialog_content_padding"
-			android:text = "余额: <img src='ic_score'/>2060 和 <img src='ic_money'/>50" />
+			android:paddingBottom = "@dimen/di_dialog_content_padding"
+			android:paddingLeft = "@dimen/di_dialog_content_padding"
+			android:paddingRight = "@dimen/di_dialog_content_padding"
+			/>
 
 	<ViewStub
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:inflatedId="@+id/vs_content"/>
+			android:inflatedId = "@+id/vs_content" />
 
 	<LinearLayout
 			android:layout_width = "match_parent"

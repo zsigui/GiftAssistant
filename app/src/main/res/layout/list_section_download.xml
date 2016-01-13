@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+		android:id = "@+id/tv_download_section_header"
+		style = "@style/DefaultTextView.Text"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		android:background = "@color/co_btn_grey"
+		android:gravity = "left|center_vertical"
+		android:paddingLeft = "16dp"
+		android:paddingTop= "12dp"
+		android:paddingBottom = "8dp"
+		android:textSize = "14sp" >
+
+</TextView >

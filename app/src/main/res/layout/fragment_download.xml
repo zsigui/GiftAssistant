@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+        <com.oplay.giftassistant.ui.widget.StickyListHeadersListViewExpandable
+                android:id = "@+id/download_adapterView"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:animationCache = "false"
+                android:cacheColorHint = "@null"
+                android:divider = "@null"
+                android:dividerHeight = "0dp"
+                android:drawSelectorOnTop = "false"
+                android:fadingEdge = "none"
+                android:fadingEdgeLength = "0dp"
+                android:footerDividersEnabled = "false"
+                android:headerDividersEnabled = "false"
+                android:listSelector = "@null"
+                android:scrollbarStyle = "insideOverlay"
+                android:scrollingCache = "false"
+                />
+</LinearLayout >
