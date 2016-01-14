@@ -40,6 +40,7 @@
 	<color name = "co_btn_blue_pressed" >#1FA7C9</color >
 	<color name = "co_btn_purple" >#b679d2</color >
 	<color name = "co_btn_grey" >#c9c9c9</color >
+	<color name = "co_btn_grey_pressed" >#B9B9B9</color >
 
 
 	<color name = "co_tabs_indicator_common_bg" >#ffaa17</color >

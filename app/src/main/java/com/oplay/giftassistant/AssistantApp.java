@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.oplay.giftassistant.asynctask.AsyncTask_InitApplication;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
@@ -29,6 +30,8 @@ import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SPUtil;
 import com.oplay.giftassistant.util.SoundPlayer;
 import com.socks.library.KLog;
+
+import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
 
@@ -80,6 +83,7 @@ public class AssistantApp extends Application {
 		initLoadingView();
 		initDrawerImageLoader();
 		OuwanSDKManager.getInstance().init();
+		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
 	private void initLoadingView() {

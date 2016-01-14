@@ -2,6 +2,7 @@ package com.oplay.giftassistant.ui.fragment.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -177,7 +178,7 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 
 
 	@Override
-	public void onItemClick(ScoreMission item, int position) {
+	public void onItemClick(ScoreMission item, View view, int position) {
 		if (mData == null || mData.size() == 0) {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_FRAG, "Empty or Null Data On Item Click! mData = " + mData);

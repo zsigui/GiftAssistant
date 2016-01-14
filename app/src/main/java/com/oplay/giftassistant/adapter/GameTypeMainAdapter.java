@@ -42,7 +42,7 @@ public class GameTypeMainAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
 			@Override
 			public void onClick(View v) {
 				if (mItemClickListener != null) {
-					mItemClickListener.onItemClick(o, i);
+					mItemClickListener.onItemClick(o, null, i);
 				}
 			}
 		});
