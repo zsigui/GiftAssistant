@@ -44,6 +44,11 @@ public class NetUrl {
 	public static final String GIFT_SEIZE_CODE = "gift_buy";
 
 	/**
+	 * 请求特定礼包的礼包码
+	 */
+	public static final String GIFT_GET_SPECIFIC_CODE = "get_pay_result";
+
+	/**
 	 * 礼包详情
 	 */
 	public static final String GIFT_GET_DETAIL = "gift_plan_detail";

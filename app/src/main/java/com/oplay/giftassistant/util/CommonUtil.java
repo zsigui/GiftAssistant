@@ -2,6 +2,7 @@ package com.oplay.giftassistant.util;
 
 import android.content.Context;
 
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.model.MobileInfoModel;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
@@ -30,10 +31,7 @@ public class CommonUtil {
 		}
 		MobileInfoModel model = MobileInfoModel.getInstance();
 		if (!model.isInit()) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_UTIL, "need to call initMobileInfoModel() firstly");
-			}
-			return;
+			initMobileInfoModel(AssistantApp.getInstance().getApplicationContext());
 		}
 		reqBase.imsi = model.getImsi();
 		reqBase.imei = model.getImei();

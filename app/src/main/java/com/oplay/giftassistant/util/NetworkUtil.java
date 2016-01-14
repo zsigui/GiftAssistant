@@ -49,7 +49,7 @@ public class NetworkUtil {
 	 * 获取ConnectivityManager
 	 */
 	public static ConnectivityManager getConnectivityManager(Context context) {
-		return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		return context == null ? null : (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	}
 
 	/**
@@ -65,8 +65,12 @@ public class NetworkUtil {
 	 * @return boolean 不管wifi，还是mobile net，只有当前在连接状态（可有效传输数据）才返回true,反之false。
 	 */
 	public static boolean isConnected(Context context) {
-		NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
-		return net != null && net.isConnected();
+		if (context != null) {
+			NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+			return net != null && net.isConnected();
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -78,7 +82,9 @@ public class NetworkUtil {
 		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
-				if (net.isConnectedOrConnecting()) { return true; }
+				if (net.isConnectedOrConnecting()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -137,7 +143,9 @@ public class NetworkUtil {
 		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
-				if (net.getType() == ConnectivityManager.TYPE_WIFI) { return net.isAvailable(); }
+				if (net.getType() == ConnectivityManager.TYPE_WIFI) {
+					return net.isAvailable();
+				}
 			}
 		}
 		return false;
@@ -157,7 +165,9 @@ public class NetworkUtil {
 		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
-				if (net.getType() == ConnectivityManager.TYPE_MOBILE) { return net.isAvailable(); }
+				if (net.getType() == ConnectivityManager.TYPE_MOBILE) {
+					return net.isAvailable();
+				}
 			}
 		}
 		return false;
@@ -186,7 +196,8 @@ public class NetworkUtil {
 	 * @return boolean
 	 */
 	public static boolean printNetworkInfo(Context context) {
-		ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context
+				.CONNECTIVITY_SERVICE);
 		if (connectivity != null) {
 			NetworkInfo in = connectivity.getActiveNetworkInfo();
 			KLog.i(TAG, "-------------$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$-------------");
@@ -197,7 +208,8 @@ public class NetworkUtil {
 					// if (info[i].getType() == ConnectivityManager.TYPE_WIFI) {
 					KLog.i(TAG, "NetworkInfo[" + i + "]isAvailable : " + info[i].isAvailable());
 					KLog.i(TAG, "NetworkInfo[" + i + "]isConnected : " + info[i].isConnected());
-					KLog.i(TAG, "NetworkInfo[" + i + "]isConnectedOrConnecting : " + info[i].isConnectedOrConnecting());
+					KLog.i(TAG, "NetworkInfo[" + i + "]isConnectedOrConnecting : " + info[i].isConnectedOrConnecting
+							());
 					KLog.i(TAG, "NetworkInfo[" + i + "]: " + info[i]);
 					// }
 				}
@@ -211,7 +223,7 @@ public class NetworkUtil {
 
 	/**
 	 * get connected network type by {@link android.net.ConnectivityManager}
-	 *
+	 * <p/>
 	 * such as WIFI, MOBILE, ETHERNET, BLUETOOTH, etc.
 	 *
 	 * @return {@link android.net.ConnectivityManager#TYPE_WIFI}, {@link android.net.ConnectivityManager#TYPE_MOBILE},
@@ -228,10 +240,11 @@ public class NetworkUtil {
 
 	/**
 	 * get network type by {@link android.telephony.TelephonyManager}
-	 *
+	 * <p/>
 	 * such as 2G, 3G, 4G, etc.
 	 *
-	 * @return {@link android.telephony.TelephonyManager#NETWORK_TYPE_CDMA}, {@link android.telephony.TelephonyManager#NETWORK_TYPE_GPRS},
+	 * @return {@link android.telephony.TelephonyManager#NETWORK_TYPE_CDMA}, {@link android.telephony
+	 * .TelephonyManager#NETWORK_TYPE_GPRS},
 	 * {@link android.telephony.TelephonyManager#NETWORK_TYPE_LTE}...
 	 */
 	public static int getTelNetworkTypeINT(Context context) {

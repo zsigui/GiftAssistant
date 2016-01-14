@@ -40,7 +40,7 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 		lazyLoad();
 	}
 
-	protected void lazyLoadInitConfig() {
+	protected void refreshInitConfig() {
 		mIsLoading = true;
 		if (!mIsRefresh) {
 			mViewManager.showLoading();
@@ -48,7 +48,7 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 		}
 	}
 
-	protected void lazyLoadFailEnd() {
+	protected void refreshFailEnd() {
 		if (!mIsRefresh) {
 			mViewManager.showErrorRetry();
 			mHasData = false;
@@ -60,7 +60,7 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 		mRefreshLayout.setEnabled(true);
 	}
 
-	protected void lazyLoadSuccessEnd() {
+	protected void refreshSuccessEnd() {
 		mViewManager.showContent();
 		mHasData = true;
 		mIsLoading = mIsRefresh = false;

@@ -17,10 +17,11 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
-import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftBanner;
@@ -129,6 +130,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
+
+		ObserverManager.getInstance().addGiftUpdateListener(this);
+
 		// 设置Banner
 		views = new ArrayList<>(3);
 		for (int i = 0; i < 3; i++) {
@@ -199,13 +203,13 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	protected void lazyLoad() {
 
-		lazyLoadInitConfig();
+		refreshInitConfig();
 
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 					return;
 				}
 				ReqIndexGift data = new ReqIndexGift();
@@ -218,12 +222,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 						if (response != null && response.isSuccess()) {
 							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 								// 获取数据成功
-								lazyLoadSuccessEnd();
+								refreshSuccessEnd();
 								updateData(response.body().getData());
 								return;
 							}
 						}
-						lazyLoadFailEnd();
+						refreshFailEnd();
 					}
 
 					@Override
@@ -232,7 +236,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 							KLog.e(t);
 						}
 						mIsLoading = false;
-						//lazyLoadFailEnd();
+						//refreshFailEnd();
 						updateData(initStashGiftData());
 					}
 				});
@@ -284,7 +288,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	}
 
 	/* 更新控件数据 end */
-
 
 	@Override
 	public void onClick(View v) {

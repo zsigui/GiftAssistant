@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GiftAssistant.iml" filepath="$PROJECT_DIR$/GiftAssistant.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/third/ouwansdk/ouwansdk.iml" filepath="$PROJECT_DIR$/third/ouwansdk/ouwansdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/third/third.iml" filepath="$PROJECT_DIR$/third/third.iml" />
+      <module fileurl="file://$PROJECT_DIR$/third/youmilib/youmilib.iml" filepath="$PROJECT_DIR$/third/youmilib/youmilib.iml" />
     </modules>
   </component>
 </project>

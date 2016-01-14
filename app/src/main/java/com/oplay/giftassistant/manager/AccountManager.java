@@ -58,11 +58,20 @@ public class AccountManager {
 		mUser = user;
 		// 当用户变化，需要进行通知
 		ObserverManager.getInstance().notifyUserUpdate();
+		ObserverManager.getInstance().notifyGiftUpdate();
+
 		if (user != null) {
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
 		} else {
 			NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
 		}
+
+		if (isLogin()) {
+			OuwanSDKManager.getInstance().login();
+		} else {
+			OuwanSDKManager.getInstance().logout();
+		}
+
 		// 如果再更新状态过程中用户退出登录，直接取消重试
 		mHandler.removeCallbacks(mUpdateSessionTask);
 		Global.THREAD_POOL.execute(new Runnable() {
@@ -93,12 +102,6 @@ public class AccountManager {
 		return mUser == null ? null : mUser.userSession;
 	}
 
-	public void updateUserSession() {
-		if (isLogin()) {
-			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
-			mHandler.postAtFrontOfQueue(mUpdateSessionTask);
-		}
-	}
 
 	public void updateUserInfo() {
 		if (isLogin()) {
@@ -112,6 +115,19 @@ public class AccountManager {
 		}
 	}
 
+
+	/**
+	 * 更新用户的Session
+	 */
+	public void updateUserSession() {
+		if (isLogin()) {
+			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
+			mHandler.postAtFrontOfQueue(mUpdateSessionTask);
+		}
+	}
+	/**
+	 * 重试更新Session
+	 */
 	private int mUpdateSessionRetryTime = 0;
 	private Runnable mUpdateSessionTask = new Runnable() {
 		@Override
@@ -150,6 +166,7 @@ public class AccountManager {
 	};
 
 	private void retryJudge() {
+		// 只重试3次
 		if (mUpdateSessionRetryTime < 3) {
 			// 请求失败, 5秒后再请求
 			mHandler.postAtTime(mUpdateSessionTask, 5000);

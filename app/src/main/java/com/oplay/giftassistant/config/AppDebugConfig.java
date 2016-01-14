@@ -32,6 +32,8 @@ public class AppDebugConfig {
 
 	public static final String TAG_MANAGER = "data_manager_debug";
 
+	public static final String TAG_WEBVIEW = "data_webview_debug";
+
 
 
 

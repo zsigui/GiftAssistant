@@ -8,7 +8,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-    public static final int TYPE_COUNT = 11;
+    public static final int TYPE_COUNT = 12;
 
     // 限量礼包类型，可抢，limit
     public static final int TYPE_LIMIT_SEIZE = 0;
@@ -32,6 +32,8 @@ public class GiftTypeUtil {
 	public static final int TYPE_NORMAL_SEARCHED = 9;
 	// 限量礼包类型，已抢完, disabled
 	public static final int TYPE_LIMIT_EMPTY = 10;
+	// 正常礼包类型，已抢号, disabled
+	public static final int TYPE_NORMAL_SEIZED = 11;
 
 	// 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束
 	public static final int STATUS_WAIT_SEIZE = 1;
@@ -53,7 +55,11 @@ public class GiftTypeUtil {
 		if (gift.seizeStatus != SEIZE_TYPE_NEVER) {
 			switch (gift.seizeStatus) {
 				case SEIZE_TYPE_SEIZED:
-					return TYPE_LIMIT_SEIZED;
+					if (gift.isLimit) {
+						return TYPE_LIMIT_SEIZED;
+					} else {
+						return TYPE_NORMAL_SEIZED;
+					}
 				case SEIZE_TYPE_SEARCHED:
 					return TYPE_NORMAL_SEARCHED;
 			}

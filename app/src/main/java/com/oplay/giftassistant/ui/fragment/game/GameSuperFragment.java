@@ -181,7 +181,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 
     @Override
     protected void lazyLoad() {
-	    lazyLoadInitConfig();
+	    refreshInitConfig();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -194,23 +194,23 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
                                                        Retrofit retrofit) {
                                     if (response != null && response.isSuccess()) {
 	                                    if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-		                                    lazyLoadSuccessEnd();
+		                                    refreshSuccessEnd();
 		                                    updateData(response.body().getData());
 		                                    return;
 	                                    }
                                     }
                                     // 出错
-	                                lazyLoadFailEnd();
+	                                refreshFailEnd();
                                 }
 
                                 @Override
                                 public void onFailure(Throwable t) {
-                                    lazyLoadFailEnd();
+                                    refreshFailEnd();
                                     updateData(initStashData());
                                 }
                             });
                 } else {
-	                lazyLoadFailEnd();
+	                refreshFailEnd();
                 }
             }
         }).start();

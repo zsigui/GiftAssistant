@@ -82,7 +82,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	@Override
 	protected void lazyLoad() {
-		lazyLoadInitConfig();
+		refreshInitConfig();
 
         new Thread(new Runnable() {
             @Override
@@ -96,13 +96,13 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                         retrofit) {
                                     if (response != null && response.isSuccess() &&
 		                                    response.body().getCode() == StatusCode.SUCCESS) {
-                                        lazyLoadSuccessEnd();
+                                        refreshSuccessEnd();
                                         OneTypeDataList<IndexGameNew> backObj = response.body().getData();
                                         setLoadState(backObj.data, backObj.isEndPage);
                                         updateData(backObj.data);
                                         return;
                                     }
-	                                lazyLoadFailEnd();
+	                                refreshFailEnd();
                                 }
 
                                 @Override
@@ -110,7 +110,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	                                if (AppDebugConfig.IS_DEBUG) {
 		                                KLog.e(AppDebugConfig.TAG_FRAG, t);
 	                                }
-	                                lazyLoadFailEnd();
+	                                refreshFailEnd();
                                     OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
                                     setLoadState(backObj.data, backObj.isEndPage);
                                     updateData(backObj.data);

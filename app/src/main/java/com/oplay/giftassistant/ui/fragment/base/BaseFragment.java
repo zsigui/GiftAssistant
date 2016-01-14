@@ -2,6 +2,8 @@ package com.oplay.giftassistant.ui.fragment.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
@@ -39,6 +41,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	private String mFragName;
+	protected Handler mHandler = new Handler(Looper.myLooper());
+
+	protected boolean mIsRefresh = false;
 
 	protected LoadAndRetryViewManager.OnRetryListener mRetryListener = new LoadAndRetryViewManager.OnRetryListener() {
 		@Override
@@ -127,6 +132,35 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		mFragName = fragName;
 	}
 
+
+	protected void refreshInitConfig() {
+		mIsLoading = true;
+		if (!mIsRefresh) {
+			if (mViewManager != null) {
+				mViewManager.showLoading();
+			}
+			mHasData = false;
+		}
+	}
+
+	protected void refreshFailEnd() {
+		if (!mIsRefresh) {
+			if (mViewManager != null) {
+				mViewManager.showErrorRetry();
+			}
+			mHasData = false;
+		}
+		mIsLoading = mIsRefresh = false;
+	}
+
+	protected void refreshSuccessEnd() {
+		if (mViewManager != null) {
+			mViewManager.showContent();
+		}
+		mHasData = true;
+		mIsLoading = mIsRefresh = false;
+	}
+
 	/**
 	 * 初始化View控件
 	 */
@@ -203,7 +237,11 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	@Override
 	public void onGiftUpdate() {
-
+		if (mIsRefresh) {
+			return;
+		}
+		mIsRefresh = true;
+		lazyLoad();
 	}
 
 	@Override

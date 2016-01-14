@@ -135,7 +135,7 @@ public class OuwanLoginFragment extends BaseFragment_WithName {
 									if (response.body() != null
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										AccountManager.getInstance().setUser(response.body().getData());
-										((BaseAppCompatActivity) getActivity()).popOrExit();
+										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}
 									showToast("登录失败 - " + (response.body() == null ?

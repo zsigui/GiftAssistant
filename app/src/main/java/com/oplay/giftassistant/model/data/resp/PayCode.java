@@ -19,7 +19,7 @@ public class PayCode implements Serializable {
 	 * 订单号
 	 */
 	@SerializedName("trade_no")
-	public String orderId;
+	public String tradeNo;
 
 	/**
 	 * 支付金额，单位元

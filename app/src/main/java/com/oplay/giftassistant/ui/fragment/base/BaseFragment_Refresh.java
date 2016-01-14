@@ -43,29 +43,20 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
     protected void loadMoreData() {
     }
 
-	protected void lazyLoadInitConfig() {
-		mIsLoading = true;
-		if (!mIsRefresh) {
-			mViewManager.showLoading();
-			mHasData = false;
-		}
+	protected void refreshInitConfig() {
+		super.refreshInitConfig();
 	}
 
-	protected void lazyLoadFailEnd() {
-		if (!mIsRefresh) {
-			mViewManager.showErrorRetry();
-			mHasData = false;
-		} else {
+	protected void refreshFailEnd() {
+		if (mIsRefresh) {
 			ToastUtil.showShort("刷新请求出错");
 		}
-		mIsLoading = mIsRefresh = false;
+		super.refreshFailEnd();
 		mRefreshLayout.endRefreshing();
 	}
 
-	protected void lazyLoadSuccessEnd() {
-		mViewManager.showContent();
-		mHasData = true;
-		mIsLoading = mIsRefresh = false;
+	protected void refreshSuccessEnd() {
+		super.refreshSuccessEnd();
 		mRefreshLayout.endRefreshing();
 	}
 

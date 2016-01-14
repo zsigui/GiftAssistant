@@ -91,7 +91,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	@Override
 	protected void lazyLoad() {
-		lazyLoadInitConfig();
+		refreshInitConfig();
 
 		new Thread(new Runnable() {
 			@Override
@@ -104,18 +104,18 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
 										retrofit) {
 									if (response != null && response.isSuccess()) {
-										lazyLoadSuccessEnd();
+										refreshSuccessEnd();
 										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
 										setLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
 										return;
 									}
-									lazyLoadFailEnd();
+									refreshFailEnd();
 								}
 
 								@Override
 								public void onFailure(Throwable t) {
-									lazyLoadFailEnd();
+									refreshFailEnd();
 									OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
 									setLoadState(backObj.data, backObj.isEndPage);
 									updateData(backObj.data);

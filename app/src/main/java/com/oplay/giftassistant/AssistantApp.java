@@ -24,6 +24,7 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SPUtil;
 import com.oplay.giftassistant.util.SoundPlayer;
@@ -78,6 +79,7 @@ public class AssistantApp extends Application {
 		initRetrofit();
 		initLoadingView();
 		initDrawerImageLoader();
+		OuwanSDKManager.getInstance().init();
 	}
 
 	private void initLoadingView() {
@@ -115,6 +117,7 @@ public class AssistantApp extends Application {
 
 	private void initRetrofit() {
 		mGson = new GsonBuilder()
+				.serializeNulls()
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();
 		mRetrofit = new Retrofit.Builder()

@@ -6,6 +6,8 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 
+import net.ouwan.umipay.android.api.UmipayBrowser;
+
 /**
  *
  * 偶玩豆和积分明细
@@ -34,6 +36,7 @@ public class MoneyDetailFragment extends BaseFragment_WithName {
 			return;
 		}
 		// do something
+		UmipayBrowser browser = new UmipayBrowser();
 	}
 
 	@Override

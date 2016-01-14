@@ -53,7 +53,6 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 		public void run() {
 			if (sSendCodeRemainTime == 0) {
 				btnSendCode.setEnabled(true);
-				sSendCodeRemainTime = RESEND_DURATION;
 				btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
 			} else {
 				btnSendCode.setText(
@@ -150,6 +149,7 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 		btnSendCode.setEnabled(false);
 		btnSendCode.setText(String.format(getResources().getString(R.string.st_login_phone_resend_code),
 				sSendCodeRemainTime));
+		sSendCodeRemainTime = RESEND_DURATION;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -175,9 +175,12 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 									}
 									showToast("发送失败 - " + (response.body() == null ?
 											"解析异常" : response.body().getMsg()));
+									resetRemain();
 									return;
 								}
 								showToast("发送失败 - 解析异常");
+								resetRemain();
+
 							}
 
 							@Override
@@ -187,10 +190,17 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 									KLog.e(t);
 								}
 								showToast("发送失败 - 网络异常");
+								resetRemain();
 							}
 						});
 			}
 		});
+	}
+
+	private void resetRemain() {
+		mHandler.removeCallbacks(setTimeRunnable);
+		sSendCodeRemainTime = 0;
+		mHandler.postAtFrontOfQueue(setTimeRunnable);
 	}
 
 	@Override
@@ -225,7 +235,7 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 									if (response.body() != null
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										AccountManager.getInstance().setUser(response.body().getData());
-										((BaseAppCompatActivity) getActivity()).popOrExit();
+										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}
 									showToast("登录失败 - " + (response.body() == null ?

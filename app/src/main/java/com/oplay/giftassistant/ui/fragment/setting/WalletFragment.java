@@ -9,6 +9,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
+import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
@@ -87,7 +88,7 @@ public class WalletFragment extends BaseFragment_WithName {
 						getResources().getString(R.string.st_score_detail));
 				break;
 			case R.id.btn_get_bean:
-				ToastUtil.showShort("充值偶玩豆");
+				OuwanSDKManager.getInstance().recharge();
 				break;
 			case R.id.btn_get_score:
 				((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,

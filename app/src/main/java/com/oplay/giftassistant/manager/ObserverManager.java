@@ -3,6 +3,8 @@ package com.oplay.giftassistant.manager;
 import android.app.Activity;
 import android.app.Fragment;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 
 /**
@@ -12,6 +14,13 @@ import java.util.ArrayList;
  * Created by zsigui on 16-1-5.
  */
 public class ObserverManager {
+
+	public class STATUS {
+		// 可以设置32个tag
+		public static final int UPDATE_INDEX = 0x00000001;
+		public static final int UPDATE_DETAIL = 0x00000002;
+		public static final int UPDATE_ALL = 0xFFFFFFFF;
+	}
 
 	private static ObserverManager sInstance;
 
@@ -23,7 +32,6 @@ public class ObserverManager {
 		}
 		return sInstance;
 	}
-
 
 	private ArrayList<UserUpdateListener> mUserObservers = new ArrayList<>();
 
@@ -73,15 +81,19 @@ public class ObserverManager {
 		}
 	}
 
+
+
 	public void notifyGiftUpdate() {
 		for (GiftUpdateListener observer : mGiftObservers) {
 			if (observer != null) {
 				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
 					// 当为fragment且正被移除出界面，不更新，正确？
+					KLog.d("notify", "isRemove = " + observer + ", " + ((Fragment) observer).isRemoving());
 					return;
 				}
 				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
 					// 当Activity即将被销毁，无须更新
+					KLog.d("notify", "isFinishing = " + observer + ", " + ((Activity) observer).isFinishing());
 					return;
 				}
 				observer.onGiftUpdate();

@@ -27,6 +27,7 @@ import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
+import com.oplay.giftassistant.service.ClockService;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -60,10 +61,27 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private IProfile mProfile;
 
 
+	private void startClockService() {
+		Intent intent = new Intent(MainActivity.this, ClockService.class);
+		startService(intent);
+	}
+
+	private void stopClockService() {
+		Intent intent = new Intent(MainActivity.this, ClockService.class);
+		stopService(intent);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createDrawer(savedInstanceState);
+		startClockService();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		stopClockService();
 	}
 
 	protected void initView() {
@@ -184,8 +202,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mProfile = new ProfileDrawerItem()
 					.withName(TextUtils.isEmpty(mUser.nick) ? mUser.username : mUser.nick)
 					.withEmail(mUser.phone)
-					.withIcon(mUser.img)
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
+			if (TextUtils.isEmpty(mUser.img)) {
+				mProfile.withIcon(R.drawable.ic_img_default);
+			} else {
+				mProfile.withIcon(mUser.img);
+			}
 		}
 	}
 
@@ -214,9 +236,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (AccountManager.getInstance().isLogin()) {
 			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
-			ImageLoader.getInstance().displayImage(mUser.img, ivProfile);
+			if (TextUtils.isEmpty(mUser.img)) {
+				ivProfile.setImageResource(R.drawable.ic_img_default);
+			} else {
+				ImageLoader.getInstance().displayImage(mUser.img, ivProfile);
+			}
 		} else {
-			ImageLoader.getInstance().displayImage("drawable://" + R.drawable.ic_img_default, ivProfile);
+			ivProfile.setImageResource(R.drawable.ic_img_default);
 			tvGiftCount.setText("?");
 		}
 	}

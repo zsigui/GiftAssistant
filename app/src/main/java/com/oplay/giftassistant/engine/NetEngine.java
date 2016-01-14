@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.engine;
 
 import com.oplay.giftassistant.config.NetUrl;
+import com.oplay.giftassistant.model.data.req.ReqGetCode;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.req.ReqLogin;
@@ -76,8 +77,14 @@ public interface NetEngine {
 	/**
 	 * 支付 抢夺礼包码
 	 */
-	@POST
-	Call<JsonRespBase<PayCode>> payGiftCode(@Url String url, @Body JsonReqBase<ReqPayCode> reqData);
+	@POST(NetUrl.GIFT_SEIZE_CODE)
+	Call<JsonRespBase<PayCode>> payGiftCode(@Body JsonReqBase<ReqPayCode> reqData);
+
+	/**
+	 * 支付 获取特定礼包码
+	 */
+	@POST(NetUrl.GIFT_GET_SPECIFIC_CODE)
+	Call<JsonRespBase<PayCode>> getSpecificGiftCode(@Body JsonReqBase<ReqGetCode> reqData);
 
 	/* -------------- 游戏接口 --------------- */
 	/**

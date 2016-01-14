@@ -79,13 +79,13 @@ public class SettingActivity extends BaseAppCompatActivity {
 
 
 	@Override
-	public void popOrExit() {
+	public void handleBackPressed() {
 		if (isTopFragment(FeedBackFragment.class.getSimpleName())) {
 			ToastUtil.showShort("反馈返回，执行保存处理");
 			if (getTopFragment() instanceof FeedBackFragment) {
 				KLog.d("is FeedBack");
 			}
 		}
-		super.popOrExit();
+		super.handleBackPressed();
 	}
 }

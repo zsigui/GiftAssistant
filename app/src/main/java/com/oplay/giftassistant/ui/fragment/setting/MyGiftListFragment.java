@@ -79,7 +79,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	@Override
 	protected void lazyLoad() {
-		lazyLoadInitConfig();
+		refreshInitConfig();
 
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
@@ -94,13 +94,13 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 										retrofit) {
 									if (response != null && response.isSuccess() &&
 											response.body().getCode() == StatusCode.SUCCESS) {
-										lazyLoadSuccessEnd();
+										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 										setLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
 										return;
 									}
-									lazyLoadFailEnd();
+									refreshFailEnd();
 								}
 
 								@Override
@@ -108,7 +108,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}
-									// lazyLoadFailEnd();
+									// refreshFailEnd();
 									OneTypeDataList<IndexGiftNew> backObj = initStashMoreRefreshData();
 									setLoadState(backObj.data, backObj.isEndPage);
 									updateData(backObj.data);

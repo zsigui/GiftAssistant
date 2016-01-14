@@ -51,7 +51,6 @@ public class FeedBackFragment extends BaseFragment_WithName implements TextWatch
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		//setTitleBar(R.string.st_feedback_title);
 	}
 
 	@Override

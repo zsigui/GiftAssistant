@@ -275,9 +275,9 @@
 	<style name = "DefaultRadioButton.FeedBack" >
 		<item name = "android:textSize" >14sp</item >
 		<item name = "android:textColor" >@color/co_common_text_main</item >
-		<item name = "android:background" >@color/co_white</item >
+		<item name = "android:background" >@drawable/selector_white_module</item >
 		<item name = "android:button" >@null</item >
-		<item name = "android:drawableLeft" >@drawable/ic_toolbar_gift</item >
+		<item name = "android:drawableLeft" >@drawable/selector_item_circle_check</item >
 		<item name = "android:drawablePadding" >6dp</item >
 		<item name = "android:paddingTop" >12dp</item >
 		<item name = "android:paddingBottom" >12dp</item >

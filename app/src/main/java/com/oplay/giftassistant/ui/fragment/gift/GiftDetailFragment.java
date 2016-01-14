@@ -17,6 +17,8 @@ import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.manager.ObserverManager;
+import com.oplay.giftassistant.manager.PayManager;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
@@ -59,6 +61,7 @@ public class GiftDetailFragment extends BaseFragment {
 	private IndexGiftNew mData;
 	private int mId;
 
+
 	public static GiftDetailFragment newInstance(int id) {
 		GiftDetailFragment fragment = new GiftDetailFragment();
 		Bundle bundle = new Bundle();
@@ -98,6 +101,7 @@ public class GiftDetailFragment extends BaseFragment {
 		if (getArguments() == null) {
 			throw new IllegalStateException("need to set data here");
 		}
+		ObserverManager.getInstance().addGiftUpdateListener(this);
 		mId = getArguments().getInt(KeyConfig.KEY_DATA);
 	}
 
@@ -168,6 +172,7 @@ public class GiftDetailFragment extends BaseFragment {
 			}
 
 		} else {
+			tvConsume.setVisibility(View.GONE);
 			tvCode.setVisibility(View.VISIBLE);
 			btnCopy.setVisibility(View.VISIBLE);
 			tvCode.setText(Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", mData.code)));
@@ -181,13 +186,12 @@ public class GiftDetailFragment extends BaseFragment {
 
 	@Override
 	protected void lazyLoad() {
-		mIsLoading = true;
-		mViewManager.showLoading();
+		refreshInitConfig();
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 					return;
 				}
 				ReqGiftDetail data = new ReqGiftDetail();
@@ -199,9 +203,9 @@ public class GiftDetailFragment extends BaseFragment {
 								if (!mCanShowUI) {
 									return;
 								}
-								mIsLoading = false;
 								if (response != null && response.code() == 200) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+										refreshSuccessEnd();
 										updateData(response.body().getData());
 										return;
 									}
@@ -210,7 +214,7 @@ public class GiftDetailFragment extends BaseFragment {
 									}
 								}
 								// 加载错误页面也行
-								mViewManager.showErrorRetry();
+								refreshSuccessEnd();
 							}
 
 							@Override
@@ -218,11 +222,10 @@ public class GiftDetailFragment extends BaseFragment {
 								if (!mCanShowUI) {
 									return;
 								}
-								mIsLoading = false;
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
 								}
-								mViewManager.showErrorRetry();
+								refreshFailEnd();
 								updateData(initStashGiftDetail());
 							}
 						});
@@ -240,7 +243,15 @@ public class GiftDetailFragment extends BaseFragment {
 				ToastUtil.showShort("已复制");
 				break;
 			case R.id.btn_send:
-
+				switch (btnSend.getStatus()) {
+					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+						PayManager.getInstance().chargeGift(getContext(), mData, btnSend);
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+						PayManager.getInstance().searchGift(getContext(), mData, btnSend);
+						break;
+				}
 				break;
 		}
 	}

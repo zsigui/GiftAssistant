@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.listener.OnBackPressListener;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
@@ -125,7 +126,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.iv_bar_back) {
-			popOrExit();
+			handleBackPressed();
 		}
 	}
 
@@ -274,7 +275,12 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	/**
 	 * 执行fragment出栈 或者 activity终结操作
 	 */
-	public void popOrExit() {
+	public void handleBackPressed() {
+		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
+				&& ((OnBackPressListener) getTopFragment()).onBack()) {
+			// back事件被处理
+			return;
+		}
 		if (!popFrag() && !isFinishing()) {
 			finish();
 		} else {
@@ -294,7 +300,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	public void onBackPressed() {
 		this.mNeedWorkCallback = false;
-		popOrExit();
+		handleBackPressed();
 	}
 
 	/**

@@ -1,0 +1,144 @@
+<manifest xmlns:android = "http://schemas.android.com/apk/res/android"
+          package = "com.umipay.android.pro" >
+
+
+	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name = "android.permission.INTERNET" />
+	<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
+	<!--悬浮窗权限-->
+	<uses-permission android:name = "android.permission.SYSTEM_ALERT_WINDOW" />
+	<uses-permission android:name = "android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name = "com.android.launcher.permission.READ_SETTINGS" />
+	<uses-permission android:name = "com.android.launcher.permission.INSTALL_SHORTCUT" />
+	<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+	<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
+	<!--银联插件3.1.0新增权限-->
+	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
+	<!--易联支付需要权限 -->
+	<uses-permission android:name = "android.permission.READ_SMS" />
+	<uses-permission android:name = "android.permission.RECEIVE_SMS" />
+	<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name = "android.permission.RECORD_AUDIO" />
+	<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
+
+	<uses-feature android:name = "android.hardware.camera" />
+
+	<uses-permission android:name = "android.permission.CAMERA" />
+	<uses-permission android:name = "android.hardware.camera.autofocus" />
+	<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+	<uses-permission android:name = "android.permission.RECORD_VIDEO" />
+
+
+	<!-- 汇付宝-微信支付需要权限-->
+	<uses-permission android:name = "android.permission.VIBRATE" />
+	<uses-permission android:name = "android.permission.PLUGIN" />
+
+
+	<application >
+		<activity
+				android:name = "net.ouwan.umipay.android.api.UmipayActivity"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:screenOrientation = "landscape"
+				android:theme = "@style/umipay_main_dialog_theme" >
+		</activity >
+		<activity
+				android:name = "net.ouwan.umipay.android.api.UmipayBrowser"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:screenOrientation = "portrait"
+				android:theme = "@style/UmipayTheme_NoFullscreen" >
+		</activity >
+
+		<!-- 新版支付宝需要添加的acticity -->
+		<activity
+				android:name = "com.alipay.sdk.app.H5PayActivity"
+				android:configChanges = "orientation|keyboardHidden|navigation"
+				android:exported = "false"
+				android:screenOrientation = "behind" >
+		</activity >
+		<activity
+				android:name = "com.alipay.sdk.auth.AuthActivity"
+				android:configChanges = "orientation|keyboardHidden|navigation"
+				android:exported = "false"
+				android:screenOrientation = "behind" >
+		</activity >
+		<!-- 新版支付宝需要添加的acticity-->
+		<!--银联支付activity-->
+		<activity
+				android:name = "com.unionpay.uppay.PayActivity"
+				android:configChanges = "orientation|keyboardHidden|screenSize"
+				android:excludeFromRecents = "true"
+				android:screenOrientation = "portrait" />
+		<!--银联支付activity-->
+		<!-- 插件入口界面 -->
+		<activity
+				android:name = "com.payeco.android.plugin.PayecoPluginLoadingActivity"
+				android:launchMode = "singleTask"
+				android:screenOrientation = "portrait"
+				/>
+		<!-- 插件拍照界面 -->
+		<activity
+				android:name = "com.payeco.android.plugin.PayecoCameraActivity"
+				android:screenOrientation = "portrait"
+				/>
+		<!-- 插件录像界面 -->
+		<activity
+				android:name = "com.payeco.android.plugin.PayecoVedioActivity"
+				android:process = "com.payeco.android.plugin.vedio"
+				android:screenOrientation = "landscape"
+				/>
+		<!--易联需要添加的activity-->
+		<!--汇付宝-微信支付需要添加的activity-->
+		<activity
+				android:name = "com.junnet.heepay.ui.activity.WelcomeActivity"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:excludeFromRecents = "true"
+				android:screenOrientation = "behind"
+				android:theme = "@android:style/Theme.Dialog"
+				android:windowSoftInputMode = "stateAlwaysHidden|adjustResize" />
+		<activity
+				android:name = "com.junnet.heepay.ui.activity.WechatPaymentActivity"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:excludeFromRecents = "true"
+				android:screenOrientation = "behind"
+				android:theme = "@android:style/Theme.Dialog"
+				android:windowSoftInputMode = "stateAlwaysHidden|adjustResize" />
+		<activity
+				android:name = "com.ipaynow.plugin.activity.PayMethodActivity"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:exported = "false"
+				android:screenOrientation = "behind"
+				android:theme = "@android:style/Theme.Dialog" />
+
+		<activity
+				android:name = "com.ipaynow.plugin.inner_plugin.wechat_plugin.activity.WeChatNotifyActivity"
+				android:configChanges = "keyboardHidden|orientation|screenSize"
+				android:screenOrientation = "behind"
+				android:theme = "@android:style/Theme.NoDisplay" />
+
+		<service
+				android:name = "net.ouwan.umipay.android.api.UmipayService"
+				android:exported = "false" >
+		</service >
+		<!--&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;-->
+		<!--<receiver android:name = "net.umipay.android.poll.Push_Boot_Receiver" >-->
+		<!--<intent-filter >-->
+		<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+		<!--</intent-filter >-->
+		<!--</receiver >-->
+
+		<!-- 接听闹钟广播 -->
+		<receiver
+				android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"
+				android:exported = "false" >
+			<intent-filter >
+				<action android:name = "net.ouwan.umipay.android.poll.push" />
+			</intent-filter >
+			<intent-filter >
+				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
+			</intent-filter >
+		</receiver >
+	</application >
+</manifest >

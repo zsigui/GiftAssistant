@@ -17,6 +17,8 @@ public class GiftButton extends TextView{
 
 	private boolean mBiggerButton;
 
+	private int mStatus;
+
 	public GiftButton(Context context) {
 		this(context, null);
 	}
@@ -34,6 +36,7 @@ public class GiftButton extends TextView{
 	}
 
 	public void setState(int state) {
+		mStatus = state;
 		setEnabled(false);
 		setOrangeBg();
 		switch (state) {
@@ -61,6 +64,7 @@ public class GiftButton extends TextView{
 				setEnabled(true);
 				break;
 			case GiftTypeUtil.TYPE_LIMIT_SEIZED :
+			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
 				setText(R.string.st_gift_seized);
 				break;
 			case GiftTypeUtil.TYPE_LIMIT_EMPTY :
@@ -73,6 +77,10 @@ public class GiftButton extends TextView{
 				setText(R.string.st_gift_wait_seize);
 				break;
 		}
+	}
+
+	public int getStatus() {
+		return mStatus;
 	}
 
 	private void setOrangeBg() {

@@ -23,15 +23,16 @@ import com.socks.library.KLog;
 /**
  * Created by zsigui on 16-1-12.
  */
-public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverManager.UserUpdateListener{
+public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverManager.UserUpdateListener {
 
 	private static final String TITLE_BEAN_SCORE = "积分或偶玩豆消耗";
-	private static final String TITLE_SCORE= "积分消耗";
+	private static final String TITLE_SCORE = "积分消耗";
 	private static final String TITLE_BEAN = "偶玩豆消耗";
 	private static final String REMAIN_BOTH = "余额：<img src='ic_score'/>%d 和 <img src='ic_bean'>%d";
 	private static final String REMAIN_SCORE = "余额：<img src='ic_score'/>%d";
 	private static final String REMAIN_BEAN = "余额：<img src='ic_bean'>%d";
-	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/><font color='#f85454'>%d</font> 或" +
+	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/><font color='#f85454'>%d</font> " +
+			"或" +
 			" <img src='ic_bean'><font color='#f85454'>%d</font>，";
 	private static final String BEAN_SCORE_BOTH_NOT_ENOUGH = BEAN_SCORE_BOTH_BASE + "余额不足。";
 	private static final String BEAN_SCORE_BOTH_ENOUGH = BEAN_SCORE_BOTH_BASE + "确认抢号吗?";
@@ -101,7 +102,9 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 		@Override
 		public Drawable getDrawable(String source) {
 			int id = ReflectUtil.getDrawableId(getContext(), source);
-			return getResources().getDrawable(id);
+			Drawable drawable = getResources().getDrawable(id);
+			drawable.setBounds(0, 0, drawable.getIntrinsicWidth() + 2, drawable.getIntrinsicHeight() + 3);
+			return drawable;
 		}
 	};
 

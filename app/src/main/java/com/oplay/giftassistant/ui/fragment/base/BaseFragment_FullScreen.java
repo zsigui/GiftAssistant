@@ -41,7 +41,7 @@ public abstract class BaseFragment_FullScreen extends BaseFragment {
 		if (v.getId() == R.id.iv_bar_back) {
 			mCanShowUI = false;
 			if (getActivity() instanceof BaseAppCompatActivity) {
-				((BaseAppCompatActivity) getActivity()).popOrExit();
+				((BaseAppCompatActivity) getActivity()).handleBackPressed();
 			}
 		}
 	}
