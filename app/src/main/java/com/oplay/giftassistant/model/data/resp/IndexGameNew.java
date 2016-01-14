@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.model.data.resp;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
@@ -9,11 +10,14 @@ import com.oplay.giftassistant.download.ApkDownloadDir;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.model.AppStatus;
 import com.oplay.giftassistant.model.DownloadStatus;
+import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.util.Util_System_Intent;
 import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.common.v2.download.model.IFileDownloadTaskExtendObject;
+import net.youmi.android.libs.common.v2.network.NetworkStatus;
 
 import java.io.File;
 
@@ -23,7 +27,7 @@ import java.io.File;
 public class IndexGameNew implements IFileDownloadTaskExtendObject {
 
 	static final long FILE_SIZE_KB = 1024;
-	static final long FILE_SIZE_MB = 1024*1024;
+	static final long FILE_SIZE_MB = 1024 * 1024;
 
 	// 游戏标志
 	@SerializedName("app_id")
@@ -111,6 +115,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 			mDestFilePath = destFile.getAbsolutePath();
 		}
 	}
+
 	public final String getDestFilePath() {
 		initFile();
 		return mDestFilePath;
@@ -121,7 +126,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 			try {
 				mDestFilePath = destFilePath;
 				mDestFile = new File(destFilePath);
-			}catch (Throwable e) {
+			} catch (Throwable e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(e);
 				}
@@ -129,13 +134,17 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 		}
 	}
 
+	public boolean isFileExists() {
+		return mDestFile != null && mDestFile.exists();
+	}
+
 	public void initFile() {
 		try {
 			if (mDestFilePath == null || mDestFile == null) {
-				mDestFile = ApkDownloadDir.getInstance(mContext).newDownloadStoreFile(downloadUrl,null);
+				mDestFile = ApkDownloadDir.getInstance(mContext).newDownloadStoreFile(downloadUrl, null);
 				mDestFilePath = mDestFile.getAbsolutePath();
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
@@ -169,7 +178,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 		try {
 			ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
 			ToastUtil.showShort("已添加新的下载任务");
-		}catch (Throwable e) {
+		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
@@ -189,7 +198,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	public void restartDownload() {
 		try {
 			ApkDownloadManager.getInstance(mContext).restartDownloadTask(this);
-		}catch (Throwable e) {
+		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
@@ -222,7 +231,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 			case FINISHED:
 				if (isInstalled) {
 					return AppStatus.OPENABLE;
-				}else {
+				} else {
 					return AppStatus.INSTALLABLE;
 				}
 		}
@@ -232,7 +241,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	public String getApkFileSizeStr() {
 		if (apkFileSize >= FILE_SIZE_MB) {
 			return String.format("%1$.1fMB", (1.0f) * apkFileSize / FILE_SIZE_MB);
-		}else {
+		} else {
 			return String.format("%1$.1fKB", (1.0f) * apkFileSize / FILE_SIZE_KB);
 		}
 	}
@@ -240,8 +249,80 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	public String getCompleteSizeStr() {
 		if (completeSize >= FILE_SIZE_MB) {
 			return String.format("%1$.1fMB", (1.0f) * completeSize / FILE_SIZE_MB);
-		}else {
+		} else {
 			return String.format("%1$.1fKB", (1.0f) * completeSize / FILE_SIZE_KB);
+		}
+	}
+
+	public void handleOnClick(FragmentManager fragmentManager) {
+		if (AppDebugConfig.IS_DEBUG) {
+			AppDebugConfig.logMethodWithParams(this, appStatus);
+		}
+		if (appStatus == null) {
+			if (AppDebugConfig.IS_DEBUG) {
+				AppDebugConfig.logMethodWithParams(this, packageName, "appStatus NULL!!!");
+			}
+			return;
+		}
+		switch (appStatus) {
+			case DOWNLOADABLE:
+			case UPDATABLE:
+				if (NetworkStatus.getNetworkType(mContext) == NetworkStatus.Type.TYPE_WIFI) {
+					startDownload();
+				} else {
+					ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+					confirmDialog.setTitle("提示");
+					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
+					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+						@Override
+						public void onCancel() {
+
+						}
+
+						@Override
+						public void onConfirm() {
+							startDownload();
+						}
+					});
+					confirmDialog.show(fragmentManager, "download");
+				}
+				break;
+			case INSTALLABLE:
+				initFile();
+				startInstall();
+				break;
+			case OPENABLE:
+				Util_System_Intent.startActivityByPackageName(mContext, packageName);
+				break;
+			case PAUSABLE:
+				stopDownload();
+				break;
+			case RESUMABLE:
+			case RETRYABLE:
+				if (NetworkStatus.getNetworkType(mContext) == NetworkStatus.Type.TYPE_WIFI) {
+					restartDownload();
+				} else {
+					ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+					confirmDialog.setTitle("提示");
+					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
+					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+						@Override
+						public void onCancel() {
+
+						}
+
+						@Override
+						public void onConfirm() {
+							startDownload();
+						}
+					});
+					confirmDialog.show(fragmentManager, "download");
+				}
+				break;
+			case DISABLE:
+			default:
+				break;
+
 		}
 	}
 }

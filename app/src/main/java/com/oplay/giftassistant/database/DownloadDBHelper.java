@@ -11,6 +11,7 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftassistant.download.listener.OnProgressUpdateListener;
+import com.oplay.giftassistant.model.DownloadStatus;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.socks.library.KLog;
 
@@ -45,11 +46,12 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 	private final String KEY_OF_IS_OPK = "o";
 	private final String KEY_OF_IS_DELETE = "p";
 	private final String KEY_OF_UPDATE_TIME = "q";
+	private final String KEY_OF_APK_FILE_SIZE = "r";
 
 	private final String[] AllColumns = new String[]{KEY_OF_APPNAME, KEY_OF_ICONURL, KEY_OF_MD5SUM, KEY_OF_PACKAGENAME,
 			KEY_OF_RAWURL, KEY_OF_DOWNLOADSTATUS, KEY_OF_PATH_APK, KEY_OF_PATH_OPK, KEY_OF_VERSIONCODE,
 			KEY_OF_IS_OFFER_APP, KEY_OF_APP_ID, KEY_OF_VERSION_NAME, KEY_OF_COMPLETE_PERCENTAGE, KEY_OF_TASK_ORIGIN,
-			KEY_OF_IS_OPK, KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME
+			KEY_OF_IS_OPK, KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE
 	};
 	private final String mOrderBy = KEY_OF_UPDATE_TIME + " DESC";
 	private Context mAppContext;
@@ -70,14 +72,15 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		return String.format(
 				"CREATE TABLE IF NOT EXISTS %s (_id INTEGER PRIMARY KEY AUTOINCREMENT,"
 						+ "%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s INTEGER,%s TEXT, %s TEXT,"
-						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT,%s INTEGER,"
-						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER"
+						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT,%s BIGINT,"
+						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER,"
+						+ "%s BIGINT"
 						+ ");",
 				TABLE_NAME, KEY_OF_APPNAME, KEY_OF_ICONURL, KEY_OF_MD5SUM, KEY_OF_PACKAGENAME, KEY_OF_RAWURL,
 				KEY_OF_DOWNLOADSTATUS, KEY_OF_PATH_APK, KEY_OF_PATH_OPK, KEY_OF_VERSIONCODE, KEY_OF_IS_OFFER_APP,
 				KEY_OF_APP_ID,
 				KEY_OF_VERSION_NAME, KEY_OF_COMPLETE_PERCENTAGE, KEY_OF_TASK_ORIGIN, KEY_OF_IS_OPK,
-				KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME
+				KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE
 		);
 	}
 
@@ -147,6 +150,41 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		return false;
 	}
 
+	private IndexGameNew getDownloadTaskFromCursor(Cursor cursor) {
+		try {
+			if (cursor == null) return null;
+			final int appId = cursor.getInt(cursor.getColumnIndex(KEY_OF_APP_ID));
+			final String rawUrl = cursor.getString(cursor.getColumnIndex(KEY_OF_RAWURL));
+			final String packageName = cursor.getString(cursor.getColumnIndex(KEY_OF_PACKAGENAME));
+			final String appName = cursor.getString(cursor.getColumnIndex(KEY_OF_APPNAME));
+			final int versionCode = cursor.getInt(cursor.getColumnIndex(KEY_OF_VERSIONCODE));
+			final String iconUrl = cursor.getString(cursor.getColumnIndex(KEY_OF_ICONURL));
+			final String serverFileMd5 = cursor.getString(cursor.getColumnIndex(KEY_OF_MD5SUM));
+			final int downloadStatus = cursor.getInt(cursor.getColumnIndex(KEY_OF_DOWNLOADSTATUS));
+			final String versionName = cursor.getString(cursor.getColumnIndex(KEY_OF_VERSION_NAME));
+			final long percentage = cursor.getLong(cursor.getColumnIndex(KEY_OF_COMPLETE_PERCENTAGE));
+			final long apkFileSize = cursor.getLong(cursor.getColumnIndex(KEY_OF_APK_FILE_SIZE));
+			final IndexGameNew downloadTask = new IndexGameNew();
+			downloadTask.id = appId;
+			downloadTask.downloadUrl = rawUrl;
+			downloadTask.packageName = packageName;
+			downloadTask.name = appName;
+//			downloadTask.setVersionCode(versionCode);
+			downloadTask.img = iconUrl;
+			downloadTask.apkMd5 = serverFileMd5;
+			downloadTask.downloadStatus = DownloadStatus.value2Name(downloadStatus);
+			downloadTask.versionName = versionName;
+			downloadTask.completeSize = percentage;
+			downloadTask.apkFileSize = apkFileSize;
+			return downloadTask;
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+		return null;
+	}
+
 	private ContentValues getUpdateAppContentValues(IndexGameNew downloadTask) {
 		final ContentValues contentValues = new ContentValues();
 		if (!TextUtils.isEmpty(downloadTask.name)) {
@@ -167,8 +205,12 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		final int status = downloadTask.downloadStatus.ordinal();
 		contentValues.put(KEY_OF_DOWNLOADSTATUS, status);
 		contentValues.put(KEY_OF_UPDATE_TIME, System.currentTimeMillis());
+		contentValues.put(KEY_OF_APK_FILE_SIZE, downloadTask.apkFileSize);
 		if (downloadTask.id > 0) {
 			contentValues.put(KEY_OF_APP_ID, downloadTask.id);
+		}
+		if (!TextUtils.isEmpty(downloadTask.versionName)) {
+			contentValues.put(KEY_OF_VERSION_NAME, downloadTask.versionName);
 		}
 		if (downloadTask.completeSize > 0) {
 			contentValues.put(KEY_OF_COMPLETE_PERCENTAGE, downloadTask.completeSize);
@@ -265,5 +307,49 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 	@Override
 	public void onProgressUpdate(String url, int percent, long speedBytesPerS) {
 		updateDownloadProgress(url, percent);
+	}
+
+	public void getDownloadList() {
+		Cursor cursor = null;
+		try {
+			final SQLiteDatabase db = getReadableDatabase();
+			cursor = db.query(TABLE_NAME, AllColumns, null, null, null, null, mOrderBy);
+			IndexGameNew info;
+			while (cursor.moveToNext()) {
+				info = getDownloadTaskFromCursor(cursor);
+				DownloadStatus ds = info.downloadStatus;
+				info.setContext(mAppContext);
+				info.initFile();
+				switch (ds) {
+					case DOWNLOADING:
+					case PENDING:
+					case PAUSED:
+					case FAILED:
+						info.downloadStatus = DownloadStatus.PAUSED;
+						ApkDownloadManager.getInstance(mAppContext).addPausedTask(info);
+						break;
+					case FINISHED:
+						if (!info.isFileExists()) {
+							deleteDownloadTask(info);
+							continue;
+						}
+						ApkDownloadManager.getInstance(mAppContext).addFinishedTask(info);
+						break;
+
+				}
+			}
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		} finally {
+			try {
+				if (cursor != null) {
+					cursor.close();
+				}
+			} catch (Exception e) {
+				KLog.e(e);
+			}
+		}
 	}
 }

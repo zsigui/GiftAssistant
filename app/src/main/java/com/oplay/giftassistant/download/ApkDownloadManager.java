@@ -33,6 +33,8 @@ import java.util.concurrent.locks.ReentrantLock;
  *         description
  */
 public class ApkDownloadManager extends BaseApkCachedDownloadManager {
+
+	private final static int TAG_APPINFO = 0xffff0011;
 	private static ApkDownloadManager mInstance = null;
 
 	private static final int MAX_DOWNLOADING_COUNT = 3;
@@ -43,7 +45,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	private Map<String, IndexGameNew> mUrl_AppInfo;
 	private Map<String, IndexGameNew> mPackageName_AppInfo;
 
-	private List<IndexGameNew> mManagerList = null;
+	private List<IndexGameNew> mManagerList;
 	private int mDownloadingCnt;
 	private int mPendingCnt;
 	private int mPausedCnt;
@@ -83,8 +85,33 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		return mInstance;
 	}
 
+	public void initDownloadList() {
+		mDownloadDBHelper.getDownloadList();
+	}
+
+	//仅限于初始化的时候用
+	public void addPausedTask(IndexGameNew info) {
+		if (!checkDownloadTask(info)) {
+			return;
+		}
+		mManagerList.add(getEndOfPaused(), info);
+		mPausedCnt++;
+		mUrl_AppInfo.put(info.downloadUrl, info);
+		mPackageName_AppInfo.put(info.packageName, info);
+	}
+
+	public void addFinishedTask(IndexGameNew info) {
+		if (!checkDownloadTask(info)) {
+			return;
+		}
+		mManagerList.add(getEndOfFinished(), info);
+		mFinishedCnt++;
+		mUrl_AppInfo.put(info.downloadUrl, info);
+		mPackageName_AppInfo.put(info.packageName, info);
+	}
+
 	public void addDownloadTask(IndexGameNew appInfo) {
-		if (!cheakDownloadTask(appInfo)) {
+		if (!checkDownloadTask(appInfo)) {
 			return;
 		}
 		final String apkUrl = appInfo.downloadUrl;
@@ -137,7 +164,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	}
 
 	public void restartDownloadTask(IndexGameNew appInfo) {
-		if (!cheakDownloadTask(appInfo)) {
+		if (!checkDownloadTask(appInfo)) {
 			return;
 		}
 		IndexGameNew info = mUrl_AppInfo.get(appInfo.downloadUrl);
@@ -151,7 +178,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	public void stopDownloadTask(IndexGameNew appInfo) {
 		appInfo = mUrl_AppInfo.get(appInfo.downloadUrl);
-		if (!cheakDownloadTask(appInfo)) {
+		if (!checkDownloadTask(appInfo)) {
 			return;
 		}
 		appInfo = stopDownloadingTask(appInfo);
@@ -165,7 +192,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	public synchronized void removeDownloadTask(String url) {
 		IndexGameNew info = mUrl_AppInfo.get(url);
-		if (!cheakDownloadTask(info)) {
+		if (!checkDownloadTask(info)) {
 			return;
 		}
 		DownloadStatus ds = info.downloadStatus;
@@ -258,8 +285,8 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	}
 
 	private void apkDownload(IndexGameNew appInfo) {
-		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 100);
-		task.addIFileDownloadTaskExtendObject(appInfo.id, appInfo);
+		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 1000);
+		task.addIFileDownloadTaskExtendObject(TAG_APPINFO, appInfo);
 		download(task, true);
 	}
 
@@ -361,7 +388,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		}
 	}
 
-	private boolean cheakDownloadTask(IndexGameNew appInfo) {
+	private boolean checkDownloadTask(IndexGameNew appInfo) {
 		return !(appInfo == null || TextUtils.isEmpty(appInfo.packageName) || TextUtils.isEmpty(appInfo.downloadUrl));
 	}
 
@@ -380,7 +407,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	public List<IndexGameNew> getDownloadList() {
 		initStatus();
-		return mManagerList;
+		return new ArrayList<>(mManagerList);
 	}
 
 	private void initStatus() {
@@ -430,16 +457,53 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	@Override
 	public boolean onDownloadSuccess(FileDownloadTask fileDownloadTask) {
+		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+		if (appInfo != null) {
+			//TODO 播放完成音乐
+			stopDownloadingTask(appInfo);
+			appInfo.downloadStatus = DownloadStatus.FINISHED;
+			appInfo.completeSize = appInfo.apkFileSize;
+			mManagerList.add(mDownloadingCnt + mPendingCnt + mPausedCnt, appInfo);
+			mFinishedCnt++;
+			notifyDownloadStatusListeners(appInfo);
+			//TODO 更新Notification
+			//TODO 自动安装
+		}
 		return false;
 	}
 
 	@Override
 	public boolean onFileAlreadyExist(FileDownloadTask fileDownloadTask) {
+		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+		if (appInfo != null) {
+			stopDownloadingTask(appInfo);
+			mManagerList.add(getEndOfPaused(), appInfo);
+			mFinishedCnt++;
+			appInfo.downloadStatus = DownloadStatus.FINISHED;
+			appInfo.completeSize = appInfo.apkFileSize;
+			notifyDownloadStatusListeners(appInfo);
+			//TODO 更新Notification
+			//TODO 自动安装
+		}
 		return false;
 	}
 
 	@Override
 	public boolean onDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus finalDownloadStatus) {
+		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+			if (appInfo != null) {
+				stopDownloadingTask(appInfo);
+				appInfo.downloadStatus = DownloadStatus.FAILED;
+				mManagerList.add(mDownloadingCnt + mPendingCnt, appInfo);
+				mPausedCnt++;
+				File parent = new File(fileDownloadTask.getStoreFile().getParent());
+				if (parent.getUsableSpace() < fileDownloadTask.getTotalLength()) {
+					//TODO 提示空间不足
+				}else {
+					//TODO 提示下载失败
+				}
+				notifyDownloadStatusListeners(appInfo);
+		}
 		return false;
 	}
 

@@ -36,6 +36,7 @@ public class DownloadFragment extends BaseFragment_WithName implements OnDownloa
 		StickyListHeadersListViewExpandable listView = getViewById(R.id.download_adapterView);
 		listView.setAdapter(mAdapter);
 		mAdapter.setExpandableListView(listView);
+		mAdapter.notifyDataSetUpdated();
 	}
 
 	@Override
@@ -68,6 +69,13 @@ public class DownloadFragment extends BaseFragment_WithName implements OnDownloa
 			mAdapter.onDestroy();
 		}
 	}
+
+//	@Override
+//	public void onResume() {
+//		super.onResume();
+//		mListData = ApkDownloadManager.getInstance(getActivity()).getDownloadList();
+//		mAdapter.notifyDataSetUpdated();
+//	}
 
 	@Override
 	public void onDownloadStatusChanged(IndexGameNew appInfo) {

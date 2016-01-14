@@ -61,7 +61,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		mGameAdapter = new IndexGameNewAdapter(getContext());
+		mGameAdapter = new IndexGameNewAdapter(getContext(), null);
 		mGiftAdapter = new IndexGiftNewAdapter(getContext());
 
 		mGameView.setAdapter(mGameAdapter);

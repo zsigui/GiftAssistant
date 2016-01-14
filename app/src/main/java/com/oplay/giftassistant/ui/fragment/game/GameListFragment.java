@@ -85,7 +85,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 		}
 
 		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
-		mAdapter = new IndexGameNewAdapter(getContext());
+		mAdapter = new IndexGameNewAdapter(getContext(), null);
 		mDataView.setAdapter(mAdapter);
 	}
 

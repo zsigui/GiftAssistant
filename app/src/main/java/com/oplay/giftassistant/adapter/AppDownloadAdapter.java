@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.adapter;
 
-import android.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +18,7 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.widget.StickyListHeadersListViewExpandable;
 import com.oplay.giftassistant.ui.widget.stickylistheaders.StickyListHeadersAdapter;
+import com.oplay.giftassistant.util.SystemUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -41,7 +41,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 
 	private HashMap<String, ViewHolder> mMap_Url_ViewHolder;
 
-	private String mToast_Pausing = "下载任务暂停中,请继续";
 	private StickyListHeadersListViewExpandable mListView;
 
 	private String mStrDownloadingAndPaused;
@@ -66,14 +65,13 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		final int endIndexOfDownloading = mDownloadManagerInstance.getEndOfDownloading();
 		final int endIndexOfPaused = mDownloadManagerInstance.getEndOfPaused();
 		final int endIndexOfDownloaded = mDownloadManagerInstance.getEndOfFinished();
-
-		notifyDataSetInvalidated();
 		if (endIndexOfDownloading > mListData.size()) return;
 		mEndIndexOfDownloading = endIndexOfDownloading >= 0 ? endIndexOfDownloading : 0;
 		mEndIndexOfPaused = endIndexOfPaused;
 		mEndIndexOfDownloaded = endIndexOfDownloaded;
 		mStrDownloadingAndPaused = String.format("当前下载(%d)", endIndexOfPaused);
 		mStrDownloaded = String.format("下载完成(%d)", endIndexOfDownloaded - endIndexOfPaused);
+		notifyDataSetInvalidated();
 	}
 
 	@Override
@@ -172,7 +170,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 			switch (v.getId()) {
 				// 下载按钮响应
 				case R.id.tv_downloading_action:
-					String str = ((TextView)v).getText().toString();
+					String str = ((TextView) v).getText().toString();
 					if ("暂停".equals(str)) {
 						stopDownload(appInfo);
 					}
@@ -210,7 +208,29 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		}
 	}
 
-	private void showDelDownloadingConfirmDialog(Fragment activity, IndexGameNew appInfo) {
+	private void stopDownload(IndexGameNew appInfo) {
+		try {
+			mDownloadManagerInstance.stopDownloadTask(appInfo);
+			notifyDataSetUpdated();
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+	}
+
+	private void restartDownload(IndexGameNew appInfo) {
+		try {
+			appInfo.handleOnClick(mFragment.getChildFragmentManager());
+			notifyDataSetUpdated();
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+	}
+
+	private void showDelDownloadingConfirmDialog(BaseFragment activity, final IndexGameNew appInfo) {
 		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 		confirmDialog.setTitle("提示");
 		confirmDialog.setContent("游戏还没下载完，确定删除吗？");
@@ -222,10 +242,31 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 
 			@Override
 			public void onConfirm() {
-
+				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+				notifyDataSetUpdated();
 			}
 		});
-		confirmDialog.show(activity.getChildFragmentManager(),);
+		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
+	}
+
+	private void showDelDownloadedConfirmDialog(BaseFragment activity, final IndexGameNew appInfo) {
+		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+		confirmDialog.setTitle("提示");
+		confirmDialog.setContent("确定删除安装包吗？");
+		confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+			@Override
+			public void onCancel() {
+
+			}
+
+			@Override
+			public void onConfirm() {
+				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+				SystemUtil.deletePackage(appInfo.getDestFilePath());
+				notifyDataSetUpdated();
+			}
+		});
+		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 	}
 
 	private ViewHolder bindConvertViewWithHolder(View convertView) {
@@ -238,15 +279,15 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mTvSpeed = (TextView) convertView.findViewById(R.id.tv_downloading_rate);
 		holder.mTvDelete = convertView.findViewById(R.id.tv_downloading_delete);
 		holder.mTvInfo = convertView.findViewById(R.id.tv_downloading_detail);
-		convertView.setTag(convertView);
+		convertView.setTag(holder);
 		return holder;
 	}
 
 	private void initDownloadingStatus(ViewHolder holder, IndexGameNew appInfo) {
 		holder.mPBar.setVisibility(View.VISIBLE);
+		holder.mPBar.setEnabled(true);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_grey);
 		holder.mTvAction.setText("暂停");
-		holder.mPBar.setProgress((int) (appInfo.apkFileSize / appInfo.completeSize));
 		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
 		holder.mTvSpeed.setVisibility(View.VISIBLE);
 		updateDownloadRate(holder.mTvSpeed, 0);
@@ -319,6 +360,10 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		} else {
 			initDownloadedStatus(holder, appInfo);
 		}
+
+		int percent = (int) (appInfo.completeSize * 100 / appInfo.apkFileSize);
+
+		holder.mPBar.setProgress(percent);
 
 		final Object tag = holder.mIvIcon.getTag(TAG_URL);
 		final String iconUrl = appInfo.img;

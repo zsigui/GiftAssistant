@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.GameTagAdapter;
@@ -71,7 +72,7 @@ public class GameTypeFragment extends BaseFragment {
 	protected void setListener() {
 		mMainItemClickListener = new OnItemClickListener<GameTypeMain>() {
 			@Override
-			public void onItemClick(GameTypeMain item, int position) {
+			public void onItemClick(GameTypeMain item, View view, int position) {
 				Intent intent = new Intent(getContext(), GameListActivity.class);
 				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_TYPE);
 				intent.putExtra(KeyConfig.KEY_DATA, item.id);
@@ -81,7 +82,7 @@ public class GameTypeFragment extends BaseFragment {
 		};
 		mTagItemClickListener = new OnItemClickListener<GameTypeMain>() {
 			@Override
-			public void onItemClick(GameTypeMain item, int position) {
+			public void onItemClick(GameTypeMain item, View view, int position) {
 				Intent intent = new Intent(getContext(), GameListActivity.class);
 				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_TYPE);
 				intent.putExtra(KeyConfig.KEY_DATA, item.id);

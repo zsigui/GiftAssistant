@@ -123,7 +123,7 @@ public class ScoreTaskAdapter extends BaseAdapter {
 					@Override
 					public void onClick(View v) {
 						if (mItemListener != null) {
-							mItemListener.onItemClick(mission, position);
+							mItemListener.onItemClick(mission, null, position);
 						}
 					}
 				});
