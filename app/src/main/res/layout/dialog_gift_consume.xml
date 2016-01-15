@@ -22,7 +22,6 @@
 
 		<View style = "@style/HDividerView" />
 
-<<<<<<< HEAD
 		<TextView
 				android:id = "@+id/tv_content"
 				android:layout_width = "match_parent"
@@ -38,20 +37,7 @@
 				android:gravity = "left|center_vertical"
 				android:paddingLeft = "@dimen/di_dialog_content_padding"
 				android:paddingRight = "@dimen/di_dialog_content_padding"/>
-=======
-	<TextView
-			android:id = "@+id/tv_remain"
-			style = "@style/DefaultTextView.Text"
-			android:paddingBottom = "@dimen/di_dialog_content_padding"
-			android:paddingLeft = "@dimen/di_dialog_content_padding"
-			android:paddingRight = "@dimen/di_dialog_content_padding"
-			/>
 
-	<ViewStub
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:inflatedId = "@+id/vs_content" />
->>>>>>> dev_lpx
 
 		<ViewStub
 				android:id = "@+id/vs_pay_method"

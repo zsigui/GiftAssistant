@@ -25,7 +25,6 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -42,23 +41,14 @@ public class GameTypeFragment extends BaseFragment {
 	private GameTypeMainAdapter mGameTypeMainAdapter;
 	private GameTagAdapter mTagAdapter;
 
-	private HashMap<String, Integer> mKeyRes;
+	private int[] mResIds = new int[]{R.drawable.ic_tag_card, R.drawable.ic_tag_round, R.drawable.ic_tag_arpg,
+			R.drawable.ic_tag_stategy, R.drawable.ic_tag_action, R.drawable.ic_tag_supernatural};
 
 	private OnItemClickListener<GameTypeMain> mMainItemClickListener;
 	private OnItemClickListener<GameTypeMain> mTagItemClickListener;
 
 	public static GameTypeFragment newInstance() {
 		return new GameTypeFragment();
-	}
-
-	public GameTypeFragment() {
-		mKeyRes = new HashMap<>();
-		mKeyRes.put("卡牌", R.drawable.test_code);
-		mKeyRes.put("回合", R.drawable.test_code);
-		mKeyRes.put("ARPG", R.drawable.test_code);
-		mKeyRes.put("策略", R.drawable.test_code);
-		mKeyRes.put("动作", R.drawable.test_code);
-		mKeyRes.put("仙侠", R.drawable.test_code);
 	}
 
 	@Override
@@ -161,10 +151,9 @@ public class GameTypeFragment extends BaseFragment {
 		if (data == null) {
 			return;
 		}
+		int i = 0;
 		for (GameTypeMain item : data) {
-			if (mKeyRes.containsKey(item.name)) {
-				item.icon = mKeyRes.get(item.name);
-			}
+			item.icon = mResIds[i++];
 		}
 		mGameTypeMainAdapter.updateData(data);
 	}
@@ -178,7 +167,7 @@ public class GameTypeFragment extends BaseFragment {
 
 	private IndexGameType initStashData() {
 		IndexGameType data = new IndexGameType();
-		ArrayList<GameTypeMain> typeData = new ArrayList<>();
+		ArrayList<GameTypeMain> typeData = new ArrayList<GameTypeMain>();
 		GameTypeMain g1 = new GameTypeMain();
 		g1.id = 1;
 		g1.name = "卡牌";
@@ -205,7 +194,7 @@ public class GameTypeFragment extends BaseFragment {
 		typeData.add(g6);
 		data.gameTypes = typeData;
 
-		ArrayList<GameTypeMain> tagData = new ArrayList<>();
+		ArrayList<GameTypeMain> tagData = new ArrayList<GameTypeMain>();
 		for (int i = 0; i < 15; i++) {
 			GameTypeMain g = new GameTypeMain();
 			g.id = i + 15;
