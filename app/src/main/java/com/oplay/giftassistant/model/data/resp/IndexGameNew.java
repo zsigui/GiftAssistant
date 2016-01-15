@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.download.ApkDownloadDir;
@@ -61,7 +62,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	public String img;
 
 	// 主推游戏Banner地址
-	@SerializedName("banner")
+	@SerializedName("stroll_img_url")
 	public String banner;
 
 	// 最新礼包名
@@ -81,16 +82,22 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	@SerializedName("version_name")
 	public String versionName;
 
+	@Expose
 	public DownloadStatus downloadStatus;
 
+	@Expose
 	public AppStatus appStatus = AppStatus.DOWNLOADABLE;
 
+	@Expose
 	public long completeSize;
 
+	@Expose
 	private File mDestFile;
 
+	@Expose
 	private String mDestFilePath;
 
+	@Expose
 	transient Context mContext;
 
 	public void initAppInfoStatus(Context context) {

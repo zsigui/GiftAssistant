@@ -16,7 +16,7 @@ public class IndexGameSuper implements Serializable {
 	@SerializedName("hot")
 	public ArrayList<IndexGameNew> hot;
 
-	@SerializedName("recommend")
+	@SerializedName("special_app")
 	public IndexGameNew recommend;
 
 	@SerializedName("new")
