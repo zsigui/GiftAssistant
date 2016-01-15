@@ -117,7 +117,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                 }
                             });
                 } else {
-                    mViewManager.showErrorRetry();
+	                refreshFailEnd();
                 }
             }
         }).start();
@@ -161,7 +161,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                     }
                                 });
                     } else {
-                        mViewManager.showErrorRetry();
+	                    moreLoadFailEnd();
                     }
                 }
             }).start();

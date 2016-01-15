@@ -18,8 +18,8 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.widget.StickyListHeadersListViewExpandable;
 import com.oplay.giftassistant.ui.widget.stickylistheaders.StickyListHeadersAdapter;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.SystemUtil;
-import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -191,8 +191,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 					break;
 				// 详细按钮响应
 				case R.id.tv_downloading_detail:
-					//TODO
-					ToastUtil.showShort("跳转游戏详情");
+					IntentUtil.jumpGameDetail(mContext, appInfo.id, appInfo.name);
 					break;
 				// 删除按钮响应
 				case R.id.tv_downloading_delete:
@@ -257,13 +256,14 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-
+				confirmDialog.dismiss();
 			}
 
 			@Override
 			public void onConfirm() {
 				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
 				SystemUtil.deletePackage(appInfo.getDestFilePath());
+				confirmDialog.dismiss();
 			}
 		});
 		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());

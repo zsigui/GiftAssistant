@@ -55,4 +55,10 @@ public class ScoreMission implements Serializable {
 	 */
 	@SerializedName("last_complete_time")
 	public String lastCompleteTime;
+
+	/**
+	 * 额外指明数据
+	 */
+	@SerializedName("extra_data")
+	public String data;
 }

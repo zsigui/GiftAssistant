@@ -69,6 +69,10 @@ public class SettingActivity extends BaseAppCompatActivity {
 				replaceFragWithTitle(R.id.fl_container, MyGiftFragment.newInstance(),
 						getResources().getString(R.string.st_my_gift_title));
 				break;
+			case KeyConfig.TYPE_ID_FEEDBACK:
+				replaceFragWithTitle(R.id.fl_container, FeedBackFragment.newInstance(),
+						getResources().getString(R.string.st_feedback_title));
+				break;
 			default:
 				if (AppDebugConfig.IS_FRAG_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_FRAG, "type = " + mType);
@@ -80,12 +84,6 @@ public class SettingActivity extends BaseAppCompatActivity {
 
 	@Override
 	public void handleBackPressed() {
-		if (isTopFragment(FeedBackFragment.class.getSimpleName())) {
-			ToastUtil.showShort("反馈返回，执行保存处理");
-			if (getTopFragment() instanceof FeedBackFragment) {
-				KLog.d("is FeedBack");
-			}
-		}
 		super.handleBackPressed();
 	}
 }

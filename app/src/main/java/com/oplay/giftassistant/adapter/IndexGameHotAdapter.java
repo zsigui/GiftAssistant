@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class IndexGameHotAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.showShort(o.name + " 游戏详情页跳转");
+				IntentUtil.jumpGameDetail(mContext, o.id, o.name);
 			}
 		});
 		bgaViewHolderHelper.getView(R.id.tv_download).setOnClickListener(new View.OnClickListener() {

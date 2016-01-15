@@ -20,12 +20,12 @@ import com.oplay.giftassistant.model.data.resp.ScoreMission;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.activity.GameDetailActivity;
 import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.ScoreText;
 import com.oplay.giftassistant.util.DateUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -38,7 +38,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class TaskFragment extends BaseFragment_WithName implements OnItemClickListener<ScoreMission> {
+public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission> {
 
 
 	private LinearLayout llSetNick;
@@ -148,7 +148,7 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 							                       Retrofit retrofit) {
 								mIsLoading = false;
 								if (response != null && response.isSuccess()) {
-									if (response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										mHasData = true;
 										setTaskIcon(mData);
 										mData = resort(mData);
@@ -223,39 +223,40 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 	}
 
 	private void setTaskIcon(ArrayList<ScoreMission> data) {
-		/*for (ScoreMission mission : data) {
+		for (ScoreMission mission : data) {
 			String id = mission.id;
 			if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
 				// 跳转到设置用户昵称界面
 				mission.icon = R.drawable.ic_task_set_nick;
 			} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
 				mission.icon = R.drawable.ic_task_upload_avator;
-			} else if (id.equals(TaskTypeUtil.ID_BIND)) {
+			} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE) ||
+					id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 				mission.icon = R.drawable.ic_task_bind;
 			} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
 				mission.icon = R.drawable.ic_task_feedback;
 			} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
 				mission.icon = R.drawable.ic_task_search;
 			} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
-				mission.icon = R.drawable.ic_task_judge_game;
+				//mission.icon = R.drawable.ic_task_judge_game;
 			} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
-				mission.icon = R.drawable.ic_task_star_comment;
+				//mission.icon = R.drawable.ic_task_star_comment;
 			} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
 				mission.icon = R.drawable.ic_task_login;
 			} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
 				mission.icon = R.drawable.ic_task_download;
 			} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
-				mission.icon = R.drawable.ic_task_normal_gift;
+				mission.icon = R.drawable.ic_task_share_normal_gift;
 			} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 				mission.icon = R.drawable.ic_task_share_limit_gift;
 			} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
 				mission.icon = R.drawable.ic_task_get_limit_with_bean;
-			} else if (id.equals(TaskTypeUtil.ID_DONWLOAD_SPECIFIED)) {
-				mission.icon = R.drawable.ic_task_download_specified;
+			} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
+				//mission.icon = R.drawable.ic_task_download_specified;
 			} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
 				mission.icon = R.drawable.ic_task_continuous_login;
 			}
-		}*/
+		}
 	}
 
 	/**
@@ -350,26 +351,40 @@ public class TaskFragment extends BaseFragment_WithName implements OnItemClickLi
 		String id = scoreMission.id;
 		Intent intent;
 		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
-			// 跳转到设置用户昵称界面
+			// 跳转到设置用户信息界面
 		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
-		} else if (id.equals(TaskTypeUtil.ID_BIND)) {
+			// 跳转到设置用户信息界面
+		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
+			// 跳转到绑定手机账号界面
+		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)){
+			// 跳转到绑定偶玩账号界面
 		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
+			IntentUtil.jumpFeedBack(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
 			intent = new Intent(getContext(), SearchActivity.class);
 			((BaseAppCompatActivity) getActivity()).openPageForResult(this, KeyConfig.REQUEST_UPDATE_AVATAR, intent);
 		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
-			intent = new Intent(getContext(), GameDetailActivity.class);
-			// 设置评论Intent
-			getActivity().startActivity(intent);
+			// 评论
 		} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
-
+			// 为某条评论点赞，暂无
 		} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
+			// 跳转登录界面
+			IntentUtil.jumpLogin(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
+			// 跳转新游推荐界面
+			IntentUtil.jumpGameNewList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
+			//
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
+			// 分享限量礼包
 		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
-		} else if (id.equals(TaskTypeUtil.ID_DONWLOAD_SPECIFIED)) {
+			// 使用偶玩豆购买限量礼包，跳转今日限量界面
+			IntentUtil.jumpGiftLimitList(getContext());
+		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
+			// 跳转指定游戏界面，暂无
+			IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), "");
 		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
+			IntentUtil.jumpLogin(getContext());
 		} else {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {
 				KLog.e("error id " + id);

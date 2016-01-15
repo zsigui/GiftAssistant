@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.fragment.game;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +12,14 @@ import com.oplay.giftassistant.adapter.other.AutoMeasureGridLayoutManager;
 import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.resp.GameTypeMain;
 import com.oplay.giftassistant.model.data.resp.IndexGameType;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.activity.GameListActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -63,21 +61,13 @@ public class GameTypeFragment extends BaseFragment {
 		mMainItemClickListener = new OnItemClickListener<GameTypeMain>() {
 			@Override
 			public void onItemClick(GameTypeMain item, View view, int position) {
-				Intent intent = new Intent(getContext(), GameListActivity.class);
-				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_TYPE);
-				intent.putExtra(KeyConfig.KEY_DATA, item.id);
-				intent.putExtra(KeyConfig.KEY_NAME, item.name);
-				startActivity(intent);
+				IntentUtil.jumpGameTagList(getContext(), item.id, item.name);
 			}
 		};
 		mTagItemClickListener = new OnItemClickListener<GameTypeMain>() {
 			@Override
 			public void onItemClick(GameTypeMain item, View view, int position) {
-				Intent intent = new Intent(getContext(), GameListActivity.class);
-				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_TYPE);
-				intent.putExtra(KeyConfig.KEY_DATA, item.id);
-				intent.putExtra(KeyConfig.KEY_NAME, item.name);
-				startActivity(intent);
+				IntentUtil.jumpGameTagList(getContext(), item.id, item.name);
 			}
 		};
 	}
@@ -105,34 +95,37 @@ public class GameTypeFragment extends BaseFragment {
 
 	@Override
 	protected void lazyLoad() {
-		mIsLoading = true;
-		mViewManager.showLoading();
-
+		refreshInitConfig();
 		Global.getNetEngine().obtainIndexGameType(new JsonReqBase<Void>())
 				.enqueue(new Callback<JsonRespBase<IndexGameType>>() {
 					@Override
 					public void onResponse(Response<JsonRespBase<IndexGameType>> response, Retrofit retrofit) {
-						mIsLoading = false;
-						if (response != null && response.isSuccess()) {
-							if (response.body().getCode() == StatusCode.SUCCESS) {
-								mHasData = true;
-								updateData(response.body().getData());
-							}
+						if (!mCanShowUI) {
 							return;
-						} else {
-							mViewManager.showErrorRetry();
 						}
+						if (response != null && response.isSuccess()) {
+							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+								refreshSuccessEnd();
+								updateData(response.body().getData());
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_APP,
+										(response.body() == null? "解析失败" : response.body().error()));
+							}
+						}
+						refreshFailEnd();
 					}
 
 					@Override
 					public void onFailure(Throwable t) {
-
+						if (!mCanShowUI) {
+							return;
+						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_UTIL, t);
 						}
-						mIsLoading = false;
-						mHasData = false;
-						// mViewManager.showErrorRetry();
+						refreshFailEnd();
 						updateData(initStashData());
 					}
 				});

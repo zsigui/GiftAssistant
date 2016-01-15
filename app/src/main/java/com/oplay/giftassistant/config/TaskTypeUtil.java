@@ -44,9 +44,13 @@ public class TaskTypeUtil {
 	 */
 	public static final String ID_SET_NICK = "";
 	/**
-	 * 绑定手机/偶玩账号
+	 * 绑定手机账号
 	 */
-	public static final String ID_BIND = "";
+	public static final String ID_BIND_PHONE = "";
+	/**
+	 * 绑定偶玩账号
+	 */
+	public static final String ID_BIND_OUWAN = "";
 	/**
 	 * 新版本意见反馈
 	 */
@@ -86,7 +90,7 @@ public class TaskTypeUtil {
 	/**
 	 * 下载指定款游戏
 	 */
-	public static final String ID_DONWLOAD_SPECIFIED = "";
+	public static final String ID_DOWNLOAD_SPECIFIED = "";
 	/**
 	 * 连续登录7天
 	 */

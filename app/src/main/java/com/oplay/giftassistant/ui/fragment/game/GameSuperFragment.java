@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.fragment.game;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,7 +15,6 @@ import com.oplay.giftassistant.adapter.IndexGameHotAdapter;
 import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
@@ -28,9 +26,9 @@ import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.activity.GameListActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.ui.widget.NestedListView;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
@@ -221,20 +219,17 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 
 	@Override
 	public void onClick(View v) {
-		Intent intent;
 		switch (v.getId()) {
 			case R.id.rl_hot_all:
-				intent = new Intent(getContext(), GameListActivity.class);
-				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_HOT);
-				getContext().startActivity(intent);
+				IntentUtil.jumpGameHotList(getContext());
 				break;
 			case R.id.rl_recommend:
-				ToastUtil.showShort("主推游戏 被点击" + ((mRecommendData != null) ? mRecommendData.name : null));
+				if (mRecommendData != null) {
+					IntentUtil.jumpGameDetail(getContext(), mRecommendData.id, mRecommendData.name);
+				}
 				break;
 			case R.id.rl_new_all:
-				intent = new Intent(getContext(), GameListActivity.class);
-				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_NEW);
-				getContext().startActivity(intent);
+				IntentUtil.jumpGameNewList(getContext());
 				break;
 			case R.id.tv_download:
 				ToastUtil.showShort("游戏 开始下载" + ((mRecommendData != null) ? mRecommendData.name : null));
@@ -249,7 +244,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 				item.handleOnClick(getChildFragmentManager());
 			} else {
 				//TODO 跳转游戏详情页
-				ToastUtil.showShort("跳转游戏详情页！");
+				IntentUtil.jumpGameDetail(getContext(), item.id, item.name);
 			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {

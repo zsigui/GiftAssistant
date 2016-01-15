@@ -17,7 +17,7 @@ import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.util.InputTextUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -29,7 +29,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class OuwanLoginFragment extends BaseFragment_WithName {
+public class OuwanLoginFragment extends BaseFragment {
 
 	private EditText etUser;
 	private TextView tvClear;

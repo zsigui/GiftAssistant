@@ -13,7 +13,7 @@ import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.DecryptDataModel;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.widget.ToggleButton;
 import com.oplay.giftassistant.util.DataClearUtil;
@@ -27,7 +27,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-5.
  */
-public class SettingFragment extends BaseFragment_WithName implements View.OnClickListener {
+public class SettingFragment extends BaseFragment {
 
 	private ToggleButton mBtnPush;
 	private ToggleButton mBtnAutoDelete;

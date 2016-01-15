@@ -3,7 +3,6 @@ package com.oplay.giftassistant.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -11,12 +10,11 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.DensityUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -73,11 +71,7 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mRecyclerView.getContext(), GiftDetailActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(KeyConfig.KEY_DATA, o.id);
-				intent.putExtra(KeyConfig.KEY_NAME, String.format("[%s]%s", o.gameName, o.name));
-				mRecyclerView.getContext().startActivity(intent);
+				IntentUtil.jumpGiftDetail(mContext, o.id, String.format("[%s]%s", o.gameName, o.name));
 			}
 		});
 	}

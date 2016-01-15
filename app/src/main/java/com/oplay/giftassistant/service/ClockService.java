@@ -4,7 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.manager.ObserverManager;
+import com.socks.library.KLog;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +25,9 @@ public class ClockService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_SERVICE, "Start Round Connect");
+		}
 		if (mTimer == null) {
 			mTimer = new Timer();
 		}
@@ -30,9 +35,21 @@ public class ClockService extends Service {
 		mTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.v(AppDebugConfig.TAG_SERVICE, "Time Clock execute, Request Refresh UI");
+				}
 				ObserverManager.getInstance().notifyGiftUpdate();
 			}
 		}, 0, 10 * 1000);
 		return super.onStartCommand(intent, flags, startId);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_SERVICE, "Stop Round Connect");
+		}
+		// 结束时关闭轮询
+		mTimer.cancel();
 	}
 }

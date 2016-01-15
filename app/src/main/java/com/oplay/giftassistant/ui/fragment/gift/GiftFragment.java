@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.fragment.gift;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +29,10 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.DateUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -291,24 +290,15 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 	@Override
 	public void onClick(View v) {
-		Intent intent;
 		switch (v.getId()) {
 			case R.id.rl_hot_all:
-	            intent = new Intent(getActivity(), GiftListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_LIKE);
-                intent.putExtras(bundle);
-                startActivity(intent);
+				IntentUtil.jumpGiftHotList(getContext());
 				break;
 			case R.id.rl_limit_all:
-				intent = new Intent(getContext(), GiftListActivity.class);
-				intent.putExtra(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_LIMIT);
-				getContext().startActivity(intent);
+				IntentUtil.jumpGiftLimitList(getContext());
 				break;
 			case R.id.rl_new_all:
-				intent = new Intent(getContext(), GiftListActivity.class);
-				intent.putExtra(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_NEW);
-				getContext().startActivity(intent);
+				IntentUtil.jumpGiftNewList(getContext());
 				break;
 		}
 	}

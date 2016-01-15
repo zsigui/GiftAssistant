@@ -94,6 +94,7 @@
 	<string name = "st_my_gift_title" >我的礼包</string >
 
 	<!-- 登录 -->
+	<string name = "st_login_user" >点击登录</string >
 	<string name = "st_login_phone_title" >登录礼包酷</string >
 	<string name = "st_login_ouwan_title" >偶玩账号登录</string >
 	<string name = "st_login_phone_hint" >请输入手机号</string >

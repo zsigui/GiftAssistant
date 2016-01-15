@@ -1,14 +1,18 @@
 package com.oplay.giftassistant.manager;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.config.WebViewUrl;
 import com.oplay.giftassistant.model.data.resp.UpdateSesion;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.model.data.resp.UserModel;
@@ -60,6 +64,8 @@ public class AccountManager {
 		ObserverManager.getInstance().notifyUserUpdate();
 		ObserverManager.getInstance().notifyGiftUpdate();
 
+		// 同步cookie
+		syncCookie();
 		if (user != null) {
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
 		} else {
@@ -115,6 +121,30 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 同步Cookie
+	 */
+	public void syncCookie(String baseUrl, String cookieVal) {
+		CookieManager.getInstance().setAcceptCookie(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
+			CookieManager.getInstance().flush();
+		} else {
+			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
+			CookieSyncManager.getInstance().sync();
+		}
+	}
+
+	public void syncCookie() {
+		if (isLogin()) {
+			String cookie = "cuid=" + getUserSesion().uid + ";" +
+					"sessionid=" +getUserSesion().session + ";";
+			KLog.e("cookie", cookie);
+			syncCookie(WebViewUrl.BASE_URL, cookie);
+		} else {
+			syncCookie(WebViewUrl.BASE_URL, "");
+		}
+	}
 
 	/**
 	 * 更新用户的Session

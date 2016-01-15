@@ -83,7 +83,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 
 	public DownloadStatus downloadStatus;
 
-	public AppStatus appStatus;
+	public AppStatus appStatus = AppStatus.DOWNLOADABLE;
 
 	public long completeSize;
 

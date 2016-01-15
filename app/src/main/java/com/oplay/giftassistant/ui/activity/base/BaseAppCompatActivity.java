@@ -22,7 +22,6 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.listener.OnBackPressListener;
 import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
 import com.oplay.giftassistant.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.socks.library.KLog;
@@ -60,7 +59,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		super.onCreate(savedInstanceState);
 		mApp = AssistantApp.getInstance();
 		if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().setStatusBarColor(getResources().getColor(R.color.co_status_bar_bg));
+			getWindow().setStatusBarColor(getStatusBarColor());
 		}
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
 		initView();
@@ -74,6 +73,14 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			initMenu(mToolbar);
 		}
 		processLogic();
+	}
+
+	/**
+	 * 重写此类设置状态栏颜色
+	 * @return
+	 */
+	protected int getStatusBarColor() {
+		return getResources().getColor(R.color.co_status_bar_bg);
 	}
 
 	protected abstract void processLogic();
@@ -130,13 +137,13 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		}
 	}
 
-	public void replaceFragWithTitle(@IdRes int id, BaseFragment_WithName newFrag, String title) {
+	public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title) {
 		newFrag.setTitleName(title);
 		replaceFrag(id, newFrag);
 		setBarTitle(title);
 	}
 
-	public void replaceFragWithTitle(@IdRes int id, BaseFragment_WithName newFrag, String title,
+	public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title,
 	                                 boolean isAddToBackStack) {
 		newFrag.setTitleName(title);
 		replaceFrag(id, newFrag, isAddToBackStack);
@@ -282,10 +289,11 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			return;
 		}
 		if (!popFrag() && !isFinishing()) {
+			mNeedWorkCallback = false;
 			finish();
 		} else {
-			if (getTopFragment() instanceof BaseFragment_WithName) {
-				setBarTitle(((BaseFragment_WithName) getTopFragment()).getTitleName());
+			if (getTopFragment() instanceof BaseFragment) {
+				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
 		}
 	}
@@ -299,8 +307,13 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	@Override
 	public void onBackPressed() {
-		this.mNeedWorkCallback = false;
 		handleBackPressed();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mNeedWorkCallback = false;
 	}
 
 	/**

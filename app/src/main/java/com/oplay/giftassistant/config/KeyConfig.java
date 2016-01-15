@@ -28,13 +28,13 @@ public class KeyConfig {
 	public static final int TYPE_ID_SCORE_TASK = 0x108;
 	public static final int TYPE_ID_MSG = 0x109;
 	public static final int TYPE_ID_PROFILE = 0x110;
+	public static final int TYPE_ID_FEEDBACK = 0x111;
 
 	/* login activity */
 	public static final int TYPE_ID_LOGIN_MAIN = 0x111;
 	public static final int TYPE_ID_OUWAN_LOGIN = 0x112;
 	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x113;
 	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x114;
-
 
 	/* game list activity */
 	// 新游推荐
@@ -46,6 +46,9 @@ public class KeyConfig {
 	// 游戏搜索
 	public static final int TYPE_ID_GAME_SEARCH = 0x204;
 
+	/* detail activity */
+	public static final int TYPE_ID_GIFT_DETAIL = 0x301;
+	public static final int TYPE_ID_GAME_DETAIL = 0x302;
 
 	/* task fragment */
 	public static final int REQUEST_UPDATE_AVATAR = 0xA00;
@@ -55,5 +58,4 @@ public class KeyConfig {
 	public static final int TYPE_KEY_SEIZED = 0x210;
 	public static final int TYPE_KEY_OVERTIME = 0x211;
 	public static final int TYPE_KEY_SEARCH = 0x212;
-
 }

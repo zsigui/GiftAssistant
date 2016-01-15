@@ -56,7 +56,7 @@ public class NetErrorFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.v_wifi:
-                IntentUtil.judgeWifiSetting(getContext());
+                IntentUtil.jumpWifiSetting(getContext());
                 break;
         }
     }

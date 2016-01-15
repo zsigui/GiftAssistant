@@ -8,13 +8,13 @@ import android.support.v4.view.ViewPager;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.NetUrl;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class MyGiftFragment extends BaseFragment_WithName {
+public class MyGiftFragment extends BaseFragment {
 
 	private ViewPager mPager;
 	private SmartTabLayout mTabLayout;
@@ -36,9 +36,9 @@ public class MyGiftFragment extends BaseFragment_WithName {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		mFragments = new Fragment[3];
-		mFragments[0] = MyGiftListFragment.newInstance(NetUrl.USER_GIFT_SEIZED);
-		mFragments[1] = MyGiftListFragment.newInstance(NetUrl.USER_GIFT_SEARCHED);
-		mFragments[2] = MyGiftListFragment.newInstance(NetUrl.USER_GIFT_OVERTIME);
+		mFragments[0] = MyGiftListFragment.newInstance(KeyConfig.TYPE_KEY_SEIZED);
+		mFragments[1] = MyGiftListFragment.newInstance(KeyConfig.TYPE_KEY_SEARCH);
+		mFragments[2] = MyGiftListFragment.newInstance(KeyConfig.TYPE_KEY_OVERTIME);
 		mTitles = new String[3];
 		mTitles[0] = "已抢";
 		mTitles[1] = "已淘";

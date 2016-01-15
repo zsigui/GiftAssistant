@@ -38,12 +38,12 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	private RecyclerView mDataView;
 	private MyGiftListAdapter mAdapter;
 	private JsonReqBase<ReqPageData> mReqPageObj;
-	private String mUrl;
+	private int mType;
 
-	public static MyGiftListFragment newInstance(String url) {
+	public static MyGiftListFragment newInstance(int type) {
 		MyGiftListFragment fragment = new MyGiftListFragment();
 		Bundle bundle = new Bundle();
-		bundle.putString(KeyConfig.KEY_URL, url);
+		bundle.putInt(KeyConfig.KEY_DATA, type);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -69,7 +69,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		mAdapter = new MyGiftListAdapter(mDataView);
 		if (getArguments() != null) {
-			mUrl = getArguments().getString(KeyConfig.KEY_URL);
+			mType = getArguments().getInt(KeyConfig.KEY_DATA);
 		}
 		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
@@ -86,13 +86,14 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
 					mReqPageObj.data.page = 1;
-					Global.getNetEngine().obtainGiftList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
+					mReqPageObj.data.type = mType;
+					Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj)
 							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
 								@Override
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 								                       Retrofit
 										retrofit) {
-									if (response != null && response.isSuccess() &&
+									if (response != null && response.isSuccess() && response.body() != null &&
 											response.body().getCode() == StatusCode.SUCCESS) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
@@ -130,7 +131,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			return;
 		}
 		mIsLoadMore = true;
-		mReqPageObj.data.page = mLastPage + 1;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -138,14 +138,16 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 					mViewManager.showErrorRetry();
 					return;
 				}
-				Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj)
+				mReqPageObj.data.page = mLastPage + 1;
+				mReqPageObj.data.type = mType;
+				Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj)
 						.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 							                       Retrofit
 									                       retrofit) {
 
-								if (response != null && response.isSuccess() &&
+								if (response != null && response.isSuccess() && response.body() != null &&
 										response.body().getCode() == StatusCode.SUCCESS) {
 									moreLoadSuccessEnd();
 									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();

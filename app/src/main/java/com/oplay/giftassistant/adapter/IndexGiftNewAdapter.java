@@ -1,7 +1,6 @@
 package com.oplay.giftassistant.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -19,12 +18,11 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.PayManager;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
 import com.oplay.giftassistant.util.DensityUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
 import java.util.List;
@@ -216,10 +214,7 @@ public class IndexGiftNewAdapter extends BaseAdapter {
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, GiftDetailActivity.class);
-				intent.putExtra(KeyConfig.KEY_DATA, gift.id);
-				intent.putExtra(KeyConfig.KEY_NAME, name);
-				mContext.startActivity(intent);
+				IntentUtil.jumpGiftDetail(mContext, gift.id, name);
 			}
 		});
 	}

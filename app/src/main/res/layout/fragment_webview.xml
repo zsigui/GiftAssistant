@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<WebView xmlns:android = "http://schemas.android.com/apk/res/android"
-         android:id = "@+id/wv_container"
-         android:layout_width = "match_parent"
-         android:layout_height = "match_parent" />
+<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+             android:layout_width = "match_parent"
+             android:layout_height = "match_parent" >
+
+
+	<WebView
+			android:id = "@+id/wv_container"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent" />
+	<ProgressBar
+			style="?android:attr/progressBarStyleHorizontal"
+			android:id="@+id/pb_percent"
+			android:max="100"
+			android:scrollbarStyle="insideOverlay"
+			android:layout_width = "match_parent"
+			android:layout_height = "2dp"
+			android:visibility="gone"
+			android:progressDrawable="@drawable/shape_progress_bar_orange"/>
+</FrameLayout >

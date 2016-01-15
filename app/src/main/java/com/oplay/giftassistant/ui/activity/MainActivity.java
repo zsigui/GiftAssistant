@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
@@ -33,6 +34,8 @@ import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
 import com.oplay.giftassistant.ui.fragment.gift.GiftFragment;
 import com.oplay.giftassistant.ui.widget.search.SearchLayout;
+import com.oplay.giftassistant.util.IntentUtil;
+import com.oplay.giftassistant.util.StringUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 
 /**
@@ -42,7 +45,8 @@ import com.oplay.giftassistant.util.ToastUtil;
  */
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener{
 
-
+	// 保持一个Activity的全局对象
+	public static MainActivity sGlobalHolder;
 	private long mLastClickTime = 0;
 	// 底部Tabs
 	private CheckedTextView[] mCtvs;
@@ -63,7 +67,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private void startClockService() {
 		Intent intent = new Intent(MainActivity.this, ClockService.class);
-		startService(intent);
+		//startService(intent);
 	}
 
 	private void stopClockService() {
@@ -74,6 +78,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		sGlobalHolder = MainActivity.this;
 		createDrawer(savedInstanceState);
 		startClockService();
 	}
@@ -108,12 +113,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				.withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
 					@Override
 					public boolean onProfileImageClick(View view, IProfile iProfile, boolean b) {
-						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 						if (AccountManager.getInstance().isLogin()) {
 							ToastUtil.showShort("已经登录，跳转个人信息页面");
 						} else {
-							intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
-							startActivity(intent);
+							IntentUtil.jumpLogin(MainActivity.this);
 						}
 						return false;
 					}
@@ -148,31 +151,26 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 							if (drawerItem.getIdentifier() != KeyConfig.TYPE_ID_SETTING
 									&& drawerItem.getIdentifier() !=  KeyConfig.TYPE_ID_DOWNLOAD
 									&& !AccountManager.getInstance().isLogin()) {
-								ToastUtil.showShort("请先登录");
-								Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-								intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_LOGIN_MAIN);
-								startActivity(intent);
+								IntentUtil.jumpLogin(MainActivity.this);
 								return false;
 							}
-							Intent intent = new Intent(MainActivity.this, SettingActivity.class);
 							switch (drawerItem.getIdentifier()) {
 								case KeyConfig.TYPE_ID_MY_GIFT_CODE:
-									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
+									IntentUtil.jumpMyGift(MainActivity.this);
 									break;
 								case KeyConfig.TYPE_ID_SETTING:
-									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SETTING);
+									IntentUtil.jumpSetting(MainActivity.this);
 									break;
 								case KeyConfig.TYPE_ID_SCORE_TASK:
-									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SCORE_TASK);
+									IntentUtil.jumpEarnScore(MainActivity.this);
 									break;
 								case KeyConfig.TYPE_ID_WALLET:
-									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
+									IntentUtil.jumpMyWallet(MainActivity.this);
 									break;
 								case KeyConfig.TYPE_ID_DOWNLOAD:
-									intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
+									IntentUtil.jumpDownloadManager(MainActivity.this);
 									break;
 							}
-							startActivity(intent);
 							return false;
 						}
 						// don't close drawer
@@ -195,13 +193,22 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private void updateProfile() {
 		if (!AccountManager.getInstance().isLogin()) {
 			mProfile = new ProfileDrawerItem()
-					.withName("未登录")
+					.withName(getResources().getString(R.string.st_login_user))
 					.withIcon(R.drawable.ic_img_default)
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
 		} else {
+			String name;
+			String email;
+			if (mUser.loginType == UserTypeUtil.TYPE_POHNE) {
+				name = (TextUtils.isEmpty(mUser.nick) ? mUser.nick : StringUtil.transePhone(mUser.phone));
+				email = "登陆手机：" + StringUtil.transePhone(mUser.phone);
+			} else {
+				name = mUser.nick;
+				email = "偶玩账号：" + mUser.username;
+			}
 			mProfile = new ProfileDrawerItem()
-					.withName(TextUtils.isEmpty(mUser.nick) ? mUser.username : mUser.nick)
-					.withEmail(mUser.phone)
+					.withName(name)
+					.withEmail(email)
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
 			if (TextUtils.isEmpty(mUser.img)) {
 				mProfile.withIcon(R.drawable.ic_img_default);
@@ -259,7 +266,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		setCurSelected(mCurrentIndex);
 	}
 
-	private void setCurSelected(int position) {
+	public void setCurSelected(int position) {
 		for (CheckedTextView ctv : mCtvs) {
 			ctv.setChecked(false);
 			ctv.setTextColor(getResources().getColor(R.color.co_tab_index_text_normal));
@@ -300,7 +307,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				return;
 			}
 		}
-		Intent intent;
 		switch (v.getId()) {
 			case R.id.ctv_gift:
 				setCurSelected(0);
@@ -309,8 +315,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				setCurSelected(1);
 				break;
 			case R.id.sl_search:
-				intent = new Intent(MainActivity.this, SearchActivity.class);
-				startActivity(intent);
+				IntentUtil.jumpSearch(MainActivity.this);
 				break;
 			case R.id.iv_profile:
 				if (mDrawer.isDrawerOpen()) {
@@ -321,9 +326,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				break;
 			case R.id.ll_gift_count:
 				if (AccountManager.getInstance().isLogin()) {
-					intent = new Intent(MainActivity.this, SettingActivity.class);
-					intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
-					startActivity(intent);
+					IntentUtil.jumpMyGift(MainActivity.this);
 				} else {
 					final ConfirmDialog dialog = ConfirmDialog.newInstance();
 					dialog.setContent("还没登录，是否跳转登录页面");
@@ -335,8 +338,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 						@Override
 						public void onConfirm() {
-							Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-							startActivity(intent);
+							IntentUtil.jumpLogin(MainActivity.this);
 							dialog.dismiss();
 						}
 					});
@@ -354,6 +356,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
+			stopClockService();
 			mApp.exit();
 			finish();
 			System.exit(0);

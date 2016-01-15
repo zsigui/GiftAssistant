@@ -69,7 +69,8 @@
 				android:layout_alignParentRight="true"
 				android:paddingRight="10dp"
 				android:textStyle="bold"
-				android:text="〉"/>
+				android:drawableRight="@drawable/ic_arrow_more"
+				android:text=""/>
 
 	</RelativeLayout>
 	<View style="@style/HDividerView"/>
@@ -88,7 +89,8 @@
 				android:layout_alignParentRight="true"
 				android:paddingRight="10dp"
 				android:textStyle="bold"
-				android:text="〉"/>
+				android:drawableRight="@drawable/ic_arrow_more"
+				android:text=""/>
 
 	</RelativeLayout>
 

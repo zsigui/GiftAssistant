@@ -62,22 +62,22 @@ public class NetUrl {
 	/**
 	 * 游戏首页-类别(标签)
 	 */
-	public static final String GAME_GET_INDEX_TYPE = "default";
+	public static final String GAME_GET_INDEX_TYPE = "recommend_labels";
 
 	/**
 	 * 游戏首页-榜单
 	 */
-	public static final String GAME_GET_INDEX_NOTICE = "default";
+	public static final String GAME_GET_INDEX_NOTICE = "app_board";
 
 	/**
 	 * 新游推荐
 	 */
-	public static final String GAME_GET_NEW = "default";
+	public static final String GAME_GET_NEW = "new_app";
 
 	/**
 	 * 热门手游
 	 */
-	public static final String GAME_GET_HOT = "default";
+	public static final String GAME_GET_HOT = "hot_app";
 
 	/**
 	 * 游戏搜索
@@ -87,12 +87,12 @@ public class NetUrl {
 	/**
 	 * 游戏详情
 	 */
-	public static final String GAME_GET_DETAIL = "default";
+	public static final String GAME_GET_DETAIL = "app_detail";
 
 	/**
 	 * 获取某类游戏
 	 */
-	public static final String GAME_GET_TYPE = "default";
+	public static final String GAME_GET_TYPE = "labels_app";
 
 	/* 用户接口 */
 
@@ -157,19 +157,9 @@ public class NetUrl {
 	public static final String USER_MODIFY_PHONE_FOUR = "api/account/modify_account_bind_mobile_step_4";
 
 	/**
-	 * 获取已抢礼包
+	 * 获取我的礼包
 	 */
-	public static final String USER_GIFT_SEIZED = "default";
-
-	/**
-	 * 获取已淘礼包
-	 */
-	public static final String USER_GIFT_SEARCHED = "default";
-
-	/**
-	 * 获取已过期礼包
-	 */
-	public static final String USER_GIFT_OVERTIME = "default";
+	public static final String USER_GIFT_SEIZED = "my_gift";
 
 
 

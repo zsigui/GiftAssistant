@@ -2,12 +2,12 @@ package com.oplay.giftassistant.ui.fragment.user;
 
 import android.os.Bundle;
 
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 
 /**
  * Created by zsigui on 16-1-11.
  */
-public class ForgetPwdFragment extends BaseFragment_WithName {
+public class ForgetPwdFragment extends BaseFragment {
 
 
 

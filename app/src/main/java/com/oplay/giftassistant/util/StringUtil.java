@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.util;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,6 +54,18 @@ public class StringUtil {
 			result.add(matcher.group(groupIndex));
 		}
 		return result;
+	}
+
+	/**
+	 * 转换输入手机号码的显示格式，中间改为****
+	 */
+	public static String transePhone(String originPhone) {
+		if (TextUtils.isEmpty(originPhone) || originPhone.length() < 11) {
+			return originPhone;
+		}
+		String lastFour = originPhone.substring(originPhone.length() - 4, originPhone.length());
+		String front = originPhone.substring(0, originPhone.length() - 8);
+		return front + "****" + lastFour;
 	}
 
 	/**

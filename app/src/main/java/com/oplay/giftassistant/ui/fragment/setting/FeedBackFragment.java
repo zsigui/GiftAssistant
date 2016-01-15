@@ -10,12 +10,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class FeedBackFragment extends BaseFragment_WithName implements TextWatcher {
+public class FeedBackFragment extends BaseFragment implements TextWatcher {
 
 	private RadioButton rbFunction;
 	private RadioButton rbPay;

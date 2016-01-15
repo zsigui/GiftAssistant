@@ -8,7 +8,7 @@ import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftassistant.download.listener.OnProgressUpdateListener;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.StickyListHeadersListViewExpandable;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class DownloadFragment extends BaseFragment_WithName implements OnDownloadStatusChangeListener, OnProgressUpdateListener {
+public class DownloadFragment extends BaseFragment implements OnDownloadStatusChangeListener, OnProgressUpdateListener {
 
 	private AppDownloadAdapter mAdapter;
 	private List<IndexGameNew> mListData;

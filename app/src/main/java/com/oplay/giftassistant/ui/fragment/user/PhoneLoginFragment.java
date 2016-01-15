@@ -20,7 +20,7 @@ import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.util.InputTextUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -32,7 +32,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class PhoneLoginFragment extends BaseFragment_WithName {
+public class PhoneLoginFragment extends BaseFragment {
 
 	private AutoCompleteTextView etPhone;
 	private TextView tvClear;
@@ -55,10 +55,10 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 				btnSendCode.setEnabled(true);
 				btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
 			} else {
+				sSendCodeRemainTime--;
 				btnSendCode.setText(
 						String.format(getResources().getString(R.string.st_login_phone_resend_code),
 								sSendCodeRemainTime));
-				sSendCodeRemainTime--;
 				mHandler.postDelayed(setTimeRunnable, 1000);
 			}
 		}
@@ -96,10 +96,6 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 		InputTextUtil.initPswFilter(etPhone, etCode, tvClear, btnLogin);
 		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
-		if (sSendCodeRemainTime > 0) {
-			mHandler.post(setTimeRunnable);
-			btnSendCode.setEnabled(false);
-		}
 	}
 
 	@Override
@@ -165,6 +161,9 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 						.enqueue(new Callback<JsonRespBase<UserModel>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
+								if (!mCanShowUI) {
+									return;
+								}
 								hideLoading();
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
@@ -185,6 +184,9 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 
 							@Override
 							public void onFailure(Throwable t) {
+								if (!mCanShowUI) {
+									return;
+								}
 								hideLoading();
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
@@ -247,6 +249,9 @@ public class PhoneLoginFragment extends BaseFragment_WithName {
 
 							@Override
 							public void onFailure(Throwable t) {
+								if (!mCanShowUI) {
+									return;
+								}
 								hideLoading();
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);

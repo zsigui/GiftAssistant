@@ -42,8 +42,18 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected LoadAndRetryViewManager mViewManager;
 	private String mFragName;
 	protected Handler mHandler = new Handler(Looper.myLooper());
-
+	// 是否处于刷新页面请求中
 	protected boolean mIsRefresh = false;
+	// Fragment标题
+	private String mTitleName;
+
+	public String getTitleName() {
+		return mTitleName;
+	}
+
+	public void setTitleName(String titleName) {
+		mTitleName = titleName;
+	}
 
 	protected LoadAndRetryViewManager.OnRetryListener mRetryListener = new LoadAndRetryViewManager.OnRetryListener() {
 		@Override
@@ -60,7 +70,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 			tv.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					IntentUtil.judgeWifiSetting(getContext());
+					IntentUtil.jumpWifiSetting(getContext());
 				}
 			});
 

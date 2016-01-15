@@ -7,13 +7,12 @@ import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.model.DecryptDataModel;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_FullScreen;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class AboutFragment extends BaseFragment_WithName {
+public class AboutFragment extends BaseFragment {
 
 	private RelativeLayout rlUpdate;
 	private RelativeLayout rlQQ;

@@ -12,14 +12,14 @@ import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-6.
  */
-public class WalletFragment extends BaseFragment_WithName {
+public class WalletFragment extends BaseFragment {
 
 	private TextView tvScore;
 	private TextView tvBean;

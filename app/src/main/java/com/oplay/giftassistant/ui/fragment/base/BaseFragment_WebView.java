@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -27,7 +26,6 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.network.Util_Network_Status;
 
 import java.io.File;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,10 +34,10 @@ import java.util.regex.Pattern;
  */
 public abstract class BaseFragment_WebView extends BaseFragment implements DownloadListener, OnBackPressListener {
 
-	private WebView mWebView;
+	protected WebView mWebView;
 	private WebSettings mSettings;
 	protected WebViewInterface mJsInterfaceObject;
-	private ProgressBar mProgressBar;
+	protected ProgressBar mProgressBar;
 
 	protected int mScrollX;
 	protected int mScrollY;
@@ -54,6 +52,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	}
 
 	private void initWebView() {
+		mProgressBar = getViewById(R.id.pb_percent);
 		mWebView = getViewById(R.id.wv_container);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -124,8 +123,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
 		// 缩放
-		mSettings.setSupportZoom(true);
-		mSettings.setBuiltInZoomControls(true);
+		mSettings.setSupportZoom(false);
+		mSettings.setBuiltInZoomControls(false);
 		mSettings.setUseWideViewPort(true);
 		mSettings.setLoadWithOverviewMode(true);
 
@@ -171,7 +170,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			mProgressBar.setVisibility(View.VISIBLE);
 		}
 		if (mViewManager != null) {
-			mViewManager.showErrorRetry();
+			mViewManager.showContent();
 		}
 	}
 
@@ -267,43 +266,21 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	 *
 	 * 需要在setting设置完之后设置，方法可在processLogic中调用
  	 */
-	public void postUrl(String url, byte[] postData, boolean mSetCookie, Map<String, String> cookies) {
+	public void postUrl(String url, byte[] postData) {
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
 		}
 		if (mWebView != null) {
 			mWebView.postUrl(url, postData);
-			if (mSetCookie) {
-				CookieManager.getInstance().setAcceptCookie(true);
-				StringBuilder cookieVal = new StringBuilder();
-				for (Map.Entry<String, String> cookie : cookies.entrySet()) {
-					cookieVal.append(cookie.getKey()).append("=").append(cookie.getValue());
-					cookieVal.append(";Max-Age=3600;Domain=.163.com;Path = /;");
-				}
-				CookieManager.getInstance().setCookie(url, cookieVal.toString());
-			}
 		}
 	}
+
+
 
 	protected void onWebProgressChangedMethod(int i) {
 		if (mProgressBar != null) {
 			mProgressBar.setProgress(i);
 		}
-	}
-
-	@Override
-	protected void setListener() {
-
-	}
-
-	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-
-	}
-
-	@Override
-	protected void lazyLoad() {
-
 	}
 
 	@Override
@@ -321,6 +298,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			}
 		}
 	}
+
+
 
 	@Override
 	public boolean onBack() {

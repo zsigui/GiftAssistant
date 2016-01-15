@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.adapter;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,9 +7,8 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
-import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
+import com.oplay.giftassistant.util.IntentUtil;
 
 import java.util.List;
 
@@ -41,11 +39,8 @@ public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftNew> 
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mRecyclerView.getContext(), GiftDetailActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(KeyConfig.KEY_DATA, o.id);
-				intent.putExtra(KeyConfig.KEY_NAME, String.format("[%s]%s", o.gameName, o.name));
-				mRecyclerView.getContext().startActivity(intent);
+				IntentUtil.jumpGiftDetail(mRecyclerView.getContext(), o.id,
+						String.format("[%s]%s", o.gameName, o.name));
 			}
 		});
 

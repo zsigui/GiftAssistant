@@ -81,11 +81,7 @@
 			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
 	    <activity
-			    android:name=".ui.activity.GiftDetailActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-
-	    <activity
-			    android:name=".ui.activity.GameDetailActivity"
+			    android:name=".ui.activity.DetailActivity"
 			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
 	    <activity

@@ -17,6 +17,9 @@ public class ReqPageData implements Serializable {
 	@SerializedName("page_size")
 	public int pageSize = 10;
 
+	@SerializedName("type")
+	public int type;
+
 	// 请求日期，仅对于获取特定日期数据的有效，否则可忽略
     // 格式：yyyy-MM-dd
 	@SerializedName("date")

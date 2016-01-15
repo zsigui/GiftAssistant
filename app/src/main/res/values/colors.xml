@@ -25,6 +25,12 @@
 	<color name = "co_common_text_main" >#333333</color >
 	<color name = "co_common_text_second" >#888888</color >
 
+	<!-- 游戏详情主题颜色表 -->
+	<color name = "co_rainbow_color_1">#343754</color>
+	<color name = "co_rainbow_color_2">#1d404b</color>
+	<color name = "co_rainbow_color_3">#422f25</color>
+	<color name = "co_rainbow_color_4">#533341</color>
+
 	<color name = "co_index_module_add_text" >#ff8543</color >
 	<color name = "co_divider_bg" >#dcdcdc</color >
 	<color name = "co_stroke_bg" >#e4e4e4</color >

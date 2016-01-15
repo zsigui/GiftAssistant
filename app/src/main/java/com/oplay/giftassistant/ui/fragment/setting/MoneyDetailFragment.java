@@ -4,9 +4,9 @@ import android.os.Bundle;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WithName;
-
-import net.ouwan.umipay.android.api.UmipayBrowser;
+import com.oplay.giftassistant.config.WebViewUrl;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WebView;
+import com.socks.library.KLog;
 
 /**
  *
@@ -14,10 +14,13 @@ import net.ouwan.umipay.android.api.UmipayBrowser;
  *
  * Created by zsigui on 16-1-6.
  */
-public class MoneyDetailFragment extends BaseFragment_WithName {
+public class MoneyDetailFragment extends BaseFragment_WebView {
+
+
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_webview);
+		mProgressBar = getViewById(R.id.pb_percent);
 	}
 
 	@Override
@@ -36,12 +39,20 @@ public class MoneyDetailFragment extends BaseFragment_WithName {
 			return;
 		}
 		// do something
-		UmipayBrowser browser = new UmipayBrowser();
+		if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
+		KLog.e("url = " + WebViewUrl.OUWAN_BEAN_DETAIL);
+			loadUrl(WebViewUrl.OUWAN_BEAN_DETAIL);
+		} else {
+			KLog.e("url = " + WebViewUrl.SCORE_DETAIL);
+			loadUrl(WebViewUrl.SCORE_DETAIL);
+		}
+		mIsLoading = true;
 	}
 
 	@Override
 	protected void lazyLoad() {
-
+		mIsLoading = true;
+		reloadPage();
 	}
 
 	public static MoneyDetailFragment newInstance(int type) {

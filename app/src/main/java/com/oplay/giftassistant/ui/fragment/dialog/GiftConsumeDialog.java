@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.fragment.dialog;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.view.View;
@@ -11,13 +10,12 @@ import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.GiftTypeUtil;
-import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
-import com.oplay.giftassistant.ui.activity.SettingActivity;
+import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ReflectUtil;
-import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
@@ -28,18 +26,17 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 	private static final String TITLE_BEAN_SCORE = "积分或偶玩豆消耗";
 	private static final String TITLE_SCORE = "积分消耗";
 	private static final String TITLE_BEAN = "偶玩豆消耗";
-	private static final String REMAIN_BOTH = "余额：<img src='ic_score'/>%d 和 <img src='ic_bean'>%d";
-	private static final String REMAIN_SCORE = "余额：<img src='ic_score'/>%d";
-	private static final String REMAIN_BEAN = "余额：<img src='ic_bean'>%d";
-	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/><font color='#f85454'>%d</font> " +
-			"或" +
-			" <img src='ic_bean'><font color='#f85454'>%d</font>，";
+	private static final String REMAIN_BOTH = "余额：<img src='ic_score'/>%d 和 <img src='ic_bean'> %d";
+	private static final String REMAIN_SCORE = "余额：<img src='ic_score'/> %d";
+	private static final String REMAIN_BEAN = "余额：<img src='ic_bean'> %d";
+	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/> <font color='#f85454'>%d</font> " +
+			"或 <img src='ic_bean'> <font color='#f85454'>%d</font>，";
 	private static final String BEAN_SCORE_BOTH_NOT_ENOUGH = BEAN_SCORE_BOTH_BASE + "余额不足。";
 	private static final String BEAN_SCORE_BOTH_ENOUGH = BEAN_SCORE_BOTH_BASE + "确认抢号吗?";
-	private static final String SCORE_BASE = "抢该礼包将消耗：<img src='ic_score'/><font color='#f85454'>%d</font>，";
+	private static final String SCORE_BASE = "抢该礼包将消耗：<img src='ic_score'/> <font color='#f85454'>%d</font>，";
 	private static final String SCORE_NOT_ENOUGH = SCORE_BASE + "余额不足。";
 	private static final String SCORE_ENOUGH = SCORE_BASE + "确认抢号吗?";
-	private static final String BEAN_BASE = "抢该礼包将消耗：<img src='ic_bean'/><font color='#f85454'>%d</font>，";
+	private static final String BEAN_BASE = "抢该礼包将消耗：<img src='ic_bean'/> <font color='#f85454'>%d</font>，";
 	private static final String BEAN_NOT_ENOUGH = BEAN_BASE + "余额不足。";
 	private static final String BEAN_ENOUGH = BEAN_BASE + "确认抢号吗?";
 
@@ -74,9 +71,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 
 		@Override
 		public void onConfirm() {
-			Intent intent = new Intent(getActivity(), SettingActivity.class);
-			intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SCORE_TASK);
-			getActivity().startActivity(intent);
+			IntentUtil.jumpEarnScore(getContext());
 		}
 	};
 	/**
@@ -95,7 +90,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 		@Override
 		public void onConfirm() {
 			// 跳转充值偶玩豆界面
-			ToastUtil.showShort("充值偶玩豆界面 跳转");
+			OuwanSDKManager.getInstance().recharge();
 		}
 	};
 	private Html.ImageGetter mImageGetter = new Html.ImageGetter() {
@@ -103,7 +98,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 		public Drawable getDrawable(String source) {
 			int id = ReflectUtil.getDrawableId(getContext(), source);
 			Drawable drawable = getResources().getDrawable(id);
-			drawable.setBounds(0, 0, drawable.getIntrinsicWidth() + 2, drawable.getIntrinsicHeight() + 3);
+			drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 			return drawable;
 		}
 	};

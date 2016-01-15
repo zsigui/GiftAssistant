@@ -34,6 +34,8 @@ public class AppDebugConfig {
 
 	public static final String TAG_WEBVIEW = "data_webview_debug";
 
+	public static final String TAG_SERVICE = "data_service_debug";
+
 
 
 

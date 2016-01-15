@@ -5,7 +5,6 @@ import android.content.Context;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.model.data.resp.UserSession;
-import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.api.GameParamInfo;
@@ -43,12 +42,14 @@ public class OuwanSDKManager implements InitCallbackListener {
 		}
 		return manager;
 	}
+
 	private int mRetryTime = 0;
+
 	public void init() {
 		GameParamInfo gameParamInfo = new GameParamInfo();
-		gameParamInfo.setAppId("13480bc2ae0d5e32");//设置AppID
-		gameParamInfo.setAppSecret("96f27505691e5f54");//设置AppSecret
-		gameParamInfo.setTestMode(false); //设置测试模式，模式非测试模式
+		gameParamInfo.setAppId("3c453306edd43bbc");//设置AppID
+		gameParamInfo.setAppSecret("3b4446772144ade3");//设置AppSecret
+		gameParamInfo.setTestMode(true); //设置测试模式，模式非测试模式
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, null);
 	}
 
@@ -70,29 +71,33 @@ public class OuwanSDKManager implements InitCallbackListener {
 		UmipayAccountManager.getInstance(mContext).setLogin(false);
 	}
 
+	/**
+	 * 初始化结果回调
+	 *
+	 * @param code
+	 * @param message
+	 */
+	// 现在有个问题，网络加载问题？退出程序才加载
 	@Override
 	public void onSdkInitFinished(int code, String message) {
 		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d("初始化结果 = " + code + ":" + message);
+			KLog.d(AppDebugConfig.TAG_MANAGER, "初始化结果 = " + code + ":" + message);
 		}
 		if (code != UmipaySDKStatusCode.SUCCESS) {
 			// 再次执行，最多重试三次
-			if (mRetryTime ++ < 3) {
+			if (mRetryTime++ < 3) {
 				init();
-			} else {
-				ToastUtil.showLong("配置支付模块失败");
 			}
 		}
 	}
 
 	/**
-	 *
 	 * 购买礼包调用支付接口
 	 *
-	 * @param tradeNo 订单号
-	 * @param pay 支付金额,元
-	 * @param desc 订单描述
-	 * @param userId 用户id
+	 * @param tradeNo  订单号
+	 * @param pay      支付金额,元
+	 * @param desc     订单描述
+	 * @param userId   用户id
 	 * @param listener 支付回调
 	 */
 	public void pay(String tradeNo, int pay, String desc, int userId, PayCallbackListener listener) {
