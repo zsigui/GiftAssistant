@@ -13,7 +13,11 @@ import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.v2.download.BaseApkCachedDownloadManager;
 import net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus;
+import net.youmi.android.libs.common.v2.download.core.AbsDownloader;
+import net.youmi.android.libs.common.v2.download.core.DefaultAPPDownloader;
+import net.youmi.android.libs.common.v2.download.listener.IFileAvailableChecker;
 import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
+import net.youmi.android.libs.common.v2.download.notify.AbsDownloadNotifier;
 import net.youmi.android.libs.common.v2.download.storer.AbsDownloadDir;
 
 import java.io.File;
@@ -407,7 +411,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	public List<IndexGameNew> getDownloadList() {
 		initStatus();
-		return new ArrayList<>(mManagerList);
+		return mManagerList;
 	}
 
 	private void initStatus() {
@@ -511,5 +515,10 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	public boolean onDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int
 			percent) {
 		return false;
+	}
+
+	@Override
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask, AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker) throws NullPointerException, IOException {
+		return new DefaultAPPDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
 	}
 }

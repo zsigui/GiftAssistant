@@ -10,7 +10,7 @@ import java.util.List;
  *         description
  */
 public interface IBaseAdapter<T> {
-	void onDestory();
+	void onDestroy();
 
 	int getCount();
 

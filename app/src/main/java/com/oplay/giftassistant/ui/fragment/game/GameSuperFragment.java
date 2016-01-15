@@ -98,6 +98,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		mRecommendDownload = getViewById(R.id.tv_download);
 		mNewBar = getViewById(R.id.rl_new_all);
 		mNewView = getViewById(R.id.rv_new_content);
+		views = new ArrayList<>();
 	}
 
 	@Override
@@ -113,13 +114,6 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-		// 设置Banner
-		views = new ArrayList<>(5);
-		for (int i = 0; i < 5; i++) {
-			View v = View.inflate(getContext(), R.layout.view_banner_img, null);
-			views.add(v);
-		}
-		mBanner.setViews(views);
 
 		// 设置RecyclerView的LayoutManager
 		GridLayoutManager glm = new GridLayoutManager(getContext(), 4);
@@ -129,17 +123,19 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 	}
 
 	public void updateBanners(ArrayList<IndexGameBanner> banners) {
-		if (banners == null || banners.size() != views.size()) {
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_FRAG, "bannerUrls is not to be null and the size need to be 5 : " +
-						banners);
-			}
+		if (banners == null || banners.size() == 0) {
+			mBanner.setVisibility(View.GONE);
 			return;
 		}
-		for (int i = 0; i < views.size(); i++) {
-			ImageLoader.getInstance().displayImage(banners.get(i).url, (ImageView) getViewById(views.get(i), R.id
-					.iv_image_view));
+
+		for (IndexGameBanner banner : banners) {
+			View v = View.inflate(getContext(), R.layout.view_banner_img, null);
+			ImageLoader.getInstance().displayImage(banner.url, (ImageView) getViewById(v, R.id.iv_image_view));
+			views.add(v);
 		}
+
+		mBanner.setViews(views);
+		mBanner.setVisibility(View.VISIBLE);
 	}
 
 	public void updateHotData(ArrayList<IndexGameNew> data) {

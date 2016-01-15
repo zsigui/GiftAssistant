@@ -44,6 +44,7 @@ public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> imp
 
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGameNew o) {
+		o.initAppInfoStatus(mContext);
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
 		if (o.playCount < 10000) {
 			bgaViewHolderHelper.setText(R.id.tv_play,

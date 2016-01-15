@@ -55,6 +55,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		mImageLoader = ImageLoader.getInstance();
 		mMap_Url_ViewHolder = new HashMap<>();
 		mDownloadManagerInstance = ApkDownloadManager.getInstance(fragment.getActivity());
+		initIndex();
 	}
 
 	public void setExpandableListView(StickyListHeadersListViewExpandable listView) {
@@ -62,6 +63,11 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	}
 
 	public void notifyDataSetUpdated() {
+		initIndex();
+		notifyDataSetInvalidated();
+	}
+
+	private void initIndex() {
 		final int endIndexOfDownloading = mDownloadManagerInstance.getEndOfDownloading();
 		final int endIndexOfPaused = mDownloadManagerInstance.getEndOfPaused();
 		final int endIndexOfDownloaded = mDownloadManagerInstance.getEndOfFinished();
@@ -71,7 +77,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		mEndIndexOfDownloaded = endIndexOfDownloaded;
 		mStrDownloadingAndPaused = String.format("当前下载(%d)", endIndexOfPaused);
 		mStrDownloaded = String.format("下载完成(%d)", endIndexOfDownloaded - endIndexOfPaused);
-		notifyDataSetInvalidated();
 	}
 
 	@Override
@@ -145,7 +150,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	}
 
 	@Override
-	public void onDestory() {
+	public void onDestroy() {
 		if (mMap_Url_ViewHolder != null) {
 			mMap_Url_ViewHolder.clear();
 		}
@@ -196,7 +201,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 					} else {
 						showDelDownloadedConfirmDialog(mFragment, appInfo);
 					}
-					notifyDataSetUpdated();
 					break;
 				default:
 					break;
@@ -211,7 +215,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	private void stopDownload(IndexGameNew appInfo) {
 		try {
 			mDownloadManagerInstance.stopDownloadTask(appInfo);
-			notifyDataSetUpdated();
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -222,7 +225,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	private void restartDownload(IndexGameNew appInfo) {
 		try {
 			appInfo.handleOnClick(mFragment.getChildFragmentManager());
-			notifyDataSetUpdated();
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -243,7 +245,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 			@Override
 			public void onConfirm() {
 				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
-				notifyDataSetUpdated();
 			}
 		});
 		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
@@ -263,7 +264,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 			public void onConfirm() {
 				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
 				SystemUtil.deletePackage(appInfo.getDestFilePath());
-				notifyDataSetUpdated();
 			}
 		});
 		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());

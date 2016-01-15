@@ -53,7 +53,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	@SerializedName("apk_size")
 	public String size;
 
-	@SerializedName("apk_file_size")
+	@SerializedName("apk_filesize")
 	public long apkFileSize;
 
 	// 游戏ICON
@@ -72,7 +72,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	@SerializedName("download_url")
 	public String downloadUrl;
 
-	@SerializedName("apkMd5")
+	@SerializedName("apk_md5")
 	public String apkMd5;
 
 	@SerializedName("package_name")

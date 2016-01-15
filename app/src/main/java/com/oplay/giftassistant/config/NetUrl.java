@@ -6,7 +6,8 @@ package com.oplay.giftassistant.config;
 public class NetUrl {
 
 	//public static final String URL_BASE = "http://172.16.3.22:8888/";
-	public static final String URL_BASE = "http://172.16.3.68:7000/";
+//	public static final String URL_BASE = "http://172.16.3.68:7000/";
+	public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
 
 	/**
 	 * 礼包首页
@@ -56,7 +57,7 @@ public class NetUrl {
 	/**
 	 * 游戏首页-精品
 	 */
-	public static final String GAME_GET_INDEX_SUPER = "default";
+	public static final String GAME_GET_INDEX_SUPER = "app_index";
 
 	/**
 	 * 游戏首页-类别(标签)

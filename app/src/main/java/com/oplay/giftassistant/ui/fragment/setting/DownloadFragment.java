@@ -36,7 +36,6 @@ public class DownloadFragment extends BaseFragment_WithName implements OnDownloa
 		StickyListHeadersListViewExpandable listView = getViewById(R.id.download_adapterView);
 		listView.setAdapter(mAdapter);
 		mAdapter.setExpandableListView(listView);
-		mAdapter.notifyDataSetUpdated();
 	}
 
 	@Override
