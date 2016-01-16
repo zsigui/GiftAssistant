@@ -18,10 +18,9 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-7.
  */
-public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyGiftListFragment extends BaseFragment_Refresh_2<IndexGiftNew> {
 
 	private RecyclerView mDataView;
 	private MyGiftListAdapter mAdapter;
@@ -51,13 +50,11 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_refresh_rv_container);
-		mRefreshLayout = getViewById(R.id.srl_layout);
-		mDataView = getViewById(R.id.rv_container);
+		mDataView = getViewById(R.id.rv_content);
 	}
 
 	@Override
 	protected void setListener() {
-		mRefreshLayout.setDelegate(this);
 	}
 
 	@Override
@@ -66,7 +63,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
-		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		mAdapter = new MyGiftListAdapter(mDataView);
 		if (getArguments() != null) {
 			mType = getArguments().getInt(KeyConfig.KEY_DATA);
@@ -74,7 +70,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 		mDataView.setAdapter(mAdapter);
-		mRefreshLayout.setPullDownRefreshEnable(false);
 	}
 
 	@Override

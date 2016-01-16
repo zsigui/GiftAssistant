@@ -29,7 +29,7 @@ public class GameListActivity extends BaseAppCompatActivity {
 			if (type == KeyConfig.TYPE_ID_GAME_SEARCH) {
 				mSearchKey = getIntent().getStringExtra(KeyConfig.KEY_SEARCH);
 			} else if (type == KeyConfig.TYPE_ID_GAME_TYPE) {
-				mGameTypeId = getIntent().getIntExtra(KeyConfig.KEY_DATA, 0);
+				mGameTypeId = getIntent().getIntExtra(KeyConfig.KEY_DATA, -1);
 				mGameTypeName = getIntent().getStringExtra(KeyConfig.KEY_NAME);
 			}
 		}

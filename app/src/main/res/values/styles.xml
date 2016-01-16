@@ -193,7 +193,6 @@
 		<item name = "android:textSize" >12sp</item >
 		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:layout_centerVertical" >true</item >
-		<item name = "android:text" >@string/st_index_gift_all</item >
 	</style >
 
 	<style name = "DefaultTextView.Text.Note" >
@@ -392,4 +391,11 @@
 	<style name = "DefaultTextView.LoginPoint" >
 		<item name = "android:textColor" >@color/co_btn_green</item >
 	</style >
+
+	<style name = "ListScrollBar">
+		<item name = "android:scrollbarStyle">insideOverlay</item>
+		<item name = "android:scrollbars">vertical</item>
+		<item name = "android:scrollbarFadeDuration">500</item>
+		<item name = "android:fadeScrollbars">true</item>
+	</style>
 </resources >

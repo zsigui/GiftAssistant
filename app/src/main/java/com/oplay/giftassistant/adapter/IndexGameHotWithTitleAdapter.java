@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,112 +11,107 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.listener.OnItemClickListener;
+import com.oplay.giftassistant.adapter.base.BaseRVAdapter_Download;
+import com.oplay.giftassistant.adapter.base.BaseRVHolder;
+import com.oplay.giftassistant.config.IndexTypeUtil;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.util.IntentUtil;
-import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.ViewUtil;
-
-import java.util.ArrayList;
-
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
  * Created by zsigui on 15-12-31.
  */
-public class IndexGameHotWithTitleAdapter extends RecyclerView.Adapter {
+public class IndexGameHotWithTitleAdapter extends BaseRVAdapter_Download implements View.OnClickListener {
 
-	public static final int ITEM_HEADER = 0;
-	public static final int ITEM_NORMAL = 1;
-
-	private ArrayList<IndexGameNew> mData;
-	private OnItemClickListener<IndexGameNew> mListener;
-
-	private RecyclerView mDataView;
-	private Context mContext;
-
-	public IndexGameHotWithTitleAdapter(RecyclerView recyclerView) {
-		mDataView = recyclerView;
-		mContext = recyclerView.getContext();
-	}
-
-	public void setListener(OnItemClickListener<IndexGameNew> listener) {
-		mListener = listener;
-	}
-
-	@Override
-	public int getItemCount() {
-		return mData == null? 0 : mData.size();
-	}
-
-	public void setData(ArrayList<IndexGameNew> data) {
-		mData = data;
+	public IndexGameHotWithTitleAdapter(Context context) {
+		super(context);
 	}
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
-			case ITEM_HEADER:
-				return new HeaderVH(LayoutInflater.from(mContext).inflate(R.layout.view_banner, parent, false));
-			case ITEM_NORMAL:
-				return new HeaderVH(LayoutInflater.from(mContext).inflate(R.layout.view_banner, parent, false));
+			case IndexTypeUtil.ITEM_HEADER:
+				return new HeaderVH(LayoutInflater.from(mContext).inflate(R.layout.item_header_index, parent, false));
+			case IndexTypeUtil.ITEM_NORMAL:
+				return new NormalVH(LayoutInflater.from(mContext).inflate(R.layout.item_grid_game_super, parent, false));
 		}
 		return null;
 	}
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		switch (getItemViewType(position)) {
+			case IndexTypeUtil.ITEM_HEADER:
+				HeaderVH headerVH = (HeaderVH) holder;
+				headerVH.tvTitle.setText("热门游戏");
+				headerVH.setIsRecyclable(false);
+				headerVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+				headerVH.itemView.setOnClickListener(this);
+				break;
+			case IndexTypeUtil.ITEM_NORMAL:
+				NormalVH normalVH = (NormalVH) holder;
+				final IndexGameNew o = mData.get(position - 1);
+				o.initAppInfoStatus(mContext);
+				normalVH.tvName.setText(o.name);
+				if (o.newCount > 0) {
+					normalVH.ivGift.setVisibility(View.VISIBLE);
+				} else {
+					normalVH.ivGift.setVisibility(View.GONE);
+				}
+				ImageLoader.getInstance().displayImage(o.img, normalVH.ivIcon);
+				ViewUtil.initDownloadBtnStatus(normalVH.btnDownload, o.appStatus);
+				normalVH.itemView.setOnClickListener(this);
+				normalVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+				normalVH.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
+				normalVH.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
+				normalVH.btnDownload.setOnClickListener(this);
 
+				mPackageNameMap.put(o.packageName, o);
+				mUrlDownloadBtn.put(o.downloadUrl, normalVH.btnDownload);
+				break;
+		}
 	}
 
 	@Override
-	public int getItemViewType(int position) {
+	protected boolean handleOnClick(View v, int position) {
 		if (position == 0) {
-			return ITEM_HEADER;
+			// 头部被点击,跳转热门游戏界面
+			IntentUtil.jumpGameHotList(mContext);
+			return true;
 		}
-		return ITEM_NORMAL;
+		return false;
+	}
+	@Override
+	protected int getItemHeaderCount() {
+		return 1;
 	}
 
-
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGameNew o) {
-		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		if (o.newCount > 0) {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-		} else {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
+	@Override
+	public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+		super.onAttachedToRecyclerView(recyclerView);
+		RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
+		if (lm instanceof GridLayoutManager) {
+			final GridLayoutManager glm = (GridLayoutManager) lm;
+			glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+				@Override
+				public int getSpanSize(int position) {
+					return getItemViewType(position) == IndexTypeUtil.ITEM_HEADER ? glm.getSpanCount(): 1;
+				}
+			});
 		}
-		ImageLoader.getInstance().displayImage(o.img, (ImageView) bgaViewHolderHelper.getView(R.id.iv_icon),
-				Global.IMAGE_OPTIONS);
-		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				IntentUtil.jumpGameDetail(mContext, o.id, o.name);
-			}
-		});
-		bgaViewHolderHelper.getView(R.id.tv_download).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ToastUtil.showShort(o.name + " 开始下载");
-			}
-		});
 	}
 
-	public void updateData(ArrayList<IndexGameNew> data) {
-		this.mData = data;
-		notifyDataSetChanged();
-	}
 
-	class HeaderVH extends RecyclerView.ViewHolder {
+	class HeaderVH extends BaseRVHolder {
 
 		TextView tvTitle;
 		public HeaderVH(View itemView) {
 			super(itemView);
-			tvTitle = ViewUtil.getViewById(itemView, R.id.tv_title);
+			tvTitle = getViewById(R.id.tv_title);
 		}
 	}
 
-	class NormalVH extends RecyclerView.ViewHolder {
+	class NormalVH extends BaseRVHolder {
 
 		TextView tvName;
 		ImageView ivGift;
@@ -124,10 +120,10 @@ public class IndexGameHotWithTitleAdapter extends RecyclerView.Adapter {
 
 		public NormalVH(View itemView) {
 			super(itemView);
-			tvName = ViewUtil.getViewById(itemView, R.id.tv_name);
-			ivGift = ViewUtil.getViewById(itemView, R.id.iv_gift);
-			ivIcon = ViewUtil.getViewById(itemView, R.id.iv_icon);
-			btnDownload = ViewUtil.getViewById(itemView, R.id.btn_download);
+			tvName = getViewById(R.id.tv_name);
+			ivGift = getViewById(R.id.iv_gift);
+			ivIcon = getViewById(R.id.iv_icon);
+			btnDownload = getViewById(R.id.tv_download);
 		}
 	}
 }

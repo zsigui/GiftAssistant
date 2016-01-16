@@ -30,17 +30,17 @@ import java.util.List;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexGiftNewAdapter extends BaseAdapter {
+public class NestedGiftListAdapter extends BaseAdapter {
 
 	private List<IndexGiftNew> mData;
 	private Context mContext;
 
 
-	public IndexGiftNewAdapter(Context context) {
+	public NestedGiftListAdapter(Context context) {
 		this(context, null);
 	}
 
-	public IndexGiftNewAdapter(Context context, List<IndexGiftNew> data) {
+	public NestedGiftListAdapter(Context context, List<IndexGiftNew> data) {
 		mContext = context;
 		this.mData = data;
 	}

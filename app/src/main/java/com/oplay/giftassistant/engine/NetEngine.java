@@ -10,9 +10,9 @@ import com.oplay.giftassistant.model.data.req.ReqModifyNick;
 import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.req.ReqPayCode;
+import com.oplay.giftassistant.model.data.resp.GameTypeMain;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
-import com.oplay.giftassistant.model.data.resp.IndexGameType;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
@@ -25,6 +25,8 @@ import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
+
+import java.util.ArrayList;
 
 import retrofit.Call;
 import retrofit.http.Body;
@@ -104,7 +106,7 @@ public interface NetEngine {
 	 * 获取 游戏 - 分类 界面
 	 */
 	@POST(NetUrl.GAME_GET_INDEX_TYPE)
-	Call<JsonRespBase<IndexGameType>> obtainIndexGameType(@Body JsonReqBase<Void> reqData);
+	Call<JsonRespBase<ArrayList<GameTypeMain>>> obtainIndexGameType(@Body JsonReqBase<Void> reqData);
 
 
 	/* ---------------- 用户接口  ---------------- */

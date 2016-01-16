@@ -20,21 +20,23 @@ public class AppDebugConfig {
     public static final boolean IS_FRAG_DEBUG = true;
 	public static final boolean IS_PERM_DEBUG = true;
 
-    public static final String TAG_APP = "op_app_debug";
+    public static final String TAG_APP = "gcool_debug_app";
 
-    public static final String TAG_FRAG = "op_fragment_debug";
+    public static final String TAG_FRAG = "gcool_debug_fragment";
     /* define some tag for debug below */
-    public static final String TAG_SEARCH = "op_search_debug";
+    public static final String TAG_SEARCH = "gcool_debug_search";
 
-    public static final String TAG_UTIL = "op_util_debug";
+    public static final String TAG_UTIL = "gcool_debug_util";
 
-	public static final String TAG_ENCRYPT = "data_encrypt_debug";
+	public static final String TAG_ENCRYPT = "gcool_debug_encrypt";
 
-	public static final String TAG_MANAGER = "data_manager_debug";
+	public static final String TAG_MANAGER = "gcool_debug_manager";
 
-	public static final String TAG_WEBVIEW = "data_webview_debug";
+	public static final String TAG_WEBVIEW = "gcool_debug_webview";
 
-	public static final String TAG_SERVICE = "data_service_debug";
+	public static final String TAG_SERVICE = "gcool_debug_service";
+
+	public static final String TAG_ADAPTER = "gcool_debug_adapter";
 
 
 

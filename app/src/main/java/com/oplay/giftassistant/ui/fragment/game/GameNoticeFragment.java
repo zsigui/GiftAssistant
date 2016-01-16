@@ -16,9 +16,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
+public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 
 	private static final String KEY_DATA = "key_data";
 	private JsonReqBase<ReqPageData> mReqPageObj;
@@ -53,20 +52,15 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_refresh_rv_container);
-		mRefreshLayout = getViewById(R.id.srl_layout);
-		mDataView = getViewById(R.id.rv_container);
+		mDataView = getViewById(R.id.rv_content);
 	}
 
 	@Override
 	protected void setListener() {
-		/*mRefreshLayout.setOnRefreshListener(this);
-		mRefreshLayout.setOnLoadListener(this);*/
-		mRefreshLayout.setDelegate(this);
 	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 

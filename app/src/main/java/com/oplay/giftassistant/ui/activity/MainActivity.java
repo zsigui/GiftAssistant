@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +27,6 @@ import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
-import com.oplay.giftassistant.service.ClockService;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -65,28 +63,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private IProfile mProfile;
 
 
-	private void startClockService() {
-		Intent intent = new Intent(MainActivity.this, ClockService.class);
-		//startService(intent);
-	}
-
-	private void stopClockService() {
-		Intent intent = new Intent(MainActivity.this, ClockService.class);
-		stopService(intent);
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
 		createDrawer(savedInstanceState);
-		startClockService();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		stopClockService();
 	}
 
 	protected void initView() {
@@ -356,7 +342,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
-			stopClockService();
 			mApp.exit();
 			finish();
 			System.exit(0);

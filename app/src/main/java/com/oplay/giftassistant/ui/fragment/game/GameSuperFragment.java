@@ -1,42 +1,25 @@
 package com.oplay.giftassistant.ui.fragment.game;
 
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.IndexGameHotAdapter;
-import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
-import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.adapter.GameSuperAdapter;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
-import com.oplay.giftassistant.download.ApkDownloadManager;
-import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
-import com.oplay.giftassistant.listener.OnItemClickListener;
-import com.oplay.giftassistant.model.AppStatus;
-import com.oplay.giftassistant.model.DownloadStatus;
 import com.oplay.giftassistant.model.data.resp.IndexGameBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
-import com.oplay.giftassistant.ui.widget.NestedListView;
-import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import cn.bingoogolapple.bgabanner.BGABanner;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -44,36 +27,10 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.OnClickListener,
-        OnItemClickListener<IndexGameNew>, OnDownloadStatusChangeListener {
+public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.OnClickListener {
 
-	private List<View> views;
-	private IndexGameNew mRecommendData;
-
-	private NestedScrollView mScrollView;
-	// 活动图，5张
-	private BGABanner mBanner;
-
-	// 热门手游
-	private RelativeLayout mHotBar;
-	private RecyclerView mHotView;
-
-	// 主推游戏
-	private RelativeLayout mRecommendItem;
-	private ImageView mRecommendView;
-	private ImageView mRecommendIcon;
-	private TextView mRecommendName;
-	private TextView mRecommendSize;
-	private TextView mRecommendDownload;
-
-	// 新游推荐
-	private RelativeLayout mNewBar;
-	private NestedListView mNewView;
-
-
-	private IndexGameHotAdapter mHotAdapter;
-	private IndexGameNewAdapter mNewAdapter;
-
+	private RecyclerView mRecyclerView;
+	private GameSuperAdapter mAdapter;
 
 	public static GameSuperFragment newInstance() {
 		return new GameSuperFragment();
@@ -81,32 +38,25 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_game_super);
-
-		mRefreshLayout = getViewById(R.id.srl_layout);
-		mScrollView = getViewById(R.id.sv_container);
-		mBanner = getViewById(R.id.banner);
-		mHotBar = getViewById(R.id.rl_hot_all);
-		mHotView = getViewById(R.id.rv_hot_content);
-		mRecommendItem = getViewById(R.id.rl_recommend);
-		mRecommendView = getViewById(R.id.iv_big_pic);
-		mRecommendIcon = getViewById(R.id.iv_icon);
-		mRecommendName = getViewById(R.id.tv_name);
-		mRecommendSize = getViewById(R.id.tv_size);
-		mRecommendDownload = getViewById(R.id.tv_download);
-		mNewBar = getViewById(R.id.rl_new_all);
-		mNewView = getViewById(R.id.rv_new_content);
-		views = new ArrayList<>();
+		initViewManger(R.layout.fragment_refresh_rv_container);
+		mRecyclerView = getViewById(R.id.rv_content);
 	}
 
 	@Override
 	protected void setListener() {
-		mRecommendItem.setOnClickListener(this);
-		mHotBar.setOnClickListener(this);
-		mNewBar.setOnClickListener(this);
-		mRecommendDownload.setOnClickListener(this);
-		mRefreshLayout.setOnRefreshListener(this);
-		ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
+		mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+					ImageLoader.getInstance().resume();
+				} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
+						|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+					ImageLoader.getInstance().pause();
+				}
+			}
+
+
+		});
 	}
 
 	@Override
@@ -114,69 +64,18 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 	protected void processLogic(Bundle savedInstanceState) {
 
 		// 设置RecyclerView的LayoutManager
-		GridLayoutManager glm = new GridLayoutManager(getContext(), 4);
-		mHotView.setLayoutManager(glm);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+		mAdapter = new GameSuperAdapter(getActivity());
+		mRecyclerView.setAdapter(mAdapter);
 
 		mIsPrepared = mNoMoreLoad = true;
 	}
 
-	public void updateBanners(ArrayList<IndexGameBanner> banners) {
-		if (banners == null || banners.size() == 0) {
-			mBanner.setVisibility(View.GONE);
-			return;
-		}
-
-		for (IndexGameBanner banner : banners) {
-			View v = View.inflate(getContext(), R.layout.view_banner_img, null);
-			ImageLoader.getInstance().displayImage(banner.url, (ImageView) getViewById(v, R.id.iv_image_view));
-			views.add(v);
-		}
-
-		mBanner.setViews(views);
-		mBanner.setVisibility(View.VISIBLE);
-	}
-
-	public void updateHotData(ArrayList<IndexGameNew> data) {
-		if (data == null) {
-			return;
-		}
-		if (mHotAdapter == null) {
-			mHotAdapter = new IndexGameHotAdapter(mHotView);
-			mHotView.setAdapter(mHotAdapter);
-		}
-		mHotAdapter.updateData(data);
-	}
-
-	public void updateRecommendData(IndexGameNew data) {
-		if (data == null) {
-			return;
-		}
-		mRecommendData = data;
-		ImageLoader.getInstance().displayImage(data.banner, mRecommendView, Global.IMAGE_OPTIONS);
-		ImageLoader.getInstance().displayImage(data.img, mRecommendIcon, Global.IMAGE_OPTIONS);
-		mRecommendName.setText(data.name);
-		mRecommendSize.setText(data.size);
-	}
-
-	public void updateNewData(ArrayList<IndexGameNew> data) {
-		if (data == null) {
-			return;
-		}
-		if (mNewAdapter == null) {
-			mNewAdapter = new IndexGameNewAdapter(getContext(), this);
-			mNewView.setAdapter(mNewAdapter);
-		}
-		mNewAdapter.updateData(data);
-	}
-
 	public void updateData(IndexGameSuper data) {
-		updateBanners(data.banner);
-		updateHotData(data.hot);
-		updateRecommendData(data.recommend);
-		updateNewData(data.news);
-		if (mScrollView != null) {
-			mScrollView.smoothScrollTo(0, 0);
+		if (data == null || mAdapter == null) {
+			return;
 		}
+		mAdapter.updateData(data);
 		mViewManager.showContent();
 	}
 
@@ -202,6 +101,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
                                     }
                                     // 出错
 	                                refreshFailEnd();
+	                                updateData(initStashData());
                                 }
 
                                 @Override
@@ -216,56 +116,6 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
             }
         }).start();
     }
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.rl_hot_all:
-				IntentUtil.jumpGameHotList(getContext());
-				break;
-			case R.id.rl_recommend:
-				if (mRecommendData != null) {
-					IntentUtil.jumpGameDetail(getContext(), mRecommendData.id, mRecommendData.name);
-				}
-				break;
-			case R.id.rl_new_all:
-				IntentUtil.jumpGameNewList(getContext());
-				break;
-			case R.id.tv_download:
-				ToastUtil.showShort("游戏 开始下载" + ((mRecommendData != null) ? mRecommendData.name : null));
-				break;
-		}
-	}
-
-	@Override
-	public void onItemClick(IndexGameNew item, View view, int position) {
-		try {
-			if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
-				item.handleOnClick(getChildFragmentManager());
-			} else {
-				//TODO 跳转游戏详情页
-				IntentUtil.jumpGameDetail(getContext(), item.id, item.name);
-			}
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
-			}
-		}
-	}
-
-	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (mNewAdapter != null && appInfo != null) {
-					final String packageName = appInfo.packageName;
-					final DownloadStatus status = appInfo.downloadStatus;
-					mNewAdapter.updateViewByPackageName(packageName, status);
-				}
-			}
-		});
-	}
 
 	private IndexGameSuper initStashData() {
 		IndexGameSuper data = new IndexGameSuper();
@@ -285,11 +135,11 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		banner3.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
 		bannerData.add(banner3);
 		IndexGameBanner banner4 = new IndexGameBanner();
-		banner4.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
+		/*banner4.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
 		bannerData.add(banner4);
 		IndexGameBanner banner5 = new IndexGameBanner();
 		banner5.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
-		bannerData.add(banner5);
+		bannerData.add(banner5);*/
 
 		data.banner = bannerData;
 

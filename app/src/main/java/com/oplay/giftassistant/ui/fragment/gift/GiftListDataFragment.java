@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
+import com.oplay.giftassistant.adapter.NestedGiftListAdapter;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
@@ -12,10 +12,9 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import retrofit.Retrofit;
  * <br/>
  * Created by zsigui on 15-12-29.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh {
+public class GiftListDataFragment extends BaseFragment_Refresh_2 {
 
 	private static final String KEY_DATA = "key_news_data";
 	private static final String KEY_URL = "key_url";
@@ -41,7 +40,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 	private JsonReqBase<ReqPageData> mReqPageObj;
 	private String mUrl;
 	private String mDate;
-	private IndexGiftNewAdapter mAdapter;
+	private NestedGiftListAdapter mAdapter;
 
 	public static GiftListDataFragment newInstance() {
 		return new GiftListDataFragment();
@@ -60,13 +59,11 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_gift_list_data);
-		mRefreshLayout = getViewById(R.id.srl_layout);
 		mDataView = getViewById(R.id.lv_container);
 	}
 
 	@Override
 	protected void setListener() {
-		mRefreshLayout.setDelegate(this);
 	}
 
 	@Override
@@ -75,8 +72,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
-		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
-		mAdapter = new IndexGiftNewAdapter(getActivity());
+		mAdapter = new NestedGiftListAdapter(getActivity());
 		if (getArguments() != null) {
 			Serializable s = getArguments().getSerializable(KEY_DATA);
 			if (s != null) {
@@ -89,7 +85,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 			mDate = getArguments().getString(KEY_DATE);
 		}
 		mDataView.setAdapter(mAdapter);
-		mRefreshLayout.setPullDownRefreshEnable(false);
+		mRefreshLayout.setCanShowLoad(false);
 	}
 
 	@Override

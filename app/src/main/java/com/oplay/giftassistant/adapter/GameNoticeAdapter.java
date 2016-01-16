@@ -37,16 +37,16 @@ public class GameNoticeAdapter extends BGARecyclerViewAdapter<IndexGameNew> {
 		String tagUrl = "drawable://";
 		switch (i) {
 			case 0:
-				tagUrl += R.drawable.ic_tag_first;
+				tagUrl += R.drawable.ic_notice_first;
 				break;
 			case 1:
-				tagUrl += R.drawable.ic_tag_second;
+				tagUrl += R.drawable.ic_notice_second;
 				break;
 			case 2:
-				tagUrl += R.drawable.ic_tag_third;
+				tagUrl += R.drawable.ic_notice_third;
 				break;
 			default:
-				tagUrl += R.drawable.ic_tag_other;
+				tagUrl += R.drawable.ic_notice_other;
 		}
 		ImageLoader.getInstance().displayImage(tagUrl,
 				bgaViewHolderHelper.<ImageView>getView(R.id.iv_tag),

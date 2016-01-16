@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
+import com.oplay.giftassistant.adapter.NestedGameListAdapter;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-4.
  */
-public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
+public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 
 	private static final String KEY_URL = "key_data_url";
 	private static final String KEY_SEARCH = "key_data_search";
@@ -35,7 +34,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 	private int mTagId = -1;
 
 	private JsonReqBase<ReqPageData> mReqPageObj;
-	private IndexGameNewAdapter mAdapter;
+	private NestedGameListAdapter mAdapter;
 	private ListView mDataView;
 
 	public static GameListFragment newInstance(String url, String searchKey) {
@@ -43,6 +42,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 		Bundle bundle = new Bundle();
 		bundle.putString(KEY_URL, url);
 		bundle.putString(KEY_SEARCH, searchKey);
+		fragment.setArguments(bundle);
 		return fragment;
 	}
 
@@ -51,6 +51,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 		Bundle bundle = new Bundle();
 		bundle.putString(KEY_URL, url);
 		bundle.putInt(KEY_TAG_ID, tagId);
+		fragment.setArguments(bundle);
 		return fragment;
 	}
 
@@ -58,13 +59,11 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_refresh_lv_container);
 
-		mRefreshLayout = getViewById(R.id.srl_layout);
-		mDataView = getViewById(R.id.rv_container);
+		mDataView = getViewById(R.id.rv_content);
 	}
 
 	@Override
 	protected void setListener() {
-		mRefreshLayout.setDelegate(this);
 	}
 
 	@Override
@@ -78,14 +77,14 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> {
 			mSearchKey = getArguments().getString(KEY_SEARCH);
 			mTagId = getArguments().getInt(KEY_TAG_ID, -1);
 		}
+
 		if (mTagId == -1) {
 			mReqPageObj.data.searchKey = mSearchKey;
 		} else {
-			mReqPageObj.data.searchKey = String.valueOf(mTagId);
+			mReqPageObj.data.labelType = mTagId;
 		}
 
-		ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
-		mAdapter = new IndexGameNewAdapter(getContext(), null);
+		mAdapter = new NestedGameListAdapter(getContext(), null);
 		mDataView.setAdapter(mAdapter);
 	}
 

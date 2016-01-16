@@ -26,7 +26,7 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 /**
  * Created by zsigui on 15-12-28.
  */
-public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener{
+public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener{
 
 	private static final int TAG_POSITION = 0xFFF11133;
 	private static final int TAG_URL = 0xffff1111;
@@ -35,7 +35,7 @@ public class IndexGameNewAdapter extends BGAAdapterViewAdapter<IndexGameNew> imp
 	private HashMap<String, IndexGameNew> mPackageNameMap;
 	private HashMap<String, TextView> mUrlDownloadBtn;
 
-	public IndexGameNewAdapter(Context context, OnItemClickListener<IndexGameNew> listener) {
+	public NestedGameListAdapter(Context context, OnItemClickListener<IndexGameNew> listener) {
 		super(context, R.layout.item_index_game_new);
 		mListener = listener;
 		mPackageNameMap = new HashMap<>();

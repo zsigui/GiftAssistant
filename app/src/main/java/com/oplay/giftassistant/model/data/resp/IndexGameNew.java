@@ -12,6 +12,7 @@ import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.model.AppStatus;
 import com.oplay.giftassistant.model.DownloadStatus;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -274,21 +275,22 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 		switch (appStatus) {
 			case DOWNLOADABLE:
 			case UPDATABLE:
-				if (NetworkStatus.getNetworkType(mContext) == NetworkStatus.Type.TYPE_WIFI) {
+				if (NetworkUtil.isWifiAvailable(mContext)) {
 					startDownload();
 				} else {
-					ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 					confirmDialog.setTitle("提示");
 					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
 					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 						@Override
 						public void onCancel() {
-
+							confirmDialog.dismiss();
 						}
 
 						@Override
 						public void onConfirm() {
 							startDownload();
+							confirmDialog.dismiss();
 						}
 					});
 					confirmDialog.show(fragmentManager, "download");

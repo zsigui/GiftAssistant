@@ -1,131 +1,142 @@
 package com.oplay.giftassistant.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.AppDebugConfig;
-import com.oplay.giftassistant.config.Global;
-import com.oplay.giftassistant.listener.OnItemClickListener;
-import com.oplay.giftassistant.model.DownloadStatus;
+import com.oplay.giftassistant.adapter.base.BaseRVAdapter_Download;
+import com.oplay.giftassistant.adapter.base.BaseRVHolder;
+import com.oplay.giftassistant.config.IndexTypeUtil;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ViewUtil;
-
-import net.youmi.android.libs.common.debug.Debug_SDK;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
  * Created by zsigui on 15-12-28.
  */
-public class IndexGameNewWithTitleAdapter extends BGARecyclerViewAdapter<IndexGameNew> implements View.OnClickListener{
+public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 
-	private static final int TAG_POSITION = 0xFFF11133;
-	private static final int TAG_URL = 0xffff1111;
-
-	private OnItemClickListener<IndexGameNew> mListener;
-	private HashMap<String, IndexGameNew> mPackageNameMap;
-	private HashMap<String, TextView> mUrlDownloadBtn;
-
-	public IndexGameNewWithTitleAdapter(RecyclerView recyclerView, OnItemClickListener<IndexGameNew> listener) {
-		super(recyclerView, R.layout.item_index_game_new);
-		mListener = listener;
-		mPackageNameMap = new HashMap<>();
-		mUrlDownloadBtn = new HashMap<>();
-	}
-
-
-	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGameNew o) {
-		o.initAppInfoStatus(mContext);
-		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		if (o.playCount < 10000) {
-			bgaViewHolderHelper.setText(R.id.tv_play,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
-		} else {
-			bgaViewHolderHelper.setText(R.id.tv_play,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
-							(float) o.playCount / 10000)));
-		}
-		if (o.newCount > 0) {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-		}else {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
-		}
-		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
-		if (o.totalCount > 0) {
-			bgaViewHolderHelper.setText(R.id.tv_gift,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
-							o.giftName, o.totalCount)));
-		} else {
-			bgaViewHolderHelper.setText(R.id.tv_gift, "暂时还木有礼包");
-		}
-		// n款礼包
-		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon),
-				Global.IMAGE_OPTIONS);
-		View convertView = bgaViewHolderHelper.getConvertView();
-		convertView.setTag(TAG_POSITION, i);
-		convertView.setOnClickListener(this);
-		TextView downloadBtn = bgaViewHolderHelper.getView(R.id.tv_download);
-
-		downloadBtn.setOnClickListener(this);
-		downloadBtn.setTag(TAG_POSITION, i);
-		downloadBtn.setTag(TAG_URL, o.downloadUrl);
-		ViewUtil.initDownloadBtnStatus(downloadBtn, o.appStatus);
-		mPackageNameMap.put(o.packageName, o);
-		mUrlDownloadBtn.put(o.downloadUrl, downloadBtn);
+	public IndexGameNewWithTitleAdapter(Context context) {
+		super(context);
 	}
 
 	@Override
-	public void onClick(View v) {
-		try {
-			final Object tag = v.getTag(TAG_POSITION);
-			if (tag instanceof Integer) {
-				final int position = (Integer) tag;
-				if (position < mDatas.size()) {
-					final IndexGameNew appInfo = mDatas.get(position);
-					if (mListener != null) {
-						mListener.onItemClick(appInfo, v, position);
-					}
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		switch (viewType) {
+			case IndexTypeUtil.ITEM_HEADER:
+				return new HeaderVH(LayoutInflater.from(mContext).inflate(R.layout.item_header_index, parent, false));
+			case IndexTypeUtil.ITEM_NORMAL:
+				return new NormalVH(LayoutInflater.from(mContext).inflate(R.layout.item_index_game_new, parent,
+						false));
+		}
+		return null;
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		if (getItemCount() == 0) {
+			return;
+		}
+		switch (getItemViewType(position)) {
+			case IndexTypeUtil.ITEM_HEADER:
+				HeaderVH headerVH = (HeaderVH) holder;
+				headerVH.tvTitle.setText("新游推荐");
+				headerVH.setIsRecyclable(false);
+				headerVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+				headerVH.itemView.setOnClickListener(this);
+				break;
+			case IndexTypeUtil.ITEM_NORMAL:
+				NormalVH normalVH = (NormalVH) holder;
+				normalVH.setIsRecyclable(false);
+				final IndexGameNew o = mData.get(position - 1);
+				o.initAppInfoStatus(mContext);
+				normalVH.tvName.setText(o.name);
+				if (o.newCount > 0) {
+					normalVH.ivGift.setVisibility(View.VISIBLE);
+				} else {
+					normalVH.ivGift.setVisibility(View.GONE);
 				}
-			}
-		}catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				Debug_SDK.e(e);
-			}
+				if (o.playCount < 10000) {
+					normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩",
+							o.playCount)));
+				} else {
+					normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
+							(float) o.playCount / 10000)));
+				}
+				if (o.totalCount > 0) {
+					normalVH.tvGift.setText(Html.fromHtml(
+							String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
+									o.giftName, o.totalCount)));
+				} else {
+					normalVH.tvGift.setText("暂时还木有礼包");
+				}
+				normalVH.tvSize.setText(o.size);
+				ImageLoader.getInstance().displayImage(o.img, normalVH.ivIcon);
+				ViewUtil.initDownloadBtnStatus(normalVH.btnDownload, o.appStatus);
+				normalVH.itemView.setOnClickListener(this);
+				normalVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+				normalVH.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
+				normalVH.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
+				normalVH.btnDownload.setOnClickListener(this);
+
+				mPackageNameMap.put(o.packageName, o);
+				mUrlDownloadBtn.put(o.downloadUrl, normalVH.btnDownload);
+				break;
 		}
 	}
 
+	@Override
+	protected boolean handleOnClick(View v, int position) {
+		if (position == 0) {
+			// 头部被点击,跳转推荐新游游戏界面
+			IntentUtil.jumpGameNewList(mContext);
+			return true;
+		}
+		return false;
+	}
 
+	@Override
+	protected int getItemHeaderCount() {
+		return 1;
+	}
 
-	public void updateViewByPackageName(String packageName, DownloadStatus status) {
-		final IndexGameNew app = mPackageNameMap.get(packageName);
-		if (app != null) {
-			app.downloadStatus = status;
-			app.initAppInfoStatus(mContext);
-			notifyDataSetChanged();
+	class HeaderVH extends BaseRVHolder {
+
+		TextView tvTitle;
+
+		public HeaderVH(View itemView) {
+			super(itemView);
+			tvTitle = getViewById(R.id.tv_title);
 		}
 	}
 
-	public void updateViewByPackageName(String packageName) {
-		final IndexGameNew app = mPackageNameMap.get(packageName);
-		if (app != null) {
-			app.initAppInfoStatus(mContext);
-			notifyDataSetChanged();
+	class NormalVH extends BaseRVHolder {
+
+		TextView tvName;
+		ImageView ivGift;
+		ImageView ivIcon;
+		TextView tvPlay;
+		TextView tvSize;
+		TextView tvGift;
+		TextView btnDownload;
+
+		public NormalVH(View itemView) {
+			super(itemView);
+			tvName = getViewById(R.id.tv_name);
+			ivGift = getViewById(R.id.iv_gift);
+			ivIcon = getViewById(R.id.iv_icon);
+			tvPlay = getViewById(R.id.tv_play);
+			tvSize = getViewById(R.id.tv_size);
+			tvGift = getViewById(R.id.tv_gift);
+			btnDownload = getViewById(R.id.tv_download);
 		}
 	}
 
-
-	public void updateData(ArrayList<IndexGameNew> games) {
-		this.mDatas = games;
-		notifyDataSetChanged();
-	}
 }

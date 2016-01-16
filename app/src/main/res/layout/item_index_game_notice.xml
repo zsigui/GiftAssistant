@@ -3,6 +3,7 @@
                 android:id="@+id/rl_recommend"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@drawable/selector_white_module"
                 android:layout_width="match_parent"
                 android:paddingRight="@dimen/di_index_hoz_module_margin_left">
 
@@ -10,8 +11,8 @@
 			android:id="@+id/iv_tag"
 			android:layout_width = "wrap_content"
 			android:layout_height = "@dimen/di_game_icon_layout_diameter"
-			android:scaleType="centerInside"
-			android:src = "@drawable/ic_tag_first"/>
+			android:scaleType="center"
+			android:src = "@drawable/ic_notice_first"/>
 
 	<RelativeLayout
 			android:id="@+id/rl_icon"
@@ -48,8 +49,7 @@
 			android:layout_marginTop="4dp"
 			android:layout_toLeftOf="@+id/ll_send"
 			android:layout_toRightOf="@+id/rl_icon"
-			android:gravity="center_vertical"
-			android:text="暴打魏蜀吴"/>
+			android:gravity="center_vertical"/>
 
 	<TextView
 			android:id="@+id/tv_play"
@@ -59,8 +59,7 @@
 			android:layout_marginLeft="@dimen/di_index_item_margin_left"
 			android:layout_marginTop="12dp"
 			android:layout_toRightOf="@+id/rl_icon"
-			android:gravity="center_vertical"
-			android:text="3.4万人在玩"/>
+			android:gravity="center_vertical"/>
 
 	<TextView
 			android:id="@+id/tv_size"
@@ -70,8 +69,7 @@
 			android:layout_alignTop="@+id/tv_play"
 			android:layout_toLeftOf="@+id/ll_send"
 			android:layout_toRightOf="@+id/tv_play"
-			android:gravity="center_vertical"
-			android:text="128.5M"/>
+			android:gravity="center_vertical"/>
 
 	<TextView
 			android:id="@+id/tv_gift"
@@ -80,8 +78,7 @@
 			android:layout_below="@+id/tv_play"
 			android:layout_marginLeft="7dp"
 			android:layout_marginTop="6dp"
-			android:layout_toRightOf="@+id/rl_icon"
-			android:text="至尊礼包 等共12款礼包"/>
+			android:layout_toRightOf="@+id/rl_icon"/>
 
 
 

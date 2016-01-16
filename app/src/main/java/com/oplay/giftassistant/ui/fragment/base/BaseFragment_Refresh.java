@@ -1,6 +1,13 @@
 package com.oplay.giftassistant.ui.fragment.base;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.util.ToastUtil;
+import com.oplay.giftassistant.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -15,7 +22,6 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	protected ArrayList<DataType> mData;
     protected BGARefreshLayout mRefreshLayout;
-    protected boolean mIsRefresh = false;
     protected boolean mIsLoadMore = false;
     protected boolean mNoMoreLoad = false;
     protected int mLastPage = 0;
@@ -40,7 +46,18 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
         return true;
     }
 
-    protected void loadMoreData() {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		mRefreshLayout = getViewById(R.id.srl_layout);
+		if (mRefreshLayout != null) {
+			mRefreshLayout.setDelegate(this);
+			ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
+		}
+		return mContentView;
+	}
+
+	protected void loadMoreData() {
     }
 
 	protected void refreshInitConfig() {

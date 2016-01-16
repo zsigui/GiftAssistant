@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.model.data.resp;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,8 +9,12 @@ import java.io.Serializable;
  */
 public class GameTypeMain implements Serializable{
 
+	@SerializedName("label_id")
 	public int id;
+
 	public int icon;
+
+	@SerializedName("name")
 	public String name;
 
 }

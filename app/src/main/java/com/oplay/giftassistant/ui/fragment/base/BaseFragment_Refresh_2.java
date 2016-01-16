@@ -2,6 +2,9 @@ package com.oplay.giftassistant.ui.fragment.base;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.ui.widget.RefreshLayout;
@@ -19,15 +22,21 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 
 	protected ArrayList<DataType> mData;
 	protected RefreshLayout mRefreshLayout;
-	protected boolean mIsRefresh = false;
 	protected boolean mIsLoadMore = false;
 	protected boolean mNoMoreLoad = false;
 	protected int mLastPage = 0;
 
 	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-		mRefreshLayout.setColorSchemeResources(R.color.co_btn_red, R.color.co_btn_orange, R.color.co_btn_blue,
-				R.color.co_btn_green);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		mRefreshLayout = getViewById(R.id.srl_layout);
+		if (mRefreshLayout != null) {
+			mRefreshLayout.setOnLoadListener(this);
+			mRefreshLayout.setOnRefreshListener(this);
+			mRefreshLayout.setColorSchemeResources(R.color.co_btn_red, R.color.co_btn_orange, R.color.co_btn_blue,
+					R.color.co_btn_green);
+		}
+		return mContentView;
 	}
 
 	@Override
@@ -41,29 +50,20 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 	}
 
 	protected void refreshInitConfig() {
-		mIsLoading = true;
-		if (!mIsRefresh) {
-			mViewManager.showLoading();
-			mHasData = false;
-		}
+		super.refreshInitConfig();
 	}
 
 	protected void refreshFailEnd() {
-		if (!mIsRefresh) {
-			mViewManager.showErrorRetry();
-			mHasData = false;
-		} else {
+		if (mIsRefresh) {
 			ToastUtil.showShort("刷新请求出错");
 		}
-		mIsLoading = mIsRefresh = false;
-		mRefreshLayout.setRefreshing(false);
+		super.refreshFailEnd();
 		mRefreshLayout.setEnabled(true);
+		mRefreshLayout.setRefreshing(false);
 	}
 
 	protected void refreshSuccessEnd() {
-		mViewManager.showContent();
-		mHasData = true;
-		mIsLoading = mIsRefresh = false;
+		super.refreshSuccessEnd();
 		mRefreshLayout.setRefreshing(false);
 		mRefreshLayout.setEnabled(true);
 	}

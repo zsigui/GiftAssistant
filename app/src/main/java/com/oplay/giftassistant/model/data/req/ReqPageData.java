@@ -28,4 +28,8 @@ public class ReqPageData implements Serializable {
 	@SerializedName("search_key")
 	// 搜索请求
 	public String searchKey;
+
+	@SerializedName("label_id")
+	// 分类ID
+	public int labelType;
 }

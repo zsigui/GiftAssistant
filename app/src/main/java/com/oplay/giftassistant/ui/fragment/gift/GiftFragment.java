@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.ui.fragment.gift;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
-import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
+import com.oplay.giftassistant.adapter.NestedGiftListAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
@@ -29,7 +30,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.service.ClockService;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
@@ -52,7 +54,7 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener {
+public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClickListener {
 
 	private static final String KEY_BANNER = "key_banner";
 	private static final String KEY_LIKE = "key_like";
@@ -77,7 +79,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 	private IndexGiftLikeAdapter mLikeAdapter;
 	private IndexGiftLimitAdapter mLimitAdapter;
-	private IndexGiftNewAdapter mNewAdapter;
+	private NestedGiftListAdapter mNewAdapter;
 
 	// 礼物界面数据
 	private IndexGift mGiftData;
@@ -105,7 +107,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_gifts);
 
-		mRefreshLayout = getViewById(R.id.srl_layout);
 		mScrollView = getViewById(R.id.sv_container);
 		mBanner = getViewById(R.id.banner);
 		mLikeBar = getViewById(R.id.rl_hot_all);
@@ -123,7 +124,30 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mLikeBar.setOnClickListener(this);
 		mLimitBar.setOnClickListener(this);
 		mNewBar.setOnClickListener(this);
-		mRefreshLayout.setDelegate(this);
+	}
+
+	private void startClockService() {
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().startService(intent);
+	}
+
+	private void stopClockService() {
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().stopService(intent);
+	}
+
+	@Override
+	protected void onUserVisible() {
+		KLog.e("service show");
+		startClockService();
+		super.onUserVisible();
+	}
+
+	@Override
+	protected void onUserInvisible() {
+		KLog.e("service stop");
+		stopClockService();
+		super.onUserInvisible();
 	}
 
 	@Override
@@ -150,8 +174,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mLimitView.setLayoutManager(llmLimit);
 		mLikeAdapter = new IndexGiftLikeAdapter(mLikeView);
 		mLimitAdapter = new IndexGiftLimitAdapter(mLimitView);
-		mNewAdapter = new IndexGiftNewAdapter(getActivity());
-		mRefreshLayout.setIsShowLoadingMoreView(false);
+		mNewAdapter = new NestedGiftListAdapter(getActivity());
 
 		// 加载数据
 

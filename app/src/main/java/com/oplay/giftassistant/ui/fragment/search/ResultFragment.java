@@ -8,8 +8,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.adapter.IndexGameNewAdapter;
-import com.oplay.giftassistant.adapter.IndexGiftNewAdapter;
+import com.oplay.giftassistant.adapter.NestedGameListAdapter;
+import com.oplay.giftassistant.adapter.NestedGiftListAdapter;
 import com.oplay.giftassistant.model.data.resp.SearchDataResult;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.NestedListView;
@@ -26,8 +26,8 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	private RelativeLayout mGiftBar;
 	private NestedListView mGiftView;
 
-	private IndexGiftNewAdapter mGiftAdapter;
-	private IndexGameNewAdapter mGameAdapter;
+	private NestedGiftListAdapter mGiftAdapter;
+	private NestedGameListAdapter mGameAdapter;
 
 
 	public static ResultFragment newInstance() {
@@ -61,8 +61,8 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		mGameAdapter = new IndexGameNewAdapter(getContext(), null);
-		mGiftAdapter = new IndexGiftNewAdapter(getContext());
+		mGameAdapter = new NestedGameListAdapter(getContext(), null);
+		mGiftAdapter = new NestedGiftListAdapter(getContext());
 
 		mGameView.setAdapter(mGameAdapter);
 		mGiftView.setAdapter(mGiftAdapter);

@@ -238,12 +238,13 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-
+				confirmDialog.dismiss();
 			}
 
 			@Override
 			public void onConfirm() {
 				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+				confirmDialog.dismiss();
 			}
 		});
 		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());

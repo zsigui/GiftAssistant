@@ -15,7 +15,6 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.resp.GameTypeMain;
-import com.oplay.giftassistant.model.data.resp.IndexGameType;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
@@ -39,8 +38,8 @@ public class GameTypeFragment extends BaseFragment {
 	private GameTypeMainAdapter mGameTypeMainAdapter;
 	private GameTagAdapter mTagAdapter;
 
-	private int[] mResIds = new int[]{R.drawable.ic_tag_card, R.drawable.ic_tag_round, R.drawable.ic_tag_arpg,
-			R.drawable.ic_tag_stategy, R.drawable.ic_tag_action, R.drawable.ic_tag_supernatural};
+	private int[] mResIds = new int[]{R.drawable.ic_tag_arpg, R.drawable.ic_tag_card, R.drawable.ic_tag_supernatural,
+			R.drawable.ic_tag_action, R.drawable.ic_tag_stategy, R.drawable.ic_tag_round};
 
 	private OnItemClickListener<GameTypeMain> mMainItemClickListener;
 	private OnItemClickListener<GameTypeMain> mTagItemClickListener;
@@ -97,9 +96,10 @@ public class GameTypeFragment extends BaseFragment {
 	protected void lazyLoad() {
 		refreshInitConfig();
 		Global.getNetEngine().obtainIndexGameType(new JsonReqBase<Void>())
-				.enqueue(new Callback<JsonRespBase<IndexGameType>>() {
+				.enqueue(new Callback<JsonRespBase<ArrayList<GameTypeMain>>>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<IndexGameType>> response, Retrofit retrofit) {
+					public void onResponse(Response<JsonRespBase<ArrayList<GameTypeMain>>> response,
+					                       Retrofit retrofit) {
 						if (!mCanShowUI) {
 							return;
 						}
@@ -111,7 +111,7 @@ public class GameTypeFragment extends BaseFragment {
 							}
 							if (AppDebugConfig.IS_DEBUG) {
 								KLog.d(AppDebugConfig.TAG_APP,
-										(response.body() == null? "解析失败" : response.body().error()));
+										(response.body() == null ? "解析失败" : response.body().error()));
 							}
 						}
 						refreshFailEnd();
@@ -131,13 +131,23 @@ public class GameTypeFragment extends BaseFragment {
 				});
 	}
 
-	private void updateData(IndexGameType response) {
-		if (response == null)
+	private void updateData(ArrayList<GameTypeMain> data) {
+		if (data == null)
 			return;
 		mHasData = true;
 		mViewManager.showContent();
-		updateTypeMain(response.gameTypes);
-		updateTag(response.tagTypes);
+		ArrayList<GameTypeMain> header = new ArrayList<>();
+		ArrayList<GameTypeMain> footer = new ArrayList<>();
+		int headerCount = (data.size() < 6 ? data.size() : 6);
+		int k = 0;
+		for (; k < headerCount; k++) {
+			header.add(data.get(k));
+		}
+		for (; k < data.size(); k++) {
+			footer.add(data.get(k));
+		}
+		updateTypeMain(header);
+		updateTag(footer);
 	}
 
 	public void updateTypeMain(ArrayList<GameTypeMain> data) {
@@ -158,8 +168,7 @@ public class GameTypeFragment extends BaseFragment {
 		mTagAdapter.updateData(data);
 	}
 
-	private IndexGameType initStashData() {
-		IndexGameType data = new IndexGameType();
+	private ArrayList<GameTypeMain> initStashData() {
 		ArrayList<GameTypeMain> typeData = new ArrayList<GameTypeMain>();
 		GameTypeMain g1 = new GameTypeMain();
 		g1.id = 1;
@@ -185,16 +194,13 @@ public class GameTypeFragment extends BaseFragment {
 		g6.id = 6;
 		g6.name = "仙侠";
 		typeData.add(g6);
-		data.gameTypes = typeData;
 
-		ArrayList<GameTypeMain> tagData = new ArrayList<GameTypeMain>();
 		for (int i = 0; i < 15; i++) {
 			GameTypeMain g = new GameTypeMain();
 			g.id = i + 15;
 			g.name = "策略塔防";
-			tagData.add(g);
+			typeData.add(g);
 		}
-		data.tagTypes = tagData;
-		return data;
+		return typeData;
 	}
 }
