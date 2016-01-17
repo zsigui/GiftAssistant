@@ -76,7 +76,6 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
 					item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
 				} else {
-					//TODO 跳转游戏详情页
 					IntentUtil.jumpGameDetail(mContext, item.id, item.name);
 				}
 			} catch (Throwable e) {

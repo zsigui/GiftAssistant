@@ -3,12 +3,14 @@ package com.oplay.giftassistant.download;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.database.DownloadDBHelper;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftassistant.download.listener.OnProgressUpdateListener;
 import com.oplay.giftassistant.model.DownloadStatus;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
+import com.oplay.giftassistant.util.SoundPlayer;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.v2.download.BaseApkCachedDownloadManager;
@@ -259,10 +261,12 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mManagerList.remove(appInfo);
 		if (DownloadStatus.DOWNLOADING.equals(appInfo.downloadStatus)) {
 			mDownloadingCnt = decrease(mDownloadingCnt);
-			stopDownload(appInfo.downloadUrl);
+			FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 500);
+			task.setIdentify(appInfo.destUrl);
+			stopDownload(task);
 			if (mPendingCnt > 0) {
 				IndexGameNew info = mManagerList.get(mDownloadingCnt);
-				apkDownload(appInfo);
+				apkDownload(info);
 				mManagerList.remove(info);
 				mPendingCnt = decrease(mPendingCnt);
 				info.downloadStatus = DownloadStatus.DOWNLOADING;
@@ -290,6 +294,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	private void apkDownload(IndexGameNew appInfo) {
 		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 1000);
+		task.setIdentify(appInfo.destUrl);
 		task.addIFileDownloadTaskExtendObject(TAG_APPINFO, appInfo);
 		download(task, true);
 	}
@@ -463,7 +468,15 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	public boolean onDownloadSuccess(FileDownloadTask fileDownloadTask) {
 		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
 		if (appInfo != null) {
-			//TODO 播放完成音乐
+			try {
+				if (AssistantApp.getInstance().isPlayDownloadComplete()) {
+					SoundPlayer.getInstance(mApplicationContext).playDownloadComplete();
+				}
+			}catch (Throwable e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.e(e);
+				}
+			}
 			stopDownloadingTask(appInfo);
 			appInfo.downloadStatus = DownloadStatus.FINISHED;
 			appInfo.completeSize = appInfo.apkFileSize;

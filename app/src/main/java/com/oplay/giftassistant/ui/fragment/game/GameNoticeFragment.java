@@ -55,11 +55,12 @@ public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 		mDataView = getViewById(R.id.rv_content);
 	}
 
-	@Override
-	protected void setListener() {
-	}
+    @Override
+    protected void setListener() {
 
-	@Override
+    }
+
+    @Override
 	protected void processLogic(Bundle savedInstanceState) {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
@@ -69,8 +70,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), llm.getOrientation());
 		mDataView.setLayoutManager(llm);
         mDataView.addItemDecoration(decoration);
-		mAdapter = new GameNoticeAdapter(mDataView);
-
+		mAdapter = new GameNoticeAdapter(getActivity());
 		mDataView.setAdapter(mAdapter);
 	}
 

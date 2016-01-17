@@ -11,8 +11,12 @@ import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 import net.youmi.android.libs.common.v2.download.storer.AbsDownloadDir;
 
+import org.apache.http.protocol.HTTP;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * ApkDownloadDir
@@ -112,18 +116,17 @@ public class ApkDownloadDir extends AbsDownloadDir {
 	public File newDownloadTempFile(String url, String identify) {
 		String temp;
 		if (!Basic_StringUtil.isNullOrEmpty(identify)) {
-			temp = Coder_Md5.md5(identify);
+			final String decodedUrl;
+			try {
+				decodedUrl = URLDecoder.decode(identify, HTTP.UTF_8);
+				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
+				final int end = decodedUrl.lastIndexOf('.');
+				temp = decodedUrl.substring(start, end);
+			} catch (UnsupportedEncodingException e) {
+				KLog.e(e);
+				temp = Coder_Md5.md5(identify);
+			}
 		} else {
-//			final String decodedUrl;
-//			try {
-//				decodedUrl = URLDecoder.decode(url, HTTP.UTF_8);
-//				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
-//				final int end = decodedUrl.length();
-//				temp = decodedUrl.substring(start, end);
-//			} catch (UnsupportedEncodingException e) {
-//				KLog.e(e);
-//				temp = Coder_Md5.md5(url);
-//			}
 			temp = Coder_Md5.md5(url);
 		}
 		return new File(getDir(), temp + ".v".trim() + "mt".trim() + "f");
@@ -144,18 +147,17 @@ public class ApkDownloadDir extends AbsDownloadDir {
 	public File newDownloadStoreFile(String url, String identify) {
 		String temp;
 		if (!Basic_StringUtil.isNullOrEmpty(identify)) {
-			temp = Coder_Md5.md5(identify);
+			final String decodedUrl;
+			try {
+				decodedUrl = URLDecoder.decode(identify, HTTP.UTF_8);
+				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
+				final int end = decodedUrl.lastIndexOf('.');
+				temp = decodedUrl.substring(start, end);
+			} catch (UnsupportedEncodingException e) {
+				KLog.e(e);
+				temp = Coder_Md5.md5(identify);
+			}
 		} else {
-//			final String decodedUrl;
-//			try {
-//				decodedUrl = URLDecoder.decode(url, HTTP.UTF_8);
-//				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
-//				final int end = decodedUrl.length();
-//				temp = decodedUrl.substring(start, end);
-//			} catch (UnsupportedEncodingException e) {
-//				KLog.e(e);
-//				temp = Coder_Md5.md5(url);
-//			}
 			temp = Coder_Md5.md5(url);
 		}
 		return new File(getDir(), temp + ".a".trim() + "pk".trim());

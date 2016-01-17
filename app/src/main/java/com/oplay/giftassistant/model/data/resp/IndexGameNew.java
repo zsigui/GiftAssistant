@@ -12,6 +12,7 @@ import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.model.AppStatus;
 import com.oplay.giftassistant.model.DownloadStatus;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftassistant.util.InstallAppUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
@@ -73,6 +74,10 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	// 下载地址
 	@SerializedName("download_url")
 	public String downloadUrl;
+
+	//最终下载地址
+	@SerializedName("cdn_download_url")
+	public String destUrl;
 
 	@SerializedName("apk_md5")
 	public String apkMd5;
@@ -149,7 +154,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	public void initFile() {
 		try {
 			if (mDestFilePath == null || mDestFile == null) {
-				mDestFile = ApkDownloadDir.getInstance(mContext).newDownloadStoreFile(downloadUrl, null);
+				mDestFile = ApkDownloadDir.getInstance(mContext).newDownloadStoreFile(downloadUrl, destUrl);
 				mDestFilePath = mDestFile.getAbsolutePath();
 			}
 		} catch (Exception e) {
@@ -214,7 +219,23 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 	}
 
 	public void startInstall() {
-		//TODO 开始安装
+		try {
+			InstallAppUtil.install(mContext, this);
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+	}
+
+	public void startApp() {
+		try {
+			Util_System_Intent.startActivityByPackageName(mContext, packageName);
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
 	}
 
 	private AppStatus getAppStatus(DownloadStatus ds) {
@@ -301,7 +322,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 				startInstall();
 				break;
 			case OPENABLE:
-				Util_System_Intent.startActivityByPackageName(mContext, packageName);
+				startApp();
 				break;
 			case PAUSABLE:
 				stopDownload();

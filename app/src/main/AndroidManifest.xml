@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.oplay.giftassistant"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+		package = "com.oplay.giftassistant"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:tools = "http://schemas.android.com/tools" >
 
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name = "android.permission.INTERNET" />
+	<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name = "android.permission.WAKE_LOCK" />
+	<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
 
 	<!-- 偶玩权限 -->
 	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
@@ -27,7 +27,7 @@
 	<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 	<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
 	<!--银联插件3.1.0新增权限-->
-	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
 	<!--易联支付需要权限 -->
 	<uses-permission android:name = "android.permission.READ_SMS" />
 	<uses-permission android:name = "android.permission.RECEIVE_SMS" />
@@ -48,55 +48,72 @@
 	<uses-permission android:name = "android.permission.VIBRATE" />
 	<uses-permission android:name = "android.permission.PLUGIN" />
 
-    <application
-        android:name=".AssistantApp"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        tools:replace="android:icon, android:theme, android:allowBackup">
+	<application
+			android:name = ".AssistantApp"
+			android:allowBackup = "false"
+			android:icon = "@mipmap/ic_launcher"
+			android:label = "@string/app_name"
+			android:theme = "@style/AppTheme"
+			tools:replace = "android:icon, android:theme, android:allowBackup" >
 
-        <activity
-            android:name=".ui.activity.SplashActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+		<activity
+				android:name = ".ui.activity.SplashActivity"
+				android:launchMode = "singleTop"
+				android:screenOrientation = "sensorPortrait" >
+			<intent-filter >
+				<action android:name = "android.intent.action.MAIN" />
+				<category android:name = "android.intent.category.LAUNCHER" />
+			</intent-filter >
+		</activity >
 
-        <activity
-            android:name=".ui.activity.MainActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
-        </activity>
+				<!--android:screenOrientation = "sensorPortrait"-->
+		<activity
+				android:name = ".ui.activity.MainActivity"
+				android:launchMode = "singleTop"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+		</activity >
 
-        <activity
-            android:name=".ui.activity.SearchActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+		<activity
+				android:name = ".ui.activity.SearchActivity"
+				android:launchMode = "singleTop"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "stateVisible|adjustPan" />
 
-	    <activity
-			    android:name=".ui.activity.GiftListActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+		<activity
+				android:name = ".ui.activity.GiftListActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
-	    <activity
-			    android:name=".ui.activity.DetailActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+		<activity
+				android:name = ".ui.activity.DetailActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
-	    <activity
-			    android:name=".ui.activity.GameListActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+		<activity
+				android:name = ".ui.activity.GameListActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
-	    <activity
-			    android:name=".ui.activity.SettingActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+		<activity
+				android:name = ".ui.activity.SettingActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
-	    <activity
-			    android:name=".ui.activity.LoginActivity"
-			    android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+		<activity
+				android:name = ".ui.activity.LoginActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
-	    <service android:name = ".service.ClockService" android:exported="false" />
-    </application>
+		<service
+				android:name = ".service.ClockService"
+				android:exported = "false" />
+	</application >
 
-</manifest>
+</manifest >

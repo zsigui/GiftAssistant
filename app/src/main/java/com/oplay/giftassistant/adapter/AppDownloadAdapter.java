@@ -101,12 +101,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 
 		bindImageViewWithUrl(holder.mIvIcon, appInfo.img, R.drawable.ic_img_default);
 		mImageLoader.displayImage(appInfo.img, holder.mIvIcon);
-		AppStatus status = appInfo.appStatus;
-		if (status == AppStatus.OPENABLE) {
-			holder.mTvAction.setEnabled(false);
-		} else {
-			holder.mTvAction.setEnabled(true);
-		}
 		initViewHolderByStatus(rawUrl, appInfo.downloadStatus);
 		holder.mTvAction.setTag(TAG_POSITION, position);
 		holder.mTvAction.setOnClickListener(this);
@@ -177,16 +171,16 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 				case R.id.tv_downloading_action:
 					String str = ((TextView) v).getText().toString();
 					if ("暂停".equals(str)) {
-						stopDownload(appInfo);
+						appInfo.stopDownload();
 					}
 					if ("继续".equals(str) || "重试".equals(str)) {
-						restartDownload(appInfo);
+						appInfo.restartDownload();
 					}
 					if ("安装".equals(str)) {
-						//安装
+						appInfo.startInstall();
 					}
 					if ("打开".equals(str)) {
-						//打开
+						appInfo.startApp();
 					}
 					break;
 				// 详细按钮响应
@@ -204,26 +198,6 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 				default:
 					break;
 			}
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
-			}
-		}
-	}
-
-	private void stopDownload(IndexGameNew appInfo) {
-		try {
-			mDownloadManagerInstance.stopDownloadTask(appInfo);
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
-			}
-		}
-	}
-
-	private void restartDownload(IndexGameNew appInfo) {
-		try {
-			appInfo.handleOnClick(mFragment.getChildFragmentManager());
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
