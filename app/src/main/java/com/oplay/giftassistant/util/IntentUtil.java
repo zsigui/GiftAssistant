@@ -3,6 +3,7 @@ package com.oplay.giftassistant.util;
 import android.content.Context;
 import android.content.Intent;
 
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.ui.activity.DetailActivity;
 import com.oplay.giftassistant.ui.activity.GameListActivity;
@@ -10,6 +11,7 @@ import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.activity.LoginActivity;
 import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.activity.SettingActivity;
+import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -83,7 +85,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGameDetail(Context context, int id, String title) {
 		Intent intent = new Intent(context, DetailActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		KLog.e(AppDebugConfig.TAG_APP, "id = " + id +", title = " + title);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_NAME, title);

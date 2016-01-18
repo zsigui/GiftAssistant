@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.WebViewUrl;
+import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WebView;
 
 /**
@@ -48,6 +49,14 @@ public class GameDetailFragment extends BaseFragment_WebView {
 		mId = getArguments().getInt(KEY_ID);
 		mStatusBarColor = getArguments().getInt(KEY_COLOR);
 		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + getResources().getColor(mStatusBarColor);
+		if (AccountManager.getInstance().isLogin()) {
+			AccountManager.getInstance().syncCookie();
+			AccountManager.getInstance().syncCookie(url);
+		} else {
+			// 测试
+			AccountManager.getInstance().syncCookie(WebViewUrl.BASE_URL, "sessionid=&cuid=0");
+			AccountManager.getInstance().syncCookie(url, "sessionid=&cuid=0");
+		}
 		loadUrl(url);
 		mIsLoading = true;
 	}

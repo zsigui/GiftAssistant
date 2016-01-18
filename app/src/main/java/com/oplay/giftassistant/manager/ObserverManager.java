@@ -37,8 +37,6 @@ public class ObserverManager {
 
 	private ArrayList<GiftUpdateListener> mGiftObservers = new ArrayList<>();
 
-	private ArrayList<OnDownloadListener> mDownloadObservers = new ArrayList<>();
-
 	public void addUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
 		mUserObservers.add(observer);
@@ -57,15 +55,6 @@ public class ObserverManager {
 	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
 		mGiftObservers.remove(observer);
-	}
-
-	/**
-	 * 进行下载监听观察者注册
-	 */
-	public void addOnDownloadListener(OnDownloadListener observer) {
-		if (observer == null)
-			return;
-		mDownloadObservers.add(observer);
 	}
 
 	public void notifyUserUpdate() {
@@ -117,17 +106,5 @@ public class ObserverManager {
 	 */
 	public interface GiftUpdateListener {
 		void onGiftUpdate();
-	}
-
-	/**
-	 * 对于下载过程的变化监听端口
-	 */
-	public interface OnDownloadListener {
-
-		void onDownloadStart(String url);
-
-		void onProgressUpdate(String url, float downloadSize, float totalSize, float rate);
-
-		void onDownloadFinished(String url);
 	}
 }

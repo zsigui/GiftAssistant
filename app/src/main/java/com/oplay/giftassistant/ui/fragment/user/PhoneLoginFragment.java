@@ -143,8 +143,6 @@ public class PhoneLoginFragment extends BaseFragment {
 			return;
 		}
 		btnSendCode.setEnabled(false);
-		btnSendCode.setText(String.format(getResources().getString(R.string.st_login_phone_resend_code),
-				sSendCodeRemainTime));
 		sSendCodeRemainTime = RESEND_DURATION;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
@@ -242,7 +240,7 @@ public class PhoneLoginFragment extends BaseFragment {
 									}
 									showToast("登录失败 - " + (response.body() == null ?
 											"解析异常" : response.body().getMsg()));
-
+									return;
 								}
 								showToast("登录失败 - 解析异常");
 							}

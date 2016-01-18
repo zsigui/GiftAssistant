@@ -24,6 +24,7 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.SPConfig;
+import com.oplay.giftassistant.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
@@ -77,8 +78,8 @@ public class AssistantApp extends Application {
 			}
 		}
 		sInstance = this;
-		initImageLoader();
 		KLog.init(true);
+		initImageLoader();
 		initRetrofit();
 		initLoadingView();
 		initDrawerImageLoader();
@@ -119,9 +120,9 @@ public class AssistantApp extends Application {
 		ImageLoader.getInstance().clearMemoryCache();
 	}
 
-
 	private void initRetrofit() {
 		mGson = new GsonBuilder()
+				.registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
 				.serializeNulls()
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();

@@ -214,12 +214,11 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 				Global.getNetEngine().obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
 					public void onResponse(Response<JsonRespBase<IndexGift>> response, Retrofit retrofit) {
-						mIsLoading = false;
 						if (response != null && response.isSuccess()) {
 							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 								// 获取数据成功
-								refreshSuccessEnd();
 								updateData(response.body().getData());
+								refreshSuccessEnd();
 								return;
 							}
 						}
@@ -231,8 +230,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.e(t);
 						}
-						mIsLoading = false;
-						//refreshFailEnd();
+						refreshFailEnd();
 						updateData(initStashGiftData());
 					}
 				});
@@ -281,6 +279,38 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 			return;
 		}
 		mNewAdapter.updateData(newData);
+	}
+
+	private void startClockService() {
+		/*Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().startService(intent);*/
+	}
+
+	private void stopClockService() {
+		/*Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().stopService(intent);*/
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		startClockService();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		stopClockService();
+	}
+
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		if (hidden) {
+			stopClockService();
+		} else {
+			startClockService();
+		}
 	}
 
 	/* 更新控件数据 end */

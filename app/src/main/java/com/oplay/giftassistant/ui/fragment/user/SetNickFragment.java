@@ -18,6 +18,7 @@ import com.oplay.giftassistant.model.data.resp.ModifyNick;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
@@ -41,11 +42,6 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		if (!AccountManager.getInstance().isLogin()) {
-			getActivity().onBackPressed();
-			ToastUtil.showShort("未登录");
-			return;
-		}
 		setContentView(R.layout.fragment_user_set_nick);
 		etNick = getViewById(R.id.et_nick);
 		tvClear = getViewById(R.id.iv_clear);
@@ -59,6 +55,12 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
+		if (!AccountManager.getInstance().isLogin()) {
+			etNick.setText("未知");
+			getActivity().onBackPressed();
+			IntentUtil.jumpLogin(getContext());
+			return;
+		}
 		etNick.setText(AccountManager.getInstance().getUserInfo().nick);
 	}
 

@@ -42,10 +42,10 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 	@Override
 	public void onRefresh() {
 		mRefreshLayout.setEnabled(false);
-		if (mIsRefresh || mIsLoading) {
+		if (mIsSwipeRefresh || mIsLoading) {
 			return;
 		}
-		mIsRefresh = true;
+		mIsSwipeRefresh = true;
 		lazyLoad();
 	}
 
@@ -54,7 +54,7 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 	}
 
 	protected void refreshFailEnd() {
-		if (mIsRefresh) {
+		if (mIsSwipeRefresh) {
 			ToastUtil.showShort("刷新请求出错");
 		}
 		super.refreshFailEnd();

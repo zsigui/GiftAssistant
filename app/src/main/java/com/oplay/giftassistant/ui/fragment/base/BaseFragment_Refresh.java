@@ -28,10 +28,10 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        if (mIsRefresh || mIsLoading){
+        if (mIsSwipeRefresh || mIsLoading){
             return;
         }
-        mIsRefresh = true;
+        mIsSwipeRefresh = true;
         lazyLoad();
     }
 
@@ -65,7 +65,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	}
 
 	protected void refreshFailEnd() {
-		if (mIsRefresh) {
+		if (mIsSwipeRefresh) {
 			ToastUtil.showShort("刷新请求出错");
 		}
 		super.refreshFailEnd();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
@@ -20,6 +21,7 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.StringUtil;
 import com.oplay.giftassistant.util.ToastUtil;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-17.
@@ -77,11 +79,16 @@ public class UserInfoFragment extends BaseFragment {
 			showToast("当前未登录");
 			IntentUtil.jumpLogin(getContext());
 		}
-		ObserverManager.getInstance().addGiftUpdateListener(this);
 	}
 
 	@Override
 	protected void lazyLoad() {
+		if (!AccountManager.getInstance().isLogin()) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_FRAG, "no login");
+			}
+			return;
+		}
 		refreshInitConfig();
 		UserInfo user = AccountManager.getInstance().getUserInfo();
 		ImageLoader.getInstance().displayImage(user.avatar, ivIcon);
@@ -159,8 +166,21 @@ public class UserInfoFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		ObserverManager.getInstance().addUserUpdateListener(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+	}
+
+
+	@Override
 	public void onUserUpdate() {
-		if (mIsRefresh) {
+		if (mIsSwipeRefresh) {
 			return;
 		}
 		lazyLoad();

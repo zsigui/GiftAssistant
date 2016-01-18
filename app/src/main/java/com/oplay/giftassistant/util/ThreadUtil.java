@@ -1,12 +1,13 @@
 package com.oplay.giftassistant.util;
 
 import android.os.Handler;
+import android.os.Looper;
 
 /**
  * Created by zsigui on 15-12-17.
  */
 public class ThreadUtil {
-	private static Handler sHandler = new Handler();
+	private static Handler sHandler = new Handler(Looper.getMainLooper());
 
 	private ThreadUtil() {
 	}

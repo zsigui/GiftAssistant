@@ -6,6 +6,7 @@ import android.os.IBinder;
 
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.manager.ObserverManager;
+import com.oplay.giftassistant.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import java.util.Timer;
@@ -38,7 +39,12 @@ public class ClockService extends Service {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.v(AppDebugConfig.TAG_SERVICE, "Time Clock execute, Request Refresh UI");
 				}
-				ObserverManager.getInstance().notifyGiftUpdate();
+				ThreadUtil.runInUIThread(new Runnable() {
+					@Override
+					public void run() {
+						ObserverManager.getInstance().notifyGiftUpdate();
+					}
+				});
 			}
 		}, 0, 10 * 1000);
 		return super.onStartCommand(intent, flags, startId);

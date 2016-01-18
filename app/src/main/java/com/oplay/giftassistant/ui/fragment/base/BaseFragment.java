@@ -24,7 +24,7 @@ import com.oplay.giftassistant.util.ToastUtil;
  * @date 2015/12/13
  */
 public abstract class BaseFragment extends BaseFragmentLog implements View.OnClickListener,
-		ObserverManager.OnDownloadListener, ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener{
+		ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener{
 	protected String TAG;
 	protected AssistantApp mApp;
 	protected View mContentView;
@@ -42,7 +42,8 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	private String mFragName;
 	protected Handler mHandler = new Handler(Looper.myLooper());
 	// 是否处于刷新页面请求中
-	protected boolean mIsRefresh = false;
+	protected boolean mIsSwipeRefresh = false;
+	protected boolean mIsNotifyRefresh = false;
 	// Fragment标题
 	private String mTitleName;
 
@@ -144,7 +145,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	protected void refreshInitConfig() {
 		mIsLoading = true;
-		if (!mIsRefresh) {
+		if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
 			if (mViewManager != null) {
 				mViewManager.showLoading();
 			}
@@ -153,13 +154,13 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	protected void refreshFailEnd() {
-		if (!mIsRefresh) {
+		if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
 			if (mViewManager != null) {
 				mViewManager.showErrorRetry();
 			}
 			mHasData = false;
 		}
-		mIsLoading = mIsRefresh = false;
+		mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
 	}
 
 	protected void refreshSuccessEnd() {
@@ -167,7 +168,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 			mViewManager.showContent();
 		}
 		mHasData = true;
-		mIsLoading = mIsRefresh = false;
+		mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
 	}
 
 	/**
@@ -236,6 +237,8 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public void onDestroyView() {
 		mCanShowUI = false;
+		ObserverManager.getInstance().removeGiftUpdateListener(this);
+		ObserverManager.getInstance().removeUserUpdateListener(this);
 		super.onDestroyView();
 	}
 
@@ -246,26 +249,11 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	@Override
 	public void onGiftUpdate() {
-		if (mIsRefresh) {
+		if (mIsSwipeRefresh || mIsNotifyRefresh) {
 			return;
 		}
-		mIsRefresh = true;
+		mIsNotifyRefresh = true;
 		lazyLoad();
-	}
-
-	@Override
-	public void onDownloadStart(String url) {
-
-	}
-
-	@Override
-	public void onProgressUpdate(String url, float downloadSize, float totalSize, float rate) {
-
-	}
-
-	@Override
-	public void onDownloadFinished(String url) {
-
 	}
 
 	@Override
