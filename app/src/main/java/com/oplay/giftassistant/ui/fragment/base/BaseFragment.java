@@ -24,8 +24,7 @@ import com.oplay.giftassistant.util.ToastUtil;
  * @date 2015/12/13
  */
 public abstract class BaseFragment extends BaseFragmentLog implements View.OnClickListener,
-		ObserverManager.OnDownloadListener, ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener,
-		ObserverManager.MsgUpdateListener {
+		ObserverManager.OnDownloadListener, ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener{
 	protected String TAG;
 	protected AssistantApp mApp;
 	protected View mContentView;
@@ -252,11 +251,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		}
 		mIsRefresh = true;
 		lazyLoad();
-	}
-
-	@Override
-	public void onMsgUpdate() {
-
 	}
 
 	@Override

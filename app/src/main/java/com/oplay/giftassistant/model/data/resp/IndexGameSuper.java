@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class IndexGameSuper implements Serializable {
 
 	@SerializedName("banner")
-	public ArrayList<IndexGameBanner> banner;
+	public ArrayList<IndexBanner> banner;
 
 	@SerializedName("hot")
 	public ArrayList<IndexGameNew> hot;

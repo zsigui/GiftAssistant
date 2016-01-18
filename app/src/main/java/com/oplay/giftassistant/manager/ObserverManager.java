@@ -37,8 +37,6 @@ public class ObserverManager {
 
 	private ArrayList<GiftUpdateListener> mGiftObservers = new ArrayList<>();
 
-	private ArrayList<MsgUpdateListener> mMsgObservers = new ArrayList<>();
-
 	private ArrayList<OnDownloadListener> mDownloadObservers = new ArrayList<>();
 
 	public void addUserUpdateListener(UserUpdateListener observer) {
@@ -46,14 +44,19 @@ public class ObserverManager {
 		mUserObservers.add(observer);
 	}
 
+	public void removeUserUpdateListener(UserUpdateListener observer) {
+		if (observer == null) return;
+		mUserObservers.remove(observer);
+	}
+
 	public void addGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
 		mGiftObservers.add(observer);
 	}
 
-	public void addMsgUpdateListener(MsgUpdateListener observer) {
+	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
-		mMsgObservers.add(observer);
+		mGiftObservers.remove(observer);
 	}
 
 	/**
@@ -101,21 +104,6 @@ public class ObserverManager {
 		}
 	}
 
-	public void notifyMsgUpdate() {
-		for (MsgUpdateListener observer : mMsgObservers) {
-			if (observer != null) {
-				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
-					// 当为fragment且正被移除出界面，不更新，正确？
-					return;
-				}
-				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
-					// 当Activity即将被销毁，无须更新
-					return;
-				}
-				observer.onMsgUpdate();
-			}
-		}
-	}
 
 	/**
 	 * 账号状态变更监听接口
@@ -129,13 +117,6 @@ public class ObserverManager {
 	 */
 	public interface GiftUpdateListener {
 		void onGiftUpdate();
-	}
-
-	/**
-	 * 消息通知状态变更监听接口
-	 */
-	public interface MsgUpdateListener {
-		void onMsgUpdate();
 	}
 
 	/**

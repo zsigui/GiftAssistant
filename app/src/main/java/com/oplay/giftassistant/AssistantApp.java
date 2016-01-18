@@ -106,6 +106,7 @@ public class AssistantApp extends Application {
 	 */
 	public void exit() {
 		ImageLoader.getInstance().clearMemoryCache();
+		ImageLoader.getInstance().stop();
 		ImageLoader.getInstance().destroy();
 	}
 

@@ -45,18 +45,6 @@ public class LoadingFragment extends BaseFragment {
 		KLog.v("lazyLoad is called, but nothing need to be do here");
 	}
 
-	@Override
-	protected void onUserVisible() {
-		super.onUserVisible();
-		startAnim();
-	}
-
-	@Override
-	protected void onUserInvisible() {
-		super.onUserInvisible();
-		stopAnim();
-	}
-
 	private void startAnim() {
 		if (mProgress != null) {
 			mProgress.startAnim();

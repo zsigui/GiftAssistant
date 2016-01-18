@@ -145,4 +145,11 @@ public class OuwanSDKManager implements InitCallbackListener {
 			}
 		}
 	}
+
+	public void showOuwanModifyPwdView() {
+	}
+
+	public void showChangePhoneView() {
+
+	}
 }

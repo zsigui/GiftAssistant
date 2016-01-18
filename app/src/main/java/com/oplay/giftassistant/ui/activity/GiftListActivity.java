@@ -280,7 +280,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ngift.id = 335;
 			ngift.status = GiftTypeUtil.STATUS_SEIZE;
 			ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-			ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+			ngift.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 			ngift.name = "至尊礼包";
 			ngift.isLimit = true;
 			ngift.bean = 30;
@@ -297,7 +297,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ng2.id = 336;
 			ng2.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 			ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-			ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+			ng2.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 			ng2.name = "高级礼包";
 			ng2.isLimit = false;
 			ng2.bean = 30;
@@ -314,7 +314,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ng3.id = 337;
 			ng3.status = GiftTypeUtil.STATUS_SEARCH;
 			ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
+			ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 			ng3.name = "高级礼包";
 			ng3.isLimit = false;
 			ng3.score = 1500;
@@ -333,7 +333,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				ng.id = i;
 				ng.status = GiftTypeUtil.STATUS_SEIZE;
 				ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-				ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
+				ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 				ng.name = "普通礼包";
 				ng.isLimit = false;
 				ng.score = (int) (Math.random() * 100) * 10;
@@ -366,7 +366,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ngift.id = 335;
 			ngift.status = GiftTypeUtil.STATUS_SEIZE;
 			ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-			ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+			ngift.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 			ngift.name = "至尊礼包";
 			ngift.isLimit = true;
 			ngift.bean = 30;
@@ -385,7 +385,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ng2.id = 336;
 			ng2.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 			ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-			ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+			ng2.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 			ng2.name = "高级礼包";
 			ng2.isLimit = false;
 			ng2.bean = 30;
@@ -404,7 +404,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			ng3.id = 337;
 			ng3.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 			ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
+			ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 			ng3.name = "高级礼包";
 			ng3.isLimit = false;
 			ng3.score = 1500;
@@ -423,7 +423,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				ng.status = GiftTypeUtil.STATUS_WAIT_SEIZE;
 				ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 				ng.gameName = "逍遥西游";
-				ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
+				ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 				ng.name = "普通礼包";
 				ng.isLimit = false;
 				ng.score = (int) (Math.random() * 100) * 10;
@@ -451,7 +451,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			game.name = "口袋妖怪复刻";
 			game.totalCount = 10 - i;
 			game.newCount = i;
-			game.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
+			game.img = "http://owan-avatar.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
 			game.playCount = (int) (Math.random() * 20000);
 			game.size = 0.5f * (int) (Math.random() * 100) + "M";
 			like.add(game);

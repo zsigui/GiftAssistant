@@ -10,7 +10,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.GameSuperAdapter;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
-import com.oplay.giftassistant.model.data.resp.IndexGameBanner;
+import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
@@ -121,24 +121,24 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		IndexGameSuper data = new IndexGameSuper();
 		mHasData = true;
 		// 先暂时使用缓存数据假定
-		ArrayList<IndexGameBanner> bannerData = new ArrayList<IndexGameBanner>();
+		ArrayList<IndexBanner> bannerData = new ArrayList<IndexBanner>();
 		ArrayList<IndexGameNew> hotData = new ArrayList<IndexGameNew>();
 		ArrayList<IndexGameNew> newData = new ArrayList<IndexGameNew>();
 
-		IndexGameBanner banner1 = new IndexGameBanner();
-		banner1.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
+		IndexBanner banner1 = new IndexBanner();
+		banner1.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
 		bannerData.add(banner1);
-		IndexGameBanner banner2 = new IndexGameBanner();
-		banner2.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
+		IndexBanner banner2 = new IndexBanner();
+		banner2.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
 		bannerData.add(banner2);
-		IndexGameBanner banner3 = new IndexGameBanner();
-		banner3.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
+		IndexBanner banner3 = new IndexBanner();
+		banner3.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
 		bannerData.add(banner3);
-		IndexGameBanner banner4 = new IndexGameBanner();
-		/*banner4.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
+		IndexBanner banner4 = new IndexBanner();
+		/*banner4.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
 		bannerData.add(banner4);
-		IndexGameBanner banner5 = new IndexGameBanner();
-		banner5.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
+		IndexBanner banner5 = new IndexBanner();
+		banner5.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
 		bannerData.add(banner5);*/
 
 		data.banner = bannerData;
@@ -151,7 +151,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 			game.playCount = 53143;
 			game.totalCount = 12;
 			game.giftName = "至尊礼包";
-			game.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+			game.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 			game.size = "" + (0.8 * i + 10 * i);
 			hotData.add(game);
 		}
@@ -164,8 +164,8 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		rec.playCount = 53143;
 		rec.totalCount = 12;
 		rec.giftName = "至尊礼包";
-		rec.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
-		rec.banner = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
+		rec.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+		rec.banner = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
 		rec.size = "153M";
 		data.recommend = rec;
 
@@ -178,7 +178,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		game1.playCount = 53143;
 		game1.totalCount = 12;
 		game1.giftName = "至尊礼包";
-		game1.img = String.format("http://owan-img.ymapp.com/app/%d/icon/%s", id, "icon_1450685681.png");
+		game1.img = String.format("http://owan-avatar.ymapp.com/app/%d/icon/%s", id, "icon_1450685681.png");
 		game1.downloadUrl = String.format("http://m.ouwan.com/api/quick_download/?app_id=%d&chn=200&pack_chn=1", id);
 		game1.packageName = "com.aifeng.quanminsifu.ouwan";
 		game1.size = "120.04 MB";
@@ -195,7 +195,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		game2.playCount = 53143;
 		game2.totalCount = 12;
 		game2.giftName = "至尊礼包";
-		game2.img = String.format("http://owan-img.ymapp.com/app/%d/icon/%s", id, "icon_1451034535.png");
+		game2.img = String.format("http://owan-avatar.ymapp.com/app/%d/icon/%s", id, "icon_1451034535.png");
 		game2.downloadUrl = String.format("http://m.ouwan.com/api/quick_download/?app_id=%d&chn=200&pack_chn=1", id);
 		game2.packageName = "com.netease.sq.ewan.ouwan";
 		game2.size = "169.34 MB";
@@ -212,7 +212,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 		game3.playCount = 53143;
 		game3.totalCount = 12;
 		game3.giftName = "至尊礼包";
-		game3.img = String.format("http://owan-img.ymapp.com/app/%d/icon/%s", id, "icon_1451031060.png");
+		game3.img = String.format("http://owan-avatar.ymapp.com/app/%d/icon/%s", id, "icon_1451031060.png");
 		game3.downloadUrl = String.format("http://m.ouwan.com/api/quick_download/?app_id=%d&chn=200&pack_chn=1", id);
 		game3.packageName = "com.ceapon.fire.ouwan";
 		game3.size = "146.53 MB";
@@ -229,7 +229,7 @@ public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.On
 //			game.playCount = 53143;
 //			game.totalCount = 12;
 //			game.giftName = "至尊礼包";
-//			game.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+//			game.avatar = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 //			game.size = "" + (0.8 * i + 10 * i);
 //			newData.add(game);
 //		}

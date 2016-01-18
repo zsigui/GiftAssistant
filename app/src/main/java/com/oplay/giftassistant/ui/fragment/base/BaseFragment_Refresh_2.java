@@ -78,6 +78,16 @@ public abstract class BaseFragment_Refresh_2<DataType> extends BaseFragment impl
 		}
 	}
 
+	@Override
+	protected void onUserVisible() {
+		super.onUserVisible();
+	}
+
+	@Override
+	protected void onUserInvisible() {
+		super.onUserInvisible();
+	}
+
 	protected void moreLoadSuccessEnd() {
 		mIsLoadMore = false;
 		mRefreshLayout.setLoading(false);

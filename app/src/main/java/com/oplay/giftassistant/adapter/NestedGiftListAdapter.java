@@ -159,6 +159,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
 				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
 					setDisabledField(viewHolder, View.GONE, null);
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
@@ -263,6 +264,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
+				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
 					viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 					viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);

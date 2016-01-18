@@ -197,4 +197,13 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_FEEDBACK);
 		context.startActivity(intent);
 	}
+
+	/**
+	 * 跳转反馈界面
+	 */
+	public static void jumpUserInfo(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USERINFO);
+		context.startActivity(intent);
+	}
 }

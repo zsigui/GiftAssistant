@@ -26,10 +26,11 @@ public class AutoMeasureGridLayoutManager extends GridLayoutManager {
 	public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
 		int height = 0;
 		int childCount = getItemCount();
+
 		for (int i = 0; i < childCount; i++) {
-			View child = recycler.getViewForPosition(i);
-			measureChild(child, widthSpec, heightSpec);
 			if (i % getSpanCount() == 0) {
+				View child = recycler.getViewForPosition(i);
+				measureChild(child, widthSpec, heightSpec);
 				int measuredHeight = child.getMeasuredHeight() + getDecoratedBottom(child);
 				height += measuredHeight;
 			}

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by zsigui on 16-1-5.
  */
-public class ReqModifyAvater implements Serializable {
+public class ReqModifyAvatar implements Serializable {
 
 	@SerializedName("avater")
 	public String avater;

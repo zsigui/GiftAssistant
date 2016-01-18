@@ -10,6 +10,7 @@ import com.oplay.giftassistant.ui.fragment.setting.MyGiftFragment;
 import com.oplay.giftassistant.ui.fragment.setting.SettingFragment;
 import com.oplay.giftassistant.ui.fragment.setting.TaskFragment;
 import com.oplay.giftassistant.ui.fragment.setting.WalletFragment;
+import com.oplay.giftassistant.ui.fragment.user.UserInfoFragment;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -72,6 +73,10 @@ public class SettingActivity extends BaseAppCompatActivity {
 			case KeyConfig.TYPE_ID_FEEDBACK:
 				replaceFragWithTitle(R.id.fl_container, FeedBackFragment.newInstance(),
 						getResources().getString(R.string.st_feedback_title));
+				break;
+			case KeyConfig.TYPE_ID_USERINFO:
+				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
+						getResources().getString(R.string.st_user_info_title));
 				break;
 			default:
 				if (AppDebugConfig.IS_FRAG_DEBUG) {

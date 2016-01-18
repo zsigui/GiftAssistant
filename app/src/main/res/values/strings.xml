@@ -122,4 +122,24 @@
 	<string name = "st_dialog_pay_title_get_code" >恭喜您！抢号成功！</string >
 	<string name = "st_dialog_pay_score" >积分支付</string >
 	<string name = "st_dialog_pay_bean" >偶玩豆支付</string >
+
+	<!-- 账户信息 -->
+	<string name = "st_user_info_title">账户信息</string>
+	<string name = "st_user_avator">头像</string>
+	<string name = "st_user_nick">昵称</string>
+	<string name = "st_user_ouwan_login">登录偶玩号</string>
+	<string name = "st_user_phone_login">登录手机号</string>
+	<string name = "st_user_ouwan_bind">绑定偶玩号</string>
+	<string name = "st_user_phone_bind">绑定手机号</string>
+	<string name = "st_user_unbind">未绑定</string>
+	<string name = "st_user_modify_pwd">修改登录密码</string>
+	<string name = "st_user_hint">小提示： 登录手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string>
+
+	<!-- 设置头像 -->
+	<string name = "st_user_set_avatar_title">设置头像</string>
+	<string name = "st_user_set_avator_gallery">从相册中选一张</string>
+	<string name = "st_user_set_avator_photo">拍一张照</string>
+
+	<!-- 设置昵称 -->
+	<string name = "st_user_set_nick_title">设置昵称</string>
 </resources >

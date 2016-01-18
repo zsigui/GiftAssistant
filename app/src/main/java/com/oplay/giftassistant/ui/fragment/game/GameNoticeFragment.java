@@ -190,7 +190,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
             game.playCount = 53143;
             game.totalCount = 12;
             game.giftName = "至尊礼包";
-            game.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+            game.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
             game.size = "" + (0.8 * i + 10 * i);
             obj.data.add(game);
         }
@@ -210,7 +210,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
             game.playCount = 53143;
             game.totalCount = 12;
             game.giftName = "高级礼包";
-            game.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+            game.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
             game.size = "" + (0.8 * i + 10 * i);
             obj.data.add(game);
         }

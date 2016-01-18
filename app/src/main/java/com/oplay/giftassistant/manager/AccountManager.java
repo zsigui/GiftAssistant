@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.manager;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +37,7 @@ import retrofit.Retrofit;
 public class AccountManager {
 
 	private static AccountManager manager;
+	private static Context mContext = AssistantApp.getInstance().getApplicationContext();
 
 	private AccountManager() {
 	}
@@ -85,7 +87,7 @@ public class AccountManager {
 			public void run() {
 				// 写入SP中
 				String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
-				Global_SharePreferences.saveEncodeStringToSharedPreferences(AssistantApp.getInstance().getApplicationContext(),
+				Global_SharePreferences.saveEncodeStringToSharedPreferences(mContext,
 						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, userJson, SPConfig.SALT_USER_INFO);
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_MANAGER, "save to sp : " + userJson);
@@ -115,7 +117,35 @@ public class AccountManager {
 			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
+					if (NetworkUtil.isConnected(mContext)) {
+						return;
+					}
+					Global.getNetEngine().getUserInfo(new JsonReqBase<String>(null))
+							.enqueue(new Callback<JsonRespBase<UserModel>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
+									if (response != null && response.isSuccess()) {
+										if (response.body() != null
+												&& response.body().getCode() == StatusCode.SUCCESS) {
+											UserModel user = getUser();
+											user.userInfo = response.body().getData().userInfo;
+											setUser(user);
+											return;
+										}
+										if (AppDebugConfig.IS_DEBUG) {
+											KLog.e(AppDebugConfig.TAG_MANAGER,
+													response.body() == null ? "解析失败" : response.body().error());
+										}
+									}
+								}
 
+								@Override
+								public void onFailure(Throwable t) {
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(AppDebugConfig.TAG_MANAGER, t);
+									}
+								}
+							});
 				}
 			});
 		}
@@ -162,7 +192,7 @@ public class AccountManager {
 	private Runnable mUpdateSessionTask = new Runnable() {
 		@Override
 		public void run() {
-			if (NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
+			if (NetworkUtil.isConnected(mContext)) {
 				Global.getNetEngine().updateSession(new JsonReqBase<String>("0"))
 						.enqueue(new Callback<JsonRespBase<UpdateSesion>>() {
 
@@ -173,6 +203,8 @@ public class AccountManager {
 									if(response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										mUpdateSessionRetryTime = 0;
 										mUser.userSession.session = response.body().getData().session;
+										// 请求更新数据
+										updateUserInfo();
 										return;
 									}
 

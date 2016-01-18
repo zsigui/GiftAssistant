@@ -12,7 +12,7 @@ public class SPConfig {
 
      /* 获取闪屏图片地址的键值 */
     public static final String SP_CACHE_FILE = "ab2331ff";
-    public static final String KEY_SPLASH_URL = "img";
+    public static final String KEY_SPLASH_URL = "avatar";
 
 	/* 获取用户信息,个人信息在SP中存储通过salt进行加密 */
 	public static final String SP_USER_INFO_FILE = "qerkj21";

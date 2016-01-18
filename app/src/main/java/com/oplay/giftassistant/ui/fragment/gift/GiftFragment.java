@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.fragment.gift;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,14 +22,13 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
+import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
-import com.oplay.giftassistant.model.data.resp.IndexGiftBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.service.ClockService;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.DateUtil;
@@ -89,7 +87,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		return new GiftFragment();
 	}
 
-	public static GiftFragment newInstance(ArrayList<IndexGiftBanner> banners,
+	public static GiftFragment newInstance(ArrayList<IndexBanner> banners,
 	                                       ArrayList<IndexGiftLike> likeGames,
 	                                       ArrayList<IndexGiftLimit> limitGifts,
 	                                       ArrayList<IndexGiftNew> newGifts) {
@@ -126,30 +124,6 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		mNewBar.setOnClickListener(this);
 	}
 
-	private void startClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().startService(intent);
-	}
-
-	private void stopClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().stopService(intent);
-	}
-
-	@Override
-	protected void onUserVisible() {
-		KLog.e("service show");
-		startClockService();
-		super.onUserVisible();
-	}
-
-	@Override
-	protected void onUserInvisible() {
-		KLog.e("service stop");
-		stopClockService();
-		super.onUserInvisible();
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
@@ -183,7 +157,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 			Serializable s;
 			s = getArguments().getSerializable(KEY_BANNER);
 			if (s != null) {
-				updateBanners((ArrayList<IndexGiftBanner>) s);
+				updateBanners((ArrayList<IndexBanner>) s);
 			}
 			s = getArguments().getSerializable(KEY_LIKE);
 			if (s != null) {
@@ -207,7 +181,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		mScrollView.smoothScrollTo(0, 0);
 	}
 
-	private void loadBanner(ArrayList<IndexGiftBanner> banners) {
+	private void loadBanner(ArrayList<IndexBanner> banners) {
 		if (banners == null || banners.size() != views.size()) {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_FRAG, "bannerUrls is not to be null and the size need to be 3 : " +
@@ -284,7 +258,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		mScrollView.smoothScrollTo(0, 0);
 	}
 
-	public void updateBanners(ArrayList<IndexGiftBanner> banners) {
+	public void updateBanners(ArrayList<IndexBanner> banners) {
 		loadBanner(banners);
 	}
 
@@ -335,19 +309,19 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 	private IndexGift initStashGiftData() {
 		mHasData = true;
 		// 先暂时使用缓存数据假定
-		ArrayList<IndexGiftBanner> bannerData = new ArrayList<IndexGiftBanner>();
+		ArrayList<IndexBanner> bannerData = new ArrayList<IndexBanner>();
 		ArrayList<IndexGiftNew> limitData = new ArrayList<IndexGiftNew>();
 		ArrayList<IndexGiftLike> likeData = new ArrayList<IndexGiftLike>();
 		ArrayList<IndexGiftNew> newData = new ArrayList<IndexGiftNew>();
 
-		IndexGiftBanner banner1 = new IndexGiftBanner();
-		banner1.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
+		IndexBanner banner1 = new IndexBanner();
+		banner1.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
 		bannerData.add(banner1);
-		IndexGiftBanner banner2 = new IndexGiftBanner();
-		banner2.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
+		IndexBanner banner2 = new IndexBanner();
+		banner2.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
 		bannerData.add(banner2);
-		IndexGiftBanner banner3 = new IndexGiftBanner();
-		banner3.url = "http://owan-img.ymapp.com/img/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
+		IndexBanner banner3 = new IndexBanner();
+		banner3.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
 		bannerData.add(banner3);
 
 		IndexGiftNew ngift = new IndexGiftNew();
@@ -355,7 +329,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		ngift.id = 335;
 		ngift.status = GiftTypeUtil.STATUS_SEIZE;
 		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-		ngift.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+		ngift.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ngift.name = "至尊礼包";
 		ngift.isLimit = true;
 		ngift.bean = 5;
@@ -372,7 +346,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		ng2.id = 336;
 		ng2.status = GiftTypeUtil.STATUS_FINISHED;
 		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-		ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+		ng2.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 		ng2.name = "高级礼包";
 		ng2.isLimit = false;
 		ng2.bean = 30;
@@ -389,7 +363,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		ng3.id = 337;
 		ng3.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-		ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
+		ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";
 		ng3.isLimit = false;
 		ng3.score = 10;
@@ -405,12 +379,12 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 			game.name = "口袋妖怪复刻";
 			game.totalCount = 10 - i;
 			game.newCount = i;
-			game.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
+			game.img = "http://owan-avatar.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
 			likeData.add(game);
 			IndexGiftNew gift = new IndexGiftNew();
 			gift.gameName = "少年三国志";
 			gift.name = "传奇礼包";
-			gift.img = "http://owan-img.ymapp.com/app/b6/41/8113/icon/icon_1431085220.png_140_140_100.png";
+			gift.img = "http://owan-avatar.ymapp.com/app/b6/41/8113/icon/icon_1431085220.png_140_140_100.png";
 			gift.remainCount = i * 10 + i;
 			limitData.add(gift);
 			IndexGiftNew ng = new IndexGiftNew();
@@ -418,7 +392,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 			ng.id = i;
 			ng.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
+			ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 			ng.name = "普通礼包";
 			ng.isLimit = false;
 			ng.score = (int) (Math.random() * 100) * 10;

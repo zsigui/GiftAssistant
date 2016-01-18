@@ -1,5 +1,6 @@
 package com.oplay.giftassistant.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -22,11 +23,13 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
+import com.oplay.giftassistant.service.ClockService;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -35,13 +38,14 @@ import com.oplay.giftassistant.ui.widget.search.SearchLayout;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.StringUtil;
 import com.oplay.giftassistant.util.ToastUtil;
+import com.socks.library.KLog;
 
 /**
  * @author micle
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener{
+public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
@@ -72,6 +76,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	protected void onDestroy() {
+		startClockService();
 		super.onDestroy();
 	}
 
@@ -100,7 +105,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					@Override
 					public boolean onProfileImageClick(View view, IProfile iProfile, boolean b) {
 						if (AccountManager.getInstance().isLogin()) {
-							ToastUtil.showShort("已经登录，跳转个人信息页面");
+							IntentUtil.jumpUserInfo(MainActivity.this);
 						} else {
 							IntentUtil.jumpLogin(MainActivity.this);
 						}
@@ -135,7 +140,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
 						if (drawerItem != null) {
 							if (drawerItem.getIdentifier() != KeyConfig.TYPE_ID_SETTING
-									&& drawerItem.getIdentifier() !=  KeyConfig.TYPE_ID_DOWNLOAD
+									&& drawerItem.getIdentifier() != KeyConfig.TYPE_ID_DOWNLOAD
 									&& !AccountManager.getInstance().isLogin()) {
 								IntentUtil.jumpLogin(MainActivity.this);
 								return false;
@@ -189,17 +194,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				name = (TextUtils.isEmpty(mUser.nick) ? mUser.nick : StringUtil.transePhone(mUser.phone));
 				email = "登陆手机：" + StringUtil.transePhone(mUser.phone);
 			} else {
-				name = mUser.nick;
+				name = (TextUtils.isEmpty(mUser.nick) ? mUser.nick : mUser.username);
 				email = "偶玩账号：" + mUser.username;
 			}
 			mProfile = new ProfileDrawerItem()
 					.withName(name)
 					.withEmail(email)
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
-			if (TextUtils.isEmpty(mUser.img)) {
+			if (TextUtils.isEmpty(mUser.avatar)) {
 				mProfile.withIcon(R.drawable.ic_img_default);
 			} else {
-				mProfile.withIcon(mUser.img);
+				mProfile.withIcon(mUser.avatar);
 			}
 		}
 	}
@@ -229,10 +234,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (AccountManager.getInstance().isLogin()) {
 			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
-			if (TextUtils.isEmpty(mUser.img)) {
+			if (TextUtils.isEmpty(mUser.avatar)) {
 				ivProfile.setImageResource(R.drawable.ic_img_default);
 			} else {
-				ImageLoader.getInstance().displayImage(mUser.img, ivProfile);
+				ImageLoader.getInstance().displayImage(mUser.avatar, ivProfile);
 			}
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_img_default);
@@ -295,10 +300,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		switch (v.getId()) {
 			case R.id.ctv_gift:
+				startClockService();
 				setCurSelected(0);
 				break;
 			case R.id.ctv_game:
 				setCurSelected(1);
+				stopClockService();
 				break;
 			case R.id.sl_search:
 				IntentUtil.jumpSearch(MainActivity.this);
@@ -334,6 +341,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
+	private void startClockService() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.e("service start");
+		}
+		Intent intent = new Intent(MainActivity.this, ClockService.class);
+		startService(intent);
+	}
+
+	private void stopClockService() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.e("service stop");
+		}
+		Intent intent = new Intent(MainActivity.this, ClockService.class);
+		stopService(intent);
+	}
+
+
 	@Override
 	public void onBackPressed() {
 		if (mDrawer != null && mDrawer.isDrawerOpen()) {
@@ -342,6 +366,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
+			stopClockService();
 			mApp.exit();
 			finish();
 			System.exit(0);

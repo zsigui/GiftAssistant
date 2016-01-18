@@ -154,7 +154,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 
-
 		mApp.setGlobalInit(true);
 	}
 
@@ -167,7 +166,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 		userInfo.bean = 10;
 		userInfo.giftCount = 1;
 		userInfo.loginType = 1;
-		userInfo.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
+		userInfo.avatar = "http://owan-avatar.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
 		userInfo.nick = "Jackie";
 		userInfo.uid = 11124444;
 		userInfo.phone = "18826401111";

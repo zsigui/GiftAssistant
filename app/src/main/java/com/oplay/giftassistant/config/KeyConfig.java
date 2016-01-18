@@ -29,12 +29,13 @@ public class KeyConfig {
 	public static final int TYPE_ID_MSG = 0x109;
 	public static final int TYPE_ID_PROFILE = 0x110;
 	public static final int TYPE_ID_FEEDBACK = 0x111;
+	public static final int TYPE_ID_USERINFO = 0x112;
 
 	/* login activity */
-	public static final int TYPE_ID_LOGIN_MAIN = 0x111;
-	public static final int TYPE_ID_OUWAN_LOGIN = 0x112;
-	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x113;
-	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x114;
+	public static final int TYPE_ID_LOGIN_MAIN = 0x151;
+	public static final int TYPE_ID_OUWAN_LOGIN = 0x152;
+	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x153;
+	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x154;
 
 	/* game list activity */
 	// 新游推荐

@@ -167,7 +167,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh_2 {
 			ng.id = i;
 			ng.status = GiftTypeUtil.STATUS_SEIZE;
 			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-img.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
+			ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
 			ng.name = "普通礼包";
 			ng.isLimit = false;
 			ng.score = (int) (Math.random() * 100) * 10;

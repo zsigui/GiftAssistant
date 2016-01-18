@@ -1,7 +1,9 @@
 package com.oplay.giftassistant.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.base.BaseRVHolder;
-import com.oplay.giftassistant.adapter.other.AutoMeasureGridLayoutManager;
-import com.oplay.giftassistant.adapter.other.AutoMeasureLinearLayoutManager;
 import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
+import com.oplay.giftassistant.adapter.other.GameSuperLinearLayoutManager;
 import com.oplay.giftassistant.adapter.other.HeaderFooterDividerItemDecoration;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.IndexTypeUtil;
@@ -23,7 +25,7 @@ import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.AppStatus;
-import com.oplay.giftassistant.model.data.resp.IndexGameBanner;
+import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.util.IntentUtil;
@@ -96,7 +98,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		mData = data;
 	}
 
-	public void updateBanners(ArrayList<IndexGameBanner> banners) {
+	public void updateBanners(ArrayList<IndexBanner> banners) {
 		if (banners == null || mBannerVH == null || mData == null) {
 			return;
 		}
@@ -105,7 +107,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		for (int i = 0; i < banners.size(); i++) {
 			View v = LayoutInflater.from(mContext).inflate(R.layout.view_banner_img, null);
 			vs.add(v);
-			final IndexGameBanner banner = banners.get(i);
+			final IndexBanner banner = banners.get(i);
 			ImageLoader.getInstance().displayImage(banner.url, (ImageView) v);
 			v.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -122,7 +124,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 	 *
 	 * @param banner
 	 */
-	private void handleBannerJump(IndexGameBanner banner) {
+	private void handleBannerJump(IndexBanner banner) {
 
 	}
 
@@ -140,7 +142,16 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 		mData.recommend = data;
 		data.initAppInfoStatus(mContext);
-		ImageLoader.getInstance().displayImage(data.banner, mRecommendVH.ivBanner);
+		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.ic_img_empty)
+				.showImageOnFail(R.drawable.ic_img_fail)
+				.showImageOnLoading(R.drawable.ic_img_loading)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.delayBeforeLoading(400)
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.build();
+		ImageLoader.getInstance().displayImage(data.banner, mRecommendVH.ivBanner, displayOptions);
 		ImageLoader.getInstance().displayImage(data.img, mRecommendVH.ivIcon);
 		mRecommendVH.tvName.setText(data.name);
 		mRecommendVH.tvSize.setText(data.size);
@@ -187,7 +198,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				if (mGameNewVH != null) {
 					return mGameNewVH;
 				}
-				return new GameNewVH(mInflater.inflate(R.layout.view_game_hot, parent, false));
+				return new GameNewVH(mInflater.inflate(R.layout.view_game_new, parent, false));
 			default:
 				throw new IllegalArgumentException("bad viewType : " + viewType);
 		}
@@ -273,7 +284,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		public GameHotVH(View itemView) {
 			super(itemView);
 			rvContainer = getViewById(R.id.rv_content);
-			rvContainer.setLayoutManager(new AutoMeasureGridLayoutManager(mContext, 4));
+			rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
 			rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
 			adapter = new IndexGameHotWithTitleAdapter(mContext);
 			rvContainer.setAdapter(adapter);
@@ -307,7 +318,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		public GameNewVH(View itemView) {
 			super(itemView);
 			rvContainer = getViewById(R.id.rv_content);
-			rvContainer.setLayoutManager(new AutoMeasureLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+			rvContainer.setLayoutManager(new GameSuperLinearLayoutManager(rvContainer));
 			rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
 			adapter = new IndexGameNewWithTitleAdapter(mContext);
 			rvContainer.setAdapter(adapter);

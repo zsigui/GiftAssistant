@@ -1,8 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:orientation = "vertical"
+              android:background = "@color/co_common_content_bg"
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 
+	<RelativeLayout
+			android:id = "@+id/rl_avatar"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:layout_marginTop = "@dimen/di_index_module_gap"
+			android:layout_height = "wrap_content"
+			android:paddingTop = "@dimen/di_index_hoz_module_top_bottom"
+			android:paddingBottom = "@dimen/di_index_hoz_module_top_bottom"
+			android:clickable = "true" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "头像" />
+
+		<ImageView
+				android:id = "@+id/iv_icon"
+				android:contentDescription = "@null"
+				style = "@style/DefaultImageView.Icon"
+				android:layout_alignParentRight = "true"
+				android:src = "@drawable/test" />
+
+	</RelativeLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<RelativeLayout
+			android:id = "@+id/rl_nick"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:clickable = "true" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_user_nick" />
+
+		<TextView
+				android:id = "@+id/tv_nick"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:paddingRight = "10dp" />
+
+	</RelativeLayout >
+
+	<LinearLayout
+			android:id = "@+id/rl_login"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:layout_marginTop = "@dimen/di_index_module_gap"
+			android:orientation = "horizontal"
+			android:gravity = "center_vertical"
+			android:clickable = "true" >
+
+		<TextView
+				android:id = "@+id/tv_login_title"
+				style = "@style/DefaultTextView.Header"
+				android:layout_weight = "1"
+				android:layout_width = "match_parent"
+				android:text = "@string/st_user_phone_login" />
+
+		<TextView
+				android:id = "@+id/tv_login"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:paddingRight = "10dp"
+				android:text = "@string/st_user_unbind" />
+
+		<ImageView
+				android:id = "@+id/iv_login"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingRight = "10dp"
+				android:src = "@drawable/ic_arrow_more" />
+
+	</LinearLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<LinearLayout
+			android:id = "@+id/rl_bind"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:orientation = "horizontal"
+			android:gravity = "center_vertical"
+			android:clickable = "true" >
+
+		<TextView
+				android:id = "@+id/tv_bind_title"
+				style = "@style/DefaultTextView.Header"
+				android:layout_weight = "1"
+				android:layout_width = "match_parent"
+				android:text = "@string/st_user_ouwan_bind" />
+
+		<TextView
+				android:id = "@+id/tv_bind"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:paddingRight = "10dp"
+				android:text = "@string/st_user_unbind" />
+
+		<ImageView
+				android:id = "@+id/iv_bind"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingRight = "10dp"
+				android:src = "@drawable/ic_arrow_more" />
+
+	</LinearLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<RelativeLayout
+			android:id = "@+id/rl_modify_pwd"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:clickable = "true" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "修改登录密码" />
+
+		<TextView
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:paddingRight = "10dp"
+				android:textStyle = "bold"
+				android:drawableRight = "@drawable/ic_arrow_more"
+				android:text = "" />
+
+	</RelativeLayout >
+
+	<TextView
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:textSize = "10sp"
+			android:paddingRight = "@dimen/di_index_hoz_module_icon_gap"
+			android:paddingLeft = "@dimen/di_index_hoz_module_margin_left"
+			android:paddingTop = "15dp"
+			android:textColor = "@color/co_common_text_second"
+			android:text = "@string/st_user_hint" />
 
 </LinearLayout >

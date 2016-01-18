@@ -15,6 +15,11 @@ public class UserInfo implements Serializable {
 	@SerializedName("login_type")
 	public int loginType;
 	/**
+	 * 0未绑定 1绑定 ， 当且仅当login_type为手机时可用
+	 */
+	@SerializedName("bind_ouwan_status")
+	public int bindOuwanStatus;
+	/**
 	 * 用户id
 	 */
 	@SerializedName("user_id")
@@ -35,7 +40,7 @@ public class UserInfo implements Serializable {
 	 * 用户头像url
 	 */
 	@SerializedName("user_img")
-	public String img;
+	public String avatar;
 
 	/**
 	 * 手机号码，绑定的手机号

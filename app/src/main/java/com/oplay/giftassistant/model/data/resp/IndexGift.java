@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class IndexGift implements Serializable {
 
 	@SerializedName("banner")
-	public ArrayList<IndexGiftBanner> banner;
+	public ArrayList<IndexBanner> banner;
 
 	@SerializedName("like")
 	public ArrayList<IndexGiftLike> like;

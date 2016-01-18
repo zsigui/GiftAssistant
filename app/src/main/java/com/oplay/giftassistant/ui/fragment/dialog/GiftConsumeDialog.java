@@ -26,17 +26,17 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 	private static final String TITLE_BEAN_SCORE = "积分或偶玩豆消耗";
 	private static final String TITLE_SCORE = "积分消耗";
 	private static final String TITLE_BEAN = "偶玩豆消耗";
-	private static final String REMAIN_BOTH = "余额：<img src='ic_score'/>%d 和 <img src='ic_bean'> %d";
-	private static final String REMAIN_SCORE = "余额：<img src='ic_score'/> %d";
-	private static final String REMAIN_BEAN = "余额：<img src='ic_bean'> %d";
-	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/> <font color='#f85454'>%d</font> " +
-			"或 <img src='ic_bean'> <font color='#f85454'>%d</font>，";
+	private static final String REMAIN_BOTH = "余额：<avatar src='ic_score'/>%d 和 <avatar src='ic_bean'> %d";
+	private static final String REMAIN_SCORE = "余额：<avatar src='ic_score'/> %d";
+	private static final String REMAIN_BEAN = "余额：<avatar src='ic_bean'> %d";
+	private static final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<avatar src='ic_score'/> <font color='#f85454'>%d</font> " +
+			"或 <avatar src='ic_bean'> <font color='#f85454'>%d</font>，";
 	private static final String BEAN_SCORE_BOTH_NOT_ENOUGH = BEAN_SCORE_BOTH_BASE + "余额不足。";
 	private static final String BEAN_SCORE_BOTH_ENOUGH = BEAN_SCORE_BOTH_BASE + "确认抢号吗?";
-	private static final String SCORE_BASE = "抢该礼包将消耗：<img src='ic_score'/> <font color='#f85454'>%d</font>，";
+	private static final String SCORE_BASE = "抢该礼包将消耗：<avatar src='ic_score'/> <font color='#f85454'>%d</font>，";
 	private static final String SCORE_NOT_ENOUGH = SCORE_BASE + "余额不足。";
 	private static final String SCORE_ENOUGH = SCORE_BASE + "确认抢号吗?";
-	private static final String BEAN_BASE = "抢该礼包将消耗：<img src='ic_bean'/> <font color='#f85454'>%d</font>，";
+	private static final String BEAN_BASE = "抢该礼包将消耗：<avatar src='ic_bean'/> <font color='#f85454'>%d</font>，";
 	private static final String BEAN_NOT_ENOUGH = BEAN_BASE + "余额不足。";
 	private static final String BEAN_ENOUGH = BEAN_BASE + "确认抢号吗?";
 

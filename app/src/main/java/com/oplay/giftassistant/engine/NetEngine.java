@@ -5,7 +5,7 @@ import com.oplay.giftassistant.model.data.req.ReqGetCode;
 import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.req.ReqLogin;
-import com.oplay.giftassistant.model.data.req.ReqModifyAvater;
+import com.oplay.giftassistant.model.data.req.ReqModifyAvatar;
 import com.oplay.giftassistant.model.data.req.ReqModifyNick;
 import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
@@ -16,6 +16,8 @@ import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
+import com.oplay.giftassistant.model.data.resp.ModifyAvatar;
+import com.oplay.giftassistant.model.data.resp.ModifyNick;
 import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.data.resp.PayCode;
@@ -139,13 +141,19 @@ public interface NetEngine {
 	 * 修改用户昵称
 	 */
 	@POST(NetUrl.USER_MODIFY_NICK)
-	Call<JsonRespBase<UserModel>> modifyUserNick(@Body JsonReqBase<ReqModifyNick> reqData);
+	Call<JsonRespBase<ModifyNick>> modifyUserNick(@Body JsonReqBase<ReqModifyNick> reqData);
 
 	/**
 	 * 修改用户头像
 	 */
 	@POST(NetUrl.USER_MODIFY_AVATAR)
-	Call<JsonRespBase<UserModel>> modifyUserAvater(@Body JsonReqBase<ReqModifyAvater> reqData);
+	Call<JsonRespBase<ModifyAvatar>> modifyUserAvatar(@Body JsonReqBase<ReqModifyAvatar> reqData);
+
+	/**
+	 * 获取个人信息接口
+	 */
+	@POST(NetUrl.USER_GET_INFO)
+	Call<JsonRespBase<UserModel>> getUserInfo(@Body JsonReqBase<String> reqData);
 
 
 	/* ---------------- 积分接口  ---------------- */

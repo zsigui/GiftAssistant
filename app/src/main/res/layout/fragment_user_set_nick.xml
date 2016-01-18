@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:background = "@color/co_common_content_bg"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+	<RelativeLayout
+			android:id = "@+id/rl_avatar"
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:layout_marginTop = "@dimen/di_index_module_gap"
+			android:layout_height = "wrap_content"
+			android:paddingTop = "@dimen/di_index_hoz_module_top_bottom"
+			android:paddingBottom = "@dimen/di_index_hoz_module_top_bottom"
+			android:clickable = "true" >
+
+		<TextView
+				android:id="@+id/tv_nick"
+				style = "@style/DefaultTextView.Header"
+				android:text = "昵称" />
+
+		<EditText
+				android:id="@+id/et_nick"
+				style="@style/DefaultTextView.Header"
+				android:layout_width = "match_parent"
+				android:text="绿叶"
+				android:layout_toRightOf="@+id/tv_nick"
+				android:layout_toLeftOf="@+id/iv_clear"
+				android:paddingLeft="20dp"
+				android:background="@null"/>
+		<TextView
+				android:id = "@+id/iv_clear"
+				android:contentDescription = "@null"
+				style="@style/DefaultImageView"
+				android:layout_alignParentRight="true"
+				android:visibility="gone"
+				android:drawableLeft = "@drawable/ic_input_clear" />
+
+	</RelativeLayout >
+
+</LinearLayout >

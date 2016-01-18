@@ -124,7 +124,7 @@ public class NetUrl {
 	/**
 	 * 获取用户个人信息
 	 */
-	public static final String USER_GET_INFO = "defaul";
+	public static final String USER_GET_INFO = "api/account/get_account_info";
 
 	/**
 	 * 修改用户昵称
@@ -134,7 +134,7 @@ public class NetUrl {
 	/**
 	 * 修改用户头像
 	 */
-	public static final String USER_MODIFY_AVATAR = "defaul";
+	public static final String USER_MODIFY_AVATAR = "api/account/change_account_avartar";
 
 	/**
 	 * 修改绑定手机-第一步

@@ -264,7 +264,7 @@ public class GiftDetailFragment extends BaseFragment {
 		ng1.id = 335;
 		ng1.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
 		ng1.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-		ng1.img = "http://owan-img.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+		ng1.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
 		ng1.name = "至尊礼包";
 		ng1.isLimit = true;
 		ng1.bean = 30;
@@ -284,7 +284,7 @@ public class GiftDetailFragment extends BaseFragment {
 		ng2.id = 336;
 		ng2.status = GiftTypeUtil.STATUS_SEIZE;
 		ng2.priceType = GiftTypeUtil.PAY_TYPE_BEAN;
-		ng2.img = "http://owan-img.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+		ng2.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
 		ng2.name = "高级礼包";
 		ng2.isLimit = true;
 		ng2.bean = 30;
@@ -303,7 +303,7 @@ public class GiftDetailFragment extends BaseFragment {
 		ng3.id = 337;
 		ng3.status = GiftTypeUtil.STATUS_SEIZE;
 		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-		ng3.img = "http://owan-img.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
+		ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";
 		ng3.useStartTime = "2015.12.10 12:00";
 		ng3.useEndTime = "2016.12.10 12:00";
