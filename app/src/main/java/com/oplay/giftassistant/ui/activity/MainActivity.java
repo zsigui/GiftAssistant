@@ -1,6 +1,5 @@
 package com.oplay.giftassistant.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -23,13 +22,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
-import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
-import com.oplay.giftassistant.service.ClockService;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.fragment.game.GameFragment;
@@ -38,7 +35,6 @@ import com.oplay.giftassistant.ui.widget.search.SearchLayout;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.StringUtil;
 import com.oplay.giftassistant.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -76,7 +72,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	protected void onDestroy() {
-		startClockService();
 		super.onDestroy();
 	}
 
@@ -300,12 +295,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		switch (v.getId()) {
 			case R.id.ctv_gift:
-				startClockService();
 				setCurSelected(0);
 				break;
 			case R.id.ctv_game:
 				setCurSelected(1);
-				stopClockService();
 				break;
 			case R.id.sl_search:
 				IntentUtil.jumpSearch(MainActivity.this);
@@ -341,23 +334,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
-	private void startClockService() {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.e("service start");
-		}
-		Intent intent = new Intent(MainActivity.this, ClockService.class);
-		startService(intent);
-	}
-
-	private void stopClockService() {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.e("service stop");
-		}
-		Intent intent = new Intent(MainActivity.this, ClockService.class);
-		stopService(intent);
-	}
-
-
 	@Override
 	public void onBackPressed() {
 		if (mDrawer != null && mDrawer.isDrawerOpen()) {
@@ -366,7 +342,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
-			stopClockService();
 			mApp.exit();
 			finish();
 			System.exit(0);

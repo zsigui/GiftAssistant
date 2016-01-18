@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.util;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
@@ -59,7 +60,15 @@ public class CommonUtil {
 			model.setDd(Global_Runtime_SystemInfo.getDeviceModel());
 			model.setDv(Global_Runtime_SystemInfo.getManufacturerInfo());
 			model.setOs(Global_Runtime_SystemInfo.getDeviceOsRelease());
-			model.setInit(true);
+			if (TextUtils.isEmpty(model.getImei()) || TextUtils.isEmpty(model.getImsi())
+					|| TextUtils.isEmpty(model.getCid()) || TextUtils.isEmpty(model.getMac())
+					|| model.getChn() == -1 || TextUtils.isEmpty(model.getApn())
+					|| TextUtils.isEmpty(model.getCn()) || TextUtils.isEmpty(model.getDd())
+					|| TextUtils.isEmpty(model.getDv()) || TextUtils.isEmpty(model.getOs())) {
+				model.setInit(false);
+			} else {
+				model.setInit(true);
+			}
 		}
 	}
 }

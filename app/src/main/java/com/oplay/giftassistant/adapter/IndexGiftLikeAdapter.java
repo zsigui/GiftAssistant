@@ -9,7 +9,7 @@ import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
-import com.oplay.giftassistant.util.ToastUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike> 
                 @Override
                 public void onClick(View v) {
                     // 去到游戏
-                    ToastUtil.showShort(String.format("%s 游戏跳转", o.name));
+	                IntentUtil.jumpGameDetail(mContext, o.id, o.name);
                 }
             });
         }

@@ -58,8 +58,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mApp = AssistantApp.getInstance();
+		int statusColor = getStatusBarColor();
 		if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().setStatusBarColor(getStatusBarColor());
+			getWindow().setStatusBarColor(statusColor);
 		}
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
 		initView();
@@ -244,11 +245,17 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		}
 		if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 			if (isMainThread()) {
+				if (getTopFragment() != null) {
+					mCurTopFragment.onPause();
+				}
 				return getSupportFragmentManager().popBackStackImmediate();
 			} else {
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
+						if (getTopFragment() != null) {
+							mCurTopFragment.onPause();
+						}
 						getSupportFragmentManager().popBackStackImmediate();
 					}
 				});
@@ -269,12 +276,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	 * 获取当前栈顶Fragment
 	 */
 	public Fragment getTopFragment() {
-		if (mCurTopFragment == null) {
-			int count = getSupportFragmentManager().getBackStackEntryCount();
-			if (count > 0) {
-				mCurTopFragment = getSupportFragmentManager()
-						.findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
-			}
+		int count = getSupportFragmentManager().getBackStackEntryCount();
+		if (count > 0) {
+			mCurTopFragment = getSupportFragmentManager()
+					.findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
 		}
 		return mCurTopFragment;
 	}

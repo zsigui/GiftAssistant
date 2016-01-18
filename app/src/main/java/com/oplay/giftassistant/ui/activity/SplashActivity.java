@@ -150,6 +150,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
+		KLog.e("user", "user = " + user);
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();

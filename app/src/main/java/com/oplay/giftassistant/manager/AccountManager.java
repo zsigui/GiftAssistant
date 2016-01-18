@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -156,11 +157,13 @@ public class AccountManager {
 	 */
 	public void syncCookie(String baseUrl, String cookieVal) {
 		CookieManager.getInstance().setAcceptCookie(true);
+		Log.e("ddddd"," cookieVal = " + cookieVal);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
 			CookieManager.getInstance().flush();
 		} else {
 			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
+			CookieSyncManager.createInstance(mContext);
 			CookieSyncManager.getInstance().sync();
 		}
 	}
@@ -169,10 +172,19 @@ public class AccountManager {
 		if (isLogin()) {
 			String cookie = "cuid=" + getUserSesion().uid + ";" +
 					"sessionid=" +getUserSesion().session + ";";
-			KLog.e("cookie", cookie);
 			syncCookie(WebViewUrl.BASE_URL, cookie);
 		} else {
 			syncCookie(WebViewUrl.BASE_URL, "");
+		}
+	}
+
+	public void syncCookie(String url) {
+		if (isLogin()) {
+			String cookie = "cuid=" + getUserSesion().uid + ";" +
+					"sessionid=" +getUserSesion().session + ";";
+			syncCookie(url, cookie);
+		} else {
+			syncCookie(url, "");
 		}
 	}
 

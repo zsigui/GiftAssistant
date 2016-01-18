@@ -53,7 +53,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void initView() {
-		setContentView(R.layout.activity_common_with_back);
+		setContentView(R.layout.activity_common_with_back_white_bg);
 
 		if (getIntent() != null) {
 			type = getIntent().getIntExtra(KEY_TYPE, TYPE_LIKE);
