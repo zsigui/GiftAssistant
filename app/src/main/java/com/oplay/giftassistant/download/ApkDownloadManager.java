@@ -93,6 +93,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 
 	public void initDownloadList() {
 		mDownloadDBHelper.getDownloadList();
+		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
 	//仅限于初始化的时候用
@@ -148,7 +149,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 					File apkFile = appInfo.getDestFile();
 					if (apkFile != null && apkFile.exists()) {
 						AppDebugConfig.logMethodWithParams(this, "文件已存在,直接安装");
-						//TODO 安装APK
+						appInfo.startInstall();
 						return;
 					} else {
 						AppDebugConfig.logMethodWithParams(this, "文件不存在,重置任务,重新下载安装");
@@ -166,7 +167,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mUrl_AppInfo.put(appInfo.downloadUrl, appInfo);
 		mPackageName_AppInfo.put(appInfo.packageName, appInfo);
 		addPendingTask(appInfo);
-		//TODO 显示Notification
+		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
 	public void restartDownloadTask(IndexGameNew appInfo) {
@@ -223,7 +224,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mUrl_AppInfo.remove(info.downloadUrl);
 		mPackageName_AppInfo.remove(info.packageName);
 		notifyDownloadStatusListeners(info);
-		//TODO 更新Notification
+		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
 	public int getEndOfDownloading() {
@@ -261,7 +262,8 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mManagerList.remove(appInfo);
 		if (DownloadStatus.DOWNLOADING.equals(appInfo.downloadStatus)) {
 			mDownloadingCnt = decrease(mDownloadingCnt);
-			FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 500);
+			FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize,
+					500);
 			task.setIdentify(appInfo.destUrl);
 			stopDownload(task);
 			if (mPendingCnt > 0) {
@@ -472,7 +474,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 				if (AssistantApp.getInstance().isPlayDownloadComplete()) {
 					SoundPlayer.getInstance(mApplicationContext).playDownloadComplete();
 				}
-			}catch (Throwable e) {
+			} catch (Throwable e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(e);
 				}
@@ -483,8 +485,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 			mManagerList.add(mDownloadingCnt + mPendingCnt + mPausedCnt, appInfo);
 			mFinishedCnt++;
 			notifyDownloadStatusListeners(appInfo);
-			//TODO 更新Notification
-			//TODO 自动安装
+			DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
+			DownloadNotificationManager.showDownload(mApplicationContext);
+			appInfo.startInstall();
 		}
 		return false;
 	}
@@ -495,12 +498,12 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		if (appInfo != null) {
 			stopDownloadingTask(appInfo);
 			mManagerList.add(getEndOfPaused(), appInfo);
-			mFinishedCnt++;
 			appInfo.downloadStatus = DownloadStatus.FINISHED;
 			appInfo.completeSize = appInfo.apkFileSize;
 			notifyDownloadStatusListeners(appInfo);
-			//TODO 更新Notification
-			//TODO 自动安装
+			mFinishedCnt++;
+			DownloadNotificationManager.showDownload(mApplicationContext);
+			appInfo.startApp();
 		}
 		return false;
 	}
@@ -508,18 +511,20 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	@Override
 	public boolean onDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus finalDownloadStatus) {
 		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
-			if (appInfo != null) {
-				stopDownloadingTask(appInfo);
-				appInfo.downloadStatus = DownloadStatus.FAILED;
-				mManagerList.add(mDownloadingCnt + mPendingCnt, appInfo);
-				mPausedCnt++;
-				File parent = new File(fileDownloadTask.getStoreFile().getParent());
-				if (parent.getUsableSpace() < fileDownloadTask.getTotalLength()) {
-					//TODO 提示空间不足
-				}else {
-					//TODO 提示下载失败
-				}
-				notifyDownloadStatusListeners(appInfo);
+		if (appInfo != null) {
+			stopDownloadingTask(appInfo);
+			appInfo.downloadStatus = DownloadStatus.FAILED;
+			mManagerList.add(mDownloadingCnt + mPendingCnt, appInfo);
+			mPausedCnt++;
+			File parent = new File(fileDownloadTask.getStoreFile().getParent());
+			if (parent.getUsableSpace() < fileDownloadTask.getTotalLength()) {
+				DownloadNotificationManager.showDownloadFailed(mApplicationContext, appInfo.destUrl, appInfo.name,
+						"手机内存空间不足");
+			} else {
+				DownloadNotificationManager.showDownloadFailed(mApplicationContext, appInfo.destUrl, appInfo.name,
+						null);
+			}
+			notifyDownloadStatusListeners(appInfo);
 		}
 		return false;
 	}
@@ -531,7 +536,10 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	}
 
 	@Override
-	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask, AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker) throws NullPointerException, IOException {
-		return new DefaultAPPDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask
+			fileDownloadTask, AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+			throws NullPointerException, IOException {
+		return new DefaultAPPDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier,
+				iFileAvailableChecker);
 	}
 }

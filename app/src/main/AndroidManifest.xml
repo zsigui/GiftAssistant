@@ -70,7 +70,8 @@
 		<activity
 				android:name = ".ui.activity.MainActivity"
 				android:launchMode = "singleTop"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:screenOrientation="sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 		</activity >
 
@@ -78,37 +79,37 @@
 				android:name = ".ui.activity.SearchActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "stateVisible|adjustPan" />
 
 		<activity
 				android:name = ".ui.activity.GiftListActivity"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.DetailActivity"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.GameListActivity"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.SettingActivity"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.LoginActivity"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<service

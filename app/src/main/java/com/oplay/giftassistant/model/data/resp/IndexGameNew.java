@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.download.ApkDownloadDir;
 import com.oplay.giftassistant.download.ApkDownloadManager;
@@ -220,7 +221,9 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 
 	public void startInstall() {
 		try {
-			InstallAppUtil.install(mContext, this);
+			if (AssistantApp.getInstance().isShouldAutoInstall()) {
+				InstallAppUtil.install(mContext, this);
+			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

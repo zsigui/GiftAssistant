@@ -175,9 +175,13 @@ public class IntentUtil {
 	 * 跳转下载管理界面
 	 */
 	public static void jumpDownloadManager(Context context) {
+		context.startActivity(getJumpDownloadManagerIntent(context));
+	}
+
+	public static Intent getJumpDownloadManagerIntent(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
-		context.startActivity(intent);
+		return intent;
 	}
 
 
