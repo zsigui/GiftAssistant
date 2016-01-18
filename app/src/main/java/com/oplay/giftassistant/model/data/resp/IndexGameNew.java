@@ -32,6 +32,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 
 	static final long FILE_SIZE_KB = 1024;
 	static final long FILE_SIZE_MB = 1024 * 1024;
+	public static final int FAKE_INIT_PROGRESS = 1;
 
 	// 游戏标志
 	@SerializedName("app_id")
@@ -357,5 +358,11 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 				break;
 
 		}
+	}
+
+	public boolean isValid() {
+		return !(id == 0 || TextUtils.isEmpty(name) || apkFileSize == 0 || TextUtils.isEmpty(img) || TextUtils.isEmpty
+				(downloadUrl) || TextUtils.isEmpty(destUrl) || TextUtils.isEmpty(packageName) || TextUtils.isEmpty
+				(versionName));
 	}
 }

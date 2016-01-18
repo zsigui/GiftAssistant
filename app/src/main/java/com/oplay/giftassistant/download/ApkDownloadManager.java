@@ -416,6 +416,22 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		return mUrl_AppInfo.get(url);
 	}
 
+	public long getCompleteSizeByUrl(String url) {
+		final IndexGameNew appInfo = mUrl_AppInfo.get(url);
+		if (appInfo != null) {
+			return appInfo.completeSize;
+		}
+		return 0;
+	}
+
+	public int getProgressByUrl(String url) {
+		final IndexGameNew appInfo = mUrl_AppInfo.get(url);
+		if (appInfo != null && appInfo.apkFileSize > 0) {
+			return (int) (appInfo.completeSize * 100 / appInfo.apkFileSize);
+		}
+		return 0;
+	}
+
 	public List<IndexGameNew> getDownloadList() {
 		initStatus();
 		return mManagerList;

@@ -26,12 +26,12 @@
 			android:layout_height = "wrap_content"
 			android:paddingTop="10dp"
 			android:paddingBottom="10dp"
-			android:gravity="center">
-		<TextView
+			android:gravity="center"
+			android:visibility="gone">
+
+		<com.oplay.giftassistant.ui.widget.button.DownloadButtonView
 				android:id="@+id/btn_download"
-				android:layout_width = "280dp"
-				style="@style/DefaultTextView.BiggerBtn"
-				android:background="@drawable/selector_btn_bigger_green"
-				android:text="下载(145.5M)"/>
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content" />
 	</LinearLayout >
 </RelativeLayout >

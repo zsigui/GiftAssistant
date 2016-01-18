@@ -70,4 +70,7 @@
 
 	<!-- 设置 - 我的钱包 -->
 	<color name = "co_wallet_header_text">#FDBDBD</color>
+
+	<!--下载进度背景-->
+	<color name = "co_btn_download_background">#9ee3c8</color>
 </resources >

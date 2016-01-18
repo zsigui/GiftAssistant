@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android = "http://schemas.android.com/apk/res/android" >
+	<!-- background -->
+	<item android:id = "@android:id/background" >
+		<shape >
+			<corners
+					android:radius = "@dimen/di_btn_bigger_radius" />
+			<solid android:color = "@color/co_btn_green" />
+		</shape >
+	</item >
+	<!-- progress -->
+	<item android:id = "@android:id/progress" >
+		<clip >
+			<shape >
+				<corners
+						android:radius = "@dimen/di_btn_bigger_radius" />
+				<solid android:color = "@color/co_transparent" />
+			</shape >
+		</clip >
+	</item >
+	<!-- second progress -->
+
+	<item android:id = "@android:id/secondaryProgress" >
+		<clip >
+			<shape >
+				<corners
+						android:radius="@dimen/di_btn_bigger_radius" />
+				<solid android:color = "@color/co_transparent" />
+			</shape >
+		</clip >
+	</item >
+</layer-list >
