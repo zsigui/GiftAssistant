@@ -26,7 +26,6 @@ import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
-import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SPUtil;
 import com.oplay.giftassistant.util.SoundPlayer;
@@ -64,7 +63,7 @@ public class AssistantApp extends Application {
 	// 是否启用下载完成提示音
 	private boolean mIsPlayDownloadComplete = false;
 	// 是否已经完成全局初始化
-	private boolean mIsGlobalInit;
+	private boolean mIsGlobalInit = false;
 	// 是否允许显示下载，根据渠道获取而定
 	private boolean mIsAllowDownload = true;
 
@@ -83,7 +82,6 @@ public class AssistantApp extends Application {
 		initRetrofit();
 		initLoadingView();
 		initDrawerImageLoader();
-		OuwanSDKManager.getInstance().init();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
@@ -106,6 +104,7 @@ public class AssistantApp extends Application {
 	 * do work to release the resource when app exit
 	 */
 	public void exit() {
+		setGlobalInit(false);
 		ImageLoader.getInstance().clearMemoryCache();
 		ImageLoader.getInstance().stop();
 		ImageLoader.getInstance().destroy();

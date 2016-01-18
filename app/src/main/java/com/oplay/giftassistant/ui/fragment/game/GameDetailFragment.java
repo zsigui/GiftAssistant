@@ -24,16 +24,16 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	private static final String KEY_COLOR = "key_data_color";
 
 	private int mId;
-	private int mStatusBarColor;
 	private LinearLayout downloadLayout;
 	private DownloadButtonView btnDownload;
 	private IndexGameNew mAppInfo;
+	private String mStatusBarColor;
 
-	public static GameDetailFragment newInstance(int id, int color) {
+	public static GameDetailFragment newInstance(int id, String color) {
 		GameDetailFragment fragment = new GameDetailFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt(KEY_ID, id);
-		bundle.putInt(KEY_COLOR, color);
+		bundle.putString(KEY_COLOR, color);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -59,15 +59,10 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 			return;
 		}
 		mId = getArguments().getInt(KEY_ID);
-		mStatusBarColor = getArguments().getInt(KEY_COLOR);
-		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + getResources().getColor(mStatusBarColor);
+		mStatusBarColor = getArguments().getString(KEY_COLOR, "f85454");
+		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor;
 		if (AccountManager.getInstance().isLogin()) {
 			AccountManager.getInstance().syncCookie();
-			AccountManager.getInstance().syncCookie(url);
-		} else {
-			// 测试
-			AccountManager.getInstance().syncCookie(WebViewUrl.BASE_URL, "sessionid=&cuid=0");
-			AccountManager.getInstance().syncCookie(url, "sessionid=&cuid=0");
 		}
 		loadUrl(url);
 		mIsLoading = true;

@@ -40,6 +40,20 @@ public class DateUtil {
 		return calendar.getTime();
 	}
 
+	public static long getTime(String dateStr) {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+		long curTimeMillisecond = 0;
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
+			curTimeMillisecond = date.getTime();
+		} catch (ParseException e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, e);
+			}
+		}
+		return curTimeMillisecond;
+	}
+
 	/**
 	 * 获取当前日期n天前后的日期字符串
 	 *
@@ -58,6 +72,10 @@ public class DateUtil {
 	 */
 	public static boolean isToday(String date) {
 		try {
+			if (TextUtils.isEmpty(date) || date.length() < 10) {
+				// 日期异常
+				return false;
+			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 			String before = sdf.format(sdf.parse(date));
 			return before.equals(sdf.format(new Date(System.currentTimeMillis())));

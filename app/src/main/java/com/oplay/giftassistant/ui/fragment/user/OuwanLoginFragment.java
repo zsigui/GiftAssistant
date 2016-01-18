@@ -11,6 +11,7 @@ import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.model.data.req.ReqLogin;
 import com.oplay.giftassistant.model.data.resp.UserModel;
@@ -134,7 +135,9 @@ public class OuwanLoginFragment extends BaseFragment {
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
 											&& response.body().getCode() == StatusCode.SUCCESS) {
-										AccountManager.getInstance().setUser(response.body().getData());
+										UserModel userModel = response.body().getData();
+										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
+										AccountManager.getInstance().setUser(userModel);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}

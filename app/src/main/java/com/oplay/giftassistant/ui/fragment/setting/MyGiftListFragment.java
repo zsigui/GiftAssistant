@@ -3,6 +3,7 @@ package com.oplay.giftassistant.ui.fragment.setting;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.MyGiftListAdapter;
@@ -13,6 +14,7 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
@@ -20,6 +22,7 @@ import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
 import com.oplay.giftassistant.util.DateUtil;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -63,10 +66,16 @@ public class MyGiftListFragment extends BaseFragment_Refresh_2<IndexGiftNew> {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
-		mAdapter = new MyGiftListAdapter(mDataView);
 		if (getArguments() != null) {
 			mType = getArguments().getInt(KeyConfig.KEY_DATA);
 		}
+		mAdapter = new MyGiftListAdapter(mDataView, mType);
+		mAdapter.setItemClickListener(new OnItemClickListener<IndexGiftNew>() {
+			@Override
+			public void onItemClick(IndexGiftNew item, View view, int position) {
+				IntentUtil.jumpGiftDetail(getContext(), item.id, String.format("[%s]%s", item.name, item.gameName));
+			}
+		});
 		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 		mDataView.setAdapter(mAdapter);

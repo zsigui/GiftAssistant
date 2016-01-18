@@ -67,6 +67,6 @@ public class IndexGiftNew implements Serializable{
 	@SerializedName("remark")
     public String note;
 	// 礼包码
-	@SerializedName("code")
+	@SerializedName("gift_key")
 	public String code;
 }

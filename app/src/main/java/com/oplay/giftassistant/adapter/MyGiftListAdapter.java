@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.util.DateUtil;
@@ -28,9 +29,11 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 
 	private OnItemClickListener<IndexGiftNew> mItemClickListener;
+	private int mType;
 
-	public MyGiftListAdapter(RecyclerView recyclerView) {
+	public MyGiftListAdapter(RecyclerView recyclerView, int type) {
 		super(recyclerView, R.layout.item_list_my_gift);
+		this.mType = type;
 	}
 
 	public void setItemClickListener(OnItemClickListener<IndexGiftNew> itemClickListener) {
@@ -53,7 +56,7 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 				+ DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm"));
 		bgaViewHolderHelper.setText(R.id.tv_gift_code,
 				Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", o.code)));
-		if ((int) (Math.random() * 2) == 0) {
+		if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
 			bgaViewHolderHelper.getView(R.id.btn_copy).setEnabled(false);
 			bgaViewHolderHelper.setText(R.id.btn_copy, "已结束");
 		} else {

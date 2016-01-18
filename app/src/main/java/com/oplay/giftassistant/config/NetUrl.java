@@ -92,7 +92,7 @@ public class NetUrl {
 	/**
 	 * 获取某类游戏
 	 */
-	public static final String GAME_GET_TYPE = "labels_app";
+	public static final String GAME_GET_TYPE = "label_apps";
 
 	/* 用户接口 */
 

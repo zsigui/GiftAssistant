@@ -30,8 +30,6 @@
 	<string name = "st_gift_hint" >▌特别说明</string >
 	<string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回积分或者偶玩豆，请理解虚拟物品的特殊性！</string >
 	<!-- 游戏状态 -->
-
-
 	<string name = "st_tabs_home_gift" >礼包</string >
 	<string name = "st_tabs_index_game" >游戏</string >
 
@@ -43,6 +41,13 @@
 	<string name = "st_tabs_game_hot" >热门游戏</string >
 	<string name = "st_tabs_game_week" >本周热榜</string >
 	<string name = "st_tabs_game_feature" >期待榜</string >
+
+	<!-- 游戏详情主题颜色表 -->
+	<string name = "st_rainbow_color_1">343754</string>
+	<string name = "st_rainbow_color_2">1d404b</string>
+	<string name = "st_rainbow_color_3">422f25</string>
+	<string name = "st_rainbow_color_4">533341</string>
+	<string name = "st_rainbow_color_5">f85454</string>
 
 	<!-- 设置 -->
 	<string name = "st_setting_title" >设置</string >

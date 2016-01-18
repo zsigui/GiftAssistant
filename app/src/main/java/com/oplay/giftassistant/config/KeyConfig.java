@@ -30,6 +30,8 @@ public class KeyConfig {
 	public static final int TYPE_ID_PROFILE = 0x110;
 	public static final int TYPE_ID_FEEDBACK = 0x111;
 	public static final int TYPE_ID_USERINFO = 0x112;
+	public static final int TYPE_ID_USER_SET_NICK = 0x113;
+	public static final int TYPE_ID_USER_SET_AVATAR = 0x114;
 
 	/* login activity */
 	public static final int TYPE_ID_LOGIN_MAIN = 0x151;
@@ -56,7 +58,10 @@ public class KeyConfig {
 	public static final int REQUEST_SET_NICK = 0xA01;
 
 	/* my gift list fragment */
-	public static final int TYPE_KEY_SEIZED = 0x210;
-	public static final int TYPE_KEY_OVERTIME = 0x211;
-	public static final int TYPE_KEY_SEARCH = 0x212;
+	// 已抢
+	public static final int TYPE_KEY_SEIZED = 1;
+	// 已淘
+	public static final int TYPE_KEY_SEARCH = 2;
+	// 已过期
+	public static final int TYPE_KEY_OVERTIME = 3;
 }

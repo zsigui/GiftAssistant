@@ -110,6 +110,13 @@ public class PayManager {
 	 */
 	public void chargeGift(final Context context, final IndexGiftNew gift, final GiftButton button) {
 		if (AccountManager.getInstance().isLogin()) {
+			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+					&& gift.score <= AccountManager.getInstance().getUserInfo().score) {
+				// 只有积分支付方式且积分充足，直接执行抢号
+				handleScorePay(context, gift, button, true);
+				return;
+			}
+			// 积分或偶玩豆支付方式
 			final GiftConsumeDialog consumeDialog = GiftConsumeDialog.newInstance();
 			consumeDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 				@Override

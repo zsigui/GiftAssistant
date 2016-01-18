@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.model.data.resp.UserSession;
 import com.socks.library.KLog;
 
+import net.ouwan.umipay.android.api.AccountCallbackListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
@@ -50,7 +52,17 @@ public class OuwanSDKManager implements InitCallbackListener {
 		gameParamInfo.setAppId("3c453306edd43bbc");//设置AppID
 		gameParamInfo.setAppSecret("3b4446772144ade3");//设置AppSecret
 		gameParamInfo.setTestMode(true); //设置测试模式，模式非测试模式
-		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, null);
+		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
+			@Override
+			public void onLogin(int code, GameUserInfo userInfo) {
+
+			}
+
+			@Override
+			public void onLogout(int code, Object params) {
+
+			}
+		});
 	}
 
 	public void login() {
@@ -58,7 +70,14 @@ public class OuwanSDKManager implements InitCallbackListener {
 		// 此处游戏账号只为占位
 		GameUserInfo sdkUser = new GameUserInfo();
 		sdkUser.setOpenId(user.openId);
-		UmipayAccount account = new UmipayAccount(user.openId, user.session, UmipayAccount.TYPE_NORMAL);
+		UmipayAccount account;
+		if (AccountManager.getInstance().getUserInfo().loginType == UserTypeUtil.TYPE_POHNE) {
+			account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_PHONE);
+		} else {
+			account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_NORMAL);
+		}
+		account.setSession(user.session);
+		account.setUid(user.uid);
 		account.setGameUserInfo(sdkUser);
 		UmipayAccountManager.getInstance(mContext).setCurrentAccount(account);
 		UmipayAccountManager.getInstance(mContext).setIsLogout(false);
@@ -108,6 +127,11 @@ public class OuwanSDKManager implements InitCallbackListener {
 		payInfo.setRoleId(String.valueOf(userId));
 		payInfo.setRoleName("");
 		payInfo.setServiceType(UmipaymentInfo.SERVICE_TYPE_QUOTA);
+		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount());
+		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount()
+				.getGameUserInfo());
+		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount().getSession());
+		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount().getGameUserInfo().getOpenId());
 		UmipaySDKManager.showPayView(mContext, payInfo, listener);
 	}
 
@@ -150,6 +174,14 @@ public class OuwanSDKManager implements InitCallbackListener {
 	}
 
 	public void showChangePhoneView() {
+
+	}
+
+	public void showBindPhoneView() {
+		
+	}
+
+	public void showBindOuwanView() {
 
 	}
 }

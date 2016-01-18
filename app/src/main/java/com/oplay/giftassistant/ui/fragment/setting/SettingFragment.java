@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
@@ -17,6 +18,7 @@ import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftassistant.ui.widget.ToggleButton;
 import com.oplay.giftassistant.util.DataClearUtil;
+import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_File;
 
@@ -187,10 +189,16 @@ public class SettingFragment extends BaseFragment {
 						Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
 							@Override
 							public void onResponse(Response<Void> response, Retrofit retrofit) {
+								if (AppDebugConfig.IS_FRAG_DEBUG) {
+									KLog.e(response == null ? "response null" : response.code());
+								}
 							}
 
 							@Override
 							public void onFailure(Throwable t) {
+								if (AppDebugConfig.IS_FRAG_DEBUG) {
+									KLog.e(t);
+								}
 							}
 						});
 					}

@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.model.json.base;
 
 import com.google.gson.annotations.SerializedName;
+import com.oplay.giftassistant.config.StatusCode;
 
 import java.io.Serializable;
 
@@ -60,5 +61,9 @@ public class JsonRespBase<T> implements Serializable {
 
 	public String error() {
 		return "c : " + mCode + ", m : " + mMsg;
+	}
+
+	public boolean isSuccess() {
+		return getCode() == StatusCode.SUCCESS;
 	}
 }

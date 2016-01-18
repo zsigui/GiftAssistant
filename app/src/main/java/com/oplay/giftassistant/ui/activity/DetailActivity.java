@@ -18,8 +18,12 @@ public class DetailActivity extends BaseAppCompatActivity {
 
 	private int mDetailId;
 	private String mDetailName;
-	private int mStatusBarColor;
+	private int mStatusBarColorIndex;
 	private int mType;
+	private int[] mThemeColor = {R.color.co_rainbow_color_1, R.color.co_rainbow_color_2,
+			R.color.co_rainbow_color_3, R.color.co_rainbow_color_4, R.color.co_rainbow_color_5};
+	private int[] mThemeColorStr = {R.string.st_rainbow_color_1, R.string.st_rainbow_color_2,
+			R.string.st_rainbow_color_3, R.string.st_rainbow_color_4, R.string.st_rainbow_color_5};
 
 	@Override
 	protected void processLogic() {
@@ -34,10 +38,8 @@ public class DetailActivity extends BaseAppCompatActivity {
 			mType = getIntent().getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
 		}
 		if (mType == KeyConfig.TYPE_ID_GAME_DETAIL) {
-			int[] colors = {R.color.co_rainbow_color_1, R.color.co_rainbow_color_2,
-					R.color.co_rainbow_color_3, R.color.co_rainbow_color_4};
-			mStatusBarColor = colors[(int) (Math.random() * 4)];
-			return getResources().getColor(mStatusBarColor);
+			mStatusBarColorIndex = (int) (Math.random() * 4);
+			return getResources().getColor(mThemeColor[mStatusBarColorIndex]);
 		} else {
 			return super.getStatusBarColor();
 		}
@@ -56,10 +58,12 @@ public class DetailActivity extends BaseAppCompatActivity {
 	public void loadData() {
 		switch (mType) {
 			case KeyConfig.TYPE_ID_GAME_DETAIL:
-				replaceFragWithTitle(R.id.fl_container, GameDetailFragment.newInstance(mDetailId, mStatusBarColor),
+				replaceFragWithTitle(R.id.fl_container,
+						GameDetailFragment.newInstance(mDetailId,
+								getResources().getString(mThemeColorStr[mStatusBarColorIndex])),
 						"游戏专区", true);
 				if (mToolbar != null) {
-					mToolbar.setBackgroundResource(mStatusBarColor);
+					mToolbar.setBackgroundResource(mThemeColor[mStatusBarColorIndex]);
 				}
 				break;
 			case KeyConfig.TYPE_ID_GIFT_DETAIL:

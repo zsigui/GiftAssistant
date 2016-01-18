@@ -115,6 +115,13 @@
 		<service
 				android:name = ".service.ClockService"
 				android:exported = "false" />
+
+		<meta-data
+				android:name = "UMIPAY_CHANNEL"
+				android:value = "0" />
+		<meta-data
+				android:name = "UMIPAY_SUBCHANNEL"
+				android:value = "0" />
 	</application >
 
 </manifest >

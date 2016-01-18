@@ -247,23 +247,18 @@ public class UploadAvatarFragment extends BaseFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		try {
-			KLog.e();
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.logMethodWithParams(this, "onActivityResult_Modify_UserInfo, requestCode:" +
 						requestCode + "  resultCode:" + resultCode + "  data:" + data);
 			}
-			KLog.e();
 			if (resultCode != Activity.RESULT_OK) {
 				return;
 			}
-			KLog.e();
 			switch (requestCode) {
 				case REQ_ID_PHOTO_ALBUM:
 					// 调用Gallery返回的
 //                    final Bitmap photo = data.getParcelableExtra("data");
-					KLog.e();
 					if (data != null && data.getData() != null) {
-						KLog.e();
 						final Uri result = data.getData();
 						final String photoFilePath = getPath(getActivity(), result);
 						if (AppDebugConfig.IS_DEBUG) {

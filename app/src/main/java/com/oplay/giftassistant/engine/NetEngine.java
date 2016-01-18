@@ -10,6 +10,7 @@ import com.oplay.giftassistant.model.data.req.ReqModifyNick;
 import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.req.ReqPayCode;
+import com.oplay.giftassistant.model.data.req.ReqTaskReward;
 import com.oplay.giftassistant.model.data.resp.GameTypeMain;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
@@ -22,6 +23,7 @@ import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.data.resp.PayCode;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
+import com.oplay.giftassistant.model.data.resp.TaskReward;
 import com.oplay.giftassistant.model.data.resp.UpdateSesion;
 import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.json.JsonRespGiftList;
@@ -162,5 +164,11 @@ public interface NetEngine {
 	 * 获取积分任务
 	 */
 	@POST(NetUrl.SCORE_GET_TASK)
-	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<Void> reqData);
+	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<String> reqData);
+
+	/**
+	 * 获取积分任务奖励
+	 */
+	@POST(NetUrl.SCORE_GET_TASK)
+	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
 }

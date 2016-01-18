@@ -242,7 +242,6 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 	/* 更新控件数据 start */
 
 	public void updateData(IndexGift data) {
-		KLog.e(data);
 		if (data == null) {
 			return;
 		}

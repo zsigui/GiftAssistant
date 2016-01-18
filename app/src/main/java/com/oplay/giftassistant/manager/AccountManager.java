@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -157,7 +156,6 @@ public class AccountManager {
 	 */
 	public void syncCookie(String baseUrl, String cookieVal) {
 		CookieManager.getInstance().setAcceptCookie(true);
-		Log.e("ddddd"," cookieVal = " + cookieVal);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
 			CookieManager.getInstance().flush();
@@ -178,16 +176,6 @@ public class AccountManager {
 		}
 	}
 
-	public void syncCookie(String url) {
-		if (isLogin()) {
-			String cookie = "cuid=" + getUserSesion().uid + ";" +
-					"sessionid=" +getUserSesion().session + ";";
-			syncCookie(url, cookie);
-		} else {
-			syncCookie(url, "");
-		}
-	}
-
 	/**
 	 * 更新用户的Session
 	 */
@@ -205,7 +193,7 @@ public class AccountManager {
 		@Override
 		public void run() {
 			if (NetworkUtil.isConnected(mContext)) {
-				Global.getNetEngine().updateSession(new JsonReqBase<String>("0"))
+				Global.getNetEngine().updateSession(new JsonReqBase<String>())
 						.enqueue(new Callback<JsonRespBase<UpdateSesion>>() {
 
 							@Override
@@ -215,6 +203,7 @@ public class AccountManager {
 									if(response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										mUpdateSessionRetryTime = 0;
 										mUser.userSession.session = response.body().getData().session;
+										setUser(mUser);
 										// 请求更新数据
 										updateUserInfo();
 										return;

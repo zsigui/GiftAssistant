@@ -61,4 +61,9 @@ public class ScoreMission implements Serializable {
 	 */
 	@SerializedName("extra_data")
 	public String data;
+
+	/**
+	 * 此标志仅用于SDK，表示当前任务已完成
+	 */
+	public boolean isFinished;
 }

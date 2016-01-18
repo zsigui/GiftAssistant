@@ -23,7 +23,7 @@ public class ScoreText extends TextView{
 
 	public ScoreText(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		setStateEnable(false);
+		setStateEnable(true);
 	}
 
 

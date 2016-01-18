@@ -21,6 +21,7 @@ public class UmipayAccount implements Interface_Serializable {
 	public static final int TYPE_SINA = 2;
 	public static final int TYPE_VISITOR = 3;
 	public static final int TYPE_SLIENT = 4;
+	public static final int TYPE_PHONE = 5;
 
 	public static final int TYPE_REGIST = 10;
 	public static final int TYPE_QUICK_REGIST = 11;

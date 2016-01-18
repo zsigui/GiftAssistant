@@ -16,7 +16,6 @@ import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ReflectUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-12.
@@ -148,6 +147,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 		mPayType = GiftTypeUtil.PAY_TYPE_NONE;
 		if (mConsumeType == GiftTypeUtil.PAY_TYPE_SCORE) {
 			setTitle(TITLE_SCORE);
+			mPayType = GiftTypeUtil.PAY_TYPE_SCORE;
 			tvRemain.setText(Html.fromHtml(String.format(REMAIN_SCORE, hasScore), mImageGetter, null));
 			if (hasScore < mScoreConsume) {
 				// 可选积分支付方式，但积分不足
@@ -160,6 +160,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			}
 		} else if (mConsumeType == GiftTypeUtil.PAY_TYPE_BEAN) {
 			setTitle(TITLE_BEAN);
+			mPayType = GiftTypeUtil.PAY_TYPE_BEAN;
 			tvRemain.setText(Html.fromHtml(String.format(REMAIN_BEAN, hasBean), mImageGetter, null));
 			if (hasBean < mBeanConsume) {
 				// 可选偶玩豆支付方式，但偶玩豆不足
@@ -172,6 +173,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			}
 		} else {
 			setTitle(TITLE_BEAN_SCORE);
+			mPayType = GiftTypeUtil.PAY_TYPE_SCORE;
 			tvRemain.setText(Html.fromHtml(String.format(REMAIN_BOTH, hasScore, hasBean), mImageGetter, null));
 			if (hasBean < mBeanConsume && hasScore < mScoreConsume) {
 				// 可选积分或偶玩豆支付方式，但积分和偶玩豆都不足
@@ -190,7 +192,6 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 				&& (mBeanConsume <= hasBean || mScoreConsume <= hasScore)) {
 			if (llPayBean == null || llPayScore == null) {
 				// 还未填充，进行XML填充
-				KLog.e();
 				ViewStub vs = getViewById(R.id.vs_pay_method);
 				vs.inflate();
 				llPayBean = getViewById(R.id.ll_pay_bean);

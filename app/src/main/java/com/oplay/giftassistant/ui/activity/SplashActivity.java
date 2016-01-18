@@ -129,12 +129,18 @@ public class SplashActivity extends BaseAppCompatActivity {
 		if (mApp.isGlobalInit()) {
 			return;
 		}
-
 		mApp.initAppConfig();
 		// 初始化设备状态
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(getApplicationContext());
 		}
+		/*try {
+			OuwanSDKManager.getInstance().init();
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_APP, e);
+			}
+		}*/
 		// 获取用户信息
 		// 该信息使用salt加密存储再SharedPreference中
 		UserModel user = null;
@@ -150,7 +156,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
-		KLog.e("user", "user = " + user);
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();

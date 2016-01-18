@@ -3,7 +3,6 @@ package com.oplay.giftassistant.util;
 import android.content.Context;
 import android.content.Intent;
 
-import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.ui.activity.DetailActivity;
 import com.oplay.giftassistant.ui.activity.GameListActivity;
@@ -11,7 +10,6 @@ import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.activity.LoginActivity;
 import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.activity.SettingActivity;
-import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -85,7 +83,6 @@ public class IntentUtil {
 	 */
 	public static void jumpGameDetail(Context context, int id, String title) {
 		Intent intent = new Intent(context, DetailActivity.class);
-		KLog.e(AppDebugConfig.TAG_APP, "id = " + id +", title = " + title);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_NAME, title);
@@ -205,11 +202,29 @@ public class IntentUtil {
 	}
 
 	/**
-	 * 跳转反馈界面
+	 * 跳转用户信息界面
 	 */
 	public static void jumpUserInfo(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USERINFO);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转设置用户昵称界面
+	 */
+	public static void jumpUserSetNick(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_NICK);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转设置用户头像界面
+	 */
+	public static void jumpUserSetAvatar(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_AVATAR);
 		context.startActivity(intent);
 	}
 }

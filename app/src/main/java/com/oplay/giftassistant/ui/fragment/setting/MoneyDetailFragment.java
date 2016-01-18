@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.WebViewUrl;
+import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_WebView;
 import com.socks.library.KLog;
 
@@ -39,6 +40,9 @@ public class MoneyDetailFragment extends BaseFragment_WebView {
 			return;
 		}
 		// do something
+		if (AccountManager.getInstance().isLogin()) {
+			AccountManager.getInstance().syncCookie();
+		}
 		if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
 		KLog.e("url = " + WebViewUrl.OUWAN_BEAN_DETAIL);
 			loadUrl(WebViewUrl.OUWAN_BEAN_DETAIL);

@@ -3,7 +3,6 @@ package com.oplay.giftassistant.ui.fragment.setting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +15,7 @@ import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.config.TaskTypeUtil;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.manager.AccountManager;
+import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.model.data.resp.ScoreMission;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
@@ -23,7 +23,6 @@ import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
-import com.oplay.giftassistant.ui.widget.ScoreText;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -41,65 +40,6 @@ import retrofit.Retrofit;
 public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission> {
 
 
-	private LinearLayout llSetNick;
-	private LinearLayout llSetAvatar;
-	private LinearLayout llBind;
-	private LinearLayout llFeedback;
-	private LinearLayout llSearch;
-	private LinearLayout llJudge;
-	private LinearLayout llStar;
-	private LinearLayout llLogin;
-	private LinearLayout llDownload;
-	private LinearLayout llShareNormal;
-	private LinearLayout llShareLimit;
-	private LinearLayout llGetWithBean;
-	private LinearLayout llDownloadSpecified;
-	private LinearLayout llContinuousLogin;
-
-	private TextView tvSetNick;
-	private TextView tvSetAvatar;
-	private TextView tvBind;
-	private TextView tvFeedback;
-	private TextView tvSearch;
-	private TextView tvJudge;
-	private TextView tvStar;
-	private TextView tvLogin;
-	private TextView tvDownload;
-	private TextView tvShareNormal;
-	private TextView tvShareLimit;
-	private TextView tvGetWithBean;
-	private TextView tvDownloadSpecified;
-	private TextView tvContinuousLogin;
-
-	private ScoreText stSetNick;
-	private ScoreText stSetAvatar;
-	private ScoreText stBind;
-	private ScoreText stFeedback;
-	private ScoreText stSearch;
-	private ScoreText stJudge;
-	private ScoreText stStar;
-	private ScoreText stLogin;
-	private ScoreText stDownload;
-	private ScoreText stShareNormal;
-	private ScoreText stShareLimit;
-	private ScoreText stGetWithBean;
-	private ScoreText stDownloadSpecified;
-	private ScoreText stContinuousLogin;
-
-	private TextView btnSetNick;
-	private TextView btnSetAvatar;
-	private TextView btnBind;
-	private TextView btnFeedBack;
-	private TextView btnSearch;
-	private TextView btnJudge;
-	private TextView btnStar;
-	private TextView btnLogin;
-	private TextView btnDownload;
-	private TextView btnShareNormal;
-	private TextView btnShareLimit;
-	private TextView btnGetWithBean;
-	private TextView btnDownloadSpecified;
-	private TextView btnContinuousLOgin;
 
 	private TextView tvScore;
 	private ListView mDataView;
@@ -135,41 +75,46 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	protected void lazyLoad() {
-		mViewManager.showLoading();
-		mCanShowUI = true;
-		mIsLoading = true;
+		refreshInitConfig();
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				Global.getNetEngine().obtainScoreTask(new JsonReqBase<Void>())
+				Global.getNetEngine().obtainScoreTask(new JsonReqBase<String>())
 						.enqueue(new Callback<JsonRespBase<ScoreMissionList>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<ScoreMissionList>> response,
 							                       Retrofit retrofit) {
-								mIsLoading = false;
+								if (!mCanShowUI) {
+									return;
+								}
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										mHasData = true;
+										refreshSuccessEnd();
+										mData = response.body().getData().missions;
 										setTaskIcon(mData);
 										mData = resort(mData);
 										mAdapter.updateData(mData);
 										return;
 									}
 									if (AppDebugConfig.IS_FRAG_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_FRAG, response.body().getCode()
-												+ ", " + response.body().getMsg());
+										KLog.e(AppDebugConfig.TAG_FRAG,
+												response.body() == null? "解析失败" : response.body().error());
 									}
+									ToastUtil.showShort("获取任务列表失败 - "
+											+ (response.body() == null? "解析失败" : response.body().error()));
 								}
-								mViewManager.showErrorRetry();
+								refreshFailEnd();
 							}
 
 							@Override
 							public void onFailure(Throwable t) {
-								mIsLoading = false;
+								if (!mCanShowUI) {
+									return;
+								}
 								if (AppDebugConfig.IS_FRAG_DEBUG) {
 									KLog.e(AppDebugConfig.TAG_FRAG, t);
 								}
-								mViewManager.showErrorRetry();
+								refreshFailEnd();
 							}
 						});
 			}
@@ -223,6 +168,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	private void setTaskIcon(ArrayList<ScoreMission> data) {
+		if (data == null) {
+			if (AppDebugConfig.IS_FRAG_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_FRAG, "任务失败");
+			}
+			return;
+		}
 		for (ScoreMission mission : data) {
 			String id = mission.id;
 			if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
@@ -285,9 +236,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			if (mission.type == TaskTypeUtil.MISSION_TYPE_TIRO) {
 				if (DateUtil.isToday(mission.lastCompleteTime)) {
 					rawFinished++;
+					mission.isFinished = true;
 					rawTasks.add(mission);
 					rawFinishedIndex = (rawFinishedIndex == -1 ? rawTasks.size() - 1 : rawFinishedIndex);
 				} else {
+					mission.isFinished = false;
 					if (rawFinishedIndex == -1) {
 						rawTasks.add(mission);
 					} else {
@@ -297,9 +250,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_DAILY) {
 				if (DateUtil.isToday(mission.lastCompleteTime)) {
 					dailyFinished++;
+					mission.isFinished = true;
 					dailyTasks.add(mission);
 					dailyFinishedIndex = (dailyFinishedIndex == -1 ? dailyTasks.size() - 1 : dailyFinishedIndex);
 				} else {
+					mission.isFinished = false;
 					if (dailyFinishedIndex == -1) {
 						dailyTasks.add(mission);
 					} else {
@@ -310,10 +265,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				// 对于连续任务，得判断最后完成时间
 				if (DateUtil.isToday(mission.lastCompleteTime)) {
 					continuousFinished++;
+					mission.isFinished = true;
 					continuousTasks.add(mission);
 					continuousFinishedIndex = (continuousFinishedIndex == -1 ? continuousTasks.size() - 1 :
 							continuousFinishedIndex);
 				} else {
+					mission.isFinished = false;
 					if (continuousFinishedIndex == -1) {
 						continuousTasks.add(mission);
 					} else {
@@ -351,16 +308,22 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		String id = scoreMission.id;
 		Intent intent;
 		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
-			// 跳转到设置用户信息界面
+			// 跳转到设置用户昵称信息界面
+			IntentUtil.jumpUserSetNick(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
-			// 跳转到设置用户信息界面
+			// 跳转到设置用户头像信息界面
+			IntentUtil.jumpUserSetAvatar(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 			// 跳转到绑定手机账号界面
+			OuwanSDKManager.getInstance().showBindPhoneView();
 		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)){
 			// 跳转到绑定偶玩账号界面
+			OuwanSDKManager.getInstance().showBindOuwanView();
 		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
+			// 跳转反馈界面
 			IntentUtil.jumpFeedBack(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
+			// 跳转搜索礼包/游戏界面
 			intent = new Intent(getContext(), SearchActivity.class);
 			((BaseAppCompatActivity) getActivity()).openPageForResult(this, KeyConfig.REQUEST_UPDATE_AVATAR, intent);
 		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
@@ -374,7 +337,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			// 跳转新游推荐界面
 			IntentUtil.jumpGameNewList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
-			//
+			// 分享普通礼包
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 			// 分享限量礼包
 		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
@@ -384,6 +347,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			// 跳转指定游戏界面，暂无
 			IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), "");
 		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
+			// 跳转登录界面
 			IntentUtil.jumpLogin(getContext());
 		} else {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {

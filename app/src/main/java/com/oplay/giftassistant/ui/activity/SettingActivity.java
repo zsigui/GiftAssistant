@@ -78,6 +78,14 @@ public class SettingActivity extends BaseAppCompatActivity {
 				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
 						getResources().getString(R.string.st_user_info_title));
 				break;
+			case KeyConfig.TYPE_ID_USER_SET_NICK:
+				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
+						getResources().getString(R.string.st_user_set_nick_title));
+				break;
+			case KeyConfig.TYPE_ID_USER_SET_AVATAR:
+				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
+						getResources().getString(R.string.st_user_set_avatar_title));
+				break;
 			default:
 				if (AppDebugConfig.IS_FRAG_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_FRAG, "type = " + mType);

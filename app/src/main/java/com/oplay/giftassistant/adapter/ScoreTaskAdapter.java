@@ -117,8 +117,22 @@ public class ScoreTaskAdapter extends BaseAdapter {
 		switch (type) {
 			case TaskTypeUtil.TYPE_CONTENT:
 				ImageLoader.getInstance().displayImage("drawable://" + mission.icon, holder.ivIcon);
-				holder.tvName.setText(mission.name);
+				if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
+					holder.tvName.setText(String.format("%s(%d/%d)", mission.name,
+							mission.completeTime, mission.continuousDay));
+				} else {
+					holder.tvName.setText(mission.name);
+				}
 				holder.stScore.setText("+" + mission.rewardScore);
+				if (mission.isFinished) {
+					holder.stScore.setEnabled(false);
+					holder.btnToDo.setText("已完成");
+					holder.btnToDo.setEnabled(false);
+				} else {
+					holder.stScore.setEnabled(true);
+					holder.btnToDo.setText("去完成");
+					holder.btnToDo.setEnabled(true);
+				}
 				holder.btnToDo.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
