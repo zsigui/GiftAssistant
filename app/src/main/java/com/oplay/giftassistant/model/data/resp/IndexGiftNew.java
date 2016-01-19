@@ -40,7 +40,7 @@ public class IndexGiftNew implements Serializable{
     @SerializedName("point_price")
     public int score;
     // 抢号需要换取的偶玩豆
-	@SerializedName("ouwanb_price")
+	@SerializedName("owanb_price")
     public int bean;
     // 开抢时间戳
 	@SerializedName("start_time")

@@ -26,6 +26,7 @@ import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftassistant.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftassistant.util.SPUtil;
 import com.oplay.giftassistant.util.SoundPlayer;
@@ -135,8 +136,14 @@ public class AssistantApp extends Application {
 		DrawerImageLoader.init(new AbstractDrawerImageLoader() {
 			@Override
 			public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				ImageLoader.getInstance().displayImage(uri.toString(), imageView, Global.IMAGE_OPTIONS);
+				boolean isLogin = AccountManager.getInstance().isLogin();
+				if (isLogin) {
+					imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+					ImageLoader.getInstance().displayImage(uri.toString(), imageView, Global.AVATOR_IMAGE_LOADER);
+				} else {
+					imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+					imageView.setImageResource(R.drawable.ic_avator_unlogin);
+				}
 			}
 
 			@Override

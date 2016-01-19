@@ -180,7 +180,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (!AccountManager.getInstance().isLogin()) {
 			mProfile = new ProfileDrawerItem()
 					.withName(getResources().getString(R.string.st_login_user))
-					.withIcon(R.drawable.ic_img_default)
+					.withIcon("http://default_icon")
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
 		} else {
 			String name;
@@ -197,7 +197,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					.withEmail(email)
 					.withIdentifier(KeyConfig.TYPE_ID_PROFILE);
 			if (TextUtils.isEmpty(mUser.avatar)) {
-				mProfile.withIcon(R.drawable.ic_img_default);
+				mProfile.withIcon("http://default_icon");
 			} else {
 				mProfile.withIcon(mUser.avatar);
 			}
@@ -230,12 +230,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
 			if (TextUtils.isEmpty(mUser.avatar)) {
-				ivProfile.setImageResource(R.drawable.ic_img_default);
+				ivProfile.setImageResource(R.drawable.ic_avator_default);
 			} else {
 				ImageLoader.getInstance().displayImage(mUser.avatar, ivProfile);
 			}
 		} else {
-			ivProfile.setImageResource(R.drawable.ic_img_default);
+			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 			tvGiftCount.setText("?");
 		}
 	}

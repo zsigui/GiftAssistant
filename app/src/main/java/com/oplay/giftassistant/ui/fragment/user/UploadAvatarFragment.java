@@ -96,7 +96,8 @@ public class UploadAvatarFragment extends BaseFragment {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		ImageLoader.getInstance().displayImage(AccountManager.getInstance().getUserInfo().avatar, ivAvatar);
+		ImageLoader.getInstance().displayImage(AccountManager.getInstance().getUserInfo().avatar, ivAvatar,
+				Global.AVATOR_IMAGE_LOADER);
 	}
 
 	@Override

@@ -9,10 +9,20 @@ public class NetUrl {
 //	public static final String URL_BASE = "http://172.16.3.68:7000/";
 	public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
 
+
+	/**
+	 * 礼包/游戏搜索
+	 */
+	public static final String GET_SEARCH = "gift_search";
 	/**
 	 * 礼包首页
 	 */
 	public static final String GIFT_GET_INDEX = "gift_index";
+
+	/**
+	 * 礼包首页-刷新礼包数据
+	 */
+	public static final String GIFT_REFRESH_INDEX = "today_gift_index";
 
 	/**
 	 * 猜你喜欢
@@ -48,6 +58,11 @@ public class NetUrl {
 	 * 请求特定礼包的礼包码
 	 */
 	public static final String GIFT_GET_SPECIFIC_CODE = "get_pay_result";
+
+	/**
+	 * 通知偶玩豆订单支付失败
+	 */
+	public static final String GIFT_FAIL_PAY = "failed_pay";
 
 	/**
 	 * 礼包详情

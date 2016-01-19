@@ -60,7 +60,7 @@ public class TaskTypeUtil {
 	/**
 	 * 新版本意见反馈
 	 */
-	public static final String ID_FEEDBACK = "version_feedback";
+	public static final String ID_FEEDBACK = "version_v0.1_feedback";
 	/**
 	 * 搜索礼包/游戏
 	 */

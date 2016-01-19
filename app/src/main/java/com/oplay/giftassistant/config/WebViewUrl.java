@@ -5,11 +5,11 @@ package com.oplay.giftassistant.config;
  */
 public class WebViewUrl {
 
-	//public static final String BASE_URL = "http://172.16.1.250:8977/";
-	public static final String BASE_URL = "http://test.giftcool.ouwan.com/";
+	//public static final String URL_BASE = "http://172.16.1.250:8977/";
+	public static final String URL_BASE = NetUrl.URL_BASE;
 
-	public static final String GAME_DETAIL = BASE_URL + "m/game-detail/";
-	public static final String GIFT_DETAIL = BASE_URL + "m/gift-detail/";
-	public static final String OUWAN_BEAN_DETAIL = BASE_URL + "m/ouwan-coin/";
-	public static final String SCORE_DETAIL = BASE_URL + "m/integral/";
+	public static final String GAME_DETAIL = URL_BASE + "m/game-detail/";
+	public static final String GIFT_DETAIL = URL_BASE + "m/gift-detail/";
+	public static final String OUWAN_BEAN_DETAIL = URL_BASE + "m/ouwan-coin/";
+	public static final String SCORE_DETAIL = URL_BASE + "m/integral/";
 }

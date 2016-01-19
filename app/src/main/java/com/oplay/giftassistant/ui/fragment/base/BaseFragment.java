@@ -78,10 +78,15 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	};
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mApp = AssistantApp.getInstance();
+	}
+
+	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		TAG = this.getClass().getSimpleName();
-		mApp = AssistantApp.getInstance();
 		mActivity = (BaseAppCompatActivity) context;
 	}
 

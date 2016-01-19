@@ -2,6 +2,7 @@ package com.oplay.giftassistant.ui.fragment.user;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
@@ -71,6 +72,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 
 	@Override
 	public boolean onBack() {
+		if (TextUtils.isEmpty(etNick.getText().toString())) {
+			return false;
+		}
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -95,14 +99,15 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 										KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null?
 												"解析异常" : response.body().error()));
 									}
+									ToastUtil.showShort((response.body() == null?
+											"解析异常" : response.body().getMsg()));
 								}
-								ToastUtil.showShort("网络异常，修改昵称失败!");
 							}
 
 							@Override
 							public void onFailure(Throwable t) {
-								if (NetworkUtil.isConnected(getContext())) {
-									ToastUtil.showShort("网络错误，设置昵称失败!");
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d(AppDebugConfig.TAG_FRAG, t);
 								}
 							}
 						});

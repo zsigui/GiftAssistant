@@ -74,6 +74,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			initMenu(mToolbar);
 		}
 		processLogic();
+		mNeedWorkCallback = true;
 	}
 
 	/**

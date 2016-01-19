@@ -182,7 +182,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
 				mission.icon = R.drawable.ic_task_upload_avator;
 			} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE) ||
-					id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
+					id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
 				mission.icon = R.drawable.ic_task_bind;
 			} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
 				mission.icon = R.drawable.ic_task_feedback;

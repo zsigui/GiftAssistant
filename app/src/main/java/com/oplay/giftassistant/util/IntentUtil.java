@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.oplay.giftassistant.config.KeyConfig;
-import com.oplay.giftassistant.ui.activity.DetailActivity;
+import com.oplay.giftassistant.ui.activity.GameDetailActivity;
 import com.oplay.giftassistant.ui.activity.GameListActivity;
 import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.activity.LoginActivity;
@@ -39,7 +39,7 @@ public class IntentUtil {
 	 * @param title 标题名
 	 */
 	public static void jumpGiftDetail(Context context, int id, String title) {
-		Intent intent = new Intent(context, DetailActivity.class);
+		Intent intent = new Intent(context, GameDetailActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
@@ -82,7 +82,7 @@ public class IntentUtil {
 	 * @param title 标题名
 	 */
 	public static void jumpGameDetail(Context context, int id, String title) {
-		Intent intent = new Intent(context, DetailActivity.class);
+		Intent intent = new Intent(context, GameDetailActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_NAME, title);

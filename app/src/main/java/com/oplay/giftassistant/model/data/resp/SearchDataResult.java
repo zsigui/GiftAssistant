@@ -2,6 +2,7 @@ package com.oplay.giftassistant.model.data.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,14 +10,14 @@ import java.util.ArrayList;
  *
  * Created by zsigui on 15-12-22.
  */
-public class SearchDataResult {
+public class SearchDataResult implements Serializable{
 
-	@SerializedName("keyword")
+	@SerializedName("search_key")
 	public String keyword;
 
-	@SerializedName("games")
+	@SerializedName("game_data")
 	public ArrayList<IndexGameNew> games;
 
-	@SerializedName("gifts")
+	@SerializedName("plan_data")
 	public ArrayList<IndexGiftNew> gifts;
 }

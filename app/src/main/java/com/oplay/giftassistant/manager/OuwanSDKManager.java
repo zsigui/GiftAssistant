@@ -73,6 +73,7 @@ public class OuwanSDKManager implements InitCallbackListener {
 		UmipayAccount account;
 		if (AccountManager.getInstance().getUserInfo().loginType == UserTypeUtil.TYPE_POHNE) {
 			account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_PHONE);
+			account.setUserName(AccountManager.getInstance().getUserInfo().username);
 		} else {
 			account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_NORMAL);
 		}

@@ -5,9 +5,13 @@ import android.support.v4.app.FragmentActivity;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import com.google.gson.JsonSyntaxException;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.GiftTypeUtil;
+import com.oplay.giftassistant.manager.PayManager;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
+import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.fragment.game.GameDetailFragment;
 import com.socks.library.KLog;
 
@@ -35,6 +39,28 @@ public class WebViewInterface extends Observable {
 	@JavascriptInterface
 	public void setHeaderColor(int color) {
 
+	}
+
+	@JavascriptInterface
+	public void seizeGiftCode(String giftJson) {
+		try {
+			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
+			if (gift != null) {
+				switch (GiftTypeUtil.getItemViewType(gift)) {
+					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+						PayManager.getInstance().chargeGift(mHostActivity, gift, null);
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+						PayManager.getInstance().searchGift(mHostActivity, gift, null);
+						break;
+				}
+			}
+		} catch (JsonSyntaxException e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_WEBVIEW, e);
+			}
+		}
 	}
 
 	@JavascriptInterface

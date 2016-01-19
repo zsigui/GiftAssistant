@@ -3,17 +3,19 @@ package com.oplay.giftassistant.ui.fragment.search;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.NestedGameListAdapter;
 import com.oplay.giftassistant.adapter.NestedGiftListAdapter;
+import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.model.data.resp.SearchDataResult;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.NestedListView;
-import com.oplay.giftassistant.util.ToastUtil;
 
 /**
  * Created by zsigui on 15-12-22.
@@ -25,13 +27,19 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	private NestedListView mGameView;
 	private RelativeLayout mGiftBar;
 	private NestedListView mGiftView;
+	private LinearLayout llGame;
+	private LinearLayout llGift;
 
 	private NestedGiftListAdapter mGiftAdapter;
 	private NestedGameListAdapter mGameAdapter;
+	private SearchDataResult mData;
 
-
-	public static ResultFragment newInstance() {
-		return new ResultFragment();
+	public static ResultFragment newInstance(SearchDataResult data) {
+		ResultFragment fragment = new ResultFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(KeyConfig.KEY_DATA, data);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 
 
@@ -39,7 +47,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_search_data);
 
-		if (!mApp.isAllowDownload()) {
+		if (!AssistantApp.getInstance().isAllowDownload()) {
 			getViewById(R.id.ll_game).setVisibility(View.GONE);
 		}
 		mContainer = getViewById(R.id.sv_container);
@@ -47,9 +55,11 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		mGameBar = getViewById(R.id.rl_game);
 		mGiftView = getViewById(R.id.lv_gift);
 		mGiftBar = getViewById(R.id.rl_gift);
+		llGame = getViewById(R.id.ll_game);
+		llGift = getViewById(R.id.ll_gift);
 
-		((TextView) getViewById(R.id.tv_game_title)).setText(Html.fromHtml("搜到的 <font color='f85454'>游戏</font>"));
-		((TextView) getViewById(R.id.tv_gift_title)).setText(Html.fromHtml("搜到的 <font color='f85454'>礼包</font>"));
+		((TextView) getViewById(R.id.tv_game_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>游戏</font>"));
+		((TextView) getViewById(R.id.tv_gift_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>礼包</font>"));
 
 	}
 
@@ -64,8 +74,12 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		mGameAdapter = new NestedGameListAdapter(getContext(), null);
 		mGiftAdapter = new NestedGiftListAdapter(getContext());
 
+		if (getArguments() != null) {
+			mData = (SearchDataResult) getArguments().getSerializable(KeyConfig.KEY_DATA);
+		}
 		mGameView.setAdapter(mGameAdapter);
 		mGiftView.setAdapter(mGiftAdapter);
+		updateData(mData);
 		mContainer.smoothScrollTo(0, 0);
 	}
 
@@ -75,12 +89,27 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	}
 
 	public void updateData(SearchDataResult data) {
-		if (data.games != null && mApp.isAllowDownload()) {
-			mGameAdapter.updateData(data.games);
+		if (data == null || mGameAdapter == null || mGiftAdapter == null
+				|| mContainer == null) {
+			return;
 		}
-		if (data.gifts != null) {
-			mGiftAdapter.updateData(data.gifts);
+		if (mData != null) {
+			mGameAdapter.setDatas(mData.games);
+			mGiftAdapter.setData(mData.gifts);
+			if (mData.games == null || mData.games.size() == 0) {
+				llGame.setVisibility(View.GONE);
+			} else {
+				llGame.setVisibility(View.VISIBLE);
+			}
+			if (mData.gifts == null || mData.gifts.size() == 0
+					|| !AssistantApp.getInstance().isAllowDownload()) {
+				llGift.setVisibility(View.GONE);
+			} else {
+				llGift.setVisibility(View.VISIBLE);
+			}
 		}
+		mGameAdapter.updateData(data.games);
+		mGiftAdapter.updateData(data.gifts);
 		mContainer.smoothScrollTo(0, 0);
 	}
 
@@ -88,10 +117,8 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.rl_game:
-				ToastUtil.showShort("游戏被点击");
 				break;
 			case R.id.rl_gift:
-				ToastUtil.showShort("礼包被点击");
 				break;
 		}
 	}

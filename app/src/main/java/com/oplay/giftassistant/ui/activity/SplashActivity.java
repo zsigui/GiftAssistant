@@ -13,6 +13,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.SPConfig;
 import com.oplay.giftassistant.manager.AccountManager;
+import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.model.MobileInfoModel;
 import com.oplay.giftassistant.model.data.resp.UserInfo;
 import com.oplay.giftassistant.model.data.resp.UserModel;
@@ -134,13 +135,13 @@ public class SplashActivity extends BaseAppCompatActivity {
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(getApplicationContext());
 		}
-		/*try {
+		try {
 			OuwanSDKManager.getInstance().init();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
-		}*/
+		}
 		// 获取用户信息
 		// 该信息使用salt加密存储再SharedPreference中
 		UserModel user = null;
@@ -158,7 +159,8 @@ public class SplashActivity extends BaseAppCompatActivity {
 		}
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
-		AccountManager.getInstance().updateUserSession();
+		// AccountManager.getInstance().updateUserSession();
+		AccountManager.getInstance().updateUserInfo();
 
 		mApp.setGlobalInit(true);
 	}

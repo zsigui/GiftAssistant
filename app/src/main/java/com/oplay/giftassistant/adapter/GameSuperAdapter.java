@@ -143,11 +143,11 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		mData.recommend = data;
 		data.initAppInfoStatus(mContext);
 		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_img_empty)
-				.showImageOnFail(R.drawable.ic_img_fail)
-				.showImageOnLoading(R.drawable.ic_img_loading)
+				.showImageForEmptyUri(R.drawable.ic_banner_default)
+				.showImageOnFail(R.drawable.ic_banner_default)
+				.showImageOnLoading(R.drawable.ic_banner_default)
 				.bitmapConfig(Bitmap.Config.RGB_565)
-				.delayBeforeLoading(400)
+				.delayBeforeLoading(100)
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
 				.build();

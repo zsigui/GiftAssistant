@@ -24,17 +24,7 @@ import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.api.PayCallbackListener;
-import net.ouwan.umipay.android.api.UmipayBrowser;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
-import net.ouwan.umipay.android.config.SDKConstantConfig;
-import net.ouwan.umipay.android.global.Global_Url_Params;
-import net.youmi.android.libs.common.debug.Debug_SDK;
-import net.youmi.android.libs.webjs.view.webview.Flags_Browser_Config;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -61,37 +51,44 @@ public class PayManager {
 
 	private long mLastClickTime = 0;
 
+
 	/**
-	 * 显示偶玩支付界面
+	 * 取消订单支付
 	 */
-	public void showOuwanChargeView(Context context) {
-		try {
-			List<NameValuePair> paramsList = addOuwanClientParams(context);
-			final String title = "充值";
-			UmipayBrowser.postUrl(
-					context,
-					title,
-					SDKConstantConfig.get_UMIPAY_PAY_URL(context),
-					paramsList,
-					Flags_Browser_Config.FLAG_AUTO_CHANGE_TITLE | Flags_Browser_Config.FLAG_USE_YOUMI_JS_INTERFACES,
-					null, null, UmipayBrowser.PAY_OUWAN
-			);
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				Debug_SDK.e(e);
+	public void quickTrade(final String tradeNo) {
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				ReqGetCode reqData = new ReqGetCode();
+				reqData.tradeNo = tradeNo;
+				Global.getNetEngine().notifyTradeFail(new JsonReqBase<ReqGetCode>(reqData))
+						.enqueue(new Callback<JsonRespBase<Void>>() {
+							@Override
+							public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+								if (response != null && response.isSuccess()) {
+									if (response.body() != null && response.body().isSuccess()) {
+										return;
+									}
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.d(AppDebugConfig.TAG_MANAGER, response.body() == null?
+												"解析失败" : response.body().error());
+									}
+									return;
+								}
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d(AppDebugConfig.TAG_MANAGER, "错误返回");
+								}
+							}
+
+							@Override
+							public void onFailure(Throwable t) {
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d(AppDebugConfig.TAG_MANAGER, t);
+								}
+							}
+						});
 			}
-		}
-	}
-
-	private List<NameValuePair> addOuwanClientParams(Context context) {
-
-		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(context,
-				SDKConstantConfig.get_UMIPAY_ACCOUNT_URL(context));
-		if (AccountManager.getInstance().isLogin()) {
-			paramsList.add(new BasicNameValuePair("recharge_source", String.valueOf(3)));//指定偶玩豆充值
-			paramsList.add(new BasicNameValuePair("bankType", "upmp")); //指定银行卡充值类型
-		}
-		return paramsList;
+		});
 	}
 
 	/**
@@ -101,6 +98,7 @@ public class PayManager {
 		showLoading(context);
 		handleScorePay(context, gift, button, false);
 	}
+
 
 	/**
 	 * 请求执行抢号操作的购买服务
@@ -231,12 +229,14 @@ public class PayManager {
 										GetCodeDialog.newInstance(response.body().getData().giftCode)
 												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 														GetCodeDialog.class.getSimpleName());
-										if (isSeize) {
-											// 抢号状态
-											button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZE);
-										} else {
-											// 淘号状态
-											button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+										if (button != null) {
+											if (isSeize) {
+												// 抢号状态
+												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZE);
+											} else {
+												// 淘号状态
+												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+											}
 										}
 										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
@@ -298,12 +298,14 @@ public class PayManager {
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
 								hideLoading(mContext);
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().isSuccess()) {
 
 										GetCodeDialog.newInstance(response.body().getData().giftCode)
 												.show(((BaseAppCompatActivity) mContext).getSupportFragmentManager(),
 														GetCodeDialog.class.getSimpleName());
-										mButton.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+										if (mButton != null) {
+											mButton.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+										}
 										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
 									}
@@ -321,6 +323,9 @@ public class PayManager {
 								ToastUtil.showShort("查询礼包码失败 - 网络异常");
 							}
 						});
+			} else {
+				// 取消支付，通知取消订单
+				PayManager.getInstance().quickTrade(mTradeNo);
 			}
 		}
 	}

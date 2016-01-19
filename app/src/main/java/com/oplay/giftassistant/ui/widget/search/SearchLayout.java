@@ -227,6 +227,14 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 		}
 	}
 
+	public boolean isAutoPopupPrompt() {
+		return mIsAutoPopupPrompt;
+	}
+
+	public void setAutoPopupPrompt(boolean isAutoPopupPrompt) {
+		mIsAutoPopupPrompt = isAutoPopupPrompt;
+	}
+
 	public String getKeyword() {
 		return mCurKeyWord;
 	}

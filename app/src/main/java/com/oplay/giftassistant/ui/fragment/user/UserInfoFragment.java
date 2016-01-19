@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
@@ -79,6 +80,7 @@ public class UserInfoFragment extends BaseFragment {
 			showToast("当前未登录");
 			IntentUtil.jumpLogin(getContext());
 		}
+		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
 	@Override
@@ -91,10 +93,10 @@ public class UserInfoFragment extends BaseFragment {
 		}
 		refreshInitConfig();
 		UserInfo user = AccountManager.getInstance().getUserInfo();
-		ImageLoader.getInstance().displayImage(user.avatar, ivIcon);
+		ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
 		String nick;
 		if (user.loginType == UserTypeUtil.TYPE_POHNE) {
-			nick = (TextUtils.isEmpty(user.nick) ? user.nick : StringUtil.transePhone(user.phone));
+			nick = (TextUtils.isEmpty(user.nick) ?  StringUtil.transePhone(user.phone) : user.nick);
 			tvLoginTitle.setText(getResources().getString(R.string.st_user_phone_login));
 			tvLogin.setText(StringUtil.transePhone(user.phone));
 			tvBindTitle.setText(getResources().getString(R.string.st_user_ouwan_bind));
@@ -109,7 +111,7 @@ public class UserInfoFragment extends BaseFragment {
 				rlModifyPwd.setVisibility(View.VISIBLE);
 			}
 		} else {
-			nick = (TextUtils.isEmpty(user.nick) ? user.nick : user.username);
+			nick = (TextUtils.isEmpty(user.nick) ?  user.username : user.nick);
 			tvLoginTitle.setText(getResources().getString(R.string.st_user_ouwan_login));
 			tvLogin.setText(user.username);
 			tvBindTitle.setText(getResources().getString(R.string.st_user_phone_bind));

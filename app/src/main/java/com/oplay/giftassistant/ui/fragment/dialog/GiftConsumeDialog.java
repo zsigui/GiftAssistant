@@ -16,6 +16,7 @@ import com.oplay.giftassistant.manager.OuwanSDKManager;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ReflectUtil;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-12.
@@ -64,13 +65,14 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			if (mListener != null) {
 				mListener.onCancel();
 			} else {
-				dismiss();
+				dismissAllowingStateLoss();
 			}
 		}
 
 		@Override
 		public void onConfirm() {
 			IntentUtil.jumpEarnScore(getContext());
+			dismissAllowingStateLoss();
 		}
 	};
 	/**
@@ -82,7 +84,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			if (mListener != null) {
 				mListener.onCancel();
 			} else {
-				dismiss();
+				dismissAllowingStateLoss();
 			}
 		}
 
@@ -90,6 +92,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 		public void onConfirm() {
 			// 跳转充值偶玩豆界面
 			OuwanSDKManager.getInstance().recharge();
+			dismissAllowingStateLoss();
 		}
 	};
 	private Html.ImageGetter mImageGetter = new Html.ImageGetter() {
@@ -190,6 +193,8 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 
 		if (mConsumeType == GiftTypeUtil.PAY_TYPE_BOTH
 				&& (mBeanConsume <= hasBean || mScoreConsume <= hasScore)) {
+			KLog.e("\"4\": mConsumeType = " + mConsumeType + ", ConsumeBean = " + mBeanConsume + ", mConsumeScore = " + mScoreConsume
+					+"; hasBean = " + hasBean + ", hasScore = " + hasScore);
 			if (llPayBean == null || llPayScore == null) {
 				// 还未填充，进行XML填充
 				ViewStub vs = getViewById(R.id.vs_pay_method);

@@ -66,6 +66,7 @@ public class AccountManager {
 		ObserverManager.getInstance().notifyUserUpdate();
 		ObserverManager.getInstance().notifyGiftUpdate();
 
+
 		// 同步cookie
 		syncCookie();
 		if (user != null) {
@@ -166,13 +167,15 @@ public class AccountManager {
 		}
 	}
 
+
 	public void syncCookie() {
 		if (isLogin()) {
-			String cookie = "cuid=" + getUserSesion().uid + ";" +
-					"sessionid=" +getUserSesion().session + ";";
-			syncCookie(WebViewUrl.BASE_URL, cookie);
+			String cookie = "cuid=" + getUserSesion().uid + ";";
+			String cookieSession = "sessionid=" + getUserSesion().session + ";";
+			syncCookie(WebViewUrl.URL_BASE, cookie);
+			syncCookie(WebViewUrl.URL_BASE, cookieSession);
 		} else {
-			syncCookie(WebViewUrl.BASE_URL, "");
+			syncCookie(WebViewUrl.URL_BASE, "");
 		}
 	}
 
@@ -200,7 +203,7 @@ public class AccountManager {
 							public void onResponse(Response<JsonRespBase<UpdateSesion>> response,
 							                       Retrofit retrofit) {
 								if (response != null && response.isSuccess()) {
-									if(response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if(response.body() != null && response.body().isSuccess()) {
 										mUpdateSessionRetryTime = 0;
 										mUser.userSession.session = response.body().getData().session;
 										setUser(mUser);

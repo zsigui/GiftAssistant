@@ -1,17 +1,15 @@
 package com.oplay.giftassistant.ui.activity;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.SPConfig;
-import com.oplay.giftassistant.config.StatusCode;
-import com.oplay.giftassistant.engine.SearchEngine;
+import com.oplay.giftassistant.model.data.req.ReqSearchKey;
 import com.oplay.giftassistant.model.data.resp.SearchDataResult;
-import com.oplay.giftassistant.model.data.resp.SearchPromptResult;
-import com.oplay.giftassistant.model.json.JsonRespSearchData;
-import com.oplay.giftassistant.model.json.JsonRespSearchPrompt;
+import com.oplay.giftassistant.model.json.base.JsonReqBase;
+import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.NetErrorFragment;
 import com.oplay.giftassistant.ui.fragment.search.EmptySearchFragment;
@@ -35,7 +33,7 @@ import retrofit.Retrofit;
 public class SearchActivity extends BaseAppCompatActivity {
 
 	private SearchLayout mSearchLayout;
-	private SearchEngine mEngine;
+	/*private SearchEngine mEngine;*/
 	private ArrayList<String> mHistoryData;
 	private ResultFragment mResultFragment;
 	private EmptySearchFragment mEmptySearchFragment;
@@ -43,12 +41,6 @@ public class SearchActivity extends BaseAppCompatActivity {
 	private NetErrorFragment mNetErrorFragment;
 
     private String mLastSearchKey = "";
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
 
 	@Override
 	protected void initView() {
@@ -59,8 +51,10 @@ public class SearchActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 		obtainHistoryData();
-		mEngine = mApp.getRetrofit().create(SearchEngine.class);
+		/*mEngine = mApp.getRetrofit().create(SearchEngine.class);*/
 		mSearchLayout.setCanGetFocus(true);
+		mSearchLayout.setIsAutoSendRequest(true);
+		mSearchLayout.setIsAutoSendRequest(false);
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
 		displayHistoryUI(mHistoryData, true);
 	}
@@ -143,7 +137,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 	 */
 	private void displayDataUI(SearchDataResult data) {
 		if (mResultFragment == null) {
-			mResultFragment = ResultFragment.newInstance();
+			mResultFragment = ResultFragment.newInstance(data);
 		}
 		mResultFragment.updateData(data);
 		reattachFrag(R.id.fl_container, mResultFragment, mResultFragment.getClass().getSimpleName());
@@ -185,43 +179,51 @@ public class SearchActivity extends BaseAppCompatActivity {
             mLastSearchKey = keyword;
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
 				displayLoadingUI(R.id.fl_container);
-				mEngine.getSearchData(keyword).enqueue(new Callback<JsonRespSearchData>() {
-					@Override
-					public void onResponse(Response<JsonRespSearchData> response, Retrofit retrofit) {
-						KLog.e();
-						if (response.code() == 200) {
-							if (response.body().getCode() == StatusCode.SUCCESS) {
-								SearchDataResult data = response.body().getData();
-								// 检验Key返回数据是否是当前需要的
-								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
-									// 丢弃这次搜索结果
-									// 不更新
+				ReqSearchKey data = new ReqSearchKey();
+				data.searchKey = keyword;
+				Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data))
+						.enqueue(new Callback<JsonRespBase<SearchDataResult>>() {
+							@Override
+							public void onResponse(Response<JsonRespBase<SearchDataResult>> response, Retrofit retrofit) {
+								if (!mNeedWorkCallback) {
 									return;
 								}
-								if (data.games == null && data.gifts == null) {
-									displayEmptyUI();
-									return;
+								if (response != null && response.code() == 200) {
+									if (response.body() != null && response.body().isSuccess()) {
+										SearchDataResult data = response.body().getData();
+										// 检验Key返回数据是否是当前需要的
+										if (!mLastSearchKey.equals(mSearchLayout.getKeyword())) {
+											// 丢弃这次搜索结果
+											// 不更新
+											return;
+										}
+										if (data.games == null && data.gifts == null) {
+											displayEmptyUI();
+											return;
+										}
+										// display list h  ere
+										displayDataUI(data);
+										return;
+									}
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(response.body());
+									}
 								}
-								// display list h  ere
-								displayDataUI(data);
-								return;
+								displayNetworkErrUI();
 							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.e(response.body());
-							}
-						}
-                        displayNetworkErrUI();
-					}
 
-					@Override
-					public void onFailure(Throwable t) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.e(t);
-						}
-						// 提示网络错误
-						displayNetworkErrUI();
-					}
-				});
+							@Override
+							public void onFailure(Throwable t) {
+								if (!mNeedWorkCallback) {
+									return;
+								}
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.e(AppDebugConfig.TAG_SEARCH, t);
+								}
+								// 提示网络错误
+								displayNetworkErrUI();
+							}
+						});
 			} else {
 				displayNetworkErrUI();
 			}
@@ -230,13 +232,13 @@ public class SearchActivity extends BaseAppCompatActivity {
 		@Override
 		public void onSearchCleared() {
             // 取消上一轮搜索
-            mEngine.getSearchPrompt(mLastSearchKey).cancel();
+            //mEngine.getSearchPrompt(mLastSearchKey).cancel();
 			displayHistoryUI(mHistoryData, true);
 		}
 
 		@Override
 		public void onSearchPromptPerform(String keyword) {
-			if (NetworkUtil.isConnected(SearchActivity.this)) {
+			/*if (NetworkUtil.isConnected(SearchActivity.this)) {
 				mEngine.getSearchPrompt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
 					@Override
 					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
@@ -266,7 +268,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 						}
 					}
 				});
-			} // end if
+			} // end if*/
 
 		}
 	} // end internal class

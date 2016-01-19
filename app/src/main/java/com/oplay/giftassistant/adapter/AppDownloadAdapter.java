@@ -343,7 +343,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		final Object tag = holder.mIvIcon.getTag(TAG_URL);
 		final String iconUrl = appInfo.img;
 		if (tag != null && !tag.equals(iconUrl)) {
-			holder.mIvIcon.setImageResource(R.drawable.ic_img_empty);
+			holder.mIvIcon.setImageResource(R.drawable.ic_img_default);
 		}
 
 		holder.mIvIcon.setTag(TAG_URL, iconUrl);

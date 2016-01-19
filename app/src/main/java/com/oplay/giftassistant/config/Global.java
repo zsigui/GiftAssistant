@@ -25,14 +25,22 @@ public class Global {
 
 	/* ImageLoader默认图片加载配置 */
 	public static final DisplayImageOptions IMAGE_OPTIONS = new DisplayImageOptions.Builder()
-			.showImageForEmptyUri(R.drawable.ic_img_empty)
-			.showImageOnFail(R.drawable.ic_img_fail)
-			.showImageOnLoading(R.drawable.ic_img_loading)
+			.showImageForEmptyUri(R.drawable.ic_img_default)
+			.showImageOnFail(R.drawable.ic_img_default)
+			.showImageOnLoading(R.drawable.ic_img_default)
 			.bitmapConfig(Bitmap.Config.RGB_565)
 			.cacheInMemory(true)
 			.cacheOnDisk(true)
 			.build();
-
+	/* 头像的ImageLoader加载配置 */
+	public static final DisplayImageOptions AVATOR_IMAGE_LOADER = new DisplayImageOptions.Builder()
+			.showImageForEmptyUri(R.drawable.ic_avator_default)
+			.showImageOnFail(R.drawable.ic_avator_default)
+			.showImageOnLoading(R.drawable.ic_avator_default)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.cacheInMemory(true)
+			.cacheOnDisk(true)
+			.build();
 	public static NetEngine getNetEngine() {
 		if (sNetEngine == null) {
 			sNetEngine =AssistantApp.getInstance().getRetrofit().create(NetEngine.class);

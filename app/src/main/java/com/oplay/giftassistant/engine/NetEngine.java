@@ -10,6 +10,7 @@ import com.oplay.giftassistant.model.data.req.ReqModifyNick;
 import com.oplay.giftassistant.model.data.req.ReqModifyPhone;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.req.ReqPayCode;
+import com.oplay.giftassistant.model.data.req.ReqSearchKey;
 import com.oplay.giftassistant.model.data.req.ReqTaskReward;
 import com.oplay.giftassistant.model.data.resp.GameTypeMain;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
@@ -23,6 +24,7 @@ import com.oplay.giftassistant.model.data.resp.ModifyPhone;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.data.resp.PayCode;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
+import com.oplay.giftassistant.model.data.resp.SearchDataResult;
 import com.oplay.giftassistant.model.data.resp.TaskReward;
 import com.oplay.giftassistant.model.data.resp.UpdateSesion;
 import com.oplay.giftassistant.model.data.resp.UserModel;
@@ -42,12 +44,25 @@ import retrofit.http.Url;
  */
 public interface NetEngine {
 
+
+	/**
+	 * 游戏/礼包搜索
+	 */
+	@POST(NetUrl.GET_SEARCH)
+	Call<JsonRespBase<SearchDataResult>> obtainSearchResult(@Body JsonReqBase<ReqSearchKey> reqData);
+
 	/* -------------- 礼包接口 --------------- */
 	/**
 	 * 获取 首页-礼包 页面的数据
 	 */
 	@POST(NetUrl.GIFT_GET_INDEX)
 	Call<JsonRespBase<IndexGift>> obtainIndexGift(@Body JsonReqBase<ReqIndexGift> reqData);
+
+	/**
+	 * 获取 首页-礼包 下端接口刷新后数据
+	 */
+	@POST(NetUrl.GIFT_REFRESH_INDEX)
+	Call<JsonReqBase<IndexGift>> refreshIndexGift(@Body JsonReqBase<Void> reqData);
 
 	/**
 	 * 获取 首页-礼包-猜你喜欢 页面的数据
@@ -87,10 +102,16 @@ public interface NetEngine {
 	Call<JsonRespBase<PayCode>> payGiftCode(@Body JsonReqBase<ReqPayCode> reqData);
 
 	/**
-	 * 支付 获取特定礼包码
+	 * 支付 获取特定礼包码(订单查询)
 	 */
 	@POST(NetUrl.GIFT_GET_SPECIFIC_CODE)
 	Call<JsonRespBase<PayCode>> getSpecificGiftCode(@Body JsonReqBase<ReqGetCode> reqData);
+
+	/**
+	 * 支付 通知偶玩豆订单支付失败
+	 */
+	@POST(NetUrl.GIFT_FAIL_PAY)
+	Call<JsonRespBase<Void>> notifyTradeFail(@Body JsonReqBase<ReqGetCode> reqData);
 
 	/* -------------- 游戏接口 --------------- */
 	/**

@@ -23,6 +23,7 @@ import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
+import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
 import com.oplay.giftassistant.util.DateUtil;
@@ -111,7 +112,7 @@ public class GiftDetailFragment extends BaseFragment {
 		mHasData = true;
 		mViewManager.showContent();
 		mData = data;
-
+		((BaseAppCompatActivity)getActivity()).setBarTitle("礼包-" + mData.gameName);
 		ImageLoader.getInstance().displayImage(mData.img, ivIcon, Global.IMAGE_OPTIONS);
 		tvName.setText(String.format("[%s]%s", mData.gameName, mData.name));
 		if (mData.isLimit) {
@@ -302,6 +303,7 @@ public class GiftDetailFragment extends BaseFragment {
 		ng3.gameName = "兽人战争";
 		ng3.id = 337;
 		ng3.status = GiftTypeUtil.STATUS_SEIZE;
+		ng3.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
 		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 		ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
 		ng3.name = "高级礼包";

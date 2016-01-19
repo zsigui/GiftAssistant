@@ -13,7 +13,7 @@ import com.oplay.giftassistant.util.ToastUtil;
 /**
  * Created by zsigui on 15-12-31.
  */
-public class DetailActivity extends BaseAppCompatActivity {
+public class GameDetailActivity extends BaseAppCompatActivity {
 
 
 	private int mDetailId;

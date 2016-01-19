@@ -34,6 +34,7 @@ public class GiftTypeUtil {
 	public static final int TYPE_LIMIT_EMPTY = 10;
 	// 正常礼包类型，已抢号, disabled
 	public static final int TYPE_NORMAL_SEIZED = 11;
+	public static final int TYPE_ERROR = 233;
 
 	// 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束
 	public static final int STATUS_WAIT_SEIZE = 1;
@@ -93,6 +94,6 @@ public class GiftTypeUtil {
 				}
 			} // else finished
 		}
-		throw new IllegalArgumentException("Wrong type of the gift status");
+		return TYPE_ERROR;
     }
 }
