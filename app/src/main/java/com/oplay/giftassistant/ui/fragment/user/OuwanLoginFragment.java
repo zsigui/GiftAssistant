@@ -73,6 +73,8 @@ public class OuwanLoginFragment extends BaseFragment {
 		InputTextUtil.initPswFilter(etUser, etPwd, tvClear, btnLogin);
 		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
+		etUser.setFocusableInTouchMode(true);
+		etPwd.setFocusableInTouchMode(true);
 	}
 
 	@Override
@@ -107,6 +109,9 @@ public class OuwanLoginFragment extends BaseFragment {
 				break;
 			case R.id.tv_clear:
 				etUser.setText("");
+				etPwd.setText("");
+				etUser.requestFocus();
+				etUser.setSelection(0);
 				break;
 		}
 	}
@@ -136,7 +141,7 @@ public class OuwanLoginFragment extends BaseFragment {
 									if (response.body() != null
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
-										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
+										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										AccountManager.getInstance().setUser(userModel);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;

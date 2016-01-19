@@ -131,6 +131,9 @@ public class PhoneLoginFragment extends BaseFragment {
 				break;
 			case R.id.tv_clear:
 				etPhone.setText("");
+				etCode.setText("");
+				etPhone.setSelection(0);
+				etPhone.requestFocus();
 				break;
 		}
 	}

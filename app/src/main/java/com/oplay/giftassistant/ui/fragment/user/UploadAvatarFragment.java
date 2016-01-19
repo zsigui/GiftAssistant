@@ -208,6 +208,8 @@ public class UploadAvatarFragment extends BaseFragment {
 								hideLoading();
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+										ImageLoader.getInstance().displayImage(
+												response.body().getData().avatar, ivAvatar, Global.AVATOR_IMAGE_LOADER);
 										AccountManager.getInstance().getUserInfo().avatar =
 												response.body().getData().avatar;
 										ObserverManager.getInstance().notifyUserUpdate();
@@ -217,8 +219,11 @@ public class UploadAvatarFragment extends BaseFragment {
 										KLog.e(AppDebugConfig.TAG_FRAG,
 												response.body() == null ? "解析失败" : response.body().error());
 									}
+									ToastUtil.showShort("上传失败-" +
+											(response.body() == null ? "解析错误" : response.body().getMsg()));
+									return;
 								}
-								ToastUtil.showShort("网络异常，上传失败");
+								ToastUtil.showShort("上传失败-" + (response == null ? "网络异常" : response.message()));
 							}
 
 							@Override
@@ -227,7 +232,7 @@ public class UploadAvatarFragment extends BaseFragment {
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(AppDebugConfig.TAG_FRAG, t);
 								}
-								ToastUtil.showShort("网络异常，上传失败");
+								ToastUtil.showShort("上传失败-网络异常");
 							}
 						});
 			}
@@ -235,7 +240,8 @@ public class UploadAvatarFragment extends BaseFragment {
 	}
 
 	private String generateImageStringParam(String filePath) {
-		Bitmap bitmap = BitmapUtil.getSmallBitmap(filePath, AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
+		Bitmap bitmap = BitmapUtil.getBitmap(filePath, 10 * 1024 * 8,
+				AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
 		return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);

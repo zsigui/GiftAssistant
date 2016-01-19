@@ -42,10 +42,10 @@ public class IndexGiftNew implements Serializable{
     // 抢号需要换取的偶玩豆
 	@SerializedName("owanb_price")
     public int bean;
-    // 开抢时间戳
+    // 开抢时间
 	@SerializedName("start_time")
     public String seizeTime;
-    // 开淘时间戳
+    // 开淘时间
 	@SerializedName("tao_time")
     public String searchTime;
     // 剩余礼包数量

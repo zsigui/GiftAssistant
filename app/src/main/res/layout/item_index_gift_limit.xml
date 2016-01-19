@@ -18,6 +18,7 @@
         android:id="@+id/tv_game_name"
         style="@style/DefaultTextView.Header"
         android:layout_below="@+id/iv_icon"
+        android:layout_width = "@dimen/di_index_hoz_module_icon_diameter"
         android:layout_marginTop="10dp"
         android:text="刀塔传奇"/>
 
@@ -26,6 +27,7 @@
         style="@style/DefaultTextView.Header"
         android:layout_below="@+id/tv_game_name"
         android:layout_marginTop="1dp"
+        android:layout_width = "@dimen/di_index_hoz_module_icon_diameter"
         android:text="VIP礼包"
         android:textColor="@color/co_common_app_second_bg_orange"/>
 

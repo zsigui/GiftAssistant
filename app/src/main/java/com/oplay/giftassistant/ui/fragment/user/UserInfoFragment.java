@@ -30,9 +30,9 @@ import com.socks.library.KLog;
 public class UserInfoFragment extends BaseFragment {
 
 	private RelativeLayout rlAvatar;
-	private RelativeLayout rlNick;
-	private LinearLayout rlLogin;
-	private LinearLayout rlBind;
+	private LinearLayout llNick;
+	private LinearLayout llLogin;
+	private LinearLayout llBind;
 	private ImageView ivLogin;
 	private ImageView ivBind;
 	private RelativeLayout rlModifyPwd;
@@ -51,9 +51,9 @@ public class UserInfoFragment extends BaseFragment {
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_user_info);
 		rlAvatar = getViewById(R.id.rl_avatar);
-		rlNick = getViewById(R.id.rl_nick);
-		rlLogin = getViewById(R.id.rl_login);
-		rlBind = getViewById(R.id.rl_bind);
+		llNick = getViewById(R.id.ll_nick);
+		llLogin = getViewById(R.id.rl_login);
+		llBind = getViewById(R.id.rl_bind);
 		ivIcon = getViewById(R.id.iv_icon);
 		tvNick = getViewById(R.id.tv_nick);
 		tvLoginTitle = getViewById(R.id.tv_login_title);
@@ -68,9 +68,9 @@ public class UserInfoFragment extends BaseFragment {
 	@Override
 	protected void setListener() {
 		rlAvatar.setOnClickListener(this);
-		rlNick.setOnClickListener(this);
-		rlLogin.setOnClickListener(this);
-		rlBind.setOnClickListener(this);
+		llNick.setOnClickListener(this);
+		llLogin.setOnClickListener(this);
+		llBind.setOnClickListener(this);
 		rlModifyPwd.setOnClickListener(this);
 	}
 
@@ -105,10 +105,10 @@ public class UserInfoFragment extends BaseFragment {
 			if (user.bindOuwanStatus == 1) {
 				// 已绑定偶玩账号
 				tvBind.setText(user.username);
-				rlModifyPwd.setVisibility(View.GONE);
+				rlModifyPwd.setVisibility(View.VISIBLE);
 			} else {
 				tvBind.setText("未绑定");
-				rlModifyPwd.setVisibility(View.VISIBLE);
+				rlModifyPwd.setVisibility(View.GONE);
 			}
 		} else {
 			nick = (TextUtils.isEmpty(user.nick) ?  user.username : user.nick);
@@ -138,7 +138,7 @@ public class UserInfoFragment extends BaseFragment {
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 						UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_set_avatar_title));
 				break;
-			case R.id.rl_nick:
+			case R.id.ll_nick:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 						SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
 				break;
@@ -146,6 +146,7 @@ public class UserInfoFragment extends BaseFragment {
 				if (user.loginType == UserTypeUtil.TYPE_POHNE) {
 					if (user.bindOuwanStatus == 1) {
 						// 更换手机账号
+						OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
 					} else {
 						ToastUtil.showLong("需要先绑定偶玩账号才能更换登录手机号码");
 					}
@@ -155,6 +156,7 @@ public class UserInfoFragment extends BaseFragment {
 				if (user.loginType == UserTypeUtil.TYPE_POHNE) {
 					if (user.bindOuwanStatus == 0) {
 						// 绑定偶玩账号
+						OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
 					}
 				} else {
 					// 调用偶玩绑定号码

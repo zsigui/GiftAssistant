@@ -41,7 +41,7 @@ public class ScoreMission implements Serializable {
 	/**
 	 * 连续天数(针对连续性任务)
 	 */
-	@SerializedName("continuous_day")
+	@SerializedName("continue_day")
 	public int continuousDay;
 
 	/**

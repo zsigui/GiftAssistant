@@ -29,22 +29,31 @@
 
 	<View style = "@style/HDividerView" />
 
-	<RelativeLayout
-			android:id = "@+id/rl_nick"
+	<LinearLayout
+			android:id = "@+id/ll_nick"
 			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:orientation = "horizontal"
+			android:gravity = "center_vertical"
 			android:clickable = "true" >
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
+				android:layout_weight = "1"
+				android:layout_width = "match_parent"
 				android:text = "@string/st_user_nick" />
 
 		<TextView
 				android:id = "@+id/tv_nick"
 				style = "@style/DefaultTextView.Text"
 				android:layout_alignParentRight = "true"
-				android:paddingRight = "10dp" />
+				android:paddingRight = "10dp"/>
+		<ImageView
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:paddingRight = "10dp"
+				android:src = "@drawable/ic_arrow_more" />
 
-	</RelativeLayout >
+	</LinearLayout >
 
 	<LinearLayout
 			android:id = "@+id/rl_login"

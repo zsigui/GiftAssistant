@@ -12,6 +12,7 @@
 		<AutoCompleteTextView
 				android:id = "@+id/et_input"
 				style = "@style/DefaultTextView.Login"
+				android:cursorVisible="true"
 				android:hint = "@string/st_login_phone_hint" />
 
 		<TextView
@@ -33,6 +34,7 @@
 		<EditText
 				android:id = "@+id/et_phone_code"
 				style = "@style/DefaultTextView.Login"
+				android:cursorVisible="true"
 				android:inputType="number"
 				android:hint = "@string/st_login_phone_code_hint" />
 

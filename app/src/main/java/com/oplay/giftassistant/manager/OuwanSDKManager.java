@@ -128,12 +128,6 @@ public class OuwanSDKManager implements InitCallbackListener {
 		payInfo.setRoleId(String.valueOf(userId));
 		payInfo.setRoleName("");
 		payInfo.setServiceType(UmipaymentInfo.SERVICE_TYPE_QUOTA);
-		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount());
-		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount()
-				.getGameUserInfo());
-		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount().getSession());
-		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount()
-				.getGameUserInfo().getOpenId());
 		UmipaySDKManager.showPayView(mContext, payInfo, listener);
 	}
 

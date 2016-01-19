@@ -10,6 +10,8 @@ import com.oplay.giftassistant.ui.fragment.setting.MyGiftFragment;
 import com.oplay.giftassistant.ui.fragment.setting.SettingFragment;
 import com.oplay.giftassistant.ui.fragment.setting.TaskFragment;
 import com.oplay.giftassistant.ui.fragment.setting.WalletFragment;
+import com.oplay.giftassistant.ui.fragment.user.SetNickFragment;
+import com.oplay.giftassistant.ui.fragment.user.UploadAvatarFragment;
 import com.oplay.giftassistant.ui.fragment.user.UserInfoFragment;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
@@ -79,11 +81,11 @@ public class SettingActivity extends BaseAppCompatActivity {
 						getResources().getString(R.string.st_user_info_title));
 				break;
 			case KeyConfig.TYPE_ID_USER_SET_NICK:
-				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
+				replaceFragWithTitle(R.id.fl_container, UploadAvatarFragment.newInstance(),
 						getResources().getString(R.string.st_user_set_nick_title));
 				break;
 			case KeyConfig.TYPE_ID_USER_SET_AVATAR:
-				replaceFragWithTitle(R.id.fl_container, UserInfoFragment.newInstance(),
+				replaceFragWithTitle(R.id.fl_container, SetNickFragment.newInstance(),
 						getResources().getString(R.string.st_user_set_avatar_title));
 				break;
 			default:

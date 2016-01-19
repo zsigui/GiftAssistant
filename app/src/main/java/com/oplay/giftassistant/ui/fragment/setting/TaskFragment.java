@@ -14,6 +14,7 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.config.TaskTypeUtil;
+import com.oplay.giftassistant.handler.ScoreHandler;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.OuwanSDKManager;
@@ -21,9 +22,10 @@ import com.oplay.giftassistant.model.data.resp.ScoreMission;
 import com.oplay.giftassistant.model.data.resp.ScoreMissionList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.activity.SearchActivity;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.ui.fragment.user.SetNickFragment;
+import com.oplay.giftassistant.ui.fragment.user.UploadAvatarFragment;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -307,13 +309,15 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private void handleMission(ScoreMission scoreMission) {
 		if (scoreMission == null) return;
 		String id = scoreMission.id;
-		Intent intent;
+		ScoreHandler.sIsTasking = true;
 		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
 			// 跳转到设置用户昵称信息界面
-			IntentUtil.jumpUserSetNick(getContext());
+			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+					SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
 		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
 			// 跳转到设置用户头像信息界面
-			IntentUtil.jumpUserSetAvatar(getContext());
+			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
 		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 			// 跳转到绑定手机账号界面
 			OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
@@ -322,11 +326,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
 		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
 			// 跳转反馈界面
-			IntentUtil.jumpFeedBack(getContext());
+			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+					FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
 		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
 			// 跳转搜索礼包/游戏界面
-			intent = new Intent(getContext(), SearchActivity.class);
-			((BaseAppCompatActivity) getActivity()).openPageForResult(this, KeyConfig.REQUEST_UPDATE_AVATAR, intent);
+			IntentUtil.jumpSearch(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
 			// 评论
 		} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
