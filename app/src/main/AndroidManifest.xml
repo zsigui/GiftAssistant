@@ -84,12 +84,14 @@
 
 		<activity
 				android:name = ".ui.activity.GiftListActivity"
+				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.GameDetailActivity"
+				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
@@ -102,18 +104,21 @@
 
 		<activity
 				android:name = ".ui.activity.GameListActivity"
+				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.SettingActivity"
+				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = ".ui.activity.LoginActivity"
+				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />

@@ -70,7 +70,7 @@ public class WalletFragment extends BaseFragment {
 
 	@Override
 	protected void lazyLoad() {
-
+		AccountManager.getInstance().updateUserInfo();
 	}
 
 	@Override
@@ -94,6 +94,25 @@ public class WalletFragment extends BaseFragment {
 				((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
 						TaskFragment.newInstance(), getResources().getString(R.string.st_task_title));
 				break;
+		}
+	}
+
+	@Override
+	public void onUserUpdate() {
+		super.onUserUpdate();
+		try {
+			if (AccountManager.getInstance().isLogin()) {
+				if (tvBean != null) {
+					tvBean.setText(AccountManager.getInstance().getUserInfo().bean);
+				}
+				if (tvScore != null) {
+					tvScore.setText(AccountManager.getInstance().getUserInfo().score);
+				}
+			}
+		}catch (Throwable e) {
+			if(AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
 		}
 	}
 }

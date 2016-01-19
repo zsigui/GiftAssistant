@@ -269,11 +269,12 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		updateDownloadRate(holder.mTvSpeed, 0);
 	}
 
-	private void initFailedStatus(ViewHolder holder) {
+	private void initFailedStatus(ViewHolder holder, IndexGameNew appInfo) {
 		holder.mPBar.setVisibility(View.VISIBLE);
 		holder.mPBar.setEnabled(false);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
 		holder.mTvAction.setText("重试");
+		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
 		holder.mTvSpeed.setVisibility(View.VISIBLE);
 		holder.mTvSpeed.setText("下载暂停中");
 	}
@@ -283,6 +284,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mPBar.setEnabled(false);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
 		holder.mTvAction.setText("继续");
+		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
 		holder.mTvSpeed.setVisibility(View.VISIBLE);
 		holder.mTvSpeed.setText("下载暂停中");
 	}
@@ -330,7 +332,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		if (status == DownloadStatus.DOWNLOADING || status == DownloadStatus.PENDING) {
 			initDownloadingStatus(holder, appInfo);
 		} else if (status == DownloadStatus.FAILED) {
-			initFailedStatus(holder);
+			initFailedStatus(holder, appInfo);
 		} else if (status == DownloadStatus.PAUSED) {
 			initPauseStatus(holder, appInfo);
 		} else {

@@ -158,11 +158,11 @@ public class UserInfoFragment extends BaseFragment {
 					}
 				} else {
 					// 调用偶玩绑定号码
-					OuwanSDKManager.getInstance().showChangePhoneView();
+					OuwanSDKManager.getInstance().showChangePhoneView(getActivity());
 				}
 				break;
 			case R.id.rl_modify_pwd:
-				OuwanSDKManager.getInstance().showOuwanModifyPwdView();
+				OuwanSDKManager.getInstance().showOuwanModifyPwdView(getActivity());
 				break;
 		}
 	}

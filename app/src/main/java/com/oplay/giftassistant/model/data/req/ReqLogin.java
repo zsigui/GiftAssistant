@@ -58,6 +58,12 @@ public class ReqLogin {
 	public boolean setOuwanUser(String username, String password) {
 		this.username = username.toLowerCase();
 		this.password = Coder_Md5.md5(Coder_Md5.md5(password) + this.username);
+
+		this.username = username.toLowerCase();
+		byte[] psw_md5_bytes = Coder_Md5.md5_16(password);
+		byte[] user_bytes = this.username.getBytes();
+		byte[] bytedata = Coder_Md5.concatByteArrays(psw_md5_bytes, user_bytes);
+		this.password = Coder_Md5.md5(bytedata);
 		if (this.password.length() == 0) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "src : username = " + this.username + ", password = " + password);

@@ -132,7 +132,8 @@ public class OuwanSDKManager implements InitCallbackListener {
 		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount()
 				.getGameUserInfo());
 		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount().getSession());
-		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount().getGameUserInfo().getOpenId());
+		KLog.e("account", "account = " + UmipayAccountManager.getInstance(mContext).getCurrentAccount()
+				.getGameUserInfo().getOpenId());
 		UmipaySDKManager.showPayView(mContext, payInfo, listener);
 	}
 
@@ -171,18 +172,30 @@ public class OuwanSDKManager implements InitCallbackListener {
 		}
 	}
 
-	public void showOuwanModifyPwdView() {
+	public void showOuwanModifyPwdView(Context context) {
+		jumpToDestUrl("修改登录密码", "modifypsw");
 	}
 
-	public void showChangePhoneView() {
-
+	public void showChangePhoneView(Context context) {
+		jumpToDestUrl("修改绑定手机", "changephone");
 	}
 
-	public void showBindPhoneView() {
-		
+	public void showBindPhoneView(Context context) {
+		jumpToDestUrl("绑定手机号码", "bindphone");
 	}
 
-	public void showBindOuwanView() {
+	public void showBindOuwanView(Context context) {
+		jumpToDestUrl("绑定偶玩账号", "bindoauth");
+	}
 
+	private void jumpToDestUrl(String title, String dest) {
+		String url = SDKConstantConfig.get_UMIPAY_JUMP_URL(mContext);
+		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(mContext,
+				SDKConstantConfig.get_UMIPAY_ACCOUNT_URL(mContext));
+		int payType = UmipayBrowser.NOT_PAY;
+		paramsList.add(new BasicNameValuePair("dest", dest));
+		paramsList.add(new BasicNameValuePair("from", "giftcool"));
+		UmipayBrowser.postUrl(mContext, title, url, paramsList, Flags_Browser_Config.FLAG_AUTO_CHANGE_TITLE |
+				Flags_Browser_Config.FLAG_USE_YOUMI_JS_INTERFACES, null, null, payType);
 	}
 }

@@ -120,7 +120,7 @@ public class AccountManager {
 			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
-					if (NetworkUtil.isConnected(mContext)) {
+					if (!NetworkUtil.isConnected(mContext)) {
 						return;
 					}
 					Global.getNetEngine().getUserInfo(new JsonReqBase<String>(null))

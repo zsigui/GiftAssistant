@@ -316,10 +316,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			IntentUtil.jumpUserSetAvatar(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 			// 跳转到绑定手机账号界面
-			OuwanSDKManager.getInstance().showBindPhoneView();
+			OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
 		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)){
 			// 跳转到绑定偶玩账号界面
-			OuwanSDKManager.getInstance().showBindOuwanView();
+			OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
 		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
 			// 跳转反馈界面
 			IntentUtil.jumpFeedBack(getContext());
