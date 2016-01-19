@@ -42,7 +42,6 @@ public class LoadingDialog extends DialogFragment {
 			mLoadText = getResources().getString(R.string.st_view_loading_more);
 		}
 		setLoadText(mLoadText);
-		KLog.e(animationDrawable);
 		animationDrawable.start();
 		return new AlertDialog.Builder(getContext(), R.style.DefaultCustomDialog_NoDim)
 				.setView(contentView)

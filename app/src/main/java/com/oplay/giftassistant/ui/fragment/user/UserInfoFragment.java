@@ -170,21 +170,15 @@ public class UserInfoFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
-
 
 	@Override
 	public void onUserUpdate() {
-		if (mIsSwipeRefresh) {
-			return;
-		}
 		lazyLoad();
 	}
 }

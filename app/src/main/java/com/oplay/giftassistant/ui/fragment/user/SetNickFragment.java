@@ -11,6 +11,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
+import com.oplay.giftassistant.handler.ScoreHandler;
 import com.oplay.giftassistant.listener.OnBackPressListener;
 import com.oplay.giftassistant.manager.AccountManager;
 import com.oplay.giftassistant.manager.ObserverManager;
@@ -19,6 +20,7 @@ import com.oplay.giftassistant.model.data.resp.ModifyNick;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.util.InputMethodUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -72,18 +74,28 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 
 	@Override
 	public boolean onBack() {
-		if (TextUtils.isEmpty(etNick.getText().toString())) {
+		// 隐藏输入框
+		InputMethodUtil.hideSoftInput(mActivity);
+
+		// 做任务的情况下
+		if (ScoreHandler.sIsTasking) {
+			AccountManager.getInstance().updateUserInfo();
+		}
+
+		final String nick = etNick.getText().toString().trim();
+		if (TextUtils.isEmpty(nick) ||
+				nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
 			return false;
 		}
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (NetworkUtil.isConnected(getContext())) {
+				if (!NetworkUtil.isConnected(getContext())) {
 					ToastUtil.showShort("网络错误，修改昵称失败!");
 					return;
 				}
 				ReqModifyNick modifyNick = new ReqModifyNick();
-				modifyNick.newNick = etNick.getText().toString().trim();
+				modifyNick.newNick = nick;
 				modifyNick.oldNick = AccountManager.getInstance().getUserInfo().nick;
 				Global.getNetEngine().modifyUserNick(new JsonReqBase<ReqModifyNick>(modifyNick))
 						.enqueue(new Callback<JsonRespBase<ModifyNick>>() {
@@ -99,8 +111,6 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 										KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null?
 												"解析异常" : response.body().error()));
 									}
-									ToastUtil.showShort((response.body() == null?
-											"解析异常" : response.body().getMsg()));
 								}
 							}
 

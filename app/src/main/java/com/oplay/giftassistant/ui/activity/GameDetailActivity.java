@@ -4,10 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.game.GameDetailFragment;
-import com.oplay.giftassistant.ui.fragment.gift.GiftDetailFragment;
 import com.oplay.giftassistant.util.ToastUtil;
 
 /**
@@ -17,7 +17,7 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 
 
 	private int mDetailId;
-	private String mDetailName;
+	private int mStatus;
 	private int mStatusBarColorIndex;
 	private int mType;
 	private int[] mThemeColor = {R.color.co_rainbow_color_1, R.color.co_rainbow_color_2,
@@ -34,7 +34,7 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 	protected int getStatusBarColor() {
 		if (getIntent() != null) {
 			mDetailId = getIntent().getIntExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_DEFAULT);
-			mDetailName = getIntent().getStringExtra(KeyConfig.KEY_NAME);
+			mStatus = getIntent().getIntExtra(KeyConfig.KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
 			mType = getIntent().getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
 		}
 		if (mType == KeyConfig.TYPE_ID_GAME_DETAIL) {
@@ -59,18 +59,12 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 		switch (mType) {
 			case KeyConfig.TYPE_ID_GAME_DETAIL:
 				replaceFragWithTitle(R.id.fl_container,
-						GameDetailFragment.newInstance(mDetailId,
+						GameDetailFragment.newInstance(mDetailId, mStatus,
 								getResources().getString(mThemeColorStr[mStatusBarColorIndex])),
 						"游戏专区", true);
 				if (mToolbar != null) {
 					mToolbar.setBackgroundResource(mThemeColor[mStatusBarColorIndex]);
 				}
-				break;
-			case KeyConfig.TYPE_ID_GIFT_DETAIL:
-				replaceFragWithTitle(R.id.fl_container, GiftDetailFragment.newInstance(mDetailId),
-						mDetailName, true);
-				/*replaceFragWithTitle(R.id.fl_container, GiftWebDetailFragment.newInstance(mDetailId),
-						mDetailName, true);*/
 				break;
 			default:
 				ToastUtil.showShort("传递类型错误 : " + mType);

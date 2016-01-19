@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftassistant.adapter.base.BaseRVHolder;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.IndexTypeUtil;
 import com.oplay.giftassistant.listener.OnItemClickListener;
@@ -34,7 +35,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 				if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
 					item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
 				} else {
-					IntentUtil.jumpGameDetail(mContext, item.id, item.name);
+					IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 				}
 			}
 		});

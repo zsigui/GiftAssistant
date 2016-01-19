@@ -74,7 +74,7 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpGiftDetail(mContext, o.id, String.format("[%s]%s", o.gameName, o.name));
+				IntentUtil.jumpGiftDetail(mContext, o.id);
 			}
 		});
 	}

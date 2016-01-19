@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
@@ -20,26 +22,29 @@ import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
 import com.oplay.giftassistant.adapter.other.GameSuperLinearLayoutManager;
 import com.oplay.giftassistant.adapter.other.HeaderFooterDividerItemDecoration;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.BannerTypeUtil;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.IndexTypeUtil;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.AppStatus;
+import com.oplay.giftassistant.model.NetworkImageHolderView;
 import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ViewUtil;
+import com.oplay.giftassistant.util.transform.StackTransFormer;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
-import cn.bingoogolapple.bgabanner.BGABanner;
-
 /**
  * Created by zsigui on 16-1-15.
  */
-public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownloadStatusChangeListener {
+public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownloadStatusChangeListener, com.bigkoo
+		.convenientbanner.listener.OnItemClickListener {
 
 	private IndexGameSuper mData;
 	private Context mContext;
@@ -58,7 +63,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			}
 			switch (v.getId()) {
 				case R.id.rl_recommend:
-					IntentUtil.jumpGameDetail(mContext, mData.recommend.id, mData.recommend.name);
+					IntentUtil.jumpGameDetail(mContext, mData.recommend.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 					break;
 				case R.id.tv_download:
 					if (!AppStatus.DISABLE.equals(mData.recommend.appStatus)) {
@@ -78,7 +83,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
 					item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
 				} else {
-					IntentUtil.jumpGameDetail(mContext, item.id, item.name);
+					IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 				}
 			} catch (Throwable e) {
 				if (AppDebugConfig.IS_DEBUG) {
@@ -103,29 +108,31 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			return;
 		}
 		mData.banner = banners;
-		ArrayList<View> vs = new ArrayList<>(banners.size());
-		for (int i = 0; i < banners.size(); i++) {
-			View v = LayoutInflater.from(mContext).inflate(R.layout.view_banner_img, null);
-			vs.add(v);
-			final IndexBanner banner = banners.get(i);
-			ImageLoader.getInstance().displayImage(banner.url, (ImageView) v);
-			v.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					handleBannerJump(banner);
-				}
-			});
+		ArrayList<String> data = new ArrayList<>();
+		for (IndexBanner banner : banners) {
+			data.add(banner.url);
 		}
-		mBannerVH.mBanner.setViews(vs);
-	}
+		if (data.size() == 0) {
+			data.add("drawable://" + R.drawable.ic_banner_default);
+		}
+		mBannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
-	/**
-	 * 判断处理 Banner 跳转事件
-	 *
-	 * @param banner
-	 */
-	private void handleBannerJump(IndexBanner banner) {
-
+			@Override
+			public NetworkImageHolderView createHolder() {
+				return new NetworkImageHolderView();
+			}
+		}, data)
+				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
+				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+				.setOnItemClickListener(this);
+		if (data.size() == 1) {
+			mBannerVH.mBanner.setCanLoop(false);
+		} else {
+			mBannerVH.mBanner.setCanLoop(true);
+			mBannerVH.mBanner.setScrollDuration(500);
+			mBannerVH.mBanner.getViewPager().setPageTransformer(true, new StackTransFormer());
+			mBannerVH.mBanner.startTurning(3000);
+		}
 	}
 
 	public void updateHotData(ArrayList<IndexGameNew> data) {
@@ -266,9 +273,17 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 	}
 
+	@Override
+	public void onItemClick(int position) {
+		if (mData == null || mData.banner == null || mData.banner.size() <= position) {
+			return;
+		}
+		BannerTypeUtil.handleBanner(mContext, mData.banner.get(position));
+	}
+
 	class BannerVH extends BaseRVHolder {
 
-		BGABanner mBanner;
+		ConvenientBanner mBanner;
 
 		public BannerVH(View itemView) {
 			super(itemView);

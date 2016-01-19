@@ -26,6 +26,8 @@ import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
+import java.util.ArrayList;
+
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -155,13 +157,21 @@ public class AccountManager {
 	/**
 	 * 同步Cookie
 	 */
-	public void syncCookie(String baseUrl, String cookieVal) {
+	public void syncCookie(String baseUrl, ArrayList<String> cookies) {
 		CookieManager.getInstance().setAcceptCookie(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
+			CookieManager.getInstance().removeAllCookies(null);
+		} else {
+			CookieManager.getInstance().removeAllCookie();
+		}
+		if (cookies != null && !cookies.isEmpty()) {
+			for (String cookie : cookies) {
+				CookieManager.getInstance().setCookie(baseUrl, cookie);
+			}
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			CookieManager.getInstance().flush();
 		} else {
-			CookieManager.getInstance().setCookie(baseUrl, cookieVal);
 			CookieSyncManager.createInstance(mContext);
 			CookieSyncManager.getInstance().sync();
 		}
@@ -169,14 +179,13 @@ public class AccountManager {
 
 
 	public void syncCookie() {
+		ArrayList<String> cookies = null;
 		if (isLogin()) {
-			String cookie = "cuid=" + getUserSesion().uid + ";";
-			String cookieSession = "sessionid=" + getUserSesion().session + ";";
-			syncCookie(WebViewUrl.URL_BASE, cookie);
-			syncCookie(WebViewUrl.URL_BASE, cookieSession);
-		} else {
-			syncCookie(WebViewUrl.URL_BASE, "");
+			cookies = new ArrayList<>();
+			cookies.add("cuid=" + getUserSesion().uid + ";");
+			cookies.add("sessionid=" + getUserSesion().session + ";");
 		}
+		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}
 
 	/**

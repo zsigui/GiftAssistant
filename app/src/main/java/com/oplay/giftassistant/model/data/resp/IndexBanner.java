@@ -14,11 +14,10 @@ public class IndexBanner implements Serializable {
 	public String url;
 
 	// 跳转类型
-	public String type;
+	@SerializedName("action")
+	public int type;
 
+	// 跳转需要数据
+	@SerializedName("data")
 	public String extData;
-
-	// 游戏名，后期可能会有跳转需要，用于跳转对应论坛
-	//@SerializedName("jump")
-	// public String jump;
 }

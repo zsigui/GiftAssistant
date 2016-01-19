@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
 import com.oplay.giftassistant.util.IntentUtil;
@@ -44,7 +45,7 @@ public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike> 
                 @Override
                 public void onClick(View v) {
                     // 去到游戏
-	                IntentUtil.jumpGameDetail(mContext, o.id, o.name);
+	                IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
                 }
             });
         }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.WebViewUrl;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.download.listener.OnDownloadStatusChangeListener;
@@ -22,18 +23,21 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 
 	private static final String KEY_ID = "key_data_id";
 	private static final String KEY_COLOR = "key_data_color";
+	private static final String KEY_STATUS = "key_data_status";
 
 	private int mId;
 	private LinearLayout downloadLayout;
 	private DownloadButtonView btnDownload;
 	private IndexGameNew mAppInfo;
 	private String mStatusBarColor;
+	private int mStatus;
 
-	public static GameDetailFragment newInstance(int id, String color) {
+	public static GameDetailFragment newInstance(int id, int status, String color) {
 		GameDetailFragment fragment = new GameDetailFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt(KEY_ID, id);
 		bundle.putString(KEY_COLOR, color);
+		bundle.putInt(KEY_STATUS, status);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -59,11 +63,10 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 			return;
 		}
 		mId = getArguments().getInt(KEY_ID);
+		mStatus = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
 		mStatusBarColor = getArguments().getString(KEY_COLOR, "f85454");
-		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor;
-		if (AccountManager.getInstance().isLogin()) {
-			AccountManager.getInstance().syncCookie();
-		}
+		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor + "&status="+mStatus;
+		AccountManager.getInstance().syncCookie();
 		loadUrl(url);
 		mIsLoading = true;
 	}

@@ -186,10 +186,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			String name;
 			String email;
 			if (mUser.loginType == UserTypeUtil.TYPE_POHNE) {
-				name = (TextUtils.isEmpty(mUser.nick) ? mUser.nick : StringUtil.transePhone(mUser.phone));
+				name = (TextUtils.isEmpty(mUser.nick) ?  StringUtil.transePhone(mUser.phone) : mUser.nick);
 				email = "登陆手机：" + StringUtil.transePhone(mUser.phone);
 			} else {
-				name = (TextUtils.isEmpty(mUser.nick) ? mUser.nick : mUser.username);
+				name = (TextUtils.isEmpty(mUser.nick) ? mUser.username : mUser.nick);
 				email = "偶玩账号：" + mUser.username;
 			}
 			mProfile = new ProfileDrawerItem()

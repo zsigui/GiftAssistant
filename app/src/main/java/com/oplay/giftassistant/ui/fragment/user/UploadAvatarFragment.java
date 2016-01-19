@@ -40,7 +40,6 @@ import net.youmi.android.libs.common.coder.Coder_Md5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -137,8 +136,7 @@ public class UploadAvatarFragment extends BaseFragment {
 				PHOTO_DIR.mkdirs();
 			}
 			mCurrentPhotoFile = new File(PHOTO_DIR, getPhotoFileName());// 给新照的照片文件命名
-			((BaseAppCompatActivity) getActivity()).openPageForResult(this, REQ_ID_PHOTO_CAMERA,
-					getTakePickIntent(mCurrentPhotoFile));
+			startActivityForResult(getTakePickIntent(mCurrentPhotoFile), REQ_ID_PHOTO_CAMERA);
 		} catch (ActivityNotFoundException e) {
 			ToastUtil.showShort("没有找到照相软件，请安装照相机软件");
 		}
@@ -148,7 +146,7 @@ public class UploadAvatarFragment extends BaseFragment {
 	public void doPickPhotoFromGallery() {
 		try {
 			// Launch picker to choose photo for selected contact
-			((BaseAppCompatActivity) getActivity()).openPageForResult(this, REQ_ID_PHOTO_ALBUM, getPhotoPickIntent());
+			startActivityForResult(getPhotoPickIntent(), REQ_ID_PHOTO_ALBUM);
 		} catch (ActivityNotFoundException e) {
 			ToastUtil.showShort("没有找到图片选择器");
 		}
@@ -158,7 +156,6 @@ public class UploadAvatarFragment extends BaseFragment {
 	 * 用当前时间给取得的图片命名
 	 */
 	private String getPhotoFileName() {
-		final Date date = new Date(System.currentTimeMillis());
 		return String.format("IMG_%s.jpg", Coder_Md5.md5(DateUtil.getDate("yyyyMMddHHmmss", 0)));
 	}
 
@@ -192,7 +189,7 @@ public class UploadAvatarFragment extends BaseFragment {
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (NetworkUtil.isConnected(getContext())) {
+				if (!NetworkUtil.isConnected(getContext())) {
 					ToastUtil.showShort("网络连接失败，无法上传");
 					hideLoading();
 					return;
@@ -203,7 +200,7 @@ public class UploadAvatarFragment extends BaseFragment {
 					ToastUtil.showShort("请求文件不存在 : " + filePath);
 					return;
 				}
-				reqData.avater = generateImageStringParam(filePath);
+				reqData.avatar = generateImageStringParam(filePath);
 				Global.getNetEngine().modifyUserAvatar(new JsonReqBase<ReqModifyAvatar>(reqData))
 						.enqueue(new Callback<JsonRespBase<ModifyAvatar>>() {
 							@Override
@@ -240,7 +237,7 @@ public class UploadAvatarFragment extends BaseFragment {
 	private String generateImageStringParam(String filePath) {
 		Bitmap bitmap = BitmapUtil.getSmallBitmap(filePath, AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_HEIGHT, baos);
+		bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
 		return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 	}
 

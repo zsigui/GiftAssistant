@@ -9,6 +9,6 @@ import java.io.Serializable;
  */
 public class ReqModifyAvatar implements Serializable {
 
-	@SerializedName("avater")
-	public String avater;
+	@SerializedName("img_file")
+	public String avatar;
 }

@@ -5,22 +5,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.litesuits.common.utils.PackageUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
 import com.oplay.giftassistant.adapter.NestedGiftListAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.BannerTypeUtil;
 import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.StatusCode;
 import com.oplay.giftassistant.manager.ObserverManager;
+import com.oplay.giftassistant.model.NetworkImageHolderView;
 import com.oplay.giftassistant.model.data.req.ReqIndexGift;
 import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
@@ -34,13 +37,12 @@ import com.oplay.giftassistant.ui.widget.NestedListView;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
+import com.oplay.giftassistant.util.transform.StackTransFormer;
 import com.socks.library.KLog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-import cn.bingoogolapple.bgabanner.BGABanner;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -52,18 +54,16 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClickListener {
+public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClickListener, OnItemClickListener {
 
 	private static final String KEY_BANNER = "key_banner";
 	private static final String KEY_LIKE = "key_like";
 	private static final String KEY_LIMIT = "key_limit";
 	private static final String KEY_NEW = "key_new";
 
-	private List<View> views;
-
 	private ScrollView mScrollView;
 	// 活动视图, 3张
-	private BGABanner mBanner;
+	private ConvenientBanner mBanner;
 	// 猜你喜欢
 	private RelativeLayout mLikeBar;
 	private RecyclerView mLikeView;
@@ -130,14 +130,6 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 
 		ObserverManager.getInstance().addGiftUpdateListener(this);
 
-		// 设置Banner
-		views = new ArrayList<>(3);
-		for (int i = 0; i < 3; i++) {
-			View v = View.inflate(mActivity, R.layout.view_banner_img, null);
-			views.add(v);
-		}
-		mBanner.setViews(views);
-
 		// 设置RecyclerView的LayoutManager
 		LinearLayoutManager llmLike = new LinearLayoutManager(getContext());
 		llmLike.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -182,17 +174,37 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 	}
 
 	private void loadBanner(ArrayList<IndexBanner> banners) {
-		if (banners == null || banners.size() != views.size()) {
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_FRAG, "bannerUrls is not to be null and the size need to be 3 : " +
-						banners);
-			}
+		if (banners == null) {
 			return;
 		}
-		for (int i = 0; i < views.size(); i++) {
-			ImageLoader.getInstance().displayImage(banners.get(i).url, (ImageView) getViewById(views.get(i), R.id
-					.iv_image_view));
+		if (mGiftData != null) {
+			mGiftData.banner = banners;
 		}
+		ArrayList<String> data = new ArrayList<>();
+		for (IndexBanner banner : banners) {
+			data.add(banner.url);
+		}
+		if (data.size() == 0) {
+			data.add("drawable://" + R.drawable.ic_banner_default);
+		}
+		mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+
+			@Override
+			public NetworkImageHolderView createHolder() {
+				return new NetworkImageHolderView();
+			}
+		}, data)
+				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
+				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+				.setOnItemClickListener(this);
+		if (data.size() == 1) {
+			mBanner.setCanLoop(false);
+		} else {
+			mBanner.setCanLoop(true);
+			mBanner.setScrollDuration(500);
+			mBanner.getViewPager().setPageTransformer(true, new StackTransFormer());
+		}
+
 	}
 
 
@@ -294,12 +306,18 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 	public void onResume() {
 		super.onResume();
 		startClockService();
+		if (mBanner != null){
+			mBanner.startTurning(3000);
+		}
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		stopClockService();
+		if (mBanner != null) {
+			mBanner.stopTurning();
+		}
 	}
 
 	@Override
@@ -329,8 +347,13 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		}
 	}
 
-
-
+	@Override
+	public void onItemClick(int position) {
+		if (mGiftData == null || mGiftData.banner == null || mGiftData.banner.size() <= position) {
+			return;
+		}
+		BannerTypeUtil.handleBanner(getContext(), mGiftData.banner.get(position));
+	}
 
 	/**
 	 * 此处自定义假数据显示，实际可以将数据每次获取数据写入文件以待无网使用，看具体情况

@@ -167,7 +167,7 @@
 
 				<TextView
 						style = "@style/DefaultTextView.DetailTitle"
-						android:text = "@string/st_gift_note" />
+						android:text = "@string/st_gift_usage" />
 
 				<TextView
 						android:id = "@+id/tv_note"
@@ -176,7 +176,7 @@
 
 				<TextView
 						style = "@style/DefaultTextView.DetailTitle"
-						android:text = "@string/st_gift_hint"
+						android:text = "@string/st_gift_remark"
 						android:textColor = "@color/co_btn_orange" />
 
 				<TextView

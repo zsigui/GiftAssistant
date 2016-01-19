@@ -5,9 +5,9 @@ package com.oplay.giftassistant.config;
  */
 public class NetUrl {
 
-	//public static final String URL_BASE = "http://172.16.3.22:8888/";
+	public static final String URL_BASE = "http://172.16.3.22:8888/";
 //	public static final String URL_BASE = "http://172.16.3.68:7000/";
-	public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
+	//public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
 
 
 	/**

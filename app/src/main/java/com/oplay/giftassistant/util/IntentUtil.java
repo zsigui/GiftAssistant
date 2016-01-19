@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.ui.activity.GameDetailActivity;
 import com.oplay.giftassistant.ui.activity.GameListActivity;
+import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.ui.activity.GiftListActivity;
 import com.oplay.giftassistant.ui.activity.LoginActivity;
 import com.oplay.giftassistant.ui.activity.SearchActivity;
@@ -36,14 +37,12 @@ public class IntentUtil {
 	 *
 	 * @param context 上下文
 	 * @param id 礼包id
-	 * @param title 标题名
 	 */
-	public static void jumpGiftDetail(Context context, int id, String title) {
-		Intent intent = new Intent(context, GameDetailActivity.class);
+	public static void jumpGiftDetail(Context context, int id) {
+		Intent intent = new Intent(context, GiftDetailActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
-		intent.putExtra(KeyConfig.KEY_NAME, title);
 		context.startActivity(intent);
 	}
 
@@ -79,13 +78,13 @@ public class IntentUtil {
 	 *
 	 * @param context 上下文
 	 * @param id 游戏id
-	 * @param title 标题名
+	 * @param status 跳转详情位置：1详情 2礼包
 	 */
-	public static void jumpGameDetail(Context context, int id, String title) {
+	public static void jumpGameDetail(Context context, int id, int status) {
 		Intent intent = new Intent(context, GameDetailActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
-		intent.putExtra(KeyConfig.KEY_NAME, title);
+		intent.putExtra(KeyConfig.KEY_STATUS, status);
 		context.startActivity(intent);
 	}
 

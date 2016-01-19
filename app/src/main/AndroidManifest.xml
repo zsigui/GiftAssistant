@@ -95,6 +95,12 @@
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
+				android:name = ".ui.activity.GiftDetailActivity"
+				android:screenOrientation = "sensorPortrait"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+
+		<activity
 				android:name = ".ui.activity.GameListActivity"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"

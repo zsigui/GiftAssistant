@@ -215,7 +215,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpGiftDetail(mContext, gift.id, name);
+				IntentUtil.jumpGiftDetail(mContext, gift.id);
 			}
 		});
 	}

@@ -73,7 +73,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh_2<IndexGiftNew> {
 		mAdapter.setItemClickListener(new OnItemClickListener<IndexGiftNew>() {
 			@Override
 			public void onItemClick(IndexGiftNew item, View view, int position) {
-				IntentUtil.jumpGiftDetail(getContext(), item.id, String.format("[%s]%s", item.name, item.gameName));
+				IntentUtil.jumpGiftDetail(getContext(), item.id);
 			}
 		});
 		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

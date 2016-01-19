@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.ScoreTaskAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.StatusCode;
@@ -345,7 +346,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			IntentUtil.jumpGiftLimitList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
 			// 跳转指定游戏界面，暂无
-			IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), "");
+			IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), GameTypeUtil.JUMP_STATUS_DETAIL);
 		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
 			// 跳转登录界面
 			IntentUtil.jumpLogin(getContext());

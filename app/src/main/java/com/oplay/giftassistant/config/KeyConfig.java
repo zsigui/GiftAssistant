@@ -12,6 +12,7 @@ public class KeyConfig {
 	public static final String KEY_URL = "key_url";
 	public static final String KEY_SEARCH = "key_search";
 	public static final String KEY_NAME = "key_name";
+	public static final String KEY_STATUS = "key_status";
 
 	/* result code */
 	public static final int SUCCESS = 0;

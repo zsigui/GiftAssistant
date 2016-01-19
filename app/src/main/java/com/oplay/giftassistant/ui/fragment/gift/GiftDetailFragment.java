@@ -23,11 +23,11 @@ import com.oplay.giftassistant.model.data.req.ReqGiftDetail;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
+import com.oplay.giftassistant.ui.activity.GiftDetailActivity;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
 import com.oplay.giftassistant.util.DateUtil;
-import com.oplay.giftassistant.util.DensityUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.oplay.giftassistant.util.ToastUtil;
 import com.socks.library.KLog;
@@ -44,7 +44,6 @@ import retrofit.Retrofit;
 public class GiftDetailFragment extends BaseFragment {
 
 	private ImageView ivIcon;
-	private ImageView ivLimit;
 	private TextView tvName;
 	private TextView tvConsume;
 	private TextView tvScore;
@@ -75,7 +74,6 @@ public class GiftDetailFragment extends BaseFragment {
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_gift_detail);
 		ivIcon = getViewById(R.id.iv_icon);
-		ivLimit = getViewById(R.id.iv_limit);
 		tvName = getViewById(R.id.tv_name);
 		tvConsume = getViewById(R.id.tv_consume);
 		tvScore = getViewById(R.id.tv_score);
@@ -115,15 +113,14 @@ public class GiftDetailFragment extends BaseFragment {
 		((BaseAppCompatActivity)getActivity()).setBarTitle("礼包-" + mData.gameName);
 		ImageLoader.getInstance().displayImage(mData.img, ivIcon, Global.IMAGE_OPTIONS);
 		tvName.setText(String.format("[%s]%s", mData.gameName, mData.name));
-		if (mData.isLimit) {
-			tvName.setPadding(DensityUtil.dip2px(getContext(), 4), 0, 0, 0);
-			tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_limit_tag, 0, 0, 0);
-		} else {
-			tvName.setPadding(0, 0, 0, 0);
-			tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		if (getActivity() instanceof  GiftDetailActivity) {
+			if (data.isLimit) {
+				((GiftDetailActivity) getActivity()).showLimitTag(true);
+			} else {
+				((GiftDetailActivity) getActivity()).showLimitTag(false);
+			}
 		}
 		int state = GiftTypeUtil.getItemViewType(mData);
-
 		tvOr.setVisibility(View.GONE);
 		tvRemain.setVisibility(View.GONE);
 		pbPercent.setVisibility(View.GONE);

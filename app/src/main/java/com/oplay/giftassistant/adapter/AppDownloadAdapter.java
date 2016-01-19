@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.base.BaseListAdapter;
 import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.download.ApkDownloadManager;
 import com.oplay.giftassistant.model.AppStatus;
 import com.oplay.giftassistant.model.DownloadStatus;
@@ -185,7 +186,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 					break;
 				// 详细按钮响应
 				case R.id.tv_downloading_detail:
-					IntentUtil.jumpGameDetail(mContext, appInfo.id, appInfo.name);
+					IntentUtil.jumpGameDetail(mContext, appInfo.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 					break;
 				// 删除按钮响应
 				case R.id.tv_downloading_delete:
