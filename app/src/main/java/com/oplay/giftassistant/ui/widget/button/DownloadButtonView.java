@@ -25,11 +25,11 @@ public class DownloadButtonView extends RelativeLayout {
 	private TextView mDownloadTextView;
 	private ProgressBar mProgressBar;
 	private AppStatus mAppStatus;
-	private int mCurStateText = R.string.st_game_download;
+	private String mCurStateText = "下载";
 	private int mCurStateBackground = R.drawable.selector_btn_download_green;
 	private int mCurDownloadProgress;
 	private String mProgressText;
-	private String mDisableText = "";
+	private String mDisableText = "无效";
 
 	public DownloadButtonView(Context context) {
 		super(context);
@@ -80,9 +80,9 @@ public class DownloadButtonView extends RelativeLayout {
 				case DOWNLOADABLE:
 				case RETRYABLE:
 				case RESUMABLE:
-					return setStatus(AppStatus.PAUSABLE);
+					return setStatus(AppStatus.PAUSABLE, "");
 				case PAUSABLE:
-					return setStatus(AppStatus.RESUMABLE);
+					return setStatus(AppStatus.RESUMABLE, "");
 				case UPDATABLE:
 				case INSTALLABLE:
 				case OPENABLE:
@@ -98,33 +98,33 @@ public class DownloadButtonView extends RelativeLayout {
 		return mAppStatus;
 	}
 
-	public AppStatus setStatus(AppStatus status) {
+	public AppStatus setStatus(AppStatus status, String apkSize) {
 		if (status != null && !status.equals(mAppStatus)) {
 			mAppStatus = status;
 			switch (mAppStatus) {
 				case PAUSABLE:
 					setProgressVisible(true);
-					mCurStateText = R.string.st_game_pause;
-					mCurStateBackground = R.drawable.selector_btn_download_green;
+//					mCurStateText = String.format("%d%%", mCurDownloadProgress);
+					mCurStateBackground = R.color.co_transparent;
 					break;
 				case RETRYABLE:
 					setProgressVisible(false);
-					mCurStateText = R.string.st_game_retry;
-					mCurStateBackground = R.drawable.selector_btn_download_green;
+					mCurStateText = "重试";
+					mCurStateBackground = R.color.co_transparent;
 					break;
 				case RESUMABLE:
 					setProgressVisible(true);
-					mCurStateText = R.string.st_game_continue;
-					mCurStateBackground = R.drawable.selector_btn_download_green;
+					mCurStateText = "继续";
+					mCurStateBackground = R.color.co_transparent;
 					break;
 				case INSTALLABLE:
 					setProgressVisible(false);
-					mCurStateText = R.string.st_game_install;
+					mCurStateText = "安装";
 					mCurStateBackground = R.drawable.selector_btn_download_blue;
 					break;
 				case OPENABLE:
 					setProgressVisible(false);
-					mCurStateText = R.string.st_game_open;
+					mCurStateText = "打开";
 					mCurStateBackground = R.drawable.selector_btn_download_blue;
 					break;
 				case DISABLE:
@@ -134,7 +134,7 @@ public class DownloadButtonView extends RelativeLayout {
 				case UPDATABLE:
 				case DOWNLOADABLE:
 					setProgressVisible(false);
-					mCurStateText = R.string.st_game_download;
+					mCurStateText = String.format("下载 %s", apkSize);
 					mCurStateBackground = R.drawable.selector_btn_download_green;
 					break;
 			}
@@ -155,7 +155,7 @@ public class DownloadButtonView extends RelativeLayout {
 			return;
 		}
 		if (progress == 0) {
-			progress = IndexGameNew.FAKE_INIT_PROGRESS;
+			progress = mCurDownloadProgress == 0 ? IndexGameNew.FAKE_INIT_PROGRESS : mCurDownloadProgress;
 		}
 		mCurDownloadProgress = progress;
 		mProgressBar.setProgress(progress);

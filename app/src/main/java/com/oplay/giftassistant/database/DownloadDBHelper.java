@@ -47,11 +47,12 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 	private final String KEY_OF_IS_DELETE = "p";
 	private final String KEY_OF_UPDATE_TIME = "q";
 	private final String KEY_OF_APK_FILE_SIZE = "r";
+	private final String KEY_OF_DESTURL = "s";
 
 	private final String[] AllColumns = new String[]{KEY_OF_APPNAME, KEY_OF_ICONURL, KEY_OF_MD5SUM, KEY_OF_PACKAGENAME,
 			KEY_OF_RAWURL, KEY_OF_DOWNLOADSTATUS, KEY_OF_PATH_APK, KEY_OF_PATH_OPK, KEY_OF_VERSIONCODE,
 			KEY_OF_IS_OFFER_APP, KEY_OF_APP_ID, KEY_OF_VERSION_NAME, KEY_OF_COMPLETE_PERCENTAGE, KEY_OF_TASK_ORIGIN,
-			KEY_OF_IS_OPK, KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE
+			KEY_OF_IS_OPK, KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE, KEY_OF_DESTURL
 	};
 	private final String mOrderBy = KEY_OF_UPDATE_TIME + " DESC";
 	private Context mAppContext;
@@ -74,13 +75,13 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 						+ "%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s INTEGER,%s TEXT, %s TEXT,"
 						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT,%s BIGINT,"
 						+ "%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER,"
-						+ "%s BIGINT"
+						+ "%s BIGINT,%s TEXT"
 						+ ");",
 				TABLE_NAME, KEY_OF_APPNAME, KEY_OF_ICONURL, KEY_OF_MD5SUM, KEY_OF_PACKAGENAME, KEY_OF_RAWURL,
 				KEY_OF_DOWNLOADSTATUS, KEY_OF_PATH_APK, KEY_OF_PATH_OPK, KEY_OF_VERSIONCODE, KEY_OF_IS_OFFER_APP,
 				KEY_OF_APP_ID,
 				KEY_OF_VERSION_NAME, KEY_OF_COMPLETE_PERCENTAGE, KEY_OF_TASK_ORIGIN, KEY_OF_IS_OPK,
-				KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE
+				KEY_OF_IS_DELETE, KEY_OF_UPDATE_TIME, KEY_OF_APK_FILE_SIZE, KEY_OF_DESTURL
 		);
 	}
 
@@ -164,6 +165,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 			final String versionName = cursor.getString(cursor.getColumnIndex(KEY_OF_VERSION_NAME));
 			final long percentage = cursor.getLong(cursor.getColumnIndex(KEY_OF_COMPLETE_PERCENTAGE));
 			final long apkFileSize = cursor.getLong(cursor.getColumnIndex(KEY_OF_APK_FILE_SIZE));
+			final String destUrl = cursor.getString(cursor.getColumnIndex(KEY_OF_DESTURL));
 			final IndexGameNew downloadTask = new IndexGameNew();
 			downloadTask.id = appId;
 			downloadTask.downloadUrl = rawUrl;
@@ -176,6 +178,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 			downloadTask.versionName = versionName;
 			downloadTask.completeSize = percentage;
 			downloadTask.apkFileSize = apkFileSize;
+			downloadTask.destUrl = destUrl;
 			return downloadTask;
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
@@ -198,6 +201,9 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		}
 		if (!TextUtils.isEmpty(downloadTask.downloadUrl)) {
 			contentValues.put(KEY_OF_RAWURL, downloadTask.downloadUrl);
+		}
+		if (!TextUtils.isEmpty(downloadTask.destUrl)) {
+			contentValues.put(KEY_OF_DESTURL, downloadTask.destUrl);
 		}
 		if (!TextUtils.isEmpty(downloadTask.apkMd5)) {
 			contentValues.put(KEY_OF_MD5SUM, downloadTask.apkMd5);

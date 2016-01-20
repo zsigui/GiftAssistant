@@ -1,5 +1,7 @@
 package com.oplay.giftassistant.manager;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 
@@ -133,7 +135,7 @@ public class PayManager {
 					mLastClickTime = nowClickTime;
 					// 根据选择类型判断支付方式
 					if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_BEAN) {
-						handleBeanPay(context, gift, button);
+						handleBeanPay(context, gift, button, true);
 					} else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
 						handleScorePay(context, gift, button, true);
 					} else {
@@ -155,7 +157,7 @@ public class PayManager {
 	/**
 	 * 处理使用偶玩豆抢号的一系列请求
 	 */
-	private void handleBeanPay(final Context context, final IndexGiftNew gift, final GiftButton button) {
+	private void handleBeanPay(final Context context, final IndexGiftNew gift, final GiftButton button, final boolean isSeize) {
 		showLoading(context);
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
@@ -172,20 +174,30 @@ public class PayManager {
 						.enqueue(new Callback<JsonRespBase<PayCode>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
+								hideLoading(context);
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										PayCode payCode = response.body().getData();
-										OuwanSDKManager.getInstance().pay(payCode.tradeNo, payCode.payNumber,
-												payCode.orderDesc, payCode.uid, new SdkPayCallbackListener(context,
-														button, payCode.tradeNo));
+										ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+										cmb.setPrimaryClip(ClipData.newPlainText("礼包码", response.body().getData().giftCode));
+										GetCodeDialog.newInstance(response.body().getData().giftCode)
+												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+														GetCodeDialog.class.getSimpleName());
+										if (button != null) {
+											if (isSeize) {
+												// 抢号状态
+												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZE);
+											} else {
+												// 淘号状态
+												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+											}
+										}
+										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
 									}
-									hideLoading(context);
 									ToastUtil.showShort("抢号失败 - " + (response.body() == null ?
 											"解析失败" : response.body().error()));
 									return;
 								}
-								hideLoading(context);
 								ToastUtil.showShort("抢号失败 - 返回出错");
 							}
 

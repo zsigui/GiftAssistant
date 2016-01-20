@@ -65,7 +65,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		mId = getArguments().getInt(KEY_ID);
 		mStatus = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
 		mStatusBarColor = getArguments().getString(KEY_COLOR, "f85454");
-		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor + "&status="+mStatus;
+		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor + "&status=" + mStatus;
 		AccountManager.getInstance().syncCookie();
 		loadUrl(url);
 		mIsLoading = true;
@@ -109,8 +109,9 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 				}
 				if (isShow && btnDownload != null) {
 					mAppInfo.initAppInfoStatus(getActivity());
-					int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo.downloadUrl);
-					btnDownload.setStatus(mAppInfo.appStatus);
+					int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
+							.downloadUrl);
+					btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
 					btnDownload.setProgress(progress);
 				}
 			}
@@ -118,16 +119,29 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	}
 
 	@Override
-	public void onDownloadStatusChanged(IndexGameNew appInfo) {
-		if (downloadLayout.isShown()) {
-			btnDownload.setStatus(appInfo.appStatus);
-		}
+	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+					mAppInfo.downloadStatus = appInfo.downloadStatus;
+					mAppInfo.initAppInfoStatus(getActivity());
+					btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
+				}
+			}
+		});
 	}
 
 	@Override
-	public void onProgressUpdate(String url, int percent, long speedBytesPers) {
-		if (downloadLayout.isShown()) {
-			btnDownload.setProgress(ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(url));
-		}
+	public void onProgressUpdate(String url, final int percent, long speedBytesPers) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+					btnDownload.setProgress(percent);
+				}
+			}
+		});
 	}
 }

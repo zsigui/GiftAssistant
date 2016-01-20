@@ -1,7 +1,6 @@
 package net.youmi.android.libs.common.v2.download.base;
 
 import android.content.Context;
-import android.os.Build;
 
 import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
 
@@ -46,11 +45,13 @@ public class DefaultAutoRetryFileDownloader extends AbsAutoRetryFileDownloader {
 	 */
 	@Override
 	public IDownloader newIDowlonader(Context context, FileDownloadTask fileDownloadTask) {
-		if (Build.VERSION.SDK_INT < 9) {
-			return new BaseHttpClientFileDownloader(context, fileDownloadTask);
-		} else {
-			return new BaseHttpURLConnectionFileDownloader(context, fileDownloadTask);
-		}
+//		if (Build.VERSION.SDK_INT < 9) {
+//			return new BaseHttpClientFileDownloader(context, fileDownloadTask);
+//		} else {
+//			return new BaseHttpURLConnectionFileDownloader(context, fileDownloadTask);
+//		}
+		//TODO BaseHttpURLConnectionFileDownloader可能有bug
+		return new BaseHttpClientFileDownloader(context, fileDownloadTask);
 	}
 
 }
