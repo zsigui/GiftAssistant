@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.KeyConfig;
+import com.oplay.giftassistant.listener.OnShareListener;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.gift.GiftDetailFragment;
 import com.oplay.giftassistant.util.ToastUtil;
@@ -17,6 +18,8 @@ import com.oplay.giftassistant.util.ToastUtil;
 public class GiftDetailActivity extends BaseAppCompatActivity {
 
 	private ImageView ivLimitTag;
+	private ImageView ivShare;
+	private OnShareListener mOnShareListener;
 
 	@Override
 	protected void processLogic() {
@@ -32,6 +35,8 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
 		ivLimitTag = getViewById(toolbar, R.id.iv_tool_limit);
+		ivShare = getViewById(toolbar, R.id.iv_bar_share);
+		ivShare.setOnClickListener(this);
 		showLimitTag(false);
 	}
 
@@ -44,12 +49,28 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		replaceFrag(R.id.fl_container, GiftDetailFragment.newInstance(detailId), true);
 	}
 
+	public void setOnShareListener(OnShareListener shareClickListener) {
+		mOnShareListener = shareClickListener;
+	}
+
 	public void showLimitTag(boolean isShow){
 		if (ivLimitTag != null) {
 			if (isShow) {
 				ivLimitTag.setVisibility(View.VISIBLE);
 			} else {
 				ivLimitTag.setVisibility(View.GONE);
+			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		super.onClick(v);
+		if (v.getId() == R.id.iv_bar_share) {
+			if (mOnShareListener != null) {
+				mOnShareListener.share();
+			} else {
+				ToastUtil.showShort("该礼包无分享设置");
 			}
 		}
 	}

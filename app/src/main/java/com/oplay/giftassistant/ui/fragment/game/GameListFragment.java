@@ -1,17 +1,21 @@
 package com.oplay.giftassistant.ui.fragment.game;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.NestedGameListAdapter;
+import com.oplay.giftassistant.config.GameTypeUtil;
 import com.oplay.giftassistant.config.Global;
+import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.data.req.ReqPageData;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -23,7 +27,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-4.
  */
-public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
+public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> implements OnItemClickListener<IndexGameNew> {
 
 	private static final String KEY_URL = "key_data_url";
 	private static final String KEY_SEARCH = "key_data_search";
@@ -84,7 +88,7 @@ public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 			mReqPageObj.data.labelType = mTagId;
 		}
 
-		mAdapter = new NestedGameListAdapter(getContext(), null);
+		mAdapter = new NestedGameListAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
 	}
 
@@ -115,9 +119,6 @@ public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 								@Override
 								public void onFailure(Throwable t) {
 									refreshFailEnd();
-									OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
-									setLoadState(backObj.data, backObj.isEndPage);
-									updateData(backObj.data);
 								}
 							});
 				} else {
@@ -157,10 +158,6 @@ public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 									@Override
 									public void onFailure(Throwable t) {
 										moreLoadFailEnd();
-
-										OneTypeDataList<IndexGameNew> backObj = initStashMoreRefreshData();
-										setLoadState(backObj.data, backObj.isEndPage);
-										addMoreData(backObj.data);
 									}
 								});
 					} else {
@@ -188,43 +185,8 @@ public class GameListFragment extends BaseFragment_Refresh_2<IndexGameNew> {
 		mLastPage += 1;
 	}
 
-	public OneTypeDataList<IndexGameNew> initStashRefreshData() {
-		OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
-		obj.data = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			IndexGameNew game = new IndexGameNew();
-			game.id = i + 1;
-			game.name = "全民神将-攻城战";
-			game.newCount = 2;
-			game.playCount = 53143;
-			game.totalCount = 12;
-			game.giftName = "至尊礼包";
-			game.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
-			game.size = "" + (0.8 * i + 10 * i);
-			obj.data.add(game);
-		}
-		obj.page = 1;
-		obj.isEndPage = false;
-		return obj;
-	}
-
-	public OneTypeDataList<IndexGameNew> initStashMoreRefreshData() {
-		OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
-		obj.data = new ArrayList<>();
-		for (int i = mLastPage * 10; i < 10 + mLastPage * 10; i++) {
-			IndexGameNew game = new IndexGameNew();
-			game.id = i + 1;
-			game.name = "鬼吹灯之挖挖乐";
-			game.newCount = 2;
-			game.playCount = 53143;
-			game.totalCount = 12;
-			game.giftName = "高级礼包";
-			game.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
-			game.size = "" + (0.8 * i + 10 * i);
-			obj.data.add(game);
-		}
-		obj.page = mLastPage + 1;
-		obj.isEndPage = true;
-		return obj;
+	@Override
+	public void onItemClick(IndexGameNew item, View view, int position) {
+		IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 	}
 }

@@ -54,8 +54,8 @@
 			android:layout_marginLeft = "14dp"
 			android:layout_marginBottom = "10dp"
 			app:riv_border_color = "@color/co_stroke_bg"
-			app:riv_border_width = "@dimen/di_common_icon_border_size"
-			app:riv_corner_radius = "@dimen/di_common_icon_diameter_radius"
+			app:riv_border_width = "@dimen/di_icon_border_size"
+			app:riv_corner_radius = "@dimen/di_icon_radius"
 			app:riv_oval = "false" />
 
 </RelativeLayout >

@@ -3,7 +3,10 @@ package com.oplay.giftassistant.ui.fragment.user;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.util.InputMethodUtil;
 import com.oplay.giftassistant.util.InputTextUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -33,7 +37,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class PhoneLoginFragment extends BaseFragment {
+public class PhoneLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
 
 	private AutoCompleteTextView etPhone;
 	private TextView tvClear;
@@ -90,6 +94,10 @@ public class PhoneLoginFragment extends BaseFragment {
 		btnSendCode.setOnClickListener(this);
 		tvAnotherLogin.setOnClickListener(this);
 		tvClear.setOnClickListener(this);
+		etPhone.setOnEditorActionListener(this);
+		etCode.setOnEditorActionListener(this);
+		getViewById(R.id.ll_code).setOnClickListener(this);
+		getViewById(R.id.ll_input).setOnClickListener(this);
 	}
 
 	@Override
@@ -97,6 +105,8 @@ public class PhoneLoginFragment extends BaseFragment {
 		InputTextUtil.initPswFilter(etPhone, etCode, tvClear, btnLogin);
 		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
+		etPhone.requestFocus();
+		InputMethodUtil.showSoftInput(getActivity());
 	}
 
 	@Override
@@ -134,6 +144,16 @@ public class PhoneLoginFragment extends BaseFragment {
 				etCode.setText("");
 				etPhone.setSelection(0);
 				etPhone.requestFocus();
+				etCode.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+				etPhone.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+				break;
+			case R.id.ll_input:
+				etPhone.setSelection(etPhone.getText().length());
+				etPhone.requestFocus();
+				break;
+			case R.id.ll_code:
+				etCode.setSelection(etCode.getText().length());
+				etCode.requestFocus();
 				break;
 		}
 	}
@@ -274,5 +294,24 @@ public class PhoneLoginFragment extends BaseFragment {
 
 	public void showLoading() {
 		((BaseAppCompatActivity) getActivity()).showLoadingDialog();
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch (actionId) {
+			case EditorInfo.IME_ACTION_NEXT:
+				if (TextUtils.isEmpty(etCode.getText().toString().trim())) {
+					etCode.requestFocus();
+					etCode.setSelection(etCode.getText().toString().length());
+				} else {
+					etPhone.requestFocus();
+					etPhone.setSelection(etPhone.getText().toString().length());
+				}
+				break;
+			case EditorInfo.IME_ACTION_DONE:
+				handleLogin();
+				break;
+		}
+		return false;
 	}
 }

@@ -12,7 +12,8 @@
 	<ImageView
 			android:id = "@+id/iv_search_icon"
 			android:contentDescription = "@null"
-			android:src = "@drawable/ic_search_disabled"
+			android:src = "@drawable/ic_search"
+			android:paddingTop="3dp"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content" />
 

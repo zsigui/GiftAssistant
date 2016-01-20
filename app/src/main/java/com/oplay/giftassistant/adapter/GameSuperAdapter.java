@@ -33,9 +33,9 @@ import com.oplay.giftassistant.model.NetworkImageHolderView;
 import com.oplay.giftassistant.model.data.resp.IndexBanner;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
+import com.oplay.giftassistant.ui.widget.transformer.CubePageTransformer;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ViewUtil;
-import com.oplay.giftassistant.util.transform.StackTransFormer;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		} else {
 			mBannerVH.mBanner.setCanLoop(true);
 			mBannerVH.mBanner.setScrollDuration(500);
-			mBannerVH.mBanner.getViewPager().setPageTransformer(true, new StackTransFormer());
+			mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
 			mBannerVH.mBanner.startTurning(3000);
 		}
 	}

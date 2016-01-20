@@ -1,5 +1,8 @@
 package com.oplay.giftassistant.ui.fragment.dialog;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.text.Html;
 import android.widget.TextView;
 
@@ -32,6 +35,10 @@ public class GetCodeDialog extends BaseFragment_Dialog {
 		mGiftCode = giftCode;
 		if (tvGiftCode != null) {
 			tvGiftCode.setText(Html.fromHtml(String.format("礼包码：<font color='#ffaa17'>%s</font>", mGiftCode)));
+		}
+		if(getContext() != null) {
+			ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+			cmb.setPrimaryClip(ClipData.newPlainText("礼包码", giftCode));
 		}
 	}
 

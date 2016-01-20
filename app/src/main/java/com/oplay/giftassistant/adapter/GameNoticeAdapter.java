@@ -15,7 +15,6 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftassistant.adapter.base.BaseRVHolder;
 import com.oplay.giftassistant.config.GameTypeUtil;
-import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.IndexTypeUtil;
 import com.oplay.giftassistant.listener.OnItemClickListener;
 import com.oplay.giftassistant.model.AppStatus;
@@ -57,23 +56,19 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 		} else {
 			viewHolder.ivGift.setVisibility(View.GONE);
 		}
-		String tagUrl = "drawable://";
+		int tagId = R.drawable.ic_notice_other;
 		switch (position) {
 			case 0:
-				tagUrl += R.drawable.ic_notice_first;
+				tagId = R.drawable.ic_notice_first;
 				break;
 			case 1:
-				tagUrl += R.drawable.ic_notice_second;
+				tagId = R.drawable.ic_notice_second;
 				break;
 			case 2:
-				tagUrl += R.drawable.ic_notice_third;
+				tagId = R.drawable.ic_notice_third;
 				break;
-			default:
-				tagUrl += R.drawable.ic_notice_other;
 		}
-		ImageLoader.getInstance().displayImage(tagUrl,
-				viewHolder.ivTag,
-				Global.IMAGE_OPTIONS);
+		viewHolder.ivTag.setImageResource(tagId);
 		if (o.playCount < 10000) {
 			viewHolder.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩",
 					o.playCount)));

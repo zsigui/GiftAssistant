@@ -25,4 +25,9 @@ public class UserSession implements Serializable {
 	 */
 	@SerializedName("session_id")
 	public String session;
+
+	/**
+	 * 用于判断时间当前时间，以请求更新
+ 	 */
+	public long lastUpdateTime = System.currentTimeMillis();
 }

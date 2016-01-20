@@ -1,64 +1,53 @@
 package com.oplay.giftassistant.ui.fragment.base;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.ui.widget.RefreshLayout;
 import com.oplay.giftassistant.util.ToastUtil;
-import com.oplay.giftassistant.util.ViewUtil;
 
 import java.util.ArrayList;
-
-import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 /**
  * @author JackieZhuang
  * @email zsigui@foxmail.com
  * @date 2016/1/3
  */
-public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate{
+public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implements SwipeRefreshLayout
+		.OnRefreshListener, RefreshLayout.OnLoadListener {
 
 	protected ArrayList<DataType> mData;
-    protected BGARefreshLayout mRefreshLayout;
-    protected boolean mIsLoadMore = false;
-    protected boolean mNoMoreLoad = false;
-    protected int mLastPage = 0;
-
-    @Override
-    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        if (mIsSwipeRefresh || mIsLoading){
-            return;
-        }
-        mIsSwipeRefresh = true;
-        lazyLoad();
-    }
-
-    @Override
-    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        if (mNoMoreLoad) {
-            // return true 显示正在加载更多，return false 不显示
-            ToastUtil.showShort("没有更多新数据");
-            return false;
-        }
-        loadMoreData();
-        return true;
-    }
+	protected RefreshLayout mRefreshLayout;
+	protected boolean mIsLoadMore = false;
+	protected boolean mNoMoreLoad = false;
+	protected int mLastPage = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		mRefreshLayout = getViewById(R.id.srl_layout);
 		if (mRefreshLayout != null) {
-			mRefreshLayout.setDelegate(this);
-			ViewUtil.initRefreshLayout(getContext(), mRefreshLayout);
+			mRefreshLayout.setOnLoadListener(this);
+			mRefreshLayout.setOnRefreshListener(this);
+			mRefreshLayout.setColorSchemeResources(R.color.co_btn_red, R.color.co_btn_orange, R.color.co_btn_blue,
+					R.color.co_btn_green);
 		}
 		return mContentView;
 	}
 
-	protected void loadMoreData() {
-    }
+	@Override
+	public void onRefresh() {
+		mRefreshLayout.setEnabled(false);
+		if (mIsSwipeRefresh || mIsLoading) {
+			return;
+		}
+		mIsSwipeRefresh = true;
+		lazyLoad();
+	}
 
 	protected void refreshInitConfig() {
 		super.refreshInitConfig();
@@ -69,33 +58,56 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 			ToastUtil.showShort("刷新请求出错");
 		}
 		super.refreshFailEnd();
-		mRefreshLayout.endRefreshing();
+		mRefreshLayout.setEnabled(true);
+		mRefreshLayout.setRefreshing(false);
 	}
 
 	protected void refreshSuccessEnd() {
 		super.refreshSuccessEnd();
-		mRefreshLayout.endRefreshing();
+		mRefreshLayout.setRefreshing(false);
+		mRefreshLayout.setEnabled(true);
 	}
-
 	protected void setLoadState(Object data, boolean isEndPage) {
 		if (isEndPage || data == null) {
 			// 无更多不再请求加载
 			mNoMoreLoad = true;
-			mRefreshLayout.setIsShowLoadingMoreView(false);
+			mRefreshLayout.setCanShowLoad(false);
 		} else {
 			mNoMoreLoad = false;
-			mRefreshLayout.setIsShowLoadingMoreView(true);
+			mRefreshLayout.setCanShowLoad(true);
 		}
+	}
+
+	@Override
+	protected void onUserVisible() {
+		super.onUserVisible();
+	}
+
+	@Override
+	protected void onUserInvisible() {
+		super.onUserInvisible();
 	}
 
 	protected void moreLoadSuccessEnd() {
 		mIsLoadMore = false;
-		mRefreshLayout.endLoadingMore();
+		mRefreshLayout.setLoading(false);
 	}
 
 	protected void moreLoadFailEnd() {
 		mIsLoadMore = false;
-		mRefreshLayout.endLoadingMore();
+		mRefreshLayout.setLoading(false);
 		showToast("异常，加载失败");
+	}
+
+	@Override
+	public void onLoad() {
+		if (mNoMoreLoad) {
+			// return true 显示正在加载更多，return false 不显示
+			ToastUtil.showShort("没有更多新数据");
+		}
+		loadMoreData();
+	}
+
+	protected void loadMoreData() {
 	}
 }

@@ -1,7 +1,10 @@
 package com.oplay.giftassistant.ui.fragment.user;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
 import com.oplay.giftassistant.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.util.InputMethodUtil;
 import com.oplay.giftassistant.util.InputTextUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -30,7 +34,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class OuwanLoginFragment extends BaseFragment {
+public class OuwanLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
 
 	private EditText etUser;
 	private TextView tvClear;
@@ -56,6 +60,8 @@ public class OuwanLoginFragment extends BaseFragment {
 		btnLogin = getViewById(R.id.btn_send);
 		tvAnotherLogin = getViewById(R.id.tv_another_login);
 		tvForgetPwd = getViewById(R.id.tv_forget_pwd);
+		getViewById(R.id.ll_pwd).setOnClickListener(this);
+		getViewById(R.id.ll_input).setOnClickListener(this);
 	}
 
 	@Override
@@ -66,6 +72,8 @@ public class OuwanLoginFragment extends BaseFragment {
 		tvAnotherLogin.setOnClickListener(this);
 		tvClear.setOnClickListener(this);
 		tvForgetPwd.setOnClickListener(this);
+		etUser.setOnEditorActionListener(this);
+		etPwd.setOnEditorActionListener(this);
 	}
 
 	@Override
@@ -73,8 +81,8 @@ public class OuwanLoginFragment extends BaseFragment {
 		InputTextUtil.initPswFilter(etUser, etPwd, tvClear, btnLogin);
 		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
-		etUser.setFocusableInTouchMode(true);
-		etPwd.setFocusableInTouchMode(true);
+		etUser.requestFocus();
+		InputMethodUtil.showSoftInput(getActivity());
 	}
 
 	@Override
@@ -112,6 +120,16 @@ public class OuwanLoginFragment extends BaseFragment {
 				etPwd.setText("");
 				etUser.requestFocus();
 				etUser.setSelection(0);
+				etUser.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+				etPwd.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+				break;
+			case R.id.ll_input:
+				etUser.setSelection(etUser.getText().length());
+				etUser.requestFocus();
+				break;
+			case R.id.ll_pwd:
+				etPwd.setSelection(etPwd.getText().length());
+				etPwd.requestFocus();
 				break;
 		}
 	}
@@ -173,5 +191,24 @@ public class OuwanLoginFragment extends BaseFragment {
 
 	public void showLoading() {
 		((BaseAppCompatActivity) getActivity()).showLoadingDialog();
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch (actionId) {
+			case EditorInfo.IME_ACTION_NEXT:
+				if (TextUtils.isEmpty(etPwd.getText().toString().trim())) {
+					etPwd.requestFocus();
+					etPwd.setSelection(etPwd.getText().toString().length());
+				} else {
+					etUser.requestFocus();
+					etUser.setSelection(etUser.getText().toString().length());
+				}
+				break;
+			case EditorInfo.IME_ACTION_DONE:
+				handleLogin();
+				break;
+		}
+		return false;
 	}
 }

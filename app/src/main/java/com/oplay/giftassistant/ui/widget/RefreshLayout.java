@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 
 import com.oplay.giftassistant.R;
@@ -192,13 +193,14 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	public void setLoading(boolean loading) {
 		isLoading = loading;
 		if (isLoading) {
-			if (mListView != null) {
+			if (mListView != null && mListView.getAdapter() != null) {
 				mListView.addFooterView(mViewFooter);
 			} /*else if (mRecyclerView != null) {
 				mRecyclerView.getAdapter().addView(mViewFooter);
 			}*/
 		} else {
-			if (mListView != null) {
+			if (mListView != null && mListView.getAdapter() != null
+					&& mListView.getAdapter() instanceof HeaderViewListAdapter) {
 				mListView.removeFooterView(mViewFooter);
 			} /*else if (mRecyclerView != null) {
 				mRecyclerView.removeView(mViewFooter);

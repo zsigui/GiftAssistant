@@ -25,7 +25,7 @@ public class DateUtil {
 		try {
 			result = sdf.format(sdf.parse(timeStr));
 		} catch (ParseException e) {
-			e.printStackTrace();
+			// not print
 		}
 		return (result == null?
 				(timeStr.length() > format.length() ? timeStr.substring(0, format.length()): timeStr)
@@ -85,5 +85,14 @@ public class DateUtil {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * 判断所给日期字符串时间是否为今天
+	 */
+	public static boolean isToday(long dateTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+		String before = sdf.format(new Date(dateTime));
+		return before.equals(sdf.format(new Date(System.currentTimeMillis())));
 	}
 }

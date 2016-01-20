@@ -159,8 +159,8 @@ public class SplashActivity extends BaseAppCompatActivity {
 		}
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
-		// AccountManager.getInstance().updateUserSession();
-		AccountManager.getInstance().updateUserInfo();
+		KLog.e("update User start");
+		AccountManager.getInstance().updateUserSession();
 
 		mApp.setGlobalInit(true);
 	}

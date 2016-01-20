@@ -21,7 +21,6 @@ import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.manager.PayManager;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.widget.button.GiftButton;
-import com.oplay.giftassistant.util.DensityUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.ViewUtil;
 
@@ -192,24 +191,15 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		final String name = String.format("[%s]%s", gift.gameName, gift.name);
 		viewHolder.tvTitle.setText(name);
 		if (gift.isLimit) {
-			viewHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_limit_tag, 0, 0, 0);
-			viewHolder.tvTitle.setCompoundDrawablePadding(DensityUtil.dip2px(mContext, 4));
+			viewHolder.ivLimit.setVisibility(View.VISIBLE);
 		} else {
-			viewHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			viewHolder.ivLimit.setVisibility(View.GONE);
 		}
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
 		viewHolder.btnSend.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				switch (viewHolder.btnSend.getStatus()) {
-					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-						PayManager.getInstance().chargeGift(mContext, gift, viewHolder.btnSend);
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-						PayManager.getInstance().searchGift(mContext, gift, viewHolder.btnSend);
-						break;
-				}
+				PayManager.getInstance().seizeGift(mContext, gift, viewHolder.btnSend);
 			}
 		});
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +224,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_normal, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
 			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
@@ -244,6 +235,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
 			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
@@ -265,6 +257,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+					viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 					viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 					viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
@@ -286,6 +279,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	static class ViewHolder {
 		RelativeLayout rlItem;
 		ImageView ivIcon;
+		ImageView ivLimit;
 		TextView tvTitle;
 		TextView tvContent;
 		GiftButton btnSend;

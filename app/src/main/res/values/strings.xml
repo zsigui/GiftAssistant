@@ -68,7 +68,7 @@
 	<string name = "st_about_title" >关于礼包酷</string >
 	<string name = "st_about_update" >检查更新</string >
 	<string name = "st_about_update_text" >当前已是最新版本</string >
-	<string name = "st_about_wait_update_text" >待更新版本版本: %s</string >
+	<string name = "st_about_wait_update_text" >待更新版本: %s</string >
 	<string name = "st_about_qq" >官方QQ群</string >
 
 	<!-- 设置 - 我的钱包 -->

@@ -4,6 +4,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -47,6 +48,13 @@ public class InputTextUtil {
 					if (etTwo != null) {
 						if (TextUtils.isEmpty(etOne.getText()) || TextUtils.isEmpty(etTwo.getText())) {
 							tvSend.setEnabled(false);
+							if (TextUtils.isEmpty(etOne.getText())) {
+								etOne.setImeOptions(EditorInfo.IME_ACTION_DONE);
+								etTwo.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+							} else {
+								etOne.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+								etTwo.setImeOptions(EditorInfo.IME_ACTION_DONE);
+							}
 						} else {
 							tvSend.setEnabled(true);
 						}

@@ -2,17 +2,18 @@ package com.oplay.giftassistant.listener;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.config.AppDebugConfig;
-import com.oplay.giftassistant.config.GiftTypeUtil;
 import com.oplay.giftassistant.manager.PayManager;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.ui.fragment.game.GameDetailFragment;
+import com.oplay.giftassistant.util.IntentUtil;
 import com.socks.library.KLog;
 
 import java.util.Observable;
@@ -37,30 +38,29 @@ public class WebViewInterface extends Observable {
 	}
 
 	@JavascriptInterface
-	public void setHeaderColor(int color) {
-
+	public int jumpToGift(int id) {
+		if (id <= 0) {
+			return RET_PARAM_ERR;
+		}
+		IntentUtil.jumpGiftDetail(mHostActivity, id);
+		return RET_SUCCESS;
 	}
 
 	@JavascriptInterface
-	public void seizeGiftCode(String giftJson) {
+	public int seizeGiftCode(String giftJson) {
+		if (TextUtils.isEmpty(giftJson)) {
+			return RET_PARAM_ERR;
+		}
 		try {
 			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
-			if (gift != null) {
-				switch (GiftTypeUtil.getItemViewType(gift)) {
-					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-						PayManager.getInstance().chargeGift(mHostActivity, gift, null);
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-						PayManager.getInstance().searchGift(mHostActivity, gift, null);
-						break;
-				}
-			}
+			PayManager.getInstance().seizeGift(mHostActivity, gift, null);
+			return RET_SUCCESS;
 		} catch (JsonSyntaxException e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_WEBVIEW, e);
 			}
 		}
+		return RET_INTERAL_ERR;
 	}
 
 	@JavascriptInterface
@@ -82,7 +82,7 @@ public class WebViewInterface extends Observable {
 					return RET_PARAM_ERR;
 				}
 			}
-			((GameDetailFragment) mHostFragment).setDownloadBtn(isShow, appInfo);
+			((GameDetailFragment) mHostFragment).setDownloadBtn(isShow, mHostActivity, appInfo);
 			return RET_SUCCESS;
 		}catch (Throwable e) {
 			if(AppDebugConfig.IS_DEBUG) {

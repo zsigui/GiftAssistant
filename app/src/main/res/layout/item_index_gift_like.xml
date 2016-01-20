@@ -13,8 +13,8 @@
 				android:id = "@+id/iv_icon"
 				style = "@style/DefaultImageView.IconBigger"
 				app:riv_border_color = "@color/co_stroke_bg"
-				app:riv_border_width = "@dimen/di_common_icon_border_size"
-				app:riv_corner_radius = "@dimen/di_common_icon_diameter_radius"
+				app:riv_border_width = "@dimen/di_icon_border_size"
+				app:riv_corner_radius = "@dimen/di_icon_radius"
 				app:riv_oval = "false" />
 
 		<TextView
@@ -32,7 +32,7 @@
 	<TextView
 			android:id = "@+id/tv_game_name"
 			style = "@style/DefaultTextView.Header"
-			android:layout_width = "@dimen/di_index_hoz_module_icon_diameter"
+			android:layout_width = "@dimen/di_icon_bigger_diameter"
 			android:layout_below = "@+id/rl_icon"
 			android:layout_marginTop = "8dp"
 			android:text = "刀塔传" />

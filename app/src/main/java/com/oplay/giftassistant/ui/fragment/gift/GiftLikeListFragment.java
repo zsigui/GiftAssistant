@@ -8,7 +8,7 @@ import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.GiftLikeListAdapter;
 import com.oplay.giftassistant.adapter.other.DividerItemDecoration;
 import com.oplay.giftassistant.model.data.resp.IndexGiftLike;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GiftLikeListFragment extends BaseFragment {
+public class GiftLikeListFragment extends BaseFragment_Refresh {
 
 
 	private static final String KEY_DATA = "key_like_data";
@@ -39,7 +39,7 @@ public class GiftLikeListFragment extends BaseFragment {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_refresh_rv_container);
+		setContentView(R.layout.fragment_refresh_rv_container_with_white_bg);
 		rvData = getViewById(R.id.rv_content);
 	}
 

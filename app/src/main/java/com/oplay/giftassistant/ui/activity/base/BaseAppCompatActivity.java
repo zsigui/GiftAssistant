@@ -24,6 +24,7 @@ import com.oplay.giftassistant.ui.fragment.LoadingFragment;
 import com.oplay.giftassistant.ui.fragment.base.BaseFragment;
 import com.oplay.giftassistant.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftassistant.ui.widget.LoadAndRetryViewManager;
+import com.oplay.giftassistant.util.InputMethodUtil;
 import com.socks.library.KLog;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -289,6 +290,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	 * 执行fragment出栈 或者 activity终结操作
 	 */
 	public void handleBackPressed() {
+		InputMethodUtil.hideSoftInput(this);
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理

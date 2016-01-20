@@ -20,7 +20,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
@@ -35,7 +35,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-7.
  */
-public class MyGiftListFragment extends BaseFragment_Refresh_2<IndexGiftNew> {
+public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	private RecyclerView mDataView;
 	private MyGiftListAdapter mAdapter;

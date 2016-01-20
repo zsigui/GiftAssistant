@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.litesuits.common.utils.PackageUtil;
+import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftassistant.adapter.IndexGiftLimitAdapter;
@@ -32,12 +34,12 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftLimit;
 import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.ui.widget.NestedListView;
+import com.oplay.giftassistant.ui.widget.transformer.ZoomStackPageTransformer;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.IntentUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
-import com.oplay.giftassistant.util.transform.StackTransFormer;
 import com.socks.library.KLog;
 
 import java.io.Serializable;
@@ -54,7 +56,7 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClickListener, OnItemClickListener {
+public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener {
 
 	private static final String KEY_BANNER = "key_banner";
 	private static final String KEY_LIKE = "key_like";
@@ -65,6 +67,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 	// 活动视图, 3张
 	private ConvenientBanner mBanner;
 	// 猜你喜欢
+	private LinearLayout llLike;
 	private RelativeLayout mLikeBar;
 	private RecyclerView mLikeView;
 	// 今日限量
@@ -107,6 +110,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 
 		mScrollView = getViewById(R.id.sv_container);
 		mBanner = getViewById(R.id.banner);
+		llLike = getViewById(R.id.ll_like);
 		mLikeBar = getViewById(R.id.rl_hot_all);
 		mLikeView = getViewById(R.id.rv_like_content);
 		mLimitBar = getViewById(R.id.rl_limit_all);
@@ -141,6 +145,11 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		mLikeAdapter = new IndexGiftLikeAdapter(mLikeView);
 		mLimitAdapter = new IndexGiftLimitAdapter(mLimitView);
 		mNewAdapter = new NestedGiftListAdapter(getActivity());
+		if (AssistantApp.getInstance().isAllowDownload()) {
+			llLike.setVisibility(View.VISIBLE);
+		} else {
+			llLike.setVisibility(View.GONE);
+		}
 
 		// 加载数据
 
@@ -202,7 +211,7 @@ public class GiftFragment extends BaseFragment_Refresh_2 implements View.OnClick
 		} else {
 			mBanner.setCanLoop(true);
 			mBanner.setScrollDuration(500);
-			mBanner.getViewPager().setPageTransformer(true, new StackTransFormer());
+			mBanner.getViewPager().setPageTransformer(true, new ZoomStackPageTransformer());
 		}
 
 	}

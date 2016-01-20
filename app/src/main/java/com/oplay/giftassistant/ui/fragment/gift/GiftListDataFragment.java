@@ -12,7 +12,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGiftNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
 
@@ -29,7 +29,7 @@ import retrofit.Retrofit;
  * <br/>
  * Created by zsigui on 15-12-29.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh_2 {
+public class GiftListDataFragment extends BaseFragment_Refresh {
 
 	private static final String KEY_DATA = "key_news_data";
 	private static final String KEY_URL = "key_url";

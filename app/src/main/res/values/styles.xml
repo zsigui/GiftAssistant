@@ -142,6 +142,7 @@
 		<item name = "android:textSize" >14sp</item >
 		<item name = "android:gravity" >center</item >
 		<item name = "android:singleLine" >true</item >
+		<item name = "android:textCursorDrawable">@null</item>
 	</style >
 
 	<style name = "DefaultTextView.Detail" >
@@ -223,8 +224,8 @@
 	</style >
 
 	<style name = "IndexIconLayout" >
-		<item name = "android:layout_width" >@dimen/di_index_hoz_module_icon_diameter</item >
-		<item name = "android:layout_height" >@dimen/di_index_hoz_module_icon_diameter</item >
+		<item name = "android:layout_width" >@dimen/di_icon_bigger_diameter</item >
+		<item name = "android:layout_height" >@dimen/di_icon_bigger_diameter</item >
 		<item name = "android:background" >@color/co_transparent</item >
 	</style >
 
@@ -236,13 +237,13 @@
 	</style >
 
 	<style name = "DefaultImageView.Icon" >
-		<item name = "android:layout_width" >@dimen/di_common_icon_diameter</item >
-		<item name = "android:layout_height" >@dimen/di_common_icon_diameter</item >
+		<item name = "android:layout_width" >@dimen/di_icon_diameter</item >
+		<item name = "android:layout_height" >@dimen/di_icon_diameter</item >
 	</style >
 
 	<style name = "DefaultImageView.IconBigger" >
-		<item name = "android:layout_width" >@dimen/di_module_icon_diameter</item >
-		<item name = "android:layout_height" >@dimen/di_module_icon_diameter</item >
+		<item name = "android:layout_width" >@dimen/di_icon_bigger_diameter</item >
+		<item name = "android:layout_height" >@dimen/di_icon_bigger_diameter</item >
 	</style >
 
 	<style name = "HDividerView" >
@@ -397,5 +398,9 @@
 		<item name = "android:scrollbars">vertical</item>
 		<item name = "android:scrollbarFadeDuration">500</item>
 		<item name = "android:fadeScrollbars">true</item>
+	</style>
+
+	<style name = "DefaultEditText" parent="android:Widget.EditText">
+
 	</style>
 </resources >

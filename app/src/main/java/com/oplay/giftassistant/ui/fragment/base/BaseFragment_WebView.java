@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.oplay.giftassistant.R;
 import com.oplay.giftassistant.config.AppDebugConfig;
@@ -21,6 +22,7 @@ import com.oplay.giftassistant.config.NetUrl;
 import com.oplay.giftassistant.listener.OnBackPressListener;
 import com.oplay.giftassistant.listener.WebViewInterface;
 import com.oplay.giftassistant.util.SystemUtil;
+import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.network.Util_Network_Status;
@@ -231,6 +233,22 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		}
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (mWebView != null) {
+			mWebView.onResume();
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (mWebView != null) {
+			mWebView.onPause();
+		}
+	}
+
 	public void reloadPage() {
 		mIsLoading = false;
 		mIsLoadingFailed = false;
@@ -303,9 +321,21 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 	@Override
 	public boolean onBack() {
-		if (mWebView != null && mWebView.canGoBack()) {
-			goBack();
-			return true;
+		try {
+			if (mWebView != null) {
+				if (mWebView.canGoBack()) {
+					goBack();
+					return true;
+				}
+				mWebView.stopLoading();
+				((RelativeLayout)mContentView).removeView(mWebView);
+				mWebView.removeAllViews();
+				mWebView.destroy();
+			}
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
 		}
 		return false;
 	}

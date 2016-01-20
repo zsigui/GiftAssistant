@@ -20,7 +20,9 @@ import com.oplay.giftassistant.model.data.resp.UserModel;
 import com.oplay.giftassistant.model.data.resp.UserSession;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
+import com.oplay.giftassistant.util.DateUtil;
 import com.oplay.giftassistant.util.NetworkUtil;
+import com.oplay.giftassistant.util.ToastUtil;
 import com.oplay.giftassistant.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 
@@ -63,6 +65,12 @@ public class AccountManager {
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
 	 */
 	public void setUser(UserModel user) {
+
+		if (mUser != null && mUser.userInfo != null
+				&& user != null && user.userInfo != null) {
+			// 保留用户登录状态
+			user.userInfo.loginType = mUser.userInfo.loginType;
+		}
 		mUser = user;
 		// 当用户变化，需要进行通知
 		ObserverManager.getInstance().notifyUserUpdate();
@@ -89,6 +97,9 @@ public class AccountManager {
 			@Override
 			public void run() {
 				// 写入SP中
+				if (isLogin()) {
+					KLog.e("write session = " + getUserSesion().session);
+				}
 				String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
 				Global_SharePreferences.saveEncodeStringToSharedPreferences(mContext,
 						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, userJson, SPConfig.SALT_USER_INFO);
@@ -123,6 +134,8 @@ public class AccountManager {
 					if (!NetworkUtil.isConnected(mContext)) {
 						return;
 					}
+					KLog.e("update User start");
+					ToastUtil.showShort("update User start");
 					Global.getNetEngine().getUserInfo(new JsonReqBase<String>(null))
 							.enqueue(new Callback<JsonRespBase<UserModel>>() {
 								@Override
@@ -158,21 +171,23 @@ public class AccountManager {
 	 * 同步Cookie
 	 */
 	public void syncCookie(String baseUrl, ArrayList<String> cookies) {
-		CookieManager.getInstance().setAcceptCookie(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			CookieManager.getInstance().removeAllCookies(null);
-		} else {
-			CookieManager.getInstance().removeAllCookie();
-		}
-		if (cookies != null && !cookies.isEmpty()) {
-			for (String cookie : cookies) {
-				CookieManager.getInstance().setCookie(baseUrl, cookie);
+			if (cookies != null && !cookies.isEmpty()) {
+				for (String cookie : cookies) {
+					CookieManager.getInstance().setCookie(baseUrl, cookie);
+				}
 			}
-		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			CookieManager.getInstance().flush();
 		} else {
 			CookieSyncManager.createInstance(mContext);
+			CookieManager.getInstance().setAcceptCookie(true);
+			CookieManager.getInstance().removeAllCookie();
+			if (cookies != null && !cookies.isEmpty()) {
+				for (String cookie : cookies) {
+					CookieManager.getInstance().setCookie(baseUrl, cookie);
+				}
+			}
 			CookieSyncManager.getInstance().sync();
 		}
 	}
@@ -193,6 +208,18 @@ public class AccountManager {
 	 */
 	public void updateUserSession() {
 		if (isLogin()) {
+			// 当天登录过，无须再次重新更新 session
+			if (DateUtil.isToday(getUserSesion().lastUpdateTime)) {
+				return;
+			}
+			// session只能保持7天，一旦超时，需要重新登录
+			if (getUserSesion().lastUpdateTime + 7 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
+				KLog.e("lastUpdateTime = " + getUserSesion().lastUpdateTime
+						+ ", currentTime = " + System.currentTimeMillis());
+				ToastUtil.showShort("登录超时，需要重新登录");
+				setUser(null);
+				return;
+			}
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
 			mHandler.postAtFrontOfQueue(mUpdateSessionTask);
 		}
@@ -215,6 +242,7 @@ public class AccountManager {
 									if(response.body() != null && response.body().isSuccess()) {
 										mUpdateSessionRetryTime = 0;
 										mUser.userSession.session = response.body().getData().session;
+										KLog.e("req_new_session = " + mUser.userSession.session);
 										setUser(mUser);
 										// 请求更新数据
 										updateUserInfo();

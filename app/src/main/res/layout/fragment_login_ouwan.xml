@@ -6,13 +6,15 @@
               android:layout_height = "match_parent" >
 
 	<LinearLayout
+			android:id = "@+id/ll_input"
 			android:orientation = "horizontal"
 			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
 
 		<AutoCompleteTextView
 				android:id = "@+id/et_input"
 				style = "@style/DefaultTextView.Login"
-				android:cursorVisible="true"
+				android:cursorVisible = "true"
+				android:imeOptions = "actionNext"
 				android:hint = "@string/st_login_ouwan_user_hint" />
 
 		<TextView
@@ -28,14 +30,16 @@
 	<View style = "@style/HDividerView" />
 
 	<LinearLayout
+			android:id = "@+id/ll_pwd"
 			android:orientation = "horizontal"
 			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
 
 		<EditText
 				android:id = "@+id/et_pwd"
 				style = "@style/DefaultTextView.Login"
-				android:inputType="textPassword"
-				android:cursorVisible="true"
+				android:inputType = "textPassword"
+				android:cursorVisible = "true"
+				android:imeOptions = "actionNext"
 				android:hint = "@string/st_login_ouwan_pwd_hint" />
 
 	</LinearLayout >
@@ -51,7 +55,7 @@
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:checked = "true"
-				android:text=""
+				android:text = ""
 				android:drawableLeft = "@drawable/selector_item_check" />
 
 		<TextView

@@ -242,9 +242,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public void onDestroyView() {
 		mCanShowUI = false;
+		super.onDestroyView();
 		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		ObserverManager.getInstance().removeUserUpdateListener(this);
-		super.onDestroyView();
 	}
 
 	@Override

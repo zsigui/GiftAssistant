@@ -40,7 +40,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftDetail(Context context, int id) {
 		Intent intent = new Intent(context, GiftDetailActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		context.startActivity(intent);
@@ -82,6 +82,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGameDetail(Context context, int id, int status) {
 		Intent intent = new Intent(context, GameDetailActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_STATUS, status);

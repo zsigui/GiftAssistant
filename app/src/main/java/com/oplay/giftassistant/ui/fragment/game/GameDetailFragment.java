@@ -1,6 +1,7 @@
 package com.oplay.giftassistant.ui.fragment.game;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -25,12 +26,9 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	private static final String KEY_COLOR = "key_data_color";
 	private static final String KEY_STATUS = "key_data_status";
 
-	private int mId;
 	private LinearLayout downloadLayout;
 	private DownloadButtonView btnDownload;
 	private IndexGameNew mAppInfo;
-	private String mStatusBarColor;
-	private int mStatus;
 
 	public static GameDetailFragment newInstance(int id, int status, String color) {
 		GameDetailFragment fragment = new GameDetailFragment();
@@ -62,10 +60,10 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 			mViewManager.showEmpty();
 			return;
 		}
-		mId = getArguments().getInt(KEY_ID);
-		mStatus = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
-		mStatusBarColor = getArguments().getString(KEY_COLOR, "f85454");
-		String url = WebViewUrl.GAME_DETAIL + "?id=" + mId + "&theme=" + mStatusBarColor + "&status=" + mStatus;
+		int id = getArguments().getInt(KEY_ID);
+		int status = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
+		String statusBarColor = getArguments().getString(KEY_COLOR, "f85454");
+		String url = WebViewUrl.GAME_DETAIL + "?id=" + id + "&theme=" + statusBarColor + "&status="+ status;
 		AccountManager.getInstance().syncCookie();
 		loadUrl(url);
 		mIsLoading = true;
@@ -98,8 +96,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
 	}
 
-	public void setDownloadBtn(final boolean isShow, final IndexGameNew appInfo) {
-		getActivity().runOnUiThread(new Runnable() {
+	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {
+		hostActivity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				int visiable = isShow ? View.VISIBLE : View.GONE;

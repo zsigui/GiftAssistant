@@ -24,6 +24,7 @@
 
 			<!-- 猜你喜欢模块 -->
 			<LinearLayout
+					android:id = "@+id/ll_like"
 					style = "@style/IndexModuleLayout" >
 
 				<RelativeLayout

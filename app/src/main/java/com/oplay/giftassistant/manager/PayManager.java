@@ -73,7 +73,7 @@ public class PayManager {
 									}
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.d(AppDebugConfig.TAG_MANAGER, response.body() == null?
-												"解析失败" : response.body().error());
+												"解析失败" : response.body().getMsg());
 									}
 									return;
 								}
@@ -94,10 +94,31 @@ public class PayManager {
 	}
 
 	/**
+	 *
+	 * 执行抢礼包操作
+	 *
+	 * @param context 上下文
+	 * @param gift 礼包详情信息
+	 * @param button 礼包按钮
+	 */
+	public void seizeGift(Context context, IndexGiftNew gift, GiftButton button) {
+		switch (GiftTypeUtil.getItemViewType(gift)) {
+			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+				PayManager.getInstance().chargeGift(context, gift, button);
+				break;
+			case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+			case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+				PayManager.getInstance().searchGift(context, gift, button);
+				break;
+		}
+	}
+
+
+	/**
 	 * 执行淘号操作，直接回调
 	 */
-	public void searchGift(final Context context, final IndexGiftNew gift, GiftButton button) {
-		showLoading(context);
+	private void searchGift(final Context context, final IndexGiftNew gift, GiftButton button) {
 		handleScorePay(context, gift, button, false);
 	}
 
@@ -108,7 +129,7 @@ public class PayManager {
 	 * @param context
 	 * @param gift
 	 */
-	public void chargeGift(final Context context, final IndexGiftNew gift, final GiftButton button) {
+	private void chargeGift(final Context context, final IndexGiftNew gift, final GiftButton button) {
 		if (AccountManager.getInstance().isLogin()) {
 			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 					&& gift.score <= AccountManager.getInstance().getUserInfo().score) {
@@ -177,8 +198,6 @@ public class PayManager {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-										cmb.setPrimaryClip(ClipData.newPlainText("礼包码", response.body().getData().giftCode));
 										GetCodeDialog.newInstance(response.body().getData().giftCode)
 												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 														GetCodeDialog.class.getSimpleName());
@@ -195,7 +214,7 @@ public class PayManager {
 										return;
 									}
 									ToastUtil.showShort("抢号失败 - " + (response.body() == null ?
-											"解析失败" : response.body().error()));
+											"解析失败" : response.body().getMsg()));
 									return;
 								}
 								ToastUtil.showShort("抢号失败 - 返回出错");
@@ -254,7 +273,7 @@ public class PayManager {
 										return;
 									}
 									ToastUtil.showShort("抢号失败 - " + (response.body() == null ?
-											"解析失败" : response.body().error()));
+											"解析失败" : response.body().getMsg()));
 									return;
 								}
 								ToastUtil.showShort("抢号失败 - 返回出错");
@@ -321,7 +340,7 @@ public class PayManager {
 										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
 									}
-									KLog.d((response.body() == null ? "解析失败" : response.body().error()));
+									KLog.d((response.body() == null ? "解析失败" : response.body().getMsg()));
 								}
 								ToastUtil.showShort("查询礼包码失败, 请稍后重新查看");
 							}

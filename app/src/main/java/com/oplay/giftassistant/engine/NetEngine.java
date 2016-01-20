@@ -13,6 +13,7 @@ import com.oplay.giftassistant.model.data.req.ReqPayCode;
 import com.oplay.giftassistant.model.data.req.ReqSearchKey;
 import com.oplay.giftassistant.model.data.req.ReqTaskReward;
 import com.oplay.giftassistant.model.data.resp.GameTypeMain;
+import com.oplay.giftassistant.model.data.resp.GiftDetail;
 import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.data.resp.IndexGift;
@@ -86,7 +87,7 @@ public interface NetEngine {
      * 获取 礼包详情 页面的数据
      */
     @POST(NetUrl.GIFT_GET_DETAIL)
-    Call<JsonRespBase<IndexGiftNew>> obtainGiftDetail(@Body JsonReqBase<ReqGiftDetail> reqData);
+    Call<JsonRespBase<GiftDetail>> obtainGiftDetail(@Body JsonReqBase<ReqGiftDetail> reqData);
 
 	/**
 	 * 获取 礼包 单列表数据

@@ -15,7 +15,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.IndexGameSuper;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameSuperFragment extends BaseFragment_Refresh_2 implements View.OnClickListener {
+public class GameSuperFragment extends BaseFragment_Refresh implements View.OnClickListener {
 
 	private RecyclerView mRecyclerView;
 	private GameSuperAdapter mAdapter;

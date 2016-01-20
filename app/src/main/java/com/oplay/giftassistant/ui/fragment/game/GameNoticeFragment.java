@@ -16,7 +16,7 @@ import com.oplay.giftassistant.model.data.resp.IndexGameNew;
 import com.oplay.giftassistant.model.data.resp.OneTypeDataList;
 import com.oplay.giftassistant.model.json.base.JsonReqBase;
 import com.oplay.giftassistant.model.json.base.JsonRespBase;
-import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh_2;
+import com.oplay.giftassistant.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftassistant.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -29,7 +29,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GameNoticeFragment extends BaseFragment_Refresh_2<IndexGameNew> {
+public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	private static final String KEY_DATA = "key_data";
 	private JsonReqBase<ReqPageData> mReqPageObj;

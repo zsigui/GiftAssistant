@@ -9,12 +9,10 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -22,6 +20,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftassistant.AssistantApp;
 import com.oplay.giftassistant.R;
+import com.oplay.giftassistant.config.Global;
 import com.oplay.giftassistant.config.KeyConfig;
 import com.oplay.giftassistant.config.UserTypeUtil;
 import com.oplay.giftassistant.manager.AccountManager;
@@ -122,14 +121,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				.withAccountHeader(mDrawerHeader)
 				.addDrawerItems(
 						new PrimaryDrawerItem().withName("我的礼包").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_MY_GIFT_CODE).withIcon(GoogleMaterial.Icon.gmd_ac_unit),
-						new DividerDrawerItem(),
+								.TYPE_ID_MY_GIFT_CODE).withIcon(R.drawable.ic_toolbar_gift),
 						new PrimaryDrawerItem().withName("我的钱包").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_WALLET).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("积分任务").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_SCORE_TASK).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo),
-						new PrimaryDrawerItem().withName("个人设置").withSelectable(false).withIdentifier(KeyConfig
-								.TYPE_ID_SETTING).withIcon(GoogleMaterial.Icon.gmd_account_balance))
+								.TYPE_ID_WALLET).withIcon(R.drawable.ic_drawer_wallet),
+						new PrimaryDrawerItem().withName("每日任务").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_SCORE_TASK).withIcon(R.drawable.ic_drawer_score_task),
+						new PrimaryDrawerItem().withName("消息中心").withSelectable(false).withIdentifier(KeyConfig
+								.TYPE_ID_MSG).withIcon(R.drawable.ic_drawer_message))
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int pos, IDrawerItem drawerItem) {
@@ -156,6 +154,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 								case KeyConfig.TYPE_ID_DOWNLOAD:
 									IntentUtil.jumpDownloadManager(MainActivity.this);
 									break;
+								case KeyConfig.TYPE_ID_MSG:
+									ToastUtil.showShort("敬请期待");
+									break;
 							}
 							return false;
 						}
@@ -171,8 +172,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 		if (AssistantApp.getInstance().isAllowDownload()) {
 			mDrawer.addItem(new PrimaryDrawerItem().withName("下载管理").withSelectable(false).withIdentifier(KeyConfig
-					.TYPE_ID_DOWNLOAD).withIcon(GoogleMaterial.Icon.gmd_settings_input_svideo));
+					.TYPE_ID_DOWNLOAD).withIcon(R.drawable.ic_drawer_download));
 		}
+		mDrawer.addItem(new PrimaryDrawerItem().withName("设置").withSelectable(false).withIdentifier(KeyConfig
+				.TYPE_ID_SETTING).withIcon(R.drawable.ic_drawer_setting));
 		mDrawerHeader.setActiveProfile(KeyConfig.TYPE_ID_PROFILE);
 	}
 
@@ -185,7 +188,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		} else {
 			String name;
 			String email;
-			if (mUser.loginType == UserTypeUtil.TYPE_POHNE) {
+			if (mUser.loginType == UserTypeUtil.TYPE_POHNE
+					|| (mUser.loginType != UserTypeUtil.TYPE_OUWAN && mUser.bindOuwanStatus == 0)) {
 				name = (TextUtils.isEmpty(mUser.nick) ?  StringUtil.transePhone(mUser.phone) : mUser.nick);
 				email = "登陆手机：" + StringUtil.transePhone(mUser.phone);
 			} else {
@@ -232,7 +236,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			if (TextUtils.isEmpty(mUser.avatar)) {
 				ivProfile.setImageResource(R.drawable.ic_avator_default);
 			} else {
-				ImageLoader.getInstance().displayImage(mUser.avatar, ivProfile);
+				ImageLoader.getInstance().displayImage(mUser.avatar, ivProfile, Global.AVATOR_IMAGE_LOADER);
 			}
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);

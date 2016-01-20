@@ -144,9 +144,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(t);
 				}
-				//displayNetworkErrUI();
-				ArrayList<IndexGiftLike> data = initStashLikeData();
-				displayGiftLikeUI(data);
+				displayNetworkErrUI();
+				/*ArrayList<IndexGiftLike> data = initStashLikeData();
+				displayGiftLikeUI(data);*/
 			}
 		});
 
@@ -186,9 +186,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(t);
 				}
-				//displayNetworkErrUI();
-				ArrayList<TimeDataList<IndexGiftNew>> data = initStashNewData();
-				displayGiftNewUI(data);
+				displayNetworkErrUI();
+				/*ArrayList<TimeDataList<IndexGiftNew>> data = initStashNewData();
+				displayGiftNewUI(data);*/
 			}
 		});
 	}
@@ -227,9 +227,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(t);
 				}
-				//displayNetworkErrUI();
-				ArrayList<TimeDataList<IndexGiftNew>> data = initStashLimitData();
-				displayGiftLimitUI(data);
+				displayNetworkErrUI();
+				/*ArrayList<TimeDataList<IndexGiftNew>> data = initStashLimitData();
+				displayGiftLimitUI(data);*/
 			}
 		});
 	}

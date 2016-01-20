@@ -19,5 +19,4 @@ public class LoginActivity extends BaseAppCompatActivity {
 		replaceFragWithTitle(R.id.fl_container, PhoneLoginFragment.newInstance(),
 				getResources().getString(R.string.st_login_phone_title), false);
 	}
-
 }
