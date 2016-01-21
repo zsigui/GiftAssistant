@@ -134,7 +134,7 @@
 				android:text = "复制"
 				android:textColor = "@color/co_white" />
 
-		<com.oplay.giftassistant.ui.widget.button.GiftButton
+		<com.oplay.giftcool.ui.widget.button.GiftButton
 				android:id = "@+id/btn_send"
 				style = "@style/DefaultTextView"
 				android:layout_height = "@dimen/di_btn_height"
@@ -212,7 +212,7 @@
 			android:paddingBottom = "10dp"
 			android:gravity = "center" >
 
-		<com.oplay.giftassistant.ui.widget.button.DownloadButtonView
+		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
 				android:id = "@+id/btn_download"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content" />

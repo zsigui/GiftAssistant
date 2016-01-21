@@ -33,7 +33,7 @@
 					android:layout_height = "1dp"
 					android:background = "@color/co_divider_bg" />
 
-			<com.oplay.giftassistant.ui.widget.NestedListView
+			<com.oplay.giftcool.ui.widget.NestedListView
 					android:id = "@+id/lv_game"
 					style = "@style/DefaultListView"
 					android:minHeight = "95dp" />
@@ -60,7 +60,7 @@
 					android:layout_height = "1dp"
 					android:background = "@color/co_divider_bg" />
 
-			<com.oplay.giftassistant.ui.widget.NestedListView
+			<com.oplay.giftcool.ui.widget.NestedListView
 					android:id = "@+id/lv_gift"
 					style = "@style/DefaultListView"
 					android:minHeight = "95dp" />

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android = "http://schemas.android.com/apk/res/android" >
+	<corners
+			android:bottomLeftRadius = "22dp"
+			android:bottomRightRadius = "22dp"
+			android:topLeftRadius = "22dp"
+			android:topRightRadius = "22dp" />
+	<padding
+			android:bottom = "@dimen/di_btn_bigger_padding_top_bottom"
+			android:left = "22dp"
+			android:right = "22dp"
+			android:top = "@dimen/di_btn_bigger_padding_top_bottom" />
+	<solid android:color = "@color/co_opacity_70" />
+</shape >

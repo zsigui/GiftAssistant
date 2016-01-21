@@ -1,4 +1,4 @@
-package com.oplay.giftassistant;
+package com.oplay.giftcool;
 
 import org.junit.Test;
 

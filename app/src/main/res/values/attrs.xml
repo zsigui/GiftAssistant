@@ -28,17 +28,6 @@
 		      format = "reference" />
 	</declare-styleable >
 
-	<declare-styleable name = "RoundedLayout" >
-		<attr name = "rl_radius" format = "dimension" />
-	</declare-styleable >
-
-	<declare-styleable name = "TopInnerArrowLayout" >
-		<attr name = "arrowSize"
-		      format = "dimension" />
-		<attr name = "arrowPosition"
-		      format = "float" />
-	</declare-styleable >
-
 	<declare-styleable name = "ToggleButton" >
 		<attr name = "tb_borderWidth" format = "dimension" >
 		</attr >

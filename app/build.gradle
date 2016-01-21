@@ -5,21 +5,41 @@ android {
     buildToolsVersion BUILD_TOOL_SDK_VERSION
 
     defaultConfig {
-        applicationId "com.oplay.giftassistant"
+        applicationId "com.oplay.giftcool"
         minSdkVersion BUILD_MIN_SDK_VERSION as int
         targetSdkVersion BUILD_TARGET_SDK_VERSION as int
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
     }
 
+	signingConfigs {
+		// 以下定义debug版本
+		debug {
+		}
+		// 以下定义release版本
+		release {
+		}
+		// 也可以自定义名称
+		myConfigs {
+			storeFile file(KEY_FILE)
+			storePassword KEY_STOREPASS
+			keyAlias KEY_ALIAS
+			keyPassword KEY_KEYPASS
+		}
+	}
+
 
 	buildTypes {
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			zipAlignEnabled true
+			signingConfig signingConfigs.myConfigs
 		}
 		debug {
 			jniDebuggable true
+			signingConfig signingConfigs.myConfigs
+
 		}
 	}
 

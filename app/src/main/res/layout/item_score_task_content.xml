@@ -16,7 +16,7 @@
 			android:layout_width = "0dp"
 			android:layout_weight = "1" />
 
-	<com.oplay.giftassistant.ui.widget.ScoreText
+	<com.oplay.giftcool.ui.widget.ScoreText
 			android:id = "@+id/st_score"
 			style = "@style/DefaultTextView.Score" />
 

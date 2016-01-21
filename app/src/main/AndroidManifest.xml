@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-		package = "com.oplay.giftassistant"
+		package = "com.oplay.giftcool"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		xmlns:tools = "http://schemas.android.com/tools" >
 
@@ -49,7 +49,7 @@
 	<uses-permission android:name = "android.permission.PLUGIN" />
 
 	<application
-			android:name = ".AssistantApp"
+			android:name = "com.oplay.giftcool.AssistantApp"
 			android:allowBackup = "false"
 			android:icon = "@mipmap/ic_launcher"
 			android:label = "@string/app_name"
@@ -57,7 +57,7 @@
 			tools:replace = "android:icon, android:theme, android:allowBackup" >
 
 		<activity
-				android:name = ".ui.activity.SplashActivity"
+				android:name = "com.oplay.giftcool.ui.activity.SplashActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait" >
 			<intent-filter >
@@ -68,7 +68,7 @@
 
 				<!--android:screenOrientation = "sensorPortrait"-->
 		<activity
-				android:name = ".ui.activity.MainActivity"
+				android:name = "com.oplay.giftcool.ui.activity.MainActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation="sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
@@ -76,55 +76,55 @@
 		</activity >
 
 		<activity
-				android:name = ".ui.activity.SearchActivity"
+				android:name = "com.oplay.giftcool.ui.activity.SearchActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "stateVisible|adjustPan" />
 
 		<activity
-				android:name = ".ui.activity.GiftListActivity"
+				android:name = "com.oplay.giftcool.ui.activity.GiftListActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
-				android:name = ".ui.activity.GameDetailActivity"
+				android:name = "com.oplay.giftcool.ui.activity.GameDetailActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
-				android:name = ".ui.activity.GiftDetailActivity"
+				android:name = "com.oplay.giftcool.ui.activity.GiftDetailActivity"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
-				android:name = ".ui.activity.GameListActivity"
+				android:name = "com.oplay.giftcool.ui.activity.GameListActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
-				android:name = ".ui.activity.SettingActivity"
+				android:name = "com.oplay.giftcool.ui.activity.SettingActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
-				android:name = ".ui.activity.LoginActivity"
+				android:name = "com.oplay.giftcool.ui.activity.LoginActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<service
-				android:name = ".service.ClockService"
+				android:name = "com.oplay.giftcool.service.ClockService"
 				android:exported = "false" />
 
 		<meta-data

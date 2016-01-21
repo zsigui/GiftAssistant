@@ -13,28 +13,5 @@
         android:paddingBottom="36dp"
         android:layout_height="256dp"/>
 
-    <com.oplay.giftassistant.ui.widget.ShapeLayout.RoundedLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="220dp">
-
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/test_code"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="3dp"
-            android:layout_alignParentRight="true"
-            android:text="25礼包"
-            android:textColor="@color/co_white"
-            android:scaleType="centerCrop"
-            android:background="@drawable/shape_toolbar_right"/>
-
-    </com.oplay.giftassistant.ui.widget.ShapeLayout.RoundedLayout>
 
 </RelativeLayout>

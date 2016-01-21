@@ -7,7 +7,7 @@
               android:paddingTop = "10dp"
               android:paddingBottom = "10dp" >
 
-	<com.oplay.giftassistant.ui.widget.button.TagButton
+	<com.oplay.giftcool.ui.widget.button.TagButton
 			android:id="@+id/tv_tag"
 			android:clickable="false"
 			style = "@style/DefaultTextView.NormalBtn" />

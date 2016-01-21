@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.oplay.giftassistant.ui.widget.RefreshLayout
+<com.oplay.giftcool.ui.widget.layout.RefreshLayout
 		android:id = "@+id/srl_layout"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
@@ -102,7 +102,7 @@
 
 				<View style = "@style/HDividerView" />
 
-				<com.oplay.giftassistant.ui.widget.NestedListView
+				<com.oplay.giftcool.ui.widget.NestedListView
 						android:id = "@+id/rv_new_content"
 						style = "@style/DefaultListView"
 						android:minHeight = "95dp" />
@@ -111,4 +111,4 @@
 		</LinearLayout >
 	</ScrollView >
 
-</com.oplay.giftassistant.ui.widget.RefreshLayout >
+</com.oplay.giftcool.ui.widget.layout.RefreshLayout >

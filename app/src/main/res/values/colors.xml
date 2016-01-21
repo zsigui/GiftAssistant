@@ -35,6 +35,7 @@
 	<color name = "co_index_module_add_text" >#ff8543</color >
 	<color name = "co_divider_bg" >#dcdcdc</color >
 	<color name = "co_stroke_bg" >#e4e4e4</color >
+	<color name = "co_reward_bg" >#ffb554</color>
 
 	<color name = "co_btn_red" >#f85454</color >
 	<color name = "co_btn_red_pressed" >#E34D4E</color >

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.oplay.giftassistant.ui.widget.RefreshLayout
+<com.oplay.giftcool.ui.widget.layout.RefreshLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/srl_layout"
 		android:orientation = "vertical"
@@ -15,4 +15,4 @@
 			android:dividerHeight="@dimen/di_divider_height"
 			style="@style/ListScrollBar"
 			android:divider="@color/co_divider_bg"/>
-</com.oplay.giftassistant.ui.widget.RefreshLayout >
+</com.oplay.giftcool.ui.widget.layout.RefreshLayout >

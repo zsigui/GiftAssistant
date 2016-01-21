@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:id = "@+id/drawer_header"
+                style = "@style/NavDrawerHeaderLayout" >
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			style = "@style/NavDrawerHeaderAvatar"
+			android:src = "@drawable/ic_avatar_default"
+			app:riv_border_color = "@color/co_white"
+			app:riv_border_width = "@dimen/di_drawer_header_icon_border_size"
+			app:riv_oval = "true" />
+
+	<TextView
+			android:id = "@+id/tv_nick"
+			style = "@style/NavDrawerItemText"
+			android:textColor = "@color/co_white"
+			android:layout_marginTop = "8dp"
+			android:textSize = "16sp"
+			android:layout_below = "@+id/iv_icon" />
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/NavDrawerItemText"
+			android:textColor = "@color/co_search_bar_hint"
+			android:textSize = "12sp"
+			android:layout_marginTop = "4dp"
+			android:layout_below = "@+id/tv_nick" />
+
+	<ImageView
+			android:id = "@+id/iv_edit"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:contentDescription = "@null"
+			android:layout_alignParentRight = "true"
+			android:layout_alignBottom = "@+id/tv_name"
+			android:scaleType = "centerInside"
+			android:src = "@drawable/ic_edit" />
+</RelativeLayout >

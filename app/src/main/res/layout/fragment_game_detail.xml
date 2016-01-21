@@ -29,7 +29,7 @@
 			android:gravity="center"
 			android:visibility="gone">
 
-		<com.oplay.giftassistant.ui.widget.button.DownloadButtonView
+		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
 				android:id="@+id/btn_download"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content" />

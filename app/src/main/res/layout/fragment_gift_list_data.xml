@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.oplay.giftassistant.ui.widget.RefreshLayout
+<com.oplay.giftcool.ui.widget.layout.RefreshLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/srl_layout"
 		android:orientation = "vertical"
@@ -12,4 +12,4 @@
 			style = "@style/DefaultListView"
 			android:background="@color/co_white"
 			android:layout_height = "match_parent" />
-</com.oplay.giftassistant.ui.widget.RefreshLayout >
+</com.oplay.giftcool.ui.widget.layout.RefreshLayout >

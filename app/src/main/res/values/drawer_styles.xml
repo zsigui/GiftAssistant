@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+
+	<style name = "NavDrawerHeaderLayout" >
+		<item name = "android:layout_width" >match_parent</item >
+		<item name = "android:layout_height" >wrap_content</item >
+		<item name = "android:background" >@color/co_common_app_main_bg</item >
+		<item name = "android:orientation" >horizontal</item >
+		<item name = "android:paddingTop" >18dp</item >
+		<item name = "android:paddingBottom" >15dp</item >
+		<item name = "android:paddingLeft" >15dp</item >
+		<item name = "android:paddingRight" >15dp</item >
+	</style >
+
+	<style name = "NavDrawerHeaderAvatar" >
+		<item name = "android:layout_width" >@dimen/di_drawer_header_icon_diameter</item >
+		<item name = "android:layout_height" >@dimen/di_drawer_header_icon_diameter</item >
+		<item name = "android:scaleType" >centerCrop</item >
+	</style >
+
+	<style name = "NavDrawerItemLayout" >
+		<item name = "android:layout_width" >match_parent</item >
+		<item name = "android:layout_height" >@dimen/di_drawer_item_height</item >
+		<item name = "android:background" >@drawable/selector_white_module</item >
+		<item name = "android:gravity" >center_vertical</item >
+		<item name = "android:orientation" >horizontal</item >
+		<item name = "android:paddingLeft" >28dp</item >
+	</style >
+
+	<style name = "NavDrawerItemIcon" >
+		<item name = "android:layout_width" >wrap_content</item >
+		<item name = "android:layout_height" >wrap_content</item >
+		<item name = "android:scaleType" >centerInside</item >
+		<item name = "android:layout_marginRight" >10dp</item >
+	</style >
+
+	<style name = "NavDrawerItemText" >
+		<item name = "android:layout_width" >wrap_content</item >
+		<item name = "android:layout_height" >wrap_content</item >
+		<item name = "android:background" >@color/co_transparent</item >
+		<item name = "android:textSize" >14sp</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
+	</style >
+</resources >

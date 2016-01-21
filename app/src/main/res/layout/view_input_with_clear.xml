@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.oplay.giftassistant.ui.widget.editText.ClearEditText
+<com.oplay.giftcool.ui.widget.editText.ClearEditText
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:orientation = "horizontal"
 		style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
@@ -18,4 +18,4 @@
 			android:layout_height = "wrap_content"
 			android:clickable = "true"
 			android:background = "@drawable/ic_input_clear" />
-</com.oplay.giftassistant.ui.widget.editText.ClearEditText >
+</com.oplay.giftcool.ui.widget.editText.ClearEditText >

@@ -14,7 +14,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
 import com.litesuits.common.assist.Check;
-import com.oplay.giftassistant.config.AppDebugConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
 import java.io.File;
