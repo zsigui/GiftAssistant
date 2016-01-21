@@ -2,8 +2,6 @@ package com.oplay.giftcool.ui.fragment.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -40,7 +39,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	private String mFragName;
-	protected Handler mHandler = new Handler(Looper.myLooper());
 	// 是否处于刷新页面请求中
 	protected boolean mIsSwipeRefresh = false;
 	protected boolean mIsNotifyRefresh = false;
@@ -93,6 +91,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
+
 		if (isVisibleToUser) {
 			onUserVisible();
 		} else {
@@ -127,7 +126,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		}
 		mIsPrepared = true;
 		mCanShowUI = true;
-		lazyLoad();
+		if (!mHasData) {
+			lazyLoad();
+		}
 	}
 
 	protected void initViewManger(@LayoutRes int layoutResID) {
@@ -254,9 +255,11 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	@Override
 	public void onGiftUpdate() {
+		KLog.e("mHasData = " + mHasData + ", mIsRefresh = " + mIsLoading);
 		if (mIsSwipeRefresh || mIsNotifyRefresh) {
 			return;
 		}
+		KLog.e("mHasData = " + mHasData + ", mIsRefresh = " + mIsLoading);
 		mIsNotifyRefresh = true;
 		lazyLoad();
 	}

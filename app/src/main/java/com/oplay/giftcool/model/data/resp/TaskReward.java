@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by zsigui on 16-1-18.
+ * Created by zsigui on 16-1-21.
  */
-public class TaskReward implements Serializable {
+public class TaskReward implements Serializable{
 
-	@SerializedName("reward_points")
-	public int rewardPoints;
+	@SerializedName("reward_info")
+	public TaskRewardDetail data;
 }

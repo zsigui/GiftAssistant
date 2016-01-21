@@ -125,7 +125,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		// 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
 		setCurSelected(mCurrentIndex);
 		mDrawerLayout = getViewById(R.id.drawer_layout);
-		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout, R.string.material_drawer_open, R.string.material_drawer_close));
+		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.string.st_drawer_open, R.string.st_drawer_close));
 		replaceFrag(R.id.drawer_container, DrawerFragment.newInstance(mDrawerLayout), false);
 	}
 

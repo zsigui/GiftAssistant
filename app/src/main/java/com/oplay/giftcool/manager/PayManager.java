@@ -1,7 +1,6 @@
 package com.oplay.giftcool.manager;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
@@ -13,12 +12,12 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.GetCodeDialog;
 import com.oplay.giftcool.ui.fragment.dialog.GiftConsumeDialog;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -100,8 +99,8 @@ public class PayManager {
 	 */
 	public void seizeGift(Context context, IndexGiftNew gift, GiftButton button) {
 		if (!AccountManager.getInstance().isLogin()) {
-			Intent intent = new Intent(context, LoginActivity.class);
-			context.startActivity(intent);
+			IntentUtil.jumpLogin(context);
+			return;
 		}
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:

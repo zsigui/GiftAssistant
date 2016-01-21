@@ -5,9 +5,11 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
+import com.oplay.giftcool.handler.ScoreHandler;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.SoundPlayer;
@@ -115,6 +117,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mFinishedCnt++;
 		mUrl_AppInfo.put(info.downloadUrl, info);
 		mPackageName_AppInfo.put(info.packageName, info);
+
+		// 完成下载任务，请求奖励积分
+		ScoreHandler.reward(TaskTypeUtil.REWARD_TYPE_BIND_DOWNLOAD);
 	}
 
 	public void addDownloadTask(IndexGameNew appInfo) {

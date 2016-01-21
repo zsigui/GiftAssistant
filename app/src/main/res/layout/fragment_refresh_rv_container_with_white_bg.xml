@@ -8,7 +8,7 @@
 		android:background = "@color/co_transparent" >
 
 	<android.support.v7.widget.RecyclerView
-			android:id = "@+id/rv_content"
+			android:id = "@+id/lv_content"
 			android:background = "@color/co_white"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent" />

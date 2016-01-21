@@ -18,20 +18,16 @@
 		<TextView
 				style = "@style/DefaultTextView.Header"
 				android:textColor = "@color/co_reward_bg"
-				android:textSize="16sp"
 				android:text = "完成 " />
 
 		<TextView
 				android:id = "@+id/tv_task"
 				style = "@style/DefaultTextView.Header"
-				android:textColor = "@color/co_btn_orange"
-				android:textSize="16sp"
-				android:text = "新版本意见反馈" />
+				android:textColor = "@color/co_btn_orange" />
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
 				android:textColor = "@color/co_reward_bg"
-				android:textSize="16sp"
 				android:text = " 任务，奖励" />
 
 		<TextView
@@ -41,8 +37,7 @@
 				android:textColor = "@color/co_btn_orange"
 				android:drawablePadding = "2dp"
 				android:paddingLeft = "5dp"
-				android:textSize="16sp"
-				android:text = "10" />
+				android:textSize="16sp"/>
 	</LinearLayout >
 
 	<ImageView

@@ -3,7 +3,6 @@ package com.oplay.giftcool.ui.fragment.gift;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -19,9 +18,11 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
+import com.oplay.giftcool.handler.ScoreHandler;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
@@ -118,8 +119,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
 				@Override
 				public void share() {
-					Intent sendIntent = new Intent();
-					sendIntent.setAction(Intent.ACTION_SEND);
+					ScoreHandler.reward(TaskTypeUtil.REWARD_TYPE_BIND_SHARE_NORMAL);
 				}
 			});
 		}

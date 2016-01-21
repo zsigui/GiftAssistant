@@ -63,6 +63,8 @@
 				<EditText
 						android:id = "@+id/et_content"
 						style = "@style/DefaultTextView.FeedBackContent"
+						android:textCursorDrawable="@null"
+						android:imeOptions="actionNext"
 						android:hint = "@string/st_feedback_content_hint" />
 
 				<TextView
@@ -84,6 +86,8 @@
 					android:textColorHint = "@color/co_common_text_second"
 					android:textColor = "@color/co_black"
 					android:inputType = "number|phone"
+					android:textCursorDrawable="@null"
+					android:imeOptions="actionDone"
 					android:hint = "@string/st_feedback_phone_hint" />
 
 			<LinearLayout

@@ -9,9 +9,12 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.TaskReward;
+import com.oplay.giftcool.model.data.resp.TaskRewardDetail;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -42,9 +45,14 @@ public class ScoreHandler {
 							public void onResponse(Response<JsonRespBase<TaskReward>> response, Retrofit retrofit) {
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().isSuccess()) {
-										AccountManager.getInstance().getUserInfo().score
-												+= response.body().getData().rewardPoints;
-										// 临时，不设置存储
+										if (response.body().getData() == null || response.body().getData().data == null) {
+											return;
+										}
+										TaskRewardDetail task = response.body().getData().data;
+										UserModel model = AccountManager.getInstance().getUser();
+										model.userInfo.score += task.rewardPoints;
+										AccountManager.getInstance().setUser(model);
+										ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
 										ObserverManager.getInstance().notifyUserUpdate();
 									}
 								}

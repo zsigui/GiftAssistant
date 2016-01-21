@@ -74,7 +74,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
-		ToastUtil.showScoreReward("连续登陆7天", 100);
 	}
 
 	@Override

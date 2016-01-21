@@ -2,8 +2,7 @@
 
 
 	<!-- Base application theme. -->
-	<!-- <style name = "AppTheme" parent = "Theme.AppCompat.Light.NoActionBar" > -->
-	<style name = "AppTheme" parent = "MaterialDrawerTheme.Light" >
+	<style name = "AppTheme" parent = "Theme.AppCompat.Light.NoActionBar" >
 		<item name = "colorPrimary" >@color/co_common_app_main_bg</item >
 		<item name = "colorPrimaryDark" >@color/co_status_bar_bg</item >
 		<item name = "colorAccent" >@color/co_tool_bar_item_bg</item >
@@ -40,17 +39,6 @@
 		<!--<item name = "android:windowTranslucentStatus" >true</item >-->
 		<!--<item name = "android:fitsSystemWindows" >true</item >-->
 
-
-		<!-- MaterialDrawer specific values -->
-		<item name = "material_drawer_background" >@color/material_drawer_background</item >
-		<item name = "material_drawer_primary_text" >@color/material_drawer_primary_text</item >
-		<item name = "material_drawer_primary_icon" >@color/material_drawer_primary_icon</item >
-		<item name = "material_drawer_secondary_text" >@color/material_drawer_secondary_text</item >
-		<item name = "material_drawer_hint_text" >@color/material_drawer_hint_text</item >
-		<item name = "material_drawer_divider" >@color/material_drawer_divider</item >
-		<item name = "material_drawer_selected" >@color/material_drawer_selected</item >
-		<item name = "material_drawer_selected_text" >@color/material_drawer_selected_text</item >
-		<item name = "material_drawer_header_selection_text" >@color/material_drawer_header_selection_text</item >
 	</style >
 
 	<style name = "ActionButton.AppTheme" parent = "Widget.AppCompat.Light.ActionButton" >
@@ -331,7 +319,7 @@
 	<style name = "DefaultImageView.Score" >
 		<item name = "android:layout_width" >52dp</item >
 		<item name = "android:layout_height" >52dp</item >
-		<item name = "android:layout_marginRight" >@dimen/material_drawer_item_profile_icon_padding_right</item >
+		<item name = "android:layout_marginRight" >8dp</item >
 	</style >
 
 	<style name = "DefaultTextView.Score" >

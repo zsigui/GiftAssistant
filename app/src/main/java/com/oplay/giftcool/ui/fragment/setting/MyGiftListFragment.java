@@ -9,7 +9,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MyGiftListAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
@@ -21,7 +20,6 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -52,8 +50,8 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_refresh_rv_container);
-		mDataView = getViewById(R.id.rv_content);
+		initViewManger(R.layout.fragment_refresh_rv_container_with_white_bg);
+		mDataView = getViewById(R.id.lv_content);
 	}
 
 	@Override
@@ -113,10 +111,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}
-									// refreshFailEnd();
-									OneTypeDataList<IndexGiftNew> backObj = initStashMoreRefreshData();
-									setLoadState(backObj.data, backObj.isEndPage);
-									updateData(backObj.data);
+									refreshFailEnd();
 								}
 							});
 				} else {
@@ -156,6 +151,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 									moreLoadSuccessEnd();
 									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 									setLoadState(backObj.data, backObj.isEndPage);
+									addMoreData(backObj.data);
 									return;
 								}
 								moreLoadFailEnd();
@@ -164,10 +160,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 							@Override
 							public void onFailure(Throwable t) {
 								moreLoadFailEnd();
-
-								OneTypeDataList<IndexGiftNew> backObj = initStashMoreRefreshData();
-								setLoadState(backObj.data, backObj.isEndPage);
-								addMoreData(backObj.data);
 							}
 						});
 			}
@@ -190,32 +182,5 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mData.addAll(moreData);
 		mAdapter.updateData(mData);
 		mLastPage += 1;
-	}
-
-	public OneTypeDataList<IndexGiftNew> initStashMoreRefreshData() {
-		OneTypeDataList<IndexGiftNew> obj = new OneTypeDataList<>();
-		obj.data = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			IndexGiftNew ng = new IndexGiftNew();
-			ng.gameName = "逍遥西游";
-			ng.id = i;
-			ng.status = GiftTypeUtil.STATUS_SEIZE;
-			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
-			ng.name = "普通礼包";
-			ng.isLimit = false;
-			ng.score = (int) (Math.random() * 100) * 10;
-			ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-			ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
-			ng.searchCount = 0;
-			ng.remainCount = 100;
-			ng.totalCount = 100;
-			ng.useStartTime = "2015-09-22 9:30";
-			ng.useEndTime = "2016-09-22 9:30";
-			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-			ng.code = "12341k23j4k1j23k";
-			obj.data.add(ng);
-		}
-		return obj;
 	}
 }

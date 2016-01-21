@@ -45,7 +45,6 @@
 				android:id = "@+id/tv_name"
 				style = "@style/DefaultTextView.Header"
 				android:layout_width = "match_parent"
-				android:layout_marginTop = "6dp"
 				android:layout_marginLeft = "14dp"
 				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_alignTop = "@+id/rl_icon"

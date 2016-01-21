@@ -5,16 +5,17 @@ import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.socks.library.KLog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,18 +26,17 @@ import retrofit.Retrofit;
 
 /**
  * 显示限量礼包数据的Fragment<br/>
- * 具备下拉刷新(由于数据已最新，不具备实际意义),上拉加载(显示更多同日期数据)<br/>
+ * 具备下拉刷新,上拉加载(显示更多同日期数据)<br/>
  * <br/>
  * Created by zsigui on 15-12-29.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh {
+public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	private static final String KEY_DATA = "key_news_data";
 	private static final String KEY_URL = "key_url";
 	private static final String KEY_DATE = "key_date";
 
 	private ListView mDataView;
-	private ArrayList<IndexGiftNew> mData;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 	private String mUrl;
 	private String mDate;
@@ -58,8 +58,8 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_gift_list_data);
-		mDataView = getViewById(R.id.lv_container);
+		initViewManger(R.layout.fragment_refresh_lv_container);
+		mDataView = getViewById(R.id.lv_content);
 	}
 
 	@Override
@@ -85,12 +85,61 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 			mDate = getArguments().getString(KEY_DATE);
 		}
 		mDataView.setAdapter(mAdapter);
-		mRefreshLayout.setCanShowLoad(false);
+		if (mData != null) {
+			if (mData.size() < 10) {
+				mRefreshLayout.setCanShowLoad(false);
+			} else {
+				mRefreshLayout.setCanShowLoad(true);
+			}
+			updateData(mData);
+		}
 	}
 
 	@Override
 	protected void lazyLoad() {
+		refreshInitConfig();
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (NetworkUtil.isConnected(getContext())) {
+					mReqPageObj.data.page = 1;
+					mReqPageObj.data.date = mDate;
+					Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj)
+							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
+								                       Retrofit
+										                       retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
+									if (response != null && response.isSuccess() && response.body() != null &&
+											response.body().getCode() == StatusCode.SUCCESS) {
+										refreshSuccessEnd();
+										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+										setLoadState(backObj.data, backObj.isEndPage);
+										updateData(backObj.data);
+										return;
+									}
+									refreshFailEnd();
+								}
 
+								@Override
+								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(AppDebugConfig.TAG_FRAG, t);
+									}
+									refreshFailEnd();
+								}
+							});
+				} else {
+					mViewManager.showErrorRetry();
+				}
+			}
+		});
 	}
 
 	/**
@@ -117,7 +166,9 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 							public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 							                       Retrofit
 									retrofit) {
-
+								if (!mCanShowUI) {
+									return;
+								}
 								if (response != null && response.isSuccess()) {
 									moreLoadSuccessEnd();
 									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
@@ -130,11 +181,10 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 
 							@Override
 							public void onFailure(Throwable t) {
+								if (!mCanShowUI) {
+									return;
+								}
 								moreLoadFailEnd();
-
-								OneTypeDataList<IndexGiftNew> backObj = initStashMoreRefreshData();
-								setLoadState(backObj.data, backObj.isEndPage);
-								addMoreData(backObj.data);
 							}
 						});
 			}
@@ -143,6 +193,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 	}
 
 	public void updateData(ArrayList<IndexGiftNew> data) {
+		mViewManager.showContent();
 		mHasData = true;
 		mData = data;
 		mAdapter.updateData(mData);
@@ -158,27 +209,4 @@ public class GiftListDataFragment extends BaseFragment_Refresh {
 		mLastPage += 1;
 	}
 
-	public OneTypeDataList<IndexGiftNew> initStashMoreRefreshData() {
-		OneTypeDataList<IndexGiftNew> obj = new OneTypeDataList<>();
-		obj.data = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			IndexGiftNew ng = new IndexGiftNew();
-			ng.gameName = "逍遥西游";
-			ng.id = i;
-			ng.status = GiftTypeUtil.STATUS_SEIZE;
-			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
-			ng.name = "普通礼包";
-			ng.isLimit = false;
-			ng.score = (int) (Math.random() * 100) * 10;
-			ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-			ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
-			ng.searchCount = 0;
-			ng.remainCount = 100;
-			ng.totalCount = 100;
-			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-			obj.data.add(ng);
-		}
-		return obj;
-	}
 }

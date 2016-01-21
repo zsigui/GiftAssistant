@@ -63,7 +63,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_refresh_lv_container);
 
-		mDataView = getViewById(R.id.rv_content);
+		mDataView = getViewById(R.id.lv_content);
 	}
 
 	@Override

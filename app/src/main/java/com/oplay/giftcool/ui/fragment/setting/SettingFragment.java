@@ -18,6 +18,8 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.DataClearUtil;
+import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_File;
@@ -174,8 +176,13 @@ public class SettingFragment extends BaseFragment {
 				dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 				break;
 			case R.id.rl_feedback:
-				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
-						.newInstance(), getResources().getString(R.string.st_feedback_title));
+				if (!AccountManager.getInstance().isLogin()) {
+					ToastUtil.showShort("请先登录");
+					IntentUtil.jumpLogin(getContext());
+				} else {
+					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
+							.newInstance(), getResources().getString(R.string.st_feedback_title));
+				}
 				break;
 			case R.id.rl_about:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, AboutFragment
@@ -190,7 +197,7 @@ public class SettingFragment extends BaseFragment {
 							@Override
 							public void onResponse(Response<Void> response, Retrofit retrofit) {
 								if (AppDebugConfig.IS_FRAG_DEBUG) {
-									KLog.e(response == null ? "response null" : response.code());
+									KLog.e(response == null ? "login response null" : response.code());
 								}
 							}
 

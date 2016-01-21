@@ -27,12 +27,12 @@ public class InputTextUtil {
 
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					String editable = etOne.getText().toString();
-					String str = StringUtil.stringFilter(editable);
-					if (!editable.equals(str)) {
+					String str = StringUtil.stringFilter(s.toString());
+					if (!s.toString().equals(str)) {
 						etOne.setText(str);
 						//设置新的光标所在位置
 						etOne.setSelection(str.length());
+						s = str;
 					}
 					if (oneClear != null) {
 						if (s.length() > 0) {
@@ -78,9 +78,8 @@ public class InputTextUtil {
 
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					String editable = etTwo.getText().toString();
-					String str = StringUtil.stringFilter(editable);
-					if (!editable.equals(str)) {
+					String str = StringUtil.stringFilter(s.toString());
+					if (!s.toString().equals(str)) {
 						etTwo.setText(str);
 						//设置新的光标所在位置
 						etTwo.setSelection(str.length());

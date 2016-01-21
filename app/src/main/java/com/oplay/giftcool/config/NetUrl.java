@@ -184,4 +184,21 @@ public class NetUrl {
 	 * 获取积分任务
 	 */
 	public static final String SCORE_GET_TASK = "api/mission/get_points_mission_list";
+
+	/* 应用接口 */
+
+	/**
+	 * 意见反馈
+	 */
+	public static final String APP_POST_FEEDBACK = "api/feedback/add_feedback";
+
+	/**
+	 * 应用初始化
+	 */
+	public static final String APP_INIT = "default";
+
+	/**
+	 * 应用版本更新
+	 */
+	public static final String APP_VERSION_UPDATE = "default";
 }

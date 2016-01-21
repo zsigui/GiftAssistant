@@ -1,17 +1,11 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.StrictMode;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,7 +20,6 @@ import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
-import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
@@ -82,7 +75,6 @@ public class AssistantApp extends Application {
 		initImageLoader();
 		initRetrofit();
 		initLoadingView();
-		initDrawerImageLoader();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
@@ -130,32 +122,6 @@ public class AssistantApp extends Application {
 				.baseUrl(NetUrl.URL_BASE)
 				.addConverterFactory(GsonConverterFactory.create(mGson))
 				.build();
-	}
-
-	private void initDrawerImageLoader() {
-		DrawerImageLoader.init(new AbstractDrawerImageLoader() {
-			@Override
-			public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-				boolean isLogin = AccountManager.getInstance().isLogin();
-				if (isLogin) {
-					imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					ImageLoader.getInstance().displayImage(uri.toString(), imageView, Global.AVATOR_IMAGE_LOADER);
-				} else {
-					imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					imageView.setImageResource(R.drawable.ic_avator_unlogin);
-				}
-			}
-
-			@Override
-			public void cancel(ImageView imageView) {
-				ImageLoader.getInstance().cancelDisplayTask(imageView);
-			}
-
-			@Override
-			public Drawable placeholder(Context ctx) {
-				return ctx.getResources().getDrawable(R.drawable.ic_img_default);
-			}
-		});
 	}
 
 	/**

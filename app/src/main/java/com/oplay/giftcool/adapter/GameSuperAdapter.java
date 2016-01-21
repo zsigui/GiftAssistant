@@ -298,7 +298,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 
 		public GameHotVH(View itemView) {
 			super(itemView);
-			rvContainer = getViewById(R.id.rv_content);
+			rvContainer = getViewById(R.id.lv_content);
 			rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
 			rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
 			adapter = new IndexGameHotWithTitleAdapter(mContext);
@@ -332,7 +332,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 
 		public GameNewVH(View itemView) {
 			super(itemView);
-			rvContainer = getViewById(R.id.rv_content);
+			rvContainer = getViewById(R.id.lv_content);
 			rvContainer.setLayoutManager(new GameSuperLinearLayoutManager(rvContainer));
 			rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
 			adapter = new IndexGameNewWithTitleAdapter(mContext);

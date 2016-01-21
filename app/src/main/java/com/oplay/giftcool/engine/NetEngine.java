@@ -1,6 +1,7 @@
 package com.oplay.giftcool.engine;
 
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.data.req.ReqGetCode;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
@@ -193,4 +194,8 @@ public interface NetEngine {
 	 */
 	@POST(NetUrl.SCORE_GET_TASK)
 	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
+
+	/* ---------------- 应用接口  ---------------- */
+	@POST(NetUrl.APP_POST_FEEDBACK)
+	Call<JsonRespBase<Void>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
 }

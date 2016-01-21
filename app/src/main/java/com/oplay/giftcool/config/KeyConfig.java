@@ -40,6 +40,11 @@ public class KeyConfig {
 	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x153;
 	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x154;
 
+	/* gift list activity */
+	public static final int TYPE_ID_GIFT_LIMIT = 0x170;
+	public static final int TYPE_ID_GIFT_NEW = 0x171;
+	public static final int TYPE_ID_GIFT_LIKE = 0x172;
+
 	/* game list activity */
 	// 新游推荐
 	public static final int TYPE_ID_GAME_NEW = 0x201;

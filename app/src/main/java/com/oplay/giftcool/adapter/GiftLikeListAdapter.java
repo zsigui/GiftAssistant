@@ -1,6 +1,6 @@
 package com.oplay.giftcool.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,22 +14,17 @@ import com.oplay.giftcool.util.IntentUtil;
 
 import java.util.ArrayList;
 
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
+import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewAdapter;
 import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GiftLikeListAdapter extends BGARecyclerViewAdapter<IndexGiftLike> {
+public class GiftLikeListAdapter extends BGAAdapterViewAdapter<IndexGiftLike> {
 
 
-	public GiftLikeListAdapter(RecyclerView recyclerView) {
-		super(recyclerView, R.layout.item_list_gift_like);
-	}
-
-	public GiftLikeListAdapter(RecyclerView recyclerView, ArrayList<IndexGiftLike> data) {
-		this(recyclerView);
-		this.mDatas = data;
+	public GiftLikeListAdapter(Context context) {
+		super(context, R.layout.item_list_gift_like);
 	}
 
 	@Override
@@ -58,5 +53,13 @@ public class GiftLikeListAdapter extends BGARecyclerViewAdapter<IndexGiftLike> {
 				}
 			});
 		}
+	}
+
+	public void updateData(ArrayList<IndexGiftLike> data) {
+		if (data == null) {
+			return;
+		}
+		mDatas = data;
+		notifyDataSetChanged();
 	}
 }

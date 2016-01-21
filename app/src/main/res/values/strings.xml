@@ -9,6 +9,10 @@
 	<string name = "toolbar_title" >默认</string >
 	<!-- -->
 	<string name = "err_setting" >去设置</string >
+
+	<!-- 侧边栏 -->
+	<string name = "st_drawer_open">打开</string>
+	<string name = "st_drawer_close">关闭</string>
 	<!--礼包 -->
 	<string name = "st_search_hint" >搜索游戏和礼包</string >
 	<string name = "st_search_history_clear" >清空所有搜索记录</string >

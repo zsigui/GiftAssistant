@@ -49,9 +49,10 @@ public class IntentUtil {
 	/**
 	 * 跳转猜你喜欢列表界面
 	 */
-	public static void jumpGiftHotList(Context context) {
+	public static void jumpGiftHotList(Context context, String gameKey) {
 		Intent intent = new Intent(context, GiftListActivity.class);
-		intent.putExtra(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_LIKE);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIKE);
+		intent.putExtra(KeyConfig.KEY_DATA, gameKey);
 		context.startActivity(intent);
 	}
 
@@ -60,7 +61,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftLimitList(Context context) {
 		Intent intent = new Intent(context, GiftListActivity.class);
-		intent.putExtra(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_LIMIT);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
 		context.startActivity(intent);
 	}
 
@@ -69,7 +70,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftNewList(Context context) {
 		Intent intent = new Intent(context, GiftListActivity.class);
-		intent.putExtra(GiftListActivity.KEY_TYPE, GiftListActivity.TYPE_NEW);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_NEW);
 		context.startActivity(intent);
 	}
 

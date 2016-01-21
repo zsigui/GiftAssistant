@@ -1,37 +1,48 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.widget.ListView;
 
+import com.litesuits.common.utils.PackageUtil;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftLikeListAdapter;
-import com.oplay.giftcool.adapter.other.DividerItemDecoration;
+import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
+import com.oplay.giftcool.model.data.resp.OneTypeDataList;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.NetworkUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Created by zsigui on 15-12-30.
  */
-public class GiftLikeListFragment extends BaseFragment_Refresh {
+public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
 
-	private static final String KEY_DATA = "key_like_data";
+	private static final String KEY_DATA = "key_like_game";
 
-	private RecyclerView rvData;
+	private ListView mDataView;
 	private GiftLikeListAdapter mAdapter;
+	private String mGameKey;
+	private JsonReqBase<ReqIndexGift> mReqPageObj;
 
 	public static GiftLikeListFragment newInstance() {
 		return new GiftLikeListFragment();
 	}
 
-	public static GiftLikeListFragment newInstance(ArrayList<IndexGiftLike> data) {
+	public static GiftLikeListFragment newInstance(String gameKey) {
 		GiftLikeListFragment fragment = new GiftLikeListFragment();
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(KEY_DATA, data);
+		bundle.putSerializable(KEY_DATA, gameKey);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -39,8 +50,8 @@ public class GiftLikeListFragment extends BaseFragment_Refresh {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_refresh_rv_container_with_white_bg);
-		rvData = getViewById(R.id.rv_content);
+		initViewManger(R.layout.fragment_refresh_lv_container);
+		mDataView = getViewById(R.id.lv_content);
 	}
 
 	@Override
@@ -51,39 +62,120 @@ public class GiftLikeListFragment extends BaseFragment_Refresh {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-
-		LinearLayoutManager llm = new LinearLayoutManager(getContext());
-		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
-				llm.getOrientation(),
-				getContext().getResources().getColor(R.color.co_divider_bg),
-				1);
-		rvData.setLayoutManager(llm);
-		rvData.addItemDecoration(decoration);
-		mAdapter = new GiftLikeListAdapter(rvData);
+		ReqIndexGift data = new ReqIndexGift();
+		mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
 
 		if (getArguments() != null) {
-			Serializable s = getArguments().getSerializable(KEY_DATA);
-			if (s != null) {
-				mAdapter.setDatas((ArrayList<IndexGiftLike>) s);
-			}
+			mGameKey = getArguments().getString(KEY_DATA);
 		}
+		mLastPage = 1;
 
-		rvData.setAdapter(mAdapter);
-
-	}
-
-	public void updateData(ArrayList<IndexGiftLike> data) {
-		if (data == null) {
-			return;
+		if (TextUtils.isEmpty(mGameKey)) {
+			mReqPageObj.data.appNames = PackageUtil.getInstalledAppName(getContext());
+		} else {
+			ArrayList<String> s = new ArrayList<>();
+			s.add(mGameKey);
+			mReqPageObj.data.appNames = s;
 		}
-		mAdapter.setDatas(data);
-		mAdapter.notifyDataSetChanged();
+		mAdapter = new GiftLikeListAdapter(getContext());
+		mDataView.setAdapter(mAdapter);
+
 	}
 
 	@Override
 	protected void lazyLoad() {
+		refreshInitConfig();
 
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (NetworkUtil.isConnected(getContext())) {
+					mReqPageObj.data.page = 1;
+					Global.getNetEngine().obtainGiftLike(mReqPageObj)
+							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
+										                       response, Retrofit
+										retrofit) {
+									if (response != null && response.isSuccess()) {
+										refreshSuccessEnd();
+										OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+										setLoadState(backObj.data, backObj.isEndPage);
+										updateData(backObj.data);
+										return;
+									}
+									refreshFailEnd();
+								}
+
+								@Override
+								public void onFailure(Throwable t) {
+									refreshFailEnd();
+								}
+							});
+				} else {
+					mViewManager.showErrorRetry();
+				}
+			}
+		});
+
+	}
+
+	/**
+	 * 加载更多数据
+	 */
+	@Override
+	protected void loadMoreData() {
+		if (!mNoMoreLoad && !mIsLoadMore) {
+			mIsLoadMore = true;
+			mReqPageObj.data.page = mLastPage + 1;
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					if (NetworkUtil.isConnected(getContext())) {
+						Global.getNetEngine().obtainGiftLike(mReqPageObj)
+								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+									@Override
+									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
+											                       response, Retrofit
+											retrofit) {
+										if (response != null && response.isSuccess()) {
+											moreLoadSuccessEnd();
+											OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+											setLoadState(backObj.data, backObj.isEndPage);
+											addMoreData(backObj.data);
+											return;
+										}
+										moreLoadFailEnd();
+									}
+
+									@Override
+									public void onFailure(Throwable t) {
+										moreLoadFailEnd();
+									}
+								});
+					} else {
+						mViewManager.showErrorRetry();
+					}
+				}
+			}).start();
+		}
+	}
+
+	public void updateData(ArrayList<IndexGiftLike> data) {
+		mViewManager.showContent();
+		mHasData = true;
+		mData = data;
+		mAdapter.updateData(mData);
+		mLastPage = 1;
+	}
+
+	private void addMoreData(ArrayList<IndexGiftLike> moreData) {
+		if (moreData == null) {
+			return;
+		}
+		mData.addAll(moreData);
+		mAdapter.updateData(mData);
+		mLastPage += 1;
 	}
 
 

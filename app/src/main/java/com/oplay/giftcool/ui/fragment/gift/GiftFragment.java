@@ -84,6 +84,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 	// 礼物界面数据
 	private IndexGift mGiftData;
+	// 请求后游戏键值的MD5串
+	private String mGameKey;
 
 
 	public static GiftFragment newInstance() {
@@ -126,13 +128,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mLikeBar.setOnClickListener(this);
 		mLimitBar.setOnClickListener(this);
 		mNewBar.setOnClickListener(this);
+		ObserverManager.getInstance().addGiftUpdateListener(this);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-
-		ObserverManager.getInstance().addGiftUpdateListener(this);
 
 		// 设置RecyclerView的LayoutManager
 		LinearLayoutManager llmLike = new LinearLayoutManager(getContext());
@@ -345,7 +346,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.rl_hot_all:
-				IntentUtil.jumpGiftHotList(getContext());
+				IntentUtil.jumpGiftHotList(getContext(), mGameKey);
 				break;
 			case R.id.rl_limit_all:
 				IntentUtil.jumpGiftLimitList(getContext());

@@ -39,7 +39,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_refresh_rv_container);
-		mRecyclerView = getViewById(R.id.rv_content);
+		mRecyclerView = getViewById(R.id.lv_content);
 	}
 
 	@Override
