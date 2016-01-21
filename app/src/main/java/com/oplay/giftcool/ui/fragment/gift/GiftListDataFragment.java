@@ -209,4 +209,8 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mLastPage += 1;
 	}
 
+	@Override
+	public String getPageName() {
+		return null;
+	}
 }

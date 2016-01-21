@@ -21,6 +21,7 @@ import com.socks.library.KLog;
  */
 public class WalletFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "我的钱包";
 	private TextView tvScore;
 	private TextView tvBean;
 	private TextView btnGetScore;
@@ -114,5 +115,10 @@ public class WalletFragment extends BaseFragment {
 				KLog.e(e);
 			}
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

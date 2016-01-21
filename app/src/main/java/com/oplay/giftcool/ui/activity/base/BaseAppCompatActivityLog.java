@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 
 /**
  * @author micle
@@ -57,6 +58,7 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
+        TCAgent.onPause(this);
     }
 
     @Override
@@ -71,6 +73,7 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
+        TCAgent.onResume(this);
     }
 
     @Override

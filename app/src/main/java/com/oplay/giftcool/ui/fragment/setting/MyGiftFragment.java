@@ -16,6 +16,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
  */
 public class MyGiftFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "我的礼包";
 	private ViewPager mPager;
 	private SmartTabLayout mTabLayout;
 
@@ -53,6 +54,11 @@ public class MyGiftFragment extends BaseFragment {
 
 	public static MyGiftFragment newInstance() {
 		return new MyGiftFragment();
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 
 	public class MyGiftPagerAdapter extends FragmentPagerAdapter {

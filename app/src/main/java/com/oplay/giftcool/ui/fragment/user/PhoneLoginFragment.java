@@ -39,6 +39,7 @@ import retrofit.Retrofit;
  */
 public class PhoneLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
 
+	private final static String PAGE_NAME = "手机号登录";
 	private AutoCompleteTextView etPhone;
 	private TextView tvClear;
 	private EditText etCode;
@@ -313,5 +314,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 				break;
 		}
 		return false;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

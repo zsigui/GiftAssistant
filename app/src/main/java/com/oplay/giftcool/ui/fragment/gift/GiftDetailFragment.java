@@ -52,6 +52,7 @@ import retrofit.Retrofit;
 public class GiftDetailFragment extends BaseFragment implements OnDownloadStatusChangeListener,
 		OnProgressUpdateListener {
 
+	private final static String PAGE_NAME = "礼包详情";
 	private ImageView ivIcon;
 	private TextView tvName;
 	private TextView tvConsume;
@@ -340,5 +341,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				}
 			}
 		});
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

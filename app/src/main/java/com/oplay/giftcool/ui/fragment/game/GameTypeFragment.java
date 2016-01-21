@@ -32,7 +32,7 @@ import retrofit.Retrofit;
  */
 public class GameTypeFragment extends BaseFragment {
 
-
+	private final static String PAGE_NAME = "游戏分类";
 	private RecyclerView mTypeMainView;
 	private RecyclerView mTagView;
 	private GameTypeMainAdapter mGameTypeMainAdapter;
@@ -202,5 +202,10 @@ public class GameTypeFragment extends BaseFragment {
 			typeData.add(g);
 		}
 		return typeData;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

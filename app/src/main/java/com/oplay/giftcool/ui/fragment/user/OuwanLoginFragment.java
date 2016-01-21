@@ -36,6 +36,7 @@ import retrofit.Retrofit;
  */
 public class OuwanLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
 
+	private final static String PAGE_NAME = "偶玩登录页";
 	private EditText etUser;
 	private TextView tvClear;
 	private EditText etPwd;
@@ -210,5 +211,10 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 				break;
 		}
 		return false;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

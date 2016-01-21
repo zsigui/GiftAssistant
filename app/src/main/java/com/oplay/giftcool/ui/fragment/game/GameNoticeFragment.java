@@ -18,6 +18,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.StringUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import retrofit.Retrofit;
  */
 public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
+	private final static String PAGE_NAME = "游戏排行";
 	private static final String KEY_DATA = "key_data";
 	private JsonReqBase<ReqPageData> mReqPageObj;
 
@@ -218,4 +220,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         obj.isEndPage = true;
         return obj;
     }
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
+	}
 }

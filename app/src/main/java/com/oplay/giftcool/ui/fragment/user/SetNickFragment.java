@@ -35,6 +35,7 @@ import retrofit.Retrofit;
  */
 public class SetNickFragment extends BaseFragment implements OnBackPressListener, TextWatcher {
 
+	private final static String PAGE_NAME = "设置昵称";
 	private TextView etNick;
 	private TextView tvClear;
 
@@ -153,5 +154,10 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		} else {
 			tvClear.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

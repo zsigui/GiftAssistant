@@ -29,6 +29,7 @@ import retrofit.Retrofit;
  */
 public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> implements OnItemClickListener<IndexGameNew> {
 
+	private final static String PAGE_NAME = "游戏列表:Key=%s,TagId=%d";
 	private static final String KEY_URL = "key_data_url";
 	private static final String KEY_SEARCH = "key_data_search";
 	private static final String KEY_TAG_ID = "key_tag_id";
@@ -188,5 +189,10 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 	@Override
 	public void onItemClick(IndexGameNew item, View view, int position) {
 		IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+	}
+
+	@Override
+	public String getPageName() {
+		return String.format(PAGE_NAME,mSearchKey,mTagId);
 	}
 }

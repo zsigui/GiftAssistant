@@ -3,18 +3,21 @@ package com.oplay.giftcool.ui.fragment.base;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.ui.fragment.base.stat.TdStatInterface;
+import com.tendcloud.tenddata.TCAgent;
 
 /**
  * @author micle
  * @email zsigui@foxmail.com
  * @date 2015/12/19
  */
-public class BaseFragmentLog extends Fragment {
+public abstract class BaseFragmentLog extends Fragment implements TdStatInterface{
 
 
     @Override
@@ -79,6 +82,9 @@ public class BaseFragmentLog extends Fragment {
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
         }
+        if (!TextUtils.isEmpty(getPageName())) {
+            TCAgent.onPageStart(getContext(), getPageName());
+        }
     }
 
     @Override
@@ -94,6 +100,9 @@ public class BaseFragmentLog extends Fragment {
         super.onPause();
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
+        }
+        if (!TextUtils.isEmpty(getPageName())) {
+            TCAgent.onPageEnd(getContext(), getPageName());
         }
     }
 

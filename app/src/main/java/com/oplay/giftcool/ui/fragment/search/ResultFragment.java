@@ -22,6 +22,7 @@ import com.oplay.giftcool.ui.widget.NestedListView;
  */
 public class ResultFragment extends BaseFragment implements View.OnClickListener {
 
+	private final static String PAGE_NAME = "搜索结果页";
 	private ScrollView mContainer;
 	private RelativeLayout mGameBar;
 	private NestedListView mGameView;
@@ -121,5 +122,10 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 			case R.id.rl_gift:
 				break;
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

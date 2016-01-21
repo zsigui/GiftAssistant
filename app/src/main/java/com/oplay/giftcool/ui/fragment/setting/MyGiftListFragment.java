@@ -183,4 +183,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mAdapter.updateData(mData);
 		mLastPage += 1;
 	}
+
+	@Override
+	public String getPageName() {
+		return null;
+	}
 }

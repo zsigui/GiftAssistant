@@ -58,6 +58,7 @@ import retrofit.Retrofit;
  */
 public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener {
 
+	private final static String PAGE_NAME = "礼包首页";
 	private static final String KEY_BANNER = "key_banner";
 	private static final String KEY_LIKE = "key_like";
 	private static final String KEY_LIMIT = "key_limit";
@@ -473,5 +474,10 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		indexGift.limit = limitData;
 		indexGift.news = newData;
 		return indexGift;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

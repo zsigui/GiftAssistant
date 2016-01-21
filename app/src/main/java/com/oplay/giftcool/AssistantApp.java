@@ -24,6 +24,7 @@ import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
@@ -38,6 +39,8 @@ import retrofit.Retrofit;
  */
 public class AssistantApp extends Application {
 
+	private final static String TD_APP_ID = "7E57533EDCF044DA1BF657D786E0FDF7";
+	private final static String CHN = "0";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
@@ -71,6 +74,7 @@ public class AssistantApp extends Application {
 			}
 		}
 		sInstance = this;
+		TCAgent.init(this, TD_APP_ID, CHN);
 		KLog.init(true);
 		initImageLoader();
 		initRetrofit();

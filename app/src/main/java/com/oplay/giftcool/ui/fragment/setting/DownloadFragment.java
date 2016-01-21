@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class DownloadFragment extends BaseFragment implements OnDownloadStatusChangeListener, OnProgressUpdateListener {
 
+	private final static String PAGE_NAME = "下载管理";
 	private AppDownloadAdapter mAdapter;
 	private List<IndexGameNew> mListData;
 
@@ -98,5 +99,10 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 				}
 			}
 		});
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

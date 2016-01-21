@@ -179,4 +179,9 @@ public class DrawerFragment extends BaseFragment {
 		super.onUserUpdate();
 		updateData();
 	}
+
+	@Override
+	public String getPageName() {
+		return null;
+	}
 }

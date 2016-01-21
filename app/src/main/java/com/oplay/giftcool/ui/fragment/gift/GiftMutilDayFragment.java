@@ -26,6 +26,7 @@ import java.util.Locale;
  */
 public class GiftMutilDayFragment extends BaseFragment {
 
+    private final static String PAGE_NAME = "全部礼包";
     private static final String KEY_DATA = "key_data";
     private static final String KEY_URL = "key_url";
 
@@ -104,4 +105,8 @@ public class GiftMutilDayFragment extends BaseFragment {
         mHasData = true;
     }
 
+    @Override
+    public String getPageName() {
+        return PAGE_NAME;
+    }
 }

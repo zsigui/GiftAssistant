@@ -29,6 +29,7 @@ import com.socks.library.KLog;
  */
 public class UserInfoFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "用户信息";
 	private RelativeLayout rlAvatar;
 	private LinearLayout llNick;
 	private LinearLayout llLogin;
@@ -182,5 +183,10 @@ public class UserInfoFragment extends BaseFragment {
 	@Override
 	public void onUserUpdate() {
 		lazyLoad();
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

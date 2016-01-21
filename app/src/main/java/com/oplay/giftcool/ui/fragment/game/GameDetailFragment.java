@@ -22,6 +22,7 @@ import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 public class GameDetailFragment extends BaseFragment_WebView implements OnDownloadStatusChangeListener,
 		OnProgressUpdateListener {
 
+	private static final String PAGE_NAME = "游戏详情页";
 	private static final String KEY_ID = "key_data_id";
 	private static final String KEY_COLOR = "key_data_color";
 	private static final String KEY_STATUS = "key_data_status";
@@ -141,5 +142,10 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 				}
 			}
 		});
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

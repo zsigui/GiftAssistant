@@ -33,6 +33,7 @@ import retrofit.Retrofit;
  */
 public class SettingFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "设置";
 	private ToggleButton mBtnPush;
 	private ToggleButton mBtnAutoDelete;
 	private ToggleButton mBtnAutoCheckUpdate;
@@ -220,5 +221,8 @@ public class SettingFragment extends BaseFragment {
 		updateData();
 	}
 
-
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
+	}
 }

@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class HistoryFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "历史搜索页";
     private static final String KEY_DATA = "key_history_data";
     private static final String KEY_IS_HISTORY = "key_is_history";
 	private ListView mListView;
@@ -81,5 +82,10 @@ public class HistoryFragment extends BaseFragment {
 			}
 			mAdapter.updateData(data, isHistory);
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

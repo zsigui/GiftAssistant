@@ -43,7 +43,7 @@ import retrofit.Retrofit;
 public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission> {
 
 
-
+	private final static String PAGE_NAME = "积分任务";
 	private TextView tvScore;
 	private ListView mDataView;
 	private ArrayList<ScoreMission> mData;
@@ -368,4 +368,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		}
 	}
 
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
+	}
 }

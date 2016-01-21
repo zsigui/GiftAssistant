@@ -61,7 +61,12 @@ public class NetErrorFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    public interface OnRetryListener {
+	@Override
+	public String getPageName() {
+		return null;
+	}
+
+	public interface OnRetryListener {
         void onRetry();
     }
 }

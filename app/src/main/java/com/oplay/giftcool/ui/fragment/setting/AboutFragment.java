@@ -14,6 +14,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
  */
 public class AboutFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "关于";
 	private RelativeLayout rlUpdate;
 	private RelativeLayout rlQQ;
 	private TextView tvUpdate;
@@ -61,5 +62,10 @@ public class AboutFragment extends BaseFragment {
 			case R.id.rl_qq:
 				break;
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

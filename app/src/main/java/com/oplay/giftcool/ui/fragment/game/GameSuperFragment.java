@@ -29,6 +29,7 @@ import retrofit.Retrofit;
  */
 public class GameSuperFragment extends BaseFragment_Refresh implements View.OnClickListener {
 
+	private final static String PAGE_NAME = "游戏精品";
 	private RecyclerView mRecyclerView;
 	private GameSuperAdapter mAdapter;
 
@@ -236,5 +237,10 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 		data.news = newData;
 
 		return data;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

@@ -27,7 +27,7 @@ import retrofit.Retrofit;
  */
 public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
-
+	private final static String PAGE_NAME = "猜你喜欢";
 	private static final String KEY_DATA = "key_like_game";
 
 	private ListView mDataView;
@@ -178,5 +178,8 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		mLastPage += 1;
 	}
 
-
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
+	}
 }

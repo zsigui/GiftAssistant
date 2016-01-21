@@ -30,4 +30,9 @@ public class ForgetPwdFragment extends BaseFragment {
 	protected void lazyLoad() {
 
 	}
+
+	@Override
+	public String getPageName() {
+		return null;
+	}
 }

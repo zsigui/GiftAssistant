@@ -10,6 +10,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
  */
 public class EmptySearchFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "空搜索页";
 	public static EmptySearchFragment newInstance() {
 		return new EmptySearchFragment();
 	}
@@ -32,5 +33,10 @@ public class EmptySearchFragment extends BaseFragment {
 	@Override
 	protected void lazyLoad() {
 
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

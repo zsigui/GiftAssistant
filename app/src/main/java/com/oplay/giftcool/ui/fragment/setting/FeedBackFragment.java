@@ -31,6 +31,7 @@ import retrofit.Retrofit;
  */
 public class FeedBackFragment extends BaseFragment implements TextWatcher, TextView.OnEditorActionListener {
 
+	private final static String PAGE_NAME = "意见反馈";
 	private RadioButton rbFunction;
 	private RadioButton rbPay;
 	private RadioButton rbOther;
@@ -171,5 +172,10 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 						});
 			}
 		});
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

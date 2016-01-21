@@ -50,7 +50,7 @@ import retrofit.Retrofit;
  */
 public class UploadAvatarFragment extends BaseFragment {
 
-
+	private final static String PAGE_NAME = "上传头像";
 	private static final int REQ_ID_PHOTO_ALBUM = 33;
 	private static final int REQ_ID_PHOTO_CAMERA = 34;
 	/*拍照的照片存储位置*/
@@ -298,5 +298,10 @@ public class UploadAvatarFragment extends BaseFragment {
 				KLog.e(e);
 			}
 		}
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }

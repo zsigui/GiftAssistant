@@ -56,4 +56,9 @@ public class LoadingFragment extends BaseFragment {
 			mProgress.reset();
 		}
 	}
+
+	@Override
+	public String getPageName() {
+		return null;
+	}
 }

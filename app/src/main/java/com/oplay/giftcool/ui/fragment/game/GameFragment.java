@@ -17,6 +17,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
  */
 public class GameFragment extends BaseFragment {
 
+	private final static String PAGE_NAME = "游戏";
 	private ViewPager mPager;
 	private SmartTabLayout mTabLayout;
 
@@ -52,6 +53,11 @@ public class GameFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
     }
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
+	}
 
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {
 

@@ -16,6 +16,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
  */
 public class MoneyDetailFragment extends BaseFragment_WebView {
 
+	private final static String PAGE_NAME = "钱包明细";
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
@@ -60,5 +61,10 @@ public class MoneyDetailFragment extends BaseFragment_WebView {
 		bundle.putInt(KeyConfig.KEY_TYPE, type);
 		fragment.setArguments(bundle);
 		return fragment;
+	}
+
+	@Override
+	public String getPageName() {
+		return PAGE_NAME;
 	}
 }
