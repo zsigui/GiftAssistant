@@ -14,7 +14,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.WebViewUrl;
-import com.oplay.giftcool.model.data.resp.UpdateSesion;
+import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
@@ -237,22 +237,34 @@ public class AccountManager {
 		public void run() {
 			if (NetworkUtil.isConnected(mContext)) {
 				Global.getNetEngine().updateSession(new JsonReqBase<String>())
-						.enqueue(new Callback<JsonRespBase<UpdateSesion>>() {
+						.enqueue(new Callback<JsonRespBase<UpdateSession>>() {
 
 							@Override
-							public void onResponse(Response<JsonRespBase<UpdateSesion>> response,
+							public void onResponse(Response<JsonRespBase<UpdateSession>> response,
 							                       Retrofit retrofit) {
 								if (response != null && response.isSuccess()) {
-									if(response.body() != null && response.body().isSuccess()) {
-										mUpdateSessionRetryTime = 0;
-										mUser.userSession.session = response.body().getData().session;
-										KLog.e("req_new_session = " + mUser.userSession.session);
-										setUser(mUser);
-										// 请求更新数据
-										updateUserInfo();
-										return;
+									if(response.body() != null) {
+										if (response.body().isSuccess()) {
+											mUpdateSessionRetryTime = 0;
+											mUser.userSession.session = response.body().getData().session;
+											if (AppDebugConfig.IS_DEBUG) {
+												KLog.d("req_new_session = " + mUser.userSession.session);
+											}
+											setUser(mUser);
+											// 请求更新数据
+											updateUserInfo();
+											return;
+										}
+										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+											// 更新session不同步
+											if (AppDebugConfig.IS_DEBUG) {
+												KLog.d("session is not sync, err msg = " + response.body().getMsg());
+											}
+											// 重置登录信息，表示未登录
+											setUser(null);
+											return;
+										}
 									}
-
 								}
 								retryJudge();
 							}

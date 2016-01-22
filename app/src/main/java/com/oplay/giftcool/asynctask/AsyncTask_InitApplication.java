@@ -11,7 +11,10 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.UserModel;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.CommonUtil;
+import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -44,6 +47,18 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		return null;
 	}
 
+
+	/**
+	 * 判断是否今日首次登录
+	 */
+	public void judgeFirstOpenToday() {
+		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LAST_OPEN_TIME, 0);
+		// 首次打开APP 或者 今日首次登录
+		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
+		// 写入当前时间
+		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LAST_OPEN_TIME, System.currentTimeMillis());
+	}
+
 	/**
 	 * 需要在此完成一些APP全局常量初始化的获取工作
 	 */
@@ -64,6 +79,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(mContext);
 		}
+		// 判断是否金立首次打开APP
+		judgeFirstOpenToday();
+
 		try {
 			OuwanSDKManager.getInstance().init();
 		} catch (Exception e) {
@@ -88,7 +106,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		}
 		AccountManager.getInstance().setUser(user);
 		// 每次登录请求一次更新用户状态和数据
-		KLog.e("update User start");
 		AccountManager.getInstance().updateUserSession();
 
 		assistantApp.setGlobalInit(true);

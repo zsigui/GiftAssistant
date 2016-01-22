@@ -23,7 +23,14 @@ public class SPConfig {
 	public static final String KEY_SESSION = "ss";
 	public static final String KEY_PHONE = "mp";
 	public static final String KEY_PROFILE_URL = "pu";
+	// 上次开启应用时间
+	public static final String KEY_LAST_OPEN_TIME = "last_open_time";
 
+
+	/* 已输入账号资料 */
+	public static final String SP_LOGIN_FILE = "loginfile1234a";
+	public static final String KEY_LOGIN_OUWAN = "login_ouwan";
+	public static final String KEY_LOGIN_PHONE = "login_phone";
 
     /* 获取搜索记录 */
     public static final String SP_SEARCH_FILE = "12341bbedf";

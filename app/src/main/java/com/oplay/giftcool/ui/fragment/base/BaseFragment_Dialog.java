@@ -41,8 +41,12 @@ public abstract class BaseFragment_Dialog extends DialogFragment implements View
 		btnPositive = getViewById(R.id.btn_confirm);
 		btnNegative = getViewById(R.id.btn_cancel);
 		tvTitle = getViewById(R.id.tv_title);
-		btnPositive.setOnClickListener(this);
-		btnNegative.setOnClickListener(this);
+		if (btnPositive != null) {
+			btnPositive.setOnClickListener(this);
+		}
+		if (btnNegative != null) {
+			btnNegative.setOnClickListener(this);
+		}
 
 		mIsPrepared = true;
 

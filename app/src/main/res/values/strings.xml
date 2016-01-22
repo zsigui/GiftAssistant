@@ -135,8 +135,15 @@
 	<string name = "st_dialog_gift_share_title">礼包分享</string>
 	<string name = "st_dialog_gcool_share_title">礼包酷分享</string>
 	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
-	<string name = "share_gcool_description_1" >精品礼包，游戏下载……福利根本停不下来～</string >
-	<string name = "share_gcool_description_2" >加入[礼包酷]的3个理由：1.精品礼包 2.游戏下载 3.免费领分～</string >
+	<string name = "st_share_gcool_description_1" >精品礼包，游戏下载……福利根本停不下来～</string >
+	<string name = "st_share_gcool_description_2" >加入[礼包酷]的3个理由：1.精品礼包 2.游戏下载 3.免费领分～</string >
+
+
+
+	<string name = "st_welcome_login_hint" >积分可以兑换各种豪华礼包\n积分存放再“我的钱包”里面</string >
+	<string name = "st_welcome_unlogin_hint" >马上登录，获取大量积分。\n积分可以兑换各种礼包噢~</string >
+	<string name = "st_welcome_login_btn" >获取更多积分</string >
+	<string name = "st_welcome_unlogin_btn" >马上登录</string >
 
 	<!-- 账户信息 -->
 	<string name = "st_user_info_title">账户信息</string>

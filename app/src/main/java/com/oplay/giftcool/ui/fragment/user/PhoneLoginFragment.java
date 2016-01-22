@@ -16,6 +16,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
@@ -28,6 +29,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -108,6 +110,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		btnLogin.setEnabled(false);
 		etPhone.requestFocus();
 		InputMethodUtil.showSoftInput(getActivity());
+		etPhone.setText(readFromHistory());
 	}
 
 	@Override
@@ -234,6 +237,25 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		mHandler.removeCallbacks(setTimeRunnable);
 	}
 
+	public void writeToHistory(String name) {
+		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, "");
+		if (history.contains(name)) {
+			return;
+		}
+		if ("".equals(history)) {
+			history = name;
+		} else {
+			history = name + "," + history;
+		}
+		SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, history);
+	}
+
+	public String readFromHistory() {
+		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, "");
+		return "".equals(history) ? "" : history.substring(0,
+				(!history.contains(",") ? history.length() : history.indexOf(",")));
+	}
+
 	private void handleLogin() {
 		showLoading();
 		final ReqLogin login = new ReqLogin();
@@ -261,6 +283,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
+										writeToHistory(login.getPhone());
 										AccountManager.getInstance().setUser(userModel);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;

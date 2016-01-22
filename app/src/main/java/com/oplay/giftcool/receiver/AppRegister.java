@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 /**
@@ -22,7 +22,7 @@ public class AppRegister extends BroadcastReceiver{
 		if (intent != null) {
 			if (intent.getAction() != null) {
 				if (intent.getAction().equals(Action.REGISTER_APP_TO_WEIXIN)) {
-					WXAPIFactory.createWXAPI(context, null).registerApp(AppConfig.SHARE_WEXIN_APP_ID);
+					WXAPIFactory.createWXAPI(context, null).registerApp(ShareSDKConfig.SHARE_WEXIN_APP_ID);
 				} else if (intent.getAction().equals(Action.UNREGISTER_APP_FROM_WEIXIN)) {
 					WXAPIFactory.createWXAPI(context, null).unregisterApp();
 				}

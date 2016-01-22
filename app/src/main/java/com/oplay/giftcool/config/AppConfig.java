@@ -9,9 +9,4 @@ public class AppConfig {
 	public static final int UPLOAD_PIC_WIDTH = 640;
 	public static final int UPLOAD_PIC_HEIGHT = 640;
 	public static final int UPLOAD_PIC_QUALITY = 80;
-
-
-	/* 分享 */
-	public static final String SHARE_WEXIN_APP_ID = "wxf0794ef08cf93255";
-	public static final String SHARE_QQ_APP_ID = "";
 }

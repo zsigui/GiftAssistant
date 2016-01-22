@@ -16,4 +16,8 @@ public class ShareSDKConfig {
 
 	public static final int QQFRIENDS = 1;
 	public static final int QZONE = 2;
+
+	/* 分享 */
+	public static final String SHARE_WEXIN_APP_ID = "wxf0794ef08cf93255";
+	public static final String SHARE_QQ_APP_ID = "";
 }

@@ -38,7 +38,7 @@ public class ShareSDKManager {
 		final String k = new String(Base64.decode(context.getString(R.string.share_key_mm_id).getBytes(),
 				Base64.DEFAULT));
 		mWXApi = WXAPIFactory.createWXAPI(mContext, k);
-		mWXApi.registerApp(k);
+		mWXApi.registerApp(ShareSDKConfig.SHARE_WEXIN_APP_ID);
 	}
 
 	public static synchronized ShareSDKManager getInstance(Context context) {
@@ -98,11 +98,11 @@ public class ShareSDKManager {
 						case WX_FRIENDS:
 						case QQ_FRIENDS:
 						case QQ_ZONE: {
-							description = mContext.getString(R.string.share_gcool_description_1);
+							description = mContext.getString(R.string.st_share_gcool_description_1);
 							break;
 						}
 						case WX_MM: {
-							description = mContext.getString(R.string.share_gcool_description_2);
+							description = mContext.getString(R.string.st_share_gcool_description_2);
 							break;
 						}
 					}

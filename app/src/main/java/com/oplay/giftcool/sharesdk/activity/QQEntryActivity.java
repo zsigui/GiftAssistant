@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
@@ -55,7 +54,7 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mTencent = Tencent.createInstance(AppConfig.SHARE_QQ_APP_ID, this);
+		mTencent = Tencent.createInstance(ShareSDKConfig.SHARE_QQ_APP_ID, this);
 		Intent intent = getIntent();
 		if (intent != null) {
 			final String data = intent.getDataString();

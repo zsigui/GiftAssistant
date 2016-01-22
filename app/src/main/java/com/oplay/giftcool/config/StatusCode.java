@@ -7,7 +7,7 @@ package com.oplay.giftcool.config;
  * <br />
  * Created by zsigui on 15-12-22.
  */
-public class StatusCode {
+public abstract interface StatusCode {
 
 	/**
 	 * 成功
@@ -58,4 +58,10 @@ public class StatusCode {
 	 * 包头错误
 	 */
 	public static int ERR_HASH = 112;
+
+
+	/**
+	 * 未登录
+	 */
+	public static int ERR_UN_LOGIN = 10037;
 }

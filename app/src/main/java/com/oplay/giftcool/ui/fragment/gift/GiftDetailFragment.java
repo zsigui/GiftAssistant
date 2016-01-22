@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
@@ -31,15 +32,20 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.sharesdk.ShareSDKConfig;
+import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
+
+import java.io.File;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -119,7 +125,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
 				@Override
 				public void share() {
-					if (mData == null || mData.giftData == null) {
+					if (mData == null || mData.giftData == null || mData.gameData == null) {
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d("mData = " + mData);
 						}
@@ -133,6 +139,17 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
 					}
 
+					KLog.e(ImageLoader.getInstance());
+					KLog.e(ImageLoader.getInstance().getDiskCache());
+					KLog.e(mData);
+					KLog.e(mData.gameData);
+					KLog.e(mData.gameData.img);
+					File file = ImageLoader.getInstance().getDiskCache().get(mData.gameData.img);
+					String src = (file != null ? file.getAbsolutePath() : null);
+					ShareSDKManager.getInstance(mApp).share(getChildFragmentManager(), mData.giftData.name,
+							mData.giftData.content, WebViewUrl.GIFT_DETAIL + "?" + mData.giftData.id,
+							mData.giftData.img, BitmapUtil.getSmallBitmap(src,
+									ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE));
 				}
 			});
 		}

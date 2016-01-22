@@ -29,7 +29,7 @@ import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
-import com.oplay.giftcool.model.data.resp.UpdateSesion;
+import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.initAppResult;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
@@ -153,7 +153,7 @@ public interface NetEngine {
 	 * 更新session，保持登录态情况下，每次启动APP进行验证
 	 */
 	@POST(NetUrl.USER_UPDATE_SESSION)
-	Call<JsonRespBase<UpdateSesion>> updateSession(@Body JsonReqBase<String> reqData);
+	Call<JsonRespBase<UpdateSession>> updateSession(@Body JsonReqBase<String> reqData);
 
 	/**
 	 * 修改手机号码，需要进行多歩

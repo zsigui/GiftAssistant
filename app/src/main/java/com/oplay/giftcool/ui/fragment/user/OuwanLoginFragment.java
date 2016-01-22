@@ -13,6 +13,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
@@ -20,11 +21,13 @@ import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -84,6 +87,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		btnLogin.setEnabled(false);
 		etUser.requestFocus();
 		InputMethodUtil.showSoftInput(getActivity());
+		etUser.setText(readFromHistory());
 	}
 
 	@Override
@@ -135,6 +139,25 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		}
 	}
 
+	public void writeToHistory(String name) {
+		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+		if (history.contains(name)) {
+			return;
+		}
+		if ("".equals(history)) {
+			history = name;
+		} else {
+			history = name + "," + history;
+		}
+		SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, history);
+	}
+
+	public String readFromHistory() {
+		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+		return "".equals(history) ? "" : history.substring(0,
+				(!history.contains(",") ? history.length() : history.indexOf(",")));
+	}
+
 	private void handleLogin() {
 		showLoading();
 		final ReqLogin login = new ReqLogin();
@@ -161,6 +184,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
+										writeToHistory(login.getUsername());
+										MainActivity.sIsTodayFirstOpen = true;
 										AccountManager.getInstance().setUser(userModel);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +19,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
@@ -36,6 +38,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
+	// 判断是否今日首次打开APP
+	public static boolean sIsTodayFirstOpen = false;
 	private long mLastClickTime = 0;
 	// 底部Tabs
 	private CheckedTextView[] mCtvs;
@@ -59,9 +63,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
-		//createDrawer(savedInstanceState);
-
+		createDrawer();
 	}
+
+	private void createDrawer() {
+		mDrawerLayout = getViewById(R.id.drawer_layout);
+		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.string.st_drawer_open, R.string.st_drawer_close));
+		replaceFrag(R.id.drawer_container, DrawerFragment.newInstance(mDrawerLayout), false);
+	}
+
+
 
 	@Override
 	protected void onDestroy() {
@@ -115,6 +127,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		handleFirstOpen();
+	}
+
+	@Override
 	protected void processLogic() {
 		ObserverManager.getInstance().addUserUpdateListener(this);
 
@@ -124,10 +142,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 		// 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
 		setCurSelected(mCurrentIndex);
-		mDrawerLayout = getViewById(R.id.drawer_layout);
-		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.string.st_drawer_open, R.string.st_drawer_close));
-		replaceFrag(R.id.drawer_container, DrawerFragment.newInstance(mDrawerLayout), false);
+
 	}
 
 	public void setCurSelected(int position) {
@@ -215,5 +230,25 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public void onUserUpdate() {
 		mUser = AccountManager.getInstance().getUserInfo();
 		updateToolBar();
+		handleFirstOpen();
+	}
+
+	private void handleFirstOpen() {
+		if (sIsTodayFirstOpen) {
+			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (AccountManager.getInstance().isLogin()) {
+						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
+								AccountManager.getInstance().getUser());
+					} else {
+						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this, null);
+					}
+					sIsTodayFirstOpen = false;
+				}
+			}, 1000);
+
+		}
 	}
 }
