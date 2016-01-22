@@ -188,8 +188,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	private void setCommonField(final ViewHolder viewHolder, final IndexGiftNew gift) {
 		ImageAware imageAware = new ImageViewAware(viewHolder.ivIcon, false);
 		ImageLoader.getInstance().displayImage(gift.img, imageAware, Global.IMAGE_OPTIONS);
-		final String name = String.format("[%s]%s", gift.gameName, gift.name);
-		viewHolder.tvTitle.setText(name);
+		viewHolder.tvTitle.setText(gift.name);
 		if (gift.isLimit) {
 			viewHolder.ivLimit.setVisibility(View.VISIBLE);
 		} else {

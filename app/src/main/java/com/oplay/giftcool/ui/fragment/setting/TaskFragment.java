@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -11,13 +10,12 @@ import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
-import com.oplay.giftcool.handler.ScoreHandler;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.ScoreMission;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -74,6 +72,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
+		ScoreManager.getInstance().setInWorking(true);
 	}
 
 	@Override
@@ -134,40 +133,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			return;
 		}
 		handleMission(item);
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (!AccountManager.getInstance().isLogin()) {
-			// 跳转登录
-			return;
-		}
-		if (resultCode == KeyConfig.SUCCESS) {
-		/*	if (requestCode == KeyConfig.REQUEST_UPDATE_AVATAR) {
-				updateOnceMission(TaskTypeUtil.ID_UPLOAD_AVATOR);
-			} else if (requestCode == KeyConfig.REQUEST_SET_NICK) {
-				updateOnceMission(TaskTypeUtil.ID_SET_NICK);
-			}*/
-
-		}
-	}
-
-	/**
-	 * 更新一次性任务状态
-	 */
-	private void updateOnceMission(String id) {
-		for (ScoreMission mission : mData) {
-			if (mission.id.equals(id)) {
-				mission.completeTime++;
-				mission.lastCompleteTime = DateUtil.getDate("yyyy-MM-dd", 0);
-				AccountManager.getInstance().getUserInfo().score += mission.rewardScore;
-				return;
-			}
-		}
-		mData = resort(mData);
-		mAdapter.updateData(mData);
-		onUserUpdate();
 	}
 
 	private void setTaskIcon(ArrayList<ScoreMission> data) {
@@ -309,7 +274,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private void handleMission(ScoreMission scoreMission) {
 		if (scoreMission == null) return;
 		String id = scoreMission.id;
-		ScoreHandler.sIsTasking = true;
+		ScoreManager.getInstance().setInWorking(true);
 		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
 			// 跳转到设置用户昵称信息界面
 			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,

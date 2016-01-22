@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 发现页面:应用类型列表 -->
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		android:gravity = "center_horizontal"
+		android:orientation = "vertical"
+		android:paddingBottom = "5dp"
+		>
+
+	<ImageView
+			android:id = "@+id/iv_grid_share_icon"
+			android:layout_width = "45dp"
+			android:layout_height = "45dp"
+			android:scaleType = "centerCrop"
+			/>
+
+	<TextView
+			android:id = "@+id/tv_grid_share_name"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_marginTop = "4dp"
+			android:paddingLeft = "3dp"
+			android:paddingRight = "3dp"
+			android:textColor = "@color/co_common_text_second"
+			android:textSize = "12dp"
+			/>
+
+</LinearLayout >

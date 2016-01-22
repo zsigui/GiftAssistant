@@ -30,6 +30,10 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter {
 		mContext = context;
 	}
 
+	public T getItem(int position) {
+		return getItemCount() <= position ? null : mData.get(position);
+	}
+
 	@Override
 	public int getItemCount() {
 		return mData == null? 0 : mData.size();

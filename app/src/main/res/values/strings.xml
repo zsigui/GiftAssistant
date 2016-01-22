@@ -132,6 +132,12 @@
 	<string name = "st_dialog_pay_score" >积分支付</string >
 	<string name = "st_dialog_pay_bean" >偶玩豆支付</string >
 
+	<string name = "st_dialog_gift_share_title">礼包分享</string>
+	<string name = "st_dialog_gcool_share_title">礼包酷分享</string>
+	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
+	<string name = "share_gcool_description_1" >精品礼包，游戏下载……福利根本停不下来～</string >
+	<string name = "share_gcool_description_2" >加入[礼包酷]的3个理由：1.精品礼包 2.游戏下载 3.免费领分～</string >
+
 	<!-- 账户信息 -->
 	<string name = "st_user_info_title">账户信息</string>
 	<string name = "st_user_avator">头像</string>
@@ -151,4 +157,17 @@
 
 	<!-- 设置昵称 -->
 	<string name = "st_user_set_nick_title">设置昵称</string>
+
+	<!-- 分享 -->
+	<string name = "st_share_title">礼包分享</string>
+	<string name = "st_share_limit_pattern">%s(限今天)</string>
+	<string name = "st_share_limit_sms_pattern">%s，价值珍贵，限量领取</string>
+	<string name = "st_share_normal_sms_pattern">%s，快抢呀</string>
+	<string name = "st_share_result_success" >分享成功</string >
+	<string name = "share_key_mm_id" >wx-share-key</string >
+	<string name = "st_share_mm_friends" >微信好友</string >
+	<string name = "st_share_mm_moments" >朋友圈</string >
+	<string name = "st_share_qq_zone" >QQ空间</string >
+	<string name = "st_share_qq_friends" >QQ好友</string >
+	<string name = "st_share_more" >更多</string >
 </resources >

@@ -24,6 +24,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -213,6 +214,7 @@ public class UploadAvatarFragment extends BaseFragment {
 										AccountManager.getInstance().getUserInfo().avatar =
 												response.body().getData().avatar;
 										ObserverManager.getInstance().notifyUserUpdate();
+										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {

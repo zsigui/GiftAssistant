@@ -129,6 +129,10 @@
 				android:name = "com.oplay.giftcool.service.ClockService"
 				android:exported = "false" />
 
+		<activity android:name = ".wxapi.WXEntryActivity"
+		          android:exported="true"
+		          android:screenOrientation="sensorPortrait" />
+
 		<meta-data
 				android:name = "UMIPAY_CHANNEL"
 				android:value = "0" />

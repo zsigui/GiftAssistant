@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.util.SystemUtil;
@@ -28,8 +28,6 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.network.Util_Network_Status;
 
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by zsigui on 16-1-14.
@@ -77,22 +75,18 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				boolean hasFind = false;
+				boolean hasFind;
 				Uri mUri = Uri.parse(url);
 				final String host = mUri.getHost();
 				final String path = mUri.getEncodedPath();
 				//首先域名匹配
-				if (NetUrl.URL_BASE.contains(host)) {
+				if (WebViewUrl.URL_BASE.contains(host)) {
 					//其次路径匹配
-					if (path.contains("/essay/detail/")) {
-						Pattern p = Pattern.compile("\\d+");
-						Matcher m = p.matcher(path);
-						hasFind = true;
-					}
+					hasFind = true;
 				} else {
 					Intent in = new Intent (Intent.ACTION_VIEW , Uri.parse(url));
 					startActivity(in);
-					return true;
+					hasFind = false;
 				}
 				return hasFind || super.shouldOverrideUrlLoading(view, url);
 			}
@@ -104,8 +98,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				onWebProgressChangedMethod(newProgress);
 			}
 		});
+		// 关闭硬件加速，否则部分手机（如vivo）WebView会很卡
 		if (Build.VERSION.SDK_INT >= 11) {
-			mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 			AppDebugConfig.logMethodWithParams(this, mWebView.isHardwareAccelerated());
 		}
 		// 下载监听

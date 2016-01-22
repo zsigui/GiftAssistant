@@ -7,7 +7,13 @@ public class NetUrl {
 
 	//public static final String URL_BASE = "http://172.16.3.22:8888/";
 	//public static final String URL_BASE = "http://172.16.3.68:7000/";
-	public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
+	public static final String URL_BASE = "http://test.giftcool.ouwan.com/api/";
+
+
+	/**
+	 * 礼包酷下载地址
+	 */
+	public static final String GIFT_COOL_DOWNLOAD = "http://test.giftcool.ouwan.com/api/";
 
 
 	/**
@@ -114,62 +120,62 @@ public class NetUrl {
 	/**
 	 * 用户退出
 	 */
-	public static final String USER_LOGOUT = "api/account/logout_account";
+	public static final String USER_LOGOUT = "account/logout_account";
 
 	/**
 	 * 更新Session
 	 */
-	public static final String USER_UPDATE_SESSION = "api/account/change_login_session";
+	public static final String USER_UPDATE_SESSION = "account/change_login_session";
 
 	/**
 	 * 手机登录-第一步
 	 */
-	public static final String USER_PHONE_LOGIN_FIRST = "api/account/get_phone_verification_code_for_login";
+	public static final String USER_PHONE_LOGIN_FIRST = "account/get_phone_verification_code_for_login";
 
 	/**
 	 * 手机登录-第二步
 	 */
-	public static final String USER_PHONE_LOGIN_SECOND = "api/account/login_account_by_phone_verification_code";
+	public static final String USER_PHONE_LOGIN_SECOND = "account/login_account_by_phone_verification_code";
 
 	/**
 	 * 偶玩账号登录
 	 */
-	public static final String USER_OUWAN_LOGIN = "api/account/login_account_by_ouwan";
+	public static final String USER_OUWAN_LOGIN = "account/login_account_by_ouwan";
 
 	/**
 	 * 获取用户个人信息
 	 */
-	public static final String USER_GET_INFO = "api/account/get_account_info";
+	public static final String USER_GET_INFO = "account/get_account_info";
 
 	/**
 	 * 修改用户昵称
 	 */
-	public static final String USER_MODIFY_NICK = "api/account/modify_account_nick";
+	public static final String USER_MODIFY_NICK = "account/modify_account_nick";
 
 	/**
 	 * 修改用户头像
 	 */
-	public static final String USER_MODIFY_AVATAR = "api/account/change_account_avartar";
+	public static final String USER_MODIFY_AVATAR = "account/change_account_avartar";
 
 	/**
 	 * 修改绑定手机-第一步
 	 */
-	public static final String USER_MODIFY_PHONE_FIRST = "api/account/modify_account_bind_mobile_step_1";
+	public static final String USER_MODIFY_PHONE_FIRST = "account/modify_account_bind_mobile_step_1";
 
 	/**
 	 * 修改绑定手机-第二步
 	 */
-	public static final String USER_MODIFY_PHONE_SECOND = "api/account/modify_account_bind_mobile_step_2";
+	public static final String USER_MODIFY_PHONE_SECOND = "account/modify_account_bind_mobile_step_2";
 
 	/**
 	 * 修改绑定手机-第三歩
 	 */
-	public static final String USER_MODIFY_PHONE_THIRD = "api/account/modify_account_bind_mobile_step_3";
+	public static final String USER_MODIFY_PHONE_THIRD = "account/modify_account_bind_mobile_step_3";
 
 	/**
 	 * 修改绑定手机-第四步
 	 */
-	public static final String USER_MODIFY_PHONE_FOUR = "api/account/modify_account_bind_mobile_step_4";
+	public static final String USER_MODIFY_PHONE_FOUR = "account/modify_account_bind_mobile_step_4";
 
 	/**
 	 * 获取我的礼包
@@ -183,14 +189,14 @@ public class NetUrl {
 	/**
 	 * 获取积分任务
 	 */
-	public static final String SCORE_GET_TASK = "api/mission/get_points_mission_list";
+	public static final String SCORE_GET_TASK = "mission/get_points_mission_list";
 
 	/* 应用接口 */
 
 	/**
 	 * 意见反馈
 	 */
-	public static final String APP_POST_FEEDBACK = "api/feedback/add_feedback";
+	public static final String APP_POST_FEEDBACK = "feedback/add_feedback";
 
 	/**
 	 * 应用初始化

@@ -11,10 +11,10 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.handler.ScoreHandler;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -78,11 +78,6 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		// 隐藏输入框
 		InputMethodUtil.hideSoftInput(mActivity);
 
-		// 做任务的情况下
-		if (ScoreHandler.sIsTasking) {
-			AccountManager.getInstance().updateUserInfo();
-		}
-
 		final String nick = etNick.getText().toString().trim();
 		if (TextUtils.isEmpty(nick) ||
 				nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
@@ -106,6 +101,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										AccountManager.getInstance().getUserInfo().nick = response.body().getData().nick;
 										ObserverManager.getInstance().notifyUserUpdate();
+										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {

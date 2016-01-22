@@ -10,21 +10,10 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.manager.OuwanSDKManager;
-import com.oplay.giftcool.model.MobileInfoModel;
-import com.oplay.giftcool.model.data.resp.UserInfo;
-import com.oplay.giftcool.model.data.resp.UserModel;
-import com.oplay.giftcool.model.data.resp.UserSession;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
-
-import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.io.File;
 
@@ -57,7 +46,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 			if ((mApp.isGlobalInit() && initDuration > minSplashDuration)) {
 				judgeToMain();
 			} else {
-				doInit();
 				mHandler.postDelayed(mInitRunnable, 100);
 			}
 		}
@@ -123,67 +111,4 @@ public class SplashActivity extends BaseAppCompatActivity {
 		}
 	}
 
-	/**
-	 * 需要在此完成一些APP全局常量初始化的获取工作
-	 */
-	private void doInit() {
-		if (mApp.isGlobalInit()) {
-			return;
-		}
-		mApp.initAppConfig();
-		// 初始化设备状态
-		if (!MobileInfoModel.getInstance().isInit()) {
-			CommonUtil.initMobileInfoModel(getApplicationContext());
-		}
-		try {
-			OuwanSDKManager.getInstance().init();
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_APP, e);
-			}
-		}
-		// 获取用户信息
-		// 该信息使用salt加密存储再SharedPreference中
-		UserModel user = null;
-		try {
-			String userJson = Global_SharePreferences.getStringFromSharedPreferences(getApplicationContext(),
-					SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, SPConfig.SALT_USER_INFO, null);
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
-			}
-			user = mApp.getGson().fromJson(userJson, UserModel.class);
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_APP, e);
-			}
-		}
-		AccountManager.getInstance().setUser(user);
-		// 每次登录请求一次更新用户状态和数据
-		KLog.e("update User start");
-		AccountManager.getInstance().updateUserSession();
-
-		mApp.setGlobalInit(true);
-	}
-
-	private UserModel initUser() {
-		// 创建测试用户
-		UserModel u = new UserModel();
-		UserInfo userInfo = new UserInfo();
-		userInfo.username = "zsigui";
-		userInfo.score = 150;
-		userInfo.bean = 10;
-		userInfo.giftCount = 1;
-		userInfo.loginType = 1;
-		userInfo.avatar = "http://owan-avatar.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
-		userInfo.nick = "Jackie";
-		userInfo.uid = 11124444;
-		userInfo.phone = "18826401111";
-		UserSession session = new UserSession();
-		session.openId = "1200024455";
-		session.session = "ABBEF54787545F";
-		session.uid = 11124444;
-		u.userInfo = userInfo;
-		u.userSession = session;
-		return u;
-	}
 }

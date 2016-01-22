@@ -9,6 +9,9 @@ import java.io.Serializable;
  */
 public class TaskReward implements Serializable{
 
-	@SerializedName("reward_info")
-	public TaskRewardDetail data;
+	@SerializedName("reward_points")
+	public int rewardPoints;
+
+	@SerializedName("reward_name")
+	public String taskName;
 }

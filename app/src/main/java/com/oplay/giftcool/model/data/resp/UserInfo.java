@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class UserInfo implements Serializable {
+public class UserInfo extends TaskReward implements Serializable {
 
 	/**
 	 * 登陆类型

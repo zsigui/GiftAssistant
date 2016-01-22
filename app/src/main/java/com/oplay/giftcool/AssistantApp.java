@@ -77,12 +77,10 @@ public class AssistantApp extends Application {
 		TCAgent.init(this, TD_APP_ID, CHN);
 		KLog.init(true);
 		initImageLoader();
-		initRetrofit();
-		initLoadingView();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
-	private void initLoadingView() {
+	public void initLoadingView() {
 		LoadAndRetryViewManager.DEFAULT_EMPTY_VIEW_ID = R.layout.fragment_empty_search;
 		LoadAndRetryViewManager.DEFAULT_LOAD_VIEW_ID = R.layout.fragment_data_loading;
 		// 加载失败，错误或者重试
@@ -116,7 +114,7 @@ public class AssistantApp extends Application {
 		ImageLoader.getInstance().clearMemoryCache();
 	}
 
-	private void initRetrofit() {
+	public void initRetrofit() {
 		mGson = new GsonBuilder()
 				.registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
 				.serializeNulls()

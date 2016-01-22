@@ -18,14 +18,13 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
-import com.oplay.giftcool.handler.ScoreHandler;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -120,7 +119,20 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
 				@Override
 				public void share() {
-					ScoreHandler.reward(TaskTypeUtil.REWARD_TYPE_BIND_SHARE_NORMAL);
+					if (mData == null || mData.giftData == null) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d("mData = " + mData);
+						}
+						ToastUtil.showShort("页面出错，请重新进入");
+						return;
+					}
+					// 设置分享成功后奖励类型
+					if (mData.giftData.isLimit) {
+						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
+					} else {
+						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
+					}
+
 				}
 			});
 		}

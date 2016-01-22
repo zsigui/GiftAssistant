@@ -197,5 +197,5 @@ public interface NetEngine {
 
 	/* ---------------- 应用接口  ---------------- */
 	@POST(NetUrl.APP_POST_FEEDBACK)
-	Call<JsonRespBase<Void>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
+	Call<JsonRespBase<TaskReward>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
 }

@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
+import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -145,13 +147,14 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 					feedBack.type = 3;
 				}
 				Global.getNetEngine().postFeedBack(new JsonReqBase<ReqFeedBack>(feedBack))
-						.enqueue(new Callback<JsonRespBase<Void>>() {
+						.enqueue(new Callback<JsonRespBase<TaskReward>>() {
 							@Override
-							public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+							public void onResponse(Response<JsonRespBase<TaskReward>> response, Retrofit retrofit) {
 								mIsLoading = false;
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().isSuccess()) {
 										ToastUtil.showShort("提交成功");
+										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}
 									ToastUtil.showShort("提交失败-" + (response.body() == null ?

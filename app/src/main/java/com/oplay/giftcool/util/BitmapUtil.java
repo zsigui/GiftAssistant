@@ -339,4 +339,15 @@ public class BitmapUtil {
 		byte[] byteData = baos.toByteArray();
 		return byteData;
 	}
+
+	public static Bitmap compressResize(Bitmap bitmap, int reqWidth, int reqHeight) {
+		final int width = bitmap.getWidth();
+		final int height = bitmap.getHeight();
+		float scaleWidth = ((float) reqWidth) / width;
+		float scaleHeight = ((float) reqHeight) / height;
+		Matrix matrix = new Matrix();
+		matrix.postScale(scaleWidth, scaleHeight);
+		final Bitmap desBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+		return desBitmap;
+	}
 }
