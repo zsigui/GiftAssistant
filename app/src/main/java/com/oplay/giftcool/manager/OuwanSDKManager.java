@@ -6,6 +6,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.model.data.resp.UserSession;
+import com.oplay.giftcool.util.ChannelUtil;
 import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
@@ -51,7 +52,10 @@ public class OuwanSDKManager implements InitCallbackListener {
 		GameParamInfo gameParamInfo = new GameParamInfo();
 		gameParamInfo.setAppId("3c453306edd43bbc");//设置AppID
 		gameParamInfo.setAppSecret("3b4446772144ade3");//设置AppSecret
+		//TODO 上线要设成正式false
 		gameParamInfo.setTestMode(true); //设置测试模式，模式非测试模式
+		gameParamInfo.setChannelId(ChannelUtil.getChannelId(mContext) + "");
+		gameParamInfo.setSubChannelId("0");
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
 			@Override
 			public void onLogin(int code, GameUserInfo userInfo) {
@@ -167,29 +171,29 @@ public class OuwanSDKManager implements InitCallbackListener {
 	}
 
 	public void showOuwanModifyPwdView(Context context) {
-		jumpToDestUrl("修改登录密码", "modifypsw");
+		jumpToDestUrl(context, "修改登录密码", "modifypsw");
 	}
 
 	public void showChangePhoneView(Context context) {
-		jumpToDestUrl("修改绑定手机", "changephone");
+		jumpToDestUrl(context, "修改绑定手机", "changephone");
 	}
 
 	public void showBindPhoneView(Context context) {
-		jumpToDestUrl("绑定手机号码", "bindphone");
+		jumpToDestUrl(context, "绑定手机号码", "bindphone");
 	}
 
 	public void showBindOuwanView(Context context) {
-		jumpToDestUrl("绑定偶玩账号", "bindoauth");
+		jumpToDestUrl(context, "绑定偶玩账号", "bindoauth");
 	}
 
-	private void jumpToDestUrl(String title, String dest) {
-		String url = SDKConstantConfig.get_UMIPAY_JUMP_URL(mContext);
-		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(mContext,
-				SDKConstantConfig.get_UMIPAY_ACCOUNT_URL(mContext));
+	private void jumpToDestUrl(Context context, String title, String dest) {
+		String url = SDKConstantConfig.get_UMIPAY_JUMP_URL(context);
+		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(context,
+				SDKConstantConfig.get_UMIPAY_ACCOUNT_URL(context));
 		int payType = UmipayBrowser.NOT_PAY;
 		paramsList.add(new BasicNameValuePair("dest", dest));
 		paramsList.add(new BasicNameValuePair("from", "giftcool"));
-		UmipayBrowser.postUrl(mContext, title, url, paramsList, Flags_Browser_Config.FLAG_AUTO_CHANGE_TITLE |
+		UmipayBrowser.postUrl(context, title, url, paramsList, Flags_Browser_Config.FLAG_AUTO_CHANGE_TITLE |
 				Flags_Browser_Config.FLAG_USE_YOUMI_JS_INTERFACES, null, null, payType);
 	}
 }

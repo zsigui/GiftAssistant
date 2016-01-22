@@ -9,15 +9,15 @@ import android.support.v4.view.ViewPager;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
  * @email zsigui@foxmail.com
  * @date 2015/12/27
  */
-public class GameFragment extends BaseFragment {
+public class GameFragment extends BaseFragment implements ViewPager.OnPageChangeListener{
 
-	private final static String PAGE_NAME = "游戏";
 	private ViewPager mPager;
 	private SmartTabLayout mTabLayout;
 
@@ -25,6 +25,7 @@ public class GameFragment extends BaseFragment {
 	private GameSuperFragment mSuperFragment;
 	private GameTypeFragment mTypeFragment;
 	private GameNoticeFragment mNoticeFragment;
+	private int mCurrentPosition = 0;
 
 	public static GameFragment newInstance() {
 		return new GameFragment();
@@ -48,6 +49,7 @@ public class GameFragment extends BaseFragment {
 	    mPager.setOffscreenPageLimit(2);
 	    mTabLayout.setViewPager(mPager);
 	    mPager.setCurrentItem(0);
+	    mPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -56,7 +58,22 @@ public class GameFragment extends BaseFragment {
 
 	@Override
 	public String getPageName() {
-		return PAGE_NAME;
+		return null;
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		mCurrentPosition = position;
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
+
 	}
 
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {
@@ -95,5 +112,20 @@ public class GameFragment extends BaseFragment {
 		public CharSequence getPageTitle(int position) {
 			return mTabTitle[position];
 		}
+	}
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		KLog.d(mCurrentPosition);
+		if (mSuperFragment!=null && mCurrentPosition == 0) {
+			mSuperFragment.setUserVisibleHint(isVisibleToUser);
+		}
+		if (mTypeFragment!=null && mCurrentPosition == 1) {
+			mTypeFragment.setUserVisibleHint(isVisibleToUser);
+		}
+		if (mNoticeFragment!=null && mCurrentPosition == 2) {
+			mNoticeFragment.setUserVisibleHint(isVisibleToUser);
+		}
+		super.setUserVisibleHint(isVisibleToUser);
 	}
 }

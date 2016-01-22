@@ -26,6 +26,13 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
         }
+        if (!TextUtils.isEmpty(getPageName())) {
+            if (isVisibleToUser) {
+	            TCAgent.onPageStart(getContext(), getPageName());
+            }else {
+	            TCAgent.onPageEnd(getContext(), getPageName());
+            }
+        }
     }
 
     @Override
@@ -79,11 +86,11 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
     @Override
     public void onResume() {
         super.onResume();
+        if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
+            TCAgent.onPageStart(getContext(), getPageName());
+        }
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
-        }
-        if (!TextUtils.isEmpty(getPageName())) {
-            TCAgent.onPageStart(getContext(), getPageName());
         }
     }
 
@@ -99,10 +106,10 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
     public void onPause() {
         super.onPause();
         if (AppDebugConfig.IS_FRAG_DEBUG) {
+            if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
+                TCAgent.onPageEnd(getContext(), getPageName());
+            }
             AppDebugConfig.logMethodName(this);
-        }
-        if (!TextUtils.isEmpty(getPageName())) {
-            TCAgent.onPageEnd(getContext(), getPageName());
         }
     }
 

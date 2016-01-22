@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.coder.Base64;
@@ -26,10 +27,9 @@ public class ChannelUtil {
 	 * 获取通过Base64加密的channel id
 	 *
 	 * @param context
-	 * @param fileNameSuffix channel file name suffix
 	 * @return
 	 */
-	public static int getChannelId(Context context, String fileNameSuffix) {
+	public static int getChannelId(Context context) {
 
 		final int chn = PreferenceManager.getDefaultSharedPreferences(context).getInt(KEY_CHANNEL, -1);
 		if (chn != -1) {
@@ -46,7 +46,7 @@ public class ChannelUtil {
 			while (zipEntries.hasMoreElements()) {
 				ZipEntry entry = zipEntries.nextElement();
 				String entryName = entry.getName();
-				if (entryName.endsWith(fileNameSuffix)) {
+				if (entryName.endsWith(Global.CHANNEL_FILE_NAME_SUFFIX)) {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.e("CHANNEL", "CHANNEL_FILE_ENTRY:" + entryName);
 					}
@@ -60,7 +60,7 @@ public class ChannelUtil {
 				if (index != -1) {
 					start = index + 1;
 				}
-				int end = channelFileName.indexOf(fileNameSuffix);
+				int end = channelFileName.indexOf(Global.CHANNEL_FILE_NAME_SUFFIX);
 				String channelMisc = channelFileName.substring(start, end);
 				String channel = new String(Base64.decode(channelMisc, Base64.NO_OPTIONS), "UTF-8");
 

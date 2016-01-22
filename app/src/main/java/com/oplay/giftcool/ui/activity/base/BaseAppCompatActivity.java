@@ -80,6 +80,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	/**
 	 * 重写此类设置状态栏颜色
+	 *
 	 * @return
 	 */
 	protected int getStatusBarColor() {
@@ -216,12 +217,15 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		Fragment f = getSupportFragmentManager().findFragmentByTag(oldTag);
 		if (f != null && !f.isHidden()) {
 			ft.hide(f);
+			f.setUserVisibleHint(false);
 		}
 		f = getSupportFragmentManager().findFragmentByTag(newTag);
 		if (f != null) {
 			ft.show(f);
+			f.setUserVisibleHint(true);
 		} else {
 			ft.add(id, newFrag, newTag);
+			newFrag.setUserVisibleHint(true);
 		}
 		ft.commitAllowingStateLoss();
 	}

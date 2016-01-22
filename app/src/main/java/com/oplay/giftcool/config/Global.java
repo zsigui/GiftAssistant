@@ -19,6 +19,7 @@ public class Global {
 	/* 外部缓存存储位置 */
 	public final static String EXTERNAL_CACHE = "/gift_cool/cache";
 	public final static String IMG_CACHE_PATH = EXTERNAL_CACHE + "/imgs";
+	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
 
 	/* Retrofit网络请求接口引擎 */
 	private static NetEngine sNetEngine;
