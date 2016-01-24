@@ -10,12 +10,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.download.ApkDownloadManager;
+import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
+import net.youmi.android.libs.common.util.Util_System_Runtime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +29,8 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 /**
  * Created by zsigui on 15-12-28.
  */
-public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener{
+public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener,
+		OnDownloadStatusChangeListener {
 
 	private static final int TAG_POSITION = 0xFFF11133;
 	private static final int TAG_URL = 0xffff1111;
@@ -40,6 +44,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 		mListener = listener;
 		mPackageNameMap = new HashMap<>();
 		mUrlDownloadBtn = new HashMap<>();
+		ApkDownloadManager.getInstance(context).addDownloadStatusListener(this);
 	}
 
 	@Override
@@ -56,7 +61,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 		}
 		if (o.newCount > 0) {
 			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-		}else {
+		} else {
 			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
 		}
 		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
@@ -97,7 +102,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 					}
 				}
 			}
-		}catch (Throwable e) {
+		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);
 			}
@@ -158,5 +163,27 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 	public void updateData(ArrayList<IndexGameNew> games) {
 		this.mDatas = games;
 		notifyDataSetChanged();
+	}
+
+	public void onDestroy() {
+		ApkDownloadManager.getInstance(mContext).removeDownloadStatusListener(this);
+		if (mPackageNameMap != null) {
+			mPackageNameMap.clear();
+			mPackageNameMap = null;
+		}
+		if (mUrlDownloadBtn != null) {
+			mUrlDownloadBtn.clear();
+			mUrlDownloadBtn = null;
+		}
+	}
+
+	@Override
+	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+		Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
+			@Override
+			public void run() {
+				updateViewByPackageName(appInfo.packageName);
+			}
+		});
 	}
 }

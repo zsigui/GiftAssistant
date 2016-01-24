@@ -5,7 +5,7 @@ package com.oplay.giftcool.config;
  */
 public class NetUrl {
 
-	//public static final String URL_BASE = "http://172.16.3.22:8888/";
+//	public static final String URL_BASE = "http://172.16.3.22:8888/api/";
 	//public static final String URL_BASE = "http://172.16.3.68:7000/";
 	public static final String URL_BASE = "http://test.giftcool.ouwan.com/api/";
 
@@ -201,7 +201,7 @@ public class NetUrl {
 	/**
 	 * 应用初始化
 	 */
-	public static final String APP_INIT = "default";
+	public static final String APP_INIT = "init";
 
 	/**
 	 * 应用版本更新

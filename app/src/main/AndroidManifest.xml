@@ -48,7 +48,7 @@
 	<uses-permission android:name = "android.permission.VIBRATE" />
 	<uses-permission android:name = "android.permission.PLUGIN" />
 
-	<uses-permission android:name="android.permission.GET_TASKS"  />
+	<uses-permission android:name = "android.permission.GET_TASKS" />
 
 	<application
 			android:name = "com.oplay.giftcool.AssistantApp"
@@ -68,70 +68,80 @@
 			</intent-filter >
 		</activity >
 
-				<!--android:screenOrientation = "sensorPortrait"-->
+		<!--android:screenOrientation = "sensorPortrait"-->
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.MainActivity"
-				android:launchMode = "singleTop"
-				android:screenOrientation="sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+				android:launchMode = "singleTop"
+				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 		</activity >
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.SearchActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "stateVisible|adjustPan" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GiftListActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GameDetailActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GiftDetailActivity"
-				android:screenOrientation = "sensorPortrait"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GameListActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.SettingActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.LoginActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
 		<service
 				android:name = "com.oplay.giftcool.service.ClockService"
 				android:exported = "false" />
 
-		<activity android:name = ".wxapi.WXEntryActivity"
-		          android:exported="true"
-		          android:screenOrientation="sensorPortrait" />
+		<activity
+				android:name = ".wxapi.WXEntryActivity"
+				android:exported = "true"
+				android:screenOrientation = "sensorPortrait" />
+
+		<receiver android:name = ".receiver.PackageInstallReceiver" >
+			<intent-filter android:priority = "1000" >
+				<action android:name = "android.intent.action.PACKAGE_ADDED" />
+				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
+
+				<data android:scheme = "package"/>
+			</intent-filter >
+		</receiver >
 
 		<meta-data
 				android:name = "UMIPAY_CHANNEL"

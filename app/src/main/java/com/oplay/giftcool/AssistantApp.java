@@ -20,6 +20,7 @@ import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -30,6 +31,7 @@ import com.tendcloud.tenddata.TCAgent;
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import retrofit.Retrofit;
 
@@ -44,6 +46,10 @@ public class AssistantApp extends Application {
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
+
+	private UpdateInfo mUpdateInfo;
+	private ArrayList<String> mQQInfo;
+	private String mStartImg;
 
 	// 是否安装完成自动删除
 	private boolean mShouldAutoDeleteApk = false;
@@ -265,5 +271,29 @@ public class AssistantApp extends Application {
 
 	public Gson getGson() {
 		return mGson;
+	}
+
+	public UpdateInfo getUpdateInfo() {
+		return mUpdateInfo;
+	}
+
+	public void setUpdateInfo(UpdateInfo updateInfo) {
+		mUpdateInfo = updateInfo;
+	}
+
+	public ArrayList<String> getQQInfo() {
+		return mQQInfo;
+	}
+
+	public void setQQInfo(ArrayList<String> QQInfo) {
+		mQQInfo = QQInfo;
+	}
+
+	public String getStartImg() {
+		return mStartImg;
+	}
+
+	public void setStartImg(String startImg) {
+		mStartImg = startImg;
 	}
 }

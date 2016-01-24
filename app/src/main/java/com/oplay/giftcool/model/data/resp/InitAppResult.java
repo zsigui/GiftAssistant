@@ -3,7 +3,6 @@ package com.oplay.giftcool.model.data.resp;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * initAppResult
@@ -12,14 +11,11 @@ import java.util.ArrayList;
  *         date 16-1-22
  *         description
  */
-public class initAppResult implements Serializable {
+public class InitAppResult implements Serializable {
 
-	@SerializedName("is_show_download")
-	boolean isShowDownload;
-
-	@SerializedName("qq_info")
-	ArrayList<String> qqInfo;
+	@SerializedName("config")
+	public InitAppConfig initAppConfig;
 
 	@SerializedName("update")
-	UpdateInfo updateInfo;
+	public UpdateInfo updateInfo;
 }

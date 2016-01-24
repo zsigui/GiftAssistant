@@ -31,7 +31,7 @@ import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserModel;
-import com.oplay.giftcool.model.data.resp.initAppResult;
+import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -49,7 +49,7 @@ import retrofit.http.Url;
 public interface NetEngine {
 
 	@POST(NetUrl.APP_INIT)
-	Call<JsonRespBase<initAppResult>> initAPP(@Body JsonReqBase<ReqInitApp> reqData);
+	Call<JsonRespBase<InitAppResult>> initAPP(@Body JsonReqBase<ReqInitApp> reqData);
 
 
 	/**

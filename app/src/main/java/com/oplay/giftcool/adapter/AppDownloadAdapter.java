@@ -11,6 +11,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
@@ -101,7 +102,11 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mIvIcon.setTag(rawUrl);
 
 		bindImageViewWithUrl(holder.mIvIcon, appInfo.img, R.drawable.ic_img_default);
-		mImageLoader.displayImage(appInfo.img, holder.mIvIcon);
+		if (appInfo.id == Global.GIFTCOOL_GAME_ID) {
+			holder.mIvIcon.setImageResource(R.drawable.ic_launcher);
+		}else {
+			mImageLoader.displayImage(appInfo.img, holder.mIvIcon);
+		}
 		initViewHolderByStatus(rawUrl, appInfo.downloadStatus);
 		holder.mTvAction.setTag(TAG_POSITION, position);
 		holder.mTvAction.setOnClickListener(this);
@@ -293,7 +298,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mPBar.setVisibility(View.GONE);
 		holder.mTvPercent.setText(String.format("版本号：%s | %s", appInfo.versionName, appInfo.getApkFileSizeStr()));
 		holder.mTvSpeed.setVisibility(View.GONE);
-		AppStatus status = appInfo.appStatus;
+		AppStatus status = appInfo.getAppStatus(appInfo.downloadStatus);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_blue);
 		if (status == AppStatus.INSTALLABLE || status == AppStatus.UPDATABLE) {
 			holder.mTvAction.setText("安装");
@@ -343,14 +348,14 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 
 		holder.mPBar.setProgress(percent);
 
-		final Object tag = holder.mIvIcon.getTag(TAG_URL);
-		final String iconUrl = appInfo.img;
-		if (tag != null && !tag.equals(iconUrl)) {
-			holder.mIvIcon.setImageResource(R.drawable.ic_img_default);
-		}
-
-		holder.mIvIcon.setTag(TAG_URL, iconUrl);
-		mImageLoader.displayImage(iconUrl, holder.mIvIcon);
+//		final Object tag = holder.mIvIcon.getTag(TAG_URL);
+//		final String iconUrl = appInfo.img;
+//		if (tag != null && !tag.equals(iconUrl)) {
+//			holder.mIvIcon.setImageResource(R.drawable.ic_img_default);
+//		}
+//
+//		holder.mIvIcon.setTag(TAG_URL, iconUrl);
+//		mImageLoader.displayImage(iconUrl, holder.mIvIcon);
 		holder.mTvAppName.setText(appInfo.name);
 	}
 

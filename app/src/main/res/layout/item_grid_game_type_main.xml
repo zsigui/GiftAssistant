@@ -13,7 +13,6 @@
 	<com.makeramen.roundedimageview.RoundedImageView
 			android:id = "@+id/iv_icon"
 			style = "@style/DefaultImageView.Icon"
-			android:src = "@drawable/test_code"
 			app:riv_oval = "true" />
 
 	<TextView

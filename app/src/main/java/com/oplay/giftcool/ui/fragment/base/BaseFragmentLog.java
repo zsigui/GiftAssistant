@@ -26,6 +26,9 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
         }
+        if (getContext() == null) {
+            return;
+        }
         if (!TextUtils.isEmpty(getPageName())) {
             if (isVisibleToUser) {
 	            TCAgent.onPageStart(getContext(), getPageName());

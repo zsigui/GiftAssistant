@@ -9,6 +9,7 @@ import com.oplay.giftcool.adapter.NestedGameListAdapter;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -188,11 +189,25 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 
 	@Override
 	public void onItemClick(IndexGameNew item, View view, int position) {
-		IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+		if (view.getId() == R.id.tv_download) {
+			if (item != null && !AppStatus.DISABLE.equals(item.appStatus)) {
+				item.handleOnClick(getActivity().getSupportFragmentManager());
+			}
+		}else {
+			IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+		}
 	}
 
 	@Override
 	public String getPageName() {
 		return String.format(PAGE_NAME,mSearchKey,mTagId);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mAdapter!=null) {
+			mAdapter.onDestroy();
+		}
 	}
 }

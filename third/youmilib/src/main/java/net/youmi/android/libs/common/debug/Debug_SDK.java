@@ -25,7 +25,7 @@ package net.youmi.android.libs.common.debug;
  */
 public class Debug_SDK extends Debug_SDK_Log_Temp {
 
-	public final static boolean isDownloadLog = false;
+	public final static boolean isDownloadLog = true;
 	public final static String mDownloadTag = "download_";
 
 	public final static boolean isCacheLog = false;

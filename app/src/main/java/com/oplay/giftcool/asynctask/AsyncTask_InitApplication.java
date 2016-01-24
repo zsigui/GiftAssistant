@@ -2,22 +2,32 @@ package com.oplay.giftcool.asynctask;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.MobileInfoModel;
+import com.oplay.giftcool.model.data.req.ReqInitApp;
+import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
+
+import retrofit.Response;
 
 /**
  * AsyncTask_InitApplication
@@ -32,6 +42,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	public AsyncTask_InitApplication(Context context) {
 		mContext = context.getApplicationContext();
 	}
+
 	@Override
 	protected Void doInBackground(Object... params) {
 		try {
@@ -39,7 +50,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			doInit();
 			// 初始化下载列表
 			ApkDownloadManager.getInstance(mContext).initDownloadList();
-		}catch (Throwable e) {
+		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
@@ -79,6 +90,12 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(mContext);
 		}
+		// 初始化配置，获取更新信息
+		if (!initAndCheckUpdate()) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e("initAndCheckUpdate failed!");
+			}
+		}
 		// 判断是否金立首次打开APP
 		judgeFirstOpenToday();
 
@@ -109,5 +126,36 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		AccountManager.getInstance().updateUserSession();
 
 		assistantApp.setGlobalInit(true);
+	}
+
+	private boolean initAndCheckUpdate() {
+		ReqInitApp data = new ReqInitApp();
+		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
+		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
+		try {
+			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
+			if (response != null && response.isSuccess()) {
+				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+					if (response.body().getData() != null) {
+						if (response.body().getData().initAppConfig != null) {
+							AssistantApp.getInstance().setAllowDownload(response.body().getData().initAppConfig
+									.isShowDownload);
+							AssistantApp.getInstance().setQQInfo(response.body().getData().initAppConfig.qqInfo);
+							AssistantApp.getInstance().setStartImg(response.body().getData().initAppConfig
+									.startImgUrl);
+						}
+						if (response.body().getData().updateInfo != null) {
+							AssistantApp.getInstance().setUpdateInfo(response.body().getData().updateInfo);
+						}
+						return true;
+					}
+				}
+			}
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+		return false;
 	}
 }

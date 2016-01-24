@@ -1,8 +1,11 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +17,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.socks.library.KLog;
 
 import java.io.File;
 
@@ -44,6 +48,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 				return;
 			}
 			if ((mApp.isGlobalInit() && initDuration > minSplashDuration)) {
+				saveImageUrl(mApp.getStartImg());
 				judgeToMain();
 			} else {
 				mHandler.postDelayed(mInitRunnable, 100);
@@ -75,15 +80,25 @@ public class SplashActivity extends BaseAppCompatActivity {
 		iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
 		iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		iv.setImageResource(R.drawable.pic_splash);
+		boolean useCacheImg = false;
 		String imageUrl = getImageUrl();
 		if (imageUrl != null) {
 			File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
 			if (file != null && file.exists()) {
-				ImageLoader.getInstance().displayImage(imageUrl, iv);
+				Bitmap bitmap = null;
+				try {
+					bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+				}catch (Throwable e) {
+					KLog.e(e);
+				}
+				iv.setImageBitmap(bitmap);
+				useCacheImg = true;
 			} else {
 				ImageLoader.getInstance().loadImage(imageUrl, null);
 			}
+		}
+		if (!useCacheImg) {
+			iv.setImageResource(R.drawable.pic_splash);
 		}
 		setContentView(iv);
 	}
@@ -94,6 +109,9 @@ public class SplashActivity extends BaseAppCompatActivity {
 	}
 
 	private void saveImageUrl(String url) {
+		if (TextUtils.isEmpty(url)) {
+			return;
+		}
 		SPUtil.putString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, url);
 	}
 

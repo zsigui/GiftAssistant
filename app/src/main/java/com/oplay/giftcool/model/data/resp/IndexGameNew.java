@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -222,9 +221,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 
 	public void startInstall() {
 		try {
-			if (AssistantApp.getInstance().isShouldAutoInstall()) {
-				InstallAppUtil.install(mContext, this);
-			}
+			InstallAppUtil.install(mContext, this);
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -242,7 +239,7 @@ public class IndexGameNew implements IFileDownloadTaskExtendObject {
 		}
 	}
 
-	private AppStatus getAppStatus(DownloadStatus ds) {
+	public AppStatus getAppStatus(DownloadStatus ds) {
 		boolean isInstalled = Util_System_Package.isPakcageInstall(mContext, packageName);
 		if (ds == null) {
 			return isInstalled ? AppStatus.OPENABLE : AppStatus.DOWNLOADABLE;

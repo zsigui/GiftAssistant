@@ -38,6 +38,8 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.util.Util_System_Runtime;
+
 import java.util.ArrayList;
 
 /**
@@ -260,7 +262,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 	}
 
 	@Override
-	public void onDownloadStatusChanged(IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
 		if (mData == null || mData.recommend == null) {
 			return;
 		}
@@ -268,7 +270,12 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			mData.recommend.downloadStatus = appInfo.downloadStatus;
 			mData.recommend.initAppInfoStatus(mContext);
 			if (mRecommendVH != null) {
-				ViewUtil.initDownloadBtnStatus(mRecommendVH.btnDownload, appInfo.appStatus);
+				Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
+					@Override
+					public void run() {
+						ViewUtil.initDownloadBtnStatus(mRecommendVH.btnDownload, appInfo.appStatus);
+					}
+				});
 			}
 		}
 	}
@@ -300,7 +307,8 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			super(itemView);
 			rvContainer = getViewById(R.id.lv_content);
 			rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
-			rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
+			rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager
+					.VERTICAL));
 			adapter = new IndexGameHotWithTitleAdapter(mContext);
 			rvContainer.setAdapter(adapter);
 		}

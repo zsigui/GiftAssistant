@@ -16,7 +16,6 @@
 		<com.makeramen.roundedimageview.RoundedImageView
 				android:id = "@+id/iv_icon"
 				style = "@style/DefaultImageView.Icon"
-				android:src = "@drawable/test"
 				app:riv_border_color = "@color/co_stroke_bg"
 				app:riv_border_width = "1dip"
 				app:riv_corner_radius = "15dp"

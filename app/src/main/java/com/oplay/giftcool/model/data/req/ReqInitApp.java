@@ -13,9 +13,6 @@ import java.io.Serializable;
  */
 public class ReqInitApp implements Serializable {
 
-	@SerializedName("cur_version_code")
-	int curVersionCode;
-
-	@SerializedName("cur_version_name")
-	String curVersionName;
+	@SerializedName("version_code")
+	public int curVersionCode;
 }

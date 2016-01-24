@@ -128,4 +128,12 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	public String getPageName() {
 		return PAGE_NAME;
 	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mGameAdapter != null) {
+			mGameAdapter.onDestroy();
+		}
+	}
 }

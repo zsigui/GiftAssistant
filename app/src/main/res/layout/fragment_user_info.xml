@@ -22,8 +22,7 @@
 				android:id = "@+id/iv_icon"
 				android:contentDescription = "@null"
 				style = "@style/DefaultImageView.Icon"
-				android:layout_alignParentRight = "true"
-				android:src = "@drawable/test" />
+				android:layout_alignParentRight = "true" />
 
 	</RelativeLayout >
 

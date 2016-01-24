@@ -7,7 +7,6 @@
 	<com.makeramen.roundedimageview.RoundedImageView
 			android:id="@+id/iv_icon"
 			style = "@style/DefaultImageView.Score"
-			android:src = "@drawable/test_code"
 			app:riv_oval = "true" />
 
 	<TextView

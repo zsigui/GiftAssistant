@@ -14,7 +14,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -323,7 +322,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					return true;
 				}
 				mWebView.stopLoading();
-				((RelativeLayout)mContentView).removeView(mWebView);
+				((ViewGroup)mContentView).removeView(mWebView);
 				mWebView.removeAllViews();
 				mWebView.destroy();
 			}

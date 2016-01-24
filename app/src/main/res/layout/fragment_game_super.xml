@@ -60,7 +60,6 @@
 
 				<ImageView
 						android:id = "@+id/iv_big_pic"
-						android:src = "@drawable/test_map"
 						android:contentDescription="@null"
 						android:scaleType="centerCrop"
 						android:layout_width = "match_parent"
@@ -101,7 +100,6 @@
 
 				<com.makeramen.roundedimageview.RoundedImageView
 						android:id = "@+id/iv_icon"
-						android:src = "@drawable/test"
 						style = "@style/DefaultImageView.Icon"
 						android:layout_alignParentBottom = "true"
 						android:layout_marginLeft = "14dp"

@@ -20,9 +20,13 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
@@ -41,6 +45,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 判断是否今日首次打开APP
 	public static boolean sIsTodayFirstOpen = false;
 	private long mLastClickTime = 0;
+
+	//是否已经显示过更新提示
+	private boolean mHasShowUpdate = false;
 	// 底部Tabs
 	private CheckedTextView[] mCtvs;
 	private ImageView ivProfile;
@@ -122,14 +129,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			}
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
-			tvGiftCount.setText("?");
+			tvGiftCount.setText("0");
 		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		handleFirstOpen();
+		//没更新才显示欢迎
+		if (!handleUpdateApp()) {
+			handleFirstOpen();
+		}
 	}
 
 	@Override
@@ -250,5 +260,61 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			}, 1000);
 
 		}
+	}
+
+	/**
+	 * 处理更新逻辑
+	 * @return　是否有更新
+	 */
+	private boolean handleUpdateApp() {
+
+		final UpdateInfo updateInfo = mApp.getUpdateInfo();
+		if (updateInfo != null && updateInfo.checkoutUpdateInfo(this)) {
+			mHasShowUpdate = true;
+			final IndexGameNew appInfo = new IndexGameNew();
+			appInfo.id = Global.GIFTCOOL_GAME_ID;
+			appInfo.name = getString(R.string.app_name);
+			appInfo.apkFileSize = updateInfo.apkFileSize;
+			//没icon地址，随便填个
+			appInfo.img = updateInfo.downloadUrl;
+			appInfo.downloadUrl = updateInfo.downloadUrl;
+			appInfo.destUrl = updateInfo.downloadUrl;
+			appInfo.packageName = updateInfo.packageName;
+			appInfo.versionName = updateInfo.versionName;
+			appInfo.size = appInfo.getApkFileSizeStr();
+			appInfo.initAppInfoStatus(this);
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					ConfirmDialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content);
+					confirmDialog.show(getSupportFragmentManager(), "update");
+				}
+			}, 1000);
+			return true;
+		}
+		return false;
+	}
+
+	private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
+		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+		confirmDialog.setTitle("更新提示");
+		confirmDialog.setContent(content);
+		confirmDialog.setPositiveBtnText("马上更新");
+		confirmDialog.setNegativeBtnText("暂不更新");
+		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+			@Override
+			public void onCancel() {
+				confirmDialog.dismiss();
+				handleFirstOpen();
+			}
+
+			@Override
+			public void onConfirm() {
+				appInfo.startDownload();
+				confirmDialog.dismiss();
+				handleFirstOpen();
+			}
+		});
+		return confirmDialog;
 	}
 }

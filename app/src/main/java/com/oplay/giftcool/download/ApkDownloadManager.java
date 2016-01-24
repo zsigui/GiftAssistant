@@ -7,6 +7,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
+import com.oplay.giftcool.download.listener.OnInstallListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.DownloadStatus;
@@ -39,7 +40,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *         date 16-1-4
  *         description
  */
-public class ApkDownloadManager extends BaseApkCachedDownloadManager {
+public class ApkDownloadManager extends BaseApkCachedDownloadManager implements OnInstallListener {
 
 	private final static int TAG_APPINFO = 0xffff0011;
 	private static ApkDownloadManager mInstance = null;
@@ -76,6 +77,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mOnProgressUpdateListeners = new LinkedList<>();
 		mDownloadDBHelper = DownloadDBHelper.getInstance(context);
 		addDownloadStatusListener(mDownloadDBHelper);
+		InstallNotifier.getInstance().addListener(this);
 		mNotifyStatusLock = new ReentrantLock();
 	}
 
@@ -267,8 +269,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 		mManagerList.remove(appInfo);
 		if (DownloadStatus.DOWNLOADING.equals(appInfo.downloadStatus)) {
 			mDownloadingCnt = decrease(mDownloadingCnt);
-			FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize,
-					500);
+			FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, null, -1, 500);
 			task.setIdentify(appInfo.destUrl);
 			stopDownload(task);
 			if (mPendingCnt > 0) {
@@ -300,7 +301,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 	}
 
 	private void apkDownload(IndexGameNew appInfo) {
-		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, appInfo.apkMd5, appInfo.apkFileSize, 1000);
+		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, null, -1, 1000);
 		task.setIdentify(appInfo.destUrl);
 		task.addIFileDownloadTaskExtendObject(TAG_APPINFO, appInfo);
 		download(task, true);
@@ -362,7 +363,11 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 			if (arrays != null) {
 				for (int i = 0; i < size; i++) {
 					if (arrays[i] != null) {
-						arrays[i].onDownloadStatusChanged(appInfo);
+						try {
+							arrays[i].onDownloadStatusChanged(appInfo);
+						} catch (Throwable e) {
+							KLog.e(e);
+						}
 					}
 				}
 			}
@@ -562,5 +567,14 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager {
 			throws NullPointerException, IOException {
 		return new DefaultAPPDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier,
 				iFileAvailableChecker);
+	}
+
+	@Override
+	public void onInstall(Context context, String packageName) {
+		final IndexGameNew appInfo = getAppInfoByPackageName(packageName);
+		if (appInfo != null) {
+			appInfo.initAppInfoStatus(context);
+			notifyDownloadStatusListeners(appInfo);
+		}
 	}
 }

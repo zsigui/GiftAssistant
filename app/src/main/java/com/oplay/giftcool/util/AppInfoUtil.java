@@ -1,6 +1,7 @@
 package com.oplay.giftcool.util;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
@@ -8,12 +9,40 @@ import android.telephony.TelephonyManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.common.util.Util_System_Permission;
 
 /**
  * Created by zsigui on 15-12-25.
  */
 public class AppInfoUtil {
+
+	public static int getAppVerCode(Context context) {
+		int verCode = 0;
+		try {
+			PackageInfo pi = Util_System_Package.getPackageInfo(context, context.getPackageName());
+			verCode = pi.versionCode;
+		}catch (Throwable e) {
+			verCode = Integer.MAX_VALUE;
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+		return verCode;
+	}
+
+	public static String getAppVerName(Context context) {
+		String verName = "";
+		try {
+			PackageInfo pi = Util_System_Package.getPackageInfo(context, context.getPackageName());
+			verName = pi.versionName;
+		}catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+		return verName;
+	}
 
 	public static String getSPN(Context context) {
 		try {

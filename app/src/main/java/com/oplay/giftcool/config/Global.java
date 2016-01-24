@@ -20,6 +20,7 @@ public class Global {
 	public final static String EXTERNAL_CACHE = "/gift_cool/cache";
 	public final static String IMG_CACHE_PATH = EXTERNAL_CACHE + "/imgs";
 	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
+	public final static int GIFTCOOL_GAME_ID = 2000705;
 
 	/* Retrofit网络请求接口引擎 */
 	private static NetEngine sNetEngine;
