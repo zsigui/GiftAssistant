@@ -146,15 +146,10 @@ public class ScoreManager {
 		} else {
 			type = ptype;
 		}
+		KLog.d("reward type = " + type);
 		switch (type) {
 			case RewardType.DOWNLOAD:
 				if (!mIsDownloadToday) return;
-				break;
-			case RewardType.SHARE_NORMAL:
-				if (!mIsShareNormalToday) return;
-				break;
-			case RewardType.SHARE_LIMIT:
-				if (!mIsShareLimitToday) return;
 				break;
 			case RewardType.SEARCH:
 				if (!mIsSearchToday) return;
@@ -180,6 +175,7 @@ public class ScoreManager {
 										if (!AccountManager.getInstance().isLogin()) {
 											return;
 										}
+										KLog.d("search data = " + response.body().getData());
 										toastByCallback(response.body().getData());
 										writeLocalTaskState(data.type);
 									}
@@ -209,14 +205,6 @@ public class ScoreManager {
 				mIsDownloadToday = false;
 				SPUtil.putLong(context, spFile, SPConfig.KEY_DOWNLOAD_LAST_TIME, curTime);
 				break;
-			case RewardType.SHARE_NORMAL:
-				mIsShareNormalToday = false;
-				SPUtil.putLong(context, spFile, SPConfig.KEY_SHARE_NORMAL_LAST_TIME, curTime);
-				break;
-			case RewardType.SHARE_LIMIT:
-				mIsShareLimitToday = false;
-				SPUtil.putLong(context, spFile, SPConfig.KEY_SHARE_LIMIT_LAST_TIME, curTime);
-				break;
 			case RewardType.SEARCH:
 				mIsSearchToday = false;
 				SPUtil.putLong(context, spFile, SPConfig.KEY_SEARCH_LAST_TIME, curTime);
@@ -226,6 +214,7 @@ public class ScoreManager {
 				SPUtil.putLong(context, spFile, SPConfig.KEY_BUY_BY_BEAN_LAST_TIME, curTime);
 				break;
 		}
+		mIsSearchToday = true;
 	}
 
 	/**

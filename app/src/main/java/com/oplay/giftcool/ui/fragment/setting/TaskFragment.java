@@ -346,7 +346,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	@Override
 	public void onUserUpdate() {
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
-			tvScore.setText(AccountManager.getInstance().getUserInfo().score);
+			tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		}
 		lazyLoad();
 	}

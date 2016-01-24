@@ -7,7 +7,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -122,11 +121,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (AccountManager.getInstance().isLogin()) {
 			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
-			if (TextUtils.isEmpty(mUser.avatar)) {
-				ivProfile.setImageResource(R.drawable.ic_avatar_default);
-			} else {
-				ViewUtil.showAvatarImage(mUser.avatar, ivProfile, AccountManager.getInstance().isLogin());
-			}
+			ViewUtil.showAvatarImage(mUser.avatar, ivProfile, AccountManager.getInstance().isLogin());
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 			tvGiftCount.setText("0");

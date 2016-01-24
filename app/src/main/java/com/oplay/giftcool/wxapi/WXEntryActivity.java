@@ -56,7 +56,12 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler{
 	@Override
 	public void onResp(BaseResp baseResp) {
 		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_SERVICE, "resp from wx share : " + baseResp);
+			KLog.d(AppDebugConfig.TAG_SERVICE, "resp from wx share : "
+					+ (baseResp == null? null : baseResp.errCode + ":" + baseResp.errStr));
+		}
+		if (baseResp == null) {
+			ToastUtil.showShort("分享失败-出错了");
+			return;
 		}
 		switch (baseResp.errCode) {
 			case BaseResp.ErrCode.ERR_OK:

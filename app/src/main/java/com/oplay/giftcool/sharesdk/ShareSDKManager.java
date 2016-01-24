@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentManager;
-import android.util.Base64;
 import android.view.View;
 
 import com.oplay.giftcool.R;
@@ -36,9 +35,7 @@ public class ShareSDKManager {
 
 	private ShareSDKManager(Context context) {
 		mContext = context.getApplicationContext();
-		final String k = new String(Base64.decode(context.getString(R.string.share_key_mm_id).getBytes(),
-				Base64.DEFAULT));
-		mWXApi = WXAPIFactory.createWXAPI(mContext, k);
+		mWXApi = WXAPIFactory.createWXAPI(mContext, ShareSDKConfig.SHARE_WEXIN_APP_ID, false);
 		mWXApi.registerApp(ShareSDKConfig.SHARE_WEXIN_APP_ID);
 	}
 

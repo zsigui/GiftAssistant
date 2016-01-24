@@ -96,7 +96,7 @@ public class UploadAvatarFragment extends BaseFragment {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		ImageLoader.getInstance().displayImage(AccountManager.getInstance().getUserInfo().avatar, ivAvatar,
-				Global.AVATOR_IMAGE_LOADER);
+				Global.AVATAR_IMAGE_LOADER);
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class UploadAvatarFragment extends BaseFragment {
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										ImageLoader.getInstance().displayImage(
-												response.body().getData().avatar, ivAvatar, Global.AVATOR_IMAGE_LOADER);
+												response.body().getData().avatar, ivAvatar, Global.AVATAR_IMAGE_LOADER);
 										UserModel model = AccountManager.getInstance().getUser();
 										try {
 											ImageLoader.getInstance().getDiskCache().remove(model.userInfo.avatar);

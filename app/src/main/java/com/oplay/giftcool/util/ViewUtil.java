@@ -86,10 +86,14 @@ public class ViewUtil {
 			}
 		} else {
 			try {
-				ImageLoader.getInstance().displayImage(avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
+				if (ivIcon.getTag() == null || !(ivIcon.getTag()).equals(avatar)) {
+					ImageViewAware viewAware = new ImageViewAware(ivIcon, false);
+					ImageLoader.getInstance().displayImage(avatar, viewAware, Global.AVATAR_IMAGE_LOADER);
+					ivIcon.setTag(avatar);
+				}
 			} catch (Exception e) {
 				// 通常ImageLoader未初始化完成调用报错，先设置默认图片
-				ivIcon.setImageResource(R.drawable.ic_img_default);
+				ivIcon.setImageResource(R.drawable.ic_avatar_default);
 			}
 		}
 	}

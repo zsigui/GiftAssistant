@@ -97,7 +97,7 @@ public class DrawerFragment extends BaseFragment {
 			tvNick.setText(nick);
 			tvName.setText(name);
 			ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());
-			ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
+			ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATAR_IMAGE_LOADER);
 		}
 	}
 

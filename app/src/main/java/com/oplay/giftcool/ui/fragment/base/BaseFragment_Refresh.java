@@ -70,8 +70,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	// 刷新时，默认可以头一次加载可以下拉更多
 	protected void refreshLoadState() {
-		mIsLoadMore = true;
-		mRefreshLayout.setCanShowLoad(true);
+
 	}
 
 	protected void setLoadState(Object data, boolean isEndPage) {

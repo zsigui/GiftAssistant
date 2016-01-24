@@ -1,8 +1,7 @@
 package com.oplay.giftcool.ui.fragment.user;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,10 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -24,6 +22,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 /**
@@ -45,17 +44,7 @@ public class UserInfoFragment extends BaseFragment {
 	private TextView tvLogin;
 	private TextView tvBindTitle;
 	private TextView tvBind;
-
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-				case 0:
-					setData();
-			}
-		}
-	};
+	private Context mContext = AssistantApp.getInstance().getApplicationContext();
 
 	public static UserInfoFragment newInstance() {
 		return new UserInfoFragment();
@@ -106,19 +95,20 @@ public class UserInfoFragment extends BaseFragment {
 			}
 			return;
 		}
-		mHandler.sendEmptyMessage(0);
+		setData();
 	}
 
 
 	private void setData() {
 		UserInfo user = AccountManager.getInstance().getUserInfo();
-		ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
+		ViewUtil.showAvatarImage(user.avatar, ivIcon, true);
 		String nick;
-		if (user.loginType == UserTypeUtil.TYPE_POHNE) {
+		if (user.loginType == UserTypeUtil.TYPE_POHNE
+				|| (user.loginType != UserTypeUtil.TYPE_OUWAN && user.bindOuwanStatus == 0)) {
 			nick = (TextUtils.isEmpty(user.nick) ?  StringUtil.transePhone(user.phone) : user.nick);
-			tvLoginTitle.setText(getResources().getString(R.string.st_user_phone_login));
+			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_phone_login));
 			tvLogin.setText(StringUtil.transePhone(user.phone));
-			tvBindTitle.setText(getResources().getString(R.string.st_user_ouwan_bind));
+			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_bind));
 			ivLogin.setVisibility(View.VISIBLE);
 			ivBind.setVisibility(View.GONE);
 			if (user.bindOuwanStatus == 1) {
@@ -131,9 +121,9 @@ public class UserInfoFragment extends BaseFragment {
 			}
 		} else {
 			nick = (TextUtils.isEmpty(user.nick) ?  user.username : user.nick);
-			tvLoginTitle.setText(getResources().getString(R.string.st_user_ouwan_login));
+			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_login));
 			tvLogin.setText(user.username);
-			tvBindTitle.setText(getResources().getString(R.string.st_user_phone_bind));
+			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_phone_bind));
 			rlModifyPwd.setVisibility(View.VISIBLE);
 			ivLogin.setVisibility(View.GONE);
 			ivBind.setVisibility(View.VISIBLE);

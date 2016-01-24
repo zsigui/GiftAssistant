@@ -35,7 +35,7 @@ public class Global {
 			.cacheOnDisk(true)
 			.build();
 	/* 头像的ImageLoader加载配置 */
-	public static final DisplayImageOptions AVATOR_IMAGE_LOADER = new DisplayImageOptions.Builder()
+	public static final DisplayImageOptions AVATAR_IMAGE_LOADER = new DisplayImageOptions.Builder()
 			.showImageForEmptyUri(R.drawable.ic_avatar_default)
 			.showImageOnFail(R.drawable.ic_avatar_default)
 			.showImageOnLoading(R.drawable.ic_avatar_default)
