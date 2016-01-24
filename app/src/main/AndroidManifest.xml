@@ -5,13 +5,8 @@
 		xmlns:tools = "http://schemas.android.com/tools" >
 
 
-	<uses-permission android:name = "android.permission.INTERNET" />
-	<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name = "android.permission.WAKE_LOCK" />
-	<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
 
 	<!-- 偶玩权限 -->
 	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
@@ -71,14 +66,9 @@
 		<!--android:screenOrientation = "sensorPortrait"-->
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.MainActivity"
-<<<<<<< Updated upstream
-=======
 				android:launchMode = "singleTask"
 				android:screenOrientation = "sensorPortrait"
->>>>>>> Stashed changes
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 		</activity >
 
@@ -106,17 +96,13 @@
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GiftDetailActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-<<<<<<< Updated upstream
 				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
-=======
 				android:exported = "true"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter>
 				<action android:name="android.intent.action.SEND" />
 			</intent-filter>
 		</activity>
->>>>>>> Stashed changes
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GameListActivity"
@@ -144,20 +130,6 @@
 				android:exported = "false" />
 
 		<activity
-<<<<<<< Updated upstream
-				android:name = ".wxapi.WXEntryActivity"
-				android:exported = "true"
-				android:screenOrientation = "sensorPortrait" />
-
-		<receiver android:name = ".receiver.PackageInstallReceiver" >
-			<intent-filter android:priority = "1000" >
-				<action android:name = "android.intent.action.PACKAGE_ADDED" />
-				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
-
-				<data android:scheme = "package"/>
-			</intent-filter >
-		</receiver >
-=======
 				android:name = "com.oplay.giftcool.wxapi.WXEntryActivity"
 				android:exported = "true"
 				android:screenOrientation = "sensorPortrait" />
@@ -166,7 +138,14 @@
 				android:name = "com.oplay.giftcool.sharesdk.activity.QQEntryActivity"
 				android:exported = "true"
 				android:screenOrientation = "sensorPortrait" />
->>>>>>> Stashed changes
+
+		<receiver android:name = ".receiver.PackageInstallReceiver" >
+			<intent-filter android:priority = "1000" >
+				<action android:name = "android.intent.action.PACKAGE_ADDED" />
+				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
+				<data android:scheme = "package"/>
+			</intent-filter >
+		</receiver >
 
 		<meta-data
 				android:name = "UMIPAY_CHANNEL"
