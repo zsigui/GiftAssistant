@@ -6,6 +6,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -175,6 +176,7 @@ public class SearchActivity extends BaseAppCompatActivity {
 	private class SearchActionListener implements SearchLayout.OnSearchActionListener {
 		@Override
 		public void onSearchPerform(String keyword) {
+			ScoreManager.getInstance().reward(ScoreManager.RewardType.SEARCH);
 			saveHistoryData(keyword);
             mLastSearchKey = keyword;
 			if (NetworkUtil.isConnected(SearchActivity.this)) {

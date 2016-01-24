@@ -191,29 +191,50 @@ public class SettingFragment extends BaseFragment {
 				break;
 			case R.id.rl_logout:
 				// 调用登出接口，但不关心结果
-				Global.THREAD_POOL.execute(new Runnable() {
+				final ConfirmDialog logoutDialog = ConfirmDialog.newInstance();
+				logoutDialog.setContent(getResources().getString(R.string.st_content_clear_cache));
+				logoutDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 					@Override
-					public void run() {
-						Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
-							@Override
-							public void onResponse(Response<Void> response, Retrofit retrofit) {
-								if (AppDebugConfig.IS_FRAG_DEBUG) {
-									KLog.e(response == null ? "login response null" : response.code());
-								}
-							}
+					public void onCancel() {
+						logoutDialog.dismiss();
+					}
 
-							@Override
-							public void onFailure(Throwable t) {
-								if (AppDebugConfig.IS_FRAG_DEBUG) {
-									KLog.e(t);
-								}
-							}
-						});
+					@Override
+					public void onConfirm() {
+						doLogout();
+						logoutDialog.dismiss();
 					}
 				});
-				AccountManager.getInstance().setUser(null);
+				logoutDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 				break;
 		}
+	}
+
+	private void doLogout() {
+		((BaseAppCompatActivity) getActivity()).showLoadingDialog();
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
+					@Override
+					public void onResponse(Response<Void> response, Retrofit retrofit) {
+						if (AppDebugConfig.IS_FRAG_DEBUG) {
+							KLog.e(response == null ? "login response null" : response.code());
+						}
+						((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_FRAG_DEBUG) {
+							KLog.e(t);
+						}
+						((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+					}
+				});
+			}
+		});
+		AccountManager.getInstance().setUser(null);
 	}
 
 	@Override

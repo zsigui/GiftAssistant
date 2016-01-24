@@ -111,7 +111,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 									if (response != null && response.isSuccess()) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-										setLoadState(backObj.data, backObj.isEndPage);
+										refreshLoadState();
 										updateData(backObj.data);
 										return;
 									}

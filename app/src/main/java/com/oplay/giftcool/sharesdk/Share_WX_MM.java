@@ -64,14 +64,18 @@ public class Share_WX_MM extends IShare {
 
 					@Override
 					public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-						final int Width = bitmap.getWidth();
-						final int Height = bitmap.getHeight();
-						final int Length = Width < Height ? Width : Height;
-						final int x = (Width - Length) / 2;
-						final int y = (Height - Length) / 2;
-						final Bitmap b = Bitmap.createBitmap(bitmap, x, y, Length, Length);
+						if (bitmap != null) {
+							final int Width = bitmap.getWidth();
+							final int Height = bitmap.getHeight();
+							final int Length = Width < Height ? Width : Height;
+							final int x = (Width - Length) / 2;
+							final int y = (Height - Length) / 2;
+							final Bitmap b = Bitmap.createBitmap(bitmap, x, y, Length, Length);
 //						bitmap.recycle();
-						shareWithBitmap(title, description, url, b);
+							shareWithBitmap(title, description, url, b);
+						} else {
+							shareWithBitmap(title, description, url, null);
+						}
 					}
 
 					@Override

@@ -9,6 +9,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -60,6 +61,7 @@ public class WalletFragment extends BaseFragment {
 		btnGetBean.setOnClickListener(this);
 		rlBeanDetail.setOnClickListener(this);
 		rlScoreDetail.setOnClickListener(this);
+		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class WalletFragment extends BaseFragment {
 
 	@Override
 	protected void lazyLoad() {
-		AccountManager.getInstance().updateUserInfo();
+		AccountManager.getInstance().updatePartUserInfo();
 	}
 
 	@Override

@@ -63,6 +63,18 @@ public class ScoreMission implements Serializable {
 	public String data;
 
 	/**
+	 * 表示今天能完成几次
+	 */
+	@SerializedName("day_count")
+	public int dayCount;
+
+	/**
+	 * 表示今日已完成次数
+	 */
+	@SerializedName("day_complete_times")
+	public int dayCompleteCount;
+
+	/**
 	 * 此标志仅用于SDK，表示当前任务已完成
 	 */
 	public boolean isFinished;

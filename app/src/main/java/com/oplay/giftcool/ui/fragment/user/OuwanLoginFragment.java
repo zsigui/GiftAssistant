@@ -17,6 +17,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -186,6 +187,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										writeToHistory(login.getUsername());
 										MainActivity.sIsTodayFirstOpen = true;
+										ScoreManager.getInstance().resetLocalTaskState();
 										AccountManager.getInstance().setUser(userModel);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;

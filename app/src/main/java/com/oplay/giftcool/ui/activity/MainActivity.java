@@ -13,10 +13,8 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
@@ -32,6 +30,7 @@ import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 /**
  * @author micle
@@ -125,7 +124,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			if (TextUtils.isEmpty(mUser.avatar)) {
 				ivProfile.setImageResource(R.drawable.ic_avatar_default);
 			} else {
-				ImageLoader.getInstance().displayImage(mUser.avatar, ivProfile, Global.AVATOR_IMAGE_LOADER);
+				ViewUtil.showAvatarImage(mUser.avatar, ivProfile, AccountManager.getInstance().isLogin());
 			}
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
@@ -258,7 +257,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					sIsTodayFirstOpen = false;
 				}
 			}, 1000);
-
 		}
 	}
 

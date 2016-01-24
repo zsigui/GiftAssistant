@@ -8,7 +8,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -17,6 +16,7 @@ import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.DensityUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.GONE);
 			bgaViewHolderHelper.getView(R.id.tv_name).setPadding(DensityUtil.dip2px(mContext, 7), 0, 0, 0);
 		}
-		ImageLoader.getInstance().displayImage(o.img, (ImageView) bgaViewHolderHelper.getView(R.id.iv_icon));
+		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
 		bgaViewHolderHelper.setText(R.id.tv_content, o.content);
 		bgaViewHolderHelper.setText(R.id.tv_deadline, DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm") + " ~ "
 				+ DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm"));

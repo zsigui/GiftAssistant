@@ -12,6 +12,6 @@ public class TaskReward implements Serializable{
 	@SerializedName("reward_points")
 	public int rewardPoints;
 
-	@SerializedName("reward_name")
+	@SerializedName("mission_name")
 	public String taskName;
 }

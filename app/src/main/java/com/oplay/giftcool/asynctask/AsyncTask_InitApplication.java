@@ -12,6 +12,7 @@ import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
@@ -63,11 +64,11 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	 * 判断是否今日首次登录
 	 */
 	public void judgeFirstOpenToday() {
-		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LAST_OPEN_TIME, 0);
+		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
 		// 首次打开APP 或者 今日首次登录
 		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
 		// 写入当前时间
-		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LAST_OPEN_TIME, System.currentTimeMillis());
+		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
 	}
 
 	/**
@@ -98,6 +99,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		}
 		// 判断是否金立首次打开APP
 		judgeFirstOpenToday();
+		ScoreManager.getInstance().resetLocalTaskState();
 
 		try {
 			OuwanSDKManager.getInstance().init();
@@ -111,7 +113,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		UserModel user = null;
 		try {
 			String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
-					SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, SPConfig.SALT_USER_INFO, null);
+					SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
 			}

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.ScoreMission;
@@ -65,6 +67,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	protected void setListener() {
+		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
 	@Override
@@ -202,7 +205,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		for (ScoreMission mission : data) {
 			// 最后完成时间是今天，标志为已经完成
 			if (mission.type == TaskTypeUtil.MISSION_TYPE_TIRO) {
-				if (DateUtil.isToday(mission.lastCompleteTime)) {
+				if (!TextUtils.isEmpty(mission.lastCompleteTime)
+						&& DateUtil.isToday(mission.lastCompleteTime)
+						&& mission.dayCount == mission.dayCompleteCount) {
 					rawFinished++;
 					mission.isFinished = true;
 					rawTasks.add(mission);
@@ -216,7 +221,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					}
 				}
 			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_DAILY) {
-				if (DateUtil.isToday(mission.lastCompleteTime)) {
+				if (!TextUtils.isEmpty(mission.lastCompleteTime)
+						&& DateUtil.isToday(mission.lastCompleteTime)
+						&& mission.dayCount == mission.dayCompleteCount) {
 					dailyFinished++;
 					mission.isFinished = true;
 					dailyTasks.add(mission);
@@ -231,7 +238,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				}
 			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
 				// 对于连续任务，得判断最后完成时间
-				if (DateUtil.isToday(mission.lastCompleteTime)) {
+				if (!TextUtils.isEmpty(mission.lastCompleteTime)
+						&& DateUtil.isToday(mission.lastCompleteTime)) {
 					continuousFinished++;
 					mission.isFinished = true;
 					continuousTasks.add(mission);
@@ -308,14 +316,23 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			IntentUtil.jumpGameNewList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
 			// 分享普通礼包
+			IntentUtil.jumpGiftNewList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 			// 分享限量礼包
+			IntentUtil.jumpGiftLimitList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
 			// 使用偶玩豆购买限量礼包，跳转今日限量界面
 			IntentUtil.jumpGiftLimitList(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
 			// 跳转指定游戏界面，暂无
-			IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), GameTypeUtil.JUMP_STATUS_DETAIL);
+			try {
+				IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), GameTypeUtil.JUMP_STATUS_DETAIL);
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.e(e);
+				}
+				ToastUtil.showShort("数据获取出错，跳转失败");
+			}
 		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
 			// 跳转登录界面
 			IntentUtil.jumpLogin(getContext());
@@ -331,6 +348,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
 			tvScore.setText(AccountManager.getInstance().getUserInfo().score);
 		}
+		lazyLoad();
 	}
 
 	@Override

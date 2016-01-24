@@ -106,7 +106,7 @@
 	<string name = "st_login_user" >点击登录</string >
 	<string name = "st_login_phone_title" >登录礼包酷</string >
 	<string name = "st_login_ouwan_title" >偶玩账号登录</string >
-	<string name = "st_login_phone_hint" >请输入手机号</string >
+	<string name = "st_login_phone_hint" >请输入手机号直接登录，无须注册</string >
 	<string name = "st_login_phone_code_hint" >请输入短信验证码</string >
 	<string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
 	<string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
@@ -135,8 +135,8 @@
 	<string name = "st_dialog_gift_share_title">礼包分享</string>
 	<string name = "st_dialog_gcool_share_title">礼包酷分享</string>
 	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
-	<string name = "st_share_gcool_description_1" >精品礼包，游戏下载……福利根本停不下来～</string >
-	<string name = "st_share_gcool_description_2" >加入[礼包酷]的3个理由：1.精品礼包 2.游戏下载 3.免费领分～</string >
+	<string name = "st_share_gcool_description_1" >超级豪华礼包，价值珍贵，限时限量，等你来抢!</string >
+	<string name = "st_share_gcool_description_2" >新手礼包、豪华礼包……各式礼包，尽在礼包酷，等你加入！</string >
 
 
 

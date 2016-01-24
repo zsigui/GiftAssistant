@@ -88,8 +88,10 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		if (mData != null) {
 			if (mData.size() < 10) {
 				mRefreshLayout.setCanShowLoad(false);
+				mNoMoreLoad = true;
 			} else {
 				mRefreshLayout.setCanShowLoad(true);
+				mNoMoreLoad = false;
 			}
 			updateData(mData);
 		}

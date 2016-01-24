@@ -148,6 +148,11 @@ public class NetUrl {
 	public static final String USER_GET_INFO = "account/get_account_info";
 
 	/**
+	 * 获取用户部分信息
+	 */
+	public static final String USER_GET_PART_INFO = "account/get_account_gift_points_info";
+
+	/**
 	 * 修改用户昵称
 	 */
 	public static final String USER_MODIFY_NICK = "account/modify_account_nick";
@@ -190,6 +195,10 @@ public class NetUrl {
 	 * 获取积分任务
 	 */
 	public static final String SCORE_GET_TASK = "mission/get_points_mission_list";
+	/**
+	 * 请求积分奖励
+	 */
+	public static final String SCORE_REWARD = "mission/reward_points_by_mission_name";
 
 	/* 应用接口 */
 

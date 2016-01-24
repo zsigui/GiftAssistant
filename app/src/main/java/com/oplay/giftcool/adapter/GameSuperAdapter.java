@@ -115,7 +115,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			data.add(banner.url);
 		}
 		if (data.size() == 0) {
-			data.add("drawable://" + R.drawable.ic_banner_default);
+			data.add("drawable://");
 		}
 		mBannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 

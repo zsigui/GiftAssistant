@@ -23,17 +23,16 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
-import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -190,11 +189,6 @@ public class UploadAvatarFragment extends BaseFragment {
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
-					ToastUtil.showShort("网络连接失败，无法上传");
-					hideLoading();
-					return;
-				}
 				ReqModifyAvatar reqData = new ReqModifyAvatar();
 				File file = new File(filePath);
 				if (!file.exists() || !file.isFile()) {
@@ -211,9 +205,12 @@ public class UploadAvatarFragment extends BaseFragment {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										ImageLoader.getInstance().displayImage(
 												response.body().getData().avatar, ivAvatar, Global.AVATOR_IMAGE_LOADER);
-										AccountManager.getInstance().getUserInfo().avatar =
-												response.body().getData().avatar;
-										ObserverManager.getInstance().notifyUserUpdate();
+										UserModel model = AccountManager.getInstance().getUser();
+										try {
+											ImageLoader.getInstance().getDiskCache().remove(model.userInfo.avatar);
+										} catch (Throwable ignored) {}
+										model.userInfo.avatar = response.body().getData().avatar;
+										AccountManager.getInstance().setUser(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}
@@ -244,6 +241,7 @@ public class UploadAvatarFragment extends BaseFragment {
 	private String generateImageStringParam(String filePath) {
 		Bitmap bitmap = BitmapUtil.getBitmap(filePath, 10 * 1024 * 8,
 				AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
+		bitmap = BitmapUtil.createBitmapThumbnail(bitmap, true, 480, 480);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
 		return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);

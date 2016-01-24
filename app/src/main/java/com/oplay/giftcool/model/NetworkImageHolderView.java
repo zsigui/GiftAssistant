@@ -26,14 +26,18 @@ public class NetworkImageHolderView implements Holder<String> {
 
 	@Override
 	public void UpdateUI(Context context, int position, String data) {
-		DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_banner_default)
-				.showImageOnFail(R.drawable.ic_banner_default)
-				.showImageOnLoading(R.drawable.ic_banner_default)
-				.bitmapConfig(Bitmap.Config.RGB_565)
-				.cacheInMemory(true)
-				.cacheOnDisk(true)
-				.build();
-		ImageLoader.getInstance().displayImage(data, imageView, imgOptions);
+		if (data.startsWith("drawable://")) {
+			imageView.setImageResource(R.drawable.ic_banner_default);
+		} else {
+			DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
+					.showImageForEmptyUri(R.drawable.ic_banner_default)
+					.showImageOnFail(R.drawable.ic_banner_default)
+					.showImageOnLoading(R.drawable.ic_banner_default)
+					.bitmapConfig(Bitmap.Config.RGB_565)
+					.cacheInMemory(true)
+					.cacheOnDisk(true)
+					.build();
+			ImageLoader.getInstance().displayImage(data, imageView, imgOptions);
+		}
 	}
 }

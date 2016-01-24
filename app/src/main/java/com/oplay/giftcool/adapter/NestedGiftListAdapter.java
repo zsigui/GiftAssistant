@@ -12,12 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.GiftTypeUtil;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
@@ -186,8 +182,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	 * 设置几个类型下的通用配置
 	 */
 	private void setCommonField(final ViewHolder viewHolder, final IndexGiftNew gift) {
-		ImageAware imageAware = new ImageViewAware(viewHolder.ivIcon, false);
-		ImageLoader.getInstance().displayImage(gift.img, imageAware, Global.IMAGE_OPTIONS);
+		ViewUtil.showImage(viewHolder.ivIcon, gift.img);
 		viewHolder.tvTitle.setText(gift.name);
 		if (gift.isLimit) {
 			viewHolder.ivLimit.setVisibility(View.VISIBLE);

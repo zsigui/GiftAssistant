@@ -61,7 +61,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler{
 		switch (baseResp.errCode) {
 			case BaseResp.ErrCode.ERR_OK:
 				// 分享成功
-				ScoreManager.getInstance().reward();
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
 				break;
 			case BaseResp.ErrCode.ERR_USER_CANCEL:
 				// 分享取消

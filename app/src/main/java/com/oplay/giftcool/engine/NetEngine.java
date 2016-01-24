@@ -9,7 +9,6 @@ import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
-import com.oplay.giftcool.model.data.req.ReqModifyPhone;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
@@ -23,13 +22,13 @@ import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
-import com.oplay.giftcool.model.data.resp.ModifyPhone;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
+import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
@@ -156,12 +155,6 @@ public interface NetEngine {
 	Call<JsonRespBase<UpdateSession>> updateSession(@Body JsonReqBase<String> reqData);
 
 	/**
-	 * 修改手机号码，需要进行多歩
-	 */
-	@POST
-	Call<JsonRespBase<ModifyPhone>> modifyPhone(@Url String url, @Body JsonReqBase<ReqModifyPhone> reqData);
-
-	/**
 	 * 登录，分为 手机号码登录 和 偶玩账号登录
 	 */
 	@POST
@@ -183,8 +176,14 @@ public interface NetEngine {
 	 * 获取个人信息接口
 	 */
 	@POST(NetUrl.USER_GET_INFO)
-	Call<JsonRespBase<UserModel>> getUserInfo(@Body JsonReqBase<String> reqData);
+	Call<JsonRespBase<UserModel>> getUserInfo(@Body JsonReqBase<Void> reqData);
 
+
+	/**
+	 * 获取用户部分信息接口
+	 */
+	@POST(NetUrl.USER_GET_PART_INFO)
+	Call<JsonRespBase<UserInfo>> getUserPartInfo(@Body JsonReqBase<Void> reqData);
 
 	/* ---------------- 积分接口  ---------------- */
 
@@ -197,7 +196,7 @@ public interface NetEngine {
 	/**
 	 * 获取积分任务奖励
 	 */
-	@POST(NetUrl.SCORE_GET_TASK)
+	@POST(NetUrl.SCORE_REWARD)
 	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
 
 	/* ---------------- 应用接口  ---------------- */

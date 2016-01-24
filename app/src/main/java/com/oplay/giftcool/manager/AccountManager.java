@@ -2,8 +2,6 @@ package com.oplay.giftcool.manager;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -45,8 +43,6 @@ public class AccountManager {
 
 	private AccountManager() {
 	}
-
-	private Handler mHandler = new Handler(Looper.getMainLooper());
 
 	public static AccountManager getInstance() {
 		if (manager == null) {
@@ -91,8 +87,6 @@ public class AccountManager {
 			OuwanSDKManager.getInstance().logout();
 		}
 
-		// 如果再更新状态过程中用户退出登录，直接取消重试
-		mHandler.removeCallbacks(mUpdateSessionTask);
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -102,7 +96,7 @@ public class AccountManager {
 				}
 				String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
 				Global_SharePreferences.saveEncodeStringToSharedPreferences(mContext,
-						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_SESSION, userJson, SPConfig.SALT_USER_INFO);
+						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, userJson, SPConfig.SALT_USER_INFO);
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_MANAGER, "save to sp : " + userJson);
 				}
@@ -134,9 +128,7 @@ public class AccountManager {
 					if (!NetworkUtil.isConnected(mContext)) {
 						return;
 					}
-					KLog.e("update User start");
-
-					Global.getNetEngine().getUserInfo(new JsonReqBase<String>(null))
+					Global.getNetEngine().getUserInfo(new JsonReqBase<Void>())
 							.enqueue(new Callback<JsonRespBase<UserModel>>() {
 								@Override
 								public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
@@ -145,7 +137,54 @@ public class AccountManager {
 												&& response.body().getCode() == StatusCode.SUCCESS) {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
-											ToastUtil.showShort("userInfo = " + user.userInfo);
+											KLog.d("update User success");
+											setUser(user);
+											return;
+										}
+										if (AppDebugConfig.IS_DEBUG) {
+											KLog.e(AppDebugConfig.TAG_MANAGER,
+													response.body() == null ? "解析失败" : response.body().error());
+										}
+									}
+								}
+
+								@Override
+								public void onFailure(Throwable t) {
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(AppDebugConfig.TAG_MANAGER, t);
+									}
+								}
+							});
+				}
+			});
+		}
+	}
+
+	/**
+	 * 更新用户部分信息: 偶玩豆，积分，礼包数
+	 */
+	public void updatePartUserInfo() {
+		if (isLogin()) {
+			Global.THREAD_POOL.execute(new Runnable() {
+				@Override
+				public void run() {
+					if (!NetworkUtil.isConnected(mContext)) {
+						return;
+					}
+
+					Global.getNetEngine().getUserPartInfo(new JsonReqBase<Void>())
+							.enqueue(new Callback<JsonRespBase<UserInfo>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<UserInfo>> response, Retrofit retrofit) {
+									if (response != null && response.isSuccess()) {
+										if (response.body() != null
+												&& response.body().getCode() == StatusCode.SUCCESS) {
+											UserInfo info = response.body().getData();
+											UserModel user = getUser();
+											user.userInfo.score = info.score;
+											user.userInfo.bean = info.bean;
+											user.userInfo.giftCount = info.giftCount;
+											KLog.d("update User Part Info success");
 											setUser(user);
 											return;
 										}
@@ -225,71 +264,54 @@ public class AccountManager {
 				return;
 			}
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
-			mHandler.postAtFrontOfQueue(mUpdateSessionTask);
+			updateSessionNetRequest();
 		}
 	}
-	/**
-	 * 重试更新Session
-	 */
-	private int mUpdateSessionRetryTime = 0;
-	private Runnable mUpdateSessionTask = new Runnable() {
-		@Override
-		public void run() {
-			if (NetworkUtil.isConnected(mContext)) {
-				Global.getNetEngine().updateSession(new JsonReqBase<String>())
-						.enqueue(new Callback<JsonRespBase<UpdateSession>>() {
 
-							@Override
-							public void onResponse(Response<JsonRespBase<UpdateSession>> response,
-							                       Retrofit retrofit) {
-								if (response != null && response.isSuccess()) {
-									if(response.body() != null) {
-										if (response.body().isSuccess()) {
-											mUpdateSessionRetryTime = 0;
-											mUser.userSession.session = response.body().getData().session;
-											if (AppDebugConfig.IS_DEBUG) {
-												KLog.d("req_new_session = " + mUser.userSession.session);
-											}
-											setUser(mUser);
-											// 请求更新数据
-											updateUserInfo();
-											return;
+	private void updateSessionNetRequest() {
+		if (NetworkUtil.isConnected(mContext)) {
+			Global.getNetEngine().updateSession(new JsonReqBase<String>())
+					.enqueue(new Callback<JsonRespBase<UpdateSession>>() {
+
+						@Override
+						public void onResponse(Response<JsonRespBase<UpdateSession>> response,
+						                       Retrofit retrofit) {
+							if (response != null && response.isSuccess()) {
+								if (response.body() != null) {
+									if (response.body().isSuccess()) {
+										mUser.userSession.session = response.body().getData().session;
+										if (AppDebugConfig.IS_DEBUG) {
+											KLog.d("req_new_session = " + mUser.userSession.session);
 										}
-										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
-											// 更新session不同步
-											if (AppDebugConfig.IS_DEBUG) {
-												KLog.d("session is not sync, err msg = " + response.body().getMsg());
-											}
-											// 重置登录信息，表示未登录
-											setUser(null);
-											return;
+										setUser(mUser);
+										// 请求更新数据
+										updateUserInfo();
+										return;
+									}
+									if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+										// 更新session不同步
+										if (AppDebugConfig.IS_DEBUG) {
+											KLog.d("session is not sync, err msg = " + response.body().getMsg());
 										}
+										// 重置登录信息，表示未登录
+										setUser(null);
+										return;
 									}
 								}
-								retryJudge();
 							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.e(AppDebugConfig.TAG_MANAGER, t);
-								}
-								retryJudge();
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
 							}
-						});
-			} else {
-				// 暂时无网络
-				retryJudge();
-			}
-		}
-	};
+						}
 
-	private void retryJudge() {
-		// 只重试3次
-		if (mUpdateSessionRetryTime < 3) {
-			// 请求失败, 5秒后再请求
-			mHandler.postAtTime(mUpdateSessionTask, 5000);
+						@Override
+						public void onFailure(Throwable t) {
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_MANAGER, t);
+								KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
+							}
+						}
+					});
 		}
-		mUpdateSessionRetryTime++;
 	}
 }

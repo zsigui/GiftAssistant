@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
@@ -78,7 +77,7 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 					normalVH.tvGift.setText("暂时还木有礼包");
 				}
 				normalVH.tvSize.setText(o.size);
-				ImageLoader.getInstance().displayImage(o.img, normalVH.ivIcon);
+				ViewUtil.showImage(normalVH.ivIcon, o.img);
 				ViewUtil.initDownloadBtnStatus(normalVH.btnDownload, o.appStatus);
 				normalVH.itemView.setOnClickListener(this);
 				normalVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);

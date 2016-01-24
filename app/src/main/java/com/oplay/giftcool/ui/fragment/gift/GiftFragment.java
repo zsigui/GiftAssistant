@@ -21,7 +21,6 @@ import com.oplay.giftcool.adapter.IndexGiftLimitAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
-import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -37,7 +36,6 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.transformer.ZoomStackPageTransformer;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -254,7 +252,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 							KLog.e(t);
 						}
 						refreshFailEnd();
-						updateData(initStashGiftData());
 					}
 				});
 			}
@@ -268,6 +265,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		if (data == null) {
 			return;
 		}
+		int y = mScrollView.getScrollY();
 		mViewManager.showContent();
 		mHasData = true;
 		mGiftData = data;
@@ -275,7 +273,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		updateLikeData(data.like);
 		updateLimitData(data.limit);
 		updateNewData(data.news);
-		mScrollView.smoothScrollTo(0, 0);
+		mScrollView.smoothScrollTo(0, y);
 	}
 
 	public void updateBanners(ArrayList<IndexBanner> banners) {
@@ -364,116 +362,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			return;
 		}
 		BannerTypeUtil.handleBanner(getContext(), mGiftData.banner.get(position));
-	}
-
-	/**
-	 * 此处自定义假数据显示，实际可以将数据每次获取数据写入文件以待无网使用，看具体情况
-	 */
-	private IndexGift initStashGiftData() {
-		mHasData = true;
-		// 先暂时使用缓存数据假定
-		ArrayList<IndexBanner> bannerData = new ArrayList<IndexBanner>();
-		ArrayList<IndexGiftNew> limitData = new ArrayList<IndexGiftNew>();
-		ArrayList<IndexGiftLike> likeData = new ArrayList<IndexGiftLike>();
-		ArrayList<IndexGiftNew> newData = new ArrayList<IndexGiftNew>();
-
-		IndexBanner banner1 = new IndexBanner();
-		banner1.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/28/1451266522_48a10badcdbd.jpg";
-		bannerData.add(banner1);
-		IndexBanner banner2 = new IndexBanner();
-		banner2.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/22/1450752589_814869b92f05.jpg";
-		bannerData.add(banner2);
-		IndexBanner banner3 = new IndexBanner();
-		banner3.url = "http://owan-avatar.ymapp.com/avatar/upload/www/2015/12/23/1450833623_8e099a40a742.jpg";
-		bannerData.add(banner3);
-
-		IndexGiftNew ngift = new IndexGiftNew();
-		ngift.gameName = "全民神将-攻城战";
-		ngift.id = 335;
-		ngift.status = GiftTypeUtil.STATUS_SEIZE;
-		ngift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-		ngift.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
-		ngift.name = "至尊礼包";
-		ngift.isLimit = true;
-		ngift.bean = 5;
-		ngift.score = 5;
-		ngift.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-		ngift.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 1);
-		ngift.searchCount = 0;
-		ngift.remainCount = 10;
-		ngift.totalCount = 10;
-		ngift.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-		newData.add(ngift);
-		IndexGiftNew ng2 = new IndexGiftNew();
-		ng2.gameName = "鬼吹灯之挖挖乐";
-		ng2.id = 336;
-		ng2.status = GiftTypeUtil.STATUS_FINISHED;
-		ng2.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
-		ng2.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
-		ng2.name = "高级礼包";
-		ng2.isLimit = false;
-		ng2.bean = 30;
-		ng2.score = 5;
-		ng2.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -3);
-		ng2.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", -1);
-		ng2.searchCount = 0;
-		ng2.remainCount = 159;
-		ng2.totalCount = 350;
-		ng2.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-		newData.add(ng2);
-		IndexGiftNew ng3 = new IndexGiftNew();
-		ng3.gameName = "兽人战争";
-		ng3.id = 337;
-		ng3.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
-		ng3.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-		ng3.img = "http://owan-avatar.ymapp.com/app/11058/icon/icon_1450059064.png_140_140_100.png";
-		ng3.name = "高级礼包";
-		ng3.isLimit = false;
-		ng3.score = 10;
-		ng3.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-		ng3.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-		ng3.searchCount = 355;
-		ng3.remainCount = 0;
-		ng3.totalCount = 350;
-		ng3.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-		newData.add(ng3);
-		for (int i = 0; i < 10; i++) {
-			IndexGiftLike game = new IndexGiftLike();
-			game.name = "口袋妖怪复刻";
-			game.totalCount = 10 - i;
-			game.newCount = i;
-			game.img = "http://owan-avatar.ymapp.com/app/10946/icon/icon_1439432439.png_140_140_100.png";
-			likeData.add(game);
-			IndexGiftNew gift = new IndexGiftNew();
-			gift.gameName = "少年三国志";
-			gift.name = "传奇礼包";
-			gift.img = "http://owan-avatar.ymapp.com/app/b6/41/8113/icon/icon_1431085220.png_140_140_100.png";
-			gift.remainCount = i * 10 + i;
-			limitData.add(gift);
-			IndexGiftNew ng = new IndexGiftNew();
-			ng.gameName = "逍遥西游";
-			ng.id = i;
-			ng.status = GiftTypeUtil.STATUS_WAIT_SEARCH;
-			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-avatar.ymapp.com/app/10657/icon/icon_1450246643.png_140_140_100.png";
-			ng.name = "普通礼包";
-			ng.isLimit = false;
-			ng.score = (int) (Math.random() * 100) * 10;
-			ng.searchTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 3);
-			ng.seizeTime = DateUtil.getDate("yyyy-MM-dd HH:mm", 5);
-			ng.searchCount = 0;
-			ng.remainCount = 100;
-			ng.totalCount = 100;
-			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-			newData.add(ng);
-		}
-
-		IndexGift indexGift = new IndexGift();
-		indexGift.banner = bannerData;
-		indexGift.like = likeData;
-		indexGift.limit = limitData;
-		indexGift.news = newData;
-		return indexGift;
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.model.data.req.ReqGetCode;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.PayCode;
@@ -21,9 +20,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
-
-import net.ouwan.umipay.android.api.PayCallbackListener;
-import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -49,46 +45,6 @@ public class PayManager {
 
 
 	private long mLastClickTime = 0;
-
-
-	/**
-	 * 取消订单支付
-	 */
-	public void quickTrade(final String tradeNo) {
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				ReqGetCode reqData = new ReqGetCode();
-				reqData.tradeNo = tradeNo;
-				Global.getNetEngine().notifyTradeFail(new JsonReqBase<ReqGetCode>(reqData))
-						.enqueue(new Callback<JsonRespBase<Void>>() {
-							@Override
-							public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().isSuccess()) {
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_MANAGER, response.body() == null ?
-												"解析失败" : response.body().getMsg());
-									}
-									return;
-								}
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_MANAGER, "错误返回");
-								}
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_MANAGER, t);
-								}
-							}
-						});
-			}
-		});
-	}
 
 	/**
 	 * 执行抢礼包操作
@@ -195,6 +151,9 @@ public class PayManager {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+										// 更新部分用户信息
+										AccountManager.getInstance().updatePartUserInfo();
+
 										GetCodeDialog.newInstance(response.body().getData().giftCode)
 												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 														GetCodeDialog.class.getSimpleName());
@@ -254,6 +213,8 @@ public class PayManager {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+										// 更新部分用户信息
+										AccountManager.getInstance().updatePartUserInfo();
 
 										GetCodeDialog.newInstance(response.body().getData().giftCode)
 												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
@@ -302,61 +263,100 @@ public class PayManager {
 		}
 	}
 
-	private class SdkPayCallbackListener implements PayCallbackListener {
+//	/**
+//	 * 取消订单支付
+//	 */
+//	public void quickTrade(final String tradeNo) {
+//		Global.THREAD_POOL.execute(new Runnable() {
+//			@Override
+//			public void run() {
+//				ReqGetCode reqData = new ReqGetCode();
+//				reqData.tradeNo = tradeNo;
+//				Global.getNetEngine().notifyTradeFail(new JsonReqBase<ReqGetCode>(reqData))
+//						.enqueue(new Callback<JsonRespBase<Void>>() {
+//							@Override
+//							public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+//								if (response != null && response.isSuccess()) {
+//									if (response.body() != null && response.body().isSuccess()) {
+//										return;
+//									}
+//									if (AppDebugConfig.IS_DEBUG) {
+//										KLog.d(AppDebugConfig.TAG_MANAGER, response.body() == null ?
+//												"解析失败" : response.body().getMsg());
+//									}
+//									return;
+//								}
+//								if (AppDebugConfig.IS_DEBUG) {
+//									KLog.d(AppDebugConfig.TAG_MANAGER, "错误返回");
+//								}
+//							}
+//
+//							@Override
+//							public void onFailure(Throwable t) {
+//								if (AppDebugConfig.IS_DEBUG) {
+//									KLog.d(AppDebugConfig.TAG_MANAGER, t);
+//								}
+//							}
+//						});
+//			}
+//		});
+//	}
 
-		private GiftButton mButton;
-		private String mTradeNo;
-		private Context mContext;
-
-		private SdkPayCallbackListener(Context context, GiftButton button, String tradeNo) {
-			mContext = context;
-			mButton = button;
-			mTradeNo = tradeNo;
-		}
-
-		@Override
-		public void onPay(int code) {
-			if (code == UmipaySDKStatusCode.PAY_FINISH
-					|| code == UmipaySDKStatusCode.SUCCESS) {
-				// 执行查号操作
-				ReqGetCode getCode = new ReqGetCode();
-				getCode.tradeNo = mTradeNo;
-				Global.getNetEngine().getSpecificGiftCode(new JsonReqBase<ReqGetCode>(getCode))
-						.enqueue(new Callback<JsonRespBase<PayCode>>() {
-							@Override
-							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
-								hideLoading(mContext);
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().isSuccess()) {
-
-										GetCodeDialog.newInstance(response.body().getData().giftCode)
-												.show(((BaseAppCompatActivity) mContext).getSupportFragmentManager(),
-														GetCodeDialog.class.getSimpleName());
-										if (mButton != null) {
-											mButton.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
-										}
-										ObserverManager.getInstance().notifyGiftUpdate();
-										return;
-									}
-									KLog.d((response.body() == null ? "解析失败" : response.body().getMsg()));
-								}
-								ToastUtil.showShort("查询礼包码失败, 请稍后重新查看");
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								hideLoading(mContext);
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_UTIL, t);
-								}
-								ToastUtil.showShort("查询礼包码失败 - 网络异常");
-							}
-						});
-			} else {
-				// 取消支付，通知取消订单
-				PayManager.getInstance().quickTrade(mTradeNo);
-			}
-		}
-	}
+//	private class SdkPayCallbackListener implements PayCallbackListener {
+//
+//		private GiftButton mButton;
+//		private String mTradeNo;
+//		private Context mContext;
+//
+//		private SdkPayCallbackListener(Context context, GiftButton button, String tradeNo) {
+//			mContext = context;
+//			mButton = button;
+//			mTradeNo = tradeNo;
+//		}
+//
+//		@Override
+//		public void onPay(int code) {
+//			if (code == UmipaySDKStatusCode.PAY_FINISH
+//					|| code == UmipaySDKStatusCode.SUCCESS) {
+//				// 执行查号操作
+//				ReqGetCode getCode = new ReqGetCode();
+//				getCode.tradeNo = mTradeNo;
+//				Global.getNetEngine().getSpecificGiftCode(new JsonReqBase<ReqGetCode>(getCode))
+//						.enqueue(new Callback<JsonRespBase<PayCode>>() {
+//							@Override
+//							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
+//								hideLoading(mContext);
+//								if (response != null && response.isSuccess()) {
+//									if (response.body() != null && response.body().isSuccess()) {
+//
+//										GetCodeDialog.newInstance(response.body().getData().giftCode)
+//												.show(((BaseAppCompatActivity) mContext).getSupportFragmentManager(),
+//														GetCodeDialog.class.getSimpleName());
+//										if (mButton != null) {
+//											mButton.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+//										}
+//										ObserverManager.getInstance().notifyGiftUpdate();
+//										return;
+//									}
+//									KLog.d((response.body() == null ? "解析失败" : response.body().getMsg()));
+//								}
+//								ToastUtil.showShort("查询礼包码失败, 请稍后重新查看");
+//							}
+//
+//							@Override
+//							public void onFailure(Throwable t) {
+//								hideLoading(mContext);
+//								if (AppDebugConfig.IS_DEBUG) {
+//									KLog.d(AppDebugConfig.TAG_UTIL, t);
+//								}
+//								ToastUtil.showShort("查询礼包码失败 - 网络异常");
+//							}
+//						});
+//			} else {
+//				// 取消支付，通知取消订单
+//				PayManager.getInstance().quickTrade(mTradeNo);
+//			}
+//		}
+//	}
 
 }

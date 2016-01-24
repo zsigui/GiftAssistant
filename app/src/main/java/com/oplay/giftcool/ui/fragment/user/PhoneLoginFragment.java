@@ -20,10 +20,12 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
@@ -284,7 +286,9 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
 										writeToHistory(login.getPhone());
+										MainActivity.sIsTodayFirstOpen = true;
 										AccountManager.getInstance().setUser(userModel);
+										ScoreManager.getInstance().resetLocalTaskState();
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}

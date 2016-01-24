@@ -71,6 +71,11 @@
 		<!--android:screenOrientation = "sensorPortrait"-->
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.MainActivity"
+<<<<<<< Updated upstream
+=======
+				android:launchMode = "singleTask"
+				android:screenOrientation = "sensorPortrait"
+>>>>>>> Stashed changes
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait"
@@ -101,8 +106,17 @@
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GiftDetailActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+<<<<<<< Updated upstream
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+=======
+				android:exported = "true"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+			</intent-filter>
+		</activity>
+>>>>>>> Stashed changes
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GameListActivity"
@@ -130,6 +144,7 @@
 				android:exported = "false" />
 
 		<activity
+<<<<<<< Updated upstream
 				android:name = ".wxapi.WXEntryActivity"
 				android:exported = "true"
 				android:screenOrientation = "sensorPortrait" />
@@ -142,6 +157,16 @@
 				<data android:scheme = "package"/>
 			</intent-filter >
 		</receiver >
+=======
+				android:name = "com.oplay.giftcool.wxapi.WXEntryActivity"
+				android:exported = "true"
+				android:screenOrientation = "sensorPortrait" />
+
+		<activity
+				android:name = "com.oplay.giftcool.sharesdk.activity.QQEntryActivity"
+				android:exported = "true"
+				android:screenOrientation = "sensorPortrait" />
+>>>>>>> Stashed changes
 
 		<meta-data
 				android:name = "UMIPAY_CHANNEL"

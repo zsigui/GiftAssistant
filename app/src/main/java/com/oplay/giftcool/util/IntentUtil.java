@@ -9,6 +9,7 @@ import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.GiftListActivity;
 import com.oplay.giftcool.ui.activity.LoginActivity;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 
@@ -226,6 +227,14 @@ public class IntentUtil {
 	public static void jumpUserSetAvatar(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_AVATAR);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转礼包首页
+	 */
+	public static void jumpHome(Context context) {
+		Intent intent = new Intent(context, MainActivity.class);
 		context.startActivity(intent);
 	}
 }

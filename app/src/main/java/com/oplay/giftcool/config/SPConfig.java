@@ -16,15 +16,15 @@ public class SPConfig {
 
 	/* 获取用户信息,个人信息在SP中存储通过salt进行加密 */
 	public static final String SP_USER_INFO_FILE = "qerkj21";
-	public static final String SALT_USER_INFO = "abcdef33575471";
+	public static final String SALT_USER_INFO = "ss";
 	public static final String KEY_USER_INFO = "kljizckuiqew";
-	public static final String KEY_USER_ID = "uid";
-	public static final String KEY_USERNAME = "un";
-	public static final String KEY_SESSION = "ss";
-	public static final String KEY_PHONE = "mp";
-	public static final String KEY_PROFILE_URL = "pu";
+	public static final String KEY_LOGIN_LAST_OPEN_TIME = "login_last_open_time";
 	// 上次开启应用时间
-	public static final String KEY_LAST_OPEN_TIME = "last_open_time";
+	public static final String KEY_DOWNLOAD_LAST_TIME = "download_last_time";
+	public static final String KEY_SHARE_LIMIT_LAST_TIME = "share_limit_last_time";
+	public static final String KEY_SHARE_NORMAL_LAST_TIME = "share_normal_last_time";
+	public static final String KEY_SEARCH_LAST_TIME = "search_last_time";
+	public static final String KEY_BUY_BY_BEAN_LAST_TIME = "buy_by_bean_last_time";
 
 
 	/* 已输入账号资料 */

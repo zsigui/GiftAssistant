@@ -19,6 +19,7 @@ import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -153,8 +154,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 								mIsLoading = false;
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().isSuccess()) {
-										ToastUtil.showShort("提交成功");
+										ToastUtil.showShort("反馈成功，谢谢你");
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
+										((BaseAppCompatActivity)getActivity()).handleBackPressed();
 										return;
 									}
 									ToastUtil.showShort("提交失败-" + (response.body() == null ?

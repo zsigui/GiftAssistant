@@ -35,12 +35,6 @@ public class TaskTypeUtil {
 	 */
 	public static final int MISSION_TYPE_CONTINUOUS = 3;
 
-	public static final int REWARD_TYPE_BIND_OUWAN = 1;
-	public static final int REWARD_TYPE_BIND_PHONE = 2;
-	public static final int REWARD_TYPE_BIND_DOWNLOAD = 3;
-	public static final int REWARD_TYPE_BIND_SHARE_NORMAL = 4;
-	public static final int REWARD_TYPE_BIND_SHARE_LIMIT = 5;
-
 	/**
 	 * 上传头像
 	 */
@@ -64,7 +58,7 @@ public class TaskTypeUtil {
 	/**
 	 * 搜索礼包/游戏
 	 */
-	public static final String ID_SEARCH = "";
+	public static final String ID_SEARCH = "search_gift_or_game";
 	/**
 	 * 评论一款游戏
 	 */
@@ -92,7 +86,7 @@ public class TaskTypeUtil {
 	/**
 	 * 使用偶玩豆领取一款每日限量礼包
 	 */
-	public static final String ID_GET_LIMIT_WITH_BEAN = "";
+	public static final String ID_GET_LIMIT_WITH_BEAN = "get_every_day_precious_gift_by_ouwan_mili";
 	/**
 	 * 下载指定款游戏
 	 */

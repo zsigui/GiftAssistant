@@ -45,7 +45,7 @@ public class AboutFragment extends BaseFragment {
 	protected void processLogic(Bundle savedInstanceState) {
 		tvUpdate.setText(String.format(getResources().getString(R.string.st_about_wait_update_text), "V2.0"));
 		tvVersion.setText("礼包酷 " + DecryptDataModel.SDK_VER_NAME);
-		tvQQ.setText("459100875");
+		tvQQ.setText("515318514");
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.oplay.giftcool.ui.fragment.user;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,6 +46,17 @@ public class UserInfoFragment extends BaseFragment {
 	private TextView tvBindTitle;
 	private TextView tvBind;
 
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case 0:
+					setData();
+			}
+		}
+	};
+
 	public static UserInfoFragment newInstance() {
 		return new UserInfoFragment();
 	}
@@ -68,6 +81,7 @@ public class UserInfoFragment extends BaseFragment {
 
 	@Override
 	protected void setListener() {
+		ObserverManager.getInstance().addUserUpdateListener(this);
 		rlAvatar.setOnClickListener(this);
 		llNick.setOnClickListener(this);
 		llLogin.setOnClickListener(this);
@@ -92,7 +106,11 @@ public class UserInfoFragment extends BaseFragment {
 			}
 			return;
 		}
-		refreshInitConfig();
+		mHandler.sendEmptyMessage(0);
+	}
+
+
+	private void setData() {
 		UserInfo user = AccountManager.getInstance().getUserInfo();
 		ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
 		String nick;
@@ -127,7 +145,6 @@ public class UserInfoFragment extends BaseFragment {
 
 		}
 		tvNick.setText(nick);
-		refreshSuccessEnd();
 	}
 
 	@Override

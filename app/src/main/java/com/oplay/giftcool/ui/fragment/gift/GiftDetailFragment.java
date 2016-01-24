@@ -43,6 +43,7 @@ import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -133,23 +134,29 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						return;
 					}
 					// 设置分享成功后奖励类型
+					String title;
 					if (mData.giftData.isLimit) {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
+						title = String.format(getResources().getString(R.string.st_share_limit_pattern),
+								mData.giftData.name);
 					} else {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
+						title = mData.giftData.name;
 					}
 
-					KLog.e(ImageLoader.getInstance());
-					KLog.e(ImageLoader.getInstance().getDiskCache());
-					KLog.e(mData);
-					KLog.e(mData.gameData);
-					KLog.e(mData.gameData.img);
-					File file = ImageLoader.getInstance().getDiskCache().get(mData.gameData.img);
-					String src = (file != null ? file.getAbsolutePath() : null);
-					ShareSDKManager.getInstance(mApp).share(getChildFragmentManager(), mData.giftData.name,
-							mData.giftData.content, WebViewUrl.GIFT_DETAIL + "?" + mData.giftData.id,
-							mData.giftData.img, BitmapUtil.getSmallBitmap(src,
-									ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE));
+					String src = null;
+					try {
+						File file = ImageLoader.getInstance().getDiskCache().get(mData.gameData.img);
+						src = (file != null ? file.getAbsolutePath() : null);
+					} catch (Exception e) {
+						// ImageLoader未初始化完成
+					}
+					ShareSDKManager.getInstance(mApp).share(getChildFragmentManager(),
+							title,
+							mData.giftData.content,
+							WebViewUrl.GIFT_DETAIL + "?" + mData.giftData.id,
+							mData.giftData.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
+									ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
 				}
 			});
 		}
@@ -181,7 +188,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			return;
 		}
 		tvName.setText(giftData.name);
-		if (getActivity() instanceof  GiftDetailActivity) {
+		if (getActivity() instanceof GiftDetailActivity) {
 			if (giftData.isLimit) {
 				((GiftDetailActivity) getActivity()).showLimitTag(true);
 			} else {
@@ -225,7 +232,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 							giftData.remainCount)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-					tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>", giftData.searchCount)));
+					tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>",
+							giftData.searchCount)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 					int progress = giftData.remainCount * 100 / giftData.totalCount;
@@ -236,10 +244,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
 					tvRemain.setVisibility(View.VISIBLE);
-					tvRemain.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", giftData.seizeTime)));
+					tvRemain.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+							giftData.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-					tvRemain.setText(Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", giftData.searchTime)));
+					tvRemain.setText(Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
+							giftData.searchTime)));
 					break;
 			}
 
@@ -265,8 +275,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			return;
 		}
 		mAppInfo = game;
-		((BaseAppCompatActivity)getActivity()).setBarTitle(mAppInfo.name);
-		ImageLoader.getInstance().displayImage(mAppInfo.img, ivIcon, Global.IMAGE_OPTIONS);
+		((BaseAppCompatActivity) getActivity()).setBarTitle(mAppInfo.name);
+		ViewUtil.showImage(ivIcon, mAppInfo.img);
 		mAppInfo.initAppInfoStatus(getActivity());
 		int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
 				.downloadUrl);

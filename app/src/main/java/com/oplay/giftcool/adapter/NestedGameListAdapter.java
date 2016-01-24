@@ -6,16 +6,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.util.ViewUtil;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
@@ -73,8 +72,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 			bgaViewHolderHelper.setText(R.id.tv_gift, "暂时还木有礼包");
 		}
 		// n款礼包
-		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon),
-				Global.IMAGE_OPTIONS);
+		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
 //		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(this);
 		View convertView = bgaViewHolderHelper.getConvertView();
 		convertView.setTag(TAG_POSITION, i);

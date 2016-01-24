@@ -120,8 +120,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		mPackageName_AppInfo.put(info.packageName, info);
 
 		// 完成下载任务，请求奖励积分
-		ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.BIND_DOWNLOAD);
-		ScoreManager.getInstance().reward();
+		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 	}
 
 	public void addDownloadTask(IndexGameNew appInfo) {

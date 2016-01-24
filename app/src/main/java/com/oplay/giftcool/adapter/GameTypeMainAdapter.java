@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class GameTypeMainAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final GameTypeMain o) {
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		ImageLoader.getInstance().displayImage("drawable://" + o.icon, (ImageView) bgaViewHolderHelper.getView(R.id.iv_icon));
+		ViewUtil.showImage((ImageView) bgaViewHolderHelper.getView(R.id.iv_icon), o.icon);
 		bgaViewHolderHelper.getView(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

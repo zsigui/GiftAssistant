@@ -25,6 +25,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -79,7 +80,7 @@ public class DrawerFragment extends BaseFragment {
 	private void updateData() {
 		if (!AccountManager.getInstance().isLogin()) {
 			ivIcon.setImageResource(R.drawable.ic_avator_unlogin);
-			tvNick.setText("点击登录");
+			tvNick.setText("点击注册/登录");
 			tvName.setText("");
 		} else {
 			String nick;
@@ -95,6 +96,7 @@ public class DrawerFragment extends BaseFragment {
 			}
 			tvNick.setText(nick);
 			tvName.setText(name);
+			ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());
 			ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATOR_IMAGE_LOADER);
 		}
 	}
@@ -153,6 +155,7 @@ public class DrawerFragment extends BaseFragment {
 			@Override
 			public void onClick(View v) {
 				ToastUtil.showShort("敬请期待");
+				closeDrawer();
 			}
 		}));
 		if (AssistantApp.getInstance().isAllowDownload()) {

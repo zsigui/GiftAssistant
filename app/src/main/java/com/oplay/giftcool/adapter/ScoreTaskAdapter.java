@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -116,20 +115,30 @@ public class ScoreTaskAdapter extends BaseAdapter {
 		final ScoreMission mission = mData.get(position);
 		switch (type) {
 			case TaskTypeUtil.TYPE_CONTENT:
-				ImageLoader.getInstance().displayImage("drawable://" + mission.icon, holder.ivIcon);
+				ViewUtil.showImage(holder.ivIcon, mission.icon);
 				if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
 					holder.tvName.setText(String.format("%s(%d/%d)", mission.name,
 							mission.completeTime, mission.continuousDay));
 				} else {
-					holder.tvName.setText(mission.name);
+					if (mission.dayCount > 1) {
+						holder.tvName.setText(String.format("%s(%d/%d)", mission.name,
+								mission.dayCompleteCount, mission.dayCount));
+					} else {
+						holder.tvName.setText(mission.name);
+					}
 				}
 				holder.stScore.setText("+" + mission.rewardScore);
 				if (mission.isFinished) {
-					holder.stScore.setEnabled(false);
+					if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS
+							&& mission.completeTime != mission.continuousDay) {
+						holder.stScore.setStateEnable(true);
+					} else {
+						holder.stScore.setStateEnable(false);
+					}
 					holder.btnToDo.setText("已完成");
 					holder.btnToDo.setEnabled(false);
 				} else {
-					holder.stScore.setEnabled(true);
+					holder.stScore.setStateEnable(true);
 					holder.btnToDo.setText("去完成");
 					holder.btnToDo.setEnabled(true);
 				}

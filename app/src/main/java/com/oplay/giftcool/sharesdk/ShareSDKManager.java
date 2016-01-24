@@ -25,6 +25,7 @@ import java.util.ArrayList;
 /**
  * shareSDK管理类
  * Created by yxf on 14-11-7.
+ * update by zsg on 16-1-24
  */
 public class ShareSDKManager {
 
@@ -58,10 +59,11 @@ public class ShareSDKManager {
 			ArrayList<IShare> shareList = new ArrayList<IShare>();
 			shareList.add(new Share_WX_MM(mContext, mWXApi));
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
-			shareList.add(new Share_QQ_Friends(mContext));
-			shareList.add(new Share_QQ_Zone(mContext));
+/*			shareList.add(new Share_QQ_Friends(mContext));
+			shareList.add(new Share_QQ_Zone(mContext));*/
 			shareList.add(new Share_More(mContext));
-			final ShareDialog dialog = ShareDialog.newInstance(title);
+			final ShareDialog dialog = ShareDialog.newInstance(mContext.getResources().getString(R.string
+					.st_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
 				@Override
 				public void onItemClick(IShare item, View view, int position) {
@@ -70,7 +72,7 @@ public class ShareSDKManager {
 				}
 			});
 			dialog.setAdapter(adapter);
-			dialog.show(fragmentManager, "share");
+			dialog.show(fragmentManager, ShareDialog.class.getSimpleName());
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);
@@ -78,14 +80,15 @@ public class ShareSDKManager {
 		}
 	}
 
-	public void shareOuwan(final FragmentManager fragmentManager) {
+	public void shareGCool(final FragmentManager fragmentManager) {
 		try {
 			ArrayList<IShare> shareList = new ArrayList<IShare>();
 			shareList.add(new Share_WX_MM(mContext, mWXApi));
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
 			shareList.add(new Share_QQ_Friends(mContext));
 			shareList.add(new Share_QQ_Zone(mContext));
-			final ShareDialog dialog = ShareDialog.newInstance(mContext.getString(R.string.st_dialog_gcool_share_title));
+			final ShareDialog dialog = ShareDialog.newInstance(mContext.getString(R.string
+					.st_dialog_gcool_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
 				@Override
 				public void onItemClick(IShare item, View view, int position) {
@@ -97,11 +100,11 @@ public class ShareSDKManager {
 					switch (item.getShareType()) {
 						case WX_FRIENDS:
 						case QQ_FRIENDS:
-						case QQ_ZONE: {
+						case WX_MM: {
 							description = mContext.getString(R.string.st_share_gcool_description_1);
 							break;
 						}
-						case WX_MM: {
+						case QQ_ZONE: {
 							description = mContext.getString(R.string.st_share_gcool_description_2);
 							break;
 						}
@@ -111,7 +114,7 @@ public class ShareSDKManager {
 				}
 			});
 			dialog.setAdapter(adapter);
-			dialog.show(fragmentManager, "share");
+			dialog.show(fragmentManager, ShareDialog.class.getSimpleName());
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);

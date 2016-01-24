@@ -67,9 +67,17 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mRefreshLayout.setRefreshing(false);
 		mRefreshLayout.setEnabled(true);
 	}
+
+	// 刷新时，默认可以头一次加载可以下拉更多
+	protected void refreshLoadState() {
+		mIsLoadMore = true;
+		mRefreshLayout.setCanShowLoad(true);
+	}
+
 	protected void setLoadState(Object data, boolean isEndPage) {
 		if (isEndPage || data == null) {
 			// 无更多不再请求加载
+			ToastUtil.showShort("没有更多");
 			mNoMoreLoad = true;
 			mRefreshLayout.setCanShowLoad(false);
 		} else {

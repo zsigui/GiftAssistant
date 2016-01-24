@@ -36,7 +36,7 @@ public class ShareAdapter extends BaseRVAdapter<IShare> implements View.OnClickL
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.griditem_share, parent, false);
+		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_share, parent, false);
 		return new ViewHolder(itemView);
 	}
 

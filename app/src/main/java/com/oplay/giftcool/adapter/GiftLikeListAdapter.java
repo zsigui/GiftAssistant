@@ -5,12 +5,12 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class GiftLikeListAdapter extends BGAAdapterViewAdapter<IndexGiftLike> {
 				String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
 		bgaViewHolderHelper.setText(R.id.tv_remain, Html.fromHtml(
 				String.format("今日新增<font color='#ffaa17'>%d</font>款", o.newCount)));
-		ImageLoader.getInstance().displayImage(o.img, (ImageView)bgaViewHolderHelper.getView(R.id.iv_icon));
+		ViewUtil.showImage((ImageView) bgaViewHolderHelper.getView(R.id.iv_icon), o.img);
 		if (AssistantApp.getInstance().isAllowDownload()) {
 			bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 				@Override

@@ -13,17 +13,15 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -86,10 +84,6 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
-					ToastUtil.showShort("网络错误，修改昵称失败!");
-					return;
-				}
 				ReqModifyNick modifyNick = new ReqModifyNick();
 				modifyNick.newNick = nick;
 				modifyNick.oldNick = AccountManager.getInstance().getUserInfo().nick;
@@ -99,8 +93,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 							public void onResponse(Response<JsonRespBase<ModifyNick>> response, Retrofit retrofit) {
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										AccountManager.getInstance().getUserInfo().nick = response.body().getData().nick;
-										ObserverManager.getInstance().notifyUserUpdate();
+										UserModel model = AccountManager.getInstance().getUser();
+										model.userInfo.nick = response.body().getData().nick;
+										AccountManager.getInstance().setUser(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}

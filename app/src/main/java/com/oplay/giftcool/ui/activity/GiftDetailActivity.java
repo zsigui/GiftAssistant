@@ -7,9 +7,13 @@ import android.widget.ImageView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftDetailFragment;
+import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 /**
@@ -18,7 +22,6 @@ import com.oplay.giftcool.util.ToastUtil;
 public class GiftDetailActivity extends BaseAppCompatActivity {
 
 	private ImageView ivLimitTag;
-	private ImageView ivShare;
 	private OnShareListener mOnShareListener;
 
 	@Override
@@ -35,8 +38,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
 		ivLimitTag = getViewById(toolbar, R.id.iv_tool_limit);
-		ivShare = getViewById(toolbar, R.id.iv_bar_share);
-		ivShare.setOnClickListener(this);
+		getViewById(toolbar, R.id.iv_bar_share).setOnClickListener(this);
 		showLimitTag(false);
 	}
 
@@ -71,6 +73,25 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 				mOnShareListener.share();
 			} else {
 				ToastUtil.showShort("该礼包无分享设置");
+			}
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		InputMethodUtil.hideSoftInput(this);
+		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
+				&& ((OnBackPressListener) getTopFragment()).onBack()) {
+			// back事件被处理
+			return;
+		}
+		if (!popFrag() && !isFinishing()) {
+			mNeedWorkCallback = false;
+			IntentUtil.jumpHome(GiftDetailActivity.this);
+			finish();
+		} else {
+			if (getTopFragment() instanceof BaseFragment) {
+				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
 		}
 	}

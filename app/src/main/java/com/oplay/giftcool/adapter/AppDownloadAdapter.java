@@ -22,6 +22,7 @@ import com.oplay.giftcool.ui.widget.StickyListHeadersListViewExpandable;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.SystemUtil;
+import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -105,8 +106,10 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		if (appInfo.id == Global.GIFTCOOL_GAME_ID) {
 			holder.mIvIcon.setImageResource(R.drawable.ic_launcher);
 		}else {
-			mImageLoader.displayImage(appInfo.img, holder.mIvIcon);
+			ViewUtil.showImage(holder.mIvIcon, appInfo.img);
 		}
+
+
 		initViewHolderByStatus(rawUrl, appInfo.downloadStatus);
 		holder.mTvAction.setTag(TAG_POSITION, position);
 		holder.mTvAction.setOnClickListener(this);

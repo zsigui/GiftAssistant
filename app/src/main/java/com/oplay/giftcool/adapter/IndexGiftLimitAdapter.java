@@ -4,11 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.List;
 
@@ -34,8 +33,7 @@ public class IndexGiftLimitAdapter extends BGARecyclerViewAdapter<IndexGiftNew> 
 		bgaViewHolderHelper.setText(R.id.tv_game_name, o.gameName);
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
 		bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(o.remainCount));
-		ImageLoader.getInstance().displayImage(o.img, bgaViewHolderHelper.<ImageView>getView(R.id
-				.iv_icon), Global.IMAGE_OPTIONS);
+		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -84,7 +84,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		super.onLayout(changed, left, top, right, bottom);
 
 		// 初始化ListView对象
-		if (mListView == null) {
+		if (mListView == null && mRecyclerView == null) {
 			getListView();
 		}
 	}
@@ -100,6 +100,22 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 				mListView = (ListView) childView;
 				// 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
 				mListView.setOnScrollListener(this);
+			} else if (childView instanceof  RecyclerView) {
+				mRecyclerView = (RecyclerView) childView;
+				mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+					@Override
+					public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+						super.onScrollStateChanged(recyclerView, newState);
+					}
+
+					@Override
+					public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+						super.onScrolled(recyclerView, dx, dy);
+						if (canLoad()) {
+							loadData();
+						}
+					}
+				});
 			}
 		}
 	}
