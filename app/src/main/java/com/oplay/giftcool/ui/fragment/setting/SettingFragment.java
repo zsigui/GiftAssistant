@@ -192,7 +192,7 @@ public class SettingFragment extends BaseFragment {
 			case R.id.rl_logout:
 				// 调用登出接口，但不关心结果
 				final ConfirmDialog logoutDialog = ConfirmDialog.newInstance();
-				logoutDialog.setContent(getResources().getString(R.string.st_content_clear_cache));
+				logoutDialog.setContent(getResources().getString(R.string.st_content_logout));
 				logoutDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 					@Override
 					public void onCancel() {

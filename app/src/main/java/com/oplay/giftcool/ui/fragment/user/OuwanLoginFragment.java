@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -44,8 +44,9 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	private EditText etUser;
 	private TextView tvClear;
 	private EditText etPwd;
-	private CheckedTextView ctvAgreeLaw;
-	private TextView tvLaw;
+	//使用条款先注释掉，估计后面还要改回来
+//	private CheckedTextView ctvAgreeLaw;
+//	private TextView tvLaw;
 	private TextView btnLogin;
 	private TextView tvAnotherLogin;
 	private TextView tvForgetPwd;
@@ -60,8 +61,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		etUser = getViewById(R.id.et_input);
 		tvClear = getViewById(R.id.tv_clear);
 		etPwd = getViewById(R.id.et_pwd);
-		ctvAgreeLaw = getViewById(R.id.ctv_law);
-		tvLaw = getViewById(R.id.tv_law);
+//		ctvAgreeLaw = getViewById(R.id.ctv_law);
+//		tvLaw = getViewById(R.id.tv_law);
 		btnLogin = getViewById(R.id.btn_send);
 		tvAnotherLogin = getViewById(R.id.tv_another_login);
 		tvForgetPwd = getViewById(R.id.tv_forget_pwd);
@@ -72,8 +73,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	@Override
 	protected void setListener() {
 		btnLogin.setOnClickListener(this);
-		tvLaw.setOnClickListener(this);
-		ctvAgreeLaw.setOnClickListener(this);
+//		tvLaw.setOnClickListener(this);
+//		ctvAgreeLaw.setOnClickListener(this);
 		tvAnotherLogin.setOnClickListener(this);
 		tvClear.setOnClickListener(this);
 		tvForgetPwd.setOnClickListener(this);
@@ -84,7 +85,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		InputTextUtil.initPswFilter(etUser, etPwd, tvClear, btnLogin);
-		ctvAgreeLaw.setChecked(true);
+//		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
 		etUser.requestFocus();
 		InputMethodUtil.showSoftInput(getActivity());
@@ -103,19 +104,19 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			case R.id.btn_send:
 				handleLogin();
 				break;
-			case R.id.tv_law:
-				// 显示条款弹窗
-				break;
+//			case R.id.tv_law:
+//				 显示条款弹窗
+//				break;
 			case R.id.tv_forget_pwd:
-
+				OuwanSDKManager.getInstance().showForgetPswView(getContext());
 				break;
-			case R.id.ctv_law:
-				if (ctvAgreeLaw.isChecked()) {
-					ctvAgreeLaw.setChecked(false);
-				} else {
-					ctvAgreeLaw.setChecked(true);
-				}
-				break;
+//			case R.id.ctv_law:
+//				if (ctvAgreeLaw.isChecked()) {
+//					ctvAgreeLaw.setChecked(false);
+//				} else {
+//					ctvAgreeLaw.setChecked(true);
+//				}
+//				break;
 			case R.id.tv_another_login:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 						PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),

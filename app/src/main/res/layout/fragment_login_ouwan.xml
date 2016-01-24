@@ -44,34 +44,44 @@
 
 	</LinearLayout >
 
-	<LinearLayout
+	<!--<LinearLayout-->
+			<!--android:layout_width = "match_parent"-->
+			<!--android:layout_height = "wrap_content"-->
+			<!--android:paddingLeft = "@dimen/di_login_padding_left_right"-->
+			<!--android:paddingTop = "@dimen/di_login_padding_gap" >-->
+
+		<!--<CheckedTextView-->
+				<!--android:id = "@+id/ctv_law"-->
+				<!--android:layout_width = "wrap_content"-->
+				<!--android:layout_height = "wrap_content"-->
+				<!--android:checked = "true"-->
+				<!--android:text = ""-->
+				<!--android:drawableLeft = "@drawable/selector_item_check" />-->
+
+		<!--<TextView-->
+				<!--style = "@style/DefaultTextView.Text"-->
+				<!--android:textSize = "10sp"-->
+				<!--android:paddingLeft = "5dp"-->
+				<!--android:paddingRight = "5dp"-->
+				<!--android:text = "@string/st_login_law_a" />-->
+
+		<!--<TextView-->
+				<!--android:id = "@+id/tv_law"-->
+				<!--style = "@style/DefaultTextView.LoginPoint"-->
+				<!--android:textSize = "10sp"-->
+				<!--android:clickable = "true"-->
+				<!--android:text = "@string/st_login_law_b" />-->
+	<!--</LinearLayout >-->
+
+	<TextView
+			style="@style/DefaultTextView.Text"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:paddingLeft = "@dimen/di_login_padding_left_right"
-			android:paddingTop = "@dimen/di_login_padding_gap" >
-
-		<CheckedTextView
-				android:id = "@+id/ctv_law"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:checked = "true"
-				android:text = ""
-				android:drawableLeft = "@drawable/selector_item_check" />
-
-		<TextView
-				style = "@style/DefaultTextView.Text"
-				android:textSize = "10sp"
-				android:paddingLeft = "5dp"
-				android:paddingRight = "5dp"
-				android:text = "@string/st_login_law_a" />
-
-		<TextView
-				android:id = "@+id/tv_law"
-				style = "@style/DefaultTextView.LoginPoint"
-				android:textSize = "10sp"
-				android:clickable = "true"
-				android:text = "@string/st_login_law_b" />
-	</LinearLayout >
+			android:layout_marginTop="15dp"
+			android:paddingLeft="@dimen/di_login_padding_left_right"
+	        android:text="@string/st_login_notice"
+	        android:gravity="left|center_vertical"
+			/>
 
 	<TextView
 			android:id = "@+id/btn_send"

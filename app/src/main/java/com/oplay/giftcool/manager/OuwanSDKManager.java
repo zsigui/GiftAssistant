@@ -186,6 +186,10 @@ public class OuwanSDKManager implements InitCallbackListener {
 		jumpToDestUrl(context, "绑定偶玩账号", "bindoauth");
 	}
 
+	public void showForgetPswView(Context context) {
+		UmipaySDKManager.showRegetPswView(context);
+	}
+
 	private void jumpToDestUrl(Context context, String title, String dest) {
 		String url = SDKConstantConfig.get_UMIPAY_JUMP_URL(context);
 		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(context,
