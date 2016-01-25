@@ -215,5 +215,5 @@ public class NetUrl {
 	/**
 	 * 应用版本更新
 	 */
-	public static final String APP_VERSION_UPDATE = "default";
+	public static final String APP_VERSION_UPDATE = "update_version";
 }

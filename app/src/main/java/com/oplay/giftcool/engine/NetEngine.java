@@ -27,6 +27,7 @@ import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
+import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -47,9 +48,17 @@ import retrofit.http.Url;
  */
 public interface NetEngine {
 
+	/**
+	 * 应用初始化接口
+	 */
 	@POST(NetUrl.APP_INIT)
 	Call<JsonRespBase<InitAppResult>> initAPP(@Body JsonReqBase<ReqInitApp> reqData);
 
+	/**
+	 * 更新版本
+	 */
+	@POST(NetUrl.APP_VERSION_UPDATE)
+	Call<JsonRespBase<UpdateInfo>> checkUpdate(@Body JsonReqBase<ReqInitApp> reqData);
 
 	/**
 	 * 游戏/礼包搜索

@@ -2,7 +2,6 @@ package com.oplay.giftcool.asynctask;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;

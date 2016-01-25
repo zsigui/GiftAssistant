@@ -483,8 +483,13 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		final String downloadUrl = fileDownloadTask.getRawDownloadUrl();
 		if (downloadUrl != null) {
 			IndexGameNew info = mUrl_AppInfo.get(downloadUrl);
-			if (info != null && totalLength > 0) {
-				info.completeSize = completeLength;
+			if (info != null) {
+				if (totalLength > 0) {
+					info.apkFileSize = totalLength;
+				}
+				if (completeLength > 0) {
+					info.completeSize = completeLength;
+				}
 			}
 		}
 		notifyProgressUpdateListeners(downloadUrl, percent, speedBytes);

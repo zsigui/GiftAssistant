@@ -37,6 +37,8 @@ public class ObserverManager {
 
 	private ArrayList<GiftUpdateListener> mGiftObservers = new ArrayList<>();
 
+	private ArrayList<UserActionListener> mUserActionListeners = new ArrayList<>();
+
 	public void addUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
 		mUserObservers.add(observer);
@@ -55,6 +57,16 @@ public class ObserverManager {
 	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
 		mGiftObservers.remove(observer);
+	}
+
+	public void addUserActionListener(UserActionListener observer) {
+		if (observer == null) return;
+		mUserActionListeners.add(observer);
+	}
+
+	public void removeActionListener(UserActionListener observer) {
+		if (observer == null) return;
+		mUserActionListeners.remove(observer);
 	}
 
 	public void notifyUserUpdate() {
@@ -93,6 +105,15 @@ public class ObserverManager {
 		}
 	}
 
+	public void notifyUserActionUpdate(int action, int code) {
+		for (UserActionListener observer : mUserActionListeners) {
+			if (observer != null) {
+
+				observer.onUserActionFinish(action, code);
+			}
+		}
+	}
+
 
 	/**
 	 * 账号状态变更监听接口
@@ -106,5 +127,18 @@ public class ObserverManager {
 	 */
 	public interface GiftUpdateListener {
 		void onGiftUpdate();
+	}
+
+	public interface UserActionListener {
+		public static final int ACTION_DEFAULT = 0;
+		public static final int ACTION_MODIFY_PSW = 1;
+		public static final int ACTION_CHANGE_PHONE = 2;
+		public static final int ACTION_BIND_PHONE = 3;
+		public static final int ACTION_BIND_OUWAN = 4;
+
+		public static final int ACTION_CODE_DEFAULT = -1;
+		public static final int ACTION_CODE_FAILED = 0;
+		public static final int ACTION_CODE_SUCCESS = 1;
+		void onUserActionFinish(int action, int code);
 	}
 }

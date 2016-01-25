@@ -55,11 +55,21 @@ import java.util.List;
  *         description
  */
 public class UmipayBrowser extends Activity implements Interface_SDK_Handler, Interface_Js_View_TitleSetable,
-		View.OnClickListener{
+		View.OnClickListener {
 
 	public static final int NOT_PAY = 0;//不是充值
 	public static final int PAY_GAME = 1;//游戏充值
 	public static final int PAY_OUWAN = 2;//偶玩豆充值
+
+	public static final int ACTION_DEFAULT = 0;
+	public static final int ACTION_MODIFY_PSW = 1;
+	public static final int ACTION_CHANGE_PHONE = 2;
+	public static final int ACTION_BIND_PHONE = 3;
+	public static final int ACTION_BIND_OUWAN = 4;
+
+	public static final int ACTION_CODE_DEFAULT = -1;
+	public static final int ACTION_CODE_FAILED = 0;
+	public static final int ACTION_CODE_SUCCESS = 1;
 
 	/**
 	 * session of Activity，会话，如果会话不存在则自动关闭Activity，这样的做法是为了防止进程结束重启的情况导致业务流程错误。
@@ -77,6 +87,7 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	private static final String KEY_BROWSER_LOAD_JS_FILE_URL = "gVygD7wQw8Li";
 	private static final String KEY_POST_DATA = "SZdsfBrNTwaq";
 	private static final String KEY_PAY_TYPE = "paytype";
+	private static final String KEY_ACTION_TYPE = "action";
 	/**
 	 * 标题栏
 	 */
@@ -99,6 +110,9 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	private View_SDKWebPage mWebPage;
 	//支付状态
 	private int mPayCode = 0;
+	//操作状态
+	private int mActionCode = 0;
+	private int mActionType = 0;
 
 	public static void preLoadUrl(Context context, String url) {
 		View_SDKWebPage preLoadWebPage = new View_SDKWebPage(context, null,
@@ -141,6 +155,37 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 			intent.putExtra(KEY_ACTIVITY_SESSION,
 					Global_Data_Offers.getUmipayOffersActivitySession());
 			intent.putExtra(KEY_PAY_TYPE, payType);
+			if (allPageLoadJsCode != null) {
+				intent.putExtra(KEY_BROWSER_LOAD_JS_CODE, allPageLoadJsCode);
+			}
+			if (allPageLoadJsFileUrl != null) {
+				intent.putExtra(KEY_BROWSER_LOAD_JS_FILE_URL,
+						allPageLoadJsFileUrl);
+			}
+
+			if (paramsList != null && paramsList.size() > 0) {
+				intent.putExtra(KEY_POST_DATA, generatePostData(paramsList));
+			}
+
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(intent);
+
+		} catch (Throwable e) {
+			Debug_Log.e(e);
+		}
+	}
+
+	public static void postUrl(Context context, String title, String url, List<NameValuePair> paramsList, int flags,
+	                           String allPageLoadJsCode, String allPageLoadJsFileUrl, int payType, int actionType) {
+		try {
+			Intent intent = new Intent(context, UmipayBrowser.class);
+			intent.putExtra(KEY_TITLE, title);
+			intent.putExtra(KEY_URL, url);
+			intent.putExtra(KEY_FLAGS, flags);
+			intent.putExtra(KEY_ACTIVITY_SESSION,
+					Global_Data_Offers.getUmipayOffersActivitySession());
+			intent.putExtra(KEY_PAY_TYPE, payType);
+			intent.putExtra(KEY_ACTION_TYPE, actionType);
 			if (allPageLoadJsCode != null) {
 				intent.putExtra(KEY_BROWSER_LOAD_JS_CODE, allPageLoadJsCode);
 			}
@@ -227,6 +272,7 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 				mPostData = intent.getStringExtra(KEY_POST_DATA);
 				mFlags = intent.getIntExtra(KEY_FLAGS, 0);
 				mPayType = intent.getIntExtra(KEY_PAY_TYPE, 0);
+				mActionType = intent.getIntExtra(KEY_ACTION_TYPE, ACTION_DEFAULT);
 			} catch (Throwable e) {
 				Debug_Log.e(e);
 			}
@@ -253,9 +299,9 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 		mWebPage = new View_SDKWebPage(this, this, mFlags, this, mAllPageJsCode, mAllPageLoadJsFileUrl, 0, factory);
 		mWebPage.setYoumiWebViewClient(new UmipayWebViewClinet());
 		mWebPage.getCurrentView().setPadding(0, 0, 0, 0);
-		if(Build.VERSION.SDK_INT  >= 19){
+		if (Build.VERSION.SDK_INT >= 19) {
 			//android4.4以上webview硬件加速时会导致渲染异常，背景设置透明失效，先禁止硬件加速
-			mWebPage.getCurrentView().setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+			mWebPage.getCurrentView().setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 		mContentLayout.addView(mWebPage.getCurrentView(), new LinearLayout.LayoutParams(LinearLayout.LayoutParams
 				.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -322,6 +368,10 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 		if (isPayPage()) {
 			mPayCode = code;
 		}
+	}
+
+	public void setActionCode(int actionCode) {
+		mActionCode = actionCode;
 	}
 
 	public void logout_CloseBrowser() {
@@ -515,6 +565,9 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	protected void onDestroy() {
 		if (isPayPage() && mPayType == PAY_GAME) {
 			ListenerManager.callbackPay(mPayCode);
+		}
+		if (mActionType != ACTION_DEFAULT) {
+			ListenerManager.callbackAction(mActionType, mActionCode);
 		}
 		if (mWebPage != null) {
 			mWebPage.exitBrowser();

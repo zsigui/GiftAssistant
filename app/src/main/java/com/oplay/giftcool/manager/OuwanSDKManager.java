@@ -1,6 +1,7 @@
 package com.oplay.giftcool.manager;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -10,6 +11,7 @@ import com.oplay.giftcool.util.ChannelUtil;
 import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
+import net.ouwan.umipay.android.api.ActionCallbackListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
@@ -21,6 +23,7 @@ import net.ouwan.umipay.android.api.UmipaymentInfo;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
 import net.ouwan.umipay.android.entry.UmipayAccount;
 import net.ouwan.umipay.android.global.Global_Url_Params;
+import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
 import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.webjs.view.webview.Flags_Browser_Config;
@@ -33,9 +36,10 @@ import java.util.List;
 /**
  * Created by zsigui on 16-1-14.
  */
-public class OuwanSDKManager implements InitCallbackListener {
+public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener {
 
 	private Context mContext = AssistantApp.getInstance().getApplicationContext();
+	private Handler mHandler = new Handler(mContext.getMainLooper());
 
 	private static OuwanSDKManager manager = new OuwanSDKManager();
 
@@ -67,6 +71,7 @@ public class OuwanSDKManager implements InitCallbackListener {
 
 			}
 		});
+		ListenerManager.setActionCallbackListener(this);
 	}
 
 	public void login() {
@@ -171,26 +176,26 @@ public class OuwanSDKManager implements InitCallbackListener {
 	}
 
 	public void showOuwanModifyPwdView(Context context) {
-		jumpToDestUrl(context, "修改登录密码", "modifypsw");
+		jumpToDestUrl(context, "修改登录密码", "modifypsw", UmipayBrowser.ACTION_MODIFY_PSW);
 	}
 
 	public void showChangePhoneView(Context context) {
-		jumpToDestUrl(context, "修改绑定手机", "changephone");
+		jumpToDestUrl(context, "修改绑定手机", "changephone", UmipayBrowser.ACTION_CHANGE_PHONE);
 	}
 
 	public void showBindPhoneView(Context context) {
-		jumpToDestUrl(context, "绑定手机号码", "bindphone");
+		jumpToDestUrl(context, "绑定手机号码", "bindphone", UmipayBrowser.ACTION_BIND_PHONE);
 	}
 
 	public void showBindOuwanView(Context context) {
-		jumpToDestUrl(context, "绑定偶玩账号", "bindoauth");
+		jumpToDestUrl(context, "绑定偶玩账号", "bindoauth", UmipayBrowser.ACTION_BIND_OUWAN);
 	}
 
 	public void showForgetPswView(Context context) {
 		UmipaySDKManager.showRegetPswView(context);
 	}
 
-	private void jumpToDestUrl(Context context, String title, String dest) {
+	private void jumpToDestUrl(Context context, String title, String dest, int actionType) {
 		String url = SDKConstantConfig.get_UMIPAY_JUMP_URL(context);
 		List<NameValuePair> paramsList = Global_Url_Params.getDefaultRequestParams(context,
 				SDKConstantConfig.get_UMIPAY_ACCOUNT_URL(context));
@@ -198,6 +203,16 @@ public class OuwanSDKManager implements InitCallbackListener {
 		paramsList.add(new BasicNameValuePair("dest", dest));
 		paramsList.add(new BasicNameValuePair("from", "giftcool"));
 		UmipayBrowser.postUrl(context, title, url, paramsList, Flags_Browser_Config.FLAG_AUTO_CHANGE_TITLE |
-				Flags_Browser_Config.FLAG_USE_YOUMI_JS_INTERFACES, null, null, payType);
+				Flags_Browser_Config.FLAG_USE_YOUMI_JS_INTERFACES, null, null, payType, actionType);
+	}
+
+	@Override
+	public void onActionCallback(final int action, final int code) {
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				ObserverManager.getInstance().notifyUserActionUpdate(action, code);
+			}
+		});
 	}
 }

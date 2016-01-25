@@ -40,6 +40,23 @@ public class Basic_StringUtil {
 		return true;
 	}
 
+	public static boolean isNullOrEmpty(String str) {
+		try {
+			if (str == null) {
+				return true;
+			}
+			if (str.trim().length() == 0) {
+				return true;
+			}
+			return false;
+		} catch (Throwable e) {
+			if (Debug_SDK.isBasicLog) {
+				Debug_SDK.te(Debug_SDK.mBasicTag, Basic_StringUtil.class, e);
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * 获取非null的字符串，如果为null，则返回空串
 	 *

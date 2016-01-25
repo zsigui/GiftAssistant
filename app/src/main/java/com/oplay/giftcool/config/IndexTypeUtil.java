@@ -10,6 +10,7 @@ public class IndexTypeUtil {
 	 */
 	public static final int TAG_POSITION = 0xFFF11133;
 	public static final int TAG_URL = 0xffff1111;
+	public static final int TAG_VIEW = 0xffff1144;
 
 	/*
 	 * 单纯头部内容的module

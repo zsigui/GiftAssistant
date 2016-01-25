@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
+import net.ouwan.umipay.android.api.ActionCallbackListener;
 import net.ouwan.umipay.android.api.InitCallbackListener;
 import net.ouwan.umipay.android.api.PayCallbackListener;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
@@ -21,6 +22,7 @@ import net.ouwan.umipay.android.interfaces.Interface_Account_Listener_Login;
 import net.ouwan.umipay.android.interfaces.Interface_Account_Listener_Register;
 import net.ouwan.umipay.android.interfaces.Interface_GetPush_Listener;
 import net.ouwan.umipay.android.interfaces.Interface_Verificate_SMS_Listener;
+import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * ListenerManager
@@ -44,6 +46,8 @@ public class ListenerManager {
 	private static Interface_Account_Listener_Register mCommandRegistListener;
 
 	private static Interface_GetPush_Listener mCommandGetPushListener;
+
+	private static ActionCallbackListener mActionCallbackListener;
 
 	private static Handler mHandler = new InternalHandler(Looper.getMainLooper());
 
@@ -105,6 +109,14 @@ public class ListenerManager {
 		mCommandGetPushListener = commandGetPushListener;
 	}
 
+	public static ActionCallbackListener getActionCallbackListener() {
+		return mActionCallbackListener;
+	}
+
+	public static void setActionCallbackListener(ActionCallbackListener mActionCallbackListener) {
+		ListenerManager.mActionCallbackListener = mActionCallbackListener;
+	}
+
 	public static void callbackInitFinish(int code, String msg) {
 		try {
 			mInitCallbackListener.onSdkInitFinished(code, msg);
@@ -120,6 +132,21 @@ public class ListenerManager {
 			}
 		} catch (Throwable e) {
 			Debug_Log.e(e);
+		}
+	}
+
+	public static void callbackAction(final int action, final int code) {
+		try {
+			if (mActionCallbackListener != null) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						mActionCallbackListener.onActionCallback(action, code);
+					}
+				}).start();
+			}
+		} catch (Throwable e) {
+			Debug_SDK.e(e);
 		}
 	}
 

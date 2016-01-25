@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 
 /**
@@ -58,10 +59,10 @@ public class ViewUtil {
 
 	public static void showImage(ImageView iv, String img) {
 		try {
-			if (iv.getTag() == null || !(iv.getTag()).equals(img)) {
+			if (iv.getTag(IndexTypeUtil.TAG_VIEW) == null || !(iv.getTag(IndexTypeUtil.TAG_VIEW)).equals(img)) {
 				ImageViewAware viewAware = new ImageViewAware(iv, false);
 				ImageLoader.getInstance().displayImage(img, viewAware, Global.IMAGE_OPTIONS);
-				iv.setTag(img);
+				iv.setTag(IndexTypeUtil.TAG_VIEW, img);
 			}
 		} catch (Exception e) {
 			// 通常ImageLoader未初始化完成调用报错，先设置默认图片

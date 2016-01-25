@@ -63,6 +63,8 @@ public class JsModel_Browser_PayExtent_Js_Interface_Factory extends
 					return new JsHandler_Push_Notification();
 				case 14:
 					return new JsHandler_Pay_With_WECHAT();
+				case 15:
+					return new JsHandler_Action_CallBack();
 				default:
 					break;
 			}
