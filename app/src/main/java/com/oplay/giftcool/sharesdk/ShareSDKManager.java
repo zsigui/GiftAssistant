@@ -46,8 +46,9 @@ public class ShareSDKManager {
 		return mInstance;
 	}
 
-	public void share(final FragmentManager fragmentManager, final String title, final String description,
-	                  final String url, final String iconUrl, final Bitmap iconBitmap) {
+	public void share(final FragmentManager fragmentManager, final Context context, final String title,
+	                  final String description, final String b_desc, final String url, final String iconUrl,
+	                  final Bitmap iconBitmap) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.logMethodWithParams(this, "\ntitle;" + title, "\ndescription" + description +
@@ -58,14 +59,18 @@ public class ShareSDKManager {
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
 /*			shareList.add(new Share_QQ_Friends(mContext));
 			shareList.add(new Share_QQ_Zone(mContext));*/
-			shareList.add(new Share_More(mContext));
+			shareList.add(new Share_More(context));
 			final ShareDialog dialog = ShareDialog.newInstance(mContext.getResources().getString(R.string
 					.st_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
 				@Override
 				public void onItemClick(IShare item, View view, int position) {
 					dialog.dismissAllowingStateLoss();
-					item.share(title, description, url, iconUrl, iconBitmap);
+					if (item instanceof Share_More) {
+						item.share(title, b_desc, url, iconUrl, iconBitmap);
+					} else {
+						item.share(title, description, url, iconUrl, iconBitmap);
+					}
 				}
 			});
 			dialog.setAdapter(adapter);

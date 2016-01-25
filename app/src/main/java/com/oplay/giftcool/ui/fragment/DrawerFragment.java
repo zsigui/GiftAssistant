@@ -133,33 +133,51 @@ public class DrawerFragment extends BaseFragment {
 		models.add(new DrawerModel(R.drawable.ic_drawer_gift, "我的礼包", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpMyGift(getContext());
+				if (AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpMyGift(getContext());
+				} else {
+					IntentUtil.jumpLogin(getContext());
+				}
 				closeDrawer();
+
 			}
 		}));
 		models.add(new DrawerModel(R.drawable.ic_drawer_wallet, "我的钱包", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpMyWallet(getContext());
+				if (AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpMyWallet(getContext());
+				} else {
+					IntentUtil.jumpLogin(getContext());
+				}
 				closeDrawer();
 			}
 		}));
 		models.add(new DrawerModel(R.drawable.ic_drawer_score_task, "每日任务", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpEarnScore(getContext());
+				if (AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpEarnScore(getContext());
+				} else {
+					IntentUtil.jumpLogin(getContext());
+				}
 				closeDrawer();
 			}
 		}));
 		models.add(new DrawerModel(R.drawable.ic_drawer_message, "消息中心", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.showShort("敬请期待");
+				if (AccountManager.getInstance().isLogin()) {
+					ToastUtil.showShort("敬请期待");
+				} else {
+					IntentUtil.jumpLogin(getContext());
+				}
 				closeDrawer();
 			}
 		}));
 		if (AssistantApp.getInstance().isAllowDownload()) {
 			models.add(new DrawerModel(R.drawable.ic_drawer_download, "下载管理", new View.OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
 					IntentUtil.jumpDownloadManager(getContext());

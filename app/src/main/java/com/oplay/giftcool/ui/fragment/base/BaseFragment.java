@@ -160,8 +160,10 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	protected void refreshFailEnd() {
+		KLog.d("misNotifyRefresh = " + mIsNotifyRefresh + ", mIsSwipeRefresh = " + mIsSwipeRefresh);
 		if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
 			if (mViewManager != null) {
+				KLog.d("showErrorRetry");
 				mViewManager.showErrorRetry();
 			}
 			mHasData = false;
@@ -255,11 +257,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	@Override
 	public void onGiftUpdate() {
-		KLog.e("mHasData = " + mHasData + ", mIsRefresh = " + mIsLoading);
 		if (mIsSwipeRefresh || mIsNotifyRefresh) {
 			return;
 		}
-		KLog.e("mHasData = " + mHasData + ", mIsRefresh = " + mIsLoading);
 		mIsNotifyRefresh = true;
 		lazyLoad();
 	}

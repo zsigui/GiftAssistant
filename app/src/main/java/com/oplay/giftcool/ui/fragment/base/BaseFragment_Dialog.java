@@ -144,6 +144,8 @@ public abstract class BaseFragment_Dialog extends DialogFragment implements View
 			case R.id.btn_confirm:
 				if (mListener != null) {
 					mListener.onConfirm();
+				} else {
+					this.dismiss();
 				}
 				break;
 			case R.id.btn_cancel:

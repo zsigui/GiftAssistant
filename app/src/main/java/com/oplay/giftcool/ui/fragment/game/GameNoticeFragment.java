@@ -37,6 +37,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	private RecyclerView mDataView;
 	private GameNoticeAdapter mAdapter;
+	private long mMaintainDataTime = 0;
 
 	public static GameNoticeFragment newInstance() {
 		return new GameNoticeFragment();
@@ -106,9 +107,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		                                KLog.e(AppDebugConfig.TAG_FRAG, t);
 	                                }
 	                                refreshFailEnd();
-                                    OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
-                                    setLoadState(backObj.data, backObj.isEndPage);
-                                    updateData(backObj.data);
+//                                    OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
+//                                    setLoadState(backObj.data, backObj.isEndPage);
+//                                    updateData(backObj.data);
                                 }
                             });
                 } else {
@@ -150,9 +151,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                     public void onFailure(Throwable t) {
 	                                    moreLoadFailEnd();
 
-                                        OneTypeDataList<IndexGameNew> backObj = initStashMoreRefreshData();
-                                        setLoadState(backObj.data, backObj.isEndPage);
-                                        addMoreData(backObj.data);
+//                                        OneTypeDataList<IndexGameNew> backObj = initStashMoreRefreshData();
+//                                        setLoadState(backObj.data, backObj.isEndPage);
+//                                        addMoreData(backObj.data);
                                     }
                                 });
                     } else {
@@ -180,45 +181,45 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         mLastPage += 1;
     }
 
-    public OneTypeDataList<IndexGameNew> initStashRefreshData() {
-        OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
-        obj.data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            IndexGameNew game = new IndexGameNew();
-            game.id = i + 1;
-            game.name = "全民神将-攻城战";
-            game.newCount = 2;
-            game.playCount = 53143;
-            game.totalCount = 12;
-            game.giftName = "至尊礼包";
-            game.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
-            game.size = "" + (0.8 * i + 10 * i);
-            obj.data.add(game);
-        }
-        obj.page = 1;
-        obj.isEndPage = false;
-        return obj;
-    }
-
-    public OneTypeDataList<IndexGameNew> initStashMoreRefreshData() {
-        OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
-        obj.data = new ArrayList<>();
-        for (int i = mLastPage * 10; i < 10 + mLastPage * 10; i++) {
-            IndexGameNew game = new IndexGameNew();
-            game.id = i + 1;
-            game.name = "鬼吹灯之挖挖乐";
-            game.newCount = 2;
-            game.playCount = 53143;
-            game.totalCount = 12;
-            game.giftName = "高级礼包";
-            game.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
-            game.size = "" + (0.8 * i + 10 * i);
-            obj.data.add(game);
-        }
-        obj.page = mLastPage + 1;
-        obj.isEndPage = true;
-        return obj;
-    }
+//    public OneTypeDataList<IndexGameNew> initStashRefreshData() {
+//        OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
+//        obj.data = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            IndexGameNew game = new IndexGameNew();
+//            game.id = i + 1;
+//            game.name = "全民神将-攻城战";
+//            game.newCount = 2;
+//            game.playCount = 53143;
+//            game.totalCount = 12;
+//            game.giftName = "至尊礼包";
+//            game.img = "http://owan-avatar.ymapp.com/app/10986/icon/icon_1449227350.png_140_140_100.png";
+//            game.size = "" + (0.8 * i + 10 * i);
+//            obj.data.add(game);
+//        }
+//        obj.page = 1;
+//        obj.isEndPage = false;
+//        return obj;
+//    }
+//
+//    public OneTypeDataList<IndexGameNew> initStashMoreRefreshData() {
+//        OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
+//        obj.data = new ArrayList<>();
+//        for (int i = mLastPage * 10; i < 10 + mLastPage * 10; i++) {
+//            IndexGameNew game = new IndexGameNew();
+//            game.id = i + 1;
+//            game.name = "鬼吹灯之挖挖乐";
+//            game.newCount = 2;
+//            game.playCount = 53143;
+//            game.totalCount = 12;
+//            game.giftName = "高级礼包";
+//            game.img = "http://owan-avatar.ymapp.com/app/11061/icon/icon_1450325761.png_140_140_100.png";
+//            game.size = "" + (0.8 * i + 10 * i);
+//            obj.data.add(game);
+//        }
+//        obj.page = mLastPage + 1;
+//        obj.isEndPage = true;
+//        return obj;
+//    }
 
 	@Override
 	public String getPageName() {

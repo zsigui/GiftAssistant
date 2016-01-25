@@ -12,7 +12,9 @@
 
 	<com.makeramen.roundedimageview.RoundedImageView
 			android:id = "@+id/iv_icon"
-			style = "@style/DefaultImageView.Icon"
+			style = "@style/DefaultImageView"
+			android:layout_width="52dp"
+			android:layout_height="52dp"
 			app:riv_oval = "true" />
 
 	<TextView

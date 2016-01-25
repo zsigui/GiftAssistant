@@ -230,17 +230,23 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (mWebView != null) {
-			mWebView.onResume();
-		}
+		try {
+			// 部分手机在调用 onPause 还是会出现mWeiView == null
+			if (mWebView != null) {
+				mWebView.onResume();
+			}
+		} catch (Exception ignored) {}
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		if (mWebView != null) {
-			mWebView.onPause();
-		}
+		try {
+			// 部分手机在调用 onPause 还是会出现mWeiView == null
+			if (mWebView != null) {
+				mWebView.onResume();
+			}
+		} catch (Exception ignored){}
 	}
 
 	public void reloadPage() {

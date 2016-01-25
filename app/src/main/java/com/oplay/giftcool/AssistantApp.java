@@ -78,11 +78,14 @@ public class AssistantApp extends Application {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().build());
 			}
+			KLog.d("Gift Cool App is Start Now");
 		}
 		sInstance = this;
 		TCAgent.init(this, TD_APP_ID, ChannelUtil.getChannelId(this) + "");
 		KLog.init(true);
 		initImageLoader();
+		// 初始配置加载列表
+		initLoadingView();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 

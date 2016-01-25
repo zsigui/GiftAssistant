@@ -3,7 +3,6 @@ package com.oplay.giftcool.adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,34 +13,34 @@ import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.DensityUtil;
-import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
+import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewAdapter;
 import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
  * Created by zsigui on 16-1-7.
  */
-public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
+public class MyGiftListAdapter extends BGAAdapterViewAdapter<IndexGiftNew> {
 
 	private OnItemClickListener<IndexGiftNew> mItemClickListener;
 	private int mType;
 
-	public MyGiftListAdapter(RecyclerView recyclerView, int type) {
-		super(recyclerView, R.layout.item_list_my_gift);
-		this.mType = type;
+	public MyGiftListAdapter(Context context, int type) {
+		super(context, R.layout.item_list_my_gift);
+		mType = type;
 	}
+
 
 	public void setItemClickListener(OnItemClickListener<IndexGiftNew> itemClickListener) {
 		mItemClickListener = itemClickListener;
 	}
 
 	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftNew o) {
+	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final IndexGiftNew o) {
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
 		if (o.isLimit) {
 			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.VISIBLE);
@@ -74,7 +73,9 @@ public class MyGiftListAdapter extends BGARecyclerViewAdapter<IndexGiftNew> {
 		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentUtil.jumpGiftDetail(mContext, o.id);
+				if (mItemClickListener != null) {
+					mItemClickListener.onItemClick(o, v, i);
+				}
 			}
 		});
 	}

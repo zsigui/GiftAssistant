@@ -104,6 +104,7 @@
 				android:layout_toLeftOf = "@+id/ll_send"
 				android:layout_toRightOf = "@+id/tv_remain"
 				android:max = "100"
+				android:visibility="gone"
 				android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
 		<TextView
@@ -118,6 +119,7 @@
 				android:layout_alignBottom = "@+id/rl_icon"
 				android:background = "@color/co_gift_code_bg"
 				android:gravity = "left|center_vertical"
+				android:visibility="gone"
 				android:paddingLeft = "10dp"
 				android:paddingRight = "10dp" />
 
@@ -156,49 +158,64 @@
 		<LinearLayout
 				style = "@style/IndexModuleLayout"
 				android:layout_height = "wrap_content"
-				android:background="@color/co_transparent"
-				android:layout_marginTop = "6dp"
 				android:paddingBottom = "30dp"
-				android:paddingLeft = "15dp"
-				android:paddingRight = "18dp" >
+				android:background="@color/co_transparent">
+			<View
+					android:background="@color/co_common_content_bg"
+					android:layout_width = "match_parent"
+					android:layout_height = "6dp" />
 
 			<TextView
 					style = "@style/DefaultTextView.DetailTitle"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:text = "@string/st_gift_content" />
 
 			<TextView
 					android:id = "@+id/et_content"
 					style = "@style/DefaultTextView.Detail"
 					android:singleLine = "false"
-					android:text = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠" />
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp" />
 
 			<TextView
 					style = "@style/DefaultTextView.DetailTitle"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:text = "@string/st_gift_deadline" />
 
 			<TextView
 					android:id = "@+id/tv_deadline"
 					style = "@style/DefaultTextView.Detail"
-					android:text = "2015.12.10 12:00 ~ 2016.12.10 12:00" />
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp" />
 
 			<TextView
 					style = "@style/DefaultTextView.DetailTitle"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:text = "@string/st_gift_usage" />
 
 			<TextView
 					android:id = "@+id/tv_usage"
 					style = "@style/DefaultTextView.Detail"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:singleLine = "false" />
 
 			<TextView
 					style = "@style/DefaultTextView.DetailTitle"
 					android:text = "@string/st_gift_remark"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:textColor = "@color/co_btn_orange" />
 
 			<TextView
 					android:id = "@+id/tv_remark"
 					style = "@style/DefaultTextView.Detail"
 					android:singleLine = "false"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
 					android:text = "@string/st_gift_hint_content" />
 
 		</LinearLayout >

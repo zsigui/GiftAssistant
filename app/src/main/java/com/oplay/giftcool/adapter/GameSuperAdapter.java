@@ -33,7 +33,6 @@ import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
-import com.oplay.giftcool.ui.widget.transformer.CubePageTransformer;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -132,7 +131,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		} else {
 			mBannerVH.mBanner.setCanLoop(true);
 			mBannerVH.mBanner.setScrollDuration(500);
-			mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
+			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
 			mBannerVH.mBanner.startTurning(3000);
 		}
 	}

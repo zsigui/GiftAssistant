@@ -1,13 +1,11 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MyGiftListAdapter;
-import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -35,7 +33,7 @@ import retrofit.Retrofit;
  */
 public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
-	private RecyclerView mDataView;
+	private ListView mDataView;
 	private MyGiftListAdapter mAdapter;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 	private int mType;
@@ -50,7 +48,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_refresh_rv_container_with_white_bg);
+		initViewManger(R.layout.fragment_refresh_lv_container);
 		mDataView = getViewById(R.id.lv_content);
 	}
 
@@ -67,15 +65,15 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		if (getArguments() != null) {
 			mType = getArguments().getInt(KeyConfig.KEY_DATA);
 		}
-		mAdapter = new MyGiftListAdapter(mDataView, mType);
+		mAdapter = new MyGiftListAdapter(getContext(), mType);
 		mAdapter.setItemClickListener(new OnItemClickListener<IndexGiftNew>() {
 			@Override
 			public void onItemClick(IndexGiftNew item, View view, int position) {
 				IntentUtil.jumpGiftDetail(getContext(), item.id);
 			}
 		});
-		mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+		/*mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));*/
 		mDataView.setAdapter(mAdapter);
 	}
 
@@ -167,11 +165,14 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	}
 
+	private int mCurY;
 	public void updateData(ArrayList<IndexGiftNew> data) {
 		mViewManager.showContent();
 		mHasData = true;
 		mData = data;
+		mCurY = mDataView.getScrollY();
 		mAdapter.updateData(mData);
+		mDataView.smoothScrollBy(mCurY, 0);
 		mLastPage = 1;
 	}
 
@@ -180,12 +181,14 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			return;
 		}
 		mData.addAll(moreData);
+		mCurY = mDataView.getScrollY();
 		mAdapter.updateData(mData);
+		mDataView.smoothScrollBy(mCurY, 0);
 		mLastPage += 1;
 	}
 
 	@Override
 	public String getPageName() {
-		return null;
+		return "我的礼包";
 	}
 }

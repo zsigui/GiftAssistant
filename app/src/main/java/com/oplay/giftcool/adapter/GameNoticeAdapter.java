@@ -56,6 +56,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 			viewHolder.ivGift.setVisibility(View.GONE);
 		}
 		int tagId = R.drawable.ic_notice_other;
+		viewHolder.tvTag.setVisibility(View.GONE);
 		switch (position) {
 			case 0:
 				tagId = R.drawable.ic_notice_first;
@@ -66,8 +67,11 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 			case 2:
 				tagId = R.drawable.ic_notice_third;
 				break;
+			default:
+				viewHolder.tvTag.setVisibility(View.VISIBLE);
 		}
 		viewHolder.ivTag.setImageResource(tagId);
+		viewHolder.tvTag.setText(String.valueOf(position + 1));
 		if (o.playCount < 10000) {
 			viewHolder.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩",
 					o.playCount)));
@@ -98,6 +102,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 	class ViewHolder extends BaseRVHolder {
 		TextView tvName;
 		ImageView ivTag;
+		TextView tvTag;
 		ImageView ivGift;
 		ImageView ivIcon;
 		TextView tvPlay;
@@ -109,6 +114,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 			super(itemView);
 			tvName = getViewById(R.id.tv_name);
 			ivTag = getViewById(R.id.iv_tag);
+			tvTag = getViewById(R.id.tv_tag);
 			ivGift = getViewById(R.id.iv_gift);
 			ivIcon = getViewById(R.id.iv_icon);
 			tvPlay = getViewById(R.id.tv_play);

@@ -26,9 +26,9 @@ public class NetUrl {
 	public static final String GIFT_GET_INDEX = "gift_index";
 
 	/**
-	 * 礼包首页-刷新礼包数据
+	 * 礼包-刷新数据
 	 */
-	public static final String GIFT_REFRESH_INDEX = "today_gift_index";
+	public static final String GIFT_REFRESH = "gift_update";
 
 	/**
 	 * 猜你喜欢

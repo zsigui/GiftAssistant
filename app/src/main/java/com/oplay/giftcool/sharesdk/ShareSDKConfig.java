@@ -20,4 +20,5 @@ public class ShareSDKConfig {
 	/* 分享 */
 	public static final String SHARE_WEXIN_APP_ID = "wxf0794ef08cf93255";
 	public static final String SHARE_QQ_APP_ID = "";
+	public static final int SHARE_REQUEST_CODE = 0xA10;
 }

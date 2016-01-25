@@ -5,6 +5,7 @@ package com.oplay.giftcool.ui.widget.layout;
  */
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -14,9 +15,12 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.socks.library.KLog;
 
 /**
  * 继承自SwipeRefreshLayout,从而实现滑动到底部时上拉加载更多的功能.
@@ -62,6 +66,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * 是否显示加载更多
 	 */
 	private boolean mCanShowLoad = true;
+	private AnimationDrawable mFooterAnimDrawable;
 
 	/**
 	 * @param context
@@ -73,19 +78,41 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	public RefreshLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
+
 		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
 		mViewFooter = LayoutInflater.from(context).inflate(R.layout.view_item_footer, null,
 				false);
+		mFooterAnimDrawable  = (AnimationDrawable)(mViewFooter.findViewById(R.id.iv_anim).getBackground());
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
-
+		KLog.d("onLayout. mRecyclerView = " + mRecyclerView + ", mListView = " + mListView);
 		// 初始化ListView对象
 		if (mListView == null && mRecyclerView == null) {
 			getListView();
+		}
+		KLog.d("onLayout. mRecyclerView = " + mRecyclerView + ", mListView = " + mListView);
+	}
+
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+
+		setColorSchemeResources(R.color.co_btn_red, R.color.co_btn_orange, R.color.co_btn_blue,
+				R.color.co_btn_green);
+	}
+
+	public void setAdapter(ListAdapter adapter) {
+		if (mListView != null) {
+			if (mListView.getFooterViewsCount() == 0) {
+				mListView.addFooterView(mViewFooter);
+			}
+			mListView.setAdapter(adapter);
+			// 添加只是为了在ListView的setAdapter方法时将Adapter包装成HeaderViewListAdapter。因此并不需要footer，因此添加后再移除,
+			mListView.removeFooterView(mViewFooter);
 		}
 	}
 
@@ -93,15 +120,21 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * 获取ListView对象
 	 */
 	private void getListView() {
-		int childs = getChildCount();
-		if (childs > 0) {
+		int childCount = getChildCount();
+		KLog.d("mRecyclerView = " + mRecyclerView + ", mListView = " + mListView + ", childCount = " + childCount);
+		if (childCount > 0) {
 			View childView = getChildAt(0);
+			for (int i = 0; i<getChildCount(); i++) {
+				KLog.d("View = " + getChildAt(i));
+			}
 			if (childView instanceof ListView) {
 				mListView = (ListView) childView;
+				KLog.d("mRecyclerView = " + mRecyclerView + ", mListView = " + mListView);
 				// 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
 				mListView.setOnScrollListener(this);
 			} else if (childView instanceof  RecyclerView) {
 				mRecyclerView = (RecyclerView) childView;
+				KLog.d("mRecyclerView = " + mRecyclerView + ", mListView = " + mListView);
 				mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 					@Override
 					public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -173,9 +206,24 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * 判断是否到了最底部
 	 */
 	private boolean isBottom() {
-
+		KLog.d("mRecyclerView = " + mRecyclerView + ", mListView = " + mListView);
 		if (mListView != null && mListView.getAdapter() != null) {
 			return mListView.getLastVisiblePosition() == (mListView.getAdapter().getCount() - 1);
+		} else if (mRecyclerView != null && mRecyclerView.getLayoutManager() != null) {
+			View lastChildView = mRecyclerView.getLayoutManager()
+					.getChildAt(mRecyclerView.getLayoutManager().getChildCount() - 1);
+			int lastChildBottom = lastChildView.getBottom();
+			int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
+
+			int lastPosition = mRecyclerView.getLayoutManager().getPosition(lastChildView);
+
+			if (lastChildBottom == recyclerBottom
+					&& lastPosition == mRecyclerView.getLayoutManager().getItemCount() - 1) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d("slip to end ");
+				}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -208,12 +256,36 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		isLoading = loading;
 		if (isLoading) {
 			if (mListView != null && mListView.getAdapter() != null) {
-				mListView.addFooterView(mViewFooter);
+				if (mListView.getFooterViewsCount() == 0) {
+					mListView.addFooterView(mViewFooter);
+				} else {
+					mViewFooter.setVisibility(View.VISIBLE);
+				}
+				if (mFooterAnimDrawable != null) {
+					mFooterAnimDrawable.start();
+				}
+
+			} else if (mRecyclerView != null && mRecyclerView.getLayoutManager() != null) {
+				mRecyclerView.addView(mViewFooter);
+				if (mFooterAnimDrawable != null) {
+					mFooterAnimDrawable.start();
+				}
 			}
 		} else {
-			if (mListView != null && mListView.getAdapter() != null
-					&& mListView.getAdapter() instanceof HeaderViewListAdapter) {
-				mListView.removeFooterView(mViewFooter);
+			if (mListView != null && mListView.getAdapter() != null) {
+				if (mListView.getAdapter() instanceof HeaderViewListAdapter) {
+					mListView.removeFooterView(mViewFooter);
+				} else {
+					mViewFooter.setVisibility(View.GONE);
+				}
+				if (mFooterAnimDrawable != null) {
+					mFooterAnimDrawable.stop();
+				}
+			} else if (mRecyclerView != null && mRecyclerView.getLayoutManager() != null) {
+				if (mFooterAnimDrawable != null) {
+					mFooterAnimDrawable.stop();
+				}
+				mRecyclerView.removeView(mViewFooter);
 			}
 			mYDown = 0;
 			mLastY = 0;

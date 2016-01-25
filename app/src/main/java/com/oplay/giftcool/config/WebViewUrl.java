@@ -9,7 +9,7 @@ public class WebViewUrl {
 	public static final String URL_BASE = "http://test.giftcool.ouwan.com/";
 
 	public static final String GAME_DETAIL = URL_BASE + "m/game-detail/";
-	public static final String GIFT_DETAIL = URL_BASE + "m/gift-detail/";
+	public static final String GIFT_DETAIL = URL_BASE + "m/gift/";
 	public static final String OUWAN_BEAN_DETAIL = URL_BASE + "m/ouwan-coin/";
 	public static final String SCORE_DETAIL = URL_BASE + "m/integral/";
 }

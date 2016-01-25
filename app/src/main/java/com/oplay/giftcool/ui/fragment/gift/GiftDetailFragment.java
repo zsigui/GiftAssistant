@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.gift;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -69,7 +70,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	private TextView tvContent;
 	private TextView tvDeadline;
 	private TextView tvUsage;
-	private TextView tvRemark;
 	private GiftButton btnSend;
 	private ProgressBar pbPercent;
 	private TextView tvCode;
@@ -104,7 +104,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		tvContent = getViewById(R.id.et_content);
 		tvDeadline = getViewById(R.id.tv_deadline);
 		tvUsage = getViewById(R.id.tv_usage);
-		tvRemark = getViewById(R.id.tv_remark);
 		btnSend = getViewById(R.id.btn_send);
 		pbPercent = getViewById(R.id.pb_percent);
 		tvCode = getViewById(R.id.tv_gift_code);
@@ -133,15 +132,21 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						ToastUtil.showShort("页面出错，请重新进入");
 						return;
 					}
+
 					// 设置分享成功后奖励类型
 					String title;
+					String b_desc;
 					if (mData.giftData.isLimit) {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
 						title = String.format(getResources().getString(R.string.st_share_limit_pattern),
 								mData.giftData.name);
+						b_desc = String.format(getResources().getString(R.string.st_share_limit_sms_pattern),
+								mData.giftData.name);
 					} else {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
 						title = mData.giftData.name;
+						b_desc = String.format(getResources().getString(R.string.st_share_normal_sms_pattern),
+								mData.giftData.name);
 					}
 
 					String src = null;
@@ -152,9 +157,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						// ImageLoader未初始化完成
 					}
 					ShareSDKManager.getInstance(mApp).share(getChildFragmentManager(),
+							getActivity(),
 							title,
 							mData.giftData.content,
-							WebViewUrl.GIFT_DETAIL + "?" + mData.giftData.id,
+							b_desc,
+							WebViewUrl.GIFT_DETAIL + "?plan_id=" + mData.giftData.id,
 							mData.giftData.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
 									ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
 				}
@@ -187,12 +194,20 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (giftData == null) {
 			return;
 		}
-		tvName.setText(giftData.name);
+		tvName.setText(String.format("[%s]%s", (mData.gameData == null ? "":mData.gameData.name), giftData.name));
 		if (getActivity() instanceof GiftDetailActivity) {
 			if (giftData.isLimit) {
 				((GiftDetailActivity) getActivity()).showLimitTag(true);
 			} else {
 				((GiftDetailActivity) getActivity()).showLimitTag(false);
+			}
+			int type = GiftTypeUtil.getItemViewType(mData.giftData);
+			if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
+					|| type == GiftTypeUtil.TYPE_LIMIT_EMPTY
+					|| type == GiftTypeUtil.TYPE_NORMAL_FINISHED) {
+				((GiftDetailActivity) getActivity()).showShareButton(false);
+			} else {
+				((GiftDetailActivity) getActivity()).showShareButton(true);
 			}
 		}
 		if (giftData.isLimit) {
@@ -265,9 +280,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			tvDeadline.setText(DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm") + " ~ "
 					+ DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm"));
 			tvUsage.setText(giftData.usage);
-			tvRemark.setText(giftData.note);
 			initDownload(mData.gameData);
 		}
+
+
 	}
 
 	public void initDownload(IndexGameNew game) {
@@ -280,7 +296,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		mAppInfo.initAppInfoStatus(getActivity());
 		int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
 				.downloadUrl);
-		btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
+		btnDownload.setStatus(mAppInfo.appStatus, "");
 		btnDownload.setProgress(progress);
 	}
 
@@ -364,10 +380,16 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
 					mAppInfo.downloadStatus = appInfo.downloadStatus;
 					mAppInfo.initAppInfoStatus(getActivity());
-					btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
+					btnDownload.setStatus(mAppInfo.appStatus, "");
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class Share_More extends IShare {
 
 
 	public void share(String title, String description, String url, String iconUrl, Bitmap icon) {
-		ShareUtil.shareText(mContext, title, title + " - " + description + " " + url);
+		ShareUtil.shareText(mContext, title, description + " " + url);
 	}
 
 	@Override

@@ -81,8 +81,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
 		// 初始化网络下载模块
 		assistantApp.initRetrofit();
-		// 初始配置加载列表
-		assistantApp.initLoadingView();
+
 
 		// 初始化设备配置
 		assistantApp.initAppConfig();

@@ -33,8 +33,6 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		if (mRefreshLayout != null) {
 			mRefreshLayout.setOnLoadListener(this);
 			mRefreshLayout.setOnRefreshListener(this);
-			mRefreshLayout.setColorSchemeResources(R.color.co_btn_red, R.color.co_btn_orange, R.color.co_btn_blue,
-					R.color.co_btn_green);
 		}
 		return mContentView;
 	}
@@ -74,15 +72,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	}
 
 	protected void setLoadState(Object data, boolean isEndPage) {
-		if (isEndPage || data == null) {
-			// 无更多不再请求加载
-			ToastUtil.showShort("没有更多");
-			mNoMoreLoad = true;
-			mRefreshLayout.setCanShowLoad(false);
-		} else {
-			mNoMoreLoad = false;
-			mRefreshLayout.setCanShowLoad(true);
-		}
+		mNoMoreLoad = isEndPage || data == null;
 	}
 
 	@Override
@@ -111,6 +101,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		if (mNoMoreLoad) {
 			// return true 显示正在加载更多，return false 不显示
 			ToastUtil.showShort("没有更多新数据");
+			mRefreshLayout.setLoading(false);
+			//mRefreshLayout.setCanShowLoad(false);
+			return;
 		}
 		loadMoreData();
 	}

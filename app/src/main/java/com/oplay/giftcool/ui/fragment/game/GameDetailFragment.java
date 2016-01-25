@@ -111,7 +111,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 					mAppInfo.initAppInfoStatus(getActivity());
 					int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
 							.downloadUrl);
-					btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
+					btnDownload.setStatus(mAppInfo.appStatus, "");
 					btnDownload.setProgress(progress);
 				}
 			}
@@ -127,7 +127,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
 					mAppInfo.downloadStatus = appInfo.downloadStatus;
 					mAppInfo.initAppInfoStatus(getActivity());
-					btnDownload.setStatus(mAppInfo.appStatus, mAppInfo.size);
+					btnDownload.setStatus(mAppInfo.appStatus, "");
 				}
 			}
 		});

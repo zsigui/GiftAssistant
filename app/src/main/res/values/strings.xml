@@ -134,6 +134,11 @@
 	<string name = "st_dialog_pay_title_get_code" >恭喜您！抢号成功！</string >
 	<string name = "st_dialog_pay_score" >积分支付</string >
 	<string name = "st_dialog_pay_bean" >偶玩豆支付</string >
+	<string name = "st_dialog_seize_success" >恭喜，抢号成功！</string >
+	<string name = "st_dialog_seize_failed" >很遗憾，抢号失败！</string >
+	<string name = "st_dialog_search_success" >恭喜，淘号成功！</string >
+	<string name = "st_dialog_search_failed" >很遗憾，淘号失败</string >
+	<string name = "st_dialog_btn_ok" >我知道了</string >
 
 	<string name = "st_dialog_gift_share_title">礼包分享</string>
 	<string name = "st_dialog_gcool_share_title">礼包酷分享</string>

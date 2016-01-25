@@ -31,6 +31,7 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -231,8 +232,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
+	public void jumpToIndexGame(int gamePosition) {
+		setCurSelected(1);
+		if(mGameFragment != null) {
+			mGameFragment.setPagePosition(gamePosition);
+		}
+	}
+
 	@Override
 	public void onUserUpdate() {
+		KLog.d("Main.onUserUpdate");
 		mUser = AccountManager.getInstance().getUserInfo();
 		updateToolBar();
 		handleFirstOpen();

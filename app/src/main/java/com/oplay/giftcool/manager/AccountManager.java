@@ -237,8 +237,8 @@ public class AccountManager {
 		ArrayList<String> cookies = null;
 		if (isLogin()) {
 			cookies = new ArrayList<>();
-			cookies.add("cuid=" + getUserSesion().uid + ";");
-			cookies.add("sessionid=" + getUserSesion().session + ";");
+			cookies.add("cuid=" + getUserSesion().uid + "; HttpOnly");
+			cookies.add("sessionid=" + getUserSesion().session + "; HttpOnly");
 		}
 		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}

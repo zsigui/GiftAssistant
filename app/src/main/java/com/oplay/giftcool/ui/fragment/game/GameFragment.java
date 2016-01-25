@@ -76,6 +76,12 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 
 	}
 
+	public void setPagePosition(int gamePosition) {
+		if (mPager != null && mPager.getAdapter() != null) {
+			mPager.setCurrentItem(gamePosition);
+		}
+	}
+
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {
 
 		public IndexGamePagerAdapter(FragmentManager fm) {

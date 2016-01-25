@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.dialog;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
@@ -12,6 +13,8 @@ public class ConfirmDialog extends BaseFragment_Dialog{
 
 	private TextView tvContent;
 	private String mContent;
+	private int mPositiveVisibility = View.VISIBLE;
+	private int mNegativeVisibility = View.VISIBLE;
 
 	public static ConfirmDialog newInstance() {
 		return new ConfirmDialog();
@@ -26,6 +29,8 @@ public class ConfirmDialog extends BaseFragment_Dialog{
 	@Override
 	protected void processLogic() {
 		setContent(mContent);
+		setPositiveVisibility(mPositiveVisibility);
+		setNegativeVisibility(mNegativeVisibility);
 	}
 
 
@@ -33,6 +38,20 @@ public class ConfirmDialog extends BaseFragment_Dialog{
 		mContent = content;
 		if (tvContent != null) {
 			tvContent.setText(content);
+		}
+	}
+
+	public void setPositiveVisibility(int visibility) {
+		mPositiveVisibility = visibility;
+		if (btnPositive != null) {
+			btnPositive.setVisibility(mPositiveVisibility);
+		}
+	}
+
+	public void setNegativeVisibility(int visibility) {
+		mNegativeVisibility = visibility;
+		if (btnNegative != null) {
+			btnNegative.setVisibility(mNegativeVisibility);
 		}
 	}
 }

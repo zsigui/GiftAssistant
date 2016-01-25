@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/ll_tabs_home"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/di_tab_index_bg_height"
-              android:background="@color/co_tab_index_bg"
-              android:orientation="horizontal">
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:orientation = "vertical"
+		android:layout_height = "@dimen/di_tab_index_bg_height" >
 
-    <CheckedTextView
-		android:id="@+id/ctv_gift"
-        style="@style/CheckedTextNormal.Index"
-        android:drawableTop="@drawable/selector_tab_index_gift"
-        android:text="@string/st_tabs_home_gift"/>
+	<View style = "@style/HDividerView" />
 
-    <CheckedTextView
-		android:id="@+id/ctv_game"
-        style="@style/CheckedTextNormal.Index"
-        android:drawableTop="@drawable/selector_tab_index_game"
-        android:text="@string/st_tabs_index_game"/>
+	<LinearLayout
+			android:id = "@+id/ll_tabs_home"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_tab_index_bg_height"
+			android:background = "@color/co_tab_index_bg"
+			android:orientation = "horizontal" >
 
-</LinearLayout>
+		<CheckedTextView
+				android:id = "@+id/ctv_gift"
+				style = "@style/CheckedTextNormal.Index"
+				android:drawableTop = "@drawable/selector_tab_index_gift"
+				android:text = "@string/st_tabs_home_gift" />
+
+		<CheckedTextView
+				android:id = "@+id/ctv_game"
+				style = "@style/CheckedTextNormal.Index"
+				android:drawableTop = "@drawable/selector_tab_index_game"
+				android:text = "@string/st_tabs_index_game" />
+
+	</LinearLayout >
+</LinearLayout >

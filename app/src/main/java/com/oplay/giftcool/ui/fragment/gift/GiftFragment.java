@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
+import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
@@ -33,15 +35,17 @@ import com.oplay.giftcool.model.data.resp.IndexGiftLimit;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.NestedListView;
-import com.oplay.giftcool.ui.widget.transformer.ZoomStackPageTransformer;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -211,7 +215,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		} else {
 			mBanner.setCanLoop(true);
 			mBanner.setScrollDuration(500);
-			mBanner.getViewPager().setPageTransformer(true, new ZoomStackPageTransformer());
+			//mBanner.getViewPager().setPageTransformer(true, new ZoomStackPageTransformer());
+			mBanner.startTurning(3000);
 		}
 
 	}
@@ -302,20 +307,20 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	}
 
 	private void startClockService() {
-		/*Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().startService(intent);*/
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().startService(intent);
 	}
 
 	private void stopClockService() {
-		/*Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().stopService(intent);*/
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().stopService(intent);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		startClockService();
-		if (mBanner != null){
+		if (mBanner != null) {
 			mBanner.startTurning(3000);
 		}
 	}
@@ -327,6 +332,87 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		if (mBanner != null) {
 			mBanner.stopTurning();
 		}
+	}
+
+	@Override
+	public void onGiftUpdate() {
+		if (mIsSwipeRefresh || mIsNotifyRefresh || mGiftData == null) {
+			return;
+		}
+		mIsNotifyRefresh = true;
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				HashSet<Integer> ids = new HashSet<Integer>();
+				for (IndexGiftNew gift : mGiftData.limit) {
+					ids.add(gift.id);
+				}
+				for (IndexGiftNew gift : mGiftData.news) {
+					ids.add(gift.id);
+				}
+				ReqRefreshGift reqData = new ReqRefreshGift();
+				reqData.ids = ids;
+				Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
+						.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+
+							@Override
+							public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
+							                       Retrofit retrofit) {
+								if (response != null && response.isSuccess()) {
+									if (response.body() != null && response.body().isSuccess()) {
+										// 数据刷新成功，进行更新
+										HashMap<String, IndexGiftNew> respData = response.body().getData();
+										ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+										updateCircle(respData, waitDelIndexs, mGiftData.limit);
+										delIndex(mGiftData.limit, waitDelIndexs);
+										waitDelIndexs.clear();
+										updateCircle(respData, waitDelIndexs, mGiftData.news);
+										delIndex(mGiftData.news, waitDelIndexs);
+										updateData(mGiftData);
+									}
+								}
+								mIsNotifyRefresh = false;
+							}
+
+							@Override
+							public void onFailure(Throwable t) {
+								mIsNotifyRefresh = false;
+							}
+						});
+			}
+		});
+	}
+
+	private void delIndex(ArrayList<IndexGiftNew> data, ArrayList<Integer> waitDelIndexs) {
+		for (int i = waitDelIndexs.size() - 1; i >= 0; i--) {
+			data.remove(waitDelIndexs.get(i).intValue());
+		}
+	}
+
+	private void updateCircle(HashMap<String, IndexGiftNew> respData, ArrayList<Integer> waitDelIndexs,
+	                          ArrayList<IndexGiftNew> gifts) {
+		int i = 0;
+		for (IndexGiftNew gift : gifts) {
+			if (respData.get(gift.id + "") != null) {
+				IndexGiftNew item = respData.get(gift.id + "");
+				setGiftUpdateInfo(gift, item);
+			} else {
+				// 找不到，需要被移除
+				waitDelIndexs.add(i);
+			}
+			i++;
+		}
+	}
+
+	private void setGiftUpdateInfo(IndexGiftNew toBeSet, IndexGiftNew data) {
+		toBeSet.status = data.status;
+		toBeSet.priceType = data.priceType;
+		toBeSet.seizeStatus = data.seizeStatus;
+		toBeSet.searchCount = data.searchCount;
+		toBeSet.searchTime = data.searchTime;
+		toBeSet.totalCount = data.totalCount;
+		toBeSet.remainCount = data.remainCount;
+		toBeSet.code = data.code;
 	}
 
 	@Override

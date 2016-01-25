@@ -241,9 +241,16 @@ public class UploadAvatarFragment extends BaseFragment {
 	private String generateImageStringParam(String filePath) {
 		Bitmap bitmap = BitmapUtil.getBitmap(filePath, 10 * 1024 * 8,
 				AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
-		bitmap = BitmapUtil.createBitmapThumbnail(bitmap, true, 480, 480);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
+		ByteArrayOutputStream baos;
+		int width = AppConfig.UPLOAD_PIC_WIDTH;
+		int height = AppConfig.UPLOAD_PIC_HEIGHT;
+		do {
+			width = width * 2 / 3;
+			height = height * 2 /3;
+			bitmap = BitmapUtil.createBitmapThumbnail(bitmap, true, width, height);
+			baos = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
+		} while (baos.toByteArray().length > 100 * 1024);
 		return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 	}
 

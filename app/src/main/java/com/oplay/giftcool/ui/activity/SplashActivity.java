@@ -16,7 +16,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -41,13 +40,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 			long initDuration = System.currentTimeMillis() - mFirstInitTime;
 			long minSplashDuration = 1234;
 			long maxInitDuration = 4000;
-			if (initDuration > maxInitDuration) {
-				ToastUtil.showShort("初始化失败");
-				mApp.exit();
-				SplashActivity.this.finish();
-				return;
-			}
-			if ((mApp.isGlobalInit() && initDuration > minSplashDuration)) {
+			if ((mApp.isGlobalInit() && initDuration > minSplashDuration) || initDuration > maxInitDuration) {
 				saveImageUrl(mApp.getStartImg());
 				judgeToMain();
 			} else {

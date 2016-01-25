@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.ShareInfo;
+import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 
@@ -31,7 +32,11 @@ public class ShareUtil {
 		sharingIntent.putExtra(Intent.EXTRA_TEXT, shareContent);
 		Intent chooserIntent = Intent.createChooser(sharingIntent, "分享");
 		chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(chooserIntent);
+		if (context instanceof FragmentActivity) {
+			((FragmentActivity) context).startActivityForResult(chooserIntent, ShareSDKConfig.SHARE_REQUEST_CODE);
+		} else {
+			context.startActivity(chooserIntent);
+		}
 	}
 
 	public static void shareToPackage(Context context, ShareInfo info, String shareText) {

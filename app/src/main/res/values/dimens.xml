@@ -30,7 +30,9 @@
 	<dimen name = "di_drawer_item_height">45dp</dimen>
 
 	<!-- 主页 -->
-	<dimen name = "di_tab_index_bg_height" >62dp</dimen >
+	<dimen name = "di_tab_index_bg_height" >55dp</dimen >
+	<dimen name = "di_title_light_width" >6dp</dimen >
+	<dimen name = "di_title_light_padding" >6dp</dimen >
 
 	<dimen name = "di_tool_bar_profile_diameter" >40dp</dimen >
 	<dimen name = "di_tool_bar_padding_left" >16dp</dimen >
@@ -77,7 +79,7 @@
 	<!-- 主页-游戏-分类 -->
 	<dimen name = "di_game_tag_radius" >2dp</dimen >
 	<dimen name = "di_game_tag_padding_top_bottom" >3dp</dimen >
-	<dimen name = "di_game_tag_padding_left_right" >14dp</dimen >
+	<dimen name = "di_game_tag_padding_left_right" >0dp</dimen >
 
 	<!-- 礼包详情 页面 -->
 	<dimen name = "di_detail_header_margin_left" >14dp</dimen >

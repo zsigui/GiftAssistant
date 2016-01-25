@@ -22,6 +22,7 @@ import com.oplay.giftcool.model.data.resp.ScoreMission;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.user.SetNickFragment;
@@ -312,8 +313,13 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			// 跳转登录界面
 			IntentUtil.jumpLogin(getContext());
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
-			// 跳转新游推荐界面
-			IntentUtil.jumpGameNewList(getContext());
+			// 跳转游戏榜单界面
+			if (MainActivity.sGlobalHolder == null) {
+				IntentUtil.jumpGameNewList(getContext());
+			} else {
+				MainActivity.sGlobalHolder.jumpToIndexGame(2);
+				getActivity().finish();
+			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
 			// 分享普通礼包
 			IntentUtil.jumpGiftNewList(getContext());

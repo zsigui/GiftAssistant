@@ -1,7 +1,9 @@
 package com.oplay.giftcool.manager;
 
 import android.content.Context;
+import android.view.View;
 
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -13,6 +15,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.GetCodeDialog;
 import com.oplay.giftcool.ui.fragment.dialog.GiftConsumeDialog;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
@@ -45,6 +48,7 @@ public class PayManager {
 
 
 	private long mLastClickTime = 0;
+	private long mLastDialogClickTime = 0;
 
 	/**
 	 * 执行抢礼包操作
@@ -58,14 +62,20 @@ public class PayManager {
 			IntentUtil.jumpLogin(context);
 			return;
 		}
+		long nowClickTime = System.currentTimeMillis();
+		KLog.e("time = " + (nowClickTime - mLastClickTime));
+		if (nowClickTime - mLastClickTime <= 1000) {
+			return;
+		}
+		mLastClickTime = nowClickTime;
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-				PayManager.getInstance().chargeGift(context, gift, button);
+				chargeGift(context, gift, button);
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 			case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-				PayManager.getInstance().searchGift(context, gift, button);
+				searchGift(context, gift, button);
 				break;
 		}
 	}
@@ -105,11 +115,11 @@ public class PayManager {
 			public void onConfirm() {
 				// 执行抢号操作
 				long nowClickTime = System.currentTimeMillis();
-				if (System.currentTimeMillis() - mLastClickTime <= 2000) {
+				if (nowClickTime - mLastDialogClickTime <= 2000) {
 					ToastUtil.showShort("请求过于频繁，请勿连续点击");
 					return;
 				}
-				mLastClickTime = nowClickTime;
+				mLastDialogClickTime = nowClickTime;
 				// 根据选择类型判断支付方式
 				if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_BEAN) {
 					handleBeanPay(context, gift, button, true);
@@ -154,9 +164,10 @@ public class PayManager {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
-										GetCodeDialog.newInstance(response.body().getData().giftCode)
-												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-														GetCodeDialog.class.getSimpleName());
+										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData().giftCode);
+										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_success));
+										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
 											if (isSeize) {
 												// 抢号状态
@@ -166,11 +177,22 @@ public class PayManager {
 												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
 											}
 										}
+										ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
 										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
 									}
-									ToastUtil.showShort("抢号失败 - " + (response.body() == null ?
-											"解析失败" : response.body().getMsg()));
+									if (response.body() != null) {
+										ConfirmDialog dialog = ConfirmDialog.newInstance();
+										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));
+										dialog.setNegativeVisibility(View.GONE);
+										dialog.setPositiveVisibility(View.VISIBLE);
+										dialog.setPositiveBtnText(context.getResources().getString(R.string.st_dialog_btn_ok));
+										dialog.setContent(response.body().getMsg());
+										dialog.show(((BaseAppCompatActivity)context).getSupportFragmentManager(),
+												"seize failed");
+									} else {
+										ToastUtil.showShort("抢号失败 - 解析失败");
+									}
 									return;
 								}
 								ToastUtil.showShort("抢号失败 - 返回出错");
@@ -216,9 +238,11 @@ public class PayManager {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
-										GetCodeDialog.newInstance(response.body().getData().giftCode)
-												.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-														GetCodeDialog.class.getSimpleName());
+										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData()
+												.giftCode);
+										dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_success));
+										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
 											if (isSeize) {
 												// 抢号状态
@@ -231,8 +255,18 @@ public class PayManager {
 										ObserverManager.getInstance().notifyGiftUpdate();
 										return;
 									}
-									ToastUtil.showShort("抢号失败 - " + (response.body() == null ?
-											"解析失败" : response.body().getMsg()));
+									if (response.body() != null) {
+										ConfirmDialog dialog = ConfirmDialog.newInstance();
+										dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_failed));
+										dialog.setNegativeVisibility(View.GONE);
+										dialog.setPositiveVisibility(View.VISIBLE);
+										dialog.setPositiveBtnText(context.getResources().getString(R.string.st_dialog_btn_ok));
+										dialog.setContent(response.body().getMsg());
+										dialog.show(((BaseAppCompatActivity)context).getSupportFragmentManager(),
+												"search failed");
+									} else {
+										ToastUtil.showShort("抢号失败 - 解析失败");
+									}
 									return;
 								}
 								ToastUtil.showShort("抢号失败 - 返回出错");

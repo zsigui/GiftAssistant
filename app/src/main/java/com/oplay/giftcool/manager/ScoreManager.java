@@ -214,7 +214,6 @@ public class ScoreManager {
 				SPUtil.putLong(context, spFile, SPConfig.KEY_BUY_BY_BEAN_LAST_TIME, curTime);
 				break;
 		}
-		mIsSearchToday = true;
 	}
 
 	/**

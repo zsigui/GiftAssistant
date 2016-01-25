@@ -11,6 +11,7 @@ import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
+import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
@@ -20,6 +21,7 @@ import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -31,12 +33,12 @@ import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
-import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit.Call;
 import retrofit.http.Body;
@@ -74,12 +76,6 @@ public interface NetEngine {
 	Call<JsonRespBase<IndexGift>> obtainIndexGift(@Body JsonReqBase<ReqIndexGift> reqData);
 
 	/**
-	 * 获取 首页-礼包 下端接口刷新后数据
-	 */
-	@POST(NetUrl.GIFT_REFRESH_INDEX)
-	Call<JsonReqBase<IndexGift>> refreshIndexGift(@Body JsonReqBase<Void> reqData);
-
-	/**
 	 * 获取 首页-礼包-猜你喜欢 页面的数据
 	 */
 	@POST(NetUrl.GIFT_GET_ALL_LIKE)
@@ -111,22 +107,29 @@ public interface NetEngine {
     JsonReqBase<ReqPageData> reqData);
 
 	/**
+	 * 获取刷新指定礼包数据
+	 */
+	@POST(NetUrl.GIFT_REFRESH)
+	Call<JsonRespBase<HashMap<String, IndexGiftNew>>> refreshGift(@Body JsonReqBase<ReqRefreshGift> reqData);
+
+	/**
 	 * 支付 抢夺礼包码
 	 */
 	@POST(NetUrl.GIFT_SEIZE_CODE)
 	Call<JsonRespBase<PayCode>> payGiftCode(@Body JsonReqBase<ReqPayCode> reqData);
 
 	/**
-	 * 支付 获取特定礼包码(订单查询)
+	 * 支付 获取特定礼包码(订单查询)(废弃)
 	 */
 	@POST(NetUrl.GIFT_GET_SPECIFIC_CODE)
 	Call<JsonRespBase<PayCode>> getSpecificGiftCode(@Body JsonReqBase<ReqGetCode> reqData);
 
 	/**
-	 * 支付 通知偶玩豆订单支付失败
+	 * 支付 通知偶玩豆订单支付失败(废弃)
 	 */
 	@POST(NetUrl.GIFT_FAIL_PAY)
 	Call<JsonRespBase<Void>> notifyTradeFail(@Body JsonReqBase<ReqGetCode> reqData);
+
 
 	/* -------------- 游戏接口 --------------- */
 	/**
