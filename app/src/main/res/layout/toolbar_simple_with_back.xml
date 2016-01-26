@@ -22,12 +22,19 @@
 
 	<TextView
 			android:id = "@+id/tv_bar_title"
-			android:layout_width = "match_parent"
+			android:layout_width = "wrap_content"
+			android:maxWidth = "260dp"
 			android:layout_height = "?actionBarSize"
 			android:gravity = "center_vertical"
 			android:singleLine = "true"
 			android:textColor = "@android:color/white"
 			android:textSize = "@dimen/di_tool_bar_title_size" />
+
+	<ViewStub
+			android:id="@+id/vs_save"
+			android:layout_width = "match_parent"
+			android:layout_height = "?actionBarSize"
+			android:layout="@layout/view_save"/>
 
 
 </android.support.v7.widget.Toolbar >

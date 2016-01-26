@@ -2,6 +2,7 @@ package com.oplay.giftcool.ui.fragment.gift;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -89,7 +90,15 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	private IndexGift mGiftData;
 	// 请求后游戏键值的MD5串
 	private String mGameKey;
-
+	// 每隔5分钟刷新一次
+	private Handler mHandler = new Handler();
+	private Runnable mRefreshRunnable = new Runnable() {
+		@Override
+		public void run() {
+			lazyLoad();
+			mHandler.postDelayed(this, 5 * 60 * 1000);
+		}
+	};
 
 	public static GiftFragment newInstance() {
 		return new GiftFragment();
@@ -184,6 +193,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 		mIsPrepared = true;
 		mScrollView.smoothScrollTo(0, 0);
+		mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
 	}
 
 	private void loadBanner(ArrayList<IndexBanner> banners) {
@@ -431,6 +441,12 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		} else {
 			startClockService();
 		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mHandler.removeCallbacks(mRefreshRunnable);
 	}
 
 	/* 更新控件数据 end */

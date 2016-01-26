@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -40,6 +41,7 @@ public class AboutFragment extends BaseFragment {
 	private TextView tvUpdate;
 	private TextView tvQQ;
 	private TextView tvVersion;
+	private Context mContext;
 
 	private UpdateInfo mUpdateInfo;
 
@@ -65,7 +67,8 @@ public class AboutFragment extends BaseFragment {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		tvUpdate.setText(getResources().getString(R.string.st_about_checking_update));
+		mContext = getContext();
+		tvUpdate.setText(mContext.getResources().getString(R.string.st_about_checking_update));
 		tvVersion.setText("礼包酷 " + DecryptDataModel.SDK_VER_NAME);
 		tvQQ.setText(getQQInfo());
 	}
@@ -104,28 +107,34 @@ public class AboutFragment extends BaseFragment {
 								@Override
 								public void onResponse(Response<JsonRespBase<UpdateInfo>> response,
 								                       Retrofit retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (response != null && response.isSuccess() && response.body() != null &&
 											response.body().getCode() == StatusCode.SUCCESS) {
 										mUpdateInfo = response.body().getData();
 										if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
-											setUpdate(String.format(getResources().getString(R.string
+											setUpdate(String.format(mContext.getResources().getString(R.string
 													.st_about_wait_update_text), mUpdateInfo.versionName));
 											return;
 										}
 									}
-									setUpdate(getResources().getString(R.string.st_about_update_text));
+									setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
 								}
 
 								@Override
 								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}
-									setUpdate(getResources().getString(R.string.st_about_check_update_failed));
+									setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
 								}
 							});
 				} else {
-					setUpdate(getResources().getString(R.string.st_about_check_update_failed));
+					setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
 				}
 			}
 		});

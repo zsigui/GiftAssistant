@@ -234,6 +234,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			// 部分手机在调用 onPause 还是会出现mWeiView == null
 			if (mWebView != null) {
 				mWebView.onResume();
+				mWebView.resumeTimers();
 			}
 		} catch (Exception ignored) {}
 	}

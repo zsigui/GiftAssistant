@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -8,17 +9,22 @@ import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
+import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -64,6 +70,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	@Override
 	protected void setListener() {
+		ObserverManager.getInstance().addGiftUpdateListener(this);
 	}
 
 	@Override
@@ -86,14 +93,11 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		}
 		mDataView.setAdapter(mAdapter);
 		if (mData != null) {
-			if (mData.size() < 10) {
-				mNoMoreLoad = true;
-			} else {
-				mNoMoreLoad = false;
-			}
+			mNoMoreLoad = mData.size() < 10;
 			mRefreshLayout.setCanShowLoad(true);
 			updateData(mData);
 		}
+		startClockService();
 	}
 
 	@Override
@@ -211,7 +215,99 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	}
 
 	@Override
+	public void onGiftUpdate() {
+		if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
+			return;
+		}
+		mIsNotifyRefresh = true;
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				HashSet<Integer> ids = new HashSet<Integer>();
+				for (IndexGiftNew gift : mData) {
+					ids.add(gift.id);
+				}
+				ReqRefreshGift reqData = new ReqRefreshGift();
+				reqData.ids = ids;
+				Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
+						.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+
+							@Override
+							public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
+							                       Retrofit retrofit) {
+								if (response != null && response.isSuccess()) {
+									if (response.body() != null && response.body().isSuccess()) {
+										// 数据刷新成功，进行更新
+										HashMap<String, IndexGiftNew> respData = response.body().getData();
+										ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+										updateCircle(respData, waitDelIndexs, mData);
+										delIndex(mData, waitDelIndexs);
+										int y = mDataView.getScrollY();
+										updateData(mData);
+										mDataView.smoothScrollBy(y, 0);
+									}
+								}
+								mIsNotifyRefresh = false;
+							}
+
+							@Override
+							public void onFailure(Throwable t) {
+								mIsNotifyRefresh = false;
+							}
+						});
+			}
+		});
+	}
+
+	private void delIndex(ArrayList<IndexGiftNew> data, ArrayList<Integer> waitDelIndexs) {
+		for (int i = waitDelIndexs.size() - 1; i >= 0; i--) {
+			data.remove(waitDelIndexs.get(i).intValue());
+		}
+	}
+
+	private void updateCircle(HashMap<String, IndexGiftNew> respData, ArrayList<Integer> waitDelIndexs,
+	                          ArrayList<IndexGiftNew> gifts) {
+		int i = 0;
+		for (IndexGiftNew gift : gifts) {
+			if (respData.get(gift.id + "") != null) {
+				IndexGiftNew item = respData.get(gift.id + "");
+				setGiftUpdateInfo(gift, item);
+			} else {
+				// 找不到，需要被移除
+				waitDelIndexs.add(i);
+			}
+			i++;
+		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		stopClockService();
+	}
+
+	private void startClockService() {
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().startService(intent);
+	}
+
+	private void stopClockService() {
+		Intent intent = new Intent(getContext(), ClockService.class);
+		getContext().stopService(intent);
+	}
+
+	private void setGiftUpdateInfo(IndexGiftNew toBeSet, IndexGiftNew data) {
+		toBeSet.status = data.status;
+		toBeSet.seizeStatus = data.seizeStatus;
+		toBeSet.searchCount = data.searchCount;
+		toBeSet.searchTime = data.searchTime;
+		toBeSet.totalCount = data.totalCount;
+		toBeSet.remainCount = data.remainCount;
+		toBeSet.code = data.code;
+	}
+
+	@Override
 	public String getPageName() {
-		return null;
+		return "礼包列表";
 	}
 }

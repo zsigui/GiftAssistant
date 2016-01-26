@@ -180,6 +180,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+
 		ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
 		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
 	}

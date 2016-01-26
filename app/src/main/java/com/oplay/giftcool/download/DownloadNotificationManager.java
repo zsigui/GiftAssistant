@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
@@ -45,6 +46,7 @@ public class DownloadNotificationManager {
 					.NOTIFICATION_SERVICE);
 			if (count > 0) {
 				Intent downloadIntent = IntentUtil.getJumpDownloadManagerIntent(context);
+				downloadIntent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
 				PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_DOWNLOAD, downloadIntent,
 						PendingIntent.FLAG_UPDATE_CURRENT);
 				String tickerText = String.format("您有%d个游戏正在下载中", count);
@@ -172,6 +174,21 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			notificationManager.cancel(notificationId);
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+	}
+
+	public static void clearAllNotification(Context context) {
+		try {
+			if (AppDebugConfig.IS_DEBUG) {
+				AppDebugConfig.logMethodName(DownloadNotificationManager.class);
+			}
+			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
+					.NOTIFICATION_SERVICE);
+			notificationManager.cancelAll();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

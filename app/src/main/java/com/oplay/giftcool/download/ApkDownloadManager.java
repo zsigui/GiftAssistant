@@ -120,8 +120,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		mUrl_AppInfo.put(info.downloadUrl, info);
 		mPackageName_AppInfo.put(info.packageName, info);
 
-		// 完成下载任务，请求奖励积分
-		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
+
 	}
 
 	public void addDownloadTask(GameDownloadInfo appInfo) {
@@ -520,6 +519,8 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 			DownloadNotificationManager.showDownload(mApplicationContext);
 			appInfo.startInstall();
 		}
+		// 完成下载任务，请求奖励积分
+		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 		return false;
 	}
 

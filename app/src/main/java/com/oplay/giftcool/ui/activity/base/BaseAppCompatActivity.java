@@ -67,7 +67,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		initView();
 		mToolbar = getViewById(R.id.toolbar);
 		if (mToolbar != null) {
-			setSupportActionBar(mToolbar);
 			final View backIcon = mToolbar.findViewById(R.id.iv_bar_back);
 			if (backIcon != null) {
 				backIcon.setOnClickListener(this);
@@ -302,11 +301,18 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		}
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
+			doBeforeFinish();
 			finish();
 		} else {
 			if (getTopFragment() instanceof BaseFragment) {
 				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
+		}
+	}
+
+	protected void doBeforeFinish() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "doBeforeFinish called");
 		}
 	}
 

@@ -51,6 +51,7 @@ import retrofit.Retrofit;
 public class UploadAvatarFragment extends BaseFragment {
 
 	private final static String PAGE_NAME = "上传头像";
+	private final static String TOAST_FAILED = "上传失败";
 	private static final int REQ_ID_PHOTO_ALBUM = 33;
 	private static final int REQ_ID_PHOTO_CAMERA = 34;
 	/*拍照的照片存储位置*/
@@ -177,11 +178,15 @@ public class UploadAvatarFragment extends BaseFragment {
 	}
 
 	public void showLoading() {
-		((BaseAppCompatActivity) getActivity()).showLoadingDialog("上传图片中...");
+		if (getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).showLoadingDialog("上传图片中...");
+		}
 	}
 
 	public void hideLoading() {
-		((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+		if (getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+		}
 	}
 
 	public void onRequestUploadPortrait(final String filePath) {
@@ -218,11 +223,10 @@ public class UploadAvatarFragment extends BaseFragment {
 										KLog.e(AppDebugConfig.TAG_FRAG,
 												response.body() == null ? "解析失败" : response.body().error());
 									}
-									ToastUtil.showShort("上传失败-" +
-											(response.body() == null ? "解析错误" : response.body().getMsg()));
+									ToastUtil.blurErrorMsg(TOAST_FAILED, response.body());
 									return;
 								}
-								ToastUtil.showShort("上传失败-" + (response == null ? "网络异常" : response.message()));
+								ToastUtil.blurErrorResp(TOAST_FAILED, response);
 							}
 
 							@Override
@@ -231,7 +235,7 @@ public class UploadAvatarFragment extends BaseFragment {
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(AppDebugConfig.TAG_FRAG, t);
 								}
-								ToastUtil.showShort("上传失败-网络异常");
+								ToastUtil.blurThrow(TOAST_FAILED);
 							}
 						});
 			}

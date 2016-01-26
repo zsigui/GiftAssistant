@@ -168,7 +168,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			if (hasBean < mBeanConsume) {
 				// 可选偶玩豆支付方式，但偶玩豆不足
 				tvContent.setText(Html.fromHtml(String.format(BEAN_NOT_ENOUGH, mBeanConsume), mImageGetter, null));
-				setPositiveBtnText("充值余额");
+				setPositiveBtnText("充值");
 				mWrapperListener = mGetBeanListener;
 			} else {
 				// 可选偶玩豆支付方式，偶玩豆充足

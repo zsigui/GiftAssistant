@@ -23,9 +23,10 @@ import java.util.Observable;
  */
 public class WebViewInterface extends Observable {
 
-	private static final int RET_SUCCESS = 0;
-	private static final int RET_INTERAL_ERR = 1;
-	private static final int RET_PARAM_ERR = 2;
+	public static final int RET_SUCCESS = 0;
+	public static final int RET_INTERNAL_ERR = 1;
+	public static final int RET_PARAM_ERR = 2;
+	public static final int RET_OTHER_ERR = 3;
 
 	private FragmentActivity mHostActivity;
 	private Fragment mHostFragment;
@@ -53,21 +54,20 @@ public class WebViewInterface extends Observable {
 		}
 		try {
 			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
-			PayManager.getInstance().seizeGift(mHostActivity, gift, null);
-			return RET_SUCCESS;
+			return PayManager.getInstance().seizeGift(mHostActivity, gift, null);
 		} catch (JsonSyntaxException e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_WEBVIEW, e);
 			}
 		}
-		return RET_INTERAL_ERR;
+		return RET_INTERNAL_ERR;
 	}
 
 	@JavascriptInterface
 	public int setDownloadBtn(boolean isShow, String params) {
 		try {
 			if (mHostActivity == null || mHostFragment == null || !(mHostFragment instanceof GameDetailFragment)) {
-				return RET_INTERAL_ERR;
+				return RET_INTERNAL_ERR;
 			}
 			IndexGameNew appInfo = null;
 			if (isShow) {
@@ -88,7 +88,7 @@ public class WebViewInterface extends Observable {
 			if(AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
-			return RET_INTERAL_ERR;
+			return RET_INTERNAL_ERR;
 		}
 	}
 }

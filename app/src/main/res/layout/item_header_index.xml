@@ -9,9 +9,8 @@
 	<TextView
 			android:id="@+id/tv_light"
 			style = "@style/DefaultTextView.Header"
-			android:layout_width="@dimen/di_title_light_width"
-			android:layout_marginRight="@dimen/di_title_light_padding"
-			android:background="@color/co_common_app_main_bg"/>
+			android:text="▌"
+			android:textColor="@color/co_common_app_main_bg"/>
 	<TextView
 			android:id="@+id/tv_title"
 			android:layout_toRightOf="@id/tv_light"

@@ -8,6 +8,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.PayCode;
@@ -57,27 +58,28 @@ public class PayManager {
 	 * @param gift    礼包详情信息
 	 * @param button  礼包按钮
 	 */
-	public void seizeGift(Context context, IndexGiftNew gift, GiftButton button) {
+	public int seizeGift(Context context, IndexGiftNew gift, GiftButton button) {
 		if (!AccountManager.getInstance().isLogin()) {
 			IntentUtil.jumpLogin(context);
-			return;
+			return WebViewInterface.RET_OTHER_ERR;
 		}
+		KLog.d("WebView", "type = " + GiftTypeUtil.getItemViewType(gift));
 		long nowClickTime = System.currentTimeMillis();
-		KLog.e("time = " + (nowClickTime - mLastClickTime));
 		if (nowClickTime - mLastClickTime <= 1000) {
-			return;
+			return WebViewInterface.RET_OTHER_ERR;
 		}
 		mLastClickTime = nowClickTime;
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
 				chargeGift(context, gift, button);
-				break;
+				return WebViewInterface.RET_SUCCESS;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 			case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
 				searchGift(context, gift, button);
-				break;
+				return WebViewInterface.RET_SUCCESS;
 		}
+		return WebViewInterface.RET_PARAM_ERR;
 	}
 
 
@@ -249,7 +251,11 @@ public class PayManager {
 										AccountManager.getInstance().updatePartUserInfo();
 
 										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
-										dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_success));
+										if (isSeize) {
+											dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_success));
+										} else {
+											dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_success));
+										}
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
@@ -266,7 +272,11 @@ public class PayManager {
 									}
 									if (response.body() != null) {
 										ConfirmDialog dialog = ConfirmDialog.newInstance();
-										dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_failed));
+										if (isSeize) {
+											dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));
+										} else {
+											dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_failed));
+										}
 										dialog.setNegativeVisibility(View.GONE);
 										dialog.setPositiveVisibility(View.VISIBLE);
 										dialog.setPositiveBtnText(context.getResources().getString(R.string.st_dialog_btn_ok));
@@ -305,6 +315,8 @@ public class PayManager {
 			((BaseAppCompatActivity) context).hideLoadingDialog();
 		}
 	}
+
+
 
 //	/**
 //	 * 取消订单支付

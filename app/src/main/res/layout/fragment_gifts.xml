@@ -36,9 +36,8 @@
 					<TextView
 							android:id="@+id/hot_light"
 							style = "@style/DefaultTextView.Header"
-							android:layout_width="@dimen/di_title_light_width"
-							android:layout_marginRight="@dimen/di_title_light_padding"
-							android:background="@color/co_common_app_main_bg"/>
+							android:text="▌"
+							android:textColor="@color/co_common_app_main_bg"/>
 					<TextView
 							android:layout_toRightOf="@id/hot_light"
 							style = "@style/DefaultTextView.Header"
@@ -66,17 +65,17 @@
 						android:id = "@+id/rl_limit_all"
 						style = "@style/IndexModuleTitleLayout" >
 
-					<TextView
-							android:id="@+id/new_limit"
-							style = "@style/DefaultTextView.Header"
-							android:layout_width="@dimen/di_title_light_width"
-							android:layout_marginRight="@dimen/di_title_light_padding"
-							android:background="@color/co_common_app_main_bg"/>
+
 					<TextView
 							android:id="@+id/tv_limit"
 							android:layout_toRightOf="@+id/new_limit"
 							style = "@style/DefaultTextView.Header"
 							android:text = "@string/st_index_gift_limit" />
+					<TextView
+							android:id="@+id/new_limit"
+							style = "@style/DefaultTextView.Header"
+							android:text="▌"
+							android:textColor="@color/co_common_app_main_bg"/>
 
 					<TextView
 							android:id = "@+id/tv_limit_hint"
@@ -109,9 +108,8 @@
 					<TextView
 							android:id="@+id/new_light"
 							style = "@style/DefaultTextView.Header"
-							android:layout_width="@dimen/di_title_light_width"
-							android:layout_marginRight="@dimen/di_title_light_padding"
-							android:background="@color/co_common_app_main_bg"/>
+							android:text="▌"
+							android:textColor="@color/co_common_app_main_bg"/>
 					<TextView
 							android:layout_toRightOf="@id/new_light"
 							style = "@style/DefaultTextView.Header"

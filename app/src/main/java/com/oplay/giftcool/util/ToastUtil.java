@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
+
+import retrofit.Response;
 
 /**
  * @author JackieZhuang
@@ -49,6 +52,18 @@ public class ToastUtil {
 
 	public static void showShort(@StringRes int resId) {
 		show(resId, Toast.LENGTH_SHORT);
+	}
+
+	public static void blurThrow(String prefix) {
+		ToastUtil.showShort(prefix + "-网络异常");
+	}
+
+	public static void blurErrorResp(String prefix, Response response) {
+		ToastUtil.showShort(prefix + (response == null ? "返回出错" : response.message()));
+	}
+
+	public static void blurErrorMsg(String prefix, JsonRespBase response) {
+		ToastUtil.showShort(prefix + (response == null ? "解析错误" : response.getMsg()));
 	}
 
 	/**

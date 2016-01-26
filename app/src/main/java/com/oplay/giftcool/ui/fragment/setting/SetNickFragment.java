@@ -12,6 +12,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
@@ -19,9 +20,12 @@ import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.SettingActivity;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -34,6 +38,7 @@ import retrofit.Retrofit;
 public class SetNickFragment extends BaseFragment implements OnBackPressListener, TextWatcher {
 
 	private final static String PAGE_NAME = "设置昵称";
+	private final static String TOAST_FAILED = "修改失败";
 	private TextView etNick;
 	private TextView tvClear;
 
@@ -64,6 +69,16 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 			return;
 		}
 		etNick.setText(AccountManager.getInstance().getUserInfo().nick);
+		if (getActivity() != null) {
+			((SettingActivity) getActivity()).setSaveVisibility(View.VISIBLE);
+			((SettingActivity) getActivity()).setSaveListener(new OnShareListener() {
+				@Override
+				public void share() {
+					KLog.e();
+					handleSave();
+				}
+			});
+		}
 	}
 
 	@Override
@@ -75,12 +90,32 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 	public boolean onBack() {
 		// 隐藏输入框
 		InputMethodUtil.hideSoftInput(mActivity);
-
-		final String nick = etNick.getText().toString().trim();
-		if (TextUtils.isEmpty(nick) ||
-				nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
-			return false;
+		if (getActivity() != null) {
+			((SettingActivity) getActivity()).setSaveVisibility(View.GONE);
 		}
+		return false;
+	}
+
+	public void showLoading() {
+		if (getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).showLoadingDialog("修改昵称中...");
+		}
+	}
+
+	public void hideLoading() {
+		if (getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+		}
+	}
+
+
+	private void handleSave() {
+		if (mIsLoading) {
+			return;
+		}
+		mIsLoading = true;
+		showLoading();
+		final String nick = etNick.getText().toString().trim();
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -91,31 +126,45 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 						.enqueue(new Callback<JsonRespBase<ModifyNick>>() {
 							@Override
 							public void onResponse(Response<JsonRespBase<ModifyNick>> response, Retrofit retrofit) {
+								hideLoading();
+								if (!mCanShowUI) {
+									return;
+								}
+								mIsLoading = false;
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel model = AccountManager.getInstance().getUser();
 										model.userInfo.nick = response.body().getData().nick;
 										AccountManager.getInstance().setUser(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
+										ToastUtil.showShort("修改成功");
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null?
+										KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null ?
 												"解析异常" : response.body().error()));
 									}
+									ToastUtil.blurErrorMsg(TOAST_FAILED, response.body());
+									return;
 								}
+								ToastUtil.blurErrorResp(TOAST_FAILED, response);
 							}
 
 							@Override
 							public void onFailure(Throwable t) {
+								hideLoading();
+								if (!mCanShowUI) {
+									return;
+								}
+								mIsLoading = false;
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.d(AppDebugConfig.TAG_FRAG, t);
 								}
+								ToastUtil.blurThrow(TOAST_FAILED);
 							}
 						});
 			}
 		});
-		return false;
 	}
 
 	@Override
@@ -144,6 +193,17 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 			tvClear.setVisibility(View.VISIBLE);
 		} else {
 			tvClear.setVisibility(View.GONE);
+		}
+		final String nick = s.toString().trim();
+		if (TextUtils.isEmpty(nick) ||
+				nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
+			if (getActivity() != null) {
+				((SettingActivity) getActivity()).setSaveEnable(false);
+			}
+		} else {
+			if (getActivity() != null) {
+				((SettingActivity) getActivity()).setSaveEnable(true);
+			}
 		}
 	}
 

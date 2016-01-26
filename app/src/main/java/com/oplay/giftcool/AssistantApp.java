@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -112,6 +113,7 @@ public class AssistantApp extends Application {
 		ImageLoader.getInstance().clearMemoryCache();
 		ImageLoader.getInstance().stop();
 		ImageLoader.getInstance().destroy();
+		DownloadNotificationManager.cancelDownload(getApplicationContext());
 	}
 
 	@Override

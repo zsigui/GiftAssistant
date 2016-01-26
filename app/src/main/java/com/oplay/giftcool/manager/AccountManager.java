@@ -192,6 +192,12 @@ public class AccountManager {
 											KLog.e(AppDebugConfig.TAG_MANAGER,
 													response.body() == null ? "解析失败" : response.body().error());
 										}
+										// 登录状态失效，原因包括: 已在其他地方登录，更新失败
+										if (response.body() !=null
+												&& response.body().getCode()==StatusCode.ERR_UN_LOGIN) {
+
+											setUser(null);
+										}
 									}
 								}
 
