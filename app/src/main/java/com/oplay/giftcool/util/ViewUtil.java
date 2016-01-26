@@ -80,6 +80,7 @@ public class ViewUtil {
 
 	public static void showAvatarImage(String avatar, ImageView ivIcon, boolean isLogin) {
 		if (TextUtils.isEmpty(avatar)) {
+			ivIcon.setTag(avatar);
 			if (isLogin) {
 				ivIcon.setImageResource(R.drawable.ic_avatar_default);
 			} else {

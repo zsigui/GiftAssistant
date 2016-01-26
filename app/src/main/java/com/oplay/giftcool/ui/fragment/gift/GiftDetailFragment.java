@@ -139,15 +139,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					String b_desc;
 					if (mData.giftData.isLimit) {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
-						title = String.format(getResources().getString(R.string.st_share_limit_pattern),
-								mData.giftData.name);
-						b_desc = String.format(getResources().getString(R.string.st_share_limit_sms_pattern),
-								mData.giftData.name);
+						title = String.format("[%s]%s(限今天)", mData.gameData.name, mData.giftData.name);
+						b_desc = String.format("[%s]%s，价值珍贵，限量领取",
+								mData.gameData.name, mData.giftData.name);
 					} else {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
-						title = mData.giftData.name;
-						b_desc = String.format(getResources().getString(R.string.st_share_normal_sms_pattern),
-								mData.giftData.name);
+						title = String.format("[%s]%s", mData.gameData.name, mData.giftData.name);
+						b_desc = String.format("[%s]%s，快抢呀",
+								mData.gameData.name, mData.giftData.name);
 					}
 
 					String src = null;

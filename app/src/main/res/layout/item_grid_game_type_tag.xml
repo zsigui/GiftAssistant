@@ -4,8 +4,8 @@
               android:layout_width = "match_parent"
               android:layout_height = "wrap_content"
               android:gravity = "center"
-              android:paddingTop = "8dp"
-              android:paddingBottom = "8dp" >
+              android:paddingTop = "9dp"
+              android:paddingBottom = "9dp" >
 
 	<com.oplay.giftcool.ui.widget.button.TagButton
 			android:id="@+id/tv_tag"

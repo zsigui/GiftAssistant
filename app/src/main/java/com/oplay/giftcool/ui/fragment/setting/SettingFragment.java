@@ -7,12 +7,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.DecryptDataModel;
-import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
@@ -20,13 +18,8 @@ import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.DataClearUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_File;
-
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 /**
  * Created by zsigui on 16-1-5.
@@ -201,40 +194,13 @@ public class SettingFragment extends BaseFragment {
 
 					@Override
 					public void onConfirm() {
-						doLogout();
+						AccountManager.getInstance().logout();
 						logoutDialog.dismiss();
 					}
 				});
 				logoutDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 				break;
 		}
-	}
-
-	private void doLogout() {
-		((BaseAppCompatActivity) getActivity()).showLoadingDialog();
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
-					@Override
-					public void onResponse(Response<Void> response, Retrofit retrofit) {
-						if (AppDebugConfig.IS_FRAG_DEBUG) {
-							KLog.e(response == null ? "login response null" : response.code());
-						}
-						((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
-					}
-
-					@Override
-					public void onFailure(Throwable t) {
-						if (AppDebugConfig.IS_FRAG_DEBUG) {
-							KLog.e(t);
-						}
-						((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
-					}
-				});
-			}
-		});
-		AccountManager.getInstance().setUser(null);
 	}
 
 	@Override

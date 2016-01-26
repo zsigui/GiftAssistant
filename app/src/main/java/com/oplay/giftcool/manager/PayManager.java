@@ -97,6 +97,16 @@ public class PayManager {
 	 */
 	private void chargeGift(final Context context, final IndexGiftNew gift, final GiftButton button) {
 
+		if (gift.priceType == GiftTypeUtil.PAY_TYPE_NONE) {
+			// 未知金额类型，此时自己定义
+			if (gift.bean == 0 && gift.score != 0) {
+				gift.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
+			} else if (gift.bean != 0 && gift.score == 0) {
+				gift.priceType = GiftTypeUtil.PAY_TYPE_BEAN;
+			} else {
+				gift.priceType = GiftTypeUtil.PAY_TYPE_BOTH;
+			}
+		}
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 				&& gift.score <= AccountManager.getInstance().getUserInfo().score) {
 			// 只有积分支付方式且积分充足，直接执行抢号

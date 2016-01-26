@@ -3,7 +3,7 @@ package com.oplay.giftcool.model.data.req;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * 请求礼包主页数据
@@ -13,7 +13,7 @@ import java.util.List;
 public class ReqIndexGift implements Serializable {
 
 	@SerializedName("games")
-	public List<String> appNames;
+	public HashSet<String> appNames;
 
 	@SerializedName("page_id")
 	public int page = 0;

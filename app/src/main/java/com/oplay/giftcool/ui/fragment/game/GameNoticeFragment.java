@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.fragment.game;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -32,12 +33,35 @@ import retrofit.Retrofit;
 public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	private final static String PAGE_NAME = "游戏排行";
-	private static final String KEY_DATA = "key_data";
+	private final static String KEY_DATA = "key_data";
+	private final static long MAINTAIN_DATA_TIME = 0;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 
 	private RecyclerView mDataView;
 	private GameNoticeAdapter mAdapter;
-	private long mMaintainDataTime = 0;
+
+	private boolean mInPage = false;
+	private boolean mIsRunning = false;
+	private Handler mHandler = new Handler();
+	/**
+	 * 每隔5秒调起一次清除数据
+	 */
+	private Runnable mClearDataTask = new Runnable() {
+		@Override
+		public void run() {
+			if ((!mInPage && mIsRunning) || mData == null || mData.size() < 10) {
+				mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
+				return;
+			}
+			ArrayList<IndexGameNew> remainData = new ArrayList<>(10);
+			for (IndexGameNew game : mData) {
+				remainData.add(game);
+			}
+			if (!mInPage && mIsRunning) {
+				updateData(remainData);
+			}
+		}
+	};
 
 	public static GameNoticeFragment newInstance() {
 		return new GameNoticeFragment();
@@ -181,7 +205,38 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         mLastPage += 1;
     }
 
-//    public OneTypeDataList<IndexGameNew> initStashRefreshData() {
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (!mIsRunning) {
+			mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			mIsRunning = true;
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (mInPage && mIsRunning) {
+			mHandler.removeCallbacks(mClearDataTask);
+			mIsRunning = false;
+		}
+	}
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		mInPage = isVisibleToUser;
+		if (isVisibleToUser) {
+			mHandler.removeCallbacks(mClearDataTask);
+			mIsRunning = false;
+		} else {
+			mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			mIsRunning = true;
+		}
+	}
+
+	//    public OneTypeDataList<IndexGameNew> initStashRefreshData() {
 //        OneTypeDataList<IndexGameNew> obj = new OneTypeDataList<>();
 //        obj.data = new ArrayList<>();
 //        for (int i = 0; i < 10; i++) {

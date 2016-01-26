@@ -27,7 +27,7 @@ public class NetworkImageHolderView implements Holder<String> {
 	@Override
 	public void UpdateUI(Context context, int position, String data) {
 		if (data.startsWith("drawable://")) {
-			imageView.setImageResource(R.drawable.ic_banner_default);
+			imageView.setImageResource(R.drawable.ic_banner_empty_default);
 		} else {
 			DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
 					.showImageForEmptyUri(R.drawable.ic_banner_default)

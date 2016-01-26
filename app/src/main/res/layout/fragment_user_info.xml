@@ -139,13 +139,13 @@
 	</RelativeLayout >
 
 	<TextView
+			android:id="@+id/tv_hint"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
 			android:textSize = "10sp"
 			android:paddingRight = "@dimen/di_index_hoz_module_icon_gap"
 			android:paddingLeft = "@dimen/di_index_hoz_module_margin_left"
 			android:paddingTop = "15dp"
-			android:textColor = "@color/co_common_text_second"
-			android:text = "@string/st_user_hint" />
+			android:textColor = "@color/co_common_text_second"/>
 
 </LinearLayout >

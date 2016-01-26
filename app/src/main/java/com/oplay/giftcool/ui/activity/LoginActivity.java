@@ -2,7 +2,7 @@ package com.oplay.giftcool.ui.activity;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.ui.fragment.user.PhoneLoginFragment;
+import com.oplay.giftcool.ui.fragment.login.PhoneLoginFragment;
 
 /**
  * Created by zsigui on 16-1-6.

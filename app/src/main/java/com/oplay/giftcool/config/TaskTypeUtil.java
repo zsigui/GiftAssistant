@@ -68,6 +68,10 @@ public class TaskTypeUtil {
 	 */
 	public static final String ID_STAR_COMMENT = "";
 	/**
+	 * 第一次登录
+	 */
+	public static final String ID_FIRST_LOGIN = "first_login_reward";
+	/**
 	 * 登录
 	 */
 	public static final String ID_LOGIN = "every_day_login";

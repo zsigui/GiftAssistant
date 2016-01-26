@@ -42,6 +42,6 @@ public class ScaleImageView extends ImageView {
         } else {
             height = (int) (width * mFraction);
         }
-
+		super.onMeasure(width, height);
     }
 }

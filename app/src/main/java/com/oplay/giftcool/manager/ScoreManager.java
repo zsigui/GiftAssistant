@@ -3,11 +3,9 @@ package com.oplay.giftcool.manager;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -15,13 +13,9 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoginDialog;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
-
-import net.youmi.android.libs.common.coder.Coder_Md5;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -75,7 +69,7 @@ public class ScoreManager {
 			// 评论任务完成，奖励积分
 			ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
 			// 通知刷新积分
-			AccountManager.getInstance().updatePartUserInfo();
+			AccountManager.getInstance().updateUserInfo();
 			setInWorking(false);
 		}
 	}
@@ -146,21 +140,21 @@ public class ScoreManager {
 		} else {
 			type = ptype;
 		}
-		KLog.d("reward type = " + type);
-		switch (type) {
-			case RewardType.DOWNLOAD:
-				if (!mIsDownloadToday) return;
-				break;
-			case RewardType.SEARCH:
-				if (!mIsSearchToday) return;
-				break;
-			case RewardType.BUY_BY_BEAN:
-				if (!mIsBuyByBeanToday) return;
-				break;
-			case RewardType.NOTHING:
-				// 通知类型出错，返回
-				return;
-		}
+//		switch (type) {
+//			case RewardType.DOWNLOAD:
+//				if (!mIsDownloadToday) return;
+//				break;
+//			case RewardType.SEARCH:
+//				if (!mIsSearchToday) return;
+//				break;
+//			case RewardType.BUY_BY_BEAN:
+//				if (!mIsBuyByBeanToday) return;
+//				break;
+//			case RewardType.NOTHING:
+//				// 通知类型出错，返回
+//				return;
+//		}
+		KLog.d("reward_type = " + type);
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -197,7 +191,7 @@ public class ScoreManager {
 	 * 将指定任务的最后完成时间写入SP
 	 */
 	private void writeLocalTaskState(int type) {
-		Context context = AssistantApp.getInstance().getApplicationContext();
+		/*Context context = AssistantApp.getInstance().getApplicationContext();
 		String spFile = Coder_Md5.md5(String.valueOf(AccountManager.getInstance().getUserSesion().uid));
 		long curTime = System.currentTimeMillis();
 		switch (type) {
@@ -213,14 +207,14 @@ public class ScoreManager {
 				mIsBuyByBeanToday = false;
 				SPUtil.putLong(context, spFile, SPConfig.KEY_BUY_BY_BEAN_LAST_TIME, curTime);
 				break;
-		}
+		}*/
 	}
 
 	/**
 	 * 重设需要本地通知服务器的任务的最后成功写入时间
 	 */
 	public void resetLocalTaskState() {
-		Context context = AssistantApp.getInstance().getApplicationContext();
+		/*Context context = AssistantApp.getInstance().getApplicationContext();
 		if (AccountManager.getInstance().isLogin()) {
 			long lastTime;
 			String spFile = Coder_Md5.md5(String.valueOf(AccountManager.getInstance().getUserSesion().uid));
@@ -244,7 +238,7 @@ public class ScoreManager {
 			mIsShareLimitToday = false;
 			mIsSearchToday = false;
 			mIsBuyByBeanToday = false;
-		}
+		}*/
 	}
 
 	public static abstract interface RewardType {

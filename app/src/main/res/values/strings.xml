@@ -163,7 +163,8 @@
 	<string name = "st_user_phone_bind">绑定手机号</string>
 	<string name = "st_user_unbind">未绑定</string>
 	<string name = "st_user_modify_pwd">修改登录密码</string>
-	<string name = "st_user_hint">小提示： 绑定手机号码可以找回登录密码，有效保障账号安全</string>
+	<string name = "st_user_ouwan_hint">小提示： 绑定手机号码可以找回登录密码，有效保障账号安全</string>
+	<string name = "st_user_phone_hint">小提示： 登陆手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string>
 	<string name = "st_login_notice">手机号直接登录，无须注册</string>
 
 	<!-- 设置头像 -->

@@ -109,13 +109,16 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		if (banners == null || mBannerVH == null || mData == null) {
 			return;
 		}
+		if (banners.size() == 0) {
+			IndexBanner banner = new IndexBanner();
+			banner.url = "drawable://" + R.drawable.ic_banner_empty_default;
+			banner.type = BannerTypeUtil.ACTION_SCORE_TASK;
+			banners.add(banner);
+		}
 		mData.banner = banners;
 		ArrayList<String> data = new ArrayList<>();
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
-		}
-		if (data.size() == 0) {
-			data.add("drawable://");
 		}
 		mBannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
@@ -124,7 +127,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				return new NetworkImageHolderView();
 			}
 		}, data)
-				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
+				.setPageIndicator(new int[]{0, 0})
 				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
 				.setOnItemClickListener(this);
 		if (data.size() == 1) {
@@ -135,6 +138,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
 			mBannerVH.mBanner.startTurning(3000);
 		}
+
 	}
 
 	public void updateHotData(ArrayList<IndexGameNew> data) {

@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -80,6 +78,7 @@ public class DrawerFragment extends BaseFragment {
 	private void updateData() {
 		if (!AccountManager.getInstance().isLogin()) {
 			ivIcon.setImageResource(R.drawable.ic_avator_unlogin);
+			ivIcon.setTag("");
 			tvNick.setText("点击注册/登录");
 			tvName.setText("");
 		} else {
@@ -97,7 +96,6 @@ public class DrawerFragment extends BaseFragment {
 			tvNick.setText(nick);
 			tvName.setText(name);
 			ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());
-			ImageLoader.getInstance().displayImage(user.avatar, ivIcon, Global.AVATAR_IMAGE_LOADER);
 		}
 	}
 

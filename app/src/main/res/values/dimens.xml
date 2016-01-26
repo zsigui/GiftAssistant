@@ -44,7 +44,7 @@
 	<dimen name = "di_search_bar_radius" >20dp</dimen >
 	<dimen name = "di_search_bar_height" >40dp</dimen >
 
-	<dimen name = "di_banner_height" >151dp</dimen >
+	<dimen name = "di_banner_height" >160dp</dimen >
 	<dimen name = "di_banner_padding_bottom_top" >6dp</dimen >
 
 	<dimen name = "di_index_module_gap" >7dp</dimen >

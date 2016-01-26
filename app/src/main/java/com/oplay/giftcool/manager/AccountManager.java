@@ -314,4 +314,31 @@ public class AccountManager {
 					});
 		}
 	}
+
+	public void logout() {
+		if (!isLogin()) {
+			return;
+		}
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
+					@Override
+					public void onResponse(Response<Void> response, Retrofit retrofit) {
+						if (AppDebugConfig.IS_FRAG_DEBUG) {
+							KLog.e(response == null ? "login response null" : response.code());
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_FRAG_DEBUG) {
+							KLog.e(t);
+						}
+					}
+				});
+			}
+		});
+		AccountManager.getInstance().setUser(null);
+	}
 }

@@ -13,7 +13,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ReflectUtil;
@@ -90,8 +89,8 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 
 		@Override
 		public void onConfirm() {
-			// 跳转充值偶玩豆界面
-			OuwanSDKManager.getInstance().recharge();
+			// 跳转我的礼包界面
+			IntentUtil.jumpMyGift(getContext());
 			dismissAllowingStateLoss();
 		}
 	};

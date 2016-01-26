@@ -115,8 +115,8 @@ public class Share_WX_MM extends IShare {
 				WXMediaMessage msg = new WXMediaMessage(webpage);
 				// 此处由于是直接显示在图片右边的内容，所以title部分应该是description，
 				// 会导致分享对话框的title部分就是这个description
-				msg.title = description;
-				msg.description = description;
+				msg.title = title + "\n" + description;
+				msg.description =  description;
 				Bitmap thumb = BitmapUtil.compressResize(imgBitmap, ShareSDKConfig.THUMB_SIZE,
 						ShareSDKConfig.THUMB_SIZE);
 				msg.setThumbImage(thumb);

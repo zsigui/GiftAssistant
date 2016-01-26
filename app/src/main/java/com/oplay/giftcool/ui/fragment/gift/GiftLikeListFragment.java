@@ -17,6 +17,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -73,7 +74,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		if (TextUtils.isEmpty(mGameKey)) {
 			mReqPageObj.data.appNames = PackageUtil.getInstalledAppName(getContext());
 		} else {
-			ArrayList<String> s = new ArrayList<>();
+			HashSet<String> s = new HashSet<>();
 			s.add(mGameKey);
 			mReqPageObj.data.appNames = s;
 		}

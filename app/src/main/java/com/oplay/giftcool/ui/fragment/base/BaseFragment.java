@@ -160,7 +160,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	protected void refreshFailEnd() {
-		KLog.d("misNotifyRefresh = " + mIsNotifyRefresh + ", mIsSwipeRefresh = " + mIsSwipeRefresh);
 		if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
 			if (mViewManager != null) {
 				KLog.d("showErrorRetry");

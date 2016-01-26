@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -122,7 +121,6 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
-		KLog.d(mCurrentPosition);
 		if (mSuperFragment!=null && mCurrentPosition == 0) {
 			mSuperFragment.setUserVisibleHint(isVisibleToUser);
 		}

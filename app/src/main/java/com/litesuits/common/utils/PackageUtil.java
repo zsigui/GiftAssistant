@@ -13,12 +13,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
+
 import com.litesuits.common.assist.Check;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +35,8 @@ public class PackageUtil {
     public static final int APP_INSTALL_INTERNAL = 1;
     public static final int APP_INSTALL_EXTERNAL = 2;
 
-	public static List<String> getInstalledAppName(Context context) {
-		List<String> appNames = new ArrayList<>();
+	public static HashSet<String> getInstalledAppName(Context context) {
+		HashSet<String> appNames = new HashSet<>();
 		List<PackageInfo> pInfos = PackageUtil.getInstalledPackages(context);
 		for (PackageInfo pInfo : pInfos) {
 			try {

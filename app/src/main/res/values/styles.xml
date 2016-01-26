@@ -209,7 +209,7 @@
 		<item name = "android:layout_width" >match_parent</item >
 		<item name = "android:layout_height" >wrap_content</item >
 		<item name = "android:divider" >@color/co_divider_bg</item >
-		<item name = "android:dividerHeight" >1dp</item >
+		<item name = "android:dividerHeight" >@dimen/di_divider_height</item >
 	</style >
 
 	<style name = "IndexIconLayout" >

@@ -63,12 +63,18 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
 			@Override
 			public void onLogin(int code, GameUserInfo userInfo) {
-
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d("ouwanSdk", "onLogin = " + code);
+				}
 			}
 
 			@Override
 			public void onLogout(int code, Object params) {
-
+				// 修改密码，可能会调用该登出接口
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d("ouwanSdk", "onLogout = " + code + ", " + params);
+				}
+				AccountManager.getInstance().logout();
 			}
 		});
 		ListenerManager.setActionCallbackListener(this);

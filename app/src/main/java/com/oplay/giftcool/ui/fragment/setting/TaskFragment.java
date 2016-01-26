@@ -25,8 +25,6 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.fragment.user.SetNickFragment;
-import com.oplay.giftcool.ui.fragment.user.UploadAvatarFragment;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -41,7 +39,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission> {
+public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission>,ObserverManager.UserActionListener {
 
 
 	private final static String PAGE_NAME = "积分任务";
@@ -58,7 +56,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		if (!AccountManager.getInstance().isLogin()) {
-			ToastUtil.showShort("页面进入错误，请关闭页面登录后重试");
+			ToastUtil.showShort("页面进入错误，请先登录");
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
 			return;
 		}
 		initViewManger(R.layout.fragment_score_task);
@@ -69,6 +69,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	@Override
 	protected void setListener() {
 		ObserverManager.getInstance().addUserUpdateListener(this);
+		ObserverManager.getInstance().addUserActionListener(this);
 	}
 
 	@Override
@@ -178,6 +179,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				//mission.icon = R.drawable.ic_task_download_specified;
 			} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
 				mission.icon = R.drawable.ic_task_continuous_login;
+			} else if (id.equals(TaskTypeUtil.ID_FIRST_LOGIN)) {
+				mission.icon = R.drawable.ic_task_first_login;
 			}
 		}
 	}
@@ -350,7 +353,15 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
+	public void onDestroyView() {
+		KLog.e("onDestoryView");
+		super.onDestroyView();
+		ObserverManager.getInstance().removeActionListener(this);
+	}
+
+	@Override
 	public void onUserUpdate() {
+
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
 			tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		}
@@ -360,5 +371,18 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void onUserActionFinish(int action, int code) {
+		KLog.e("action = " + action + ", code = " + code);
+		switch (action) {
+			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
+				break;
+			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
+				break;
+		}
 	}
 }

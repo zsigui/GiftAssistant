@@ -3,6 +3,7 @@ package com.oplay.giftcool.config;
 import android.content.Context;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -30,20 +31,21 @@ public class BannerTypeUtil {
 				case ACTION_WEB:
 					break;
 				case ACTION_GAME_DETAIL:
-					KLog.e(banner.extData);
 					IndexGameNew game_d = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);
 					IntentUtil.jumpGameDetail(context, game_d.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 					break;
 				case ACTION_SCORE_TASK:
+					if (!AccountManager.getInstance().isLogin()) {
+						IntentUtil.jumpLogin(context);
+						return;
+					}
 					IntentUtil.jumpEarnScore(context);
 					break;
 				case ACTION_GIFT_DETAIL:
-					KLog.e(banner.extData);
 					IndexGiftNew gift_o = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGiftNew.class);
 					IntentUtil.jumpGiftDetail(context, gift_o.id);
 					break;
 				case ACTION_GAME_DETAIL_GIFT:
-					KLog.e(banner.extData);
 					IndexGameNew game_g = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);
 					IntentUtil.jumpGameDetail(context, game_g.id, GameTypeUtil.JUMP_STATUS_GIFT);
 					break;

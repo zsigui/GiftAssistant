@@ -3,6 +3,8 @@ package com.oplay.giftcool.ui.activity;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.setting.DownloadFragment;
 import com.oplay.giftcool.ui.fragment.setting.FeedBackFragment;
@@ -10,18 +12,20 @@ import com.oplay.giftcool.ui.fragment.setting.MyGiftFragment;
 import com.oplay.giftcool.ui.fragment.setting.SettingFragment;
 import com.oplay.giftcool.ui.fragment.setting.TaskFragment;
 import com.oplay.giftcool.ui.fragment.setting.WalletFragment;
-import com.oplay.giftcool.ui.fragment.user.SetNickFragment;
-import com.oplay.giftcool.ui.fragment.user.UploadAvatarFragment;
-import com.oplay.giftcool.ui.fragment.user.UserInfoFragment;
+import com.oplay.giftcool.ui.fragment.setting.SetNickFragment;
+import com.oplay.giftcool.ui.fragment.setting.UploadAvatarFragment;
+import com.oplay.giftcool.ui.fragment.setting.UserInfoFragment;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-5.
  */
-public class SettingActivity extends BaseAppCompatActivity {
+public class SettingActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
 	private int mType;
+	private boolean mInSetting = false;
 
 	@Override
 	protected void initView() {
@@ -50,9 +54,10 @@ public class SettingActivity extends BaseAppCompatActivity {
 			ToastUtil.showShort("跳转出错");
 			return;
 		}
-
+		mInSetting = false;
 		switch (mType) {
 			case KeyConfig.TYPE_ID_SETTING:
+				mInSetting = true;
 				replaceFragWithTitle(R.id.fl_container, SettingFragment.newInstance(), getResources().getString(R
 						.string.st_setting_title));
 				break;
@@ -96,9 +101,32 @@ public class SettingActivity extends BaseAppCompatActivity {
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		ObserverManager.getInstance().addUserUpdateListener(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+	}
 
 	@Override
 	public void handleBackPressed() {
 		super.handleBackPressed();
+	}
+
+	@Override
+	public void onUserUpdate() {
+		if (mInSetting) {
+			return;
+		}
+		if (!AccountManager.getInstance().isLogin()) {
+			ToastUtil.showShort("登录状态失效，请重新登录");
+			IntentUtil.jumpLogin(this);
+			finish();
+		}
 	}
 }

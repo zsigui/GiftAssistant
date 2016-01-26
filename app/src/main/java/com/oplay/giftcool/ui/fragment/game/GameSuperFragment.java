@@ -70,6 +70,9 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
 	public void updateData(IndexGameSuper data) {
 		if (data == null || mAdapter == null) {
+			if (!mHasData) {
+				mViewManager.showErrorRetry();
+			}
 			return;
 		}
 		mAdapter.updateData(data);

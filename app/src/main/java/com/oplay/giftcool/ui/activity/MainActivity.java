@@ -122,9 +122,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (AccountManager.getInstance().isLogin()) {
 			mUser = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(mUser.giftCount));
-			ViewUtil.showAvatarImage(mUser.avatar, ivProfile, AccountManager.getInstance().isLogin());
+			ViewUtil.showAvatarImage(mUser.avatar, ivProfile, true);
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
+			ivProfile.setTag("");
 			tvGiftCount.setText("0");
 		}
 	}
