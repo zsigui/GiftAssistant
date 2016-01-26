@@ -1,6 +1,6 @@
 package com.oplay.giftcool.download.listener;
 
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 
 /**
  * OnDownloadStatusChangeListener
@@ -10,5 +10,5 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
  *         description
  */
 public interface OnDownloadStatusChangeListener {
-	public void onDownloadStatusChanged(IndexGameNew appInfo);
+	public void onDownloadStatusChanged(GameDownloadInfo appInfo);
 }

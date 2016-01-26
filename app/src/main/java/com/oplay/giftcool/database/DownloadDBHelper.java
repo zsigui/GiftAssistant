@@ -12,6 +12,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.model.DownloadStatus;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.socks.library.KLog;
 
@@ -85,7 +86,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		);
 	}
 
-	private boolean updateElseInsert(SQLiteDatabase db, IndexGameNew downloadTask) {
+	private boolean updateElseInsert(SQLiteDatabase db, GameDownloadInfo downloadTask) {
 		try {
 			if (db == null || downloadTask == null) {
 				return false;
@@ -123,7 +124,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		return false;
 	}
 
-	private boolean deleteDownloadTask(IndexGameNew downloadTask) {
+	private boolean deleteDownloadTask(GameDownloadInfo downloadTask) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.i("DBHelper_Download", "DownloadTaskToDeleteInDB:" + downloadTask);
@@ -188,7 +189,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		return null;
 	}
 
-	private ContentValues getUpdateAppContentValues(IndexGameNew downloadTask) {
+	private ContentValues getUpdateAppContentValues(GameDownloadInfo downloadTask) {
 		final ContentValues contentValues = new ContentValues();
 		if (!TextUtils.isEmpty(downloadTask.name)) {
 			contentValues.put(KEY_OF_APPNAME, downloadTask.name);
@@ -285,12 +286,12 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 	}
 
 	@Override
-	public void onDownloadStatusChanged(IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(GameDownloadInfo appInfo) {
 		try {
 			if (appInfo == null || TextUtils.isEmpty(appInfo.downloadUrl)) {
 				return;
 			}
-			final IndexGameNew item = appInfo;
+			final GameDownloadInfo item = appInfo;
 			new Thread(new Runnable() {
 				@Override
 				public void run() {

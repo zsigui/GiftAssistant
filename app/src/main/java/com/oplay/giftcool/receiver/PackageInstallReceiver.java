@@ -10,7 +10,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.InstallNotifier;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -38,7 +38,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 			}
 			// 安装新应用
 			if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
-				final IndexGameNew appInfo = ApkDownloadManager.getInstance(context)
+				final GameDownloadInfo appInfo = ApkDownloadManager.getInstance(context)
 						.getAppInfoByPackageName(packName);
 				try {
 					if (appInfo != null) {

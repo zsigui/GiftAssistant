@@ -13,6 +13,7 @@ import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.ViewUtil;
 
@@ -176,7 +177,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 	}
 
 	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
 			@Override
 			public void run() {

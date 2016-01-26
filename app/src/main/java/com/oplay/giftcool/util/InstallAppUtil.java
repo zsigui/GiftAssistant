@@ -3,7 +3,7 @@ package com.oplay.giftcool.util;
 import android.content.Context;
 
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_File;
@@ -20,7 +20,7 @@ import java.io.File;
  */
 public class InstallAppUtil {
 
-	public static void install(Context context, IndexGameNew appInfo) {
+	public static void install(Context context, GameDownloadInfo appInfo) {
 		try {
 			File destFile = appInfo.getDestFile();
 			String destFilePath = appInfo.getDestFilePath();

@@ -15,7 +15,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.StickyListHeadersListViewExpandable;
@@ -35,7 +35,7 @@ import java.util.List;
  *         date 16-1-12
  *         description
  */
-public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements View.OnClickListener,
+public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implements View.OnClickListener,
 		StickyListHeadersAdapter {
 
 	private BaseFragment mFragment;
@@ -52,7 +52,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	private int mEndIndexOfPaused;
 	private int mEndIndexOfDownloaded;
 
-	public AppDownloadAdapter(List<IndexGameNew> listData, BaseFragment fragment) {
+	public AppDownloadAdapter(List<GameDownloadInfo> listData, BaseFragment fragment) {
 		super(fragment.getActivity(), listData);
 		mFragment = fragment;
 		mImageLoader = ImageLoader.getInstance();
@@ -97,7 +97,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final IndexGameNew appInfo = mListData.get(position);
+		final GameDownloadInfo appInfo = mListData.get(position);
 		final String rawUrl = appInfo.downloadUrl;
 		mMap_Url_ViewHolder.put(rawUrl, holder);
 		holder.mIvIcon.setTag(rawUrl);
@@ -174,7 +174,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 				return;
 			}
 
-			final IndexGameNew appInfo = mListData.get(position);
+			final GameDownloadInfo appInfo = mListData.get(position);
 			switch (v.getId()) {
 				// 下载按钮响应
 				case R.id.tv_downloading_action:
@@ -214,7 +214,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		}
 	}
 
-	private void showDelDownloadingConfirmDialog(BaseFragment activity, final IndexGameNew appInfo) {
+	private void showDelDownloadingConfirmDialog(BaseFragment activity, final GameDownloadInfo appInfo) {
 		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 		confirmDialog.setTitle("提示");
 		confirmDialog.setContent("游戏还没下载完，确定删除吗？");
@@ -233,7 +233,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 	}
 
-	private void showDelDownloadedConfirmDialog(BaseFragment activity, final IndexGameNew appInfo) {
+	private void showDelDownloadedConfirmDialog(BaseFragment activity, final GameDownloadInfo appInfo) {
 		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 		confirmDialog.setTitle("提示");
 		confirmDialog.setContent("确定删除安装包吗？");
@@ -267,7 +267,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		return holder;
 	}
 
-	private void initDownloadingStatus(ViewHolder holder, IndexGameNew appInfo) {
+	private void initDownloadingStatus(ViewHolder holder, GameDownloadInfo appInfo) {
 		holder.mPBar.setVisibility(View.VISIBLE);
 		holder.mPBar.setEnabled(true);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_grey);
@@ -277,7 +277,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		updateDownloadRate(holder.mTvSpeed, 0);
 	}
 
-	private void initFailedStatus(ViewHolder holder, IndexGameNew appInfo) {
+	private void initFailedStatus(ViewHolder holder, GameDownloadInfo appInfo) {
 		holder.mPBar.setVisibility(View.VISIBLE);
 		holder.mPBar.setEnabled(false);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
@@ -287,7 +287,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mTvSpeed.setText("下载暂停中");
 	}
 
-	private void initPauseStatus(ViewHolder holder, IndexGameNew appInfo) {
+	private void initPauseStatus(ViewHolder holder, GameDownloadInfo appInfo) {
 		holder.mPBar.setVisibility(View.VISIBLE);
 		holder.mPBar.setEnabled(false);
 		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
@@ -297,7 +297,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 		holder.mTvSpeed.setText("下载暂停中");
 	}
 
-	private void initDownloadedStatus(ViewHolder holder, IndexGameNew appInfo) {
+	private void initDownloadedStatus(ViewHolder holder, GameDownloadInfo appInfo) {
 		holder.mPBar.setVisibility(View.GONE);
 		holder.mTvPercent.setText(String.format("版本号：%s | %s", appInfo.versionName, appInfo.getApkFileSizeStr()));
 		holder.mTvSpeed.setVisibility(View.GONE);
@@ -330,7 +330,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 	}
 
 	private void initViewHolderByStatus(String rawUrl, DownloadStatus status) {
-		final IndexGameNew appInfo = mDownloadManagerInstance.getAppInfoByUrl(rawUrl);
+		final GameDownloadInfo appInfo = mDownloadManagerInstance.getAppInfoByUrl(rawUrl);
 		if (appInfo == null) return;
 		final ViewHolder holder = findVisibleViewHolderByUrl(rawUrl);
 		if (holder == null) {
@@ -347,18 +347,11 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 			initDownloadedStatus(holder, appInfo);
 		}
 
-		int percent = (int) (appInfo.completeSize * 100 / appInfo.apkFileSize);
-
-		holder.mPBar.setProgress(percent);
-
-//		final Object tag = holder.mIvIcon.getTag(TAG_URL);
-//		final String iconUrl = appInfo.img;
-//		if (tag != null && !tag.equals(iconUrl)) {
-//			holder.mIvIcon.setImageResource(R.drawable.ic_img_default);
-//		}
-//
-//		holder.mIvIcon.setTag(TAG_URL, iconUrl);
-//		mImageLoader.displayImage(iconUrl, holder.mIvIcon);
+		if (appInfo.apkFileSize <= 0) {
+			holder.mPBar.setProgress(0);
+		}else {
+			holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
+		}
 		holder.mTvAppName.setText(appInfo.name);
 	}
 
@@ -368,7 +361,7 @@ public class AppDownloadAdapter extends BaseListAdapter<IndexGameNew> implements
 
 	public void updateDownloadingView(String url, int percent, long speedBytesPers) {
 		try {
-			final IndexGameNew appInfo = mDownloadManagerInstance.getAppInfoByUrl(url);
+			final GameDownloadInfo appInfo = mDownloadManagerInstance.getAppInfoByUrl(url);
 			if (appInfo == null) {
 				return;
 			}

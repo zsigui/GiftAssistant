@@ -26,7 +26,7 @@ import java.net.URLDecoder;
  *         description
  */
 public class ApkDownloadDir extends AbsDownloadDir {
-	public static final String DIR_DOWNLOAD = "/gift_assistant/download";
+	public static final String DIR_DOWNLOAD = "/gift_cool/download";
 	private static ApkDownloadDir mSdcardFileDirInstance;
 	private static ApkDownloadDir mDataFileDirInstance;
 

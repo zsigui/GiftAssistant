@@ -15,27 +15,6 @@ public class PayCode implements Serializable {
 	@SerializedName("gift_key")
 	public String giftCode;
 
-	/**
-	 * 订单号
-	 */
-	@SerializedName("trade_no")
-	public String tradeNo;
-
-	/**
-	 * 支付金额，单位元
-	 */
-	@SerializedName("pay_money")
-	public int payNumber;
-
-	/**
-	 * 商品描述
-	 */
-	@SerializedName("description")
-	public String orderDesc;
-
-	/**
-	 * 用户ID
-	 */
-	@SerializedName("cuid")
-	public int uid;
+	@SerializedName("game_info")
+	public GameDownloadInfo gameInfo;
 }

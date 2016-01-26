@@ -164,7 +164,7 @@ public class PayManager {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
-										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData().giftCode);
+										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
 										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_success));
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
@@ -238,8 +238,7 @@ public class PayManager {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
-										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData()
-												.giftCode);
+										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
 										dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_success));
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());

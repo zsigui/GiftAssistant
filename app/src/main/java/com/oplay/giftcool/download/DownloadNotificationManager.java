@@ -13,7 +13,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
 
@@ -79,7 +79,7 @@ public class DownloadNotificationManager {
 		}
 	}
 
-	public static void showDownloadComplete(Context context, IndexGameNew appInfo) {
+	public static void showDownloadComplete(Context context, GameDownloadInfo appInfo) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.logMethodName(DownloadNotificationManager.class);

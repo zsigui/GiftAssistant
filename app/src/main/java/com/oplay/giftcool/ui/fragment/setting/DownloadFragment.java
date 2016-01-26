@@ -7,7 +7,7 @@ import com.oplay.giftcool.adapter.AppDownloadAdapter;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.StickyListHeadersListViewExpandable;
 
@@ -20,7 +20,7 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 
 	private final static String PAGE_NAME = "下载管理";
 	private AppDownloadAdapter mAdapter;
-	private List<IndexGameNew> mListData;
+	private List<GameDownloadInfo> mListData;
 
 
 	public static DownloadFragment newInstance() {
@@ -78,7 +78,7 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 //	}
 
 	@Override
-	public void onDownloadStatusChanged(IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(GameDownloadInfo appInfo) {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

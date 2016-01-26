@@ -44,9 +44,11 @@ public class JsHandler_Action_CallBack extends JsHandler_abstract_Params_NoPsw_H
 				action = Basic_JSONUtil.getInt(params, "a", -1);
 				code = Basic_JSONUtil.getInt(params, "b", -1);
 			}
-			if (code == 1) {
-				((UmipayBrowser) sdkHandler.getActivity()).setActionCode(UmipayBrowser.ACTION_CODE_SUCCESS);
+			if (((UmipayBrowser) sdkHandler.getActivity()).setActionCode(action, code)) {
+
 				return toSimpleCodeJson(OK);
+			} else {
+				return toSimpleCodeJson(Err_Params);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

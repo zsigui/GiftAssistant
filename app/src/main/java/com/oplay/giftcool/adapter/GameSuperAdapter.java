@@ -30,6 +30,7 @@ import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.NetworkImageHolderView;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
@@ -261,7 +262,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 	}
 
 	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		if (mData == null || mData.recommend == null) {
 			return;
 		}

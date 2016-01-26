@@ -11,6 +11,7 @@ import com.oplay.giftcool.download.listener.OnInstallListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.DownloadStatus;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
@@ -50,10 +51,10 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	private final int DOWNLOADFINISHED_PERCENT = 100;
 	private final int DOWNLOADSTART_PERCENT = 0;
-	private Map<String, IndexGameNew> mUrl_AppInfo;
-	private Map<String, IndexGameNew> mPackageName_AppInfo;
+	private Map<String, GameDownloadInfo> mUrl_AppInfo;
+	private Map<String, GameDownloadInfo> mPackageName_AppInfo;
 
-	private List<IndexGameNew> mManagerList;
+	private List<GameDownloadInfo> mManagerList;
 	private int mDownloadingCnt;
 	private int mPendingCnt;
 	private int mPausedCnt;
@@ -123,14 +124,14 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 	}
 
-	public void addDownloadTask(IndexGameNew appInfo) {
+	public void addDownloadTask(GameDownloadInfo appInfo) {
 		if (!checkDownloadTask(appInfo)) {
 			return;
 		}
 		final String apkUrl = appInfo.downloadUrl;
 		//下载包已经在队列中
 		if (mUrl_AppInfo.containsKey(apkUrl)) {
-			final IndexGameNew info = mUrl_AppInfo.get(apkUrl);
+			final GameDownloadInfo info = mUrl_AppInfo.get(apkUrl);
 			if (info == null || appInfo.downloadStatus == null) {
 				AppDebugConfig.logMethodWithParams(this, "下载内容错误");
 				return;
@@ -176,11 +177,11 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
-	public void restartDownloadTask(IndexGameNew appInfo) {
+	public void restartDownloadTask(GameDownloadInfo appInfo) {
 		if (!checkDownloadTask(appInfo)) {
 			return;
 		}
-		IndexGameNew info = mUrl_AppInfo.get(appInfo.downloadUrl);
+		GameDownloadInfo info = mUrl_AppInfo.get(appInfo.downloadUrl);
 		if (info != null) {
 			if (mManagerList.remove(info)) {
 				mPausedCnt = decrease(mPausedCnt);
@@ -189,7 +190,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	public void stopDownloadTask(IndexGameNew appInfo) {
+	public void stopDownloadTask(GameDownloadInfo appInfo) {
 		appInfo = mUrl_AppInfo.get(appInfo.downloadUrl);
 		if (!checkDownloadTask(appInfo)) {
 			return;
@@ -204,7 +205,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	public synchronized void removeDownloadTask(String url) {
-		IndexGameNew info = mUrl_AppInfo.get(url);
+		GameDownloadInfo info = mUrl_AppInfo.get(url);
 		if (!checkDownloadTask(info)) {
 			return;
 		}
@@ -245,14 +246,14 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		return getEndOfPaused() + mFinishedCnt;
 	}
 
-	private synchronized void addPendingTask(IndexGameNew appInfo) {
+	private synchronized void addPendingTask(GameDownloadInfo appInfo) {
 		mManagerList.add(getEndOfDownloading(), appInfo);
 		appInfo.downloadStatus = DownloadStatus.PENDING;
 		mPendingCnt++;
 		notifyDownloadStatusListeners(appInfo);
 		if (mDownloadingCnt < MAX_DOWNLOADING_COUNT) {
 			apkDownload(appInfo);
-			IndexGameNew info = mManagerList.remove(mDownloadingCnt);
+			GameDownloadInfo info = mManagerList.remove(mDownloadingCnt);
 			mPendingCnt = decrease(mPendingCnt);
 			info.downloadStatus = DownloadStatus.DOWNLOADING;
 			mManagerList.add(mDownloadingCnt, info);
@@ -261,7 +262,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	private synchronized IndexGameNew stopDownloadingTask(IndexGameNew appInfo) {
+	private synchronized GameDownloadInfo stopDownloadingTask(GameDownloadInfo appInfo) {
 		if (appInfo == null) {
 			return null;
 		}
@@ -272,7 +273,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 			task.setIdentify(appInfo.destUrl);
 			stopDownload(task);
 			if (mPendingCnt > 0) {
-				IndexGameNew info = mManagerList.get(mDownloadingCnt);
+				GameDownloadInfo info = mManagerList.get(mDownloadingCnt);
 				apkDownload(info);
 				mManagerList.remove(info);
 				mPendingCnt = decrease(mPendingCnt);
@@ -286,9 +287,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		return appInfo;
 	}
 
-	private void deleteDownloadInfo(IndexGameNew appInfo) {
+	private void deleteDownloadInfo(GameDownloadInfo appInfo) {
 		if (appInfo != null) {
-			final IndexGameNew info = mUrl_AppInfo.get(appInfo.downloadUrl);
+			final GameDownloadInfo info = mUrl_AppInfo.get(appInfo.downloadUrl);
 			if (info != null) {
 				info.downloadStatus = null;
 				mUrl_AppInfo.remove(appInfo.downloadUrl);
@@ -299,7 +300,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	private void apkDownload(IndexGameNew appInfo) {
+	private void apkDownload(GameDownloadInfo appInfo) {
 		FileDownloadTask task = new FileDownloadTask(appInfo.downloadUrl, null, -1, 1000);
 		task.setIdentify(appInfo.destUrl);
 		task.addIFileDownloadTaskExtendObject(TAG_APPINFO, appInfo);
@@ -349,7 +350,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	private void notifyDownloadStatusListeners(IndexGameNew appInfo) {
+	private void notifyDownloadStatusListeners(GameDownloadInfo appInfo) {
 		try {
 			if (mNotifyStatusLock != null) {
 				mNotifyStatusLock.lock();
@@ -408,25 +409,25 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	private boolean checkDownloadTask(IndexGameNew appInfo) {
+	private boolean checkDownloadTask(GameDownloadInfo appInfo) {
 		return !(appInfo == null || TextUtils.isEmpty(appInfo.packageName) || TextUtils.isEmpty(appInfo.downloadUrl));
 	}
 
 	public DownloadStatus getAppDownloadStatus(String url) {
-		IndexGameNew info = mUrl_AppInfo.get(url);
+		GameDownloadInfo info = mUrl_AppInfo.get(url);
 		return info != null ? info.downloadStatus : null;
 	}
 
-	public IndexGameNew getAppInfoByPackageName(String packageName) {
+	public GameDownloadInfo getAppInfoByPackageName(String packageName) {
 		return mPackageName_AppInfo.get(packageName);
 	}
 
-	public IndexGameNew getAppInfoByUrl(String url) {
+	public GameDownloadInfo getAppInfoByUrl(String url) {
 		return mUrl_AppInfo.get(url);
 	}
 
 	public long getCompleteSizeByUrl(String url) {
-		final IndexGameNew appInfo = mUrl_AppInfo.get(url);
+		final GameDownloadInfo appInfo = mUrl_AppInfo.get(url);
 		if (appInfo != null) {
 			return appInfo.completeSize;
 		}
@@ -434,20 +435,20 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	public int getProgressByUrl(String url) {
-		final IndexGameNew appInfo = mUrl_AppInfo.get(url);
+		final GameDownloadInfo appInfo = mUrl_AppInfo.get(url);
 		if (appInfo != null && appInfo.apkFileSize > 0) {
 			return (int) (appInfo.completeSize * 100 / appInfo.apkFileSize);
 		}
 		return 0;
 	}
 
-	public List<IndexGameNew> getDownloadList() {
+	public List<GameDownloadInfo> getDownloadList() {
 		initStatus();
 		return mManagerList;
 	}
 
 	private void initStatus() {
-		for (IndexGameNew i : mManagerList) {
+		for (GameDownloadInfo i : mManagerList) {
 			i.initAppInfoStatus(mApplicationContext);
 		}
 	}
@@ -482,7 +483,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	                                        int percent, long speedBytes, long intervalTime_ms) {
 		final String downloadUrl = fileDownloadTask.getRawDownloadUrl();
 		if (downloadUrl != null) {
-			IndexGameNew info = mUrl_AppInfo.get(downloadUrl);
+			GameDownloadInfo info = mUrl_AppInfo.get(downloadUrl);
 			if (info != null) {
 				if (totalLength > 0) {
 					info.apkFileSize = totalLength;
@@ -498,7 +499,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	@Override
 	public boolean onDownloadSuccess(FileDownloadTask fileDownloadTask) {
-		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+		GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
 		if (appInfo != null) {
 			try {
 				if (AssistantApp.getInstance().isPlayDownloadComplete()) {
@@ -524,7 +525,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	@Override
 	public boolean onFileAlreadyExist(FileDownloadTask fileDownloadTask) {
-		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+		GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
 		if (appInfo != null) {
 			stopDownloadingTask(appInfo);
 			mManagerList.add(getEndOfPaused(), appInfo);
@@ -540,7 +541,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	@Override
 	public boolean onDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus finalDownloadStatus) {
-		IndexGameNew appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+		GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
 		if (appInfo != null) {
 			stopDownloadingTask(appInfo);
 			appInfo.downloadStatus = DownloadStatus.FAILED;
@@ -575,7 +576,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	@Override
 	public void onInstall(Context context, String packageName) {
-		final IndexGameNew appInfo = getAppInfoByPackageName(packageName);
+		final GameDownloadInfo appInfo = getAppInfoByPackageName(packageName);
 		if (appInfo != null) {
 			appInfo.initAppInfoStatus(context);
 			notifyDownloadStatusListeners(appInfo);

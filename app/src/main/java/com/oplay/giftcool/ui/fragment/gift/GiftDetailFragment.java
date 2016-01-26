@@ -28,6 +28,7 @@ import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -372,7 +373,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	}
 
 	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

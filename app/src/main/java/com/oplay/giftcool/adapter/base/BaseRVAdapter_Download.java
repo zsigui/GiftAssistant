@@ -11,6 +11,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.DownloadStatus;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.socks.library.KLog;
 
@@ -131,7 +132,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 	}
 
 	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		((Activity) mContext).runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

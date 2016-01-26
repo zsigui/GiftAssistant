@@ -370,8 +370,12 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 		}
 	}
 
-	public void setActionCode(int actionCode) {
+	public boolean setActionCode(int actionType, int actionCode) {
+		if (actionType != mActionType) {
+			return false;
+		}
 		mActionCode = actionCode;
+		return true;
 	}
 
 	public void logout_CloseBrowser() {

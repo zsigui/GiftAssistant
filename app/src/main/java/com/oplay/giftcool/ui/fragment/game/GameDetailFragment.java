@@ -12,6 +12,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
@@ -119,7 +120,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	}
 
 	@Override
-	public void onDownloadStatusChanged(final IndexGameNew appInfo) {
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
