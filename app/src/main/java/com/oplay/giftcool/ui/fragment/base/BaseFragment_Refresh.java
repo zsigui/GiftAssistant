@@ -11,6 +11,7 @@ import com.oplay.giftcool.ui.widget.layout.RefreshLayout;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author JackieZhuang
@@ -66,9 +67,14 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mRefreshLayout.setEnabled(true);
 	}
 
-	// 刷新时，默认可以头一次加载可以下拉更多
-	protected void refreshLoadState() {
-
+	protected void refreshLoadState(Object data, boolean isEndPage) {
+		if (data != null && data instanceof List) {
+			mRefreshLayout.setCanShowLoad(((List)data).size() > 5);
+			mNoMoreLoad = isEndPage || ((List)data).size() < 10;
+		} else {
+			mNoMoreLoad = isEndPage || data == null;
+			mRefreshLayout.setCanShowLoad(true);
+		}
 	}
 
 	protected void setLoadState(Object data, boolean isEndPage) {

@@ -94,7 +94,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mDataView.setAdapter(mAdapter);
 		if (mData != null) {
 			mNoMoreLoad = mData.size() < 10;
-			mRefreshLayout.setCanShowLoad(true);
+			mRefreshLayout.setCanShowLoad(mData.size() >= 6);
 			updateData(mData);
 		}
 		startClockService();
@@ -122,7 +122,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 											response.body().getCode() == StatusCode.SUCCESS) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
-										setLoadState(backObj.data, backObj.isEndPage);
+										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
 										return;
 									}

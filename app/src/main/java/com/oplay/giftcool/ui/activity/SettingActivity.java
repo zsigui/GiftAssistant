@@ -186,7 +186,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 			return;
 		}
 		if (!AccountManager.getInstance().isLogin()) {
-			ToastUtil.showShort("登录状态失效，请重新登录");
+			ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(this);
 			finish();
 		}

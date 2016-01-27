@@ -351,4 +351,5 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			rvContainer.setAdapter(adapter);
 		}
 	}
+
 }

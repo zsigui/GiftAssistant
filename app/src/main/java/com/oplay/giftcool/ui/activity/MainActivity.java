@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -39,6 +41,7 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
+	private static final String TAG_EXIT = "com.oplay.giftcool.MainActivity.exit";
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
 	// 判断是否今日首次打开APP
@@ -216,12 +219,27 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if (intent != null) {
+			boolean isExit = intent.getBooleanExtra(TAG_EXIT, false);
+			if (isExit) {
+				finish();
+				System.exit(0);
+			}
+		}
+	}
+
+	@Override
 	public void onBackPressed() {
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
+			ObserverManager.getInstance().removeUserUpdateListener(this);
 			mApp.exit();
-			finish();
-			System.exit(0);
+			// 发送退出指令
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtra(TAG_EXIT, true);
+			startActivity(intent);
 		} else {
 			mLastClickTime = System.currentTimeMillis();
 			ToastUtil.showShort("再次点击退出应用");
@@ -238,6 +256,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	public void onUserUpdate() {
 		mUser = AccountManager.getInstance().getUserInfo();
+		KLog.e("userUpdate", "onUserUpdate, mUser = " + mUser);
 		updateToolBar();
 		handleFirstOpen();
 	}

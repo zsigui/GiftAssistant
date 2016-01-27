@@ -43,6 +43,14 @@ public class Global {
 			.cacheInMemory(true)
 			.cacheOnDisk(true)
 			.build();
+	public static final DisplayImageOptions BANNER_IMAGE_LOADER = new DisplayImageOptions.Builder()
+			.showImageForEmptyUri(R.drawable.ic_banner_default)
+			.showImageOnFail(R.drawable.ic_banner_default)
+			.showImageOnLoading(R.drawable.ic_banner_default)
+			.bitmapConfig(Bitmap.Config.RGB_565)
+			.cacheInMemory(true)
+			.cacheOnDisk(true)
+			.build();
 	public static NetEngine getNetEngine() {
 		if (sNetEngine == null) {
 			sNetEngine =AssistantApp.getInstance().getRetrofit().create(NetEngine.class);

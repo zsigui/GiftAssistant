@@ -1,15 +1,17 @@
 package com.oplay.giftcool.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bigkoo.convenientbanner.holder.Holder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.util.ThreadUtil;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-19.
@@ -25,19 +27,31 @@ public class NetworkImageHolderView implements Holder<String> {
 	}
 
 	@Override
-	public void UpdateUI(Context context, int position, String data) {
+	public void UpdateUI(Context context, int position, final String data) {
 		if (data.startsWith("drawable://")) {
 			imageView.setImageResource(R.drawable.ic_banner_empty_default);
 		} else {
-			DisplayImageOptions imgOptions = new DisplayImageOptions.Builder()
-					.showImageForEmptyUri(R.drawable.ic_banner_default)
-					.showImageOnFail(R.drawable.ic_banner_default)
-					.showImageOnLoading(R.drawable.ic_banner_default)
-					.bitmapConfig(Bitmap.Config.RGB_565)
-					.cacheInMemory(true)
-					.cacheOnDisk(true)
-					.build();
-			ImageLoader.getInstance().displayImage(data, imageView, imgOptions);
+			try {
+				if (!ImageLoader.getInstance().isInited()) {
+					ThreadUtil.runInUIThread(new Runnable() {
+						@Override
+						public void run() {
+							if (ImageLoader.getInstance().isInited()) {
+								ImageLoader.getInstance().displayImage(data, imageView, Global.BANNER_IMAGE_LOADER);
+							} else {
+								ThreadUtil.runInUIThread(this, 2000);
+							}
+
+						}
+					}, 2000);
+				} else {
+					ImageLoader.getInstance().displayImage(data, imageView, Global.BANNER_IMAGE_LOADER);
+				}
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(e);
+				}
+			}
 		}
 	}
 }

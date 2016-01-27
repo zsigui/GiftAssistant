@@ -60,6 +60,8 @@ public abstract interface StatusCode {
 	public static int ERR_HASH = 112;
 
 
+
+	/* ******** 用户相关状态码 1002x ~ 1003x ********* */
 	/**
 	 * 未登录
 	 */

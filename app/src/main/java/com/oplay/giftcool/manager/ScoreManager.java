@@ -154,7 +154,6 @@ public class ScoreManager {
 //				// 通知类型出错，返回
 //				return;
 //		}
-		KLog.d("reward_type = " + type);
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -169,9 +168,12 @@ public class ScoreManager {
 										if (!AccountManager.getInstance().isLogin()) {
 											return;
 										}
-										KLog.d("search data = " + response.body().getData());
 										toastByCallback(response.body().getData());
 										writeLocalTaskState(data.type);
+									}
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.d(AppDebugConfig.TAG_MANAGER,
+												"积分获取-" + (response.body() == null?"解析失败" : response.body().error()));
 									}
 								}
 							}

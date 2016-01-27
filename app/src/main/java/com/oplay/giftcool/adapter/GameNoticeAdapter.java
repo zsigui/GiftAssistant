@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -15,6 +16,7 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -24,7 +26,10 @@ import com.oplay.giftcool.util.ViewUtil;
 /**
  * Created by zsigui on 15-12-31.
  */
-public class GameNoticeAdapter extends BaseRVAdapter_Download {
+public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterListener {
+
+	private boolean mHasFooter = false;
+
 	public GameNoticeAdapter(Context context) {
 		super(context);
 		setListener(new OnItemClickListener<IndexGameNew>() {
@@ -40,12 +45,25 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 	}
 
 	@Override
+	protected int getItemFooterCount() {
+		return mHasFooter ? 1 : 0;
+	}
+
+	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		if (viewType == IndexTypeUtil.ITEM_FOOTER) {
+			return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent, false));
+		}
 		return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_index_game_notice, parent, false));
 	}
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		if (getItemViewType(position) == IndexTypeUtil.ITEM_FOOTER) {
+			FooterHolder footerHolder = (FooterHolder) holder;
+			footerHolder.animDrawable.start();
+			return;
+		}
 		ViewHolder viewHolder = (ViewHolder) holder;
 		final IndexGameNew o = mData.get(position);
 		o.initAppInfoStatus(mContext);
@@ -97,6 +115,22 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download {
 
 		mPackageNameMap.put(o.packageName, o);
 		mUrlDownloadBtn.put(o.downloadUrl, viewHolder.btnDownload);
+	}
+
+	@Override
+	public void showFooter(boolean isShow) {
+		mHasFooter = isShow;
+		notifyDataSetChanged();
+	}
+
+	class FooterHolder extends BaseRVHolder {
+
+		AnimationDrawable animDrawable;
+
+		public FooterHolder(View itemView) {
+			super(itemView);
+			animDrawable = (AnimationDrawable) getViewById(R.id.iv_anim).getBackground();
+		}
 	}
 
 	class ViewHolder extends BaseRVHolder {

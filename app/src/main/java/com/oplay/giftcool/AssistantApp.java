@@ -22,6 +22,7 @@ import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
+import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -109,11 +110,20 @@ public class AssistantApp extends Application {
 	 * do work to release the resource when app exit
 	 */
 	public void exit() {
-		setGlobalInit(false);
-		ImageLoader.getInstance().clearMemoryCache();
-		ImageLoader.getInstance().stop();
-		ImageLoader.getInstance().destroy();
-		DownloadNotificationManager.cancelDownload(getApplicationContext());
+		try {
+			ClockService.stopService(getApplicationContext());
+			setGlobalInit(false);
+			if (ImageLoader.getInstance().isInited()) {
+				ImageLoader.getInstance().clearMemoryCache();
+				ImageLoader.getInstance().stop();
+				ImageLoader.getInstance().destroy();
+			}
+			DownloadNotificationManager.cancelDownload(getApplicationContext());
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "exit exception : " + e);
+			}
+		}
 	}
 
 	@Override
@@ -140,7 +150,7 @@ public class AssistantApp extends Application {
 	/**
 	 * initial the configuration of Universal-Image-Loader
 	 */
-	private void initImageLoader() {
+	public void initImageLoader() {
 		try {
 			final DisplayImageOptions options = Global.IMAGE_OPTIONS;
 			final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
@@ -157,9 +167,13 @@ public class AssistantApp extends Application {
 					.build();
 			ImageLoader.getInstance().init(config);
 			L.writeLogs(false);
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
+			}
 		} catch (Throwable e) {
 			ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed");
 				KLog.e(e);
 			}
 		}

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
@@ -18,6 +19,17 @@ import java.util.TimerTask;
 public class ClockService extends Service {
 
 	private Timer mTimer;
+
+
+	public static void stopService(Context context) {
+		Intent intent = new Intent(context, ClockService.class);
+		context.stopService(intent);
+	}
+
+	public static void startService(Context context) {
+		Intent intent = new Intent(context, ClockService.class);
+		context.startService(intent);
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {

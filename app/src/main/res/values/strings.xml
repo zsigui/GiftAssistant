@@ -188,4 +188,7 @@
 	<string name = "st_share_qq_zone" >QQ空间</string >
 	<string name = "st_share_qq_friends" >QQ好友</string >
 	<string name = "st_share_more" >更多</string >
+
+	<!-- -->
+	<string name = "st_hint_un_login">用户登录态失效，请重新登录</string>
 </resources >

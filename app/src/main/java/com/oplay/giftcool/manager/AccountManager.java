@@ -7,6 +7,7 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
@@ -61,7 +62,6 @@ public class AccountManager {
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
 	 */
 	public void setUser(UserModel user) {
-
 		if (mUser != null && mUser.userInfo != null
 				&& user != null && user.userInfo != null) {
 			// 保留用户登录状态
@@ -91,9 +91,6 @@ public class AccountManager {
 			@Override
 			public void run() {
 				// 写入SP中
-				if (isLogin()) {
-					KLog.e("write session = " + getUserSesion().session);
-				}
 				String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
 				Global_SharePreferences.saveEncodeStringToSharedPreferences(mContext,
 						SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, userJson, SPConfig.SALT_USER_INFO);
@@ -137,7 +134,6 @@ public class AccountManager {
 												&& response.body().getCode() == StatusCode.SUCCESS) {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
-											KLog.d("update User success");
 											setUser(user);
 											return;
 										}
@@ -145,6 +141,8 @@ public class AccountManager {
 											KLog.e(AppDebugConfig.TAG_MANAGER,
 													response.body() == null ? "解析失败" : response.body().error());
 										}
+										// 登录状态失效，原因包括: 已在其他地方登录，更新失败
+										sessionFailed(response.body());
 									}
 								}
 
@@ -157,6 +155,13 @@ public class AccountManager {
 							});
 				}
 			});
+		}
+	}
+
+	private void sessionFailed(JsonRespBase response) {
+		if (response !=null && response.getCode()== StatusCode.ERR_UN_LOGIN) {
+			setUser(null);
+			ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
 		}
 	}
 
@@ -184,7 +189,6 @@ public class AccountManager {
 											user.userInfo.score = info.score;
 											user.userInfo.bean = info.bean;
 											user.userInfo.giftCount = info.giftCount;
-											KLog.d("update User Part Info success");
 											setUser(user);
 											return;
 										}
@@ -192,12 +196,7 @@ public class AccountManager {
 											KLog.e(AppDebugConfig.TAG_MANAGER,
 													response.body() == null ? "解析失败" : response.body().error());
 										}
-										// 登录状态失效，原因包括: 已在其他地方登录，更新失败
-										if (response.body() !=null
-												&& response.body().getCode()==StatusCode.ERR_UN_LOGIN) {
-
-											setUser(null);
-										}
+										sessionFailed(response.body());
 									}
 								}
 

@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,6 +94,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	private Runnable mRefreshRunnable = new Runnable() {
 		@Override
 		public void run() {
+			mIsNotifyRefresh = true;
 			lazyLoad();
 			mHandler.postDelayed(this, 5 * 60 * 1000);
 		}
@@ -322,20 +322,10 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mNewAdapter.updateData(newData);
 	}
 
-	private void startClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().startService(intent);
-	}
-
-	private void stopClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().stopService(intent);
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();
-		startClockService();
+		ClockService.startService(getContext());
 		if (mBanner != null) {
 			mBanner.startTurning(3000);
 		}
@@ -344,7 +334,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	public void onPause() {
 		super.onPause();
-		stopClockService();
+		ClockService.stopService(getContext());
 		if (mBanner != null) {
 			mBanner.stopTurning();
 		}
@@ -374,6 +364,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 							@Override
 							public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
 							                       Retrofit retrofit) {
+								if (!mCanShowUI) {
+									return;
+								}
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().isSuccess()) {
 										// 数据刷新成功，进行更新
@@ -437,9 +430,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if (hidden) {
-			stopClockService();
+			ClockService.stopService(getContext());
 		} else {
-			startClockService();
+			ClockService.startService(getContext());
 		}
 	}
 

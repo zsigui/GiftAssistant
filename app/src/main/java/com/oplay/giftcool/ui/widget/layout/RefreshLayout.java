@@ -119,31 +119,40 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * 获取ListView对象
 	 */
 	private void getListView() {
+
 		int childCount = getChildCount();
 		if (childCount > 0) {
-			View childView = getChildAt(0);
-			if (childView instanceof ListView) {
-				mListView = (ListView) childView;
-				// 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
-				mListView.setOnScrollListener(this);
-			} else if (childView instanceof  RecyclerView) {
-				mRecyclerView = (RecyclerView) childView;
-				mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-					@Override
-					public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-						super.onScrollStateChanged(recyclerView, newState);
-					}
-
-					@Override
-					public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-						super.onScrolled(recyclerView, dx, dy);
-						mLastY = dy;
-						if (canLoad()) {
-							loadData();
+			for (int i = 0 ; i < getChildCount(); i++) {
+				View childView = getChildAt(i);
+				if (childView instanceof ListView) {
+					mListView = (ListView) childView;
+					// 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
+					mListView.setOnScrollListener(this);
+					return;
+				}
+				if (childView instanceof  RecyclerView) {
+					mRecyclerView = (RecyclerView) childView;
+					mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+						@Override
+						public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+							super.onScrollStateChanged(recyclerView, newState);
 						}
-					}
-				});
+
+						@Override
+						public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+							super.onScrolled(recyclerView, dx, dy);
+							mLastY = dy;
+							if (canLoad()) {
+								KLog.e("refresh", mRecyclerView.getAdapter().getItemCount());
+								mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
+								loadData();
+							}
+						}
+					});
+					return;
+				}
 			}
+
 		}
 	}
 
@@ -209,7 +218,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 			int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
 
 			int lastPosition = mRecyclerView.getLayoutManager().getPosition(lastChildView);
-
 			if (lastChildBottom <= recyclerBottom
 					&& lastPosition == mRecyclerView.getLayoutManager().getItemCount() - 1) {
 				if (AppDebugConfig.IS_DEBUG) {

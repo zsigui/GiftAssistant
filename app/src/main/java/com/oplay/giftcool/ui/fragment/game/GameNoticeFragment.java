@@ -34,7 +34,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	private final static String PAGE_NAME = "游戏排行";
 	private final static String KEY_DATA = "key_data";
-	private final static long MAINTAIN_DATA_TIME = 0;
+	private final static long MAINTAIN_DATA_TIME = 5 * 1000;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 
 	private RecyclerView mDataView;
@@ -49,15 +49,15 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	private Runnable mClearDataTask = new Runnable() {
 		@Override
 		public void run() {
-			if ((!mInPage && mIsRunning) || mData == null || mData.size() < 10) {
+			if (mInPage || mData == null || mData.size() < 10) {
 				mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
 				return;
 			}
 			ArrayList<IndexGameNew> remainData = new ArrayList<>(10);
-			for (IndexGameNew game : mData) {
-				remainData.add(game);
+			for (int i = 0; i<10; i++) {
+				remainData.add(mData.get(i));
 			}
-			if (!mInPage && mIsRunning) {
+			if (!mInPage || mIsRunning) {
 				updateData(remainData);
 			}
 		}
@@ -118,7 +118,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		                                    response.body().getCode() == StatusCode.SUCCESS) {
                                         refreshSuccessEnd();
                                         OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-                                        setLoadState(backObj.data, backObj.isEndPage);
+	                                    refreshLoadState(backObj.data, backObj.isEndPage);
                                         updateData(backObj.data);
                                         return;
                                     }
@@ -205,7 +205,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         mLastPage += 1;
     }
 
-	@Override
+	/*@Override
 	public void onPause() {
 		super.onPause();
 		if (!mIsRunning) {
@@ -221,7 +221,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 			mHandler.removeCallbacks(mClearDataTask);
 			mIsRunning = false;
 		}
-	}
+	}*/
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {

@@ -101,7 +101,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 									if (response != null && response.isSuccess()) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
-										setLoadState(backObj.data, backObj.isEndPage);
+										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
 										return;
 									}

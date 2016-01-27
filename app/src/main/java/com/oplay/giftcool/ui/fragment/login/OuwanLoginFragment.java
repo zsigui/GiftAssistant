@@ -143,21 +143,22 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	public void writeToHistory(String name) {
 		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
-		if (history.contains(name)) {
-			return;
+		int i = history.indexOf(name);
+		if (i != -1) {
+			// 存在
+			history = history.substring(i, i + name.length() + 1);
 		}
-		if ("".equals(history)) {
-			history = name;
-		} else {
-			history = name + "," + history;
-		}
+		history = name + "," + history;
 		SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, history);
 	}
 
 	public String readFromHistory() {
-		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
-		return "".equals(history) ? "" : history.substring(0,
-				(!history.contains(",") ? history.length() : history.indexOf(",")));
+		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, ",");
+		if (history.charAt(history.length() - 1) != ',') {
+			history += ',';
+			SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_OUWAN, history);
+		}
+		return history.substring(0, history.indexOf(","));
 	}
 
 	private void handleLogin() {
@@ -189,6 +190,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										writeToHistory(login.getUsername());
 										MainActivity.sIsTodayFirstOpen = true;
 										ScoreManager.getInstance().resetLocalTaskState();
+										KLog.i("userUpdate", "LoginSuccess.userModel = " + userModel + ", setUser");
 										AccountManager.getInstance().setUser(userModel);
 										if (getActivity() != null) {
 											((BaseAppCompatActivity) getActivity()).handleBackPressed();

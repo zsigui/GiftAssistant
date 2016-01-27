@@ -23,6 +23,7 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -97,7 +98,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 											response.body().getCode() == StatusCode.SUCCESS) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
-										setLoadState(backObj.data, backObj.isEndPage);
+										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
 										return;
 									}
@@ -117,6 +118,16 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 				}
 			}
 		});
+	}
+
+	@Override
+	protected void refreshLoadState(Object data, boolean isEndPage) {
+		if (data != null && data instanceof List) {
+			mRefreshLayout.setCanShowLoad(((List)data).size() > 4);
+			mNoMoreLoad = isEndPage || ((List)data).size() < 10;
+		} else {
+			mNoMoreLoad = isEndPage || data == null;
+		}
 	}
 
 	/**

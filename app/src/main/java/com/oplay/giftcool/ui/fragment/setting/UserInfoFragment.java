@@ -215,6 +215,10 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
 				return;
 			case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:
+				if (code == ObserverManager.UserActionListener.ACTION_CODE_SUCCESS) {
+					ToastUtil.showShort("密码修改成功，请使用新密码重新登录");
+					AccountManager.getInstance().logout();
+				}
 				return;
 		}
 		if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {

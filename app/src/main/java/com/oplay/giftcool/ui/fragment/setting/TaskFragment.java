@@ -67,10 +67,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
-	protected void setListener() {
-		ObserverManager.getInstance().addUserUpdateListener(this);
-		ObserverManager.getInstance().addUserActionListener(this);
-	}
+	protected void setListener() {}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
@@ -78,6 +75,16 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
 		ScoreManager.getInstance().setInWorking(true);
+	}
+
+	private long mTime = 0;
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		mTime = System.currentTimeMillis();
+		ObserverManager.getInstance().addUserUpdateListener(this);
+		ObserverManager.getInstance().addUserActionListener(this);
 	}
 
 	@Override
@@ -354,17 +361,21 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	public void onDestroyView() {
-		KLog.e("onDestoryView");
 		super.onDestroyView();
 		ObserverManager.getInstance().removeActionListener(this);
 	}
 
+
+
 	@Override
 	public void onUserUpdate() {
-
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
 			tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		}
+		if (mIsNotifyRefresh) {
+			return;
+		}
+		mIsNotifyRefresh = true;
 		lazyLoad();
 	}
 
@@ -375,7 +386,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	public void onUserActionFinish(int action, int code) {
-		KLog.e("action = " + action + ", code = " + code);
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
 				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);

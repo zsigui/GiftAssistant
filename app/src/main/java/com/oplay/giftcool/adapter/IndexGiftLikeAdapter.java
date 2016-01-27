@@ -19,7 +19,7 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike> {
+public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike>{
 
 	public IndexGiftLikeAdapter(RecyclerView recyclerView) {
 		super(recyclerView, R.layout.item_index_gift_like);

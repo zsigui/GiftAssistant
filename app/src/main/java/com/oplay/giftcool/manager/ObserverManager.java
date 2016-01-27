@@ -3,9 +3,11 @@ package com.oplay.giftcool.manager;
 import android.app.Activity;
 import android.app.Fragment;
 
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 观察者模式管理器
@@ -33,54 +35,71 @@ public class ObserverManager {
 		return sInstance;
 	}
 
-	private ArrayList<UserUpdateListener> mUserObservers = new ArrayList<>();
+	private HashMap<String, UserUpdateListener> mUserObservers = new HashMap<>();
 
-	private ArrayList<GiftUpdateListener> mGiftObservers = new ArrayList<>();
+	private HashMap<String, GiftUpdateListener> mGiftObservers = new HashMap<>();
 
-	private ArrayList<UserActionListener> mUserActionListeners = new ArrayList<>();
+	private HashMap<String, UserActionListener> mUserActionListeners = new HashMap<>();
 
 	public void addUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
-		mUserObservers.add(observer);
+		String key = observer.getClass().getName();
+		if (mUserObservers.containsKey(key)) return;
+		mUserObservers.put(key, observer);
 	}
 
 	public void removeUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
-		mUserObservers.remove(observer);
+		mUserObservers.remove(observer.getClass().getName());
 	}
 
 	public void addGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
-		mGiftObservers.add(observer);
+		String key = observer.getClass().getName();
+		if (mGiftObservers.containsKey(key)) return;
+		mGiftObservers.put(key, observer);
 	}
 
 	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
-		mGiftObservers.remove(observer);
+		mGiftObservers.remove(observer.getClass().getName());
 	}
 
 	public void addUserActionListener(UserActionListener observer) {
 		if (observer == null) return;
-		mUserActionListeners.add(observer);
+		String key = observer.getClass().getName();
+		if (mUserActionListeners.containsKey(key)) return;
+		mUserActionListeners.put(key, observer);
 	}
 
 	public void removeActionListener(UserActionListener observer) {
 		if (observer == null) return;
-		mUserActionListeners.remove(observer);
+		mUserActionListeners.remove(observer.getClass().getName());
 	}
 
 	public void notifyUserUpdate() {
-		for (UserUpdateListener observer : mUserObservers) {
-			if (observer != null) {
-				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
-					// 当为fragment且正被移除出界面，不更新，正确？
-					return;
+		for (Map.Entry<String, UserUpdateListener> entry : mUserObservers.entrySet()) {
+			UserUpdateListener observer = entry.getValue();
+			try {
+				if (observer != null) {
+					if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
+						// 当为fragment且正被移除出界面，不更新，正确？
+						AppDebugConfig.logMethodWithParams(UserUpdateListener.class.getSimpleName(),
+								"isRemove = " + observer + ", " + ((Fragment) observer).isRemoving());
+						continue;
+					}
+					if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
+						// 当Activity即将被销毁，无须更新
+						AppDebugConfig.logMethodWithParams(UserUpdateListener.class.getSimpleName(),
+								"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
+						continue;
+					}
+					observer.onUserUpdate();
 				}
-				if (observer instanceof Activity && (((Activity)observer).isFinishing())) {
-					// 当Activity即将被销毁，无须更新
-					return;
+			} catch (Throwable e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, e);
 				}
-				observer.onUserUpdate();
 			}
 		}
 	}
@@ -88,17 +107,19 @@ public class ObserverManager {
 
 
 	public void notifyGiftUpdate() {
-		for (GiftUpdateListener observer : mGiftObservers) {
+		for (GiftUpdateListener observer : mGiftObservers.values()) {
 			if (observer != null) {
 				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
 					// 当为fragment且正被移除出界面，不更新，正确？
-					KLog.d("notify", "isRemove = " + observer + ", " + ((Fragment) observer).isRemoving());
-					return;
+					AppDebugConfig.logMethodWithParams(GiftUpdateListener.class.getSimpleName(),
+							"isRemove = " + observer + ", " + ((Fragment) observer).isRemoving());
+					continue;
 				}
 				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
 					// 当Activity即将被销毁，无须更新
-					KLog.d("notify", "isFinishing = " + observer + ", " + ((Activity) observer).isFinishing());
-					return;
+					AppDebugConfig.logMethodWithParams(GiftUpdateListener.class.getSimpleName(),
+							"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
+					continue;
 				}
 				observer.onGiftUpdate();
 			}
@@ -106,9 +127,20 @@ public class ObserverManager {
 	}
 
 	public void notifyUserActionUpdate(int action, int code) {
-		for (UserActionListener observer : mUserActionListeners) {
+		for (UserActionListener observer : mUserActionListeners.values()) {
 			if (observer != null) {
-
+				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
+					// 当为fragment且正被移除出界面，不更新，正确？
+					AppDebugConfig.logMethodWithParams(UserActionListener.class.getSimpleName(),
+							"isRemove = " + observer + ", " + ((Fragment) observer).isRemoving());
+					continue;
+				}
+				if (observer instanceof Activity && ((Activity)observer).isFinishing()) {
+					// 当Activity即将被销毁，无须更新
+					AppDebugConfig.logMethodWithParams(UserActionListener.class.getSimpleName(),
+							"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
+					continue;
+				}
 				observer.onUserActionFinish(action, code);
 			}
 		}

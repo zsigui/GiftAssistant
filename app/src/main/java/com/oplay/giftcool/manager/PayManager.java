@@ -194,6 +194,11 @@ public class PayManager {
 										return;
 									}
 									if (response.body() != null) {
+										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+											ToastUtil.showShort(context.getResources().getString(R.string.st_hint_un_login));
+											IntentUtil.jumpLogin(context);
+											return;
+										}
 										ConfirmDialog dialog = ConfirmDialog.newInstance();
 										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));
 										dialog.setNegativeVisibility(View.GONE);
