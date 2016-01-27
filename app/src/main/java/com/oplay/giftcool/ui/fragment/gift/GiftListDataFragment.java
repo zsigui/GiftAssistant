@@ -198,7 +198,14 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	}
 
 	public void updateData(ArrayList<IndexGiftNew> data) {
-		mViewManager.showContent();
+		if (data == null) {
+			return;
+		}
+		if (data.size() == 0) {
+			mViewManager.showEmpty();
+		} else {
+			mViewManager.showContent();
+		}
 		mHasData = true;
 		mData = data;
 		mAdapter.updateData(mData);

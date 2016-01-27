@@ -15,9 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Base64;
 
-import com.litesuits.android.log.Log;
-import com.litesuits.common.assist.Base64;
 import com.socks.library.KLog;
 
 import java.io.ByteArrayInputStream;
@@ -157,7 +156,6 @@ public class BitmapUtil {
 
 	public static Intent buildImageGetIntent(Uri saveTo, int aspectX, int aspectY,
 	                                         int outputX, int outputY, boolean returnData) {
-		Log.i(TAG, "Build.VERSION.SDK_INT : " + Build.VERSION.SDK_INT);
 		Intent intent = new Intent();
 		if (Build.VERSION.SDK_INT < 19) {
 			intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -231,7 +229,6 @@ public class BitmapUtil {
 		bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
 		byte[] bytes = baos.toByteArray();
 		bitmap.recycle();
-		Log.i(TAG, "Bitmap compressed success, size: " + bytes.length);
 		return bytes;
 	}
 

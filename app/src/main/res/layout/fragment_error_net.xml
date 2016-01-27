@@ -6,7 +6,7 @@
 	<ImageView
 			android:id="@+id/v_err"
 			android:contentDescription="@null"
-			android:src="@drawable/err_404"
+			android:src="@drawable/pic_error_net"
 			android:scaleType="centerInside"
 			android:layout_centerInParent="true"
             android:clickable="true"

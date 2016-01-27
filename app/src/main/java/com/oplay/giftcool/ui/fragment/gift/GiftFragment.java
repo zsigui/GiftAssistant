@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
-import com.litesuits.common.utils.PackageUtil;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.IndexGiftLikeAdapter;
@@ -40,6 +39,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
 import java.io.Serializable;
@@ -248,7 +248,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					return;
 				}
 				ReqIndexGift data = new ReqIndexGift();
-				data.appNames = PackageUtil.getInstalledAppName(getContext());
+				data.appNames = SystemUtil.getInstalledAppName(getContext());
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
 				Global.getNetEngine().obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
@@ -284,6 +284,14 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			if (!mHasData) {
 				mViewManager.showErrorRetry();
 			}
+			return;
+		}
+		if (data.limit != null && data.limit.size() == 0
+				&& data.news != null && data.news.size() == 0
+				&& data.banner != null && data.banner.size() == 0
+				&& data.like != null && data.like.size() == 0) {
+			// 数据为空
+			mViewManager.showEmpty();
 			return;
 		}
 		int y = mScrollView.getScrollY();

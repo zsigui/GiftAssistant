@@ -92,7 +92,7 @@ public class AssistantApp extends Application {
 	}
 
 	public void initLoadingView() {
-		LoadAndRetryViewManager.DEFAULT_EMPTY_VIEW_ID = R.layout.fragment_empty_search;
+		LoadAndRetryViewManager.DEFAULT_EMPTY_VIEW_ID = R.layout.fragment_data_empty;
 		LoadAndRetryViewManager.DEFAULT_LOAD_VIEW_ID = R.layout.fragment_data_loading;
 		// 加载失败，错误或者重试
 		LoadAndRetryViewManager.DEFAULT_ERROR_RETRY_VIEW_ID = R.layout.fragment_error_net;

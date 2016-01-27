@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ListView;
 
-import com.litesuits.common.utils.PackageUtil;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftLikeListAdapter;
 import com.oplay.giftcool.config.Global;
@@ -15,6 +14,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +72,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		mLastPage = 1;
 
 		if (TextUtils.isEmpty(mGameKey)) {
-			mReqPageObj.data.appNames = PackageUtil.getInstalledAppName(getContext());
+			mReqPageObj.data.appNames = SystemUtil.getInstalledAppName(getContext());
 		} else {
 			HashSet<String> s = new HashSet<>();
 			s.add(mGameKey);
@@ -163,7 +163,11 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 	}
 
 	public void updateData(ArrayList<IndexGiftLike> data) {
-		mViewManager.showContent();
+		if (data.size() == 0) {
+			mViewManager.showEmpty();
+		} else {
+			mViewManager.showContent();
+		}
 		mHasData = true;
 		mData = data;
 		mAdapter.updateData(mData);

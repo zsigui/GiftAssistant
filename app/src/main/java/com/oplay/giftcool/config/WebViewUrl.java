@@ -5,7 +5,6 @@ package com.oplay.giftcool.config;
  */
 public class WebViewUrl {
 
-	//public static final String URL_BASE = "http://172.16.1.250:8977/";
 	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/";
 	public static final String URL_BASE = "http://libao.ouwan.com/";
 

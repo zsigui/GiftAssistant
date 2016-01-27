@@ -58,7 +58,7 @@ public class ClockService extends Service {
 					}
 				});
 			}
-		}, 0, 10 * 1000);
+		}, 0, 60 * 1000);
 		return super.onStartCommand(intent, flags, startId);
 	}
 

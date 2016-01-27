@@ -59,11 +59,11 @@ public class ToastUtil {
 	}
 
 	public static void blurErrorResp(String prefix, Response response) {
-		ToastUtil.showShort(prefix + (response == null ? "返回出错" : response.message()));
+		ToastUtil.showShort(prefix + (response == null ? "-返回出错" : "-" + response.message()));
 	}
 
 	public static void blurErrorMsg(String prefix, JsonRespBase response) {
-		ToastUtil.showShort(prefix + (response == null ? "解析错误" : response.getMsg()));
+		ToastUtil.showShort(prefix + (response == null ? "-内部错误" : "-" + response.getMsg()));
 	}
 
 	/**

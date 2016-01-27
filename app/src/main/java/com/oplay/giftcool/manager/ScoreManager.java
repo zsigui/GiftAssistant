@@ -134,6 +134,9 @@ public class ScoreManager {
 	 * @param ptype 分享类型采用setRewardType并设置该值为RewardType.NOTHING
 	 */
 	public void reward(int ptype) {
+		if (!AccountManager.getInstance().isLogin()) {
+			return;
+		}
 		final int type;
 		if (ptype == RewardType.NOTHING) {
 			type = getRewardType();

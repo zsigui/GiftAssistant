@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -16,12 +16,18 @@ import java.util.List;
  */
 public class SystemUtil {
 
-	public static List<String> getInstalledAppName(Context context) {
-		List<String> data = new ArrayList<>();
+	public static HashSet<String> getInstalledAppName(Context context) {
+		HashSet<String> data = new HashSet<>();
 		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
 		for (int i = 0; i < packages.size(); i++) {
-			PackageInfo packageInfo = packages.get(i);
-			data.add(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
+			try {
+				PackageInfo packageInfo = packages.get(i);
+				data.add(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_UTIL, e);
+				}
+			}
 		}
 		return data;
 	}

@@ -519,8 +519,8 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 			DownloadNotificationManager.showDownload(mApplicationContext);
 			appInfo.startInstall();
 		}
-		// 完成下载任务，请求奖励积分
 		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
+
 		return false;
 	}
 

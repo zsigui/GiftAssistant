@@ -107,19 +107,18 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		UserInfo user = AccountManager.getInstance().getUserInfo();
 		ViewUtil.showAvatarImage(user.avatar, ivIcon, true);
 		String nick;
-		if (user.loginType == UserTypeUtil.TYPE_POHNE
-				|| (user.loginType != UserTypeUtil.TYPE_OUWAN && user.bindOuwanStatus == 0)) {
+		if (!TextUtils.isEmpty(user.thirdOpenId)) {
 			nick = (TextUtils.isEmpty(user.nick) ?  StringUtil.transePhone(user.phone) : user.nick);
 			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_phone_login));
 			tvLogin.setText(StringUtil.transePhone(user.phone));
 			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_bind));
 			ivLogin.setVisibility(View.GONE);
-			ivBind.setVisibility(View.GONE);
 			tvHint.setText(mContext.getResources().getString(R.string.st_user_phone_hint));
 			if (user.bindOuwanStatus == 1) {
 				// 已绑定偶玩账号
 				tvBind.setText(user.username);
 				rlModifyPwd.setVisibility(View.VISIBLE);
+				ivBind.setVisibility(View.GONE);
 			} else {
 				tvBind.setText("未绑定");
 				rlModifyPwd.setVisibility(View.GONE);
@@ -168,13 +167,13 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				}
 				break;
 			case R.id.rl_bind:
-				if (user.loginType == UserTypeUtil.TYPE_POHNE) {
+				if (!TextUtils.isEmpty(user.thirdOpenId)) {
 					if (user.bindOuwanStatus == 0) {
 						// 绑定偶玩账号
 						OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
 					}
 				} else {
-					// 调用偶玩绑定号码
+					// 调用偶玩绑定手机号码
 					OuwanSDKManager.getInstance().showChangePhoneView(getActivity());
 				}
 				break;
@@ -182,6 +181,12 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				OuwanSDKManager.getInstance().showOuwanModifyPwdView(getActivity());
 				break;
 		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override
@@ -206,14 +211,17 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 
 	@Override
 	public void onUserActionFinish(int action, int code) {
-		KLog.e("action = " + action + ", code = " + code);
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
-				return;
+				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
+					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
+				}
+				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
-				return;
+				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
+					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
+				}
+				break;
 			case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:
 				if (code == ObserverManager.UserActionListener.ACTION_CODE_SUCCESS) {
 					ToastUtil.showShort("密码修改成功，请使用新密码重新登录");

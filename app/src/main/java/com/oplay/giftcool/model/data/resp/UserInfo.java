@@ -10,10 +10,14 @@ import java.io.Serializable;
 public class UserInfo implements Serializable {
 
 	/**
-	 * 登陆类型
+	 * 登陆类型(采用何种方式登录)
 	 */
-	@SerializedName("login_type")
 	public int loginType;
+	/**
+	 * 第三方OpenId(用于识别该账号是否首次手机登录)
+	 */
+	@SerializedName("third_openid")
+	public String thirdOpenId;
 	/**
 	 * 0未绑定 1绑定 ， 当且仅当login_type为手机时可用
 	 */

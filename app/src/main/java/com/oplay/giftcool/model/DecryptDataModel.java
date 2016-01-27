@@ -28,6 +28,9 @@ public class DecryptDataModel {
 	 * 平台系统，默认
 	 */
 	private int mPlatform = 3;
+
+//	private String mAppKey = "abcdef0123456789";
+//	private String mAppSecret = "0123456789abcdef";
 	private String mAppKey = AppConfig.APP_KEY;
 	private String mAppSecret = AppConfig.APP_SECRET;
 

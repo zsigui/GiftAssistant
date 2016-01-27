@@ -360,12 +360,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
+	public void onDestroy() {
+		super.onDestroy();
 		ObserverManager.getInstance().removeActionListener(this);
 	}
-
-
 
 	@Override
 	public void onUserUpdate() {
@@ -388,10 +386,14 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	public void onUserActionFinish(int action, int code) {
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
+				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
+					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
+				}
 				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
+				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
+					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
+				}
 				break;
 		}
 	}

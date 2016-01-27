@@ -31,6 +31,7 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import retrofit.Callback;
@@ -43,6 +44,7 @@ import retrofit.Retrofit;
 public class PhoneLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
 
 	private final static String PAGE_NAME = "手机号登录";
+	private final static String ERR_PREFIX = "登录失败";
 	private AutoCompleteTextView etPhone;
 	private TextView tvClear;
 	private EditText etCode;
@@ -292,11 +294,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}
-									showToast("登录失败 - " + (response.body() == null ?
-											"解析异常" : response.body().getMsg()));
+									ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
 									return;
 								}
-								showToast("登录失败 - 解析异常");
+								ToastUtil.blurErrorResp(ERR_PREFIX, response);
 							}
 
 							@Override
@@ -308,7 +309,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
 								}
-								showToast("登录失败 - 网络异常");
+								ToastUtil.blurThrow(ERR_PREFIX);
 							}
 						});
 			}

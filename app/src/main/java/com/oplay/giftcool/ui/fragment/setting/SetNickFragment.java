@@ -138,6 +138,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 										AccountManager.getInstance().setUser(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										ToastUtil.showShort("修改成功");
+										getActivity().onBackPressed();
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {
