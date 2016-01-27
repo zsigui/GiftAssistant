@@ -16,6 +16,7 @@ import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
@@ -59,18 +60,15 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
 							(float) o.playCount / 10000)));
 		}
-		if (o.newCount > 0) {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-		} else {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
-		}
 		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
 		if (o.totalCount > 0) {
+			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
 			bgaViewHolderHelper.setText(R.id.tv_gift,
 					Html.fromHtml(String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
 							o.giftName, o.totalCount)));
 		} else {
 			bgaViewHolderHelper.setText(R.id.tv_gift, "暂时还木有礼包");
+			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
 		}
 		// n款礼包
 		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
@@ -97,6 +95,7 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 				if (position < mDatas.size()) {
 					final IndexGameNew appInfo = mDatas.get(position);
 					if (mListener != null) {
+						KLog.e("appInfo.id = " + appInfo.id + ", appInfo.name = " + appInfo.name + ", position = " + position);
 						mListener.onItemClick(appInfo, v, position);
 					}
 				}

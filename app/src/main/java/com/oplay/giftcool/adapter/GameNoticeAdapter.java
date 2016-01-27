@@ -60,15 +60,13 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterL
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		if (getItemViewType(position) == IndexTypeUtil.ITEM_FOOTER) {
-			FooterHolder footerHolder = (FooterHolder) holder;
-			footerHolder.animDrawable.start();
 			return;
 		}
 		ViewHolder viewHolder = (ViewHolder) holder;
 		final IndexGameNew o = mData.get(position);
 		o.initAppInfoStatus(mContext);
 		viewHolder.tvName.setText(o.name);
-		if (o.newCount > 0) {
+		if (o.totalCount > 0) {
 			viewHolder.ivGift.setVisibility(View.VISIBLE);
 		} else {
 			viewHolder.ivGift.setVisibility(View.GONE);

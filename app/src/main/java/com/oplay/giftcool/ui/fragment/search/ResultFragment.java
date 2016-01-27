@@ -12,15 +12,21 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGameListAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
+import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.model.AppStatus;
+import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.NestedListView;
+import com.oplay.giftcool.util.IntentUtil;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 15-12-22.
  */
-public class ResultFragment extends BaseFragment implements View.OnClickListener {
+public class ResultFragment extends BaseFragment implements View.OnClickListener, OnItemClickListener<IndexGameNew> {
 
 	private final static String PAGE_NAME = "搜索结果页";
 	private ScrollView mContainer;
@@ -72,7 +78,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		mGameAdapter = new NestedGameListAdapter(getContext(), null);
+		mGameAdapter = new NestedGameListAdapter(getContext(), this);
 		mGiftAdapter = new NestedGiftListAdapter(getContext());
 
 		if (getArguments() != null) {
@@ -134,6 +140,18 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		super.onDestroy();
 		if (mGameAdapter != null) {
 			mGameAdapter.onDestroy();
+		}
+	}
+
+	@Override
+	public void onItemClick(IndexGameNew item, View view, int position) {
+		KLog.e("item = " + item.id + ", position = " + position + ", view = " + view);
+		if (view.getId() == R.id.tv_download) {
+			if (item != null && !AppStatus.DISABLE.equals(item.appStatus)) {
+				item.handleOnClick(getActivity().getSupportFragmentManager());
+			}
+		}else {
+			IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 		}
 	}
 }
