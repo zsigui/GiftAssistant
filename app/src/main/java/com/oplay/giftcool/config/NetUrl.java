@@ -5,9 +5,18 @@ package com.oplay.giftcool.config;
  */
 public class NetUrl {
 
-//	public static final String URL_BASE = "http://172.16.3.22:8888/api/";
-	//public static final String URL_BASE = "http://172.16.3.68:7000/";
-	public static final String URL_BASE = "http://test.giftcool.ouwan.com/api/";
+	/**
+	 * 测试地址
+	 */
+	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/api/";
+	/**
+	 * 正式地址
+	 */
+	public static final String URL_BASE = "http://libao.ouwan.com/api/";
+
+	public static String getBaseUrl() {
+		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
+	}
 
 
 	/**

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.model.data.resp.UserSession;
@@ -54,10 +55,9 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
 	public void init() {
 		GameParamInfo gameParamInfo = new GameParamInfo();
-		gameParamInfo.setAppId("3c453306edd43bbc");//设置AppID
-		gameParamInfo.setAppSecret("3b4446772144ade3");//设置AppSecret
-		//TODO 上线要设成正式false
-		gameParamInfo.setTestMode(true); //设置测试模式，模式非测试模式
+		gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
+		gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
+		gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
 		gameParamInfo.setChannelId(ChannelUtil.getChannelId(mContext) + "");
 		gameParamInfo.setSubChannelId("0");
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {

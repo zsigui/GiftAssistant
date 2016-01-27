@@ -1,5 +1,7 @@
 package com.oplay.giftcool.model;
 
+import com.oplay.giftcool.config.AppConfig;
+
 /**
  * 进行Pack加密解密需要的默认参数 <br/>
  * Note: 设置一个全局类进行通用设置<br />
@@ -26,8 +28,8 @@ public class DecryptDataModel {
 	 * 平台系统，默认
 	 */
 	private int mPlatform = 3;
-	private String mAppKey = "abcdef0123456789";
-	private String mAppSecret = "0123456789abcdef";
+	private String mAppKey = AppConfig.APP_KEY;
+	private String mAppSecret = AppConfig.APP_SECRET;
 
 	public DecryptDataModel() {
 	}

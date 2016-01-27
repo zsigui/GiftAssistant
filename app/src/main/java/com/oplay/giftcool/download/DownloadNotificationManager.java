@@ -116,7 +116,6 @@ public class DownloadNotificationManager {
 		builder.setContentTitle(title);
 		builder.setTicker(tickerText);
 		builder.setContentText(tickerText);
-		//TODO 改成礼包酷logo
 		builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_stat_notify));
 		updateBySDKVersion(builder);
 //        builder.setDefaults(Notification.DEFAULT_ALL);

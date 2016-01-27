@@ -232,11 +232,12 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 			if (TextUtils.isEmpty(url)) {
 				return false;
 			}
+			long completeSize = ApkDownloadManager.getInstance(mAppContext).getCompleteSizeByUrl(url);
 			final String selection = String.format("%s=?", KEY_OF_RAWURL);
 			final String[] selectionArgs = new String[1];
 			selectionArgs[0] = url;
 			final ContentValues values = new ContentValues(1);
-			values.put(KEY_OF_COMPLETE_PERCENTAGE, percent);
+			values.put(KEY_OF_COMPLETE_PERCENTAGE, completeSize);
 			final int updateAffected = getWritableDatabase().update(TABLE_NAME, values, selection, selectionArgs);
 			return updateAffected != 0;
 		}catch (Throwable e) {

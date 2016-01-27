@@ -365,9 +365,6 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			if (appInfo == null) {
 				return;
 			}
-			if (percent == 0) {
-				return;
-			}
 
 			final ViewHolder holder = findVisibleViewHolderByUrl(url);
 			if (holder == null) {

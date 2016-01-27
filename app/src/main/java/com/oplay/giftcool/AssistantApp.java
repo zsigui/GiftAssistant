@@ -142,7 +142,7 @@ public class AssistantApp extends Application {
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();
 		mRetrofit = new Retrofit.Builder()
-				.baseUrl(NetUrl.URL_BASE)
+				.baseUrl(NetUrl.getBaseUrl())
 				.addConverterFactory(GsonConverterFactory.create(mGson))
 				.build();
 	}
