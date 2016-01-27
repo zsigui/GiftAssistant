@@ -373,7 +373,11 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 
 			updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
 			updateDownloadRate(holder.mTvSpeed, speedBytesPers);
-			holder.mPBar.setProgress(percent);
+			if (appInfo.apkFileSize <= 0) {
+				holder.mPBar.setProgress(percent);
+			}else {
+				holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
+			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

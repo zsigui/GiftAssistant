@@ -1,5 +1,6 @@
 package com.oplay.giftcool.model.data.req;
 
+import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.StringUtil;
 import com.socks.library.KLog;
@@ -14,19 +15,23 @@ public class ReqLogin {
 	/**
 	 * 偶玩用户名
 	 */
+	@SerializedName("username")
 	private String username;
 	/**
 	 * 用户密码,只在用户使用偶玩账号登录的时候有效，其它时候设置为null<br />
 	 * 默认加密规则: md5(password + md5( lowercase(username) )) <br />
 	 */
+	@SerializedName("password")
 	private String password;
 	/**
 	 * 手机账号
 	 */
+	@SerializedName("phone")
 	private String phone;
 	/**
 	 * 手机登录验证码
 	 */
+	@SerializedName("code")
 	private String code;
 
 	public String getPassword() {
