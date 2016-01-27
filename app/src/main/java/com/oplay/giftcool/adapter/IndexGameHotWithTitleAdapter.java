@@ -52,7 +52,7 @@ public class IndexGameHotWithTitleAdapter extends BaseRVAdapter_Download impleme
 				final IndexGameNew o = mData.get(position - 1);
 				o.initAppInfoStatus(mContext);
 				normalVH.tvName.setText(o.name);
-				if (o.newCount > 0) {
+				if (o.totalCount > 0) {
 					normalVH.ivGift.setVisibility(View.VISIBLE);
 				} else {
 					normalVH.ivGift.setVisibility(View.GONE);

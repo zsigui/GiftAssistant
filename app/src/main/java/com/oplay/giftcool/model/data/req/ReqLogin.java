@@ -1,5 +1,7 @@
 package com.oplay.giftcool.model.data.req;
 
+import android.text.TextUtils;
+
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.StringUtil;
 import com.socks.library.KLog;
@@ -92,14 +94,14 @@ public class ReqLogin {
 	 * 第二步登录的是否调用
 	 */
 	public boolean setPhoneUser(String phone, String code) {
-		/*String phoneRegex = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+		String phoneRegex = "^(1\\d{10}$)|^";
 		if (!StringUtil.matches(phone, phoneRegex, false)
 				|| TextUtils.isEmpty(code)) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "src : phone = " + this.phone);
 			}
 			return false;
-		}*/
+		}
 		this.phone = phone;
 		this.code = code;
 		return true;

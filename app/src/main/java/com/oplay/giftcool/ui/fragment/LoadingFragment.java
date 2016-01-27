@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.widget.circleprogress.CircleProgress;
 import com.socks.library.KLog;
 
 /**
@@ -14,7 +13,6 @@ import com.socks.library.KLog;
  */
 public class LoadingFragment extends BaseFragment {
 
-	private CircleProgress mProgress;
 
 	/**
 	 * provide a global instance for the reason that loading fragment will be used frequently
@@ -27,7 +25,6 @@ public class LoadingFragment extends BaseFragment {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_data_loading);
-		mProgress = getViewById(R.id.loading);
 	}
 
 	@Override
@@ -37,7 +34,6 @@ public class LoadingFragment extends BaseFragment {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		startAnim();
 	}
 
 	@Override
@@ -45,17 +41,6 @@ public class LoadingFragment extends BaseFragment {
 		KLog.v("lazyLoad is called, but nothing need to be do here");
 	}
 
-	private void startAnim() {
-		if (mProgress != null) {
-			mProgress.startAnim();
-		}
-	}
-
-	private void stopAnim() {
-		if (mProgress != null) {
-			mProgress.reset();
-		}
-	}
 
 	@Override
 	public String getPageName() {

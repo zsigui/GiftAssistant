@@ -399,6 +399,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 				mLoadingDialog = LoadingDialog.newInstance();
 			}
 			mLoadingDialog.setLoadText(loadText);
+			mLoadingDialog.setCancelable(false);
 			mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
 		} else {
 			mHandler.post(new Runnable() {
@@ -407,6 +408,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 					if (mLoadingDialog == null) {
 						mLoadingDialog = LoadingDialog.newInstance();
 					}
+					mLoadingDialog.setCancelable(false);
 					mLoadingDialog.setLoadText(loadText);
 					mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
 				}

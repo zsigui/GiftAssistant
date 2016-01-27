@@ -5,7 +5,6 @@ package com.oplay.giftcool.ui.widget.layout;
  */
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -67,7 +66,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * 是否显示加载更多
 	 */
 	private boolean mCanShowLoad = true;
-	private AnimationDrawable mFooterAnimDrawable;
 
 	/**
 	 * @param context
@@ -84,7 +82,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 
 		mViewFooter = LayoutInflater.from(context).inflate(R.layout.view_item_footer, null,
 				false);
-		mFooterAnimDrawable  = (AnimationDrawable)(mViewFooter.findViewById(R.id.iv_anim).getBackground());
 	}
 
 	@Override
@@ -262,9 +259,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 				} else {
 					mViewFooter.setVisibility(View.VISIBLE);
 				}
-				if (mFooterAnimDrawable != null) {
-					mFooterAnimDrawable.start();
-				}
 
 			} else if (mRecyclerView != null && mRecyclerView.getAdapter() != null
 					&& mRecyclerView.getAdapter() instanceof FooterListener) {
@@ -276,9 +270,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 					mListView.removeFooterView(mViewFooter);
 				} else {
 					mViewFooter.setVisibility(View.GONE);
-				}
-				if (mFooterAnimDrawable != null) {
-					mFooterAnimDrawable.stop();
 				}
 			} else if (mRecyclerView != null && mRecyclerView.getAdapter() != null
 					&& mRecyclerView.getAdapter() instanceof FooterListener) {

@@ -220,7 +220,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 				return new NetworkImageHolderView();
 			}
 		}, data)
-				.setPageIndicator(new int[]{0, 0})
+				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
 				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
 				.setOnItemClickListener(this);
 		if (data.size() == 1) {
