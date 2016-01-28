@@ -39,7 +39,8 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission>,ObserverManager.UserActionListener {
+public class TaskFragment extends BaseFragment implements OnItemClickListener<ScoreMission>,
+		ObserverManager.UserActionListener {
 
 
 	private final static String PAGE_NAME = "积分任务";
@@ -67,7 +68,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
-	protected void setListener() {}
+	protected void setListener() {
+	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
@@ -112,10 +114,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 									}
 									if (AppDebugConfig.IS_FRAG_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG,
-												response.body() == null? "解析失败" : response.body().error());
+												response.body() == null ? "解析失败" : response.body().error());
 									}
 									ToastUtil.showShort("获取任务列表失败 - "
-											+ (response.body() == null? "解析失败" : response.body().error()));
+											+ (response.body() == null ? "解析失败" : response.body().error()));
 								}
 								refreshFailEnd();
 							}
@@ -296,21 +298,21 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		ScoreManager.getInstance().setInWorking(true);
 		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
 			// 跳转到设置用户昵称信息界面
-			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+			((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 					SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
 		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
 			// 跳转到设置用户头像信息界面
-			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+			((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
 		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 			// 跳转到绑定手机账号界面
 			OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
-		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)){
+		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
 			// 跳转到绑定偶玩账号界面
 			OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
 		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
 			// 跳转反馈界面
-			((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
+			((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 					FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
 		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
 			// 跳转搜索礼包/游戏界面
@@ -342,7 +344,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
 			// 跳转指定游戏界面，暂无
 			try {
-				IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data), GameTypeUtil.JUMP_STATUS_DETAIL);
+				IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data),
+						GameTypeUtil.JUMP_STATUS_DETAIL);
 			} catch (Exception e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(e);
@@ -386,14 +389,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	public void onUserActionFinish(int action, int code) {
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
-				}
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
+				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
-				}
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
+				AccountManager.getInstance().updateUserInfo();
 				break;
 		}
 	}

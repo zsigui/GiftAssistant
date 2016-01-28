@@ -39,7 +39,6 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 
 	@Override
 	protected void initView() {
-		KLog.e("setting", "onCreate is call");
 		setContentView(R.layout.activity_common_with_back);
 	}
 

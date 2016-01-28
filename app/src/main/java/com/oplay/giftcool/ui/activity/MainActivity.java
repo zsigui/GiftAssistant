@@ -32,7 +32,6 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -256,7 +255,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	public void onUserUpdate() {
 		mUser = AccountManager.getInstance().getUserInfo();
-		KLog.e("userUpdate", "onUserUpdate, mUser = " + mUser);
 		updateToolBar();
 		handleFirstOpen();
 	}
@@ -286,7 +284,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private boolean handleUpdateApp() {
 
 		final UpdateInfo updateInfo = mApp.getUpdateInfo();
-		if (updateInfo != null && updateInfo.checkoutUpdateInfo(this)) {
+		if (!mHasShowUpdate && updateInfo != null && updateInfo.checkoutUpdateInfo(this)) {
 			mHasShowUpdate = true;
 			final IndexGameNew appInfo = new IndexGameNew();
 			appInfo.id = Global.GIFTCOOL_GAME_ID;

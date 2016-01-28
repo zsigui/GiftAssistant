@@ -1,0 +1,61 @@
+
+-optimizationpasses 5 #混淆级别
+-dontusemixedcaseclassnames
+-skipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+-dontnote
+-ignorewarnings
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/* # 混淆时所采用的算法
+
+-keepattributes Signature
+
+-dontnote android.os.SystemProperties
+-dontnote com.google.android.gms.ads.identifier.**
+-dontnote com.android.internal.telephony.PhoneFactory
+
+-dontnote **ILicensingService
+-keepclassmembers class net.youmi.android.libs.webjs.js.base.JsInterface_Impl {
+	   public *;
+}
+
+-keep class net.ymfx.android.d.** {
+    *;
+}
+
+-keep class android.net.** {*;}
+-keep class com.android.internal.http.multipart.** {*;}
+-keep class org.apache.** {*;}
+#-dontwarn net.youmi.android.libs.**
+#-keep class net.youmi.android.libs.** {*;}
+#-dontwarn net.ouwan.umipay.android.**
+#-keep class net.ouwan.umipay.android.** {*;}
+-dontwarn com.alipay.**
+-keep class com.alipay.** {*;}
+-dontwarn
+-keep class org.json.alipay.** {*;}
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** {*;}
+-dontwarn com.payeco.android.plugin.**
+-keep class com.payeco.android.plugin.** {*;}
+-dontwarn com.sina.sso.**
+-keep class com.sina.sso.** {*;}
+-dontwarn com.ta.utdid2.**
+-keep class com.ta.utdid2.** {*;}
+-dontwarn com.tencent.**
+-keep class com.tencent.** {*;}
+-dontwarn com.unionpay.**
+-keep class com.unionpay.** {*;}
+-dontwarn com.UCMobile.PayPlugin.**
+-keep class com.UCMobile.PayPlugin.** {*;}
+-dontwarn com.ut.device.**
+-keep class com.ut.device.** {*;}
+-dontwarn com.weibo.sdk.android.**
+-keep class com.weibo.sdk.android.** {*;}
+#汇付宝-微信
+#-libraryjars libs/ HeepayService.jar
+-dontwarn com.junnet.heepay.**
+-keep public class com.ipaynow.plugin.utils.MerchantTools{ <fields>; <methods>; }
+-keep public class com.ipaynow.plugin.utils.PreSignMessageUtil{ <fields>; <methods>; }
+-keep public class com.ipaynow.plugin.api.IpaynowPlugin{ <fields>; <methods>; }
+-keep class com.junnet.heepay.** { *; }

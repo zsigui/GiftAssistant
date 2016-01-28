@@ -31,9 +31,9 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		initViewManger(R.layout.fragment_download);
 		mListData = ApkDownloadManager.getInstance(getActivity()).getDownloadList();
 		mAdapter = new AppDownloadAdapter(mListData, this);
-		setContentView(R.layout.fragment_download);
 		StickyListHeadersListViewExpandable listView = getViewById(R.id.download_adapterView);
 		listView.setAdapter(mAdapter);
 		mAdapter.setExpandableListView(listView);
@@ -47,6 +47,11 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
+		if (mListData == null || mListData.size() == 0) {
+			mViewManager.showEmpty();
+		} else {
+			mViewManager.showContent();
+		}
 
 	}
 
@@ -84,6 +89,11 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 			public void run() {
 				if (mAdapter != null) {
 					mAdapter.notifyStatusChanged();
+					if (mAdapter.getCount() > 0) {
+						mViewManager.showContent();
+					} else {
+						mViewManager.showEmpty();
+					}
 				}
 			}
 		});

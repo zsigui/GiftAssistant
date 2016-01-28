@@ -31,8 +31,8 @@ android {
 
 	buildTypes {
 		release {
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-umipay.txt'
+			minifyEnabled true
 			shrinkResources true
 			zipAlignEnabled true
 			debuggable false
@@ -40,8 +40,8 @@ android {
 			signingConfig signingConfigs.myConfigs
 		}
 		debug {
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-umipay.txt'
+			minifyEnabled true
 			jniDebuggable true
 			signingConfig signingConfigs.myConfigs
 

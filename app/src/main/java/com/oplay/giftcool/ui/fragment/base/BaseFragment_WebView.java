@@ -20,11 +20,11 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.WebViewInterface;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
-import net.youmi.android.libs.common.network.Util_Network_Status;
 
 import java.io.File;
 
@@ -138,9 +138,15 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				cacheDir = getActivity().getCacheDir();
 			}
 			if (cacheDir != null) {
-				if (!Util_Network_Status.isNetworkAvailable(getActivity())) {
+				if (!NetworkUtil.isAvailable(getContext())) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
+					}
 					mSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 				} else {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load default");
+					}
 					mSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 				}
 				mSettings.setAppCachePath(cacheDir.getAbsolutePath());

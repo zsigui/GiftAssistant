@@ -63,7 +63,6 @@ public class PayManager {
 			IntentUtil.jumpLogin(context);
 			return WebViewInterface.RET_OTHER_ERR;
 		}
-		KLog.d("WebView", "type = " + GiftTypeUtil.getItemViewType(gift));
 		long nowClickTime = System.currentTimeMillis();
 		if (nowClickTime - mLastClickTime <= 1000) {
 			return WebViewInterface.RET_OTHER_ERR;

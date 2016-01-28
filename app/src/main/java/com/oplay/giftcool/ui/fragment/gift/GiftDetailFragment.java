@@ -175,6 +175,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			throw new IllegalStateException("need to set data here");
 		}
 		mId = getArguments().getInt(KeyConfig.KEY_DATA);
+		if (AppDebugConfig.IS_FRAG_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
+		}
+		mViewManager.showLoading();
 	}
 
 	@Override
@@ -186,8 +190,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	}
 
 	private void updateData(GiftDetail data) {
-		if (data == null)
+		if (data == null) {
+			mViewManager.showEmpty();
 			return;
+		}
 		mHasData = true;
 		mViewManager.showContent();
 		mData = data;

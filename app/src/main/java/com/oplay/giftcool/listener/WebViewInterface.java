@@ -53,6 +53,9 @@ public class WebViewInterface extends Observable {
 			return RET_PARAM_ERR;
 		}
 		try {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WEBVIEW, "json = " + giftJson);
+			}
 			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
 			return PayManager.getInstance().seizeGift(mHostActivity, gift, null);
 		} catch (JsonSyntaxException e) {

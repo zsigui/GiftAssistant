@@ -65,11 +65,17 @@ public class ScoreManager {
 	}
 
 	public void toastByCallback(TaskReward task) {
+		toastByCallback(task, true);
+	}
+
+	public void toastByCallback(TaskReward task, boolean needNotify) {
 		if (task != null && task.rewardPoints != 0 && AccountManager.getInstance().isLogin()) {
 			// 评论任务完成，奖励积分
 			ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
-			// 通知刷新积分
-			AccountManager.getInstance().updateUserInfo();
+			if (needNotify) {
+				// 通知刷新积分
+				AccountManager.getInstance().updatePartUserInfo();
+			}
 			setInWorking(false);
 		}
 	}
@@ -128,12 +134,18 @@ public class ScoreManager {
 		}
 	}
 
+
+	public void reward(int ptype) {
+		reward(ptype, true);
+	}
+
 	/**
 	 * 对需要本地通知任务进行通知获取奖励
 	 *
 	 * @param ptype 分享类型采用setRewardType并设置该值为RewardType.NOTHING
+	 * @param needNotify 是否需要通知
 	 */
-	public void reward(int ptype) {
+	public void reward(int ptype, final boolean needNotify) {
 		if (!AccountManager.getInstance().isLogin()) {
 			return;
 		}
@@ -171,7 +183,7 @@ public class ScoreManager {
 										if (!AccountManager.getInstance().isLogin()) {
 											return;
 										}
-										toastByCallback(response.body().getData());
+										toastByCallback(response.body().getData(), needNotify);
 										writeLocalTaskState(data.type);
 									}
 									if (AppDebugConfig.IS_DEBUG) {

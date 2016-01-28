@@ -108,7 +108,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		ViewUtil.showAvatarImage(user.avatar, ivIcon, true);
 		String nick;
 		if (!TextUtils.isEmpty(user.thirdOpenId)) {
-			nick = (TextUtils.isEmpty(user.nick) ?  StringUtil.transePhone(user.phone) : user.nick);
+			nick = (TextUtils.isEmpty(user.nick) ? StringUtil.transePhone(user.phone) : user.nick);
 			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_phone_login));
 			tvLogin.setText(StringUtil.transePhone(user.phone));
 			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_bind));
@@ -125,7 +125,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				ivBind.setImageResource(View.VISIBLE);
 			}
 		} else {
-			nick = (TextUtils.isEmpty(user.nick) ?  user.username : user.nick);
+			nick = (TextUtils.isEmpty(user.nick) ? user.username : user.nick);
 			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_login));
 			tvLogin.setText(user.username);
 			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_phone_bind));
@@ -150,7 +150,8 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		switch (v.getId()) {
 			case R.id.rl_avatar:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-						UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_set_avatar_title));
+						UploadAvatarFragment.newInstance(), getResources().getString(R.string
+								.st_user_set_avatar_title));
 				break;
 			case R.id.ll_nick:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
@@ -213,14 +214,12 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 	public void onUserActionFinish(int action, int code) {
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN);
-				}
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
+				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE);
-				}
+				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
+				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:
 				if (code == ObserverManager.UserActionListener.ACTION_CODE_SUCCESS) {

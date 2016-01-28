@@ -21,17 +21,16 @@
 -skipnonpubliclibraryclasses
 -dontpreverify
 -verbose
+-dontnote
 -ignorewarnings
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/* # 混淆时所采用的算法
 
 # libs
--injars libs/libammsdk.jar
--injars libs/TalkingDataAnalytics_V2.1.37.jar
 -dontwarn android.net.http.SslError
+-keep public class android.net.http.SslError
 -keep class com.tencent.** { *; }
 -keep class com.tendcloud.tenddata.** { *; }
 
--injars libs/universal-image-loader-1.9.5.jar
 -keep class com.nostra13.universalimageloader.** { *; }
 
 -keep class com.facebook.rebound.** { *; }
@@ -65,9 +64,13 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 # entity
--keep public class com.oplay.giftcool.model.**
+-keep public enum com.oplay.giftcool.model.** {*;}
 
 # js
+-keep public class android.webkit.WebViewClient
+-dontwarn android.webkit.WebView
+-dontwarn android.webkit.WebViewClient
+
 -keep class com.oplay.giftcool.listener.WebViewInterface {*;}
 -keepclassmembers class * extends android.webkit.WebViewClient {
      *;
@@ -76,6 +79,13 @@
      *;
 }
 
+
+
+
+# Android
+-keep class android.** {*;}
+-keep class com.android.** {*;}
+-keep class java.** {*;}
 # common
 -keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.**
@@ -116,3 +126,5 @@
 -keep class * implements android.os.Parcelable {    # 保持Parcelable不被混淆
   public static final android.os.Parcelable$Creator *;
 }
+
+

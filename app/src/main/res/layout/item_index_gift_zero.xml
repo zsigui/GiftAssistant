@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		android:id = "@+id/rl_recommend"
+		style = "@style/IndexListItemLayout"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto" >
+
+	<!-- 此ImageView需要自定义实现 -->
+	<RelativeLayout
+			android:id = "@+id/rl_icon"
+			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_height = "@dimen/di_icon_diameter"
+			android:layout_centerHorizontal = "true"
+			android:background = "@color/co_transparent" >
+
+		<com.makeramen.roundedimageview.RoundedImageView
+				android:id = "@+id/iv_icon"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:scaleType = "centerCrop"
+				app:riv_border_color = "@color/co_stroke_bg"
+				app:riv_border_width = "@dimen/di_icon_border_size"
+				app:riv_corner_radius = "@dimen/di_icon_radius"
+				app:riv_oval = "false" />
+
+		<ImageView
+				android:id = "@+id/iv_limit"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:layout_alignParentBottom = "true"
+				android:layout_alignParentRight = "true"
+				android:layout_marginRight = "@dimen/di_icon_border_size"
+				android:layout_marginBottom = "@dimen/di_icon_border_size"
+				android:contentDescription = "@null"
+				android:src = "@drawable/ic_tag_limit" />
+	</RelativeLayout >
+
+	<TextView
+			android:id = "@+id/tv_game_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_below = "@+id/rl_icon"
+			android:layout_width = "@dimen/di_icon_bigger_diameter"
+			android:layout_marginTop = "10dp"
+			android:text = "刀塔传奇" />
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_below = "@+id/tv_game_name"
+			android:layout_marginTop = "1dp"
+			android:layout_width = "@dimen/di_icon_bigger_diameter"
+			android:text = "VIP礼包"
+			android:textColor = "@color/co_common_app_second_bg_orange" />
+
+	<TextView
+			android:id = "@+id/tv_new_text"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginTop = "8dp"
+			android:text = "剩余" />
+
+	<TextView
+			android:id = "@+id/tv_remain"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "6dp"
+			android:layout_marginTop = "7dp"
+			android:layout_toRightOf = "@+id/tv_new_text"
+			android:background = "@drawable/shape_rect_remain_bg"
+			android:text = "123"
+			android:textColor = "@color/co_white" />
+
+</RelativeLayout >

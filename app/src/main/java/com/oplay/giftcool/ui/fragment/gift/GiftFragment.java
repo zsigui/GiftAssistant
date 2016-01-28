@@ -286,10 +286,11 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			}
 			return;
 		}
-		if (data.limit != null && data.limit.size() == 0
-				&& data.news != null && data.news.size() == 0
-				&& data.banner != null && data.banner.size() == 0
-				&& data.like != null && data.like.size() == 0) {
+		if ((data.limit == null || data.limit.size() == 0)
+				&& (data.zero == null || data.zero.size() == 0)
+				&& (data.news == null || data.news.size() == 0)
+				&& (data.banner == null || data.banner.size() == 0)
+				&& (data.like == null || data.like.size() == 0)) {
 			// 数据为空
 			mViewManager.showEmpty();
 			return;
@@ -307,6 +308,18 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 	public void updateBanners(ArrayList<IndexBanner> banners) {
 		loadBanner(banners);
+	}
+
+	public void updateZeroData(ArrayList<IndexGiftNew> zeroData) {
+		if (zeroData == null || zeroData.size() == 0) {
+			// 无
+			if (llLike != null) {
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				lp.setMargins(0, 0, 0, 0);
+				llLike.setLayoutParams(lp);
+			}
+			return;
+		}
 	}
 
 	public void updateLikeData(ArrayList<IndexGiftLike> likeData) {

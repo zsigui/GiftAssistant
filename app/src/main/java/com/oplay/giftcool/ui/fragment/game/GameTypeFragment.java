@@ -126,14 +126,15 @@ public class GameTypeFragment extends BaseFragment {
 							KLog.d(AppDebugConfig.TAG_UTIL, t);
 						}
 						refreshFailEnd();
-						updateData(initStashData());
 					}
 				});
 	}
 
 	private void updateData(ArrayList<GameTypeMain> data) {
-		if (data == null)
+		if (data == null || data.size() == 0) {
+			mViewManager.showEmpty();
 			return;
+		}
 		mHasData = true;
 		mViewManager.showContent();
 		ArrayList<GameTypeMain> header = new ArrayList<>();
@@ -166,42 +167,6 @@ public class GameTypeFragment extends BaseFragment {
 			return;
 		}
 		mTagAdapter.updateData(data);
-	}
-
-	private ArrayList<GameTypeMain> initStashData() {
-		ArrayList<GameTypeMain> typeData = new ArrayList<GameTypeMain>();
-		GameTypeMain g1 = new GameTypeMain();
-		g1.id = 1;
-		g1.name = "卡牌";
-		typeData.add(g1);
-		GameTypeMain g2 = new GameTypeMain();
-		g2.id = 2;
-		g2.name = "回合";
-		typeData.add(g2);
-		GameTypeMain g3 = new GameTypeMain();
-		g3.id = 3;
-		g3.name = "动作";
-		typeData.add(g3);
-		GameTypeMain g4 = new GameTypeMain();
-		g4.id = 4;
-		g4.name = "ARPG";
-		typeData.add(g4);
-		GameTypeMain g5 = new GameTypeMain();
-		g5.id = 5;
-		g5.name = "策略";
-		typeData.add(g5);
-		GameTypeMain g6 = new GameTypeMain();
-		g6.id = 6;
-		g6.name = "仙侠";
-		typeData.add(g6);
-
-		for (int i = 0; i < 15; i++) {
-			GameTypeMain g = new GameTypeMain();
-			g.id = i + 15;
-			g.name = "策略塔防";
-			typeData.add(g);
-		}
-		return typeData;
 	}
 
 	@Override

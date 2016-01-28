@@ -89,8 +89,8 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 
 		@Override
 		public void onConfirm() {
-			// 跳转我的礼包界面
-			IntentUtil.jumpMyGift(getContext());
+			// 跳转我的钱包
+			IntentUtil.jumpMyWallet(getContext());
 			dismissAllowingStateLoss();
 		}
 	};

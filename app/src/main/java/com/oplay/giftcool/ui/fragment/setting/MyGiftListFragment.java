@@ -178,6 +178,11 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 	private int mCurY;
 	public void updateData(ArrayList<IndexGiftNew> data) {
+		if (data == null || data.size() == 0) {
+			mViewManager.showEmpty();
+			KLog.e("show Empty");
+			return;
+		}
 		mViewManager.showContent();
 		mHasData = true;
 		mData = data;

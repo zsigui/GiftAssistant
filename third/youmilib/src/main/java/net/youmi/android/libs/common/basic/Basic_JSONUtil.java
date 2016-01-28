@@ -369,7 +369,7 @@ public class Basic_JSONUtil {
 		}
 	}
 
-	public static void putObject(JSONObject jo, String key, Object object) {
+	public static void put(JSONObject jo, String key, Object object) {
 		try {
 			if (jo != null) {
 				jo.put(key, object);
