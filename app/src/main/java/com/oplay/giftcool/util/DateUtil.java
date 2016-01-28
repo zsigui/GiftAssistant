@@ -32,6 +32,11 @@ public class DateUtil {
 				: result);
 	}
 
+	public static String formatTime(long time, String format) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+		return sdf.format(new Date(time));
+	}
+
 	public static Date getDate(Date curDate, int day) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 		Calendar calendar = Calendar.getInstance();

@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 		android:id = "@+id/rl_recommend"
-		style = "@style/IndexListItemLayout"
+		style = "@style/IndexListItemLayout.Horizontal"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		xmlns:app = "http://schemas.android.com/apk/res-auto" >
 
 	<RelativeLayout
 			android:id = "@+id/rl_icon"
-			style = "@style/IndexIconLayout" >
+			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_height = "@dimen/di_icon_diameter"
+			android:layout_centerHorizontal = "true"
+			android:background = "@color/co_transparent" >
 
 		<com.makeramen.roundedimageview.RoundedImageView
 				android:id = "@+id/iv_icon"
-				style = "@style/DefaultImageView.IconBigger"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:scaleType = "centerCrop"
 				app:riv_border_color = "@color/co_stroke_bg"
 				app:riv_border_width = "@dimen/di_icon_border_size"
 				app:riv_corner_radius = "@dimen/di_icon_radius"
@@ -22,36 +27,31 @@
 				style = "@style/DefaultTextView"
 				android:layout_alignParentBottom = "true"
 				android:layout_marginBottom = "5dp"
-				android:layout_marginLeft = "1dp"
+				android:layout_marginLeft = "@dimen/di_icon_border_size"
 				android:background = "@drawable/shape_rect_icon_tap"
-				android:text = "1款礼包"
 				android:textColor = "@color/co_white"
 				android:textSize = "10sp" />
 	</RelativeLayout >
 
 	<TextView
 			android:id = "@+id/tv_game_name"
-			style = "@style/DefaultTextView.Header"
-			android:layout_width = "@dimen/di_icon_bigger_diameter"
-			android:layout_below = "@+id/rl_icon"
-			android:layout_marginTop = "8dp"
-			android:text = "刀塔传" />
+			style = "@style/DefaultTextView.ItemTitle"
+			android:layout_below = "@+id/rl_icon"/>
 
 	<TextView
 			android:id = "@+id/tv_new_text"
-			style = "@style/DefaultTextView.Text"
-			android:layout_alignParentLeft = "true"
-			android:layout_below = "@+id/tv_game_name"
-			android:layout_marginTop = "2dp"
-			android:text = "今日新增" />
+			style = "@style/DefaultTextView.ItemSubTitle"
+			android:text="@string/st_index_gift_like_new_add"
+			android:layout_centerHorizontal="false"
+			android:layout_below = "@+id/tv_game_name" />
 
 	<TextView
 			android:id = "@+id/tv_remain"
-			style = "@style/DefaultTextView.Text"
-			android:layout_alignTop = "@+id/tv_new_text"
+			style = "@style/DefaultTextView.ItemSubTitle"
+			android:layout_below = "@+id/tv_game_name"
+			android:layout_centerHorizontal="false"
 			android:layout_marginLeft = "6dp"
 			android:layout_toRightOf = "@+id/tv_new_text"
-			android:text = "50"
 			android:textColor = "@color/co_index_module_add_text" />
 
 </RelativeLayout >

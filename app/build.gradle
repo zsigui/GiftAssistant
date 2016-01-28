@@ -41,7 +41,7 @@ android {
 		}
 		debug {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-umipay.txt'
-			minifyEnabled true
+			minifyEnabled false
 			jniDebuggable true
 			signingConfig signingConfigs.myConfigs
 

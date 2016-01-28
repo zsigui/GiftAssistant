@@ -83,7 +83,7 @@
 		<item name = "android:textSize" >12sp</item >
 		<item name = "android:paddingTop" >3dp</item >
 		<item name = "android:paddingBottom" >3dp</item >
-		<item name = "android:drawablePadding">-2dp</item>
+		<item name = "android:drawablePadding" >-2dp</item >
 	</style >
 
 	<!-- 模块页面最外层 -->
@@ -124,6 +124,12 @@
 		<item name = "android:paddingRight" >8dp</item >
 	</style >
 
+	<style name = "IndexListItemLayout.Horizontal" >
+		<item name = "android:layout_width" >96dp</item >
+		<item name = "android:paddingLeft" >13dp</item >
+		<item name = "android:paddingRight" >13dp</item >
+	</style >
+
 
 	<style name = "DefaultTextView" >
 		<item name = "android:layout_width" >wrap_content</item >
@@ -131,7 +137,7 @@
 		<item name = "android:textSize" >14sp</item >
 		<item name = "android:gravity" >center</item >
 		<item name = "android:singleLine" >true</item >
-		<item name = "android:textCursorDrawable">@null</item>
+		<item name = "android:textCursorDrawable" >@null</item >
 	</style >
 
 	<style name = "DefaultTextView.Detail" >
@@ -139,6 +145,21 @@
 		<item name = "android:layout_width" >match_parent</item >
 		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:textSize" >13sp</item >
+	</style >
+
+	<style name = "DefaultTextView.ItemTitle" >
+		<item name = "android:gravity" >center</item >
+		<item name = "android:layout_marginTop" >5dp</item >
+		<item name = "android:textColor" >@color/co_common_text_main</item >
+		<item name = "android:layout_centerHorizontal" >true</item >
+	</style >
+
+	<style name = "DefaultTextView.ItemSubTitle" >
+		<item name = "android:gravity" >center</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
+		<item name = "android:textSize" >12sp</item >
+		<item name = "android:layout_marginTop" >3dp</item >
+		<item name = "android:layout_centerHorizontal" >true</item >
 	</style >
 
 	<style name = "DefaultTextView.DetailTitle" >
@@ -337,7 +358,7 @@
 		<item name = "android:backgroundDimEnabled" >true</item >
 	</style >
 	<!-- 弹窗去掉背景样式 -->
-	<style name = "DefaultCustomDialog.NoDim">
+	<style name = "DefaultCustomDialog.NoDim" >
 		<item name = "android:backgroundDimEnabled" >false</item >
 	</style >
 
@@ -371,8 +392,8 @@
 		<item name = "android:layout_weight" >1</item >
 		<item name = "android:gravity" >left</item >
 		<item name = "android:paddingRight" >@dimen/di_login_padding_left_right</item >
-		<item name = "android:textColor">@color/co_common_text_main</item>
-		<item name = "android:textColorHint">@color/co_common_text_second</item>
+		<item name = "android:textColor" >@color/co_common_text_main</item >
+		<item name = "android:textColorHint" >@color/co_common_text_second</item >
 		<item name = "android:background" >@color/co_transparent</item >
 	</style >
 
@@ -380,14 +401,14 @@
 		<item name = "android:textColor" >@color/co_btn_green</item >
 	</style >
 
-	<style name = "ListScrollBar">
-		<item name = "android:scrollbarStyle">insideOverlay</item>
-		<item name = "android:scrollbars">vertical</item>
-		<item name = "android:scrollbarFadeDuration">500</item>
-		<item name = "android:fadeScrollbars">true</item>
-	</style>
+	<style name = "ListScrollBar" >
+		<item name = "android:scrollbarStyle" >insideOverlay</item >
+		<item name = "android:scrollbars" >vertical</item >
+		<item name = "android:scrollbarFadeDuration" >500</item >
+		<item name = "android:fadeScrollbars" >true</item >
+	</style >
 
-	<style name = "DefaultEditText" parent="android:Widget.EditText">
+	<style name = "DefaultEditText" parent = "android:Widget.EditText" >
 
-	</style>
+	</style >
 </resources >

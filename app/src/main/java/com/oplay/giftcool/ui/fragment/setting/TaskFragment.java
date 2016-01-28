@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -234,6 +235,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					}
 				}
 			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_DAILY) {
+				if ((TaskTypeUtil.ID_DOWNLOAD.equals(mission.id)
+						|| TaskTypeUtil.ID_DOWNLOAD_SPECIFIED.equals(mission.id))
+						&& !AssistantApp.getInstance().isAllowDownload()) {
+					// 不允许下载，不添加
+					continue;
+				}
 				if (!TextUtils.isEmpty(mission.lastCompleteTime)
 						&& DateUtil.isToday(mission.lastCompleteTime)
 						&& mission.dayCount == mission.dayCompleteCount) {

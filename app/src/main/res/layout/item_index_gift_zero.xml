@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 		android:id = "@+id/rl_recommend"
-		style = "@style/IndexListItemLayout"
+		style = "@style/IndexListItemLayout.Horizontal"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		xmlns:app = "http://schemas.android.com/apk/res-auto" >
 
@@ -23,51 +23,37 @@
 				app:riv_corner_radius = "@dimen/di_icon_radius"
 				app:riv_oval = "false" />
 
-		<ImageView
-				android:id = "@+id/iv_limit"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
+		<TextView
+				android:id = "@+id/tv_src"
+				style = "@style/DefaultTextView"
 				android:layout_alignParentBottom = "true"
-				android:layout_alignParentRight = "true"
-				android:layout_marginRight = "@dimen/di_icon_border_size"
-				android:layout_marginBottom = "@dimen/di_icon_border_size"
-				android:contentDescription = "@null"
-				android:src = "@drawable/ic_tag_limit" />
+				android:layout_marginBottom = "5dp"
+				android:layout_marginLeft = "@dimen/di_icon_border_size"
+				android:background = "@drawable/shape_rect_icon_tap"
+				android:textColor = "@color/co_white"
+				android:textSize = "10sp" />
 	</RelativeLayout >
 
 	<TextView
 			android:id = "@+id/tv_game_name"
-			style = "@style/DefaultTextView.Header"
-			android:layout_below = "@+id/rl_icon"
-			android:layout_width = "@dimen/di_icon_bigger_diameter"
-			android:layout_marginTop = "10dp"
-			android:text = "刀塔传奇" />
+			style = "@style/DefaultTextView.ItemTitle"
+			android:layout_below = "@+id/rl_icon"/>
 
 	<TextView
 			android:id = "@+id/tv_name"
-			style = "@style/DefaultTextView.Header"
-			android:layout_below = "@+id/tv_game_name"
-			android:layout_marginTop = "1dp"
-			android:layout_width = "@dimen/di_icon_bigger_diameter"
-			android:text = "VIP礼包"
-			android:textColor = "@color/co_common_app_second_bg_orange" />
+			style = "@style/DefaultTextView.ItemSubTitle"
+			android:layout_below = "@+id/tv_game_name" />
 
 	<TextView
-			android:id = "@+id/tv_new_text"
-			style = "@style/DefaultTextView.Text"
+			android:id = "@+id/tv_tag_seize"
+			android:layout_width = "60dp"
+			android:layout_height = "wrap_content"
+			android:layout_centerHorizontal = "true"
 			android:layout_below = "@+id/tv_name"
-			android:layout_marginTop = "8dp"
-			android:text = "剩余" />
-
-	<TextView
-			android:id = "@+id/tv_remain"
-			style = "@style/DefaultTextView.Text"
-			android:layout_below = "@+id/tv_name"
-			android:layout_marginLeft = "6dp"
-			android:layout_marginTop = "7dp"
-			android:layout_toRightOf = "@+id/tv_new_text"
-			android:background = "@drawable/shape_rect_remain_bg"
-			android:text = "123"
-			android:textColor = "@color/co_white" />
+			android:layout_marginTop = "3dp"
+			android:textColor = "@color/co_white"
+			android:textSize = "12sp"
+			android:gravity = "center"
+			android:background = "@drawable/selector_btn_zero_seize" />
 
 </RelativeLayout >

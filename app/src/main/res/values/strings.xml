@@ -19,6 +19,8 @@
 	<!-- 礼包状态 -->
 	<string name = "st_gift_or" >或</string >
 
+	<string name = "st_0_gift_seize" >0元抢</string >
+	<string name = "st_0_gift_wait_seize" >下一波</string >
 	<string name = "st_gift_finished" >已结束</string >
 	<string name = "st_gift_seized" >已抢号</string >
 	<string name = "st_gift_empty" >已抢完</string >
@@ -39,7 +41,9 @@
 
 	<string name = "st_index_gift_all" >全部</string >
 	<string name = "st_index_gift_like" >猜你喜欢</string >
+	<string name = "st_index_gift_like_new_add" >金日新增</string >
 	<string name = "st_index_gift_limit" >今日限量</string >
+	<string name = "st_index_gift_limit_remain" >剩余</string >
 	<string name = "st_index_gift_new" >新鲜出炉</string >
 
 	<string name = "st_tabs_game_hot" >热门游戏</string >

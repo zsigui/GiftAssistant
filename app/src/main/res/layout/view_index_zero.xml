@@ -33,6 +33,6 @@
 	<android.support.v7.widget.RecyclerView
 			android:id = "@+id/rv_zero"
 			style = "@style/DefaultRecyclerView"
-			android:layout_height = "147dp" />
+			android:layout_height = "160dp" />
 
 </LinearLayout >

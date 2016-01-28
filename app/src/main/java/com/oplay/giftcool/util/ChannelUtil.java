@@ -1,7 +1,6 @@
 package com.oplay.giftcool.util;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -31,11 +30,11 @@ public class ChannelUtil {
 	 */
 	public static int getChannelId(Context context) {
 
-		final int chn = PreferenceManager.getDefaultSharedPreferences(context).getInt(KEY_CHANNEL, -1);
-		if (chn != -1) {
-			return chn;
-		}
-
+		long i = System.currentTimeMillis();
+//		final int chn = PreferenceManager.getDefaultSharedPreferences(context).getInt(KEY_CHANNEL, -1);
+//		if (chn != -1) {
+//			return chn;
+//		}
 		ZipFile zipFile = null;
 		try {
 			long time = System.currentTimeMillis();
@@ -54,6 +53,9 @@ public class ChannelUtil {
 					break;
 				}
 			}
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_UTIL, "time 1 = " + (System.currentTimeMillis() - i));
+			}
 			if (!TextUtils.isEmpty(channelFileName)) {
 				int index = channelFileName.indexOf("/");
 				int start = 0;
@@ -67,18 +69,19 @@ public class ChannelUtil {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e("CHANNEL", "NAME:" + channelFileName + " MISC:" + channelMisc + " DECODED:" + channel +
 							" time:" + (System.currentTimeMillis() - time));
+					KLog.e(AppDebugConfig.TAG_UTIL, "time 2 = " + (System.currentTimeMillis() - i));
 				}
 
 				// replaceall non-printable character
 				channel = channel.replaceAll("[\\p{C}\\p{Z}]", "");
 
 				final int chnInt = Integer.valueOf(channel);
-				PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_CHANNEL, chnInt).commit();
+//				PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_CHANNEL, chnInt).commit();
 				return chnInt;
 			}
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
+				KLog.e(AppDebugConfig.TAG_UTIL, e);
 			}
 		} finally {
 			try {
@@ -88,6 +91,7 @@ public class ChannelUtil {
 			} catch (IOException e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.e(e);
+					KLog.e(AppDebugConfig.TAG_UTIL, "time 3 = " + (System.currentTimeMillis() - i));
 				}
 			}
 		}

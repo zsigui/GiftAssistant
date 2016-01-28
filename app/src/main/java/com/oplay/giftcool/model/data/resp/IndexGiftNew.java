@@ -64,12 +64,19 @@ public class IndexGiftNew implements Serializable{
 	@SerializedName("use_end_time")
 	public String useEndTime;
     // 特别说明
-	@SerializedName("remarks")
-    public String note;
+//	@SerializedName("remarks")
+//    public String note;
 	// 礼包兑换方式
 	@SerializedName("usage")
 	public String usage;
 	// 礼包码
 	@SerializedName("gift_key")
 	public String code;
+	// 礼包类型 1 普通 2 限量 4 0元抢
+	@SerializedName("type")
+	public int giftType;
+	// 原价
+	@SerializedName("origin_price")
+	public int orginPrice;
+
 }

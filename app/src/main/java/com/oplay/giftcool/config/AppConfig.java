@@ -16,4 +16,8 @@ public class AppConfig {
 
 	/* 测试环境 */
 	public static final boolean TEST_MODE = false;
+
+	/* Retrofit 访问网络连接超时时间，单位 ms */
+	public static final int NET_CONNECT_TIMEOUT = 8 * 1000;
+	public static final int NET_READ_TIMEOUT = 30 * 1000;
 }

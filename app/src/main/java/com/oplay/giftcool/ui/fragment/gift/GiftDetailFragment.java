@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
@@ -178,6 +179,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (AppDebugConfig.IS_FRAG_DEBUG) {
 			KLog.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
 		}
+		if (!AssistantApp.getInstance().isAllowDownload()) {
+			downloadLayout.setVisibility(View.GONE);
+		} else {
+			downloadLayout.setVisibility(View.VISIBLE);
+		}
 		mViewManager.showLoading();
 	}
 
@@ -300,11 +306,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		mAppInfo = game;
 		((BaseAppCompatActivity) getActivity()).setBarTitle(mAppInfo.name);
 		ViewUtil.showImage(ivIcon, mAppInfo.img);
-		mAppInfo.initAppInfoStatus(getActivity());
-		int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
-				.downloadUrl);
-		btnDownload.setStatus(mAppInfo.appStatus, "");
-		btnDownload.setProgress(progress);
+		if (AssistantApp.getInstance().isAllowDownload()) {
+			mAppInfo.initAppInfoStatus(getActivity());
+			int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
+					.downloadUrl);
+			btnDownload.setStatus(mAppInfo.appStatus, "");
+			btnDownload.setProgress(progress);
+		}
 	}
 
 	@Override
@@ -337,7 +345,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 									}
 								}
 								// 加载错误页面也行
-								refreshSuccessEnd();
+								refreshFailEnd();
 							}
 
 							@Override

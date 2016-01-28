@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -50,6 +51,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	//是否已经显示过更新提示
 	private boolean mHasShowUpdate = false;
 	// 底部Tabs
+	private LinearLayout llTab;
 	private CheckedTextView[] mCtvs;
 	private ImageView ivProfile;
 	private TextView tvGiftCount;
@@ -86,13 +88,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	protected void initView() {
 		setContentView(R.layout.activity_main);
+		llTab = getViewById(R.id.ll_tabs);
 		CheckedTextView ctvGame = getViewById(R.id.ctv_game);
 		CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
 		mCtvs = new CheckedTextView[2];
 		mCtvs[0] = ctvGift;
 		mCtvs[1] = ctvGame;
 		if (!AssistantApp.getInstance().isAllowDownload()) {
-			ctvGame.setVisibility(View.GONE);
+			llTab.setVisibility(View.GONE);
 		}
 	}
 

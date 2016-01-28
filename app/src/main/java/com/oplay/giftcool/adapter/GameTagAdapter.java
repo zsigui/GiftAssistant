@@ -36,16 +36,22 @@ public class GameTagAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final GameTypeMain o) {
 		int state = TagButton.STATE_NONE;
-		if (i >= 1 && i == 1) {
-			state = TagButton.STATE_RED;
-		} else if (i >= 3 && i == 3) {
-			state = TagButton.STATE_ORANGE;
-		} else if (i >= 8 && i == 8) {
-			state = TagButton.STATE_BLUE;
-		} else if (i >= 9 && i == 9) {
-			state = TagButton.STATE_PURPLE;
-		} else if (i >= 13 && i == 13) {
-			state = TagButton.STATE_LIGHT_GREEN;
+		switch (i % 15) {
+			case 1:
+				state = TagButton.STATE_RED;
+				break;
+			case 3:
+				state = TagButton.STATE_ORANGE;
+				break;
+			case 8:
+				state = TagButton.STATE_BLUE;
+				break;
+			case 9:
+				state = TagButton.STATE_PURPLE;
+				break;
+			case 13:
+				state = TagButton.STATE_LIGHT_GREEN;
+				break;
 		}
 		bgaViewHolderHelper.setText(R.id.tv_tag, o.name);
 		((TagButton) bgaViewHolderHelper.getView(R.id.tv_tag)).setState(state);

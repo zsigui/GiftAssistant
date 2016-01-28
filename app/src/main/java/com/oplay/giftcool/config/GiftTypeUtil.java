@@ -51,6 +51,10 @@ public class GiftTypeUtil {
 	public static final int SEIZE_TYPE_NEVER = 0;
 	public static final int SEIZE_TYPE_SEIZED = 1;
 	public static final int SEIZE_TYPE_SEARCHED = 2;
+	//
+	public static final int GIFT_TYPE_NORMAL = 1;
+	public static final int GIFT_TYPE_LIMIT = 2;
+	public static final int GIFT_TYPE_ZERO_SEIZE = 3;
 
 	public static int getItemViewType(IndexGiftNew gift) {
 		if (gift.seizeStatus != SEIZE_TYPE_NEVER) {

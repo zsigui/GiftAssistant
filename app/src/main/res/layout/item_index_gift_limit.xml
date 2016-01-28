@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     android:id="@+id/rl_recommend"
-    style="@style/IndexListItemLayout"
+    style="@style/IndexListItemLayout.Horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- 此ImageView需要自定义实现 -->
 	<RelativeLayout
 			android:id = "@+id/rl_icon"
-			android:layout_width = "@dimen/di_icon_bigger_diameter"
-			android:layout_height = "@dimen/di_icon_bigger_diameter"
+			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_height = "@dimen/di_icon_diameter"
+			android:layout_centerHorizontal = "true"
 			android:background = "@color/co_transparent" >
 
 		<com.makeramen.roundedimageview.RoundedImageView
@@ -34,28 +35,24 @@
 				android:src = "@drawable/ic_tag_limit" />
 	</RelativeLayout >
 
-    <TextView
-        android:id="@+id/tv_game_name"
-        style="@style/DefaultTextView.Header"
-        android:layout_below="@+id/rl_icon"
-        android:layout_width = "@dimen/di_icon_bigger_diameter"
-        android:layout_marginTop="10dp"
-        android:text="刀塔传奇"/>
+	<TextView
+			android:id = "@+id/tv_game_name"
+			style = "@style/DefaultTextView.ItemTitle"
+			android:layout_below = "@+id/rl_icon"/>
 
-    <TextView
-        android:id="@+id/tv_name"
-        style="@style/DefaultTextView.Header"
-        android:layout_below="@+id/tv_game_name"
-        android:layout_marginTop="1dp"
-        android:layout_width = "@dimen/di_icon_bigger_diameter"
-        android:text="VIP礼包"
-        android:textColor="@color/co_common_app_second_bg_orange"/>
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.ItemSubTitle"
+			android:text="VIP礼包"
+			android:layout_below = "@+id/tv_game_name" />
 
     <TextView
         android:id="@+id/tv_new_text"
-        style="@style/DefaultTextView.Text"
+        style="@style/DefaultTextView.ItemSubTitle"
         android:layout_below="@+id/tv_name"
-        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="4dp"
         android:text="剩余"/>
 
     <TextView
@@ -63,7 +60,7 @@
         style="@style/DefaultTextView.Text"
         android:layout_below="@+id/tv_name"
         android:layout_marginLeft="6dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="3dp"
         android:layout_toRightOf="@+id/tv_new_text"
         android:background="@drawable/shape_rect_remain_bg"
         android:text="123"

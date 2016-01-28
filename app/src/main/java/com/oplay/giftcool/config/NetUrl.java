@@ -14,7 +14,7 @@ public class NetUrl {
 	/**
 	 * 正式地址
 	 */
-	public static final String URL_BASE = "http://libao.ouwan.com/api/";
+	public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
 
 	public static String getBaseUrl() {
 		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
@@ -25,7 +25,7 @@ public class NetUrl {
 	 * 礼包酷下载地址
 	 */
 	//public static final String GIFT_COOL_DOWNLOAD = "http://test.giftcool.ouwan.com/api/";
-	public static final String GIFT_COOL_DOWNLOAD = "http://libao.ouwan.com/api/";
+	public static final String GIFT_COOL_DOWNLOAD = getBaseUrl() + "download_apk";
 
 
 	/**

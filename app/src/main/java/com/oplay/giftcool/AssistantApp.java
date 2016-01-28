@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.asynctask.AsyncTask_InitApplication;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
@@ -28,12 +29,14 @@ import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
+import com.squareup.okhttp.OkHttpClient;
 import com.tendcloud.tenddata.TCAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Retrofit;
 
@@ -76,6 +79,7 @@ public class AssistantApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		// enabled StrictMode only in TEST
+		KLog.init(AppDebugConfig.IS_DEBUG);
 		if (AppDebugConfig.IS_DEBUG) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().build());
@@ -84,7 +88,6 @@ public class AssistantApp extends Application {
 		}
 		sInstance = this;
 		TCAgent.init(this, TD_APP_ID, ChannelUtil.getChannelId(this) + "");
-		KLog.init(true);
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
@@ -141,9 +144,13 @@ public class AssistantApp extends Application {
 				.serializeNulls()
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();
+		OkHttpClient httpClient = new OkHttpClient();
+		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
+		httpClient.setReadTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS);
 		mRetrofit = new Retrofit.Builder()
 				.baseUrl(NetUrl.getBaseUrl())
 				.addConverterFactory(GsonConverterFactory.create(mGson))
+				.client(httpClient)
 				.build();
 	}
 

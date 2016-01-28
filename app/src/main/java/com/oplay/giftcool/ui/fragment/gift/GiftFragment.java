@@ -14,13 +14,14 @@ import android.widget.TextView;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftcool.adapter.IndexGiftLimitAdapter;
+import com.oplay.giftcool.adapter.IndexGiftZeroAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -42,7 +43,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +69,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	private ScrollView mScrollView;
 	// 活动视图, 3张
 	private ConvenientBanner mBanner;
+	// 0元疯抢
+	private RecyclerView mZeroView;
 	// 猜你喜欢
 	private LinearLayout llLike;
 	private RelativeLayout mLikeBar;
@@ -81,6 +83,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	private NestedListView mNewView;
 
 
+	private IndexGiftZeroAdapter mZeroAdapter;
 	private IndexGiftLikeAdapter mLikeAdapter;
 	private IndexGiftLimitAdapter mLimitAdapter;
 	private NestedGiftListAdapter mNewAdapter;
@@ -132,7 +135,10 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mNewBar = getViewById(R.id.rl_new_all);
 		mNewView = getViewById(R.id.rv_new_content);
 		((TextView) getViewById(R.id.tv_limit_hint)).setText(Html.fromHtml("(每天<font " +
-				"color='#F86060'>20:00</font>更新10款)"));
+				"color='#f85454'>20:00</font>开抢10款)"));
+		mZeroView = getViewById(R.id.rv_zero);
+		((TextView) getViewById(R.id.tv_zero_limit)).setText(Html.fromHtml("(每天<font " +
+				"color='#f85454'>20:00</font>开抢3款)"));
 	}
 
 	@Override
@@ -148,45 +154,23 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	protected void processLogic(Bundle savedInstanceState) {
 
 		// 设置RecyclerView的LayoutManager
+		LinearLayoutManager llmZero = new LinearLayoutManager(getContext());
+		llmZero.setOrientation(LinearLayoutManager.HORIZONTAL);
 		LinearLayoutManager llmLike = new LinearLayoutManager(getContext());
 		llmLike.setOrientation(LinearLayoutManager.HORIZONTAL);
 		LinearLayoutManager llmLimit = new LinearLayoutManager(getContext());
 		llmLimit.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+		mZeroView.setLayoutManager(llmZero);
 		mLikeView.setLayoutManager(llmLike);
 		mLimitView.setLayoutManager(llmLimit);
+		mZeroAdapter = new IndexGiftZeroAdapter(getContext());
 		mLikeAdapter = new IndexGiftLikeAdapter(mLikeView);
 		mLimitAdapter = new IndexGiftLimitAdapter(mLimitView);
 		mNewAdapter = new NestedGiftListAdapter(getActivity());
-		if (AssistantApp.getInstance().isAllowDownload()) {
-			llLike.setVisibility(View.VISIBLE);
-		} else {
-			llLike.setVisibility(View.GONE);
-		}
 
 		// 加载数据
-
-		if (getArguments() != null) {
-
-			Serializable s;
-			s = getArguments().getSerializable(KEY_BANNER);
-			if (s != null) {
-				updateBanners((ArrayList<IndexBanner>) s);
-			}
-			s = getArguments().getSerializable(KEY_LIKE);
-			if (s != null) {
-				mLikeAdapter.setDatas((ArrayList<IndexGiftLike>) s);
-			}
-			s = getArguments().getSerializable(KEY_LIMIT);
-			if (s != null) {
-				mLimitAdapter.setDatas((ArrayList<IndexGiftNew>) s);
-			}
-			s = getArguments().getSerializable(KEY_NEW);
-			if (s != null) {
-				mNewAdapter.setData((ArrayList<IndexGiftNew>) s);
-			}
-		}
-
+		mZeroView.setAdapter(mZeroAdapter);
 		mLikeView.setAdapter(mLikeAdapter);
 		mLimitView.setAdapter(mLimitAdapter);
 		mNewView.setAdapter(mNewAdapter);
@@ -299,6 +283,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mViewManager.showContent();
 		mHasData = true;
 		mGiftData = data;
+		updateZeroData(data.zero);
 		updateBanners(data.banner);
 		updateLikeData(data.like);
 		updateLimitData(data.limit);
@@ -311,15 +296,44 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	}
 
 	public void updateZeroData(ArrayList<IndexGiftNew> zeroData) {
-		if (zeroData == null || zeroData.size() == 0) {
-			// 无
-			if (llLike != null) {
-				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-				lp.setMargins(0, 0, 0, 0);
-				llLike.setLayoutParams(lp);
-			}
+		zeroData = initStashData();
+		if (zeroData == null) {
 			return;
 		}
+		mZeroAdapter.updateData(zeroData);
+	}
+
+	private ArrayList<IndexGiftNew> initStashData() {
+		ArrayList<IndexGiftNew> data = new ArrayList<>();
+		for (int i = 0; i < 6; i++) {
+			IndexGiftNew ng = new IndexGiftNew();
+			ng.gameName = "逍遥西游";
+			ng.id = i;
+			ng.status = GiftTypeUtil.STATUS_SEIZE;
+			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
+			ng.img = "http://owan-img.ymapp.com/app/e2/06/10339/icon/icon_1450063729.png_128_128_70.png";
+			ng.name = "白金礼包";
+			ng.isLimit = true;
+			ng.giftType = GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE;
+			ng.orginPrice = (i + 1) * 100;
+			ng.score = 0;
+			ng.status = GiftTypeUtil.STATUS_SEIZE;
+			ng.seizeTime = "2016-01-28 20:00";
+			ng.remainCount = 100;
+			ng.totalCount = 100;
+			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
+			data.add(ng);
+		}
+		data.get(3).orginPrice = 250;
+		data.get(3).seizeTime = "2015-01-29 20:00";
+		data.get(3).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
+		data.get(4).orginPrice = 310;
+		data.get(4).seizeTime = "2015-01-29 20:00";
+		data.get(4).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
+		data.get(5).orginPrice = 99;
+		data.get(5).seizeTime = "2015-01-29 20:00";
+		data.get(5).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
+		return data;
 	}
 
 	public void updateLikeData(ArrayList<IndexGiftLike> likeData) {

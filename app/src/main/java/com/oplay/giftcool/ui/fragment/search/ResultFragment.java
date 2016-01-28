@@ -104,15 +104,15 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 			mGameAdapter.setDatas(mData.games);
 			mGiftAdapter.setData(mData.gifts);
 			if (mData.games == null || mData.games.size() == 0) {
-				llGame.setVisibility(View.GONE);
-			} else {
-				llGame.setVisibility(View.VISIBLE);
-			}
-			if (mData.gifts == null || mData.gifts.size() == 0
-					|| !AssistantApp.getInstance().isAllowDownload()) {
 				llGift.setVisibility(View.GONE);
 			} else {
 				llGift.setVisibility(View.VISIBLE);
+			}
+			if (mData.gifts == null || mData.gifts.size() == 0
+					|| !AssistantApp.getInstance().isAllowDownload()) {
+				llGame.setVisibility(View.GONE);
+			} else {
+				llGame.setVisibility(View.VISIBLE);
 			}
 		}
 		mGameAdapter.updateData(data.games);

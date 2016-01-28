@@ -61,22 +61,22 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 			if (AssistantApp.getInstance().isAllowDownload()) {
 				setPositiveBtnText("下载游戏");
 			} else {
-				setPositiveEnabled(false);
+				setPositiveBtnText("确认");
 			}
 		}
 	}
 
 	@Override
 	public void onCancel() {
-		dismiss();
+		dismissAllowingStateLoss();
 	}
 
 	@Override
 	public void onConfirm() {
-		if (mAppInfo == null) {
+		if (mAppInfo != null  && AssistantApp.getInstance().isAllowDownload()) {
+			mAppInfo.handleOnClick(getFragmentManager());
 			return;
 		}
-		mAppInfo.handleOnClick(getFragmentManager());
-		dismiss();
+		dismissAllowingStateLoss();
 	}
 }

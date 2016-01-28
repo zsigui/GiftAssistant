@@ -1,9 +1,7 @@
 package com.oplay.giftcool.model.data.req;
 
 import com.google.gson.annotations.SerializedName;
-import android.text.TextUtils;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.util.StringUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.coder.Coder_Md5;
