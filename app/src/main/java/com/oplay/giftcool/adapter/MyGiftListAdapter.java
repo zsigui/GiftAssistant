@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -41,8 +42,8 @@ public class MyGiftListAdapter extends BGAAdapterViewAdapter<IndexGiftNew> {
 
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final IndexGiftNew o) {
-		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		if (o.isLimit) {
+		bgaViewHolderHelper.setText(R.id.tv_name, String.format("[%s]%s", o.gameName, o.name));
+		if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
 			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.VISIBLE);
 			bgaViewHolderHelper.getView(R.id.tv_name).setPadding(DensityUtil.dip2px(mContext, 4), 0, 0, 0);
 		} else {

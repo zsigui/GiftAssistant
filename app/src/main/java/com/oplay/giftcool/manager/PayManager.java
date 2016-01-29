@@ -71,6 +71,7 @@ public class PayManager {
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 				chargeGift(context, gift, button);
 				return WebViewInterface.RET_SUCCESS;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH:
@@ -182,7 +183,7 @@ public class PayManager {
 										if (button != null) {
 											if (isSeize) {
 												// 抢号状态
-												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZE);
+												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
 											} else {
 												// 淘号状态
 												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
@@ -265,7 +266,7 @@ public class PayManager {
 										if (button != null) {
 											if (isSeize) {
 												// 抢号状态
-												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZE);
+												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
 											} else {
 												// 淘号状态
 												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);

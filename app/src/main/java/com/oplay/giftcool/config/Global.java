@@ -6,9 +6,11 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.engine.NetEngine;
+import com.oplay.giftcool.util.SystemUtil;
 
 import net.youmi.android.libs.common.global.Global_Executor;
 
+import java.util.HashSet;
 import java.util.concurrent.Executor;
 
 /**
@@ -62,4 +64,13 @@ public class Global {
 	 * 公用线程池，处理异步任务
 	 */
 	public final static Executor THREAD_POOL = Global_Executor.getCachedThreadPool();
+
+	private static HashSet<String> sAppName = null;
+
+	public static HashSet<String> getInstalledAppNames() {
+		if (sAppName == null) {
+			sAppName = SystemUtil.getInstalledAppName(AssistantApp.getInstance().getApplicationContext());
+		}
+		return sAppName;
+	}
 }

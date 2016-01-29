@@ -38,7 +38,7 @@
 					android:layout_marginRight = "@dimen/di_icon_border_size"
 					android:layout_marginBottom = "@dimen/di_icon_border_size"
 					android:contentDescription = "@null"
-					android:src = "@drawable/ic_tag_limit" />
+					android:src = "@drawable/ic_tool_0_seize" />
 		</RelativeLayout >
 
 		<TextView
@@ -104,7 +104,7 @@
 				android:layout_toLeftOf = "@+id/ll_send"
 				android:layout_toRightOf = "@+id/tv_remain"
 				android:max = "100"
-				android:visibility="gone"
+				android:visibility = "gone"
 				android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
 		<TextView
@@ -119,7 +119,7 @@
 				android:layout_alignBottom = "@+id/rl_icon"
 				android:background = "@color/co_gift_code_bg"
 				android:gravity = "left|center_vertical"
-				android:visibility="gone"
+				android:visibility = "gone"
 				android:paddingLeft = "10dp"
 				android:paddingRight = "10dp" />
 
@@ -135,6 +135,32 @@
 				android:text = "复制"
 				android:textColor = "@color/co_white" />
 
+		<!-- 0元抢 -->
+		<LinearLayout
+				android:id = "@+id/ll_zero"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
+				android:layout_marginRight = "5dp"
+				android:layout_marginTop = "7dp"
+				android:layout_below = "@+id/tv_consume"
+				android:layout_toRightOf = "@+id/rl_icon"
+				android:visibility = "gone"
+				android:orientation = "horizontal" >
+
+			<com.oplay.giftcool.ui.widget.DeletedTextView
+					android:id = "@+id/tv_src"
+					style = "@style/DefaultTextView.Text"
+					android:layout_width = "wrap_content"
+					android:maxWidth = "80dp"
+					android:gravity = "left|center_vertical" />
+
+			<TextView
+					android:id = "@+id/tv_zero_remain"
+					android:layout_marginLeft = "10dp"
+					style = "@style/DefaultTextView.Text" />
+		</LinearLayout >
+
 		<com.oplay.giftcool.ui.widget.button.GiftButton
 				android:id = "@+id/btn_send"
 				style = "@style/DefaultTextView"
@@ -144,14 +170,13 @@
 				android:layout_marginLeft = "10dp"
 				android:layout_marginTop = "1dp"
 				android:layout_alignParentTop = "true"
-				android:text = "抢号"
 				android:background = "@drawable/selector_btn_red"
 				android:textColor = "@color/co_white" />
 	</RelativeLayout >
 
 	<ScrollView
 			android:layout_width = "match_parent"
-			android:background="@color/co_white"
+			android:background = "@color/co_white"
 			android:layout_height = "0dp"
 			android:layout_weight = "1" >
 
@@ -159,9 +184,10 @@
 				style = "@style/IndexModuleLayout"
 				android:layout_height = "wrap_content"
 				android:paddingBottom = "30dp"
-				android:background="@color/co_transparent">
+				android:background = "@color/co_transparent" >
+
 			<View
-					android:background="@color/co_common_content_bg"
+					android:background = "@color/co_common_content_bg"
 					android:layout_width = "match_parent"
 					android:layout_height = "6dp" />
 
@@ -226,12 +252,15 @@
 			android:id = "@+id/ll_download"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:paddingTop = "10dp"
-			android:paddingBottom = "10dp"
+			android:orientation="vertical"
 			android:gravity = "center" >
+
+		<View style = "@style/HDividerView" />
 
 		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
 				android:id = "@+id/btn_download"
+				android:layout_marginTop = "10dp"
+				android:layout_marginBottom = "10dp"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content" />
 	</LinearLayout >

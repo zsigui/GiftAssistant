@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.model.ActivityModel;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
@@ -29,6 +31,13 @@ public class BannerTypeUtil {
 		try {
 			switch (banner.type) {
 				case ACTION_WEB:
+					ActivityModel model = AssistantApp.getInstance().getGson().fromJson(banner.extData, ActivityModel.class);
+					if (model.needLogin && !AccountManager.getInstance().isLogin()) {
+						ToastUtil.showShort("请先登录!");
+						IntentUtil.jumpLogin(context);
+						return;
+					}
+					IntentUtil.jumpActivityWeb(context, model.url, model.title);
 					break;
 				case ACTION_GAME_DETAIL:
 					IndexGameNew game_d = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);

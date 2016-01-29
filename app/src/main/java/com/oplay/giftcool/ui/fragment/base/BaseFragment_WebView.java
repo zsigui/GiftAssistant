@@ -257,12 +257,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	}
 
 	public void reloadPage() {
-		mIsLoading = false;
-		mIsLoadingFailed = false;
 		if (mWebView != null) {
 			mWebView.reload();
 			mScrollX = mWebView.getScrollX();
 			mScrollY = mWebView.getScrollY();
+			mIsLoading = false;
+			mIsLoadingFailed = false;
 		}
 	}
 
@@ -282,9 +282,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
 		}
-		if (mWebView != null) {
-			mWebView.loadUrl(url);
+		if (mWebView == null) {
+			mWebView = getViewById(R.id.wv_container);
 		}
+		mWebView.loadUrl(url);
 	}
 
 	/**

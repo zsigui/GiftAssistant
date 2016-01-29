@@ -2,6 +2,7 @@ package com.oplay.giftcool.ui.widget.button;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 public class GiftButton extends TextView{
 
 	private boolean mBiggerButton;
+	private CountDownTimer mTimer;
 
 	private int mStatus;
 
@@ -48,6 +50,11 @@ public class GiftButton extends TextView{
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE :
 				setText(R.string.st_gift_wait_seize);
+				if (mBiggerButton) {
+					setBackgroundResource(R.drawable.shape_rect_btn_orange);
+				} else {
+					setBackgroundResource(R.drawable.shape_rect_btn_orange_bigger);
+				}
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCHED :
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH :
@@ -55,11 +62,13 @@ public class GiftButton extends TextView{
 				setEnabled(true);
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE :
-				setText(R.string.st_gift_seize);
-				setEnabled(true);
-				break;
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE :
 				setText(R.string.st_gift_seize);
+				setRedBg();
+				setEnabled(true);
+				break;
+			case GiftTypeUtil.TYPE_ZERO_SEIZE :
+				setText(R.string.st_0_gift_seize);
 				setRedBg();
 				setEnabled(true);
 				break;

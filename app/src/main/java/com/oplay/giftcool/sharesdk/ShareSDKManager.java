@@ -58,8 +58,8 @@ public class ShareSDKManager {
 			shareList.add(new Share_WX_MM(mContext, mWXApi));
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
 /*			shareList.add(new Share_QQ_Friends(mContext));
-			shareList.add(new Share_QQ_Zone(mContext));*/
-			shareList.add(new Share_More(context));
+			shareList.add(new Share_QQ_Zone(mContext));
+			shareList.add(new Share_More(context));*/
 			final ShareDialog dialog = ShareDialog.newInstance(mContext.getResources().getString(R.string
 					.st_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
@@ -87,8 +87,8 @@ public class ShareSDKManager {
 			ArrayList<IShare> shareList = new ArrayList<IShare>();
 			shareList.add(new Share_WX_MM(mContext, mWXApi));
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
-			shareList.add(new Share_QQ_Friends(mContext));
-			shareList.add(new Share_QQ_Zone(mContext));
+			/*shareList.add(new Share_QQ_Friends(mContext));
+			shareList.add(new Share_QQ_Zone(mContext));*/
 			final ShareDialog dialog = ShareDialog.newInstance(mContext.getString(R.string
 					.st_dialog_gcool_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {

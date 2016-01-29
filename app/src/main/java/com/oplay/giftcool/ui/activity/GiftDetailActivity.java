@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -51,7 +52,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		if (ivShare != null) {
 			ivShare.setOnClickListener(this);
 		}
-		showLimitTag(false);
+		showLimitTag(false, 0);
 	}
 
 	public void loadData() {
@@ -87,8 +88,9 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		mOnShareListener = shareClickListener;
 	}
 
-	public void showLimitTag(boolean isShow){
+	public void showLimitTag(boolean isShow, @DrawableRes int bgId){
 		if (ivLimitTag != null) {
+			ivLimitTag.setBackgroundResource(bgId);
 			if (isShow) {
 				ivLimitTag.setVisibility(View.VISIBLE);
 			} else {

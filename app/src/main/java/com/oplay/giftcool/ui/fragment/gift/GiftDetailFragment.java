@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +29,8 @@ import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.model.AppStatus;
+import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
@@ -40,6 +43,9 @@ import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.BitmapUtil;
@@ -50,6 +56,7 @@ import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
+import java.util.HashSet;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -79,9 +86,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	private ImageView ivLimit;
 	private DownloadButtonView btnDownload;
 	private LinearLayout downloadLayout;
+	private LinearLayout llZero;
+	private DeletedTextView tvOriginPrice;
+	private TextView tvZeroRemain;
 
 	private GiftDetail mData;
 	private IndexGameNew mAppInfo;
+	private CountDownTimer mTimer;
 	private int mId;
 
 
@@ -113,6 +124,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		ivLimit = getViewById(R.id.iv_limit);
 		btnDownload = getViewById(R.id.btn_download);
 		downloadLayout = getViewById(R.id.ll_download);
+		llZero = getViewById(R.id.ll_zero);
+		tvOriginPrice = getViewById(R.id.tv_src);
+		tvZeroRemain = getViewById(R.id.tv_zero_remain);
 	}
 
 	@Override
@@ -138,7 +152,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					// 设置分享成功后奖励类型
 					String title;
 					String b_desc;
-					if (mData.giftData.isLimit) {
+					if (mData.giftData.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
+							&& mData.giftData.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
 						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
 						title = String.format("[%s]%s(限今天)", mData.gameData.name, mData.giftData.name);
 						b_desc = String.format("[%s]%s，价值珍贵，限量领取",
@@ -196,23 +211,25 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	}
 
 	private void updateData(GiftDetail data) {
-		if (data == null) {
+		if (data == null || data.giftData == null) {
 			mViewManager.showEmpty();
 			return;
 		}
 		mHasData = true;
 		mViewManager.showContent();
 		mData = data;
-		IndexGiftNew giftData = data.giftData;
+		final IndexGiftNew giftData = data.giftData;
 		if (giftData == null) {
 			return;
 		}
-		tvName.setText(String.format("[%s]%s", (mData.gameData == null ? "":mData.gameData.name), giftData.name));
+		tvName.setText(String.format("[%s]%s", (mData.gameData == null ? "" : mData.gameData.name), giftData.name));
 		if (getActivity() instanceof GiftDetailActivity) {
-			if (giftData.isLimit) {
-				((GiftDetailActivity) getActivity()).showLimitTag(true);
+			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_limit);
+			} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_0_seize);
 			} else {
-				((GiftDetailActivity) getActivity()).showLimitTag(false);
+				((GiftDetailActivity) getActivity()).showLimitTag(false, 0);
 			}
 			int type = GiftTypeUtil.getItemViewType(mData.giftData);
 			if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
@@ -223,12 +240,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				((GiftDetailActivity) getActivity()).showShareButton(true);
 			}
 		}
-		if (giftData.isLimit) {
-			ivLimit.setVisibility(View.VISIBLE);
-		} else {
-			ivLimit.setVisibility(View.GONE);
-		}
+		setLimitTag(giftData);
 		int state = GiftTypeUtil.getItemViewType(giftData);
+		btnSend.setState(state);
 		tvOr.setVisibility(View.GONE);
 		tvRemain.setVisibility(View.GONE);
 		pbPercent.setVisibility(View.GONE);
@@ -237,10 +251,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		btnCopy.setVisibility(View.GONE);
 		tvScore.setVisibility(View.GONE);
 		btnSend.setVisibility(View.VISIBLE);
-
+		llZero.setVisibility(View.GONE);
 		if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			tvConsume.setVisibility(View.VISIBLE);
-			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
+			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+					&& giftData.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
 				tvScore.setVisibility(View.VISIBLE);
 				tvScore.setText(String.valueOf(giftData.score));
 			} else if (giftData.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
@@ -253,32 +268,45 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				tvScore.setText(String.valueOf(giftData.score));
 				tvBean.setText(String.valueOf(giftData.bean));
 			}
-			tvRemain.setVisibility(View.VISIBLE);
-			switch (state) {
-				case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-					tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>",
-							giftData.remainCount)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-					tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>",
-							giftData.searchCount)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-					int progress = giftData.remainCount * 100 / giftData.totalCount;
-					tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
-					pbPercent.setVisibility(View.VISIBLE);
-					pbPercent.setProgress(progress);
-					break;
-				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-					tvRemain.setVisibility(View.VISIBLE);
-					tvRemain.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-							giftData.seizeTime)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-					tvRemain.setText(Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
-							giftData.searchTime)));
-					break;
+			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				tvScore.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
+				tvBean.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
+				llZero.setVisibility(View.VISIBLE);
+				tvOriginPrice.setText(
+						Html.fromHtml(String.format("<line-through>原价 <font color='#f85454'>¥%d</font>",
+								giftData.originPrice)));
+				tvOriginPrice.setPaint(mApp.getResources().getColor(R.color.co_common_app_main_bg), 3);
+				tvZeroRemain.setText(
+						Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d</font>个", giftData.remainCount)));
+
+			} else {
+				tvRemain.setVisibility(View.VISIBLE);
+				switch (state) {
+					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+						tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>",
+								giftData.remainCount)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+						tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>",
+								giftData.searchCount)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+						int progress = giftData.remainCount * 100 / giftData.totalCount;
+						tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
+						pbPercent.setVisibility(View.VISIBLE);
+						pbPercent.setProgress(progress);
+						break;
+					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+						tvRemain.setVisibility(View.VISIBLE);
+						tvRemain.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+								giftData.seizeTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+						tvRemain.setText(Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
+								giftData.searchTime)));
+						break;
+				}
 			}
 
 		} else {
@@ -287,7 +315,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			btnCopy.setVisibility(View.VISIBLE);
 			tvCode.setText(Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", giftData.code)));
 		}
-		btnSend.setState(state);
+		setDeadCount();
+
 		if (!mIsNotifyRefresh) {
 			tvContent.setText(giftData.content);
 			tvDeadline.setText(DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm") + " ~ "
@@ -297,6 +326,42 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 
 
+	}
+
+	private void setDeadCount() {
+		if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE) {
+			return;
+		}
+		if (mTimer != null) {
+			mTimer.cancel();
+		}
+		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
+		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis(), 1000) {
+			@Override
+			public void onTick(long millisUntilFinished) {
+				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
+			}
+
+			@Override
+			public void onFinish() {
+				mData.giftData.seizeStatus = GiftTypeUtil.STATUS_SEIZE;
+				btnSend.setState(GiftTypeUtil.getItemViewType(mData.giftData));
+			}
+		};
+		mTimer.start();
+	}
+
+
+	private void setLimitTag(IndexGiftNew giftData) {
+		if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+			ivLimit.setVisibility(View.VISIBLE);
+			ivLimit.setImageResource(R.drawable.ic_tag_limit);
+		} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+			ivLimit.setVisibility(View.VISIBLE);
+			ivLimit.setImageResource(R.drawable.ic_tag_0_seize);
+		} else {
+			ivLimit.setVisibility(View.GONE);
+		}
 	}
 
 	public void initDownload(IndexGameNew game) {
@@ -336,8 +401,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 								}
 								if (response != null && response.code() == 200) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										updateData(response.body().getData());
 										refreshSuccessEnd();
+										updateData(response.body().getData());
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {
@@ -379,11 +444,64 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				ToastUtil.showShort("已复制");
 				break;
 			case R.id.btn_send:
-				if (mData != null && btnSend != null) {
-					PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend);
+				if (mData == null) {
+					return;
 				}
+				if (mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE
+						&& !isInstalledGame()) {
+					return;
+				}
+				PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend);
 				break;
 		}
+	}
+
+	private boolean isInstalledGame() {
+		HashSet<String> appNames = Global.getInstalledAppNames();
+		for (String name : appNames) {
+			if (mData.gameData.name.startsWith(name)) {
+				// 前缀匹配成功，表明有安装该游戏，返回成功
+				return true;
+			}
+		}
+		if (mAppInfo == null) {
+			ToastUtil.showShort("页面信息错误，请重新进入");
+			return false;
+		}
+		final ConfirmDialog dialog = ConfirmDialog.newInstance();
+		dialog.setTitle("小贴士");
+		dialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
+				mData.gameData.name)));
+		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus.INSTALLABLE) {
+			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
+			dialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
+		} else {
+			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
+		}
+		dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+			@Override
+			public void onCancel() {
+				dialog.dismissAllowingStateLoss();
+			}
+
+			@Override
+			public void onConfirm() {
+				if (mAppInfo != null) {
+					if (mAppInfo.downloadStatus != null) {
+						if (mAppInfo.downloadStatus == DownloadStatus.DOWNLOADING) {
+							ToastUtil.showShort("已经在下载中，请等待下载完成");
+							dialog.dismissAllowingStateLoss();
+							return;
+						}
+						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
+					}
+					mAppInfo.handleOnClick(getFragmentManager());
+				}
+				dialog.dismissAllowingStateLoss();
+			}
+		});
+		dialog.show(getChildFragmentManager(),ConfirmDialog.class.getSimpleName());
+		return false;
 	}
 
 	@Override

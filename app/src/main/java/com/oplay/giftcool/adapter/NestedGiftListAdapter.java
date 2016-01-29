@@ -119,8 +119,10 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			}
 			viewHolder.pbPercent.setProgress(percent);
 
-		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE) {
-			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
+		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE
+				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
+			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
 				// 只用积分
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -145,8 +147,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		} else {
 			switch (type) {
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-					// 由于数量关系，限量礼包暂时没有等待抢号功能(由服务端状态排除)
-					// 此部分逻辑一般不会执行
 					setDisabledField(viewHolder, View.VISIBLE,
 							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift.seizeTime)));
 					break;
@@ -170,8 +170,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 					setDisabledField(viewHolder, View.VISIBLE,
 							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift.searchCount)));
 					break;
-				default:
-					throw new IllegalStateException("type is not support! " + type);
 			}
 		}
 
@@ -184,7 +182,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	private void setCommonField(final ViewHolder viewHolder, final IndexGiftNew gift) {
 		ViewUtil.showImage(viewHolder.ivIcon, gift.img);
 		viewHolder.tvTitle.setText(String.format("[%s]%s", gift.gameName, gift.name));
-		if (gift.isLimit) {
+		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
 			viewHolder.ivLimit.setVisibility(View.VISIBLE);
 		} else {
 			viewHolder.ivLimit.setVisibility(View.GONE);
@@ -215,7 +213,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	private View inflateView(ViewGroup parent, ViewHolder viewHolder, int type) {
 		View convertView;
 		LayoutInflater inflater = LayoutInflater.from(mContext);
-		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE) {
+		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE ) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_normal, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
@@ -226,7 +224,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
 			viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
 			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
-		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE) {
+		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE || type ==  GiftTypeUtil.TYPE_ZERO_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
@@ -259,8 +257,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 					viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
 					viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 					break;
-				default:
-					throw new IllegalStateException("type is not support! " + type);
 			}
 		}
 		convertView.setTag(viewHolder);

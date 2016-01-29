@@ -13,20 +13,23 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 15-12-24.
  */
 public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements View.OnClickListener {
 
-	private static final int TAG_POSITION = 0xFF01F112;
 	private boolean mIsNotifyUpdate = false;
+	private static final int TAG_TIMER = 0x11223344;
 
 	public IndexGiftZeroAdapter(Context context) {
 		super(context);
@@ -44,29 +47,39 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		final ContentHolder contentHolder = (ContentHolder) holder;
 		ViewUtil.showImage(contentHolder.ivIcon, data.img);
 		contentHolder.itemView.setOnClickListener(this);
-		contentHolder.itemView.setTag(TAG_POSITION, position);
-		contentHolder.tvSrc.setText(String.format("原:¥%d", data.orginPrice));
-		contentHolder.tvSrc.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+		contentHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+		contentHolder.tvSrc.setText(String.format("原:¥%d", data.originPrice));
+		contentHolder.tvSrc.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 		contentHolder.tvName.setText(data.name);
 		contentHolder.tvGameName.setText(data.gameName);
 		contentHolder.tvTagSeize.setEnabled(false);
-		if (data.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED){
-			contentHolder.tvTagSeize.setText("已抢");
-		}else {
+		Object obj = contentHolder.tvTagSeize.getTag(TAG_TIMER);
+		if (obj != null) {
+			((CountDownTimer) obj).cancel();
+			obj = null;
+		}
+		contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
+		if (data.seizeStatus != GiftTypeUtil.SEIZE_TYPE_NEVER) {
+			contentHolder.tvTagSeize.setText("已抢号");
+		} else {
 			switch (data.status) {
 				case GiftTypeUtil.STATUS_WAIT_SEIZE:
 					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_wait_seize));
+					contentHolder.tvTagSeize.setBackgroundResource(R.drawable.ic_0_seize_btn_count);
 					long seizeTime = DateUtil.getTime(data.seizeTime);
 					CountDownTimer timer = new CountDownTimer(seizeTime - System.currentTimeMillis(), 1000) {
 
 						@Override
 						public void onTick(long millisUntilFinished) {
-							contentHolder.tvTagSeize.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
+							contentHolder.tvTagSeize.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
 						}
 
 						@Override
 						public void onFinish() {
-							contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_seize));
+							contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string
+									.st_0_gift_seize));
+							contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
+							contentHolder.tvTagSeize.setEnabled(true);
 							if (mIsNotifyUpdate) {
 								ObserverManager.getInstance().notifyGiftUpdate();
 								setNotifyUpdate(false);
@@ -74,13 +87,14 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 						}
 					};
 					timer.start();
+					contentHolder.tvTagSeize.setTag(TAG_TIMER, timer);
 					break;
 				case GiftTypeUtil.STATUS_SEIZE:
-					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_seize));
 					contentHolder.tvTagSeize.setEnabled(true);
+					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_seize));
 					break;
 				case GiftTypeUtil.STATUS_WAIT_SEARCH:
-					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_gift_seized));
+					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_gift_empty));
 					break;
 				case GiftTypeUtil.STATUS_FINISHED:
 					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_gift_finished));
@@ -96,10 +110,20 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 
 	@Override
 	public void onClick(View v) {
-		Object object = v.getTag();
-		if (object != null) {
-			int pos = (int) object;
-			IntentUtil.jumpGiftDetail(mContext, getItem(pos).id);
+		try {
+			final Object tag = v.getTag(IndexTypeUtil.TAG_POSITION);
+			int position = (Integer) tag;
+			if (position < 0 || mData == null || position >= mData.size()) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.e(AppDebugConfig.TAG_ADAPTER, "position = " + position + ", data = " + mData);
+				}
+				return;
+			}
+			IntentUtil.jumpGiftDetail(mContext, mData.get(position).id);
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(AppDebugConfig.TAG_ADAPTER, e);
+			}
 		}
 	}
 

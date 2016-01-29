@@ -125,9 +125,9 @@
 	</style >
 
 	<style name = "IndexListItemLayout.Horizontal" >
-		<item name = "android:layout_width" >96dp</item >
-		<item name = "android:paddingLeft" >13dp</item >
-		<item name = "android:paddingRight" >13dp</item >
+		<item name = "android:layout_width" >@dimen/di_index_list_item_width</item >
+		<item name = "android:paddingLeft" >@dimen/di_index_list_item_gap</item >
+		<item name = "android:paddingRight" >@dimen/di_index_list_item_gap</item >
 	</style >
 
 

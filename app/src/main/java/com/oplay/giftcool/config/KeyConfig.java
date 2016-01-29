@@ -36,9 +36,8 @@ public class KeyConfig {
 
 	/* login activity */
 	public static final int TYPE_ID_LOGIN_MAIN = 0x151;
-	public static final int TYPE_ID_OUWAN_LOGIN = 0x152;
-	public static final int TYPE_ID_PHONE_LOGIN_ONE = 0x153;
-	public static final int TYPE_ID_PHONE_LOGIN_TWO = 0x154;
+	public static final int TYPE_ID_OUWAN_LOGIN = 0;
+	public static final int TYPE_ID_PHONE_LOGIN = 1;
 
 	/* gift list activity */
 	public static final int TYPE_ID_GIFT_LIMIT = 0x170;

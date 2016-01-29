@@ -71,6 +71,8 @@
 	<dimen name = "di_index_hoz_module_icon_gap" >14dp</dimen >
 	<dimen name = "di_index_hoz_module_top_bottom" >12dp</dimen >
 	<dimen name = "di_index_item_margin_left" >7dp</dimen >
+	<dimen name = "di_index_list_item_gap" >12dp</dimen >
+	<dimen name = "di_index_list_item_width" >94dp</dimen >
 
 	<!-- 主页-游戏-精品 -->
 	<dimen name = "di_index_game_recommend_iv_height" >176dp</dimen >

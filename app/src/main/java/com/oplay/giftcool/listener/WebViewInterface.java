@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -93,5 +94,20 @@ public class WebViewInterface extends Observable {
 			}
 			return RET_INTERNAL_ERR;
 		}
+	}
+
+	public int login(int loginType) {
+		if (loginType != KeyConfig.TYPE_ID_OUWAN_LOGIN && loginType != KeyConfig.TYPE_ID_PHONE_LOGIN) {
+			loginType = KeyConfig.TYPE_ID_PHONE_LOGIN;
+		}
+		try {
+			IntentUtil.jumpLogin(mHostActivity, loginType);
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WEBVIEW, e);
+			}
+			return RET_INTERNAL_ERR;
+		}
+		return RET_SUCCESS;
 	}
 }

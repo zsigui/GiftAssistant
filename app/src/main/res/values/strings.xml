@@ -41,7 +41,7 @@
 
 	<string name = "st_index_gift_all" >全部</string >
 	<string name = "st_index_gift_like" >猜你喜欢</string >
-	<string name = "st_index_gift_like_new_add" >金日新增</string >
+	<string name = "st_index_gift_like_new_add" >今日新增</string >
 	<string name = "st_index_gift_limit" >今日限量</string >
 	<string name = "st_index_gift_limit_remain" >剩余</string >
 	<string name = "st_index_gift_new" >新鲜出炉</string >
@@ -108,6 +108,8 @@
 	<!-- 设置 - 我的礼包 -->
 	<string name = "st_my_gift_title" >我的礼包</string >
 
+	<string name = "st_wallet_money_note" >说明</string >
+
 	<!-- 登录 -->
 	<string name = "st_login_user" >点击登录</string >
 	<string name = "st_login_phone_title" >登录礼包酷</string >
@@ -150,12 +152,16 @@
 	<string name = "st_share_gcool_description_1" >超级豪华礼包，价值珍贵，限时限量，等你来抢!</string >
 	<string name = "st_share_gcool_description_2" >新手礼包、豪华礼包……各式礼包，尽在礼包酷，等你加入！</string >
 
-
+	<string name = "st_dialog_btn_download">马上下载</string>
+	<string name = "st_dialog_btn_install">马上安装</string>
 
 	<string name = "st_welcome_login_hint" >积分可以兑换各种豪华礼包\n积分存放再“我的钱包”里面</string >
 	<string name = "st_welcome_unlogin_hint" >马上登录，获取大量积分。\n积分可以兑换各种礼包噢~</string >
 	<string name = "st_welcome_login_btn" >获取更多积分</string >
 	<string name = "st_welcome_unlogin_btn" >马上登录</string >
+
+	<string name = "st_dialog_bean_note" >偶玩豆说明</string >
+	<string name = "st_dialog_score_note" >积分说明</string >
 
 	<!-- 账户信息 -->
 	<string name = "st_user_info_title">账户信息</string>

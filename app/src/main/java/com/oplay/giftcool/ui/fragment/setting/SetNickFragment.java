@@ -70,11 +70,11 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		}
 		etNick.setText(AccountManager.getInstance().getUserInfo().nick);
 		if (getActivity() != null) {
-			((SettingActivity) getActivity()).setSaveVisibility(View.VISIBLE);
-			((SettingActivity) getActivity()).setSaveListener(new OnShareListener() {
+			((SettingActivity) getActivity()).showRightBtn(View.VISIBLE,
+					mApp.getResources().getString(R.string.st_user_set_nick_save));
+			((SettingActivity) getActivity()).setRightBtnListener(new OnShareListener() {
 				@Override
 				public void share() {
-					KLog.e();
 					handleSave();
 				}
 			});
@@ -91,7 +91,8 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		// 隐藏输入框
 		InputMethodUtil.hideSoftInput(mActivity);
 		if (getActivity() != null) {
-			((SettingActivity) getActivity()).setSaveVisibility(View.GONE);
+			((SettingActivity) getActivity()).showRightBtn(View.GONE,
+					mApp.getResources().getString(R.string.st_user_set_nick_save));
 		}
 		return false;
 	}
@@ -199,11 +200,11 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 		if (TextUtils.isEmpty(nick) ||
 				nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
 			if (getActivity() != null) {
-				((SettingActivity) getActivity()).setSaveEnable(false);
+				((SettingActivity) getActivity()).setRightBtnEnabled(false);
 			}
 		} else {
 			if (getActivity() != null) {
-				((SettingActivity) getActivity()).setSaveEnable(true);
+				((SettingActivity) getActivity()).setRightBtnEnabled(true);
 			}
 		}
 	}

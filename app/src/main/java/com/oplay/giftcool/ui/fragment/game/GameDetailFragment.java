@@ -69,13 +69,15 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 				"&download=" + mApp.isAllowDownload();
 		AccountManager.getInstance().syncCookie();
 		loadUrl(url);
-		mIsLoading = true;
+		mIsSwipeRefresh = true;
 	}
 
 	@Override
 	protected void lazyLoad() {
-		mIsLoading = true;
-		reloadPage();
+		if (!mIsSwipeRefresh) {
+			reloadPage();
+		}
+		mIsSwipeRefresh = false;
 	}
 
 	@Override

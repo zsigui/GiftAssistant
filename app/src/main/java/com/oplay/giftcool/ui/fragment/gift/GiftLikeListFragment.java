@@ -14,7 +14,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +71,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		mLastPage = 1;
 
 		if (TextUtils.isEmpty(mGameKey)) {
-			mReqPageObj.data.appNames = SystemUtil.getInstalledAppName(getContext());
+			mReqPageObj.data.appNames = Global.getInstalledAppNames();
 		} else {
 			HashSet<String> s = new HashSet<>();
 			s.add(mGameKey);

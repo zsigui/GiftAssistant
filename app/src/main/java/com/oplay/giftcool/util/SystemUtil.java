@@ -36,7 +36,9 @@ public class SystemUtil {
 		try {
 			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
 		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, e);
+			}
 			return -1;
 		}
 	}
@@ -50,9 +52,22 @@ public class SystemUtil {
 			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
+				KLog.d(AppDebugConfig.TAG_UTIL, e);
 			}
 		}
 		return ret;
+	}
+
+	public static String getAppNameByPackName(Context context, String packageName) {
+		PackageManager pm = context.getPackageManager();
+		String name = null;
+		try {
+			name = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, e);
+			}
+		}
+		return name;
 	}
 }

@@ -12,6 +12,7 @@ import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
+import com.oplay.giftcool.ui.activity.WebActivity;
 
 /**
  * @author JackieZhuang
@@ -185,12 +186,19 @@ public class IntentUtil {
 		return intent;
 	}
 
+	/**
+	 * 跳转登录界面（默认手机登录界面）
+	 */
+	public static void jumpLogin(Context context) {
+		jumpLogin(context, KeyConfig.TYPE_ID_PHONE_LOGIN);
+	}
 
 	/**
 	 * 跳转登录界面
 	 */
-	public static void jumpLogin(Context context) {
+	public static void jumpLogin(Context context, int type) {
 		Intent intent = new Intent(context, LoginActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, type);
 		context.startActivity(intent);
 	}
 
@@ -235,6 +243,16 @@ public class IntentUtil {
 	 */
 	public static void jumpHome(Context context) {
 		Intent intent = new Intent(context, MainActivity.class);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转活动页面
+	 */
+	public static void jumpActivityWeb(Context context, String url, String title) {
+		Intent intent = new Intent(context, WebActivity.class);
+		intent.putExtra(KeyConfig.KEY_URL, url);
+		intent.putExtra(KeyConfig.KEY_DATA, title);
 		context.startActivity(intent);
 	}
 }

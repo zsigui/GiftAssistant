@@ -36,7 +36,7 @@ public class GameTagAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final GameTypeMain o) {
 		int state = TagButton.STATE_NONE;
-		switch (i % 15) {
+		switch ((i + i/15) % 15) {
 			case 1:
 				state = TagButton.STATE_RED;
 				break;

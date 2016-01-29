@@ -7,10 +7,12 @@ import android.os.Handler;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.InstallNotifier;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
+import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -42,6 +44,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 						.getAppInfoByPackageName(packName);
 				try {
 					if (appInfo != null) {
+						Global.getInstalledAppNames().add(SystemUtil.getAppNameByPackName(context, packName));
 						// remove notification
 						DownloadNotificationManager.clearDownloadComplete(context, appInfo.destUrl);
 						// remove apk if necessary
@@ -70,6 +73,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 				}
 			}
 			if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {// 卸载应用
+				Global.getInstalledAppNames().remove(SystemUtil.getAppNameByPackName(context, packName));
 			}
 			new Handler().postDelayed(new Runnable() {
 				@Override

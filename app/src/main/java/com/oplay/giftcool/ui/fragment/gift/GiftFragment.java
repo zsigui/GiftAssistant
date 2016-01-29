@@ -40,7 +40,6 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -232,7 +231,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					return;
 				}
 				ReqIndexGift data = new ReqIndexGift();
-				data.appNames = SystemUtil.getInstalledAppName(getContext());
+				data.appNames = Global.getInstalledAppNames();
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
 				Global.getNetEngine().obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
@@ -296,9 +295,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	}
 
 	public void updateZeroData(ArrayList<IndexGiftNew> zeroData) {
-		zeroData = initStashData();
 		if (zeroData == null) {
-			return;
+			zeroData = initStashData();
 		}
 		mZeroAdapter.updateData(zeroData);
 	}
@@ -308,30 +306,29 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		for (int i = 0; i < 6; i++) {
 			IndexGiftNew ng = new IndexGiftNew();
 			ng.gameName = "逍遥西游";
-			ng.id = i;
+			ng.id = 0;
 			ng.status = GiftTypeUtil.STATUS_SEIZE;
 			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
 			ng.img = "http://owan-img.ymapp.com/app/e2/06/10339/icon/icon_1450063729.png_128_128_70.png";
 			ng.name = "白金礼包";
-			ng.isLimit = true;
 			ng.giftType = GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE;
-			ng.orginPrice = (i + 1) * 100;
+			ng.originPrice = (i + 1) * 100;
 			ng.score = 0;
 			ng.status = GiftTypeUtil.STATUS_SEIZE;
-			ng.seizeTime = "2016-01-28 20:00";
+			ng.seizeTime = "2016-01-28 20:00:00";
 			ng.remainCount = 100;
 			ng.totalCount = 100;
 			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
 			data.add(ng);
 		}
-		data.get(3).orginPrice = 250;
-		data.get(3).seizeTime = "2015-01-29 20:00";
+		data.get(3).originPrice = 250;
+		data.get(3).seizeTime = "2016-01-29 20:00:00";
 		data.get(3).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
-		data.get(4).orginPrice = 310;
-		data.get(4).seizeTime = "2015-01-29 20:00";
+		data.get(4).originPrice = 310;
+		data.get(4).seizeTime = "2016-01-29 20:00:00";
 		data.get(4).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
-		data.get(5).orginPrice = 99;
-		data.get(5).seizeTime = "2015-01-29 20:00";
+		data.get(5).originPrice = 99;
+		data.get(5).seizeTime = "2016-01-29 20:00:00";
 		data.get(5).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
 		return data;
 	}

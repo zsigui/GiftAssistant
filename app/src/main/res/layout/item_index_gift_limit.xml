@@ -51,7 +51,7 @@
         style="@style/DefaultTextView.ItemSubTitle"
         android:layout_below="@+id/tv_name"
         android:layout_centerHorizontal="false"
-        android:layout_marginLeft="7dp"
+        android:layout_marginLeft="11dp"
         android:layout_marginTop="4dp"
         android:text="剩余"/>
 
@@ -63,7 +63,7 @@
         android:layout_marginTop="3dp"
         android:layout_toRightOf="@+id/tv_new_text"
         android:background="@drawable/shape_rect_remain_bg"
-        android:text="123"
+        android:text="3"
         android:textColor="@color/co_white"/>
 
 </RelativeLayout>

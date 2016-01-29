@@ -32,7 +32,8 @@ public class DateUtil {
 				: result);
 	}
 
-	public static String formatTime(long time, String format) {
+	public static String formatRemain(long time, String format) {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
 		return sdf.format(new Date(time));
 	}
@@ -49,7 +50,7 @@ public class DateUtil {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 		long curTimeMillisecond = 0;
 		try {
-			Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
+			Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
 			curTimeMillisecond = date.getTime();
 		} catch (ParseException e) {
 			if (AppDebugConfig.IS_DEBUG) {

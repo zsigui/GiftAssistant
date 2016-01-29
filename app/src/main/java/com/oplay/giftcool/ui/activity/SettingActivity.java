@@ -35,7 +35,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 	private int mType;
 	private boolean mInSetting = false;
 	private OnShareListener mSaveListener;
-	private TextView btnSave;
+	private TextView btnToolRight;
 
 	@Override
 	protected void initView() {
@@ -53,39 +53,40 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		super.initMenu(toolbar);
 	}
 
-	public void setSaveVisibility(int visibility) {
+	public void showRightBtn(int visibility, String text) {
 		if (mToolbar == null)
 			return;
-		if (btnSave == null) {
+		if (btnToolRight == null) {
 			ViewStub v = getViewById(mToolbar, R.id.vs_save);
 			if (v != null) {
 				v.inflate();
-				btnSave = getViewById(R.id.btn_bar_save);
-				btnSave.setOnClickListener(this);
+				btnToolRight = getViewById(R.id.btn_bar_save);
+				btnToolRight.setOnClickListener(this);
+				btnToolRight.setText(text);
 			}
 		}
-		if (btnSave != null) {
-			btnSave.setVisibility(visibility);
+		if (btnToolRight != null) {
+			btnToolRight.setVisibility(visibility);
 		}
 	}
 
-	public void setSaveEnable(boolean enabled) {
+	public void setRightBtnEnabled(boolean enabled) {
 		if (mToolbar == null)
 			return;
-		if (btnSave == null) {
+		if (btnToolRight == null) {
 			ViewStub v = getViewById(mToolbar, R.id.vs_save);
 			if (v != null) {
 				v.inflate();
-				btnSave = getViewById(R.id.btn_bar_save);
-				btnSave.setOnClickListener(this);
+				btnToolRight = getViewById(R.id.btn_bar_save);
+				btnToolRight.setOnClickListener(this);
 			}
 		}
-		if (btnSave != null) {
-			btnSave.setEnabled(enabled);
+		if (btnToolRight != null) {
+			btnToolRight.setEnabled(enabled);
 		}
 	}
 
-	public void setSaveListener(OnShareListener saveListener) {
+	public void setRightBtnListener(OnShareListener saveListener) {
 		mSaveListener = saveListener;
 	}
 
@@ -159,7 +160,6 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		switch (v.getId()) {
 			case R.id.btn_bar_save:
 				if (mSaveListener != null) {
-					KLog.e();
 					mSaveListener.share();
 				}
 				break;
