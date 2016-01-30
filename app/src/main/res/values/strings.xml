@@ -89,6 +89,8 @@
 	<string name = "st_bean_detail" >偶玩豆明细</string >
 	<string name = "st_wallet_get_score" >免费赚积分</string >
 	<string name = "st_wallet_get_bean" >充值偶玩豆</string >
+    <string name = "st_wallet_bean_note" >偶玩豆说明</string >
+    <string name = "st_wallet_score_note" >积分说明</string >
 
 	<!-- 设置 - 积分任务 -->
 	<string name = "st_task_title" >积分任务</string >
@@ -160,8 +162,7 @@
 	<string name = "st_welcome_login_btn" >获取更多积分</string >
 	<string name = "st_welcome_unlogin_btn" >马上登录</string >
 
-	<string name = "st_dialog_bean_note" >偶玩豆说明</string >
-	<string name = "st_dialog_score_note" >积分说明</string >
+
 
 	<!-- 账户信息 -->
 	<string name = "st_user_info_title">账户信息</string>

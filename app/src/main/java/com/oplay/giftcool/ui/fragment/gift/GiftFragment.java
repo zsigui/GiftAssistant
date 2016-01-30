@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -196,6 +197,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
 		}
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Global
+                .getBannerHeight(getContext()));
+        mBanner.setLayoutParams(lp);
 		mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
 			@Override

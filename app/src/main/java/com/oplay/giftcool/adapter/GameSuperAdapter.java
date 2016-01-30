@@ -1,7 +1,6 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
@@ -24,6 +22,7 @@ import com.oplay.giftcool.adapter.other.HeaderFooterDividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
@@ -120,6 +119,9 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
 		}
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                Global.getBannerHeight(mContext));
+        mBannerVH.mBanner.setLayoutParams(lp);
 		mBannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
 			@Override
@@ -155,17 +157,11 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 		mData.recommend = data;
 		data.initAppInfoStatus(mContext);
-		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_banner_default)
-				.showImageOnFail(R.drawable.ic_banner_default)
-				.showImageOnLoading(R.drawable.ic_banner_default)
-				.bitmapConfig(Bitmap.Config.RGB_565)
-				.delayBeforeLoading(100)
-				.cacheInMemory(true)
-				.cacheOnDisk(true)
-				.build();
-		ImageLoader.getInstance().displayImage(data.banner, mRecommendVH.ivBanner, displayOptions);
-		ImageLoader.getInstance().displayImage(data.img, mRecommendVH.ivIcon);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                Global.getBannerHeight(mContext));
+        mRecommendVH.ivBanner.setLayoutParams(lp);
+        ViewUtil.showBannerImage(mRecommendVH.ivBanner, data.banner);
+        ViewUtil.showImage(mRecommendVH.ivIcon, data.img);
 		mRecommendVH.tvName.setText(data.name);
 		mRecommendVH.tvSize.setText(data.size);
 		ViewUtil.initDownloadBtnStatus(mRecommendVH.btnDownload, data.appStatus);

@@ -57,6 +57,8 @@ public class ViewUtil {
 		}
 	}
 
+
+
 	public static void showImage(ImageView iv, String img) {
 		try {
 			if (iv.getTag(IndexTypeUtil.TAG_VIEW) == null || !(iv.getTag(IndexTypeUtil.TAG_VIEW)).equals(img)) {
@@ -66,11 +68,13 @@ public class ViewUtil {
 			}
 		} catch (Exception e) {
 			// 通常ImageLoader未初始化完成调用报错，先设置默认图片
+            iv.setTag(IndexTypeUtil.TAG_VIEW, "error");
 			iv.setImageResource(R.drawable.ic_img_default);
 		}
 	}
 
 	public static void showImage(ImageView iv, int img) {
+        iv.setTag(IndexTypeUtil.TAG_VIEW, img);
 		if (img == 0) {
 			iv.setImageResource(R.drawable.ic_img_default);
 		} else {
@@ -78,9 +82,31 @@ public class ViewUtil {
 		}
 	}
 
+    public static void showBannerImage(ImageView ivIcon, String img) {
+        if (TextUtils.isEmpty(img)) {
+            ivIcon.setTag(IndexTypeUtil.TAG_VIEW, "error");
+            ivIcon.setImageResource(R.drawable.ic_banner_default);
+        } else if (img.startsWith("drawable://")) {
+            ivIcon.setTag(IndexTypeUtil.TAG_VIEW, "empty");
+            ivIcon.setImageResource(R.drawable.ic_banner_empty_default);
+        } else {
+            try {
+                if (ivIcon.getTag() == null || !(ivIcon.getTag()).equals(img)) {
+                    ImageViewAware viewAware = new ImageViewAware(ivIcon, false);
+                    ImageLoader.getInstance().displayImage(img, viewAware, Global.BANNER_IMAGE_LOADER);
+                    ivIcon.setTag(IndexTypeUtil.TAG_VIEW, img);
+                }
+            } catch (Exception e) {
+                // 通常ImageLoader未初始化完成调用报错，先设置默认图片
+                ivIcon.setTag(IndexTypeUtil.TAG_VIEW, "error");
+                ivIcon.setImageResource(R.drawable.ic_avatar_default);
+            }
+        }
+    }
+
 	public static void showAvatarImage(String avatar, ImageView ivIcon, boolean isLogin) {
 		if (TextUtils.isEmpty(avatar)) {
-			ivIcon.setTag(avatar);
+			ivIcon.setTag(IndexTypeUtil.TAG_VIEW, avatar);
 			if (isLogin) {
 				ivIcon.setImageResource(R.drawable.ic_avatar_default);
 			} else {
@@ -91,10 +117,11 @@ public class ViewUtil {
 				if (ivIcon.getTag() == null || !(ivIcon.getTag()).equals(avatar)) {
 					ImageViewAware viewAware = new ImageViewAware(ivIcon, false);
 					ImageLoader.getInstance().displayImage(avatar, viewAware, Global.AVATAR_IMAGE_LOADER);
-					ivIcon.setTag(avatar);
+					ivIcon.setTag(IndexTypeUtil.TAG_VIEW, avatar);
 				}
 			} catch (Exception e) {
 				// 通常ImageLoader未初始化完成调用报错，先设置默认图片
+                ivIcon.setTag(IndexTypeUtil.TAG_VIEW, "error");
 				ivIcon.setImageResource(R.drawable.ic_avatar_default);
 			}
 		}

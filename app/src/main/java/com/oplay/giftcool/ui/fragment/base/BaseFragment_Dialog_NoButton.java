@@ -18,7 +18,7 @@ import com.oplay.giftcool.R;
  */
 public abstract class BaseFragment_Dialog_NoButton extends DialogFragment {
 
-	private View mContentView;
+	protected View mContentView;
 
 	@NonNull
 	@Override

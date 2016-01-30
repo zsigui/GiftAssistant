@@ -77,17 +77,16 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				boolean hasFind;
 				Uri mUri = Uri.parse(url);
 				final String host = mUri.getHost();
-				final String path = mUri.getEncodedPath();
 				//首先域名匹配
 				if (WebViewUrl.URL_BASE.contains(host)) {
 					//其次路径匹配
-					hasFind = true;
+					hasFind = false;
 				} else {
 					Intent in = new Intent (Intent.ACTION_VIEW , Uri.parse(url));
 					startActivity(in);
-					hasFind = false;
+					hasFind = true;
 				}
-				return hasFind || super.shouldOverrideUrlLoading(view, url);
+				return hasFind;
 			}
 		});
 		mWebView.setWebChromeClient(new WebChromeClient() {

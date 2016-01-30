@@ -11,6 +11,7 @@ import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
+import com.oplay.giftcool.ui.fragment.dialog.WebViewDialog;
 
 /**
  *
@@ -21,6 +22,8 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackPressListener{
 
 	private final static String PAGE_NAME = "钱包明细";
+    // 防止重复点击
+    private long mLastClickTiem = 0;
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
@@ -52,15 +55,20 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 			activity.setRightBtnListener(new OnShareListener() {
 				@Override
 				public void share() {
-					/*WebViewDialog dialog;
+                    long time = System.currentTimeMillis();
+                    if (time - mLastClickTiem < 500) {
+                        mLastClickTiem = time;
+                        return;
+                    }
+					WebViewDialog dialog;
 					if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
 						dialog = WebViewDialog.newInstance(
-								mApp.getResources().getString(R.string.st_dialog_bean_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
+                                mApp.getResources().getString(R.string.st_wallet_bean_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
 					} else {
 						dialog = WebViewDialog.newInstance(
-								mApp.getResources().getString(R.string.st_dialog_score_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
+								mApp.getResources().getString(R.string.st_wallet_score_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
 					}
-					dialog.show(getChildFragmentManager(), WebViewDialog.class.getSimpleName());*/
+					dialog.show(getChildFragmentManager(), WebViewDialog.class.getSimpleName());
 				}
 			});
 		}
