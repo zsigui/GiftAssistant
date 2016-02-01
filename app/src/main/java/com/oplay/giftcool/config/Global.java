@@ -79,7 +79,7 @@ public class Global {
 
     public static int getBannerHeight(Context context) {
         if (sBannerHeight == 0) {
-            sBannerHeight = 382 * context.getResources().getDisplayMetrics().widthPixels / 782;
+            sBannerHeight = 256 * context.getResources().getDisplayMetrics().widthPixels / 705;
         }
         return sBannerHeight;
     }

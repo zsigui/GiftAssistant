@@ -230,21 +230,37 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_FRAG, "lazyLoad.Thread start() ");
+				}
 				if (!NetworkUtil.isConnected(getContext())) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_FRAG, "lazyLoad.Thread net failed ");
+					}
 					refreshFailEnd();
 					return;
 				}
 				ReqIndexGift data = new ReqIndexGift();
 				data.appNames = Global.getInstalledAppNames();
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_FRAG, "lazyLoad.Thread obtain index gift ");
+				}
 				Global.getNetEngine().obtainIndexGift(reqData).enqueue(new Callback<JsonRespBase<IndexGift>>() {
 					@Override
 					public void onResponse(Response<JsonRespBase<IndexGift>> response, Retrofit retrofit) {
+						// 获取数据成功
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_FRAG, "onResponse start() ");
+						}
 						if (response != null && response.isSuccess()) {
 							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 								// 获取数据成功
-								updateData(response.body().getData());
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d(AppDebugConfig.TAG_FRAG, "response = " + response.body().getData());
+								}
 								refreshSuccessEnd();
+								updateData(response.body().getData());
 								return;
 							}
 						}
@@ -300,7 +316,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 	public void updateZeroData(ArrayList<IndexGiftNew> zeroData) {
 		if (zeroData == null) {
-			zeroData = initStashData();
+			return;
 		}
 		mZeroAdapter.updateData(zeroData);
 	}

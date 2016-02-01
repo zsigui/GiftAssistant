@@ -11,6 +11,7 @@ public class TaskTypeUtil {
 	public static final int TYPE_HEADER = 0;
 	public static final int TYPE_CONTENT = 1;
 
+
 	public static int getItemViewType(int missionType) {
 		switch (missionType) {
 			case MISSION_TYPE_TIRO:
@@ -99,4 +100,8 @@ public class TaskTypeUtil {
 	 * 连续登录7天
 	 */
 	public static final String ID_CONTINUOUS_LOGIN = "seven_every_day_login";
+	/**
+	 * 特定时间登录任务
+	 */
+	public static final String ID_LOGIN_SPECIFIED = "";
 }

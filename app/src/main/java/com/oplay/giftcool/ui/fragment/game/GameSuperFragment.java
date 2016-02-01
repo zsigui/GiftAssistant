@@ -94,8 +94,8 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                                                        Retrofit retrofit) {
                                     if (response != null && response.isSuccess()) {
 	                                    if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-		                                    refreshSuccessEnd();
 		                                    updateData(response.body().getData());
+		                                    refreshSuccessEnd();
 		                                    return;
 	                                    }
                                     }

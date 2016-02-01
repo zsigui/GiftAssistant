@@ -10,7 +10,7 @@ import com.oplay.giftcool.config.AppConfig;
 public class DecryptDataModel {
 
 	public static final int SDK_VER = 1;
-	public static final String SDK_VER_NAME = "V1.0";
+	public static final String SDK_VER_NAME = "V1.0.1";
 
 	/**
 	 * 用户uid

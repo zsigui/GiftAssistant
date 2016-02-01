@@ -329,13 +329,15 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	}
 
 	private void setDeadCount() {
-		if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE) {
+		if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
+				|| mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
 			return;
 		}
 		if (mTimer != null) {
 			mTimer.cancel();
 		}
 		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
+		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
 		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis(), 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -344,7 +346,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 			@Override
 			public void onFinish() {
-				mData.giftData.seizeStatus = GiftTypeUtil.STATUS_SEIZE;
+				mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
 				btnSend.setState(GiftTypeUtil.getItemViewType(mData.giftData));
 			}
 		};

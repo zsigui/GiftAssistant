@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -58,6 +59,10 @@ public class WebViewInterface extends Observable {
 				KLog.d(AppDebugConfig.TAG_WEBVIEW, "json = " + giftJson);
 			}
 			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
+			if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				IntentUtil.jumpGiftDetail(mHostActivity, gift.id);
+				return RET_SUCCESS;
+			}
 			return PayManager.getInstance().seizeGift(mHostActivity, gift, null);
 		} catch (JsonSyntaxException e) {
 			if (AppDebugConfig.IS_DEBUG) {

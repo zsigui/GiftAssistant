@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.socks.library.KLog;
+
 /**
  * @author JackieZhuang
  * @email zsigui@foxmail.com
@@ -85,18 +88,30 @@ public class LoadAndRetryViewManager {
     }
 
     public void showLoading() {
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.d(AppDebugConfig.TAG_APP, "retry - showLoading");
+	    }
         showThread(TYPE_LOAD);
     }
 
     public void showErrorRetry() {
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.d(AppDebugConfig.TAG_APP, "retry - showErrorRetry");
+	    }
         showThread(TYPE_ERROR_RETRY);
     }
 
     public void showEmpty() {
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.d(AppDebugConfig.TAG_APP, "retry - showEmpty");
+	    }
         showThread(TYPE_EMPTY);
     }
 
     public void showContent() {
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.d(AppDebugConfig.TAG_APP, "retry - showContent");
+	    }
         showThread(TYPE_CONTENT);
     }
 
@@ -147,10 +162,10 @@ public class LoadAndRetryViewManager {
         } else
         {
             mContainer.post(new Runnable() {
-                @Override
-                public void run() {
-                    show(type);
-                }
+	            @Override
+	            public void run() {
+		            show(type);
+	            }
             });
         }
     }
@@ -161,6 +176,11 @@ public class LoadAndRetryViewManager {
     }
 
     private void show(int type) {
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.d(AppDebugConfig.TAG_APP, "retry - show - type = " + type
+		    + ", loadView = " + mLoadingView + ", contentView = " + mContentView
+		    + ", emptyView = " + mEmptyView + ", errorView = " + mErrorRetryView);
+	    }
         mContainer.removeAllViews();
         switch (type) {
             case TYPE_LOAD:
@@ -178,14 +198,13 @@ public class LoadAndRetryViewManager {
                     mContainer.addView(mEmptyView);
                 }
                 break;
-            case TYPE_ERROR_RETRY:
+            default:
                 if (mErrorRetryView != null) {
                     mContainer.addView(mErrorRetryView);
                     if (mOnRetryListener != null) {
                         mOnRetryListener.onRetry(mErrorRetryView);
                     }
                 }
-                break;
         }
     }
 

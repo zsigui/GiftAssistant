@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:layout_height = "match_parent"
+              android:layout_width = "match_parent"
+              android:orientation = "vertical" >
+
+	<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	                android:layout_width = "wrap_content"
+	                android:layout_height = "wrap_content"
+	                android:background = "@drawable/pic_welcome_first_login" >
+
+		<TextView
+				android:id = "@+id/tv_score"
+				style = "@style/DefaultTextView"
+				android:text = "20"
+				android:textSize = "40sp"
+				android:textStyle = "bold"
+				android:layout_centerHorizontal="true"
+				android:paddingLeft="40dp"
+				android:layout_marginTop="71dp"
+				android:textColor = "@color/co_reward_bg" />
+
+		<TextView
+				android:id = "@+id/tv_hint"
+				style = "@style/DefaultTextView"
+				android:singleLine = "false"
+				android:layout_centerHorizontal = "true"
+				android:layout_marginTop = "168dp"
+				android:lineSpacingExtra = "4dp"
+				android:textColor = "@color/co_common_text_main"
+				android:text = "@string/st_welcome_login_hint_lottery1" />
+		<TextView
+				android:id = "@+id/tv_lottery_hint"
+				style = "@style/DefaultTextView"
+				android:singleLine = "false"
+				android:layout_centerHorizontal = "true"
+				android:layout_marginTop="4dp"
+				android:layout_below="@+id/tv_hint"
+				android:textColor = "@color/co_btn_red_pressed"
+				android:text = "@string/st_welcome_login_hint_lottery2" />
+
+		<TextView
+				android:id = "@+id/btn_confirm"
+				style = "@style/DefaultTextView.NormalBtn"
+				android:text = "@string/st_welcome_unlogin_btn"
+				android:layout_centerHorizontal = "true"
+				android:layout_marginTop = "220dp"
+				android:background = "@drawable/selector_btn_red"
+				android:textColor = "@color/co_white" />
+	</RelativeLayout >
+
+</LinearLayout >

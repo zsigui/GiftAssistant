@@ -26,11 +26,13 @@ import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
@@ -46,6 +48,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public static MainActivity sGlobalHolder;
 	// 判断是否今日首次打开APP
 	public static boolean sIsTodayFirstOpen = false;
+	public static boolean sIsTodayFirstOpenForBroadcast = false;
 	private long mLastClickTime = 0;
 
 	//是否已经显示过更新提示
@@ -263,6 +266,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void handleFirstOpen() {
+		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null) {
+			ThreadUtil.runInUIThread(new Runnable() {
+				@Override
+				public void run() {
+					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
+					dialog.show(getSupportFragmentManager(), AllViewDialog.class.getSimpleName());
+					sIsTodayFirstOpenForBroadcast = false;
+				}
+			}, 500);
+
+		}
 		if (sIsTodayFirstOpen) {
 			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
 			new Handler().postDelayed(new Runnable() {

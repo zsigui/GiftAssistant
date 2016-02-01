@@ -157,9 +157,6 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 		mData.recommend = data;
 		data.initAppInfoStatus(mContext);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                Global.getBannerHeight(mContext));
-        mRecommendVH.ivBanner.setLayoutParams(lp);
         ViewUtil.showBannerImage(mRecommendVH.ivBanner, data.banner);
         ViewUtil.showImage(mRecommendVH.ivIcon, data.img);
 		mRecommendVH.tvName.setText(data.name);

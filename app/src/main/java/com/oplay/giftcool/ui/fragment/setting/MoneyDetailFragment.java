@@ -66,7 +66,7 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
                                 mApp.getResources().getString(R.string.st_wallet_bean_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
 					} else {
 						dialog = WebViewDialog.newInstance(
-								mApp.getResources().getString(R.string.st_wallet_score_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
+								mApp.getResources().getString(R.string.st_wallet_score_note), WebViewUrl.SCORE_DETAIL_NOTE);
 					}
 					dialog.show(getChildFragmentManager(), WebViewDialog.class.getSimpleName());
 				}
@@ -91,7 +91,7 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 		if (getActivity() != null) {
 			((SettingActivity) getActivity()).showRightBtn(View.GONE, "");
 		}
-		return false;
+		return super.onBack();
 	}
 
 	public static MoneyDetailFragment newInstance(int type) {

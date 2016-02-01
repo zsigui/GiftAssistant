@@ -66,6 +66,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
 		// 首次打开APP 或者 今日首次登录
 		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
+		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
 		// 写入当前时间
 		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
 	}
@@ -95,7 +96,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.e("initAndCheckUpdate failed!");
 			}
 		}
-		// 判断是否金立首次打开APP
+		// 判断是否今日首次打开APP
 		judgeFirstOpenToday();
 		ScoreManager.getInstance().resetLocalTaskState();
 
@@ -143,6 +144,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 							AssistantApp.getInstance().setQQInfo(response.body().getData().initAppConfig.qqInfo);
 							AssistantApp.getInstance().setStartImg(response.body().getData().initAppConfig
 									.startImgUrl);
+							AssistantApp.getInstance().setBroadcastBanner(response.body().getData().initAppConfig.broadcastBananer);
 						}
 						if (response.body().getData().updateInfo != null) {
 							AssistantApp.getInstance().setUpdateInfo(response.body().getData().updateInfo);

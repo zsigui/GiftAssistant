@@ -84,6 +84,7 @@ public class ScoreManager {
 	 * 每天首次启动APP显示欢迎弹窗
 	 */
 	public void showWelComeDialog(final FragmentManager fm, final Context context, final TaskReward task) {
+		ScoreManager.getInstance().toastByCallback(task, false);
 		if (task == null) {
 			// 未登录 task == null
 			final LoginDialog unloginDialog = LoginDialog.newInstance(R.layout.dialog_welcome_unlogin);
@@ -111,7 +112,7 @@ public class ScoreManager {
 				loginDialog = LoginDialog.newInstance(R.layout.dialog_welcome_login);
 			}
 			loginDialog.setScore(task.rewardPoints);
-			loginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_login_btn));
+			loginDialog.setPositiveBtnText( context.getResources().getString(R.string.st_welcome_login_btn));
 			loginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 				@Override
 				public void onCancel() {

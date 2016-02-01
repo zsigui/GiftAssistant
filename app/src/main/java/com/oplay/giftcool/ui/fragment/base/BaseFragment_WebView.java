@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.WebViewInterface;
@@ -78,7 +79,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				Uri mUri = Uri.parse(url);
 				final String host = mUri.getHost();
 				//首先域名匹配
-				if (WebViewUrl.URL_BASE.contains(host)) {
+				if (WebViewUrl.URL_BASE.contains(host) || NetUrl.URL_BASE.contains(host)) {
 					//其次路径匹配
 					hasFind = false;
 				} else {
@@ -86,7 +87,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					startActivity(in);
 					hasFind = true;
 				}
-				return hasFind;
+				return hasFind || super.shouldOverrideUrlLoading(view, url);
 			}
 		});
 		mWebView.setWebChromeClient(new WebChromeClient() {
@@ -239,7 +240,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			// 部分手机在调用 onPause 还是会出现mWeiView == null
 			if (mWebView != null) {
 				mWebView.onResume();
-				mWebView.resumeTimers();
 			}
 		} catch (Exception ignored) {}
 	}
@@ -250,18 +250,18 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		try {
 			// 部分手机在调用 onPause 还是会出现mWeiView == null
 			if (mWebView != null) {
-				mWebView.onResume();
+				mWebView.onPause();
 			}
 		} catch (Exception ignored){}
 	}
 
 	public void reloadPage() {
+		mIsLoading = false;
+		mIsLoadingFailed = false;
 		if (mWebView != null) {
 			mWebView.reload();
 			mScrollX = mWebView.getScrollX();
 			mScrollY = mWebView.getScrollY();
-			mIsLoading = false;
-			mIsLoadingFailed = false;
 		}
 	}
 
@@ -281,10 +281,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
 		}
-		if (mWebView == null) {
-			mWebView = getViewById(R.id.wv_container);
+		if (mWebView != null) {
+			mWebView.loadUrl(url);
 		}
-		mWebView.loadUrl(url);
 	}
 
 	/**

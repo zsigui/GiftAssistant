@@ -21,4 +21,10 @@ public class InitAppConfig implements Serializable{
 
 	@SerializedName("is_show_download")
 	public boolean isShowDownload;
+
+	/**
+	 * 是否具备抽奖功能
+	 */
+	@SerializedName("banner")
+	public IndexBanner broadcastBananer;
 }

@@ -44,6 +44,9 @@ public class KeyConfig {
 	public static final int TYPE_ID_GIFT_NEW = 0x171;
 	public static final int TYPE_ID_GIFT_LIKE = 0x172;
 
+	/* web activity */
+	public static final int TYPE_ID_LOTTERY = 0x172;
+
 	/* game list activity */
 	// 新游推荐
 	public static final int TYPE_ID_GAME_NEW = 0x201;

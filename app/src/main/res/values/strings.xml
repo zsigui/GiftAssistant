@@ -155,12 +155,15 @@
 	<string name = "st_share_gcool_description_2" >新手礼包、豪华礼包……各式礼包，尽在礼包酷，等你加入！</string >
 
 	<string name = "st_dialog_btn_download">马上下载</string>
-	<string name = "st_dialog_btn_install">马上安装</string>
+	<string name = "st_dialog_btn_install">安装</string>
 
-	<string name = "st_welcome_login_hint" >积分可以兑换各种豪华礼包\n积分存放再“我的钱包”里面</string >
+	<string name = "st_welcome_login_hint" >积分可以兑换各种豪华礼包\n积分存放在“我的钱包”里面</string >
+	<string name = "st_welcome_login_hint_lottery1" >积分可以兑换各种豪华礼包</string >
+	<string name = "st_welcome_login_hint_lottery2" >奖励3次免费抽奖的机会，100%中奖</string >
 	<string name = "st_welcome_unlogin_hint" >马上登录，获取大量积分。\n积分可以兑换各种礼包噢~</string >
 	<string name = "st_welcome_login_btn" >获取更多积分</string >
 	<string name = "st_welcome_unlogin_btn" >马上登录</string >
+	<string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
 
 
 

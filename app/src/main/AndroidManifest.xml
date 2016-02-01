@@ -61,12 +61,17 @@
 				<action android:name = "android.intent.action.MAIN" />
 				<category android:name = "android.intent.category.LAUNCHER" />
 			</intent-filter >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="http" android:host="giftcool.ouwan.com" android:pathPrefix="/api/open_app" />
-			</intent-filter>
+			<intent-filter >
+				<action android:name = "android.intent.action.VIEW" />
+
+				<category android:name = "android.intent.category.DEFAULT" />
+				<category android:name = "android.intent.category.BROWSABLE" />
+
+				<data
+						android:scheme = "http"
+						android:host = "giftcool.ouwan.com"
+						android:pathPrefix = "/api/open_app" />
+			</intent-filter >
 		</activity >
 
 		<!--android:screenOrientation = "sensorPortrait"-->
@@ -103,15 +108,21 @@
 				android:name = "com.oplay.giftcool.ui.activity.GiftDetailActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
+				android:launchMode = "singleTop"
 				android:exported = "true"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="http" android:host="giftcool.ouwan.com" android:pathPrefix="/api/show_gift" />
-			</intent-filter>
-		</activity>
+			<intent-filter >
+				<action android:name = "android.intent.action.VIEW" />
+
+				<category android:name = "android.intent.category.DEFAULT" />
+				<category android:name = "android.intent.category.BROWSABLE" />
+
+				<data
+						android:scheme = "http"
+						android:host = "giftcool.ouwan.com"
+						android:pathPrefix = "/api/show_gift" />
+			</intent-filter >
+		</activity >
 
 		<activity
 				android:name = "com.oplay.giftcool.ui.activity.GameListActivity"
@@ -152,7 +163,8 @@
 			<intent-filter android:priority = "1000" >
 				<action android:name = "android.intent.action.PACKAGE_ADDED" />
 				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
-				<data android:scheme = "package"/>
+
+				<data android:scheme = "package" />
 			</intent-filter >
 		</receiver >
 

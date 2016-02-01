@@ -191,8 +191,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				mission.icon = R.drawable.ic_task_continuous_login;
 			} else if (id.equals(TaskTypeUtil.ID_FIRST_LOGIN)) {
 				mission.icon = R.drawable.ic_task_first_login;
+			} else if (id.equals(TaskTypeUtil.ID_LOGIN_SPECIFIED)) {
 			}
-		}
+ 		}
 	}
 
 	/**

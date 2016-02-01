@@ -9,26 +9,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.util.List;
 
 /**
  * Created by zsigui on 15-12-24.
  */
-public class NestedGiftListAdapter extends BaseAdapter {
+public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickListener {
+
+	private static final int TAG_POS = 0xFF331234;
 
 	private List<IndexGiftNew> mData;
 	private Context mContext;
+	private OnItemClickListener<IndexGiftNew> mListener;
 
 
 	public NestedGiftListAdapter(Context context) {
@@ -43,6 +48,14 @@ public class NestedGiftListAdapter extends BaseAdapter {
 	public void updateData(List<IndexGiftNew> data) {
 		this.mData = data;
 		notifyDataSetChanged();
+	}
+
+	public OnItemClickListener<IndexGiftNew> getListener() {
+		return mListener;
+	}
+
+	public void setListener(OnItemClickListener<IndexGiftNew> listener) {
+		mListener = listener;
 	}
 
 	public List<IndexGiftNew> getData() {
@@ -103,7 +116,11 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		final IndexGiftNew gift = mData.get(position);
 
 		setCommonField(viewHolder, gift);
+		viewHolder.btnSend.setTag(TAG_POS, position);
+		convertView.setTag(TAG_POS, position);
 		viewHolder.btnSend.setState(type);
+		viewHolder.btnSend.setOnClickListener(this);
+		convertView.setOnClickListener(this);
 		// 设置数据和按键状态
 		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE) {
 
@@ -188,10 +205,10 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			viewHolder.ivLimit.setVisibility(View.GONE);
 		}
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
-		viewHolder.btnSend.setOnClickListener(new View.OnClickListener() {
+		/*viewHolder.btnSend.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				PayManager.getInstance().seizeGift(mContext, gift, viewHolder.btnSend);
+
 			}
 		});
 		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +216,7 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				IntentUtil.jumpGiftDetail(mContext, gift.id);
 			}
-		});
+		});*/
 	}
 
 	public void setDisabledField(ViewHolder viewHolder, int tvVisibility, Spanned tvText) {
@@ -223,7 +240,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
 			viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
 			viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE || type ==  GiftTypeUtil.TYPE_ZERO_SEIZE) {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
 			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
@@ -235,7 +251,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 			viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
 			viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
 			viewHolder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_text);
-			viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 		} else {
 			convertView = inflater.inflate(R.layout.item_index_gift_new_disabled, parent, false);
 			switch (type) {
@@ -255,7 +270,6 @@ public class NestedGiftListAdapter extends BaseAdapter {
 					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
 					viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
 					viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-					viewHolder.rlItem = ViewUtil.getViewById(convertView, R.id.rl_recommend);
 					break;
 			}
 		}
@@ -263,11 +277,42 @@ public class NestedGiftListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	@Override
+	public void onClick(View v) {
+		try {
+			if (v.getTag(TAG_POS) != null) {
+				Integer pos = (Integer) v.getTag(TAG_POS);
+				if (mData != null && pos < mData.size()) {
+					IndexGiftNew gift = mData.get(pos);
+					switch (v.getId()) {
+						case R.id.rl_recommend:
+							IntentUtil.jumpGiftDetail(mContext, gift.id);
+							break;
+						case R.id.btn_send:
+							if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+								// 对于0元抢，先跳转到游戏详情
+								IntentUtil.jumpGiftDetail(mContext, gift.id);
+							} else {
+								PayManager.getInstance().seizeGift(mContext, gift, (GiftButton) v);
+							}
+							break;
+					}
+					if (mListener != null) {
+						mListener.onItemClick(gift, v, pos);
+					}
+				}
+			}
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_ADAPTER, e);
+			}
+		}
+	}
+
 	/**
 	 * ViewHolder缓存，由于大体结构相似，统一一个ViewHolder类型
 	 */
 	static class ViewHolder {
-		RelativeLayout rlItem;
 		ImageView ivIcon;
 		ImageView ivLimit;
 		TextView tvTitle;

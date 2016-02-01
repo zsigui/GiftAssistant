@@ -22,6 +22,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
@@ -55,6 +56,7 @@ public class AssistantApp extends Application {
 	private UpdateInfo mUpdateInfo;
 	private ArrayList<String> mQQInfo;
 	private String mStartImg;
+	private IndexBanner mBroadcastBanner;
 
 	// 是否安装完成自动删除
 	private boolean mShouldAutoDeleteApk = false;
@@ -74,6 +76,8 @@ public class AssistantApp extends Application {
 	private boolean mIsGlobalInit = false;
 	// 是否允许显示下载，根据渠道获取而定
 	private boolean mIsAllowDownload = true;
+	// 是否显示抽奖页面
+	private boolean mShowLottery = true;
 
 	@Override
 	public void onCreate() {
@@ -147,6 +151,9 @@ public class AssistantApp extends Application {
 		OkHttpClient httpClient = new OkHttpClient();
 		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
 		httpClient.setReadTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_APP, "request url = " + NetUrl.getBaseUrl());
+		}
 		mRetrofit = new Retrofit.Builder()
 				.baseUrl(NetUrl.getBaseUrl())
 				.addConverterFactory(GsonConverterFactory.create(mGson))
@@ -321,5 +328,13 @@ public class AssistantApp extends Application {
 
 	public void setStartImg(String startImg) {
 		mStartImg = startImg;
+	}
+
+	public IndexBanner getBroadcastBanner() {
+		return mBroadcastBanner;
+	}
+
+	public void setBroadcastBanner(IndexBanner broadcastBanner) {
+		mBroadcastBanner = broadcastBanner;
 	}
 }
