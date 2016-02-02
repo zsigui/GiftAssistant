@@ -3,6 +3,7 @@ package com.oplay.giftcool;
 import android.app.Application;
 import android.os.Build;
 import android.os.StrictMode;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -323,11 +324,15 @@ public class AssistantApp extends Application {
 	}
 
 	public String getStartImg() {
-		return mStartImg;
+		return SPUtil.getString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, null);
 	}
 
 	public void setStartImg(String startImg) {
+		if (TextUtils.isEmpty(startImg)) {
+			return;
+		}
 		mStartImg = startImg;
+		SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);
 	}
 
 	public IndexBanner getBroadcastBanner() {
@@ -335,6 +340,12 @@ public class AssistantApp extends Application {
 	}
 
 	public void setBroadcastBanner(IndexBanner broadcastBanner) {
+		if (broadcastBanner == null) {
+			return;
+		}
 		mBroadcastBanner = broadcastBanner;
+		/*if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
+		}*/
 	}
 }

@@ -5,17 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -41,7 +39,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 			long minSplashDuration = 1234;
 			long maxInitDuration = 4000;
 			if ((mApp.isGlobalInit() && initDuration > minSplashDuration) || initDuration > maxInitDuration) {
-				saveImageUrl(mApp.getStartImg());
 				judgeToMain();
 			} else {
 				mHandler.postDelayed(mInitRunnable, 100);
@@ -74,7 +71,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 				ViewGroup.LayoutParams.MATCH_PARENT));
 		iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		boolean useCacheImg = false;
-		String imageUrl = getImageUrl();
+		String imageUrl = AssistantApp.getInstance().getStartImg();
 		if (imageUrl != null) {
 			File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
 			if (file != null && file.exists()) {
@@ -99,17 +96,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 	private void judgeToMain() {
 		startActivity(new Intent(SplashActivity.this, MainActivity.class));
 		this.finish();
-	}
-
-	private void saveImageUrl(String url) {
-		if (TextUtils.isEmpty(url)) {
-			return;
-		}
-		SPUtil.putString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, url);
-	}
-
-	private String getImageUrl() {
-		return SPUtil.getString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, null);
 	}
 
 	@Override

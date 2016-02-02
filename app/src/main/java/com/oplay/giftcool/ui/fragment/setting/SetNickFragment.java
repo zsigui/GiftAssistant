@@ -63,9 +63,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		if (!AccountManager.getInstance().isLogin()) {
-			etNick.setText("未知");
-			getActivity().onBackPressed();
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
 			return;
 		}
 		etNick.setText(AccountManager.getInstance().getUserInfo().nick);

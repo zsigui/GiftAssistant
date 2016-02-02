@@ -22,7 +22,7 @@ public class ScoreMission implements Serializable {
 	public String name;
 
 	/**
-	 * 任务类型: 1.新手任务 2.每日任务 3.连续性任务
+	 * 任务类型: 1.新手任务 2.每日任务 3.连续性任务 4. 期待任务
 	 */
 	@SerializedName("type")
 	public int type;
@@ -78,4 +78,5 @@ public class ScoreMission implements Serializable {
 	 * 此标志仅用于SDK，表示当前任务已完成
 	 */
 	public boolean isFinished;
+
 }

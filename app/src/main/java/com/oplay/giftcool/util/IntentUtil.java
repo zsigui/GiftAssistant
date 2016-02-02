@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
@@ -189,10 +190,14 @@ public class IntentUtil {
 	}
 
 	/**
-	 * 跳转登录界面（默认手机登录界面）
+	 * 跳转登录界面（根据最后一次登录判断）
 	 */
 	public static void jumpLogin(Context context) {
-		jumpLogin(context, KeyConfig.TYPE_ID_PHONE_LOGIN);
+		if (AccountManager.getInstance().isPhoneLogin()) {
+			jumpLogin(context, KeyConfig.TYPE_ID_PHONE_LOGIN);
+		} else {
+			jumpLogin(context, KeyConfig.TYPE_ID_OUWAN_LOGIN);
+		}
 	}
 
 	/**

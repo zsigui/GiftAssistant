@@ -145,6 +145,11 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
+		<activity
+				android:name = "com.oplay.giftcool.ui.activity.WebActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+				android:screenOrientation = "sensorPortrait"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 		<service
 				android:name = "com.oplay.giftcool.service.ClockService"
 				android:exported = "false" />

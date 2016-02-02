@@ -16,6 +16,9 @@
 				android:layout_centerHorizontal = "true"
 				android:layout_marginTop = "168dp"
 				android:lineSpacingExtra = "4dp"
+				android:layout_marginLeft = "10dp"
+				android:layout_marginRight = "10dp"
+				android:maxWidth = "@dimen/di_dialog_welcome_content_width"
 				android:textColor = "@color/co_common_text_main"
 				android:text = "@string/st_welcome_unlogin_hint" />
 
@@ -24,7 +27,9 @@
 				style = "@style/DefaultTextView.NormalBtn"
 				android:text = "@string/st_welcome_unlogin_btn"
 				android:layout_centerHorizontal = "true"
-				android:layout_marginTop = "220dp"
+				android:layout_below = "@+id/tv_hint"
+				android:layout_marginTop = "10dp"
+				android:layout_marginBottom = "25dp"
 				android:background = "@drawable/selector_btn_red"
 				android:textColor = "@color/co_white" />
 	</RelativeLayout >

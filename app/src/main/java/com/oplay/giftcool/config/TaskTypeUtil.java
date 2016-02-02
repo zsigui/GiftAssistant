@@ -17,6 +17,7 @@ public class TaskTypeUtil {
 			case MISSION_TYPE_TIRO:
 			case MISSION_TYPE_DAILY:
 			case MISSION_TYPE_CONTINUOUS:
+			case MISSION_TYPE_FUTURE:
 				return TYPE_CONTENT;
 			default:
 				return TYPE_HEADER;
@@ -35,6 +36,10 @@ public class TaskTypeUtil {
 	 * 持续任务类型
 	 */
 	public static final int MISSION_TYPE_CONTINUOUS = 3;
+	/**
+	 * 期望任务类型
+	 */
+	public static final int MISSION_TYPE_FUTURE = 4;
 
 	/**
 	 * 上传头像
@@ -103,5 +108,5 @@ public class TaskTypeUtil {
 	/**
 	 * 特定时间登录任务
 	 */
-	public static final String ID_LOGIN_SPECIFIED = "";
+	public static final String ID_LOGIN_SPECIFIED = "login_2016_02_16_reward";
 }

@@ -15,9 +15,9 @@
 				android:text = "20"
 				android:textSize = "40sp"
 				android:textStyle = "bold"
-				android:paddingTop = "71dp"
-				android:paddingLeft = "152dp"
-				android:gravity="left|center_vertical"
+				android:layout_marginTop = "63dp"
+				android:paddingLeft = "35dp"
+				android:layout_centerHorizontal = "true"
 				android:textColor = "@color/co_reward_bg" />
 
 		<TextView
@@ -27,15 +27,20 @@
 				android:layout_centerHorizontal = "true"
 				android:layout_marginTop = "168dp"
 				android:lineSpacingExtra = "4dp"
+				android:layout_marginLeft = "10dp"
+				android:layout_marginRight = "10dp"
+				android:maxWidth = "@dimen/di_dialog_welcome_content_width"
 				android:textColor = "@color/co_common_text_main"
 				android:text = "@string/st_welcome_login_hint" />
 
 		<TextView
 				android:id = "@+id/btn_confirm"
 				style = "@style/DefaultTextView.NormalBtn"
-				android:text = "@string/st_welcome_unlogin_btn"
+				android:text = "@string/st_welcome_login_btn"
 				android:layout_centerHorizontal = "true"
-				android:layout_marginTop = "220dp"
+				android:layout_below = "@+id/tv_hint"
+				android:layout_marginTop = "10dp"
+				android:layout_marginBottom = "25dp"
 				android:background = "@drawable/selector_btn_red"
 				android:textColor = "@color/co_white" />
 	</RelativeLayout >

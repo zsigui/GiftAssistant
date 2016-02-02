@@ -12,10 +12,11 @@ import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
-import com.oplay.giftcool.ui.fragment.dialog.LoginDialog;
+import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -87,29 +88,31 @@ public class ScoreManager {
 		ScoreManager.getInstance().toastByCallback(task, false);
 		if (task == null) {
 			// 未登录 task == null
-			final LoginDialog unloginDialog = LoginDialog.newInstance(R.layout.dialog_welcome_unlogin);
+			final WelcomeDialog unloginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_unlogin);
 			unloginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_unlogin_btn));
 			unloginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 				@Override
 				public void onCancel() {
 					unloginDialog.dismissAllowingStateLoss();
+					TCAgent.onEvent(context, "未登录欢迎弹窗", "取消");
 				}
 
 				@Override
 				public void onConfirm() {
 					IntentUtil.jumpLogin(context);
 					unloginDialog.dismissAllowingStateLoss();
+					TCAgent.onEvent(context, "未登录欢迎弹窗", "点击登录");
 				}
 			});
-			unloginDialog.show(fm, LoginDialog.class.getSimpleName());
+			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
 		} else if (task.rewardPoints > 0) {
-			final LoginDialog loginDialog;
+			final WelcomeDialog loginDialog;
 			if (task.rewardPoints >= 100) {
 				// 首次登录积分 >= 100
-				loginDialog = LoginDialog.newInstance(R.layout.dialog_welcome_login_first);
+				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login_first);
 			} else {
 				// 再次登录积分 < 100
-				loginDialog = LoginDialog.newInstance(R.layout.dialog_welcome_login);
+				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login);
 			}
 			loginDialog.setScore(task.rewardPoints);
 			loginDialog.setPositiveBtnText( context.getResources().getString(R.string.st_welcome_login_btn));
@@ -117,15 +120,17 @@ public class ScoreManager {
 				@Override
 				public void onCancel() {
 					loginDialog.dismissAllowingStateLoss();
+					TCAgent.onEvent(context, "登录欢迎弹窗", "取消");
 				}
 
 				@Override
 				public void onConfirm() {
 					IntentUtil.jumpEarnScore(context);
 					loginDialog.dismissAllowingStateLoss();
+					TCAgent.onEvent(context, "登录欢迎弹窗", "跳转积分任务");
 				}
 			});
-			loginDialog.show(fm, LoginDialog.class.getSimpleName());
+			loginDialog.show(fm, WelcomeDialog.class.getSimpleName());
 			if (AccountManager.getInstance().isLogin()) {
 				// 清除登录信息
 				UserModel user = AccountManager.getInstance().getUser();

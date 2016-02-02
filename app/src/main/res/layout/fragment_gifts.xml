@@ -54,7 +54,7 @@
 
 				<View style = "@style/HDividerView" />
 
-				<android.support.v7.widget.RecyclerView
+				<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
 						android:id = "@+id/rv_like_content"
 						style = "@style/DefaultRecyclerView"
 						android:layout_height = "137dp" />
@@ -95,7 +95,7 @@
 				<View
 						style = "@style/HDividerView" />
 
-				<android.support.v7.widget.RecyclerView
+				<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
 						android:id = "@+id/rv_limit_content"
 						style = "@style/DefaultRecyclerView"
 						android:layout_height = "160dp" />

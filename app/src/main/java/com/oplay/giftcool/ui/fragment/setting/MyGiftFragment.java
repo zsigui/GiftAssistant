@@ -9,7 +9,10 @@ import android.support.v4.view.ViewPager;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ToastUtil;
 
 /**
  * Created by zsigui on 16-1-6.
@@ -25,6 +28,12 @@ public class MyGiftFragment extends BaseFragment {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		if (!AccountManager.getInstance().isLogin()) {
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
+			return;
+		}
 		setContentView(R.layout.fragment_vp_container);
 		mPager = getViewById(R.id.vp_container);
 		mTabLayout = getViewById(R.id.tab_layout);

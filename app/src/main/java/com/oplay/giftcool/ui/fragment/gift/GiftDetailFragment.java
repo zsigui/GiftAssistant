@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -21,14 +20,12 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
@@ -38,7 +35,6 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -48,14 +44,12 @@ import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
-import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
-import java.io.File;
 import java.util.HashSet;
 
 import retrofit.Callback;
@@ -148,38 +142,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						ToastUtil.showShort("页面出错，请重新进入");
 						return;
 					}
-
-					// 设置分享成功后奖励类型
-					String title;
-					String b_desc;
-					if (mData.giftData.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
-							&& mData.giftData.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
-						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
-						title = String.format("[%s]%s(限今天)", mData.gameData.name, mData.giftData.name);
-						b_desc = String.format("[%s]%s，价值珍贵，限量领取",
-								mData.gameData.name, mData.giftData.name);
-					} else {
-						ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
-						title = String.format("[%s]%s", mData.gameData.name, mData.giftData.name);
-						b_desc = String.format("[%s]%s，快抢呀",
-								mData.gameData.name, mData.giftData.name);
-					}
-
-					String src = null;
-					try {
-						File file = ImageLoader.getInstance().getDiskCache().get(mData.gameData.img);
-						src = (file != null ? file.getAbsolutePath() : null);
-					} catch (Exception e) {
-						// ImageLoader未初始化完成
-					}
-					ShareSDKManager.getInstance(mApp).share(getChildFragmentManager(),
-							getActivity(),
-							title,
-							mData.giftData.content,
-							b_desc,
-							WebViewUrl.GIFT_DETAIL + "?plan_id=" + mData.giftData.id,
-							mData.giftData.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
-									ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
+					mData.giftData.gameName = mData.gameData.name;
+					mData.giftData.img = mData.gameData.img;
+					ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
 				}
 			});
 		}

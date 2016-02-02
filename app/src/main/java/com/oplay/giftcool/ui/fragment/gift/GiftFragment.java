@@ -22,7 +22,6 @@ import com.oplay.giftcool.adapter.IndexGiftZeroAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
-import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -42,6 +41,7 @@ import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -197,9 +197,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
 		}
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Global
-                .getBannerHeight(getContext()));
-        mBanner.setLayoutParams(lp);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Global
+				.getBannerHeight(getContext()));
+		mBanner.setLayoutParams(lp);
 		mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
 			@Override
@@ -321,38 +321,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mZeroAdapter.updateData(zeroData);
 	}
 
-	private ArrayList<IndexGiftNew> initStashData() {
-		ArrayList<IndexGiftNew> data = new ArrayList<>();
-		for (int i = 0; i < 6; i++) {
-			IndexGiftNew ng = new IndexGiftNew();
-			ng.gameName = "逍遥西游";
-			ng.id = 0;
-			ng.status = GiftTypeUtil.STATUS_SEIZE;
-			ng.priceType = GiftTypeUtil.PAY_TYPE_SCORE;
-			ng.img = "http://owan-img.ymapp.com/app/e2/06/10339/icon/icon_1450063729.png_128_128_70.png";
-			ng.name = "白金礼包";
-			ng.giftType = GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE;
-			ng.originPrice = (i + 1) * 100;
-			ng.score = 0;
-			ng.status = GiftTypeUtil.STATUS_SEIZE;
-			ng.seizeTime = "2016-01-28 20:00:00";
-			ng.remainCount = 100;
-			ng.totalCount = 100;
-			ng.content = "30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠";
-			data.add(ng);
-		}
-		data.get(3).originPrice = 250;
-		data.get(3).seizeTime = "2016-01-29 20:00:00";
-		data.get(3).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
-		data.get(4).originPrice = 310;
-		data.get(4).seizeTime = "2016-01-29 20:00:00";
-		data.get(4).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
-		data.get(5).originPrice = 99;
-		data.get(5).seizeTime = "2016-01-29 20:00:00";
-		data.get(5).status = GiftTypeUtil.STATUS_WAIT_SEIZE;
-		return data;
-	}
-
 	public void updateLikeData(ArrayList<IndexGiftLike> likeData) {
 		if (likeData == null) {
 			return;
@@ -401,6 +369,10 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
+				if (!NetworkUtil.isConnected(getContext())) {
+					refreshFailEnd();
+					return;
+				}
 				HashSet<Integer> ids = new HashSet<Integer>();
 				for (IndexGiftNew gift : mGiftData.limit) {
 					ids.add(gift.id);
@@ -443,6 +415,50 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 								mIsNotifyRefresh = false;
 							}
 						});
+			}
+		});
+	}
+
+	public void scrollToPos(final int type) {
+		if (mScrollView == null) {
+			return;
+		}
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				int height = mBanner.getMeasuredHeight();
+				switch (type) {
+					case 1:
+						if (mZeroView != null) {
+							mScrollView.smoothScrollTo(0, height);
+						}
+						break;
+					case 2:
+						if (mLikeView != null) {
+							height += mZeroView.getMeasuredHeight()
+									+ mApp.getResources().getDimensionPixelSize(R.dimen.di_index_module_gap);
+							mScrollView.smoothScrollTo(0, height);
+						}
+						break;
+					case 3:
+						if (mLimitView != null) {
+							height += mLikeBar.getMeasuredHeight() * 2
+									+ mZeroView.getMeasuredHeight()
+									+ mLikeView.getMeasuredHeight()
+									+ mApp.getResources().getDimensionPixelSize(R.dimen.di_index_module_gap) * 2;
+							mScrollView.smoothScrollTo(0, height);
+						}
+						break;
+					case 4:
+						if (mNewView != null) {
+							height += mLikeBar.getMeasuredHeight() * 3
+									+ mLikeView.getMeasuredHeight() + mZeroView.getMeasuredHeight()
+									+ mLimitView.getMeasuredHeight()
+									+ mApp.getResources().getDimensionPixelSize(R.dimen.di_index_module_gap) * 3;
+							mScrollView.scrollTo(0, height);
+						}
+						break;
+				}
 			}
 		});
 	}
@@ -516,6 +532,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		if (mGiftData == null || mGiftData.banner == null || mGiftData.banner.size() <= position) {
 			return;
 		}
+		TCAgent.onEvent(getContext(), "礼包首页推荐位", String.format("第%d推广位", position));
 		BannerTypeUtil.handleBanner(getContext(), mGiftData.banner.get(position));
 	}
 

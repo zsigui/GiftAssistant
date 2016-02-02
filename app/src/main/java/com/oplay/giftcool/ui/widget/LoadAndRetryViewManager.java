@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
 
 /**
@@ -170,6 +172,26 @@ public class LoadAndRetryViewManager {
         }
     }
 
+	private boolean findView() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.file(StorageUtils.getOwnCacheDirectory(mContext, Global.IMG_CACHE_PATH), "retry - show - start find");
+		}
+		for (int i = 0; i<mContainer.getChildCount(); i++) {
+			View cV = mContainer.getChildAt(i);
+			if (AppDebugConfig.IS_DEBUG) {
+				/*KLog.file(StorageUtils.getOwnCacheDirectory(mContext, Global.IMG_CACHE_PATH), "retry - show - findView = v = " + cV + ", " + (cV == mContentView)
+				 + ", " + (cV == mEmptyView) + ", " + (cV == mErrorRetryView) + ", " + (cV == mLoadingView));*/
+				KLog.d(AppDebugConfig.TAG_APP, "retry - show - findView = v = " + cV + ", " + (cV == mContentView)
+						+ ", " + (cV == mEmptyView) + ", " + (cV == mErrorRetryView) + ", " + (cV == mLoadingView));
+			}
+			if (cV == mContentView || cV == mEmptyView
+					|| cV == mErrorRetryView || cV == mLoadingView) {
+				return true;
+			}
+		}
+		return false;
+	}
+
     private boolean isMainThread()
     {
         return Looper.myLooper() == Looper.getMainLooper();
@@ -177,35 +199,46 @@ public class LoadAndRetryViewManager {
 
     private void show(int type) {
 	    if (AppDebugConfig.IS_DEBUG) {
+		  /*  KLog.file(StorageUtils.getOwnCacheDirectory(mContext, Global.IMG_CACHE_PATH), "retry - show - type = " + type
+				    + ", loadView = " + mLoadingView + ", contentView = " + mContentView
+				    + ", emptyView = " + mEmptyView + ", errorView = " + mErrorRetryView);*/
 		    KLog.d(AppDebugConfig.TAG_APP, "retry - show - type = " + type
-		    + ", loadView = " + mLoadingView + ", contentView = " + mContentView
-		    + ", emptyView = " + mEmptyView + ", errorView = " + mErrorRetryView);
+				    + ", loadView = " + mLoadingView + ", contentView = " + mContentView
+				    + ", emptyView = " + mEmptyView + ", errorView = " + mErrorRetryView);
 	    }
         mContainer.removeAllViews();
         switch (type) {
             case TYPE_LOAD:
-                if (mLoadingView != null) {
-                    mContainer.addView(mLoadingView);
+                if (mLoadingView == null) {
+	                setLoadView(DEFAULT_LOAD_VIEW_ID);
                 }
+                mContainer.addView(mLoadingView, 0);
+
                 break;
             case TYPE_CONTENT:
-                if (mContentView != null) {
-                    mContainer.addView(mContentView);
+                if (mContentView == null) {
+	                setContentView(DEFAULT_NO_VIEW_ID);
                 }
+                mContainer.addView(mContentView, 0);
                 break;
             case TYPE_EMPTY:
-                if (mEmptyView != null) {
-                    mContainer.addView(mEmptyView);
+                if (mEmptyView == null) {
+	                setEmptyView(DEFAULT_EMPTY_VIEW_ID);
                 }
+                mContainer.addView(mEmptyView, 0);
                 break;
             default:
-                if (mErrorRetryView != null) {
-                    mContainer.addView(mErrorRetryView);
-                    if (mOnRetryListener != null) {
-                        mOnRetryListener.onRetry(mErrorRetryView);
-                    }
+                if (mErrorRetryView == null) {
+	                setErrorRetryView(DEFAULT_ERROR_RETRY_VIEW_ID);
                 }
+	            mContainer.addView(mErrorRetryView, 0);
+	            if (mOnRetryListener != null) {
+		            mOnRetryListener.onRetry(mErrorRetryView);
+	            }
         }
+	    if (AppDebugConfig.IS_DEBUG) {
+		    KLog.file(StorageUtils.getOwnCacheDirectory(mContext, Global.IMG_CACHE_PATH), "retry - show - find = " + findView());
+	    }
     }
 
     /**

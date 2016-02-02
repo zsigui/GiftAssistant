@@ -137,6 +137,10 @@ public class ScoreTaskAdapter extends BaseAdapter {
 					}
 					holder.btnToDo.setText("已完成");
 					holder.btnToDo.setEnabled(false);
+				} else if (mission.type == TaskTypeUtil.MISSION_TYPE_FUTURE) {
+					holder.stScore.setStateEnable(true);
+					holder.btnToDo.setText("待完成");
+					holder.btnToDo.setEnabled(false);
 				} else {
 					holder.stScore.setStateEnable(true);
 					holder.btnToDo.setText("去完成");

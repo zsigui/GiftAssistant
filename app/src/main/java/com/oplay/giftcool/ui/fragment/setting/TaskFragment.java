@@ -58,7 +58,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		if (!AccountManager.getInstance().isLogin()) {
-			ToastUtil.showShort("页面进入错误，请先登录");
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(getContext());
 			getActivity().finish();
 			return;
@@ -192,6 +192,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			} else if (id.equals(TaskTypeUtil.ID_FIRST_LOGIN)) {
 				mission.icon = R.drawable.ic_task_first_login;
 			} else if (id.equals(TaskTypeUtil.ID_LOGIN_SPECIFIED)) {
+				mission.icon = R.drawable.ic_task_first_login;
 			}
  		}
 	}
@@ -204,25 +205,32 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		if (data == null) {
 			return null;
 		}
-		int rawFinished = 0;
-		int dailyFinished = 0;
-		int continuousFinished = 0;
-		int rawTotal;
-		int dailyTotal;
-		int continuousTotal;
-		int rawFinishedIndex = -1;
-		int dailyFinishedIndex = -1;
-		int continuousFinishedIndex = -1;
 		ArrayList<ScoreMission> result = new ArrayList<>();
+		addNewTaskType("期待任务", TaskTypeUtil.MISSION_TYPE_FUTURE, result, data);
+		addNewTaskType("新手任务", TaskTypeUtil.MISSION_TYPE_TIRO, result, data);
+		addNewTaskType("日常任务", TaskTypeUtil.MISSION_TYPE_DAILY, result, data);
+		addNewTaskType("连续任务", TaskTypeUtil.MISSION_TYPE_CONTINUOUS, result, data);
+		return result;
+	}
+
+	private void addNewTaskType(String taskTypeName, int type, ArrayList<ScoreMission> result, ArrayList<ScoreMission> data) {
+		int rawFinished = 0;
+		int rawTotal;
+		int rawFinishedIndex = -1;
 		ArrayList<ScoreMission> rawTasks = new ArrayList<>();
-		ArrayList<ScoreMission> dailyTasks = new ArrayList<>();
-		ArrayList<ScoreMission> continuousTasks = new ArrayList<>();
 		for (ScoreMission mission : data) {
+			if ((TaskTypeUtil.ID_DOWNLOAD.equals(mission.id)
+					|| TaskTypeUtil.ID_DOWNLOAD_SPECIFIED.equals(mission.id))
+					&& !AssistantApp.getInstance().isAllowDownload()) {
+				// 不允许下载，不添加
+				continue;
+			}
 			// 最后完成时间是今天，标志为已经完成
-			if (mission.type == TaskTypeUtil.MISSION_TYPE_TIRO) {
+			if (mission.type == type) {
 				if (!TextUtils.isEmpty(mission.lastCompleteTime)
 						&& DateUtil.isToday(mission.lastCompleteTime)
-						&& mission.dayCount == mission.dayCompleteCount) {
+						&& (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS
+						|| mission.dayCount == mission.dayCompleteCount)) {
 					rawFinished++;
 					mission.isFinished = true;
 					rawTasks.add(mission);
@@ -235,69 +243,15 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 						rawTasks.add(rawFinishedIndex, mission);
 					}
 				}
-			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_DAILY) {
-				if ((TaskTypeUtil.ID_DOWNLOAD.equals(mission.id)
-						|| TaskTypeUtil.ID_DOWNLOAD_SPECIFIED.equals(mission.id))
-						&& !AssistantApp.getInstance().isAllowDownload()) {
-					// 不允许下载，不添加
-					continue;
-				}
-				if (!TextUtils.isEmpty(mission.lastCompleteTime)
-						&& DateUtil.isToday(mission.lastCompleteTime)
-						&& mission.dayCount == mission.dayCompleteCount) {
-					dailyFinished++;
-					mission.isFinished = true;
-					dailyTasks.add(mission);
-					dailyFinishedIndex = (dailyFinishedIndex == -1 ? dailyTasks.size() - 1 : dailyFinishedIndex);
-				} else {
-					mission.isFinished = false;
-					if (dailyFinishedIndex == -1) {
-						dailyTasks.add(mission);
-					} else {
-						dailyTasks.add(dailyFinishedIndex, mission);
-					}
-				}
-			} else if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
-				// 对于连续任务，得判断最后完成时间
-				if (!TextUtils.isEmpty(mission.lastCompleteTime)
-						&& DateUtil.isToday(mission.lastCompleteTime)) {
-					continuousFinished++;
-					mission.isFinished = true;
-					continuousTasks.add(mission);
-					continuousFinishedIndex = (continuousFinishedIndex == -1 ? continuousTasks.size() - 1 :
-							continuousFinishedIndex);
-				} else {
-					mission.isFinished = false;
-					if (continuousFinishedIndex == -1) {
-						continuousTasks.add(mission);
-					} else {
-						continuousTasks.add(continuousFinishedIndex, mission);
-					}
-				}
 			}
 		}
 		rawTotal = rawTasks.size();
-		dailyTotal = dailyTasks.size();
-		continuousTotal = continuousTasks.size();
 		if (rawTotal > 0) {
 			ScoreMission rawTitle = new ScoreMission();
-			rawTitle.name = String.format("新手任务(%d/%d)", rawFinished, rawTotal);
+			rawTitle.name = String.format(taskTypeName + "(%d/%d)", rawFinished, rawTotal);
 			result.add(rawTitle);
 			result.addAll(rawTasks);
 		}
-		if (dailyTotal > 0) {
-			ScoreMission dailyTitle = new ScoreMission();
-			dailyTitle.name = String.format("日常任务(%d/%d)", dailyFinished, dailyTotal);
-			result.add(dailyTitle);
-			result.addAll(dailyTasks);
-		}
-		if (continuousTotal > 0) {
-			ScoreMission continuousTitle = new ScoreMission();
-			continuousTitle.name = String.format("连续任务(%d/%d)", continuousFinished, continuousTotal);
-			result.add(continuousTitle);
-			result.addAll(continuousTasks);
-		}
-		return result;
 	}
 
 	private void handleMission(ScoreMission scoreMission) {
@@ -342,7 +296,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
 			// 分享普通礼包
-			IntentUtil.jumpGiftNewList(getContext());
+			if (MainActivity.sGlobalHolder == null) {
+				IntentUtil.jumpGiftNewList(getContext());
+			} else {
+				MainActivity.sGlobalHolder.jumpToIndexGift(4);
+				getActivity().finish();
+			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 			// 分享限量礼包
 			IntentUtil.jumpGiftLimitList(getContext());
@@ -363,6 +322,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
 			// 跳转登录界面
 			IntentUtil.jumpLogin(getContext());
+		} else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
+			// 暂无
 		} else {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {
 				KLog.e("error id " + id);

@@ -33,6 +33,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -82,6 +83,12 @@ public class UploadAvatarFragment extends BaseFragment {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		if (!AccountManager.getInstance().isLogin()) {
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
+			return;
+		}
 		setContentView(R.layout.fragment_user_set_avator);
 		ivAvatar = getViewById(R.id.iv_icon);
 		rlGallery = getViewById(R.id.rl_gallery);

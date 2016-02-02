@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-29.
@@ -37,6 +38,7 @@ public class ActivityFragment extends BaseFragment_WebView {
 			return;
 		}
 		String url = getArguments().getString(KeyConfig.KEY_URL);
+		KLog.e("url = " + url);
 		loadUrl(url);
 		mIsSwipeRefresh = true;
 	}

@@ -10,7 +10,7 @@ public class NetUrl {
 	/**
 	 * 测试地址
 	 */
-	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/api/";
+	public static final String TEST_URL_BASE = "http://test.lbapi.ouwan.com/api/";
 	/**
 	 * 正式地址
 	 */

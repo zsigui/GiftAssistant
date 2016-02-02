@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.fragment.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -13,6 +14,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.util.ViewUtil;
+import com.tendcloud.tenddata.TCAgent;
 
 /**
  * Created by zsigui on 16-2-1.
@@ -50,5 +52,13 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 	@Override
 	public void onClick(View v) {
 		BannerTypeUtil.handleBanner(getActivity(), mData);
+		dismissAllowingStateLoss();
+		TCAgent.onEvent(getActivity(), "每日活动弹窗", "参与活动");
+	}
+
+	@Override
+	public void onCancel(DialogInterface dialog) {
+		super.onCancel(dialog);
+		TCAgent.onEvent(getActivity(), "每日活动弹窗", "取消");
 	}
 }

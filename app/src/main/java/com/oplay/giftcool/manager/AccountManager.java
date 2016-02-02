@@ -12,6 +12,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -53,6 +54,11 @@ public class AccountManager {
 	}
 
 	private UserModel mUser;
+	private int lastLoginType = UserTypeUtil.TYPE_POHNE;
+
+	public boolean isPhoneLogin() {
+		return lastLoginType == UserTypeUtil.TYPE_POHNE;
+	}
 
 	public UserModel getUser() {
 		return mUser;
@@ -62,10 +68,14 @@ public class AccountManager {
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
 	 */
 	public void setUser(UserModel user) {
-		if (mUser != null && mUser.userInfo != null
-				&& user != null && user.userInfo != null) {
-			// 保留用户登录状态
-			user.userInfo.loginType = mUser.userInfo.loginType;
+		if (mUser != null && mUser.userInfo != null) {
+			lastLoginType = mUser.userInfo.loginType;
+			if (user != null && user.userInfo != null) {
+				// 保留用户登录状态
+				user.userInfo.loginType = mUser.userInfo.loginType;
+			}
+		} else {
+			lastLoginType = UserTypeUtil.TYPE_POHNE;
 		}
 		mUser = user;
 		// 当用户变化，需要进行通知
@@ -242,8 +252,11 @@ public class AccountManager {
 		ArrayList<String> cookies = null;
 		if (isLogin()) {
 			cookies = new ArrayList<>();
-			cookies.add("cuid=" + getUserSesion().uid + "; HttpOnly");
-			cookies.add("sessionid=" + getUserSesion().session + "; HttpOnly");
+			String expiredDate = DateUtil.getGmtDate(4);
+			cookies.add(String.format("cuid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
+					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
+			cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
+					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
 		}
 		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}

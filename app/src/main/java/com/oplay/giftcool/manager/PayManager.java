@@ -24,6 +24,10 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -132,10 +136,16 @@ public class PayManager {
 					return;
 				}
 				mLastDialogClickTime = nowClickTime;
+				Map<String, String> kv = new HashMap<String, String>();
+				kv.put("商品名", String.format("[%s]%s", gift.gameName, gift.name));
 				// 根据选择类型判断支付方式
 				if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_BEAN) {
+					kv.put("价格", "偶玩豆 " + gift.bean);
+					TCAgent.onEvent(context, "抢礼包", "偶玩豆支付");
 					handleBeanPay(context, gift, button, true);
 				} else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
+					kv.put("价格", "积分 " + gift.score);
+					TCAgent.onEvent(context, "抢礼包", "积分支付", kv);
 					handleScorePay(context, gift, button, true);
 				} else {
 					ToastUtil.showShort("选择支付类型有误，请重新选择");
@@ -195,6 +205,7 @@ public class PayManager {
 									}
 									if (response.body() != null) {
 										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+											AccountManager.getInstance().setUser(null);
 											ToastUtil.showShort(context.getResources().getString(R.string.st_hint_un_login));
 											IntentUtil.jumpLogin(context);
 											return;
@@ -276,6 +287,12 @@ public class PayManager {
 										return;
 									}
 									if (response.body() != null) {
+										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+											AccountManager.getInstance().setUser(null);
+											ToastUtil.showShort(context.getResources().getString(R.string.st_hint_un_login));
+											IntentUtil.jumpLogin(context);
+											return;
+										}
 										ConfirmDialog dialog = ConfirmDialog.newInstance();
 										if (isSeize) {
 											dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));

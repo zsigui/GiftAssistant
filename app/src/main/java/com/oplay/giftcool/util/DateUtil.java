@@ -101,4 +101,12 @@ public class DateUtil {
 		String before = sdf.format(new Date(dateTime));
 		return before.equals(sdf.format(new Date(System.currentTimeMillis())));
 	}
+
+	public static String getGmtDate(int hours) {
+		SimpleDateFormat sdf = new SimpleDateFormat("d MMM y HH:mm:ss 'GMT'", Locale.US);
+		TimeZone gmtZone = TimeZone.getTimeZone("GMT+8");
+		sdf.setTimeZone(gmtZone);
+		Date date = new Date(System.currentTimeMillis() + 3600 * 1000 * hours);
+		return sdf.format(date);
+	}
 }

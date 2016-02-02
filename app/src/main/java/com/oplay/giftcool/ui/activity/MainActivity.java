@@ -27,7 +27,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
-import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
@@ -35,6 +35,7 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.tendcloud.tenddata.TCAgent;
 
 /**
  * @author micle
@@ -258,6 +259,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
+	public void jumpToIndexGift(int giftPosition) {
+		setCurSelected(0);
+		if (mGiftFragment != null) {
+			mGiftFragment.scrollToPos(giftPosition);
+		}
+	}
+
 	@Override
 	public void onUserUpdate() {
 		mUser = AccountManager.getInstance().getUserInfo();
@@ -267,17 +275,18 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private void handleFirstOpen() {
 		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null) {
+			sIsTodayFirstOpenForBroadcast = false;
 			ThreadUtil.runInUIThread(new Runnable() {
 				@Override
 				public void run() {
 					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
-					dialog.show(getSupportFragmentManager(), AllViewDialog.class.getSimpleName());
-					sIsTodayFirstOpenForBroadcast = false;
+					dialog.show(getSupportFragmentManager(), "broadcast");
 				}
 			}, 500);
 
 		}
 		if (sIsTodayFirstOpen) {
+				sIsTodayFirstOpen = false;
 			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
 			new Handler().postDelayed(new Runnable() {
 				@Override
@@ -288,7 +297,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					} else {
 						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this, null);
 					}
-					sIsTodayFirstOpen = false;
 				}
 			}, 1000);
 		}
@@ -318,7 +326,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			new Handler().postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					ConfirmDialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content);
+					BaseFragment_Dialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content);
 					confirmDialog.show(getSupportFragmentManager(), "update");
 				}
 			}, 1000);
@@ -327,21 +335,22 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		return false;
 	}
 
-	private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
-		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-		confirmDialog.setTitle("更新提示");
-		confirmDialog.setContent(content);
-		confirmDialog.setPositiveBtnText("马上更新");
-		confirmDialog.setNegativeBtnText("暂不更新");
+	private WelcomeDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
+		final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
+		confirmDialog.setTitle(content);
+		confirmDialog.setPositiveBtnText(getResources().getString(R.string.st_welcome_update_confirm));
+		confirmDialog.setNegativeBtnText(getResources().getString(R.string.st_welcome_update_cancel));
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
+				TCAgent.onEvent(mApp, "更新弹窗", "取消更新");
 				confirmDialog.dismiss();
 				handleFirstOpen();
 			}
 
 			@Override
 			public void onConfirm() {
+				TCAgent.onEvent(mApp, "更新弹窗", "点击更新");
 				appInfo.startDownload();
 				confirmDialog.dismiss();
 				handleFirstOpen();

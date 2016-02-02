@@ -7,18 +7,25 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ShareAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.sharesdk.base.IShare;
 import com.oplay.giftcool.ui.fragment.dialog.ShareDialog;
+import com.oplay.giftcool.util.BitmapUtil;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -57,9 +64,9 @@ public class ShareSDKManager {
 			ArrayList<IShare> shareList = new ArrayList<IShare>();
 			shareList.add(new Share_WX_MM(mContext, mWXApi));
 			shareList.add(new Share_WX_Friends(mContext, mWXApi));
-/*			shareList.add(new Share_QQ_Friends(mContext));
+			shareList.add(new Share_QQ_Friends(mContext));
 			shareList.add(new Share_QQ_Zone(mContext));
-			shareList.add(new Share_More(context));*/
+//			shareList.add(new Share_More(context));
 			final ShareDialog dialog = ShareDialog.newInstance(mContext.getResources().getString(R.string
 					.st_share_title));
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
@@ -122,6 +129,40 @@ public class ShareSDKManager {
 				Debug_SDK.e(e);
 			}
 		}
+	}
+
+	public void shareGift(Context context, FragmentManager fm, IndexGiftNew gift) {
+		// 设置分享成功后奖励类型
+		String title;
+		String b_desc;
+		if (gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
+			ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
+			title = String.format("[%s]%s(限今天)", gift.gameName, gift.name);
+			b_desc = String.format("[%s]%s，价值珍贵，限量领取",
+					gift.gameName, gift.name);
+		} else {
+			ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
+			title = String.format("[%s]%s", gift.gameName, gift.name);
+			b_desc = String.format("[%s]%s，快抢呀",
+					gift.gameName, gift.name);
+		}
+
+		String src = null;
+		try {
+			File file = ImageLoader.getInstance().getDiskCache().get(gift.img);
+			src = (file != null ? file.getAbsolutePath() : null);
+		} catch (Exception e) {
+			// ImageLoader未初始化完成
+		}
+		ShareSDKManager.getInstance(context).share(fm,
+				context,
+				title,
+				gift.content,
+				b_desc,
+				WebViewUrl.GIFT_DETAIL + "?plan_id=" + gift.id,
+				gift.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
+						ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
 	}
 
 	public IWXAPI getWXApi() {

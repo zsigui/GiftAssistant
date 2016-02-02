@@ -58,19 +58,19 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 				o.initAppInfoStatus(mContext);
 				normalVH.tvName.setText(o.name);
 				if (o.playCount < 10000) {
-					normalVH.ivGift.setVisibility(View.VISIBLE);
 					normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩",
 							o.playCount)));
 				} else {
-					normalVH.ivGift.setVisibility(View.GONE);
 					normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
 							(float) o.playCount / 10000)));
 				}
 				if (o.totalCount > 0) {
+					normalVH.ivGift.setVisibility(View.VISIBLE);
 					normalVH.tvGift.setText(Html.fromHtml(
 							String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
 									o.giftName, o.totalCount)));
 				} else {
+					normalVH.ivGift.setVisibility(View.GONE);
 					normalVH.tvGift.setText("暂时还木有礼包");
 				}
 				normalVH.tvSize.setText(o.size);

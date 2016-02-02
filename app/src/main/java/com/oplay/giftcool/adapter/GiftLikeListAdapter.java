@@ -11,6 +11,7 @@ import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,7 @@ public class GiftLikeListAdapter extends BGAAdapterViewAdapter<IndexGiftLike> {
 			bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					KLog.e("test-test", "jumpGameDetail");
 					IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
 				}
 			});

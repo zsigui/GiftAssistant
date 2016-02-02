@@ -54,6 +54,12 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		if (!AccountManager.getInstance().isLogin()) {
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
+			return;
+		}
 		setContentView(R.layout.fragment_user_info);
 		rlAvatar = getViewById(R.id.rl_avatar);
 		llNick = getViewById(R.id.ll_nick);
@@ -84,10 +90,6 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		if (!AccountManager.getInstance().isLogin()) {
-			showToast("当前未登录");
-			IntentUtil.jumpLogin(getContext());
-		}
 		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
@@ -111,15 +113,16 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 			nick = (TextUtils.isEmpty(user.nick) ? StringUtil.transePhone(user.phone) : user.nick);
 			tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_phone_login));
 			tvLogin.setText(StringUtil.transePhone(user.phone));
-			tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_bind));
 			ivLogin.setVisibility(View.GONE);
 			tvHint.setText(mContext.getResources().getString(R.string.st_user_phone_hint));
 			if (user.bindOuwanStatus == 1) {
 				// 已绑定偶玩账号
+				tvBindTitle.setText("绑定偶玩账号");
 				tvBind.setText(user.username);
 				rlModifyPwd.setVisibility(View.VISIBLE);
 				ivBind.setVisibility(View.GONE);
 			} else {
+				tvBindTitle.setText(mContext.getResources().getString(R.string.st_user_ouwan_bind));
 				tvBind.setText("未绑定");
 				rlModifyPwd.setVisibility(View.GONE);
 				ivBind.setImageResource(View.VISIBLE);

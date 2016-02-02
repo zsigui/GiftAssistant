@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.data.resp.TaskReward;
@@ -22,6 +23,7 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -49,6 +51,12 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
+		if (!AccountManager.getInstance().isLogin()) {
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
+			return;
+		}
 		setContentView(R.layout.fragment_feedback);
 		rbFunction = getViewById(R.id.rb_function);
 		rbPay = getViewById(R.id.rb_pay);

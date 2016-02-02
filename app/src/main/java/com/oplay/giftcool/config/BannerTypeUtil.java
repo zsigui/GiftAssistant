@@ -1,13 +1,15 @@
 package com.oplay.giftcool.config;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.model.ActivityModel;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.WebData;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -31,13 +33,21 @@ public class BannerTypeUtil {
 		try {
 			switch (banner.type) {
 				case ACTION_WEB:
-					ActivityModel model = AssistantApp.getInstance().getGson().fromJson(banner.extData, ActivityModel.class);
-					if (model.needLogin && !AccountManager.getInstance().isLogin()) {
+					WebData model = AssistantApp.getInstance().getGson().fromJson(banner.extData, WebData.class);
+					if (TextUtils.isEmpty(model.url)) {
+						return;
+					}
+					if (TextUtils.isEmpty(model.titleName)) {
+						model.titleName = context.getResources().getString(R.string.st_web_default_title_name);
+					}
+					int index = model.url.indexOf("need_validate");
+					if ((model.needValidate || (index != -1 && "1".equals(model.url.substring(index + 14, index + 15))))
+							&& !AccountManager.getInstance().isLogin()) {
 						ToastUtil.showShort("请先登录!");
 						IntentUtil.jumpLogin(context);
 						return;
 					}
-					IntentUtil.jumpActivityWeb(context, model.url, model.title);
+					IntentUtil.jumpActivityWeb(context, model.url, model.titleName);
 					break;
 				case ACTION_GAME_DETAIL:
 					IndexGameNew game_d = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);

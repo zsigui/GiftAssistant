@@ -11,13 +11,13 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 /**
  * Created by zsigui on 16-1-22.
  */
-public class LoginDialog extends BaseFragment_Dialog {
+public class WelcomeDialog extends BaseFragment_Dialog {
 
 	private TextView tvScore;
 	private int mScore;
 
-	public static LoginDialog newInstance(@LayoutRes int resId) {
-		LoginDialog dialog = new LoginDialog();
+	public static WelcomeDialog newInstance(@LayoutRes int resId) {
+		WelcomeDialog dialog = new WelcomeDialog();
 		dialog.setContentView(resId);
 		return dialog;
 	}

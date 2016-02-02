@@ -50,11 +50,6 @@ public class GiftButton extends TextView{
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE :
 				setText(R.string.st_gift_wait_seize);
-				if (mBiggerButton) {
-					setBackgroundResource(R.drawable.shape_rect_btn_orange);
-				} else {
-					setBackgroundResource(R.drawable.shape_rect_btn_orange_bigger);
-				}
 				break;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCHED :
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH :

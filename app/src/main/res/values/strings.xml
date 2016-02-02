@@ -24,9 +24,9 @@
 	<string name = "st_gift_finished" >已结束</string >
 	<string name = "st_gift_seized" >已抢号</string >
 	<string name = "st_gift_empty" >已抢完</string >
-	<string name = "st_gift_wait_search" >坐等淘号</string >
+	<string name = "st_gift_wait_search" >等淘号</string >
 	<string name = "st_gift_search" >淘号</string >
-	<string name = "st_gift_wait_seize" >坐等抢号</string >
+	<string name = "st_gift_wait_seize" >等抢号</string >
 	<string name = "st_gift_seize" >抢号</string >
 	<!-- 礼包详情 -->
 	<string name = "st_gift_consume" >消耗</string >
@@ -161,9 +161,14 @@
 	<string name = "st_welcome_login_hint_lottery1" >积分可以兑换各种豪华礼包</string >
 	<string name = "st_welcome_login_hint_lottery2" >奖励3次免费抽奖的机会，100%中奖</string >
 	<string name = "st_welcome_unlogin_hint" >马上登录，获取大量积分。\n积分可以兑换各种礼包噢~</string >
-	<string name = "st_welcome_login_btn" >获取更多积分</string >
+	<string name = "st_welcome_login_btn" >更多积分</string >
 	<string name = "st_welcome_unlogin_btn" >马上登录</string >
 	<string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
+	<string name = "st_welcome_update_title" >新版特性：</string >
+	<string name = "st_welcome_update_cancel" >狠狠拒绝</string >
+	<string name = "st_welcome_update_confirm" >马上更新</string >
+
+	<string name = "st_web_default_title_name" >活动页面</string >
 
 
 
@@ -173,7 +178,7 @@
 	<string name = "st_user_nick">昵称</string>
 	<string name = "st_user_ouwan_login">登录偶玩号</string>
 	<string name = "st_user_phone_login">登录手机号</string>
-	<string name = "st_user_ouwan_bind">绑定偶玩号</string>
+	<string name = "st_user_ouwan_bind">设置「新」偶玩号</string>
 	<string name = "st_user_phone_bind">绑定手机号</string>
 	<string name = "st_user_unbind">未绑定</string>
 	<string name = "st_user_modify_pwd">修改登录密码</string>

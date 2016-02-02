@@ -14,6 +14,7 @@ import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -38,10 +39,9 @@ public class WalletFragment extends BaseFragment {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		if (!AccountManager.getInstance().isLogin()) {
-			ToastUtil.showShort("跳转异常,请先返回登录");
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_FRAG, "no login to into WalletFragment!");
-			}
+			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+			IntentUtil.jumpLogin(getContext());
+			getActivity().finish();
 			return;
 		}
 		setContentView(R.layout.fragment_wallet);

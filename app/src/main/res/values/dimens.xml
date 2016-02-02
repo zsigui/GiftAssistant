@@ -104,6 +104,7 @@
 	<dimen name = "di_dialog_content_item_padding_right">10dp</dimen>
 	<dimen name = "di_dialog_content_item_drawable_gap">4dp</dimen>
 
+	<dimen name = "di_dialog_welcome_content_width">220dp</dimen>
 
 	<!-- default size of loading circle -->
 	<dimen name = "default_circle_view_size" >200dp</dimen >
