@@ -39,20 +39,9 @@
 			android:layout_below = "@+id/rl_icon" />
 
 	<TextView
-			android:id = "@+id/tv_new_text"
+			android:id = "@+id/tv_gift"
 			style = "@style/DefaultTextView.ItemSubTitle"
-			android:text = "@string/st_index_gift_like_new_add"
-			android:layout_centerHorizontal = "false"
-			android:layout_marginLeft = "5dp"
+			android:textColor = "@color/co_btn_orange"
 			android:layout_below = "@+id/tv_game_name" />
-
-	<TextView
-			android:id = "@+id/tv_remain"
-			style = "@style/DefaultTextView.ItemSubTitle"
-			android:layout_below = "@+id/tv_game_name"
-			android:layout_centerHorizontal = "false"
-			android:layout_marginLeft = "5dp"
-			android:layout_toRightOf = "@+id/tv_new_text"
-			android:textColor = "@color/co_index_module_add_text" />
 
 </RelativeLayout >

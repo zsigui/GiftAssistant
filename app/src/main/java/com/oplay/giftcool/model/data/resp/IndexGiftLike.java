@@ -40,4 +40,8 @@ public class IndexGiftLike implements Serializable{
 	// 游戏ICON
 	@SerializedName("icon")
 	public String img;
+
+	// 最新礼包名
+	@SerializedName("gift_name")
+	public String giftName;
 }

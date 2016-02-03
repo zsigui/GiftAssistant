@@ -57,7 +57,7 @@
 				<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
 						android:id = "@+id/rv_like_content"
 						style = "@style/DefaultRecyclerView"
-						android:layout_height = "137dp" />
+						android:layout_height = "138dp" />
 
 			</LinearLayout >
 
@@ -98,7 +98,7 @@
 				<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
 						android:id = "@+id/rv_limit_content"
 						style = "@style/DefaultRecyclerView"
-						android:layout_height = "160dp" />
+						android:layout_height = "164dp" />
 			</LinearLayout >
 
 			<!-- 新鲜出炉模块 -->

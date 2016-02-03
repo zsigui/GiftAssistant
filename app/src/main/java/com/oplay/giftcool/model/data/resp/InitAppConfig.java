@@ -25,6 +25,6 @@ public class InitAppConfig implements Serializable{
 	/**
 	 * 是否具备抽奖功能
 	 */
-	@SerializedName("banner")
-	public IndexBanner broadcastBananer;
+	@SerializedName("activity")
+	public IndexBanner broadcastBanner;
 }

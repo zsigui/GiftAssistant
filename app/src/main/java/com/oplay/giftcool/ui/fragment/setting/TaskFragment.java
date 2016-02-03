@@ -265,7 +265,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
 			// 跳转到设置用户头像信息界面
 			((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
+					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_avator));
 		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
 			// 跳转到绑定手机账号界面
 			OuwanSDKManager.getInstance().showBindPhoneView(getActivity());

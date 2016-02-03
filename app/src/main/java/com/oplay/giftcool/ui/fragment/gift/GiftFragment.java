@@ -532,8 +532,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		if (mGiftData == null || mGiftData.banner == null || mGiftData.banner.size() <= position) {
 			return;
 		}
-		TCAgent.onEvent(getContext(), "礼包首页推荐位", String.format("第%d推广位", position));
-		BannerTypeUtil.handleBanner(getContext(), mGiftData.banner.get(position));
+		IndexBanner banner = mGiftData.banner.get(position);
+		TCAgent.onEvent(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		BannerTypeUtil.handleBanner(getContext(), banner);
 	}
 
 	@Override

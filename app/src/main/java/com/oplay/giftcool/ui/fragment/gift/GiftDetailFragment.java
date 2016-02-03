@@ -100,7 +100,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_gift_detail);
+		setContentView(R.layout.fragment_gift_detail);
 		ivIcon = getViewById(R.id.iv_icon);
 		tvName = getViewById(R.id.tv_name);
 		tvConsume = getViewById(R.id.tv_consume);
@@ -164,7 +164,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		} else {
 			downloadLayout.setVisibility(View.VISIBLE);
 		}
-		mViewManager.showLoading();
+//		mViewManager.showLoading();
 	}
 
 	@Override
@@ -177,16 +177,15 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	private void updateData(GiftDetail data) {
 		if (data == null || data.giftData == null) {
-			mViewManager.showEmpty();
+//			mViewManager.showEmpty();
+			ToastUtil.showShort("传递参数获取数据为空");
+			getActivity().finish();
 			return;
 		}
 		mHasData = true;
-		mViewManager.showContent();
+//		mViewManager.showContent();
 		mData = data;
 		final IndexGiftNew giftData = data.giftData;
-		if (giftData == null) {
-			return;
-		}
 		tvName.setText(String.format("[%s]%s", (mData.gameData == null ? "" : mData.gameData.name), giftData.name));
 		if (getActivity() instanceof GiftDetailActivity) {
 			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {

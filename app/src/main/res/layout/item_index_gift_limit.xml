@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/rl_recommend"
-    style="@style/IndexListItemLayout.Horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+		android:id = "@+id/rl_recommend"
+		style = "@style/IndexListItemLayout.Horizontal"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto" >
 
-    <!-- 此ImageView需要自定义实现 -->
+	<!-- 此ImageView需要自定义实现 -->
 	<RelativeLayout
 			android:id = "@+id/rl_icon"
 			android:layout_width = "@dimen/di_icon_diameter"
@@ -38,32 +38,37 @@
 	<TextView
 			android:id = "@+id/tv_game_name"
 			style = "@style/DefaultTextView.ItemTitle"
-			android:layout_below = "@+id/rl_icon"/>
+			android:layout_below = "@+id/rl_icon" />
 
 	<TextView
 			android:id = "@+id/tv_name"
 			style = "@style/DefaultTextView.ItemSubTitle"
-			android:text="VIP礼包"
+			android:text = "VIP礼包"
 			android:layout_below = "@+id/tv_game_name" />
 
-    <TextView
-        android:id="@+id/tv_new_text"
-        style="@style/DefaultTextView.ItemSubTitle"
-        android:layout_below="@+id/tv_name"
-        android:layout_centerHorizontal="false"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="4dp"
-        android:text="剩余"/>
+	<LinearLayout
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:orientation = "horizontal"
+			android:layout_centerHorizontal = "true"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
+			android:gravity = "center" >
 
-    <TextView
-        android:id="@+id/tv_remain"
-        style="@style/DefaultTextView.Text"
-        android:layout_below="@+id/tv_name"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@+id/tv_new_text"
-        android:background="@drawable/shape_rect_remain_bg"
-        android:text="3"
-        android:textColor="@color/co_white"/>
+		<TextView
+				android:id = "@+id/tv_new_text"
+				style = "@style/DefaultTextView.ItemSubTitle"
+				android:layout_marginTop = "0dp"
+				android:layout_marginBottom = "0dp"
+				android:text = "剩余" />
 
-</RelativeLayout>
+		<TextView
+				android:id = "@+id/tv_remain"
+				style = "@style/DefaultTextView.Text"
+				android:layout_marginLeft = "6dp"
+				android:background = "@drawable/shape_rect_remain_bg"
+				android:text = "3"
+				android:textColor = "@color/co_white" />
+	</LinearLayout >
+
+</RelativeLayout >

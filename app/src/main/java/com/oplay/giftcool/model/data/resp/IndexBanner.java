@@ -17,6 +17,10 @@ public class IndexBanner implements Serializable {
 	@SerializedName("action")
 	public int type;
 
+	// 标题
+	@SerializedName("title")
+	public String title;
+
 	// 跳转需要数据
 	@SerializedName("data")
 	public String extData;

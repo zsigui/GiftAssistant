@@ -344,8 +344,8 @@ public class AssistantApp extends Application {
 			return;
 		}
 		mBroadcastBanner = broadcastBanner;
-		/*if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
+		if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
 			ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
-		}*/
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -33,7 +34,11 @@ public class IndexGiftLikeAdapter extends BGARecyclerViewAdapter<IndexGiftLike>{
 	@Override
 	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGiftLike o) {
 		bgaViewHolderHelper.setText(R.id.tv_game_name, o.name);
-		bgaViewHolderHelper.setText(R.id.tv_remain, String.valueOf(o.newCount));
+		if (TextUtils.isEmpty(o.giftName)) {
+			bgaViewHolderHelper.setText(R.id.tv_gift, "暂无新礼包");
+		} else {
+			bgaViewHolderHelper.setText(R.id.tv_gift, o.giftName);
+		}
 		bgaViewHolderHelper.setText(R.id.tv_count, String.format("%d款礼包", o.totalCount));
 		// n款礼包
 		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);

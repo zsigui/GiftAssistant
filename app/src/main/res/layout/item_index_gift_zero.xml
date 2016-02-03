@@ -53,6 +53,7 @@
 			android:layout_marginTop = "3dp"
 			android:textColor = "@color/co_white"
 			android:textSize = "12sp"
+			android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
 			android:gravity = "center"
 			android:background = "@drawable/selector_btn_zero_seize" />
 

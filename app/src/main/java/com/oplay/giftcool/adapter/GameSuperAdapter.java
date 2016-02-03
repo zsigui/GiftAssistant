@@ -283,8 +283,9 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		if (mData == null || mData.banner == null || mData.banner.size() <= position) {
 			return;
 		}
-		TCAgent.onEvent(mContext, "游戏首页推荐位", String.format("第%d推广位", position));
-		BannerTypeUtil.handleBanner(mContext, mData.banner.get(position));
+		IndexBanner banner = mData.banner.get(position);
+		TCAgent.onEvent(mContext, "游戏首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		BannerTypeUtil.handleBanner(mContext, banner);
 	}
 
 	class BannerVH extends BaseRVHolder {

@@ -51,14 +51,14 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 
 	@Override
 	public void onClick(View v) {
+		TCAgent.onEvent(getActivity(), "每日活动弹窗", "参与活动");
 		BannerTypeUtil.handleBanner(getActivity(), mData);
 		dismissAllowingStateLoss();
-		TCAgent.onEvent(getActivity(), "每日活动弹窗", "参与活动");
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
 		TCAgent.onEvent(getActivity(), "每日活动弹窗", "取消");
+		super.onCancel(dialog);
 	}
 }

@@ -4,23 +4,18 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.oplay.giftcool.AssistantApp;
-import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
-import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
-import com.oplay.giftcool.model.data.resp.WebData;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
@@ -139,15 +134,15 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
 		try {
-			KLog.e("initAppConfig = true" );
-			IndexBanner banner = new IndexBanner();
-			banner.url = "drawable://" + R.drawable.pic_welcome_lottery;
-			banner.type = BannerTypeUtil.ACTION_WEB;
-			WebData webData = new WebData();
-			webData.titleName = "抽奖活动";
-			webData.url = WebViewUrl.SCORE_DETAIL_NOTE + "?need_validate=1";
-			banner.extData = AssistantApp.getInstance().getGson().toJson(webData, WebData.class);
-			AssistantApp.getInstance().setBroadcastBanner(banner);
+//			KLog.e("initAppConfig = true" );
+//			IndexBanner banner = new IndexBanner();
+//			banner.url = "drawable://" + R.drawable.pic_welcome_lottery;
+//			banner.type = BannerTypeUtil.ACTION_WEB;
+//			WebData webData = new WebData();
+//			webData.titleName = "抽奖活动";
+//			webData.url = WebViewUrl.SCORE_DETAIL_NOTE + "?need_validate=1";
+//			banner.extData = AssistantApp.getInstance().getGson().toJson(webData, WebData.class);
+//			AssistantApp.getInstance().setBroadcastBanner(banner);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
 				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
@@ -159,7 +154,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 							AssistantApp.getInstance().setStartImg(response.body().getData().initAppConfig
 									.startImgUrl);
 							AssistantApp.getInstance().setBroadcastBanner(response.body().getData().initAppConfig
-									.broadcastBananer);
+									.broadcastBanner);
 						}
 						if (response.body().getData().updateInfo != null) {
 							AssistantApp.getInstance().setUpdateInfo(response.body().getData().updateInfo);
