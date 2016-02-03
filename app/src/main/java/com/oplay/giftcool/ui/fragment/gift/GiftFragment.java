@@ -124,7 +124,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_gifts);
-
 		mScrollView = getViewById(R.id.sv_container);
 		mBanner = getViewById(R.id.banner);
 		llLike = getViewById(R.id.ll_like);

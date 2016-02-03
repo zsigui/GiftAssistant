@@ -44,8 +44,12 @@ public class JsonReqBase<T> implements Serializable{
 	@SerializedName("cmd")
 	public int cmd;
 
+	@SerializedName("version")
+	public int version;
+
 	@SerializedName("d")
 	public T data;
+
 
 	public JsonReqBase() {
 		CommonUtil.addCommonParams(this, 0);

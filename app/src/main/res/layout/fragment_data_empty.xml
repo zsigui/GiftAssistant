@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ImageView
+		android:id="@+id/iv_empty_view"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:contentDescription = "@null"
 		android:layout_width = "match_parent"

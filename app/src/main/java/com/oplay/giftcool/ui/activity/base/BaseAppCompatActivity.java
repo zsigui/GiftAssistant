@@ -47,7 +47,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	protected boolean mIsLoading;
-	private Handler mHandler = new Handler(Looper.getMainLooper());
+	protected Handler mHandler = new Handler(Looper.getMainLooper());
 
 	// 保存当前栈顶对象
 	private Fragment mCurTopFragment;
@@ -420,5 +420,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		if (mLoadingDialog != null) {
 			mLoadingDialog.dismissAllowingStateLoss();
 		}
+	}
+
+	public Handler getHandler() {
+		return mHandler;
 	}
 }

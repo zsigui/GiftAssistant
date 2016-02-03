@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -44,6 +45,7 @@ public class CommonUtil {
 		reqBase.dd = model.getDd();
 		reqBase.dv = model.getDv();
 		reqBase.os = model.getOs();
+		reqBase.version = model.getVersion();
 		reqBase.cmd = cmd;
 	}
 
@@ -60,6 +62,7 @@ public class CommonUtil {
 			model.setDd(Global_Runtime_SystemInfo.getDeviceModel());
 			model.setDv(Global_Runtime_SystemInfo.getManufacturerInfo());
 			model.setOs(Global_Runtime_SystemInfo.getDeviceOsRelease());
+			model.setVersion(AppConfig.SDK_VER);
 			if (TextUtils.isEmpty(model.getImei()) || TextUtils.isEmpty(model.getImsi())
 					|| TextUtils.isEmpty(model.getCid()) || TextUtils.isEmpty(model.getMac())
 					|| model.getChn() == -1 || TextUtils.isEmpty(model.getApn())

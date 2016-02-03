@@ -17,6 +17,7 @@ public class MobileInfoModel {
 	private String dd;
 	private String dv;
 	private String os;
+	private int version;
 	private int chn;
 	private boolean isInit;
 
@@ -106,6 +107,14 @@ public class MobileInfoModel {
 
 	public void setChn(int chn) {
 		this.chn = chn;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	public static void setInstance(MobileInfoModel instance) {
