@@ -216,7 +216,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			mBanner.setCanLoop(true);
 			mBanner.setScrollDuration(500);
 			//mBanner.getViewPager().setPageTransformer(true, new ZoomStackPageTransformer());
-			mBanner.startTurning(3000);
+			mBanner.startTurning(5000);
 		}
 
 	}

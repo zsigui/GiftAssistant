@@ -139,7 +139,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			mBannerVH.mBanner.setCanLoop(true);
 			mBannerVH.mBanner.setScrollDuration(500);
 			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
-			mBannerVH.mBanner.startTurning(3000);
+			mBannerVH.mBanner.startTurning(5000);
 		}
 
 	}
