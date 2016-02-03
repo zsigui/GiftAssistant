@@ -12,7 +12,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ShareAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
-import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ScoreManager;
@@ -53,6 +52,10 @@ public class ShareSDKManager {
 		return mInstance;
 	}
 
+
+
+
+
 	public void share(final FragmentManager fragmentManager, final Context context, final String title,
 	                  final String description, final String b_desc, final String url, final String iconUrl,
 	                  final Bitmap iconBitmap) {
@@ -78,48 +81,6 @@ public class ShareSDKManager {
 					} else {
 						item.share(title, description, url, iconUrl, iconBitmap);
 					}
-				}
-			});
-			dialog.setAdapter(adapter);
-			dialog.show(fragmentManager, ShareDialog.class.getSimpleName());
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				Debug_SDK.e(e);
-			}
-		}
-	}
-
-	public void shareGCool(final FragmentManager fragmentManager) {
-		try {
-			ArrayList<IShare> shareList = new ArrayList<IShare>();
-			shareList.add(new Share_WX_MM(mContext, mWXApi));
-			shareList.add(new Share_WX_Friends(mContext, mWXApi));
-			/*shareList.add(new Share_QQ_Friends(mContext));
-			shareList.add(new Share_QQ_Zone(mContext));*/
-			final ShareDialog dialog = ShareDialog.newInstance(mContext.getString(R.string
-					.st_dialog_gcool_share_title));
-			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
-				@Override
-				public void onItemClick(IShare item, View view, int position) {
-					final String title = mContext.getString(R.string.st_dialog_gcool_share_title);
-					String description = null;
-					final String url = NetUrl.GIFT_COOL_DOWNLOAD;
-					Resources res = mContext.getResources();
-					Bitmap bmp = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
-					switch (item.getShareType()) {
-						case WX_FRIENDS:
-						case QQ_FRIENDS:
-						case WX_MM: {
-							description = mContext.getString(R.string.st_share_gcool_description_1);
-							break;
-						}
-						case QQ_ZONE: {
-							description = mContext.getString(R.string.st_share_gcool_description_2);
-							break;
-						}
-					}
-					dialog.dismissAllowingStateLoss();
-					item.share(title, description, url, null, bmp);
 				}
 			});
 			dialog.setAdapter(adapter);
@@ -163,6 +124,21 @@ public class ShareSDKManager {
 				WebViewUrl.GIFT_DETAIL + "?plan_id=" + gift.id,
 				gift.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
 						ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
+	}
+
+	public void shareGCool(final Context context, final FragmentManager fm) {
+		final String title = context.getString(R.string.st_dialog_invite_title);
+		final String desc = context.getString(R.string.st_share_gcool_description_1);
+		final String b_desc = context.getString(R.string.st_share_gcool_description_2);
+		Resources res = context.getResources();
+		final Bitmap icon =  BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
+		ShareSDKManager.getInstance(context).share(fm,
+				context,
+				title,
+				desc,
+				b_desc,
+				WebViewUrl.getBaseUrl(),
+				"http://owan-img.ymapp.com/app/100/icon/icon.png_128_128_70.png", icon);
 	}
 
 	public IWXAPI getWXApi() {

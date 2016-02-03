@@ -47,7 +47,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	protected boolean mIsLoading;
-	protected Handler mHandler = new Handler(Looper.getMainLooper());
+	protected Handler mHandler = new Handler(Looper.myLooper());
 
 	// 保存当前栈顶对象
 	private Fragment mCurTopFragment;
@@ -331,6 +331,8 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if (mHandler != null) {
+		}
 		mNeedWorkCallback = false;
 	}
 

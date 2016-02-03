@@ -118,7 +118,7 @@ public class WebViewInterface extends Observable {
 		return RET_SUCCESS;
 	}
 
-	public int share(String giftJson) {
+	public int shareGift(String giftJson) {
 		try {
 			if (mHostActivity == null || mHostFragment == null ) {
 				return RET_INTERNAL_ERR;
@@ -136,6 +136,21 @@ public class WebViewInterface extends Observable {
 			return RET_SUCCESS;
 		}catch (Throwable e) {
 			if(AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+			return RET_INTERNAL_ERR;
+		}
+	}
+
+	public int shareGCool() {
+		try {
+			if (mHostActivity == null || mHostFragment == null) {
+				return RET_INTERNAL_ERR;
+			}
+			ShareSDKManager.getInstance(mHostActivity).shareGCool(mHostActivity, mHostFragment.getChildFragmentManager());
+			return RET_SUCCESS;
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
 			return RET_INTERNAL_ERR;

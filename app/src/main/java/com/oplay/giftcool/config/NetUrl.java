@@ -22,13 +22,6 @@ public class NetUrl {
 
 
 	/**
-	 * 礼包酷下载地址
-	 */
-	//public static final String GIFT_COOL_DOWNLOAD = "http://test.giftcool.ouwan.com/api/";
-	public static final String GIFT_COOL_DOWNLOAD = getBaseUrl() + "download_apk";
-
-
-	/**
 	 * 礼包/游戏搜索
 	 */
 	public static final String GET_SEARCH = "gift_search";

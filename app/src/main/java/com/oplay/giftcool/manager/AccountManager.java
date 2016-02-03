@@ -251,12 +251,12 @@ public class AccountManager {
 	public void syncCookie() {
 		ArrayList<String> cookies = null;
 		if (isLogin()) {
-			cookies = new ArrayList<>();
+			cookies = new ArrayList<String>();
 			String expiredDate = DateUtil.getGmtDate(48);
 			cookies.add(String.format("cuid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
 			cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
-					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
+					getUserSesion().session, WebViewUrl.URL_DOMAIN, expiredDate));
 			cookies.add(String.format("c=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
 		}

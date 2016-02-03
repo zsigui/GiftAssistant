@@ -145,6 +145,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					mData.giftData.gameName = mData.gameData.name;
 					mData.giftData.img = mData.gameData.img;
 					ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
+
 				}
 			});
 		}
