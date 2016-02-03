@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
@@ -155,6 +156,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 				} else if (rbOther.isChecked()) {
 					feedBack.type = 3;
 				}
+				feedBack.version = AppConfig.SDK_VER;
 				Global.getNetEngine().postFeedBack(new JsonReqBase<ReqFeedBack>(feedBack))
 						.enqueue(new Callback<JsonRespBase<TaskReward>>() {
 							@Override

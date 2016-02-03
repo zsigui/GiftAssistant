@@ -8,7 +8,6 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.model.data.resp.UserSession;
-import com.oplay.giftcool.util.ChannelUtil;
 import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
@@ -58,7 +57,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 		gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
 		gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
 		gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
-		gameParamInfo.setChannelId(ChannelUtil.getChannelId(mContext) + "");
+		gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
 		gameParamInfo.setSubChannelId("0");
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
 			@Override

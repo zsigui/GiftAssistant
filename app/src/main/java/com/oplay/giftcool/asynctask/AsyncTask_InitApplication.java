@@ -148,6 +148,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 					if (response.body().getData() != null) {
 						if (response.body().getData().initAppConfig != null) {
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + response.body().getData());
+							}
 							AssistantApp.getInstance().setAllowDownload(response.body().getData().initAppConfig
 									.isShowDownload);
 							AssistantApp.getInstance().setQQInfo(response.body().getData().initAppConfig.qqInfo);

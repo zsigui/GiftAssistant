@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
@@ -36,6 +37,8 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.tendcloud.tenddata.TCAgent;
+
+import java.io.File;
 
 /**
  * @author micle
@@ -274,7 +277,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void handleFirstOpen() {
-		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null) {
+		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null
+				&& hasLoadPic()) {
 			sIsTodayFirstOpenForBroadcast = false;
 			ThreadUtil.runInUIThread(new Runnable() {
 				@Override
@@ -300,6 +304,20 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 			}, 1000);
 		}
+	}
+
+	private boolean hasLoadPic() {
+		boolean hasLoad = false;
+		String imageUrl = AssistantApp.getInstance().getBroadcastBanner().url;
+		if (imageUrl != null) {
+			File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
+			if (file != null && file.exists()) {
+				hasLoad = true;
+			} else {
+				ImageLoader.getInstance().loadImage(imageUrl, null);
+			}
+		}
+		return hasLoad;
 	}
 
 	/**

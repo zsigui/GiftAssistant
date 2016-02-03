@@ -178,7 +178,7 @@
 	<string name = "st_user_nick">昵称</string>
 	<string name = "st_user_ouwan_login">登录偶玩号</string>
 	<string name = "st_user_phone_login">登录手机号</string>
-	<string name = "st_user_ouwan_bind">设置「新」偶玩号</string>
+	<string name = "st_user_ouwan_bind">设置「新」偶玩账号</string>
 	<string name = "st_user_phone_bind">绑定手机号</string>
 	<string name = "st_user_unbind">未绑定</string>
 	<string name = "st_user_modify_pwd">修改登录密码</string>
@@ -201,6 +201,8 @@
 	<string name = "st_share_limit_sms_pattern">%s，价值珍贵，限量领取</string>
 	<string name = "st_share_normal_sms_pattern">%s，快抢呀</string>
 	<string name = "st_share_result_success" >分享成功</string >
+	<string name = "st_share_result_quick" >取消分享</string >
+	<string name = "st_share_result_failed" >分享失败</string >
 	<string name = "share_key_mm_id" >wx-share-key</string >
 	<string name = "st_share_mm_friends" >微信好友</string >
 	<string name = "st_share_mm_moments" >朋友圈</string >

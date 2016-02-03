@@ -7,10 +7,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.model.DecryptDataModel;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
@@ -80,7 +80,7 @@ public class SettingFragment extends BaseFragment {
 			mBtnAutoDelete.toggleOn();
 		else
 			mBtnAutoDelete.toggleOff();
-		mVer.setText(DecryptDataModel.SDK_VER_NAME);
+		mVer.setText(AppConfig.SDK_VER_NAME);
 		updateData();
 	}
 

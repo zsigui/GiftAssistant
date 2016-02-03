@@ -9,6 +9,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.WebData;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -38,14 +39,15 @@ public class BannerTypeUtil {
 					if (TextUtils.isEmpty(banner.title)) {
 						banner.title = context.getResources().getString(R.string.st_web_default_title_name);
 					}
-					int index = banner.extData.indexOf("need_validate");
-					if ((index != -1 && "1".equals(banner.extData.substring(index + 14, index + 15)))
+					WebData data = AssistantApp.getInstance().getGson().fromJson(banner.extData, WebData.class);
+					int index = data.url.indexOf("need_validate");
+					if ((index != -1 && "1".equals(data.url.substring(index + 14, index + 15)))
 							&& !AccountManager.getInstance().isLogin()) {
 						ToastUtil.showShort("请先登录!");
 						IntentUtil.jumpLogin(context);
 						return;
 					}
-					IntentUtil.jumpActivityWeb(context, banner.extData, banner.title);
+					IntentUtil.jumpActivityWeb(context, data.url, banner.title);
 					break;
 				case ACTION_GAME_DETAIL:
 					IndexGameNew game_d = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);

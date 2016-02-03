@@ -5,6 +5,10 @@ package com.oplay.giftcool.config;
  */
 public class AppConfig {
 
+	/* APP版本信息 */
+	public static final int SDK_VER = 3;
+	public static final String SDK_VER_NAME = "V1.0.2";
+
 	/* 上传头像的大小 */
 	public static final int UPLOAD_PIC_WIDTH = 640;
 	public static final int UPLOAD_PIC_HEIGHT = 640;

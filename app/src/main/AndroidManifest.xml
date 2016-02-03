@@ -150,6 +150,7 @@
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+
 		<service
 				android:name = "com.oplay.giftcool.service.ClockService"
 				android:exported = "false" />
@@ -161,8 +162,37 @@
 
 		<activity
 				android:name = "com.oplay.giftcool.sharesdk.activity.QQEntryActivity"
+				android:launchMode = "singleTask"
 				android:exported = "true"
-				android:screenOrientation = "sensorPortrait" />
+				android:screenOrientation = "sensorPortrait" >
+			<intent-filter >
+				<action android:name = "android.intent.action.VIEW" />
+
+				<category android:name = "android.intent.category.DEFAULT" />
+				<category android:name = "android.intent.category.BROWSABLE" />
+				<!-- 使用腾讯demo id -->
+				<data android:scheme = "tencent222222" />
+			</intent-filter >
+		</activity >
+
+		<activity
+				android:name = "com.tencent.tauth.AuthActivity"
+				android:launchMode = "singleTask"
+				android:noHistory = "true" >
+			<intent-filter >
+				<action android:name = "android.intent.action.VIEW" />
+				<category android:name = "android.intent.category.DEFAULT" />
+				<category android:name = "android.intent.category.BROWSABLE" />
+				<data android:scheme = "tencent1105140946" />
+			</intent-filter >
+		</activity >
+		<!-- NOTE:::::下面AssistActivity不能设置noHistory，否则会导致连QQ登录都无法正常回调 -->
+		<!--android:noHistory = "true"-->
+		<activity
+				android:name = "com.tencent.connect.common.AssistActivity"
+				android:configChanges = "orientation|keyboardHidden|screenSize"
+				android:screenOrientation = "portrait"
+				android:theme = "@android:style/Theme.Translucent.NoTitleBar" />
 
 		<receiver android:name = ".receiver.PackageInstallReceiver" >
 			<intent-filter android:priority = "1000" >

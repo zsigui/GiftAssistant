@@ -11,10 +11,4 @@ public class WebData implements Serializable {
 
 	@SerializedName("url")
 	public String url;
-
-	@SerializedName("need_validate")
-	public boolean needValidate;
-
-	@SerializedName("title")
-	public String titleName;
 }

@@ -54,7 +54,7 @@ public class CommonUtil {
 			model.setImsi(Global_Runtime_SystemInfo.getImsi(context));
 			model.setCid(new Global_Runtime_ClientId(context).getCid());
 			model.setMac(Global_Runtime_SystemInfo.getMac(context));
-			model.setChn(ChannelUtil.getChannelId(context));
+			model.setChn(AssistantApp.getInstance().getChannelId());
 			model.setApn(AppInfoUtil.getAPN(context));
 			model.setCn(AppInfoUtil.getSPN(context));
 			model.setDd(Global_Runtime_SystemInfo.getDeviceModel());

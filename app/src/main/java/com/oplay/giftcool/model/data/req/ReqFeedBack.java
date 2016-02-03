@@ -17,4 +17,7 @@ public class ReqFeedBack implements Serializable{
 
 	@SerializedName("contact")
 	public String contact;
+
+	@SerializedName("version")
+	public int version;
 }

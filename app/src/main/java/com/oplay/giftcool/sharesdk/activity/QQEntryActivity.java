@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.URLUtil;
+import com.socks.library.KLog;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
@@ -40,13 +42,19 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 
 		@Override
 		public void onError(UiError uiError) {
-//			Util_Toast.toast(getString(R.string.share_result_failed));
+			ToastUtil.showShort(getString(R.string.st_share_result_failed));
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, "onError: QQ分享失败");
+			}
 			finish();
 		}
 
 		@Override
 		public void onCancel() {
-//			Util_Toast.toast(getString(R.string.share_result_cancel));
+			ToastUtil.showShort(getString(R.string.st_share_result_quick));
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, "onCancel: QQ分享取消");
+			}
 			finish();
 		}
 	};
@@ -91,13 +99,20 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 	@Override
 	protected void onResume() {
 		super.onResume();
-		finish();
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_UTIL, "onResume: QQ分享");
+		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		mTencent.onActivityResult(requestCode, resultCode, data);
+		Tencent.onActivityResultData(requestCode, resultCode, data, mUiListener);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_UTIL, "qq分享-onActivityResult: requestCode = " + requestCode + ", " +
+					"resultCode = " + resultCode
+					+ ", data = " + data);
+		}
 	}
 
 	private void shareQQFriends(String title, String description, String url, String iconUrl, int shareType) {

@@ -58,6 +58,7 @@ public class AssistantApp extends Application {
 	private ArrayList<String> mQQInfo;
 	private String mStartImg;
 	private IndexBanner mBroadcastBanner;
+	private int mChannelId = -1;
 
 	// 是否安装完成自动删除
 	private boolean mShouldAutoDeleteApk = false;
@@ -92,7 +93,7 @@ public class AssistantApp extends Application {
 			KLog.d("Gift Cool App is Start Now");
 		}
 		sInstance = this;
-		TCAgent.init(this, TD_APP_ID, ChannelUtil.getChannelId(this) + "");
+		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
@@ -340,6 +341,9 @@ public class AssistantApp extends Application {
 	}
 
 	public void setBroadcastBanner(IndexBanner broadcastBanner) {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_APP, "broadcastBanner = " + broadcastBanner);
+		}
 		if (broadcastBanner == null) {
 			return;
 		}
@@ -347,5 +351,12 @@ public class AssistantApp extends Application {
 		if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
 			ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
 		}
+	}
+
+	public int getChannelId() {
+		if (mChannelId == -1) {
+			mChannelId = ChannelUtil.getChannelId(this);
+		}
+		return mChannelId;
 	}
 }

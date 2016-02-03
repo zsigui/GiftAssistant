@@ -9,9 +9,6 @@ import com.oplay.giftcool.config.AppConfig;
  */
 public class DecryptDataModel {
 
-	public static final int SDK_VER = 1;
-	public static final String SDK_VER_NAME = "V1.0.1";
-
 	/**
 	 * 用户uid
 	 */
@@ -23,7 +20,7 @@ public class DecryptDataModel {
 	/**
 	 * SDK版本号，默认
 	 */
-	private int mSdkVer = SDK_VER;
+	private int mSdkVer = AppConfig.SDK_VER;
 	/**
 	 * 平台系统，默认
 	 */

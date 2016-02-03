@@ -3,8 +3,10 @@ package com.oplay.giftcool.ui.fragment;
 import android.os.Bundle;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
@@ -35,10 +37,14 @@ public class ActivityFragment extends BaseFragment_WebView {
 	protected void processLogic(Bundle savedInstanceState) {
 		if (getArguments() == null) {
 			mViewManager.showEmpty();
+			ToastUtil.showShort("获取数据为空");
+			getActivity().finish();
 			return;
 		}
 		String url = getArguments().getString(KeyConfig.KEY_URL);
-		KLog.e("url = " + url);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.e(AppDebugConfig.TAG_FRAG, "frag.url = " + url);
+		}
 		loadUrl(url);
 		mIsSwipeRefresh = true;
 	}
