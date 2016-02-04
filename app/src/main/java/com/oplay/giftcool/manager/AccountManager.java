@@ -14,6 +14,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -257,8 +258,10 @@ public class AccountManager {
 					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
 			cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					getUserSesion().session, WebViewUrl.URL_DOMAIN, expiredDate));
-			cookies.add(String.format("c=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
+			cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
+			cookies.add(String.format("cid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
+					MobileInfoModel.getInstance().getCid(), WebViewUrl.URL_DOMAIN, expiredDate));
 		}
 		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}

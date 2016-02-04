@@ -213,6 +213,9 @@ public class WebViewInterface extends Observable {
 			}
 			return RET_SUCCESS;
 		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WEBVIEW, e);
+			}
 			return RET_INTERNAL_ERR;
 		}
 	}

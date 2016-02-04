@@ -263,11 +263,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
-	public void jumpToIndexGift(int giftPosition) {
-		setCurSelected(0);
-		if (mGiftFragment != null) {
-			mGiftFragment.scrollToPos(giftPosition);
-		}
+	public void jumpToIndexGift(final int giftPosition) {
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+
+				setCurSelected(0);
+				if (mGiftFragment != null) {
+					mGiftFragment.scrollToPos(giftPosition);
+				}
+			}
+		});
 	}
 
 	@Override
