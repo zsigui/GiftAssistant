@@ -42,10 +42,7 @@ public class GCRecyclerView extends RecyclerView {
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_UTIL, "x = " + ev.getX() + ", y = " + ev.getY() + ", action = " + ev.getAction()
-			 + ", isDragged = " + mIsDragged);
-		}
+
 		// 已经处于拖曳状态
 		if (ev.getAction() == MotionEvent.ACTION_MOVE && mIsDragged) {
 			return true;
