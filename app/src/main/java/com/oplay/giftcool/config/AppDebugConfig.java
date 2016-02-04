@@ -1,11 +1,14 @@
 package com.oplay.giftcool.config;
 
+import android.content.Context;
 import android.os.Debug;
 import android.util.Log;
 
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * @author micle
@@ -19,6 +22,7 @@ public class AppDebugConfig {
     public static final boolean IS_DEBUG = true;
     public static final boolean IS_FRAG_DEBUG = true;
 	public static final boolean IS_PERM_DEBUG = true;
+	public static final boolean IS_TCAGENT_SHOW = false;
 
     public static final String TAG_APP = "gcool_debug_app";
 
@@ -156,4 +160,22 @@ public class AppDebugConfig {
         }
 
     }
+
+	public static void trace(Context context, String title) {
+		if (AppDebugConfig.IS_TCAGENT_SHOW) {
+			TCAgent.onEvent(context, title);
+		}
+	}
+
+	public static void trace(Context context, String title, String subtitle) {
+		if (AppDebugConfig.IS_TCAGENT_SHOW) {
+			TCAgent.onEvent(context, title, subtitle);
+		}
+	}
+
+	public static void trace(Context context, String title, String subtitle, Map keyMap) {
+		if (AppDebugConfig.IS_TCAGENT_SHOW) {
+			TCAgent.onEvent(context, title, subtitle, keyMap);
+		}
+	}
 }

@@ -24,7 +24,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -137,15 +136,17 @@ public class PayManager {
 				}
 				mLastDialogClickTime = nowClickTime;
 				Map<String, String> kv = new HashMap<String, String>();
-				kv.put("商品名", String.format("[%s]%s", gift.gameName, gift.name));
+				kv.put("礼包名", gift.name);
+				kv.put("所属游戏名", gift.gameName);
+				kv.put("礼包类型", String.valueOf(gift.giftType));
 				// 根据选择类型判断支付方式
 				if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_BEAN) {
 					kv.put("价格", "偶玩豆 " + gift.bean);
-					TCAgent.onEvent(context, "抢礼包", "偶玩豆支付");
+					AppDebugConfig.trace(context, "抢礼包", "偶玩豆支付", kv);
 					handleBeanPay(context, gift, button, true);
 				} else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
 					kv.put("价格", "积分 " + gift.score);
-					TCAgent.onEvent(context, "抢礼包", "积分支付", kv);
+					AppDebugConfig.trace(context, "抢礼包", "积分支付", kv);
 					handleScorePay(context, gift, button, true);
 				} else {
 					ToastUtil.showShort("选择支付类型有误，请重新选择");
@@ -187,7 +188,8 @@ public class PayManager {
 										AccountManager.getInstance().updatePartUserInfo();
 
 										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
-										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_success));
+										dialog.setTitle(context.getResources().getString(R.string
+												.st_dialog_seize_success));
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
@@ -206,17 +208,20 @@ public class PayManager {
 									if (response.body() != null) {
 										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
 											AccountManager.getInstance().setUser(null);
-											ToastUtil.showShort(context.getResources().getString(R.string.st_hint_un_login));
+											ToastUtil.showShort(context.getResources().getString(R.string
+													.st_hint_un_login));
 											IntentUtil.jumpLogin(context);
 											return;
 										}
 										ConfirmDialog dialog = ConfirmDialog.newInstance();
-										dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));
+										dialog.setTitle(context.getResources().getString(R.string
+												.st_dialog_seize_failed));
 										dialog.setNegativeVisibility(View.GONE);
 										dialog.setPositiveVisibility(View.VISIBLE);
-										dialog.setPositiveBtnText(context.getResources().getString(R.string.st_dialog_btn_ok));
+										dialog.setPositiveBtnText(context.getResources().getString(R.string
+												.st_dialog_btn_ok));
 										dialog.setContent(response.body().getMsg());
-										dialog.show(((BaseAppCompatActivity)context).getSupportFragmentManager(),
+										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												"seize failed");
 									} else {
 										ToastUtil.showShort("抢号失败 - 解析失败");
@@ -268,9 +273,11 @@ public class PayManager {
 
 										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
 										if (isSeize) {
-											dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_success));
+											dialog.setTitle(context.getResources().getString(R.string
+													.st_dialog_seize_success));
 										} else {
-											dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_success));
+											dialog.setTitle(context.getResources().getString(R.string
+													.st_dialog_search_success));
 										}
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
@@ -289,21 +296,25 @@ public class PayManager {
 									if (response.body() != null) {
 										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
 											AccountManager.getInstance().setUser(null);
-											ToastUtil.showShort(context.getResources().getString(R.string.st_hint_un_login));
+											ToastUtil.showShort(context.getResources().getString(R.string
+													.st_hint_un_login));
 											IntentUtil.jumpLogin(context);
 											return;
 										}
 										ConfirmDialog dialog = ConfirmDialog.newInstance();
 										if (isSeize) {
-											dialog.setTitle(context.getResources().getString(R.string.st_dialog_seize_failed));
+											dialog.setTitle(context.getResources().getString(R.string
+													.st_dialog_seize_failed));
 										} else {
-											dialog.setTitle(context.getResources().getString(R.string.st_dialog_search_failed));
+											dialog.setTitle(context.getResources().getString(R.string
+													.st_dialog_search_failed));
 										}
 										dialog.setNegativeVisibility(View.GONE);
 										dialog.setPositiveVisibility(View.VISIBLE);
-										dialog.setPositiveBtnText(context.getResources().getString(R.string.st_dialog_btn_ok));
+										dialog.setPositiveBtnText(context.getResources().getString(R.string
+												.st_dialog_btn_ok));
 										dialog.setContent(response.body().getMsg());
-										dialog.show(((BaseAppCompatActivity)context).getSupportFragmentManager(),
+										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												"search failed");
 									} else {
 										ToastUtil.showShort("抢号失败 - 解析失败");
@@ -337,7 +348,6 @@ public class PayManager {
 			((BaseAppCompatActivity) context).hideLoadingDialog();
 		}
 	}
-
 
 
 //	/**

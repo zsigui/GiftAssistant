@@ -151,8 +151,7 @@
 	<string name = "st_dialog_gift_share_title">礼包分享</string>
 	<string name = "st_dialog_gcool_share_title">礼包酷分享</string>
 	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
-	<string name = "st_share_gcool_description_1" >超级豪华礼包，价值珍贵，限时限量，等你来抢!</string >
-	<string name = "st_share_gcool_description_2" >各式礼包，尽在礼包酷，等你加入！</string >
+	<string name = "st_share_gcool_description_1" >独家手游礼包聚集地\n抢888元礼包竟然不用钱</string >
 
 	<string name = "st_dialog_btn_download">马上下载</string>
 	<string name = "st_dialog_btn_install">安装</string>

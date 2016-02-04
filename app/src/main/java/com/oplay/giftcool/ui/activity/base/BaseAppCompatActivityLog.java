@@ -58,7 +58,9 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-        TCAgent.onPause(this);
+	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
+		    TCAgent.onPause(this);
+	    }
     }
 
     @Override
@@ -73,7 +75,9 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-        TCAgent.onResume(this);
+	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
+		    TCAgent.onResume(this);
+	    }
     }
 
     @Override

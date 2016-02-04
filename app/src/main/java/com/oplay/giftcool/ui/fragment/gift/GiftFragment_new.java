@@ -548,7 +548,7 @@ public class GiftFragment_new {}
 //			return;
 //		}
 //		IndexBanner banner = mGiftData.banner.get(position);
-//		TCAgent.onEvent(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+//		AppDebugConfig.trace(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
 //		BannerTypeUtil.handleBanner(getContext(), banner);
 //	}
 //

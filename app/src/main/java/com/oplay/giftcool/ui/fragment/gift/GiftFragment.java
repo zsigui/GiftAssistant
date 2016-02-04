@@ -41,7 +41,6 @@ import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -532,7 +531,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 			return;
 		}
 		IndexBanner banner = mGiftData.banner.get(position);
-		TCAgent.onEvent(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		AppDebugConfig.trace(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(getContext(), banner);
 	}
 

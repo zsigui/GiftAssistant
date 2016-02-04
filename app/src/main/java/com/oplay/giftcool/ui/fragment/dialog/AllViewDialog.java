@@ -21,7 +21,6 @@ import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
 
 import java.io.File;
 
@@ -79,14 +78,14 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		TCAgent.onEvent(getActivity(), "每日活动弹窗", "参与活动");
+		AppDebugConfig.trace(getActivity(), "每日活动弹窗", "参与活动");
 		BannerTypeUtil.handleBanner(getActivity(), mData);
 		dismissAllowingStateLoss();
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		TCAgent.onEvent(getActivity(), "每日活动弹窗", "取消");
+		AppDebugConfig.trace(getActivity(), "每日活动弹窗", "取消");
 		super.onCancel(dialog);
 	}
 }

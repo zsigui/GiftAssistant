@@ -30,11 +30,13 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
             return;
         }
         if (!TextUtils.isEmpty(getPageName())) {
-            if (isVisibleToUser) {
-	            TCAgent.onPageStart(getContext(), getPageName());
-            }else {
-	            TCAgent.onPageEnd(getContext(), getPageName());
-            }
+	        if (AppDebugConfig.IS_TCAGENT_SHOW) {
+		        if (isVisibleToUser) {
+			        TCAgent.onPageStart(getContext(), getPageName());
+		        } else {
+			        TCAgent.onPageEnd(getContext(), getPageName());
+		        }
+	        }
         }
     }
 
@@ -90,7 +92,9 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
     public void onResume() {
         super.onResume();
         if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
-            TCAgent.onPageStart(getContext(), getPageName());
+	        if (AppDebugConfig.IS_TCAGENT_SHOW) {
+		        TCAgent.onPageStart(getContext(), getPageName());
+	        }
         }
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             AppDebugConfig.logMethodName(this);
@@ -110,7 +114,9 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
         super.onPause();
         if (AppDebugConfig.IS_FRAG_DEBUG) {
             if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
-                TCAgent.onPageEnd(getContext(), getPageName());
+	            if (AppDebugConfig.IS_TCAGENT_SHOW) {
+		            TCAgent.onPageEnd(getContext(), getPageName());
+	            }
             }
             AppDebugConfig.logMethodName(this);
         }

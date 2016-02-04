@@ -121,6 +121,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		// 缩放
 		mSettings.setSupportZoom(false);
 		mSettings.setBuiltInZoomControls(false);
+		mSettings.setUseWideViewPort(false);
+		mSettings.setDisplayZoomControls(false);
 		mSettings.setUseWideViewPort(true);
 		mSettings.setLoadWithOverviewMode(true);
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
@@ -60,20 +61,22 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler{
 					+ (baseResp == null? null : baseResp.errCode + ":" + baseResp.errStr));
 		}
 		if (baseResp == null) {
-			ToastUtil.showShort("分享失败-出错了");
+			ToastUtil.showShort(getString(R.string.st_share_result_failed));
 			return;
 		}
 		switch (baseResp.errCode) {
 			case BaseResp.ErrCode.ERR_OK:
 				// 分享成功
+				ToastUtil.showShort(getString(R.string.st_share_result_success));
 				ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
 				break;
 			case BaseResp.ErrCode.ERR_USER_CANCEL:
 				// 分享取消
+				ToastUtil.showShort(getString(R.string.st_share_result_quick));
 				break;
 			case BaseResp.ErrCode.ERR_AUTH_DENIED:
-				// 分享拒绝
-				ToastUtil.showShort("分享失败-被拒绝了");
+				// 分享失败
+				ToastUtil.showShort(getString(R.string.st_share_result_failed));
 				break;
 		}
 		finish();

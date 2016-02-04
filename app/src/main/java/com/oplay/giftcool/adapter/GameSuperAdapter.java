@@ -36,7 +36,6 @@ import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
 
 import net.youmi.android.libs.common.util.Util_System_Runtime;
 
@@ -284,7 +283,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			return;
 		}
 		IndexBanner banner = mData.banner.get(position);
-		TCAgent.onEvent(mContext, "游戏首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		AppDebugConfig.trace(mContext, "游戏首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(mContext, banner);
 	}
 

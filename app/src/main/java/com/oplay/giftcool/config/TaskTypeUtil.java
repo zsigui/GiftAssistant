@@ -94,6 +94,10 @@ public class TaskTypeUtil {
 	 */
 	public static final String ID_SHARE_LIMIT_GIFT = "share_every_day_precious_gift";
 	/**
+	 * 分享礼包酷
+	 */
+	public static final String ID_SHARE_GIFT_COOL = "share_gift_cool";
+	/**
 	 * 使用偶玩豆领取一款每日限量礼包
 	 */
 	public static final String ID_GET_LIMIT_WITH_BEAN = "get_every_day_precious_gift_by_ouwan_mili";

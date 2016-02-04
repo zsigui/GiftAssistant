@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -36,7 +37,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.tendcloud.tenddata.TCAgent;
 
 import java.io.File;
 
@@ -76,6 +76,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
+
 		createDrawer();
 	}
 
@@ -273,7 +274,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public void onUserUpdate() {
 		mUser = AccountManager.getInstance().getUserInfo();
 		updateToolBar();
-		handleFirstOpen();
 	}
 
 	private void handleFirstOpen() {
@@ -286,7 +286,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
 					dialog.show(getSupportFragmentManager(), "broadcast");
 				}
-			}, 500);
+			}, 0);
 
 		}
 		if (sIsTodayFirstOpen) {
@@ -302,7 +302,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this, null);
 					}
 				}
-			}, 1000);
+			}, 0);
 		}
 	}
 
@@ -361,14 +361,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-				TCAgent.onEvent(mApp, "更新弹窗", "取消更新");
+				AppDebugConfig.trace(mApp, "更新弹窗", "取消更新");
 				confirmDialog.dismiss();
 				handleFirstOpen();
 			}
 
 			@Override
 			public void onConfirm() {
-				TCAgent.onEvent(mApp, "更新弹窗", "点击更新");
+				AppDebugConfig.trace(mApp, "更新弹窗", "点击更新");
 				appInfo.startDownload();
 				confirmDialog.dismiss();
 				handleFirstOpen();

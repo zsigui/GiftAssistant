@@ -56,9 +56,9 @@ public class ShareSDKManager {
 
 
 
-	public void share(final FragmentManager fragmentManager, final Context context, final String title,
-	                  final String description, final String b_desc, final String url, final String iconUrl,
-	                  final Bitmap iconBitmap) {
+	public void share(final FragmentManager fragmentManager, final Context context, final String dialog_title,
+	                  final String title, final String description, final String b_desc, final String url,
+	                  final String iconUrl, final Bitmap iconBitmap) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.logMethodWithParams(this, "\ntitle;" + title, "\ndescription" + description +
@@ -70,8 +70,7 @@ public class ShareSDKManager {
 			shareList.add(new Share_QQ_Friends(mContext));
 			shareList.add(new Share_QQ_Zone(mContext));
 //			shareList.add(new Share_More(context));
-			final ShareDialog dialog = ShareDialog.newInstance(mContext.getResources().getString(R.string
-					.st_share_title));
+			final ShareDialog dialog = ShareDialog.newInstance(dialog_title);
 			ShareAdapter adapter = new ShareAdapter(mContext, shareList, new OnItemClickListener<IShare>() {
 				@Override
 				public void onItemClick(IShare item, View view, int position) {
@@ -118,6 +117,7 @@ public class ShareSDKManager {
 		}
 		ShareSDKManager.getInstance(context).share(fm,
 				context,
+				mContext.getResources().getString(R.string.st_dialog_gift_share_title),
 				title,
 				gift.content,
 				b_desc,
@@ -127,18 +127,20 @@ public class ShareSDKManager {
 	}
 
 	public void shareGCool(final Context context, final FragmentManager fm) {
+		ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_GCOOL);
 		final String title = context.getString(R.string.st_dialog_invite_title);
 		final String desc = context.getString(R.string.st_share_gcool_description_1);
-		final String b_desc = context.getString(R.string.st_share_gcool_description_2);
+		final String b_desc = context.getString(R.string.st_share_gcool_description_1);
 		Resources res = context.getResources();
 		final Bitmap icon =  BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
 		ShareSDKManager.getInstance(context).share(fm,
 				context,
+				mContext.getResources().getString(R.string.st_dialog_gcool_share_title),
 				title,
 				desc,
 				b_desc,
 				WebViewUrl.getBaseUrl(),
-				"http://owan-img.ymapp.com/app/100/icon/icon.png_128_128_70.png", icon);
+				WebViewUrl.ICON_GCOOL, icon);
 	}
 
 	public IWXAPI getWXApi() {

@@ -103,6 +103,7 @@ public class WebViewInterface extends Observable {
 		}
 	}
 
+	@JavascriptInterface
 	public int login(int loginType) {
 		if (loginType != KeyConfig.TYPE_ID_OUWAN_LOGIN && loginType != KeyConfig.TYPE_ID_PHONE_LOGIN) {
 			loginType = KeyConfig.TYPE_ID_PHONE_LOGIN;
@@ -118,6 +119,7 @@ public class WebViewInterface extends Observable {
 		return RET_SUCCESS;
 	}
 
+	@JavascriptInterface
 	public int shareGift(String giftJson) {
 		try {
 			if (mHostActivity == null || mHostFragment == null ) {
@@ -142,6 +144,7 @@ public class WebViewInterface extends Observable {
 		}
 	}
 
+	@JavascriptInterface
 	public int shareGCool() {
 		try {
 			if (mHostActivity == null || mHostFragment == null) {
@@ -160,6 +163,7 @@ public class WebViewInterface extends Observable {
 	/**
 	 * 根据类型跳转对应列表界面
 	 */
+	@JavascriptInterface
 	public int jumpByType(int type) {
 		if (type > 10 || type < 0) {
 			return RET_PARAM_ERR;

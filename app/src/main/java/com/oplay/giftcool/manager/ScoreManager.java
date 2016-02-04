@@ -16,7 +16,6 @@ import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -94,14 +93,13 @@ public class ScoreManager {
 				@Override
 				public void onCancel() {
 					unloginDialog.dismissAllowingStateLoss();
-					TCAgent.onEvent(context, "未登录欢迎弹窗", "取消");
 				}
 
 				@Override
 				public void onConfirm() {
 					IntentUtil.jumpLogin(context);
 					unloginDialog.dismissAllowingStateLoss();
-					TCAgent.onEvent(context, "未登录欢迎弹窗", "点击登录");
+					AppDebugConfig.trace(context, "未登录欢迎弹窗", "点击登录");
 				}
 			});
 			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
@@ -120,14 +118,14 @@ public class ScoreManager {
 				@Override
 				public void onCancel() {
 					loginDialog.dismissAllowingStateLoss();
-					TCAgent.onEvent(context, "登录欢迎弹窗", "取消");
+					AppDebugConfig.trace(context, "登录欢迎弹窗", "取消");
 				}
 
 				@Override
 				public void onConfirm() {
 					IntentUtil.jumpEarnScore(context);
 					loginDialog.dismissAllowingStateLoss();
-					TCAgent.onEvent(context, "登录欢迎弹窗", "跳转积分任务");
+					AppDebugConfig.trace(context, "登录欢迎弹窗", "跳转积分任务");
 				}
 			});
 			loginDialog.show(fm, WelcomeDialog.class.getSimpleName());
@@ -273,5 +271,6 @@ public class ScoreManager {
 		public static final int SHARE_LIMIT = 5;
 		public static final int SEARCH = 6;
 		public static final int BUY_BY_BEAN = 7;
+		public static final int SHARE_GCOOL = 8;
 	}
 }

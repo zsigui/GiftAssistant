@@ -23,6 +23,7 @@ import com.oplay.giftcool.model.data.resp.ScoreMission;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -183,6 +184,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				mission.icon = R.drawable.ic_task_share_normal_gift;
 			} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 				mission.icon = R.drawable.ic_task_share_limit_gift;
+			} else if (id.equals(TaskTypeUtil.ID_SHARE_GIFT_COOL)) {
+				mission.icon = R.drawable.ic_task_share_limit_gift;
 			} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
 				mission.icon = R.drawable.ic_task_get_limit_with_bean;
 			} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
@@ -324,6 +327,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			IntentUtil.jumpLogin(getContext());
 		} else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
 			// 暂无
+		} else if (TaskTypeUtil.ID_SHARE_GIFT_COOL.equals(id)) {
+			// 进行礼包酷分享
+			ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
 		} else {
 			if (AppDebugConfig.IS_FRAG_DEBUG) {
 				KLog.e("error id " + id);

@@ -8,6 +8,7 @@ public class WebViewUrl {
 	public static final String URL_DOMAIN = ".ouwan.com";
 	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/";
 	public static final String URL_BASE = "http://libao.ouwan.com/";
+	public static final String ICON_GCOOL = "http://lb-cdn.ymapp.com/static/img/icon192_192.png";
 
 	public static String getBaseUrl() {
 		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
