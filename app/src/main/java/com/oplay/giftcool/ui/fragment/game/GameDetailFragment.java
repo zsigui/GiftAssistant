@@ -44,7 +44,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_game_detail);
+		setContentView(R.layout.fragment_game_detail);
 		btnDownload = getViewById(R.id.btn_download);
 		downloadLayout = getViewById(R.id.ll_download);
 	}

@@ -106,10 +106,10 @@ public class WalletFragment extends BaseFragment {
 		try {
 			if (AccountManager.getInstance().isLogin()) {
 				if (tvBean != null) {
-					tvBean.setText(AccountManager.getInstance().getUserInfo().bean);
+					tvBean.setText(String.valueOf(AccountManager.getInstance().getUserInfo().bean));
 				}
 				if (tvScore != null) {
-					tvScore.setText(AccountManager.getInstance().getUserInfo().score);
+					tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 				}
 			}
 		}catch (Throwable e) {
