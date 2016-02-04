@@ -25,7 +25,7 @@ public class ActivityFragment extends BaseFragment_WebView {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_webview);
+		setContentView(R.layout.fragment_webview);
 	}
 
 	@Override

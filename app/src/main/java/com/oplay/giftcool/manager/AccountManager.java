@@ -200,6 +200,7 @@ public class AccountManager {
 											user.userInfo.score = info.score;
 											user.userInfo.bean = info.bean;
 											user.userInfo.giftCount = info.giftCount;
+											KLog.d(AppDebugConfig.TAG_MANAGER, "金额= " + info.score + ", " + info.bean + ", " + info.giftCount);
 											setUser(user);
 											return;
 										}

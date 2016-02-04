@@ -79,6 +79,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
 		ScoreManager.getInstance().setInWorking(true);
+		AccountManager.getInstance().updatePartUserInfo();
 	}
 
 	private long mTime = 0;
@@ -93,6 +94,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	protected void lazyLoad() {
+		if (mIsLoading) {
+			return;
+		}
 		refreshInitConfig();
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
