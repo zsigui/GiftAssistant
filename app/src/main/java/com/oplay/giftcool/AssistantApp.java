@@ -1,6 +1,7 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -31,6 +32,8 @@ import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.squareup.okhttp.OkHttpClient;
 import com.tendcloud.tenddata.TCAgent;
 
@@ -81,9 +84,13 @@ public class AssistantApp extends Application {
 	// 是否显示抽奖页面
 	private boolean mShowLottery = true;
 
+	// LeakCanary 用于检测内存泄露
+	private RefWatcher mRefWatcher;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		mRefWatcher = LeakCanary.install(this);
 		// enabled StrictMode only in TEST
 		KLog.init(AppDebugConfig.IS_DEBUG);
 		if (AppDebugConfig.IS_DEBUG) {
@@ -113,6 +120,13 @@ public class AssistantApp extends Application {
 
 	public Retrofit getRetrofit() {
 		return mRetrofit;
+	}
+
+	/**
+	 * get a watcher to watch whether exits the problem of memory leak
+	 */
+	public static RefWatcher getRefWatcher(Context context) {
+		return ((AssistantApp) context.getApplicationContext()).mRefWatcher;
 	}
 
 	/**

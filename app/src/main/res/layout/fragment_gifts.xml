@@ -1,138 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.oplay.giftcool.ui.widget.layout.RefreshLayout
-		android:id = "@+id/srl_layout"
+<RelativeLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
-		android:layout_height = "match_parent"
-		android:background = "@color/co_transparent" >
-
-	<com.oplay.giftcool.ui.widget.layout.GCScrollView
-			android:id = "@+id/sv_container"
+		android:layout_height = "match_parent" >
+	<com.oplay.giftcool.ui.widget.layout.RefreshLayout
+			android:id = "@+id/srl_layout"
+			xmlns:android = "http://schemas.android.com/apk/res/android"
 			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:background = "@color/co_transparent"
-			android:orientation = "vertical" >
+			android:layout_height = "match_parent"
+			android:background = "@color/co_transparent" >
 
-		<LinearLayout
-				android:layout_width = "wrap_content"
+		<com.oplay.giftcool.ui.widget.layout.GCScrollView
+				android:id = "@+id/sv_container"
+				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
+				android:background = "@color/co_transparent"
 				android:orientation = "vertical" >
 
-			<!-- 广告屏 -->
-			<include
-					layout = "@layout/view_banner" />
-
-			<!-- 0元抢模块 -->
-			<include
-					layout = "@layout/view_index_zero" />
-
-			<!-- 猜你喜欢模块 -->
 			<LinearLayout
-					android:id = "@+id/ll_like"
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "@dimen/di_index_module_gap">
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					android:orientation = "vertical" >
 
-				<RelativeLayout
-						android:id = "@+id/rl_hot_all"
-						style = "@style/IndexModuleTitleLayout"
-						android:background = "@color/co_white"
-						android:clickable = "true" >
+				<!-- 广告屏 -->
+				<include
+						layout = "@layout/view_banner" />
 
-					<TextView
-							android:id="@+id/hot_light"
-							style = "@style/DefaultTextView.Header"
-							android:text="▌"
-							android:textColor="@color/co_common_app_main_bg"/>
-					<TextView
-							android:layout_toRightOf="@id/hot_light"
-							style = "@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_like" />
+				<!-- 0元抢模块 -->
+				<include
+						layout = "@layout/view_index_zero" />
 
-					<TextView style = "@style/DefaultTextView.More" />
+				<!-- 猜你喜欢模块 -->
+				<LinearLayout
+						android:id = "@+id/ll_like"
+						style = "@style/IndexModuleLayout"
+						android:layout_marginTop = "@dimen/di_index_module_gap" >
 
-				</RelativeLayout >
+					<RelativeLayout
+							android:id = "@+id/rl_hot_all"
+							style = "@style/IndexModuleTitleLayout"
+							android:background = "@color/co_white"
+							android:clickable = "true" >
 
-				<View style = "@style/HDividerView" />
+						<TextView
+								android:id = "@+id/hot_light"
+								style = "@style/DefaultTextView.Header"
+								android:text = "▌"
+								android:textColor = "@color/co_common_app_main_bg" />
 
-				<android.support.v7.widget.RecyclerView
-						android:id = "@+id/rv_like_content"
-						style = "@style/DefaultRecyclerView"
-						android:layout_height = "138dp" />
+						<TextView
+								android:layout_toRightOf = "@id/hot_light"
+								style = "@style/DefaultTextView.Header"
+								android:text = "@string/st_index_gift_like" />
+
+						<TextView style = "@style/DefaultTextView.More" />
+
+					</RelativeLayout >
+
+					<View style = "@style/HDividerView" />
+
+					<android.support.v7.widget.RecyclerView
+							android:id = "@+id/rv_like_content"
+							style = "@style/DefaultRecyclerView"
+							android:layout_height = "138dp" />
+
+				</LinearLayout >
+
+				<!-- 限量礼包模块 -->
+				<LinearLayout
+						style = "@style/IndexModuleLayout"
+						android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+					<RelativeLayout
+							android:id = "@+id/rl_limit_all"
+							style = "@style/IndexModuleTitleLayout" >
+
+
+						<TextView
+								android:id = "@+id/tv_limit"
+								android:layout_toRightOf = "@+id/new_limit"
+								style = "@style/DefaultTextView.Header"
+								android:text = "@string/st_index_gift_limit" />
+
+						<TextView
+								android:id = "@+id/new_limit"
+								style = "@style/DefaultTextView.Header"
+								android:text = "▌"
+								android:textColor = "@color/co_common_app_main_bg" />
+
+						<TextView
+								android:id = "@+id/tv_limit_hint"
+								style = "@style/DefaultTextView.Text"
+								android:layout_toRightOf = "@+id/tv_limit"
+								android:paddingLeft = "8dp" />
+
+						<TextView style = "@style/DefaultTextView.More" />
+
+					</RelativeLayout >
+
+					<View
+							style = "@style/HDividerView" />
+
+					<android.support.v7.widget.RecyclerView
+							android:id = "@+id/rv_limit_content"
+							style = "@style/DefaultRecyclerView"
+							android:layout_height = "164dp" />
+				</LinearLayout >
+
+				<!-- 新鲜出炉模块 -->
+				<LinearLayout
+						style = "@style/IndexModuleLayout"
+						android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+					<RelativeLayout
+							android:id = "@+id/rl_new_all"
+							style = "@style/IndexModuleTitleLayout" >
+
+						<TextView
+								android:id = "@+id/new_light"
+								style = "@style/DefaultTextView.Header"
+								android:text = "▌"
+								android:textColor = "@color/co_common_app_main_bg" />
+
+						<TextView
+								android:layout_toRightOf = "@id/new_light"
+								style = "@style/DefaultTextView.Header"
+								android:text = "@string/st_index_gift_new" />
+
+						<TextView style = "@style/DefaultTextView.More" />
+
+					</RelativeLayout >
+
+					<View style = "@style/HDividerView" />
+
+					<com.oplay.giftcool.ui.widget.NestedListView
+							android:id = "@+id/rv_new_content"
+							style = "@style/DefaultListView"
+							android:minHeight = "95dp" />
+				</LinearLayout >
 
 			</LinearLayout >
+		</com.oplay.giftcool.ui.widget.layout.GCScrollView >
 
-			<!-- 限量礼包模块 -->
-			<LinearLayout
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "@dimen/di_index_module_gap" >
-
-				<RelativeLayout
-						android:id = "@+id/rl_limit_all"
-						style = "@style/IndexModuleTitleLayout" >
-
-
-					<TextView
-							android:id="@+id/tv_limit"
-							android:layout_toRightOf="@+id/new_limit"
-							style = "@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_limit" />
-					<TextView
-							android:id="@+id/new_limit"
-							style = "@style/DefaultTextView.Header"
-							android:text="▌"
-							android:textColor="@color/co_common_app_main_bg"/>
-
-					<TextView
-							android:id = "@+id/tv_limit_hint"
-							style = "@style/DefaultTextView.Text"
-							android:layout_toRightOf = "@+id/tv_limit"
-							android:paddingLeft = "8dp" />
-
-					<TextView style = "@style/DefaultTextView.More" />
-
-				</RelativeLayout >
-
-				<View
-						style = "@style/HDividerView" />
-
-				<android.support.v7.widget.RecyclerView
-						android:id = "@+id/rv_limit_content"
-						style = "@style/DefaultRecyclerView"
-						android:layout_height = "164dp" />
-			</LinearLayout >
-
-			<!-- 新鲜出炉模块 -->
-			<LinearLayout
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "@dimen/di_index_module_gap" >
-
-				<RelativeLayout
-						android:id = "@+id/rl_new_all"
-						style = "@style/IndexModuleTitleLayout" >
-
-					<TextView
-							android:id="@+id/new_light"
-							style = "@style/DefaultTextView.Header"
-							android:text="▌"
-							android:textColor="@color/co_common_app_main_bg"/>
-					<TextView
-							android:layout_toRightOf="@id/new_light"
-							style = "@style/DefaultTextView.Header"
-							android:text = "@string/st_index_gift_new" />
-
-					<TextView style = "@style/DefaultTextView.More" />
-
-				</RelativeLayout >
-
-				<View style = "@style/HDividerView" />
-
-				<com.oplay.giftcool.ui.widget.NestedListView
-						android:id = "@+id/rv_new_content"
-						style = "@style/DefaultListView"
-						android:minHeight = "95dp" />
-			</LinearLayout >
-
-		</LinearLayout >
-	</com.oplay.giftcool.ui.widget.layout.GCScrollView >
-
-</com.oplay.giftcool.ui.widget.layout.RefreshLayout >
+	</com.oplay.giftcool.ui.widget.layout.RefreshLayout >
+</RelativeLayout >

@@ -20,6 +20,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.ui.fragment.LoadingFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
@@ -35,7 +36,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * @date 2015/12/13
  */
 public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog implements View.OnClickListener,
-		FragmentManager.OnBackStackChangedListener {
+		FragmentManager.OnBackStackChangedListener, OnFinishListener {
 
 	protected AssistantApp mApp;
 	protected Toolbar mToolbar;
@@ -332,9 +333,24 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (mHandler != null) {
-		}
+		release();
+		AssistantApp.getRefWatcher(this).watch(this);
+	}
+
+	@Override
+	public void release() {
+		mHandler = null;
 		mNeedWorkCallback = false;
+		mApp = null;
+		mToolbar = null;
+		mLoadingDialog = null;
+		LoadingFragment mLoadingFragment = null;
+		// 封装加载和等待等页面的管理器对象
+		LoadAndRetryViewManager mViewManager = null;
+		Fragment mCurTopFragment = null;
+		// fragment处理onActivityResult
+		Fragment mFragmentForResult = null;
+		setContentView(R.layout.xml_null);
 	}
 
 	/**

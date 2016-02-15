@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.IndexGiftLikeAdapter;
 import com.oplay.giftcool.adapter.IndexGiftLimitAdapter;
@@ -176,6 +177,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mIsPrepared = true;
 		mScrollView.smoothScrollTo(0, 0);
 		mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
+
+
 	}
 
 	private void loadBanner(ArrayList<IndexBanner> banners) {
@@ -506,6 +509,15 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	public void onDestroyView() {
 		super.onDestroyView();
 		mHandler.removeCallbacks(mRefreshRunnable);
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		AssistantApp.getRefWatcher(getActivity()).watch(mZeroAdapter);
+		AssistantApp.getRefWatcher(getActivity()).watch(mLikeAdapter);
+		AssistantApp.getRefWatcher(getActivity()).watch(mLimitAdapter);
+		AssistantApp.getRefWatcher(getActivity()).watch(mBanner);
 	}
 
 	/* 更新控件数据 end */

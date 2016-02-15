@@ -194,6 +194,20 @@ public class DrawerFragment extends BaseFragment {
 	}
 
 	@Override
+	public void release() {
+		super.release();
+		/*rlHeader = null;
+		tvNick = null;
+		ivIcon = null;
+		if (rvContent.getAdapter() != null && rvContent.getAdapter() instanceof OnFinishListener) {
+			((OnFinishListener) rvContent.getAdapter()).release();
+		}
+		rvContent.setAdapter(null);
+		drawerLayout = null;*/
+
+	}
+
+	@Override
 	public void onUserUpdate() {
 		super.onUserUpdate();
 		updateData();

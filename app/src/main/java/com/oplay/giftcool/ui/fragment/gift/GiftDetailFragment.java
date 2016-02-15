@@ -439,7 +439,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		dialog.setTitle("小贴士");
 		dialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
 				mData.gameData.name)));
-		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus.INSTALLABLE) {
+		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus
+				.INSTALLABLE) {
 			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
 			dialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
 		} else {
@@ -467,7 +468,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				dialog.dismissAllowingStateLoss();
 			}
 		});
-		dialog.show(getChildFragmentManager(),ConfirmDialog.class.getSimpleName());
+		dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 		return false;
 	}
 
@@ -502,6 +503,35 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				}
 			}
 		});
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		mTimer.cancel();
+		mTimer = null;
+		ivIcon = null;
+		tvName = null;
+		tvConsume = null;
+		tvScore = null;
+		tvOr = null;
+		tvBean = null;
+		tvRemain = null;
+		tvContent = null;
+		tvDeadline = null;
+		tvUsage = null;
+		btnSend = null;
+		pbPercent = null;
+		tvCode = null;
+		btnCopy = null;
+		ivLimit = null;
+		btnDownload = null;
+		downloadLayout = null;
+		llZero = null;
+		tvOriginPrice = null;
+		tvZeroRemain = null;
+		mData = null;
+		mAppInfo = null;
 	}
 
 	@Override

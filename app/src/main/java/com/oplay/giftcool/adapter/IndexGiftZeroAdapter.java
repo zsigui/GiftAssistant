@@ -23,6 +23,8 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by zsigui on 15-12-24.
  */
@@ -55,8 +57,10 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		contentHolder.tvTagSeize.setEnabled(false);
 		Object obj = contentHolder.tvTagSeize.getTag(TAG_TIMER);
 		if (obj != null) {
-			((CountDownTimer) obj).cancel();
-			obj = null;
+			WeakReference<CountDownTimer> counter = (WeakReference<CountDownTimer>) obj;
+			counter.get().cancel();
+			counter.clear();
+			counter = null;
 		}
 		contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
 		if (data.seizeStatus != GiftTypeUtil.SEIZE_TYPE_NEVER) {
@@ -87,7 +91,8 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 						}
 					};
 					timer.start();
-					contentHolder.tvTagSeize.setTag(TAG_TIMER, timer);
+					WeakReference<CountDownTimer> weakReference = new WeakReference<CountDownTimer>(timer);
+					contentHolder.tvTagSeize.setTag(TAG_TIMER, weakReference);
 					break;
 				case GiftTypeUtil.STATUS_SEIZE:
 					contentHolder.tvTagSeize.setEnabled(true);

@@ -5,5 +5,8 @@ package com.oplay.giftcool.listener;
  */
 public interface OnFinishListener {
 
+	/**
+	 * 在该方法进行资源的释放
+	 */
 	void release();
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
@@ -23,7 +24,7 @@ import com.socks.library.KLog;
  * @date 2015/12/13
  */
 public abstract class BaseFragment extends BaseFragmentLog implements View.OnClickListener,
-		ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener{
+		ObserverManager.UserUpdateListener, ObserverManager.GiftUpdateListener, OnFinishListener {
 	protected String TAG;
 	protected AssistantApp mApp;
 	protected View mContentView;
@@ -134,8 +135,8 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected void initViewManger(@LayoutRes int layoutResID) {
 		mViewManager = LoadAndRetryViewManager.generate(getContext(), layoutResID);
 		mContentView = mViewManager.getContainer();
-		if (((BaseAppCompatActivity)getActivity()).getHandler() != null) {
-			mViewManager.setHandler(((BaseAppCompatActivity)getActivity()).getHandler());
+		if (((BaseAppCompatActivity) getActivity()).getHandler() != null) {
+			mViewManager.setHandler(((BaseAppCompatActivity) getActivity()).getHandler());
 		}
 	}
 
@@ -255,6 +256,20 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		super.onDestroy();
 		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		ObserverManager.getInstance().removeUserUpdateListener(this);
+		release();
+		AssistantApp.getRefWatcher(getActivity()).watch(this);
+	}
+
+	@Override
+	public void release() {
+		TAG = null;
+		mApp = null;
+		mContentView = null;
+		mActivity = null;
+		mViewManager = null;
+		mFragName = null;
+		// Fragment标题
+		mTitleName = null;
 	}
 
 	@Override

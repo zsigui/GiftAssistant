@@ -1,1 +1,1 @@
-include ':app', ':third:youmilib', ':third:ouwansdk'
+include ':app', ':third:youmilib', ':third:ouwansdk', ':third:convenientbanner'
