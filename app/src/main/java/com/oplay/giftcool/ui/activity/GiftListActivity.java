@@ -77,8 +77,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			return;
 		}
 		mIsLoading = true;
-		displayLoadingUI(R.id.fl_container);
-		new Thread(new Runnable() {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (type == KeyConfig.TYPE_ID_GIFT_LIMIT) {
@@ -90,7 +89,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 					displayGiftLikeUI(mGameKey);
 				}
 			}
-		}).start();
+		});
 	}
 
 	private void loadNewGiftData() {

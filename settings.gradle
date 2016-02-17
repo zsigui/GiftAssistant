@@ -1,1 +1,2 @@
 include ':app', ':third:youmilib', ':third:ouwansdk', ':third:convenientbanner'
+include ':third:viewserver'

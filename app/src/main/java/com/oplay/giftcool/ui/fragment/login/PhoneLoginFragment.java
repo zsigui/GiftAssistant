@@ -83,7 +83,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_login_phone);
 		etPhone = getViewById(R.id.et_input);
-		tvClear = getViewById(R.id.tv_clear);
+		tvClear = getViewById(R.id.tv_user_clear);
 		etCode = getViewById(R.id.et_phone_code);
 		btnSendCode = getViewById(R.id.tv_send_code);
 //		ctvAgreeLaw = getViewById(R.id.ctv_law);
@@ -108,7 +108,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etPhone, etCode, tvClear, btnLogin);
+		InputTextUtil.initPswFilter(etPhone, etCode, tvClear, null, btnLogin);
 //		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
 		etPhone.requestFocus();
@@ -146,7 +146,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 						OuwanLoginFragment.newInstance(), getResources().getString(R.string.st_login_ouwan_title),
 						false);
 				break;
-			case R.id.tv_clear:
+			case R.id.tv_user_clear:
 				etPhone.setText("");
 				etCode.setText("");
 				etPhone.setSelection(0);

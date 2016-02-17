@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
@@ -60,16 +61,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 底部Tabs
 	private LinearLayout llTab;
 	private CheckedTextView[] mCtvs;
+
 	private ImageView ivProfile;
+	private ImageView ivHint;
 	private TextView tvGiftCount;
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
 	// 当前选项卡下标
 	private int mCurrentIndex = 0;
-
-	private UserInfo mUser;
 	private DrawerLayout mDrawerLayout;
+	private DrawerFragment mDrawerFragment;
 
 
 	@Override
@@ -84,7 +86,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mDrawerLayout = getViewById(R.id.drawer_layout);
 		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.string.st_drawer_open, R.string.st_drawer_close));
-		replaceFrag(R.id.drawer_container, DrawerFragment.newInstance(mDrawerLayout), false);
+		mDrawerFragment = DrawerFragment.newInstance(mDrawerLayout);
+		replaceFrag(R.id.drawer_container, mDrawerFragment, false);
 	}
 
 
@@ -122,15 +125,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		ivProfile = getViewById(toolbar, R.id.iv_profile);
 		ivProfile.setOnClickListener(this);
 		tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
+		ivHint = getViewById(R.id.iv_hint);
 		getViewById(R.id.ll_gift_count).setOnClickListener(this);
 		updateToolBar();
 	}
 
 	private void updateToolBar() {
 		if (AccountManager.getInstance().isLogin()) {
-			mUser = AccountManager.getInstance().getUserInfo();
-			tvGiftCount.setText(String.valueOf(mUser.giftCount));
-			ViewUtil.showAvatarImage(mUser.avatar, ivProfile, true);
+			UserInfo user = AccountManager.getInstance().getUserInfo();
+			tvGiftCount.setText(String.valueOf(user.giftCount));
+			ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 		} else {
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 			ivProfile.setTag("");
@@ -278,8 +282,44 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	public void onUserUpdate() {
-		mUser = AccountManager.getInstance().getUserInfo();
 		updateToolBar();
+	}
+
+
+	private SparseIntArray mHintCount = new SparseIntArray();
+
+	/**
+	 * 更新侧边栏和顶部导航栏信息
+	 */
+	public void updateHintState(int key, int count) {
+		if (count < -1) {
+			return;
+		}
+		int val = mHintCount.get(key);
+		if (val == 0) {
+			// 原先不存在该键值
+			if (count != 0) {
+				mHintCount.put(key, count);
+				mDrawerFragment.updateCount(key, count);
+				ivHint.setVisibility(View.VISIBLE);
+				mDrawerFragment.updateCount(key, count);
+			}
+		} else {
+			// 原先已经存在该键值
+			if (count == 0) {
+				// 移除该键值
+				mHintCount.delete(key);
+				if (mHintCount.size() > 0) {
+					ivHint.setVisibility(View.VISIBLE);
+				} else {
+					ivHint.setVisibility(View.GONE);
+				}
+			} else {
+				mHintCount.put(key, count);
+				ivHint.setVisibility(View.VISIBLE);
+			}
+			mDrawerFragment.updateCount(key, count);
+		}
 	}
 
 	private void handleFirstOpen() {
@@ -357,6 +397,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		// 保持一个Activity的全局对象
+		sGlobalHolder = null;
+		// 底部Tabs
+		 llTab = null;
+		mCtvs = null;
+		ivProfile = null;
+		tvGiftCount = null;
+		// 礼物Fragment
+		mGiftFragment = null;
+		mGameFragment = null;
+		mDrawerLayout = null;
+		mDrawerFragment = null;
 	}
 
 	private WelcomeDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {

@@ -85,6 +85,19 @@ public class HistoryFragment extends BaseFragment {
 	}
 
 	@Override
+	public void release() {
+		super.release();
+		if (mAdapter != null) {
+			mAdapter.release();
+			mAdapter = null;
+		}
+		if (mListView != null) {
+			mListView.setAdapter(null);
+			mListView = null;
+		}
+	}
+
+	@Override
 	public String getPageName() {
 		return PAGE_NAME;
 	}

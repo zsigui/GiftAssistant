@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnInstallListener;
@@ -13,6 +14,7 @@ import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
 
@@ -119,8 +121,6 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		mFinishedCnt++;
 		mUrl_AppInfo.put(info.downloadUrl, info);
 		mPackageName_AppInfo.put(info.packageName, info);
-
-
 	}
 
 	public void addDownloadTask(GameDownloadInfo appInfo) {
@@ -581,6 +581,12 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		if (appInfo != null) {
 			appInfo.initAppInfoStatus(context);
 			notifyDownloadStatusListeners(appInfo);
+		}
+	}
+
+	public void updateHintStatus() {
+		if (MainActivity.sGlobalHolder != null) {
+			MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, getEndOfPaused());
 		}
 	}
 }

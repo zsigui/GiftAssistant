@@ -30,7 +30,9 @@ public class ChannelUtil {
 	 */
 	public static int getChannelId(Context context) {
 
-		long i = System.currentTimeMillis();
+		if (AppDebugConfig.IS_DEBUG) {
+			return 10000;
+		}
 		ZipFile zipFile = null;
 		try {
 			long time = System.currentTimeMillis();

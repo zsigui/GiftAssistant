@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickListener {
+public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener {
 
 	private static final int TAG_POS = 0xFF331234;
 
@@ -307,6 +308,13 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 				KLog.d(AppDebugConfig.TAG_ADAPTER, e);
 			}
 		}
+	}
+
+	@Override
+	public void release() {
+		mContext = null;
+		mListener = null;
+		mData = null;
 	}
 
 	/**

@@ -8,6 +8,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.TimeViewPagerAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeDataList;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -98,9 +99,23 @@ public class GiftMutilDayFragment extends BaseFragment {
         TimeViewPagerAdapter adapter = new TimeViewPagerAdapter(getChildFragmentManager(), fragments);
         mPager.setAdapter(adapter);
         mTabLayout.setViewPager(mPager);
+	    mPager.setOffscreenPageLimit(5);
     }
 
-    @Override
+	@Override
+	public void release() {
+		super.release();
+		if (mPager != null && mPager.getAdapter() != null) {
+			if (mPager.getAdapter() instanceof OnFinishListener) {
+				((OnFinishListener) mPager.getAdapter()).release();
+			}
+		}
+		mPager = null;
+		mTabLayout = null;
+		mUrl = null;
+	}
+
+	@Override
     protected void lazyLoad() {
         mHasData = true;
     }

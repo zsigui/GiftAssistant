@@ -28,7 +28,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 	protected LayoutInflater mLayoutInflater;
 
 	public BaseListAdapter(Context context, List<T> objects) {
-		mContext = context;
+		mContext = context.getApplicationContext();
 		mListData = objects;
 		mLayoutInflater = LayoutInflater.from(context);
 	}
@@ -69,12 +69,12 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 
 	@Override
 	public int getCount() {
-		return mListData.size();
+		return mListData == null ? 0 : mListData.size();
 	}
 
 	@Override
 	public T getItem(int position) {
-		return mListData.get(position);
+		return getCount() == 0 ? null : mListData.get(position);
 	}
 
 	@Override

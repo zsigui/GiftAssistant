@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.util.DateUtil;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 15-12-29.
  */
-public class TimeViewPagerAdapter extends FragmentStatePagerAdapter {
+public class TimeViewPagerAdapter extends FragmentStatePagerAdapter implements OnFinishListener {
 
 	private ArrayList<Fragment> mFragments;
 	private ArrayList<String> mTitles;
@@ -66,5 +67,17 @@ public class TimeViewPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return mTitles == null ? null : mTitles.get(position);
+	}
+
+	@Override
+	public void release() {
+		if (mTitles != null) {
+			mTitles.clear();
+			mTitles = null;
+		}
+		if (mFragments != null) {
+			mFragments.clear();
+			mFragments = null;
+		}
 	}
 }

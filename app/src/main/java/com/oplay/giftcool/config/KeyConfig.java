@@ -20,19 +20,20 @@ public class KeyConfig {
 
 	public static final int TYPE_ID_DEFAULT = 0x100;
 	/* setting activity  */
-	public static final int TYPE_ID_SETTING = 0x101;
+	public static final int TYPE_ID_MY_GIFT_CODE = 0x101;
 	public static final int TYPE_ID_WALLET = 0x102;
-	public static final int TYPE_ID_DOWNLOAD = 0x103;
-	public static final int TYPE_ID_DETAIL_BEAN = 0x104;
-	public static final int TYPE_ID_DETAIL_SCORE = 0x106;
-	public static final int TYPE_ID_MY_GIFT_CODE = 0x107;
-	public static final int TYPE_ID_SCORE_TASK = 0x108;
-	public static final int TYPE_ID_MSG = 0x109;
-	public static final int TYPE_ID_PROFILE = 0x110;
-	public static final int TYPE_ID_FEEDBACK = 0x111;
-	public static final int TYPE_ID_USERINFO = 0x112;
-	public static final int TYPE_ID_USER_SET_NICK = 0x113;
-	public static final int TYPE_ID_USER_SET_AVATAR = 0x114;
+	public static final int TYPE_ID_SCORE_TASK = 0x103;
+	public static final int TYPE_ID_MSG = 0x104;
+	public static final int TYPE_ID_DOWNLOAD = 0x105;
+	public static final int TYPE_ID_SETTING = 0x106;
+
+	public static final int TYPE_ID_DETAIL_BEAN = 0x113;
+	public static final int TYPE_ID_DETAIL_SCORE = 0x114;
+	public static final int TYPE_ID_PROFILE = 0x115;
+	public static final int TYPE_ID_FEEDBACK = 0x116;
+	public static final int TYPE_ID_USERINFO = 0x117;
+	public static final int TYPE_ID_USER_SET_NICK = 0x118;
+	public static final int TYPE_ID_USER_SET_AVATAR = 0x119;
 
 	/* login activity */
 	public static final int TYPE_ID_LOGIN_MAIN = 0x151;

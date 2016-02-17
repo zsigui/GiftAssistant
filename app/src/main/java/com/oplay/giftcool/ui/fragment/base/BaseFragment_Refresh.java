@@ -114,6 +114,17 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		loadMoreData();
 	}
 
+	public RefreshLayout getRefreshLayout() {
+		return mRefreshLayout;
+	}
+
+
+	@Override
+	public void release() {
+		super.release();
+		mRefreshLayout = null;
+	}
+
 	protected void loadMoreData() {
 	}
 }

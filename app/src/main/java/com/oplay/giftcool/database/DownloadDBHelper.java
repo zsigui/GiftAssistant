@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
@@ -293,7 +294,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 				return;
 			}
 			final GameDownloadInfo item = appInfo;
-			new Thread(new Runnable() {
+			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
 					ApkDownloadManager dm = ApkDownloadManager.getInstance(mAppContext);
@@ -304,7 +305,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 						updateElseInsert(getWritableDatabase(), item);
 					}
 				}
-			}).start();
+			});
 		}catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

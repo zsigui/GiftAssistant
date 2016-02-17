@@ -34,6 +34,17 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel>{
 		drawerItemHolder.tvName.setText(item.name);
 		drawerItemHolder.ivIcon.setImageResource(item.icon);
 		drawerItemHolder.itemView.setOnClickListener(item.listener);
+		if (item.count == 0) {
+			drawerItemHolder.tvCount.setVisibility(View.GONE);
+			drawerItemHolder.ivHint.setVisibility(View.GONE);
+		} else if (item.count == -1) {
+			drawerItemHolder.tvCount.setVisibility(View.GONE);
+			drawerItemHolder.ivHint.setVisibility(View.VISIBLE);
+		} else {
+			drawerItemHolder.tvCount.setVisibility(View.VISIBLE);
+			drawerItemHolder.ivHint.setVisibility(View.GONE);
+			drawerItemHolder.tvCount.setText(String.valueOf(item.count));
+		}
 	}
 
 
@@ -41,11 +52,15 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel>{
 
 		private TextView tvName;
 		private ImageView ivIcon;
+		private TextView tvCount;
+		private ImageView ivHint;
 
 		public DrawerItemHolder(View itemView) {
 			super(itemView);
 			tvName = getViewById(R.id.nav_item_text);
 			ivIcon = getViewById(R.id.nav_item_icon);
+			tvCount = getViewById(R.id.nav_item_count);
+			ivHint = getViewById(R.id.nav_item_hint);
 		}
 	}
 }

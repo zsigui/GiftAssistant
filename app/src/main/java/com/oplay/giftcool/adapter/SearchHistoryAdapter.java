@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 /**
  * Created by zsigui on 15-12-23.
  */
-public class SearchHistoryAdapter extends BaseAdapter {
+public class SearchHistoryAdapter extends BaseAdapter implements OnFinishListener {
 
 	private static final int TYPE_NORMAL = 0;
 	private static final int TYPE_CLEAR = 1;
@@ -125,6 +126,15 @@ public class SearchHistoryAdapter extends BaseAdapter {
 		mKeywords = data;
 		mIsHistory = isHistory;
 		notifyDataSetChanged();
+	}
+
+	@Override
+	public void release() {
+		mClearListener = null;
+		if (mKeywords != null) {
+			mKeywords.clear();
+			mKeywords = null;
+		}
 	}
 
 	public interface OnClearListener{

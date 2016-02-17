@@ -36,6 +36,7 @@ public class ConvenientBanner<T> extends LinearLayout {
     private ArrayList<ImageView> mPointViews = new ArrayList<ImageView>();
     private CBPageChangeListener pageChangeListener;
     private ViewPager.OnPageChangeListener onPageChangeListener;
+	private OnTouchListener onTouchListener;
     private CBPageAdapter pageAdapter;
     private CBLoopViewPager viewPager;
     private ViewPagerScroller scroller;
@@ -114,7 +115,15 @@ public class ConvenientBanner<T> extends LinearLayout {
         }
     }
 
-    public ConvenientBanner setPages(CBViewHolderCreator holderCreator,List<T> datas){
+	@Override
+	public void setOnTouchListener(OnTouchListener onTouchListener) {
+		this.onTouchListener = onTouchListener;
+		if (viewPager != null) {
+			viewPager.setOnTouchListener(this.onTouchListener);
+		}
+	}
+
+	public ConvenientBanner setPages(CBViewHolderCreator holderCreator,List<T> datas){
         this.mDatas = datas;
         pageAdapter = new CBPageAdapter(holderCreator,mDatas);
         viewPager.setAdapter(pageAdapter,canLoop);
@@ -156,7 +165,7 @@ public class ConvenientBanner<T> extends LinearLayout {
         if(mDatas==null)return this;
         for (int count = 0; count < mDatas.size(); count++) {
             // 翻页指示的点
-            ImageView pointView = new ImageView(getContext());
+            ImageView pointView = new ImageView(getContext().getApplicationContext());
             pointView.setPadding(5, 0, 5, 0);
             if (mPointViews.isEmpty())
                 pointView.setImageResource(page_indicatorId[1]);
@@ -240,7 +249,7 @@ public class ConvenientBanner<T> extends LinearLayout {
             mScroller = ViewPager.class.getDeclaredField("mScroller");
             mScroller.setAccessible(true);
             scroller = new ViewPagerScroller(
-                    viewPager.getContext());
+                    viewPager.getContext().getApplicationContext());
             mScroller.set(viewPager, scroller);
 
         } catch (NoSuchFieldException e) {

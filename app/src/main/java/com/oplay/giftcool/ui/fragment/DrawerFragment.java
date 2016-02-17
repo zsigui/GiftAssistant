@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.DrawerModel;
@@ -38,7 +41,8 @@ public class DrawerFragment extends BaseFragment {
 	private ImageView ivIcon;
 	private RecyclerView rvContent;
 	private DrawerLayout drawerLayout;
-
+	private SparseArray<DrawerModel> mData;
+	private DrawerAdapter mAdapter;
 
 	public static DrawerFragment newInstance(DrawerLayout drawerLayout) {
 		DrawerFragment fragment = new DrawerFragment();
@@ -64,10 +68,11 @@ public class DrawerFragment extends BaseFragment {
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		rvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		DrawerAdapter adapter = new DrawerAdapter(getContext());
-		adapter.setData(initDrawerItem());
-		rvContent.setAdapter(adapter);
+		rvContent.setLayoutManager(new LinearLayoutManager(getContext().getApplicationContext(),
+				LinearLayoutManager.VERTICAL, false));
+		mAdapter = new DrawerAdapter(getContext().getApplicationContext());
+		mAdapter.setData(initDrawerItem());
+		rvContent.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -127,31 +132,35 @@ public class DrawerFragment extends BaseFragment {
 	}
 
 	private ArrayList<DrawerModel> initDrawerItem() {
-		ArrayList<DrawerModel> models = new ArrayList<>();
-		models.add(new DrawerModel(R.drawable.ic_drawer_gift, "我的礼包", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (AccountManager.getInstance().isLogin()) {
-					IntentUtil.jumpMyGift(getContext());
-				} else {
-					IntentUtil.jumpLogin(getContext());
-				}
-				closeDrawer();
+		SparseArray<DrawerModel> modelArray = new SparseArray<>();
+		modelArray.put(KeyConfig.TYPE_ID_MY_GIFT_CODE,
+				new DrawerModel(R.drawable.ic_drawer_gift, "我的礼包", new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (AccountManager.getInstance().isLogin()) {
+							IntentUtil.jumpMyGift(getContext());
+						} else {
+							IntentUtil.jumpLogin(getContext());
+						}
+						closeDrawer();
 
-			}
-		}));
-		models.add(new DrawerModel(R.drawable.ic_drawer_wallet, "我的钱包", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (AccountManager.getInstance().isLogin()) {
-					IntentUtil.jumpMyWallet(getContext());
-				} else {
-					IntentUtil.jumpLogin(getContext());
-				}
-				closeDrawer();
-			}
-		}));
-		models.add(new DrawerModel(R.drawable.ic_drawer_score_task, "每日任务", new View.OnClickListener() {
+					}
+				}));
+		modelArray.put(KeyConfig.TYPE_ID_WALLET,
+				new DrawerModel(R.drawable.ic_drawer_wallet, "我的钱包",
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (AccountManager.getInstance().isLogin()) {
+							IntentUtil.jumpMyWallet(getContext());
+						} else {
+							IntentUtil.jumpLogin(getContext());
+						}
+						closeDrawer();
+					}
+				}));
+		modelArray.put(KeyConfig.TYPE_ID_SCORE_TASK,
+				new DrawerModel(R.drawable.ic_drawer_score_task, "每日任务", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (AccountManager.getInstance().isLogin()) {
@@ -162,19 +171,16 @@ public class DrawerFragment extends BaseFragment {
 				closeDrawer();
 			}
 		}));
-		models.add(new DrawerModel(R.drawable.ic_drawer_message, "消息中心", new View.OnClickListener() {
+		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(R.drawable.ic_drawer_message, "消息中心", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (AccountManager.getInstance().isLogin()) {
-					ToastUtil.showShort("敬请期待");
-				} else {
-					IntentUtil.jumpLogin(getContext());
-				}
-				closeDrawer();
+				ToastUtil.showShort("敬请期待");
 			}
 		}));
 		if (AssistantApp.getInstance().isAllowDownload()) {
-			models.add(new DrawerModel(R.drawable.ic_drawer_download, "下载管理", new View.OnClickListener() {
+			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD,
+					new DrawerModel(R.drawable.ic_drawer_download, "下载管理",
+					new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -183,28 +189,50 @@ public class DrawerFragment extends BaseFragment {
 				}
 			}));
 		}
-		models.add(new DrawerModel(R.drawable.ic_drawer_setting, "设置", new View.OnClickListener() {
+		modelArray.put(KeyConfig.TYPE_ID_SETTING,
+				new DrawerModel(R.drawable.ic_drawer_setting, "设置", new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				IntentUtil.jumpSetting(getContext());
 				closeDrawer();
 			}
 		}));
-		return models;
+		mData = modelArray;
+		ArrayList<DrawerModel> result = new ArrayList<>();
+		for (int i = 0; i < mData.size(); i++) {
+			result.add(mData.valueAt(i));
+		}
+		return result;
+	}
+
+	public void updateCount(int key, int count) {
+		if (mData == null || count < -1)
+			return;
+		DrawerModel m = mData.get(key);
+		if (m != null) {
+			m.count = count;
+			mAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public void release() {
 		super.release();
-		/*rlHeader = null;
+		rlHeader = null;
 		tvNick = null;
 		ivIcon = null;
-		if (rvContent.getAdapter() != null && rvContent.getAdapter() instanceof OnFinishListener) {
-			((OnFinishListener) rvContent.getAdapter()).release();
+		if (rvContent != null) {
+			if (mAdapter != null && mAdapter instanceof OnFinishListener) {
+				((OnFinishListener) mAdapter).release();
+			}
+			rvContent.setAdapter(null);
+			mAdapter = null;
 		}
-		rvContent.setAdapter(null);
-		drawerLayout = null;*/
-
+		if (mData != null) {
+			mData.clear();
+			mData = null;
+		}
+		drawerLayout = null;
 	}
 
 	@Override
@@ -215,6 +243,6 @@ public class DrawerFragment extends BaseFragment {
 
 	@Override
 	public String getPageName() {
-		return null;
+		return "侧边栏";
 	}
 }

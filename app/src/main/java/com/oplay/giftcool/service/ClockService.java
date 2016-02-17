@@ -69,5 +69,7 @@ public class ClockService extends Service {
 		}
 		// 结束时关闭轮询
 		mTimer.cancel();
+		mTimer.purge();
+		mTimer = null;
 	}
 }

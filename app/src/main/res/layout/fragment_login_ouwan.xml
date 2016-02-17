@@ -5,10 +5,10 @@
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 
-	<LinearLayout
+	<RelativeLayout
 			android:id = "@+id/ll_input"
 			android:orientation = "horizontal"
-			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput">
 
 		<AutoCompleteTextView
 				android:id = "@+id/et_input"
@@ -18,14 +18,25 @@
 				android:hint = "@string/st_login_ouwan_user_hint" />
 
 		<TextView
-				android:id = "@+id/tv_clear"
+				android:id = "@+id/tv_user_clear"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:clickable = "true"
 				android:layout_marginRight = "5dp"
-				android:visibility = "gone"
+				android:layout_toLeftOf="@+id/iv_more"
+				android:visibility = "visible"
 				android:background = "@drawable/ic_input_clear" />
-	</LinearLayout >
+
+		<ImageView
+				android:id = "@+id/iv_more"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:layout_marginLeft = "5dp"
+				android:layout_alignParentRight="true"
+				android:clickable = "true"
+				android:contentDescription = "@null"
+				android:src = "@drawable/ic_input_clear" />
+	</RelativeLayout >
 
 	<View style = "@style/HDividerView" />
 
@@ -39,38 +50,46 @@
 				style = "@style/DefaultTextView.Login"
 				android:inputType = "textPassword"
 				android:cursorVisible = "true"
-				android:imeOptions = "actionNext"
+				android:imeOptions = "actionDone"
 				android:hint = "@string/st_login_ouwan_pwd_hint" />
+		<TextView
+				android:id = "@+id/tv_pwd_clear"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:clickable = "true"
+				android:layout_marginRight = "5dp"
+				android:visibility = "gone"
+				android:background = "@drawable/ic_input_clear" />
 
 	</LinearLayout >
 
 	<!--<LinearLayout-->
-			<!--android:layout_width = "match_parent"-->
-			<!--android:layout_height = "wrap_content"-->
-			<!--android:paddingLeft = "@dimen/di_login_padding_left_right"-->
-			<!--android:paddingTop = "@dimen/di_login_padding_gap" >-->
+	<!--android:layout_width = "match_parent"-->
+	<!--android:layout_height = "wrap_content"-->
+	<!--android:paddingLeft = "@dimen/di_login_padding_left_right"-->
+	<!--android:paddingTop = "@dimen/di_login_padding_gap" >-->
 
-		<!--<CheckedTextView-->
-				<!--android:id = "@+id/ctv_law"-->
-				<!--android:layout_width = "wrap_content"-->
-				<!--android:layout_height = "wrap_content"-->
-				<!--android:checked = "true"-->
-				<!--android:text = ""-->
-				<!--android:drawableLeft = "@drawable/selector_item_check" />-->
+	<!--<CheckedTextView-->
+	<!--android:id = "@+id/ctv_law"-->
+	<!--android:layout_width = "wrap_content"-->
+	<!--android:layout_height = "wrap_content"-->
+	<!--android:checked = "true"-->
+	<!--android:text = ""-->
+	<!--android:drawableLeft = "@drawable/selector_item_check" />-->
 
-		<!--<TextView-->
-				<!--style = "@style/DefaultTextView.Text"-->
-				<!--android:textSize = "10sp"-->
-				<!--android:paddingLeft = "5dp"-->
-				<!--android:paddingRight = "5dp"-->
-				<!--android:text = "@string/st_login_law_a" />-->
+	<!--<TextView-->
+	<!--style = "@style/DefaultTextView.Text"-->
+	<!--android:textSize = "10sp"-->
+	<!--android:paddingLeft = "5dp"-->
+	<!--android:paddingRight = "5dp"-->
+	<!--android:text = "@string/st_login_law_a" />-->
 
-		<!--<TextView-->
-				<!--android:id = "@+id/tv_law"-->
-				<!--style = "@style/DefaultTextView.LoginPoint"-->
-				<!--android:textSize = "10sp"-->
-				<!--android:clickable = "true"-->
-				<!--android:text = "@string/st_login_law_b" />-->
+	<!--<TextView-->
+	<!--android:id = "@+id/tv_law"-->
+	<!--style = "@style/DefaultTextView.LoginPoint"-->
+	<!--android:textSize = "10sp"-->
+	<!--android:clickable = "true"-->
+	<!--android:text = "@string/st_login_law_b" />-->
 	<!--</LinearLayout >-->
 
 	<TextView

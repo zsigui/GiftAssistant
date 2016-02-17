@@ -98,7 +98,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 	protected void lazyLoad() {
 		refreshInitConfig();
 
-		new Thread(new Runnable() {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
@@ -127,7 +127,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 					mViewManager.showErrorRetry();
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
 			mReqPageObj.data.page = mLastPage + 1;
-			new Thread(new Runnable() {
+			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
 					if (NetworkUtil.isConnected(getContext())) {
@@ -166,7 +166,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 						mViewManager.showErrorRetry();
 					}
 				}
-			}).start();
+			});
 		}
 	}
 
@@ -204,10 +204,18 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		if (mAdapter!=null) {
-			mAdapter.onDestroy();
+	public void release() {
+		super.release();
+		if (mAdapter != null) {
+			mAdapter.release();
+			mAdapter = null;
+		}
+		mUrl = null;
+		mSearchKey = null;
+		mReqPageObj = null;
+		if (mDataView != null) {
+			mDataView.setAdapter(null);
+			mDataView = null;
 		}
 	}
 }

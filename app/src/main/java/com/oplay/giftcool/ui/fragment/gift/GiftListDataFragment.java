@@ -74,12 +74,17 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	}
 
 	@Override
+	public void release() {
+
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
-		mAdapter = new NestedGiftListAdapter(getActivity());
+		mAdapter = new NestedGiftListAdapter(getContext().getApplicationContext());
 		if (getArguments() != null) {
 			Serializable s = getArguments().getSerializable(KEY_DATA);
 			if (s != null) {
@@ -158,7 +163,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		mIsLoadMore = true;
 		mReqPageObj.data.date = mDate;
 		mReqPageObj.data.page = mLastPage + 1;
-		new Thread(new Runnable() {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
@@ -170,7 +175,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 							@Override
 							public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 							                       Retrofit
-									retrofit) {
+									                       retrofit) {
 								if (!mCanShowUI) {
 									return;
 								}
@@ -193,7 +198,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 							}
 						});
 			}
-		}).start();
+		});
 
 	}
 

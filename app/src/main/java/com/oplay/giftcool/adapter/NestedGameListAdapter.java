@@ -10,6 +10,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
@@ -31,7 +32,7 @@ import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
  * Created by zsigui on 15-12-28.
  */
 public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener,
-		OnDownloadStatusChangeListener {
+		OnDownloadStatusChangeListener, OnFinishListener {
 
 	private static final int TAG_POSITION = 0xFFF11133;
 	private static final int TAG_URL = 0xffff1111;
@@ -163,7 +164,18 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 		notifyDataSetChanged();
 	}
 
-	public void onDestroy() {
+	@Override
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
+		Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
+			@Override
+			public void run() {
+				updateViewByPackageName(appInfo.packageName);
+			}
+		});
+	}
+
+	@Override
+	public void release() {
 		ApkDownloadManager.getInstance(mContext).removeDownloadStatusListener(this);
 		if (mPackageNameMap != null) {
 			mPackageNameMap.clear();
@@ -173,15 +185,11 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 			mUrlDownloadBtn.clear();
 			mUrlDownloadBtn = null;
 		}
-	}
-
-	@Override
-	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
-			@Override
-			public void run() {
-				updateViewByPackageName(appInfo.packageName);
-			}
-		});
+		mContext = null;
+		mDatas = null;
+		mOnItemChildCheckedChangeListener = null;
+		mOnItemChildClickListener = null;
+		mOnItemChildLongClickListener = null;
+		mListener = null;
 	}
 }

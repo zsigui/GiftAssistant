@@ -4,7 +4,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,7 +17,8 @@ public class InputTextUtil {
 	 * @Description:只能输入非空格的ASCII码
 	 */
 	public static void initPswFilter(final EditText etOne, final EditText etTwo,
-	                                 final TextView oneClear, final TextView tvSend) {
+	                                 final TextView oneClear, final TextView twoClear,
+	                                 final TextView tvSend) {
 		if (etOne != null) {
 			etOne.addTextChangedListener(new TextWatcher() {
 				@Override
@@ -35,7 +35,7 @@ public class InputTextUtil {
 						s = str;
 					}
 					if (oneClear != null) {
-						if (s.length() > 0) {
+						if (s.length() > 0 && etOne.isFocused()) {
 							oneClear.setVisibility(View.VISIBLE);
 						} else {
 							oneClear.setVisibility(View.GONE);
@@ -48,13 +48,6 @@ public class InputTextUtil {
 					if (etTwo != null) {
 						if (TextUtils.isEmpty(etOne.getText()) || TextUtils.isEmpty(etTwo.getText())) {
 							tvSend.setEnabled(false);
-							if (TextUtils.isEmpty(etOne.getText())) {
-								etOne.setImeOptions(EditorInfo.IME_ACTION_DONE);
-								etTwo.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-							} else {
-								etOne.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-								etTwo.setImeOptions(EditorInfo.IME_ACTION_DONE);
-							}
 						} else {
 							tvSend.setEnabled(true);
 						}
@@ -83,6 +76,13 @@ public class InputTextUtil {
 						etTwo.setText(str);
 						//设置新的光标所在位置
 						etTwo.setSelection(str.length());
+					}
+					if (twoClear != null) {
+						if (s.length() > 0 && etTwo.isFocused()) {
+							twoClear.setVisibility(View.VISIBLE);
+						} else {
+							twoClear.setVisibility(View.GONE);
+						}
 					}
 				}
 

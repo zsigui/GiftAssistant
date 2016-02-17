@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
@@ -139,12 +140,12 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 			final ArrayList<String> imgList = new ArrayList<String>();
 			imgList.add(iconUrl);
 			params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imgList);
-			new Thread(new Runnable() {
+			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
 					mTencent.shareToQzone(QQEntryActivity.this, params, mUiListener);
 				}
-			}).start();
+			});
 		} else {
 			DefaultShareIconUrlLoader.getInstance().setListener(this);
 			DefaultShareIconUrlLoader.getInstance().getDefaultShareIcon(this, title, description, url, shareType);

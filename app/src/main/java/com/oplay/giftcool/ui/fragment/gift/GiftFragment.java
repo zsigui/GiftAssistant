@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -72,7 +73,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	// 0元疯抢
 	private RecyclerView mZeroView;
 	// 猜你喜欢
-	private LinearLayout llLike;
 	private RelativeLayout mLikeBar;
 	private RecyclerView mLikeView;
 	// 今日限量
@@ -126,7 +126,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		initViewManger(R.layout.fragment_gifts);
 		mScrollView = getViewById(R.id.sv_container);
 		mBanner = getViewById(R.id.banner);
-		llLike = getViewById(R.id.ll_like);
 		mLikeBar = getViewById(R.id.rl_hot_all);
 		mLikeView = getViewById(R.id.rv_like_content);
 		mLimitBar = getViewById(R.id.rl_limit_all);
@@ -198,6 +197,24 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
 		}
+		mBanner.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (mRefreshLayout != null) {
+					switch (event.getAction()) {
+						case MotionEvent.ACTION_MOVE:
+							mRefreshLayout.setEnabled(false);
+							break;
+						case MotionEvent.ACTION_UP:
+						case MotionEvent.ACTION_CANCEL:
+							mRefreshLayout.setEnabled(true);
+							break;
+
+					}
+				}
+				return false;
+			}
+		});
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Global
 				.getBannerHeight(getContext()));
 		mBanner.setLayoutParams(lp);
@@ -228,7 +245,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 		refreshInitConfig();
 
-		new Thread(new Runnable() {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (AppDebugConfig.IS_DEBUG) {
@@ -277,7 +294,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					}
 				});
 			}
-		}).start();
+		});
 	}
 
 
@@ -343,10 +360,11 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mNewAdapter.updateData(newData);
 	}
 
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		ClockService.startService(getContext());
+		ClockService.startService(getContext().getApplicationContext());
 		if (mBanner != null) {
 			mBanner.startTurning(3000);
 		}
@@ -355,7 +373,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	public void onPause() {
 		super.onPause();
-		ClockService.stopService(getContext());
+		ClockService.stopService(getContext().getApplicationContext());
 		if (mBanner != null) {
 			mBanner.stopTurning();
 		}
@@ -518,6 +536,13 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		AssistantApp.getRefWatcher(getActivity()).watch(mLikeAdapter);
 		AssistantApp.getRefWatcher(getActivity()).watch(mLimitAdapter);
 		AssistantApp.getRefWatcher(getActivity()).watch(mBanner);
+		if (mZeroAdapter != null) {
+			mZeroAdapter = null;
+		}
+		if (mHandler != null) {
+			mHandler.removeCallbacksAndMessages(null);
+			mHandler = null;
+		}
 	}
 
 	/* 更新控件数据 end */

@@ -104,7 +104,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	protected void lazyLoad() {
 		refreshInitConfig();
 
-        new Thread(new Runnable() {
+        Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
                 if (NetworkUtil.isConnected(getContext())) {
@@ -140,7 +140,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	                refreshFailEnd();
                 }
             }
-        }).start();
+        });
 	}
 
     /**
@@ -151,7 +151,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
 			mReqPageObj.data.page = mLastPage + 1;
-            new Thread(new Runnable() {
+            Global.THREAD_POOL.execute(new Runnable() {
                 @Override
                 public void run() {
                     if (NetworkUtil.isConnected(getContext())) {
@@ -184,7 +184,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	                    moreLoadFailEnd();
                     }
                 }
-            }).start();
+            });
 		}
 	}
 

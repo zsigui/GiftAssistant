@@ -58,9 +58,10 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		Object obj = contentHolder.tvTagSeize.getTag(TAG_TIMER);
 		if (obj != null) {
 			WeakReference<CountDownTimer> counter = (WeakReference<CountDownTimer>) obj;
-			counter.get().cancel();
+			if (counter.get() != null) {
+				counter.get().cancel();
+			}
 			counter.clear();
-			counter = null;
 		}
 		contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
 		if (data.seizeStatus != GiftTypeUtil.SEIZE_TYPE_NEVER) {

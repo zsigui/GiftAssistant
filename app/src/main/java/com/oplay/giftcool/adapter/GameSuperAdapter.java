@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -49,6 +51,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 
 	private IndexGameSuper mData;
 	private Context mContext;
+	private BaseFragment_Refresh mFrag;
 	private LayoutInflater mInflater;
 
 	private BannerVH mBannerVH;
@@ -94,9 +97,10 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 	};
 
-	public GameSuperAdapter(Context context) {
+	public GameSuperAdapter(Context context, BaseFragment_Refresh frag) {
 		mContext = context;
 		mInflater = LayoutInflater.from(mContext);
+		mFrag = frag;
 		ApkDownloadManager.getInstance(mContext).addDownloadStatusListener(this);
 	}
 
@@ -119,9 +123,9 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		for (IndexBanner banner : banners) {
 			data.add(banner.url);
 		}
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                Global.getBannerHeight(mContext));
-        mBannerVH.mBanner.setLayoutParams(lp);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				Global.getBannerHeight(mContext));
+		mBannerVH.mBanner.setLayoutParams(lp);
 		mBannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
 
 			@Override
@@ -157,8 +161,8 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 		mData.recommend = data;
 		data.initAppInfoStatus(mContext);
-        ViewUtil.showBannerImage(mRecommendVH.ivBanner, data.banner);
-        ViewUtil.showImage(mRecommendVH.ivIcon, data.img);
+		ViewUtil.showBannerImage(mRecommendVH.ivBanner, data.banner);
+		ViewUtil.showImage(mRecommendVH.ivIcon, data.img);
 		mRecommendVH.tvName.setText(data.name);
 		mRecommendVH.tvSize.setText(data.size);
 		ViewUtil.initDownloadBtnStatus(mRecommendVH.btnDownload, data.appStatus);
@@ -217,6 +221,24 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		switch (getItemViewType(position)) {
 			case IndexTypeUtil.ITEM_BANNER:
 				mBannerVH = (BannerVH) holder;
+				mBannerVH.mBanner.setOnTouchListener(new View.OnTouchListener() {
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						if (mFrag != null && mFrag.getRefreshLayout() != null) {
+							switch (event.getAction()) {
+								case MotionEvent.ACTION_MOVE:
+									mFrag.getRefreshLayout().setEnabled(false);
+									break;
+								case MotionEvent.ACTION_UP:
+								case MotionEvent.ACTION_CANCEL:
+									mFrag.getRefreshLayout().setEnabled(true);
+									break;
+
+							}
+						}
+						return false;
+					}
+				});
 				updateBanners(mData.banner);
 				break;
 			case IndexTypeUtil.ITEM_HOT:

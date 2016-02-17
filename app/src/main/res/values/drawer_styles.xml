@@ -22,8 +22,6 @@
 		<item name = "android:layout_width" >match_parent</item >
 		<item name = "android:layout_height" >@dimen/di_drawer_item_height</item >
 		<item name = "android:background" >@drawable/selector_white_module</item >
-		<item name = "android:gravity" >center_vertical</item >
-		<item name = "android:orientation" >horizontal</item >
 		<item name = "android:paddingLeft" >28dp</item >
 	</style >
 

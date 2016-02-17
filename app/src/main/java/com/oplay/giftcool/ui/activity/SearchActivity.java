@@ -12,6 +12,7 @@ import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.LoadingFragment;
 import com.oplay.giftcool.ui.fragment.NetErrorFragment;
 import com.oplay.giftcool.ui.fragment.search.EmptySearchFragment;
 import com.oplay.giftcool.ui.fragment.search.HistoryFragment;
@@ -173,6 +174,28 @@ public class SearchActivity extends BaseAppCompatActivity {
 		mSearchLayout.sendSearchRequest(keyword);
 	}
 
+	@Override
+	public void release() {
+		super.release();
+		mSearchLayout = null;
+		mHistoryData = null;
+		mResultFragment = null;
+		mEmptySearchFragment = null;
+		mHistoryFragment = null;
+		mNetErrorFragment = null;
+	}
+
+
+	/**
+	 * 显示加载中页面
+	 */
+	private void displayLoadingUI() {
+		if (mLoadingFragment == null) {
+			mLoadingFragment = LoadingFragment.newInstance();
+		}
+		reattachFrag(R.id.fl_container, mLoadingFragment, LoadingFragment.class.getSimpleName());
+	}
+
 	private class SearchActionListener implements SearchLayout.OnSearchActionListener {
 		@Override
 		public void onSearchPerform(String keyword) {
@@ -180,7 +203,8 @@ public class SearchActivity extends BaseAppCompatActivity {
 			saveHistoryData(keyword);
             mLastSearchKey = keyword;
 			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				displayLoadingUI(R.id.fl_container);
+				displayLoadingUI();
+				AppDebugConfig.trace(getApplicationContext(), "搜索", "关键字: " + keyword);
 				ReqSearchKey data = new ReqSearchKey();
 				data.searchKey = keyword;
 				Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data))
@@ -238,39 +262,41 @@ public class SearchActivity extends BaseAppCompatActivity {
 			displayHistoryUI(mHistoryData, true);
 		}
 
+
+
 		@Override
 		public void onSearchPromptPerform(String keyword) {
-			/*if (NetworkUtil.isConnected(SearchActivity.this)) {
-				mEngine.getSearchPrompt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
-					@Override
-					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
-						if (response.code() == 200) {
-							if (response.body().getCode() == StatusCode.SUCCESS) {
-								SearchPromptResult data = response.body().getData();
-								// 检验Key返回数据是否是当前需要的
-								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
-									// 丢弃这次搜索结果
-									// 不更新
-									return;
-								}
-								// display list here
-								displayHistoryUI(data.promptList, false);
-								return;
-							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.e(response.body());
-							}
-						}
-					}
-
-					@Override
-					public void onFailure(Throwable t) {
-						if (AppDebugConfig.IS_FRAG_DEBUG) {
-							KLog.e(t);
-						}
-					}
-				});
-			} // end if*/
+//			if (NetworkUtil.isConnected(SearchActivity.this)) {
+//				mEngine.getSearchPrompt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
+//					@Override
+//					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
+//						if (response.code() == 200) {
+//							if (response.body().getCode() == StatusCode.SUCCESS) {
+//								SearchPromptResult data = response.body().getData();
+//								// 检验Key返回数据是否是当前需要的
+//								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
+//									// 丢弃这次搜索结果
+//									// 不更新
+//									return;
+//								}
+//								// display list here
+//								displayHistoryUI(data.promptList, false);
+//								return;
+//							}
+//							if (AppDebugConfig.IS_DEBUG) {
+//								KLog.e(response.body());
+//							}
+//						}
+//					}
+//
+//					@Override
+//					public void onFailure(Throwable t) {
+//						if (AppDebugConfig.IS_FRAG_DEBUG) {
+//							KLog.e(t);
+//						}
+//					}
+//				});
+//			} // end if
 
 		}
 	} // end internal class

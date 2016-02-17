@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.debug.hv.ViewServer;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -64,6 +66,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		int statusColor = getStatusBarColor();
 		if (Build.VERSION.SDK_INT >= 21) {
 			getWindow().setStatusBarColor(statusColor);
+		}
+		if (AppDebugConfig.IS_DEBUG) {
+			ViewServer.get(this).addWindow(this);
 		}
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
 		initView();
@@ -232,18 +237,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	}
 
 	/**
-	 * 显示加载中页面
-	 *
-	 * @param resId 加载位置资源ID
-	 */
-	protected void displayLoadingUI(@IdRes int resId) {
-		if (mLoadingFragment == null) {
-			mLoadingFragment = LoadingFragment.newInstance();
-		}
-		reattachFrag(resId, mLoadingFragment, LoadingFragment.class.getSimpleName());
-	}
-
-	/**
 	 * 执行Fragment出栈操作，栈中有Fragment时返回true，否则返回false
 	 */
 	public boolean popFrag() {
@@ -270,6 +263,14 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (AppDebugConfig.IS_DEBUG) {
+			ViewServer.get(this).setFocusedWindow(this);
+		}
 	}
 
 	/**
@@ -333,24 +334,40 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if (AppDebugConfig.IS_DEBUG) {
+			ViewServer.get(this).removeWindow(this);
+		}
+		if (ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().clearMemoryCache();
+		}
 		release();
 		AssistantApp.getRefWatcher(this).watch(this);
 	}
 
 	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		if (ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().clearMemoryCache();
+		}
+	}
+
+	@Override
 	public void release() {
-		mHandler = null;
+		if (mHandler != null) {
+			mHandler.removeCallbacksAndMessages(null);
+			mHandler = null;
+		}
 		mNeedWorkCallback = false;
 		mApp = null;
 		mToolbar = null;
 		mLoadingDialog = null;
-		LoadingFragment mLoadingFragment = null;
+		mLoadingFragment = null;
 		// 封装加载和等待等页面的管理器对象
-		LoadAndRetryViewManager mViewManager = null;
-		Fragment mCurTopFragment = null;
+		mViewManager = null;
+		mCurTopFragment = null;
 		// fragment处理onActivityResult
-		Fragment mFragmentForResult = null;
-		setContentView(R.layout.xml_null);
+		mFragmentForResult = null;
 	}
 
 	/**

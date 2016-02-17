@@ -97,6 +97,9 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
 										                       response, Retrofit
 										retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (response != null && response.isSuccess()) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
@@ -109,6 +112,9 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
 								@Override
 								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
 									refreshFailEnd();
 								}
 							});
@@ -128,16 +134,19 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
 			mReqPageObj.data.page = mLastPage + 1;
-			new Thread(new Runnable() {
+			Global.THREAD_POOL.execute(new Runnable() {
 				@Override
 				public void run() {
-					if (NetworkUtil.isConnected(getContext())) {
+					if (NetworkUtil.isConnected(getContext().getApplicationContext())) {
 						Global.getNetEngine().obtainGiftLike(mReqPageObj)
 								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
 									@Override
 									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
 											                       response, Retrofit
 											retrofit) {
+										if (!mCanShowUI) {
+											return;
+										}
 										if (response != null && response.isSuccess()) {
 											moreLoadSuccessEnd();
 											OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
@@ -150,6 +159,9 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
 									@Override
 									public void onFailure(Throwable t) {
+										if (!mCanShowUI) {
+											return;
+										}
 										moreLoadFailEnd();
 									}
 								});
@@ -157,7 +169,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 						mViewManager.showErrorRetry();
 					}
 				}
-			}).start();
+			});
 		}
 	}
 

@@ -21,7 +21,6 @@ import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.util.IntentUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 15-12-22.
@@ -136,16 +135,28 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public void release() {
+		super.release();
+		mContainer = null;
+		mGameBar = null;
+		mGameView = null;
+		mGiftBar = null;
+		mGiftView = null;
+		llGame = null;
+		llGift = null;
 		if (mGameAdapter != null) {
-			mGameAdapter.onDestroy();
+			mGameAdapter.release();
+			mGameAdapter = null;
 		}
+		if (mGiftAdapter != null) {
+			mGiftAdapter.release();
+			mGiftAdapter = null;
+		}
+		mData = null;
 	}
 
 	@Override
 	public void onItemClick(IndexGameNew item, View view, int position) {
-		KLog.e("item = " + item.id + ", position = " + position + ", view = " + view);
 		if (view.getId() == R.id.tv_download) {
 			if (item != null && !AppStatus.DISABLE.equals(item.appStatus)) {
 				item.handleOnClick(getActivity().getSupportFragmentManager());

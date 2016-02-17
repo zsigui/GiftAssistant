@@ -472,9 +472,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		return false;
 	}
 
+	private Runnable mProgressRunnable;
+
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		getActivity().runOnUiThread(new Runnable() {
+		if (mProgressRunnable != null && getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).getHandler().removeCallbacks(mProgressRunnable);
+		}
+		mProgressRunnable = new Runnable() {
 			@Override
 			public void run() {
 
@@ -483,8 +488,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					mAppInfo.initAppInfoStatus(getActivity());
 					btnDownload.setStatus(mAppInfo.appStatus, "");
 				}
+				mProgressRunnable = null;
 			}
-		});
+		};
+		if (getActivity() != null) {
+			((BaseAppCompatActivity) getActivity()).getHandler().post(mProgressRunnable);
+		}
 	}
 
 	@Override
@@ -508,8 +517,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	@Override
 	public void release() {
 		super.release();
-		mTimer.cancel();
-		mTimer = null;
+		if (mTimer != null) {
+			mTimer.cancel();
+			mTimer = null;
+		}
 		ivIcon = null;
 		tvName = null;
 		tvConsume = null;

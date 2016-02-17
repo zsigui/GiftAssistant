@@ -81,8 +81,7 @@ public class AssistantApp extends Application {
 	private boolean mIsGlobalInit = false;
 	// 是否允许显示下载，根据渠道获取而定
 	private boolean mIsAllowDownload = true;
-	// 是否显示抽奖页面
-	private boolean mShowLottery = true;
+	private boolean mIsRememberPwd = true;
 
 	// LeakCanary 用于检测内存泄露
 	private RefWatcher mRefWatcher;
@@ -228,6 +227,8 @@ public class AssistantApp extends Application {
 		setIsSaveFlow(mIsSaveFlow);
 		mIsPlayDownloadComplete = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
 				SPConfig.KEY_IS_PLAY_DOWNLOAD_COMPLETE, true);
+		mIsRememberPwd= SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_REMEMBER_PWD, true);
 		setIsPlayDownloadComplete(mIsPlayDownloadComplete);
 	}
 
@@ -239,6 +240,16 @@ public class AssistantApp extends Application {
 		mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
 		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_CHECK_UPDATE,
 				shouldAutoCheckUpdate);
+	}
+
+	public void setIsRememberPwd(boolean isRememberPwd) {
+		mIsRememberPwd = isRememberPwd;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_REMEMBER_PWD,
+				isRememberPwd);
+	}
+
+	public boolean isRememberPwd() {
+		return mIsRememberPwd;
 	}
 
 	public boolean isShouldPushMsg() {
@@ -373,4 +384,6 @@ public class AssistantApp extends Application {
 		}
 		return mChannelId;
 	}
+
+
 }

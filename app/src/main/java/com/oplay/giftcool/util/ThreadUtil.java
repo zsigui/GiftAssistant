@@ -3,6 +3,8 @@ package com.oplay.giftcool.util;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.oplay.giftcool.config.Global;
+
 /**
  * Created by zsigui on 15-12-17.
  */
@@ -18,7 +20,7 @@ public class ThreadUtil {
 	 * @param task
 	 */
 	public static void runInThread(Runnable task) {
-		new Thread(task).start();
+		Global.THREAD_POOL.execute(task);
 	}
 
 	/**

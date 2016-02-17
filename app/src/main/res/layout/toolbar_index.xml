@@ -1,65 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
-    android:id="@+id/toolbar"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="?actionBarSize"
-    android:gravity="center_vertical"
-    android:paddingLeft="@dimen/di_tool_bar_padding_left"
-    app:contentInsetEnd="0dp"
-    app:contentInsetStart="0dp"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+		android:id = "@+id/toolbar"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:layout_height = "?actionBarSize"
+		android:gravity = "center_vertical"
+		android:paddingLeft = "@dimen/di_tool_bar_padding_left"
+		app:contentInsetEnd = "0dp"
+		app:contentInsetStart = "0dp"
+		app:popupTheme = "@style/ThemeOverlay.AppCompat.Light"
+		app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/co_transparent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:background = "@color/co_transparent"
+			android:gravity = "center_vertical"
+			android:orientation = "horizontal" >
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/iv_profile"
-            style="@style/DefaultImageView.Icon"
-            android:layout_width="@dimen/di_tool_bar_profile_diameter"
-            android:layout_height="@dimen/di_tool_bar_profile_diameter"
-            android:layout_marginRight="@dimen/di_tool_bar_profile_margin_right"
-            android:clickable="true"
-            android:scaleType="centerCrop"
-            app:riv_oval="true"/>
+		<RelativeLayout
+				android:layout_width = "45dp"
+				android:layout_height = "wrap_content"
+				android:layout_marginRight = "@dimen/di_tool_bar_profile_margin_right" >
 
-        <include
-            layout="@layout/view_search"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/di_search_bar_height"
-            android:layout_weight="1"/>
+			<com.makeramen.roundedimageview.RoundedImageView
+					android:id = "@+id/iv_profile"
+					style = "@style/DefaultImageView.Icon"
+					android:layout_width = "@dimen/di_tool_bar_profile_diameter"
+					android:layout_height = "@dimen/di_tool_bar_profile_diameter"
+					android:clickable = "true"
+					android:scaleType = "centerCrop"
+					android:src = "@drawable/ic_avatar_default"
+					app:riv_oval = "true" />
 
-	    <LinearLayout
-			    android:id="@+id/ll_gift_count"
-			    android:layout_height = "@dimen/di_tool_bar_profile_diameter"
-			    android:background="@drawable/shape_toolbar_right"
-			    android:layout_width = "wrap_content"
-			    android:layout_marginLeft="7dp"
-			    android:clickable="true"
-			    android:gravity="center_vertical" >
+			<ImageView
+					android:id = "@+id/iv_hint"
+					style = "@style/DefaultImageView"
+					android:src = "@drawable/ic_toolbar_hint"
+					android:layout_alignParentTop = "true"
+					android:layout_alignParentRight = "true"
+					android:visibility = "gone"
+					android:contentDescription = "@null" />
+		</RelativeLayout >
 
-		    <ImageView
-				    android:layout_width = "wrap_content"
-				    android:layout_height = "wrap_content"
-				    android:src="@drawable/ic_toolbar_gift"
-				    android:paddingRight="5dp"
-				    android:contentDescription="@null"/>
+		<include
+				layout = "@layout/view_search"
+				android:layout_width = "0dp"
+				android:layout_height = "@dimen/di_search_bar_height"
+				android:layout_weight = "1" />
 
-		    <TextView
-				    android:id="@+id/tv_gift_count"
-				    android:layout_width = "wrap_content"
-				    android:layout_height = "wrap_content"
-				    android:textColor="@color/co_white"
-				    android:text="5"
-				    android:textSize="@dimen/di_search_bar_text_size"/>
+		<LinearLayout
+				android:id = "@+id/ll_gift_count"
+				android:layout_height = "@dimen/di_tool_bar_profile_diameter"
+				android:background = "@drawable/shape_toolbar_right"
+				android:layout_width = "wrap_content"
+				android:layout_marginLeft = "7dp"
+				android:clickable = "true"
+				android:gravity = "center_vertical" >
+
+			<ImageView
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					android:src = "@drawable/ic_toolbar_gift"
+					android:paddingRight = "5dp"
+					android:contentDescription = "@null" />
+
+			<TextView
+					android:id = "@+id/tv_gift_count"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					android:textColor = "@color/co_white"
+					android:text = "5"
+					android:textSize = "@dimen/di_search_bar_text_size" />
 
 		</LinearLayout >
-    </LinearLayout>
+	</LinearLayout >
 
-</android.support.v7.widget.Toolbar>
+</android.support.v7.widget.Toolbar >

@@ -23,6 +23,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
@@ -30,6 +31,7 @@ import com.socks.library.KLog;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -170,7 +172,7 @@ public class AccountManager {
 	}
 
 	private void sessionFailed(JsonRespBase response) {
-		if (response !=null && response.getCode()== StatusCode.ERR_UN_LOGIN) {
+		if (response != null && response.getCode() == StatusCode.ERR_UN_LOGIN) {
 			setUser(null);
 			ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
 		}
@@ -200,7 +202,8 @@ public class AccountManager {
 											user.userInfo.score = info.score;
 											user.userInfo.bean = info.bean;
 											user.userInfo.giftCount = info.giftCount;
-											KLog.d(AppDebugConfig.TAG_MANAGER, "金额= " + info.score + ", " + info.bean + ", " + info.giftCount);
+											KLog.d(AppDebugConfig.TAG_MANAGER, "金额= " + info.score + ", " + info.bean
+													+ ", " + info.giftCount);
 											setUser(user);
 											return;
 										}
@@ -364,5 +367,73 @@ public class AccountManager {
 			}
 		});
 		AccountManager.getInstance().setUser(null);
+	}
+
+	public ArrayList<String> obtainPhoneAccount() {
+		ArrayList<String> result = new ArrayList<String>();
+		return result;
+	}
+
+	public ArrayList<String> obtainOuwanAccount() {
+		return null;
+	}
+
+	public void writePhoneAccount(String val, ArrayList<String> history, boolean isRemove) {
+		writeToHistory(val, SPConfig.KEY_LOGIN_PHONE, history, isRemove);
+	}
+
+	public void writeOuwanAccount(String val, ArrayList<String> history, boolean isRemove) {
+		writeToHistory(val, SPConfig.KEY_LOGIN_OUWAN, history, isRemove);
+	}
+
+	public ArrayList<String> readPhoneAccount() {
+		return readFromHistory(SPConfig.KEY_LOGIN_PHONE);
+	}
+
+	public ArrayList<String> readOuwanAccount() {
+		return readFromHistory(SPConfig.KEY_LOGIN_OUWAN);
+	}
+
+	private void writeToHistory(String value, String key, ArrayList<String> history, boolean isRemove) {
+		if (TextUtils.isEmpty(value)) {
+			return;
+		}
+		if (history == null) {
+			history = new ArrayList<>();
+		}
+		if (isRemove) {
+			history.remove(value);
+		} else {
+			for (int i = history.size() - 1; i >= 0; i--) {
+				String s = history.get(i);
+				if (s.split(",")[0].equals(value.split(",")[0])) {
+					history.remove(i);
+					break;
+				}
+			}
+			if (history.size() > 15) {
+				history.remove(14);
+			}
+			history.add(value);
+		}
+		StringBuilder historyStr = new StringBuilder();
+		for (String s : history) {
+			historyStr.append(s).append(":");
+		}
+		if (historyStr.length() > 0) {
+			historyStr.deleteCharAt(historyStr.length() - 1);
+		}
+		SPUtil.putString(mContext, SPConfig.SP_LOGIN_FILE, key, historyStr.toString());
+	}
+
+	private ArrayList<String> readFromHistory(String key) {
+		String history = SPUtil.getString(mContext, SPConfig.SP_LOGIN_FILE, key, null);
+		ArrayList<String> result = null;
+		if (history != null) {
+			String[] names = history.split(":");
+			result = new ArrayList<String>();
+			Collections.addAll(result, names);
+		}
+		return result;
 	}
 }

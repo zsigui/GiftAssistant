@@ -62,7 +62,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
 		// 设置RecyclerView的LayoutManager
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		mAdapter = new GameSuperAdapter(getActivity());
+		mAdapter = new GameSuperAdapter(getActivity(), this);
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);
 		mIsPrepared = mNoMoreLoad = true;
@@ -82,7 +82,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 	@Override
     protected void lazyLoad() {
 	    refreshInitConfig();
-        new Thread(new Runnable() {
+        Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
                 if (NetworkUtil.isConnected(getContext())) {
@@ -112,7 +112,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 	                refreshFailEnd();
                 }
             }
-        }).start();
+        });
     }
 
 	@Override

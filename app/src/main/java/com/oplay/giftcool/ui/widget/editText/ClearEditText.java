@@ -36,7 +36,7 @@ public class ClearEditText extends LinearLayout implements View.OnClickListener 
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 		actvInput = ViewUtil.getViewById(this, R.id.et_input);
-		tvClear = ViewUtil.getViewById(this, R.id.tv_clear);
+		tvClear = ViewUtil.getViewById(this, R.id.tv_user_clear);
 		if (tvClear != null) {
 			tvClear.setOnClickListener(this);
 			tvClear.setVisibility(View.GONE);
@@ -64,7 +64,7 @@ public class ClearEditText extends LinearLayout implements View.OnClickListener 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.tv_clear:
+			case R.id.tv_user_clear:
 				actvInput.setText("");
 				break;
 		}

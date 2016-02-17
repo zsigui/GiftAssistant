@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		android:paddingTop = "2px" >
+
+	<net.ouwan.umipay.android.view.MaxRowListView
+			android:id = "@+id/lv_popup_list_content"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:divider = "@color/co_divider_bg"
+			android:dividerHeight = "1px"
+			android:cacheColorHint="@color/co_transparent"
+			android:listSelector="?selectableItemBackground"
+			android:scrollbarThumbVertical="@drawable/shape_scrollbar"
+			android:maxRows = "5" />
+
+</FrameLayout >

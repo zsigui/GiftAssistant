@@ -139,7 +139,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			return;
 		}
 		mIsLoadMore = true;
-		new Thread(new Runnable() {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
@@ -172,7 +172,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 							}
 						});
 			}
-		}).start();
+		});
 
 	}
 

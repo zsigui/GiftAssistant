@@ -51,7 +51,6 @@ public class DownloadNotificationManager {
 						PendingIntent.FLAG_UPDATE_CURRENT);
 				String tickerText = String.format("您有%d个游戏正在下载中", count);
 				String title = "点击查看详情";
-
 				Builder builder = buildNotification(context, pi, tickerText, title);
 				builder.setOngoing(true);
 				builder.setAutoCancel(false);
@@ -59,6 +58,7 @@ public class DownloadNotificationManager {
 			} else {
 				notificationManager.cancel(REQUEST_ID_DOWNLOAD);
 			}
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -74,6 +74,7 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager)
 					context.getSystemService(Service.NOTIFICATION_SERVICE);
 			notificationManager.cancel(REQUEST_ID_DOWNLOAD);
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -103,6 +104,7 @@ public class DownloadNotificationManager {
 			builder.setAutoCancel(true);
 			notificationManager.cancel(notificationId);
 			notificationManager.notify(notificationId, builder.build());
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -157,6 +159,7 @@ public class DownloadNotificationManager {
 			builder.setAutoCancel(true);
 			notificationManager.cancel(notificationId);
 			notificationManager.notify(notificationId, builder.build());
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -173,6 +176,7 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			notificationManager.cancel(notificationId);
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -188,6 +192,7 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			notificationManager.cancelAll();
+			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

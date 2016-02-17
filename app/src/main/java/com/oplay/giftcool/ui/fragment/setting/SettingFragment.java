@@ -153,7 +153,7 @@ public class SettingFragment extends BaseFragment {
 					@Override
 					public void onConfirm() {
 						((BaseAppCompatActivity) getActivity()).showLoadingDialog();
-						new Thread(new Runnable() {
+						Global.THREAD_POOL.execute(new Runnable() {
 							@Override
 							public void run() {
 								Util_System_File.delete(StorageUtils.getOwnCacheDirectory(getContext(),
@@ -163,7 +163,7 @@ public class SettingFragment extends BaseFragment {
 								((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
 								((BaseAppCompatActivity) getActivity()).showSuccessHint("清除缓存成功");
 							}
-						}).start();
+						});
 						dialog.dismiss();
 					}
 				});
