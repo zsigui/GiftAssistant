@@ -15,6 +15,7 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -30,11 +31,10 @@ import java.lang.ref.WeakReference;
  */
 public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements View.OnClickListener {
 
-	private boolean mIsNotifyUpdate = false;
 	private static final int TAG_TIMER = 0x11223344;
 
 	public IndexGiftZeroAdapter(Context context) {
-		super(context);
+		super(context.getApplicationContext());
 	}
 
 	@Override
@@ -72,7 +72,8 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_wait_seize));
 					contentHolder.tvTagSeize.setBackgroundResource(R.drawable.ic_0_seize_btn_count);
 					long seizeTime = DateUtil.getTime(data.seizeTime);
-					CountDownTimer timer = new CountDownTimer(seizeTime - System.currentTimeMillis(), 1000) {
+					CountDownTimer timer = new CountDownTimer(seizeTime - System.currentTimeMillis()
+							+ Global.sServerTimeDiffLocal, 1000) {
 
 						@Override
 						public void onTick(long millisUntilFinished) {
@@ -81,14 +82,8 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 
 						@Override
 						public void onFinish() {
-							contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string
-									.st_0_gift_seize));
-							contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
-							contentHolder.tvTagSeize.setEnabled(true);
-							if (mIsNotifyUpdate) {
-								ObserverManager.getInstance().notifyGiftUpdate();
-								setNotifyUpdate(false);
-							}
+							contentHolder.tvTagSeize.setText("刷新抢");
+							ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
 						}
 					};
 					timer.start();
@@ -108,10 +103,6 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 			}
 		}
 
-	}
-
-	public void setNotifyUpdate(boolean isNotifyUpdate) {
-		this.mIsNotifyUpdate = isNotifyUpdate;
 	}
 
 	@Override

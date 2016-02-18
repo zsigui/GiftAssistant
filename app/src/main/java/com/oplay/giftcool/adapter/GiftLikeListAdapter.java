@@ -25,7 +25,7 @@ public class GiftLikeListAdapter extends BGAAdapterViewAdapter<IndexGiftLike> {
 
 
 	public GiftLikeListAdapter(Context context) {
-		super(context, R.layout.item_list_gift_like);
+		super(context.getApplicationContext(), R.layout.item_list_gift_like);
 	}
 
 	@Override

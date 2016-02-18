@@ -278,7 +278,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	@Override
-	public void onGiftUpdate() {
+	public void onGiftUpdate(int action) {
 		if (mIsSwipeRefresh || mIsNotifyRefresh) {
 			return;
 		}

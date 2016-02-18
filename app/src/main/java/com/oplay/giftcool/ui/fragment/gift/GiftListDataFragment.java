@@ -227,7 +227,11 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	}
 
 	@Override
-	public void onGiftUpdate() {
+	public void onGiftUpdate(int action) {
+		if (action != ObserverManager.STATUS.GIFT_UPDATE_PART
+				&& action != ObserverManager.STATUS.GIFT_UPDATE_ALL) {
+			return;
+		}
 		if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
 			return;
 		}

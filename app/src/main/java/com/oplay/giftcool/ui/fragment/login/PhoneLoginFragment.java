@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.login;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,15 +10,20 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
@@ -30,9 +36,12 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
+
+import net.ouwan.umipay.android.view.MaxRowListView;
+
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -41,18 +50,28 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class PhoneLoginFragment extends BaseFragment implements TextView.OnEditorActionListener {
+public class PhoneLoginFragment extends BaseFragment implements TextView.OnEditorActionListener,
+		OnItemClickListener<String>, View.OnFocusChangeListener, OnBackPressListener {
 
 	private final static String PAGE_NAME = "手机号登录";
 	private final static String ERR_PREFIX = "登录失败";
 	private AutoCompleteTextView etPhone;
-	private TextView tvClear;
 	private EditText etCode;
+	private TextView tvPhoneClear;
+	private TextView tvCodeClear;
+	private EditText etClearFocus;
 	private TextView btnSendCode;
-//	private CheckedTextView ctvAgreeLaw;
+	//	private CheckedTextView ctvAgreeLaw;
 //	private TextView tvLaw;
 	private TextView btnLogin;
 	private TextView tvAnotherLogin;
+	private LinearLayout llPhone;
+	private ImageView ivMore;
+
+	private PopupWindow mAccountPopup;
+	private AccountAdapter mAccountAdapter;
+	private AccountAdapter mCompleteAdapter;
+	private ArrayList<String> mData;
 
 	// 倒计时剩余时间，每次发送后刷新
 	private final static int RESEND_DURATION = 60;
@@ -83,13 +102,17 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_login_phone);
 		etPhone = getViewById(R.id.et_input);
-		tvClear = getViewById(R.id.tv_user_clear);
+		tvPhoneClear = getViewById(R.id.tv_user_clear);
+		tvCodeClear = getViewById(R.id.tv_code_clear);
+		etClearFocus = getViewById(R.id.et_clear_focus);
 		etCode = getViewById(R.id.et_phone_code);
 		btnSendCode = getViewById(R.id.tv_send_code);
+		ivMore = getViewById(R.id.iv_more);
 //		ctvAgreeLaw = getViewById(R.id.ctv_law);
 //		tvLaw = getViewById(R.id.tv_law);
 		btnLogin = getViewById(R.id.btn_send);
 		tvAnotherLogin = getViewById(R.id.tv_another_login);
+		llPhone = getViewById(R.id.ll_input);
 	}
 
 	@Override
@@ -99,21 +122,49 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 //		ctvAgreeLaw.setOnClickListener(this);
 		btnSendCode.setOnClickListener(this);
 		tvAnotherLogin.setOnClickListener(this);
-		tvClear.setOnClickListener(this);
+		tvPhoneClear.setOnClickListener(this);
+		tvCodeClear.setOnClickListener(this);
 		etPhone.setOnEditorActionListener(this);
 		etCode.setOnEditorActionListener(this);
 		getViewById(R.id.ll_code).setOnClickListener(this);
-		getViewById(R.id.ll_input).setOnClickListener(this);
+		llPhone.setOnClickListener(this);
+		ivMore.setOnClickListener(this);
+		etPhone.setOnFocusChangeListener(this);
+		etCode.setOnFocusChangeListener(this);
 	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etPhone, etCode, tvClear, null, btnLogin);
+		InputTextUtil.initPswFilter(etPhone, etCode, tvPhoneClear, tvCodeClear, btnLogin);
 //		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
-		etPhone.requestFocus();
+		initHint();
+	}
+
+	private void initHint() {
+		mData = AccountManager.getInstance().readPhoneAccount();
+		if (mData != null && mData.size() > 0) {
+			etPhone.setText(mData.get(0));
+			etCode.requestFocus();
+			ivMore.setVisibility(View.VISIBLE);
+		} else {
+			etPhone.requestFocus();
+			ivMore.setVisibility(View.GONE);
+		}
 		InputMethodUtil.showSoftInput(getActivity());
-		etPhone.setText(readFromHistory());
+		mAccountAdapter = new AccountAdapter(getContext(), mData, false);
+		mCompleteAdapter = new AccountAdapter(getContext(), mData, false);
+		View popup = View.inflate(getContext(), R.layout.listview_account_popup, null);
+		MaxRowListView popupListView = getViewById(popup, R.id.lv_popup_list_content);
+		popupListView.setAdapter(mAccountAdapter);
+		etPhone.setAdapter(mCompleteAdapter);
+		mAccountPopup = new PopupWindow(popup, LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT, true);
+		mAccountAdapter.setListener(this);
+		mCompleteAdapter.setListener(this);
+		mAccountPopup.setOutsideTouchable(true);
+		mAccountPopup.setBackgroundDrawable(new BitmapDrawable());
+		etPhone.setDropDownBackgroundDrawable(null);
 	}
 
 	@Override
@@ -131,28 +182,28 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 			case R.id.tv_send_code:
 				handleGetCode();
 				break;
-//			case R.id.tv_law:
-//				// 显示条款弹窗
-//				break;
-//			case R.id.ctv_law:
-//				if (ctvAgreeLaw.isChecked()) {
-//					ctvAgreeLaw.setChecked(false);
-//				} else {
-//					ctvAgreeLaw.setChecked(true);
-//				}
-//				break;
+			case R.id.iv_more:
+				etClearFocus.requestFocus();
+				InputMethodUtil.hideSoftInput(getActivity());
+				if (mData == null || mData.size() == 0) {
+					return;
+				}
+				if (mAccountPopup.isShowing()) {
+					mAccountPopup.dismiss();
+				} else {
+					mAccountPopup.showAsDropDown(llPhone);
+				}
+				break;
 			case R.id.tv_another_login:
 				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
 						OuwanLoginFragment.newInstance(), getResources().getString(R.string.st_login_ouwan_title),
 						false);
 				break;
 			case R.id.tv_user_clear:
-				etPhone.setText("");
-				etCode.setText("");
-				etPhone.setSelection(0);
-				etPhone.requestFocus();
-				etCode.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-				etPhone.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+				clearText(etPhone);
+				break;
+			case R.id.tv_code_clear:
+				clearText(etCode);
 				break;
 			case R.id.ll_input:
 				etPhone.setSelection(etPhone.getText().length());
@@ -162,7 +213,20 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 				etCode.setSelection(etCode.getText().length());
 				etCode.requestFocus();
 				break;
+			default:
+				if (mAccountPopup != null && mAccountPopup.isShowing()) {
+					mAccountPopup.dismiss();
+				}
+				if (etPhone.isPopupShowing()) {
+					etPhone.dismissDropDown();
+				}
 		}
+	}
+
+	private void clearText(EditText et) {
+		et.setText("");
+		et.requestFocus();
+		et.setSelection(0);
 	}
 
 	private void handleGetCode() {
@@ -206,7 +270,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 									resetRemain();
 									return;
 								}
-								showToast("发送失败 - 返回出错:" + (response == null ? "":response.message()));
+								showToast("发送失败 - 返回出错:" + (response == null ? "" : response.message()));
 								resetRemain();
 
 							}
@@ -240,26 +304,6 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		mHandler.removeCallbacks(setTimeRunnable);
 	}
 
-	public void writeToHistory(String name) {
-		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, "");
-		int i = history.indexOf(name);
-		if (i != -1) {
-			// 存在
-			history = history.substring(i, i + name.length() + 1);
-		}
-		history = name + "," + history;
-		SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, history);
-	}
-
-	public String readFromHistory() {
-		String history = SPUtil.getString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, ",");
-		if (history.charAt(history.length() - 1) != ',') {
-			history += ',';
-			SPUtil.putString(getContext(), SPConfig.SP_LOGIN_FILE, SPConfig.KEY_LOGIN_PHONE, history);
-		}
-		return history.substring(0, history.indexOf(","));
-	}
-
 	private void handleLogin() {
 		showLoading();
 		final ReqLogin login = new ReqLogin();
@@ -268,6 +312,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 			showToast("手机号码格式不符合要求");
 			return;
 		}
+		etCode.requestFocus();
+		etCode.setSelection(etCode.getText().toString().length());
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -287,8 +333,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 											&& response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
-										writeToHistory(login.getPhone());
 										MainActivity.sIsTodayFirstOpen = true;
+										AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
 										AccountManager.getInstance().setUser(userModel);
 										ScoreManager.getInstance().resetLocalTaskState();
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
@@ -327,15 +373,12 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		KLog.e("test-test", "v.getId = " + v.getId() + ", etPhone.id = " + R.id.et_input + ", action_id = " + actionId
+		 + ", next_id = " + EditorInfo.IME_ACTION_NEXT);
 		switch (actionId) {
 			case EditorInfo.IME_ACTION_NEXT:
-				if (TextUtils.isEmpty(etCode.getText().toString().trim())) {
-					etCode.requestFocus();
-					etCode.setSelection(etCode.getText().toString().length());
-				} else {
-					etPhone.requestFocus();
-					etPhone.setSelection(etPhone.getText().toString().length());
-				}
+				etCode.requestFocus();
+				etCode.setSelection(etCode.getText().toString().length());
 				break;
 			case EditorInfo.IME_ACTION_DONE:
 				handleLogin();
@@ -347,5 +390,67 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void onItemClick(String item, View view, int position) {
+		switch (view.getId()) {
+			case R.id.ll_item:
+				etPhone.setText(item);
+				etCode.requestFocus();
+				break;
+			case R.id.iv_account_list_delete:
+				if (item.equals(etPhone.getText().toString().trim())) {
+					etPhone.setText("");
+					etCode.setText("");
+					etPhone.requestFocus();
+				}
+				AccountManager.getInstance().writePhoneAccount(item, mData, true);
+				if (mData == null || mData.size() == 0) {
+					ivMore.setVisibility(View.GONE);
+				}
+				mCompleteAdapter.notifyDataChanged();
+				mAccountAdapter.notifyDataChanged();
+				break;
+		}
+		etPhone.dismissDropDown();
+		if (mAccountPopup != null && mAccountPopup.isShowing()) {
+			mAccountPopup.dismiss();
+		}
+	}
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		switch (v.getId()) {
+			case R.id.et_input:
+				tvCodeClear.setVisibility(View.GONE);
+				if (hasFocus && !TextUtils.isEmpty(etPhone.getText().toString().trim())) {
+					tvPhoneClear.setVisibility(View.VISIBLE);
+				} else {
+					tvPhoneClear.setVisibility(View.GONE);
+				}
+				break;
+			case R.id.et_phone_code:
+				tvPhoneClear.setVisibility(View.GONE);
+				if (hasFocus && !TextUtils.isEmpty(etCode.getText().toString().trim())) {
+					tvCodeClear.setVisibility(View.VISIBLE);
+				} else {
+					tvCodeClear.setVisibility(View.GONE);
+				}
+				break;
+		}
+	}
+
+	@Override
+	public boolean onBack() {
+		if (mAccountPopup != null && mAccountPopup.isShowing()) {
+			mAccountPopup.dismiss();
+			return true;
+		}
+		if (etPhone.isPopupShowing()) {
+			etPhone.dismissDropDown();
+			return true;
+		}
+		return false;
 	}
 }

@@ -16,10 +16,8 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
-import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
-import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -42,7 +40,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	}
 
 	public NestedGiftListAdapter(Context context, List<IndexGiftNew> data) {
-		mContext = context;
+		mContext = context.getApplicationContext();
 		this.mData = data;
 	}
 
@@ -206,18 +204,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 			viewHolder.ivLimit.setVisibility(View.GONE);
 		}
 		viewHolder.tvContent.setText(String.format("%s", gift.content));
-		/*viewHolder.btnSend.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-			}
-		});
-		viewHolder.rlItem.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				IntentUtil.jumpGiftDetail(mContext, gift.id);
-			}
-		});*/
 	}
 
 	public void setDisabledField(ViewHolder viewHolder, int tvVisibility, Spanned tvText) {
@@ -285,19 +271,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 				Integer pos = (Integer) v.getTag(TAG_POS);
 				if (mData != null && pos < mData.size()) {
 					IndexGiftNew gift = mData.get(pos);
-					switch (v.getId()) {
-						case R.id.rl_recommend:
-							IntentUtil.jumpGiftDetail(mContext, gift.id);
-							break;
-						case R.id.btn_send:
-							if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
-								// 对于0元抢，先跳转到游戏详情
-								IntentUtil.jumpGiftDetail(mContext, gift.id);
-							} else {
-								PayManager.getInstance().seizeGift(mContext, gift, (GiftButton) v);
-							}
-							break;
-					}
 					if (mListener != null) {
 						mListener.onItemClick(gift, v, pos);
 					}

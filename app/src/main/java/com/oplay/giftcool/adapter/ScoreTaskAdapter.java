@@ -32,7 +32,7 @@ public class ScoreTaskAdapter extends BaseAdapter {
 
 	public ScoreTaskAdapter(Context context, ArrayList<ScoreMission> data,
 	                        OnItemClickListener<ScoreMission> itemListener) {
-		mContext = context;
+		mContext = context.getApplicationContext();
 		mData = data;
 		mItemListener = itemListener;
 	}

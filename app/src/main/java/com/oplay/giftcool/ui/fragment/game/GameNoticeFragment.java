@@ -49,6 +49,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	private Runnable mClearDataTask = new Runnable() {
 		@Override
 		public void run() {
+			if (!mCanShowUI) {
+				return;
+			}
 			if (mInPage || mData == null || mData.size() < 10) {
 				mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
 				return;
@@ -98,6 +101,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         mDataView.addItemDecoration(decoration);
 		mAdapter = new GameNoticeAdapter(getActivity());
 		mDataView.setAdapter(mAdapter);
+	    mViewManager.showContent();
 	}
 
 	@Override
@@ -114,6 +118,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                 @Override
                                 public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
                                         retrofit) {
+	                                if (!mCanShowUI) {
+		                                return;
+	                                }
                                     if (response != null && response.isSuccess() &&
 		                                    response.body().getCode() == StatusCode.SUCCESS) {
                                         refreshSuccessEnd();
@@ -127,13 +134,13 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
                                 @Override
                                 public void onFailure(Throwable t) {
+	                                if (!mCanShowUI) {
+		                                return;
+	                                }
 	                                if (AppDebugConfig.IS_DEBUG) {
 		                                KLog.e(AppDebugConfig.TAG_FRAG, t);
 	                                }
 	                                refreshFailEnd();
-//                                    OneTypeDataList<IndexGameNew> backObj = initStashRefreshData();
-//                                    setLoadState(backObj.data, backObj.isEndPage);
-//                                    updateData(backObj.data);
                                 }
                             });
                 } else {
@@ -160,6 +167,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
                                     @Override
                                     public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
                                             retrofit) {
+	                                    if (!mCanShowUI) {
+		                                    return;
+	                                    }
                                         if (response != null && response.isSuccess() &&
 		                                        response.body().getCode() == StatusCode.SUCCESS) {
 	                                        moreLoadSuccessEnd();
@@ -173,11 +183,10 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
                                     @Override
                                     public void onFailure(Throwable t) {
+	                                    if (!mCanShowUI) {
+		                                    return;
+	                                    }
 	                                    moreLoadFailEnd();
-
-//                                        OneTypeDataList<IndexGameNew> backObj = initStashMoreRefreshData();
-//                                        setLoadState(backObj.data, backObj.isEndPage);
-//                                        addMoreData(backObj.data);
                                     }
                                 });
                     } else {

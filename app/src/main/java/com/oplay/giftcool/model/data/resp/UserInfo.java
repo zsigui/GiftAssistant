@@ -69,4 +69,10 @@ public class UserInfo implements Serializable {
 	 */
 	@SerializedName("gift_count")
 	public int giftCount;
+
+	/**
+	 * 是否已经完成今日任务
+	 */
+	@SerializedName("is_complete_today_mission")
+	public boolean isCompleteTodayMission;
 }

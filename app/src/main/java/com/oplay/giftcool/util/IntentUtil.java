@@ -2,6 +2,7 @@ package com.oplay.giftcool.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
@@ -261,5 +262,23 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_URL, url);
 		intent.putExtra(KeyConfig.KEY_DATA, title);
 		context.startActivity(intent);
+	}
+
+	/**
+	 * 添加Q群信息
+	 */
+	public static boolean joinQQGroup(Context context, String qqKey) {
+		Intent intent = new Intent();
+		intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq" +
+				".com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + qqKey));
+		// 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
+//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		try {
+			context.startActivity(intent);
+			return true;
+		} catch (Exception e) {
+			// 未安装手Q或安装的版本不支持
+			return false;
+		}
 	}
 }

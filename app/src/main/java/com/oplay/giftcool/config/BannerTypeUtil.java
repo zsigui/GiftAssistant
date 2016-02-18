@@ -25,6 +25,7 @@ public class BannerTypeUtil {
 	public static final int ACTION_SCORE_TASK = 3;
 	public static final int ACTION_GIFT_DETAIL = 4;
 	public static final int ACTION_GAME_DETAIL_GIFT = 5;
+	public static final int ACTION_JOIN_QQ_GROUP = 6;
 
 	public static void handleBanner(Context context, IndexBanner banner) {
 		if (banner == null) {
@@ -67,6 +68,12 @@ public class BannerTypeUtil {
 				case ACTION_GAME_DETAIL_GIFT:
 					IndexGameNew game_g = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexGameNew.class);
 					IntentUtil.jumpGameDetail(context, game_g.id, GameTypeUtil.JUMP_STATUS_GIFT);
+					break;
+				case ACTION_JOIN_QQ_GROUP:
+					if (TextUtils.isEmpty(banner.extData)) {
+						return;
+					}
+					IntentUtil.joinQQGroup(context, banner.extData);
 					break;
 				case ACTION_DEFAULT:
 				default:

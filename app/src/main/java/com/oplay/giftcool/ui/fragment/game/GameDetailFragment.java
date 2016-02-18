@@ -52,8 +52,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	@Override
 	protected void setListener() {
 		btnDownload.setOnClickListener(this);
-		ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
-		ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
+		ApkDownloadManager.getInstance(getContext().getApplicationContext()).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(getContext().getApplicationContext()).addProgressUpdateListener(this);
 	}
 
 	@Override
@@ -97,8 +97,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
-		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
+		ApkDownloadManager.getInstance(getContext().getApplicationContext()).removeDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(getContext().getApplicationContext()).removeProgressUpdateListener(this);
 	}
 
 	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {

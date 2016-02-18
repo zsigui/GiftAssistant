@@ -31,7 +31,7 @@ public class MyGiftListAdapter extends BGAAdapterViewAdapter<IndexGiftNew> {
 	private int mType;
 
 	public MyGiftListAdapter(Context context, int type) {
-		super(context, R.layout.item_list_my_gift);
+		super(context.getApplicationContext(), R.layout.item_list_my_gift);
 		mType = type;
 	}
 

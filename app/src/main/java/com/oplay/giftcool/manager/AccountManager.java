@@ -31,7 +31,6 @@ import com.socks.library.KLog;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -83,7 +82,7 @@ public class AccountManager {
 		mUser = user;
 		// 当用户变化，需要进行通知
 		ObserverManager.getInstance().notifyUserUpdate();
-		ObserverManager.getInstance().notifyGiftUpdate();
+		ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
 
 
 		// 同步cookie
@@ -395,7 +394,8 @@ public class AccountManager {
 	}
 
 	private void writeToHistory(String value, String key, ArrayList<String> history, boolean isRemove) {
-		if (TextUtils.isEmpty(value)) {
+		KLog.e("test-test", "write.history = " + history + ", value = " + value + ", key = " + key);
+		if (TextUtils.isEmpty(value) || (value.contains(",") && value.indexOf(",") == 0)) {
 			return;
 		}
 		if (history == null) {
@@ -432,7 +432,11 @@ public class AccountManager {
 		if (history != null) {
 			String[] names = history.split(":");
 			result = new ArrayList<String>();
-			Collections.addAll(result, names);
+			for (String n : names) {
+				if (!TextUtils.isEmpty(n) && (!n.contains(",") || n.indexOf(",") != 0)) {
+					result.add(n);
+				}
+			}
 		}
 		return result;
 	}

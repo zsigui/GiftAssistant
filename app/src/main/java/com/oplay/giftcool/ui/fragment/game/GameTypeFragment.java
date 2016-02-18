@@ -90,6 +90,7 @@ public class GameTypeFragment extends BaseFragment {
 		mTagView.setAdapter(mTagAdapter);
 		mGameTypeMainAdapter.setItemClickListener(mMainItemClickListener);
 		mTagAdapter.setItemClickListener(mTagItemClickListener);
+		mViewManager.showContent();
 	}
 
 	@Override

@@ -172,7 +172,7 @@ public class LoadAndRetryViewManager {
         return Looper.myLooper() == Looper.getMainLooper();
     }
 
-    private void show(int type) {
+    private synchronized void show(int type) {
 		if (mLastType == type) {
 			return;
 		}

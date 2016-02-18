@@ -66,6 +66,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);
 		mIsPrepared = mNoMoreLoad = true;
+		mViewManager.showContent();
 	}
 
 	public void updateData(IndexGameSuper data) {
@@ -92,6 +93,9 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                                 @Override
                                 public void onResponse(Response<JsonRespBase<IndexGameSuper>> response,
                                                        Retrofit retrofit) {
+	                                if (!mCanShowUI) {
+		                                return;
+	                                }
                                     if (response != null && response.isSuccess()) {
 	                                    if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 		                                    updateData(response.body().getData());
@@ -105,6 +109,9 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
                                 @Override
                                 public void onFailure(Throwable t) {
+	                                if (!mCanShowUI) {
+		                                return;
+	                                }
                                     refreshFailEnd();
                                 }
                             });

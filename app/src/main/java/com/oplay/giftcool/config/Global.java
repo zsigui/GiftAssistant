@@ -25,6 +25,8 @@ public class Global {
 	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
 	public final static int GIFTCOOL_GAME_ID = 2000705;
 
+	/* 全局服务器与本地手机时间差，单位:ms */
+	public static long sServerTimeDiffLocal;
 	/* Retrofit网络请求接口引擎 */
 	private static NetEngine sNetEngine;
 

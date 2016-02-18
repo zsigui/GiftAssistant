@@ -42,11 +42,11 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 	private HashMap<String, TextView> mUrlDownloadBtn;
 
 	public NestedGameListAdapter(Context context, OnItemClickListener<IndexGameNew> listener) {
-		super(context, R.layout.item_index_game_new);
+		super(context.getApplicationContext(), R.layout.item_index_game_new);
 		mListener = listener;
 		mPackageNameMap = new HashMap<>();
 		mUrlDownloadBtn = new HashMap<>();
-		ApkDownloadManager.getInstance(context).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(context.getApplicationContext()).addDownloadStatusListener(this);
 	}
 
 	@Override

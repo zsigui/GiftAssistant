@@ -122,8 +122,7 @@
 	<string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
 	<string name = "st_login_phone_send_code" >发送验证码</string >
 	<string name = "st_login_phone_resend_code" >重新发送(%ds)</string >
-	<string name = "st_login_law_a" >我已阅读并同意</string >
-	<string name = "st_login_law_b" >使用条款和隐私政策</string >
+	<string name = "st_login_remember_pwd" >记住密码</string >
 	<string name = "st_login_has_ouwan_a" >已有偶玩账号? 用</string >
 	<string name = "st_login_has_ouwan_b" >偶玩账号登录</string >
 	<string name = "st_login_no_ouwan_a" >没有偶玩账号? 用</string >

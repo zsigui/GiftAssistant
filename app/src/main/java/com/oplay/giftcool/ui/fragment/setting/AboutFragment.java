@@ -21,6 +21,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.AppInfoUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -130,7 +131,8 @@ public class AboutFragment extends BaseFragment {
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}
-									setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
+									setUpdate(mContext.getResources().getString(R.string
+											.st_about_check_update_failed));
 								}
 							});
 				} else {
@@ -159,6 +161,7 @@ public class AboutFragment extends BaseFragment {
 				handleUpdate();
 				break;
 			case R.id.rl_qq:
+				IntentUtil.joinQQGroup(getContext(), "8MdlDK-VEslpLGRDOIlcqZUbSYuv0pNb");
 				break;
 		}
 	}

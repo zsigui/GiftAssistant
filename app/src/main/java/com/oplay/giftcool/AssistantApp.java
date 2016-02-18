@@ -69,6 +69,12 @@ public class AssistantApp extends Application {
 	private boolean mShouldAutoCheckUpdate = true;
 	// 是否推送消息
 	private boolean mShouldPushMsg = true;
+	// 是否已经完成全局初始化
+	private boolean mIsGlobalInit = false;
+	// 是否允许显示下载，根据渠道获取而定
+	private boolean mIsAllowDownload = true;
+	// 是否记住密码
+	private boolean mIsRememberPwd = true;
 
 	// 以下暂无
 	// 是否下载完成自动安装
@@ -77,11 +83,6 @@ public class AssistantApp extends Application {
 	private boolean mIsSaveFlow = false;
 	// 是否启用下载完成提示音
 	private boolean mIsPlayDownloadComplete = false;
-	// 是否已经完成全局初始化
-	private boolean mIsGlobalInit = false;
-	// 是否允许显示下载，根据渠道获取而定
-	private boolean mIsAllowDownload = true;
-	private boolean mIsRememberPwd = true;
 
 	// LeakCanary 用于检测内存泄露
 	private RefWatcher mRefWatcher;

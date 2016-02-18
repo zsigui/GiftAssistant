@@ -54,7 +54,7 @@ public class ClockService extends Service {
 				ThreadUtil.runInUIThread(new Runnable() {
 					@Override
 					public void run() {
-						ObserverManager.getInstance().notifyGiftUpdate();
+						ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 					}
 				});
 			}

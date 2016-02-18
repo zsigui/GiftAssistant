@@ -165,6 +165,11 @@ public class DrawerFragment extends BaseFragment {
 			public void onClick(View v) {
 				if (AccountManager.getInstance().isLogin()) {
 					IntentUtil.jumpEarnScore(getContext());
+					if (!AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
+						updateCount(KeyConfig.TYPE_ID_SCORE_TASK, -1);
+						// 每次更新登录状态之前只显示一次作为提示
+						AccountManager.getInstance().getUserInfo().isCompleteTodayMission = true;
+					}
 				} else {
 					IntentUtil.jumpLogin(getContext());
 				}

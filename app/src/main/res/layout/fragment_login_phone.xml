@@ -10,11 +10,18 @@
 			android:orientation = "horizontal"
 			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
 
+		<EditText
+				android:id = "@+id/et_clear_focus"
+				android:layout_width = "0dp"
+				android:layout_height = "0dp" />
+
 		<AutoCompleteTextView
 				android:id = "@+id/et_input"
 				style = "@style/DefaultTextView.Login"
-				android:cursorVisible="true"
-				android:imeOptions="actionNext"
+				android:cursorVisible = "true"
+				android:imeOptions = "actionNext"
+				android:dropDownAnchor = "@+id/ll_input"
+				android:paddingRight = "50dp"
 				android:hint = "@string/st_login_phone_hint" />
 
 		<TextView
@@ -23,8 +30,21 @@
 				android:layout_height = "wrap_content"
 				android:clickable = "true"
 				android:layout_marginRight = "5dp"
+				android:layout_toLeftOf = "@+id/iv_more"
 				android:visibility = "gone"
 				android:background = "@drawable/ic_input_clear" />
+
+		<ImageView
+				android:id = "@+id/iv_more"
+				android:layout_width = "wrap_content"
+				android:layout_height = "match_parent"
+				android:paddingLeft = "8dp"
+				android:paddingRight = "8dp"
+				android:layout_alignParentRight = "true"
+				android:clickable = "true"
+				android:contentDescription = "@null"
+				android:scaleType = "centerInside"
+				android:src = "@drawable/ic_login_select_account" />
 	</LinearLayout >
 
 	<View style = "@style/HDividerView" />
@@ -37,10 +57,20 @@
 		<EditText
 				android:id = "@+id/et_phone_code"
 				style = "@style/DefaultTextView.Login"
-				android:cursorVisible="true"
-				android:inputType="number"
-				android:imeOptions="actionNext"
+				android:cursorVisible = "true"
+				android:inputType = "number"
+				android:imeOptions = "actionDone"
 				android:hint = "@string/st_login_phone_code_hint" />
+
+		<TextView
+				android:id = "@+id/tv_code_clear"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:clickable = "true"
+				android:layout_marginRight = "5dp"
+				android:layout_marginLeft = "5dp"
+				android:visibility = "gone"
+				android:background = "@drawable/ic_input_clear" />
 
 		<View style = "@style/VDividerView" />
 

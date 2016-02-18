@@ -5,16 +5,23 @@
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
 
-	<RelativeLayout
+	<LinearLayout
 			android:id = "@+id/ll_input"
 			android:orientation = "horizontal"
-			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput">
+			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+		<EditText
+				android:id = "@+id/et_clear_focus"
+				android:layout_width = "0dp"
+				android:layout_height = "0dp" />
 
 		<AutoCompleteTextView
 				android:id = "@+id/et_input"
 				style = "@style/DefaultTextView.Login"
 				android:cursorVisible = "true"
 				android:imeOptions = "actionNext"
+				android:dropDownAnchor = "@+id/ll_input"
+				android:paddingRight = "50dp"
 				android:hint = "@string/st_login_ouwan_user_hint" />
 
 		<TextView
@@ -23,20 +30,22 @@
 				android:layout_height = "wrap_content"
 				android:clickable = "true"
 				android:layout_marginRight = "5dp"
-				android:layout_toLeftOf="@+id/iv_more"
-				android:visibility = "visible"
+				android:layout_toLeftOf = "@+id/iv_more"
+				android:visibility = "gone"
 				android:background = "@drawable/ic_input_clear" />
 
 		<ImageView
 				android:id = "@+id/iv_more"
 				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:layout_marginLeft = "5dp"
-				android:layout_alignParentRight="true"
+				android:layout_height = "match_parent"
+				android:paddingLeft = "8dp"
+				android:paddingRight = "8dp"
+				android:layout_alignParentRight = "true"
 				android:clickable = "true"
 				android:contentDescription = "@null"
-				android:src = "@drawable/ic_input_clear" />
-	</RelativeLayout >
+				android:scaleType = "centerInside"
+				android:src = "@drawable/ic_login_select_account" />
+	</LinearLayout >
 
 	<View style = "@style/HDividerView" />
 
@@ -52,6 +61,7 @@
 				android:cursorVisible = "true"
 				android:imeOptions = "actionDone"
 				android:hint = "@string/st_login_ouwan_pwd_hint" />
+
 		<TextView
 				android:id = "@+id/tv_pwd_clear"
 				android:layout_width = "wrap_content"
@@ -63,34 +73,21 @@
 
 	</LinearLayout >
 
-	<!--<LinearLayout-->
-	<!--android:layout_width = "match_parent"-->
-	<!--android:layout_height = "wrap_content"-->
-	<!--android:paddingLeft = "@dimen/di_login_padding_left_right"-->
-	<!--android:paddingTop = "@dimen/di_login_padding_gap" >-->
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:paddingLeft = "@dimen/di_login_padding_left_right"
+			android:paddingTop = "@dimen/di_login_padding_gap" >
 
-	<!--<CheckedTextView-->
-	<!--android:id = "@+id/ctv_law"-->
-	<!--android:layout_width = "wrap_content"-->
-	<!--android:layout_height = "wrap_content"-->
-	<!--android:checked = "true"-->
-	<!--android:text = ""-->
-	<!--android:drawableLeft = "@drawable/selector_item_check" />-->
-
-	<!--<TextView-->
-	<!--style = "@style/DefaultTextView.Text"-->
-	<!--android:textSize = "10sp"-->
-	<!--android:paddingLeft = "5dp"-->
-	<!--android:paddingRight = "5dp"-->
-	<!--android:text = "@string/st_login_law_a" />-->
-
-	<!--<TextView-->
-	<!--android:id = "@+id/tv_law"-->
-	<!--style = "@style/DefaultTextView.LoginPoint"-->
-	<!--android:textSize = "10sp"-->
-	<!--android:clickable = "true"-->
-	<!--android:text = "@string/st_login_law_b" />-->
-	<!--</LinearLayout >-->
+		<CheckedTextView
+				android:id = "@+id/ctv_remember_pwd"
+				style = "@style/DefaultTextView.LoginPoint"
+				android:textSize = "10sp"
+				android:checked = "true"
+				android:text = "@string/st_login_remember_pwd"
+				android:drawableLeft = "@drawable/selector_item_check"
+				android:drawablePadding = "4dp" />
+	</LinearLayout >
 
 	<TextView
 			android:id = "@+id/btn_send"

@@ -20,6 +20,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
@@ -78,8 +79,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
-
 		createDrawer();
+		updateToolBar();
 	}
 
 	private void createDrawer() {
@@ -127,15 +128,20 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
 		ivHint = getViewById(R.id.iv_hint);
 		getViewById(R.id.ll_gift_count).setOnClickListener(this);
-		updateToolBar();
 	}
 
 	private void updateToolBar() {
 		if (AccountManager.getInstance().isLogin()) {
+			if (AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
+				updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
+			} else {
+				updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, -1);
+			}
 			UserInfo user = AccountManager.getInstance().getUserInfo();
 			tvGiftCount.setText(String.valueOf(user.giftCount));
 			ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 		} else {
+			updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
 			ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 			ivProfile.setTag("");
 			tvGiftCount.setText("0");
@@ -292,7 +298,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 * 更新侧边栏和顶部导航栏信息
 	 */
 	public void updateHintState(int key, int count) {
-		if (count < -1) {
+		if (count < -1 || mDrawerFragment == null) {
 			return;
 		}
 		int val = mHintCount.get(key);

@@ -2,6 +2,7 @@ package com.oplay.giftcool.ui.fragment.gift;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -24,26 +25,30 @@ import com.oplay.giftcool.adapter.IndexGiftZeroAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
-import com.oplay.giftcool.model.data.resp.IndexGiftLimit;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.NestedListView;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,13 +64,16 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener {
+public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener, com.oplay.giftcool.listener.OnItemClickListener<IndexGiftNew> {
 
 	private final static String PAGE_NAME = "礼包首页";
-	private static final String KEY_BANNER = "key_banner";
-	private static final String KEY_LIKE = "key_like";
-	private static final String KEY_LIMIT = "key_limit";
-	private static final String KEY_NEW = "key_new";
+	private static final int ID_BANNER = 1;
+	private static final int ID_ZERO = 2;
+	private static final int ID_LIKE = 3;
+	private static final int ID_LIMIT = 4;
+	private static final int ID_NEWS = 5;
+	private static final int ID_ALL = 6;
+	private static final int ID_CIRCLE = 7;
 
 	private ScrollView mScrollView;
 	// 活动视图, 3张
@@ -93,7 +101,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	// 请求后游戏键值的MD5串
 	private String mGameKey;
 	// 每隔5分钟刷新一次
-	private Handler mHandler = new Handler();
+	private Handler mHandler;
 	private Runnable mRefreshRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -104,20 +112,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	};
 
 	public static GiftFragment newInstance() {
-		return new GiftFragment();
-	}
-
-	public static GiftFragment newInstance(ArrayList<IndexBanner> banners,
-	                                       ArrayList<IndexGiftLike> likeGames,
-	                                       ArrayList<IndexGiftLimit> limitGifts,
-	                                       ArrayList<IndexGiftNew> newGifts) {
 		GiftFragment fragment = new GiftFragment();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(KEY_BANNER, banners);
-		bundle.putSerializable(KEY_LIKE, likeGames);
-		bundle.putSerializable(KEY_LIMIT, limitGifts);
-		bundle.putSerializable(KEY_NEW, newGifts);
-		fragment.setArguments(bundle);
+		fragment.mHandler = new UpdateHandler(fragment);
 		return fragment;
 	}
 
@@ -176,8 +172,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mIsPrepared = true;
 		mScrollView.smoothScrollTo(0, 0);
 		mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
-
-
+		mViewManager.showContent();
+		mNewAdapter.setListener(this);
 	}
 
 	private void loadBanner(ArrayList<IndexBanner> banners) {
@@ -268,10 +264,15 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					@Override
 					public void onResponse(Response<JsonRespBase<IndexGift>> response, Retrofit retrofit) {
 						// 获取数据成功
+						if (!mCanShowUI) {
+							return;
+						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, "onResponse start() ");
 						}
 						if (response != null && response.isSuccess()) {
+							Global.sServerTimeDiffLocal = System.currentTimeMillis() - response.headers().getDate
+									("Date").getTime();
 							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 								// 获取数据成功
 								if (AppDebugConfig.IS_DEBUG) {
@@ -287,6 +288,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 
 					@Override
 					public void onFailure(Throwable t) {
+						if (!mCanShowUI) {
+							return;
+						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.e(t);
 						}
@@ -380,62 +384,75 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	}
 
 	@Override
-	public void onGiftUpdate() {
-		if (mIsSwipeRefresh || mIsNotifyRefresh || mGiftData == null) {
+	public void onGiftUpdate(int action) {
+		if (action == ObserverManager.STATUS.GIFT_UPDATE_ALL) {
+			mRefreshLayout.setRefreshing(true);
+			onRefresh();
 			return;
 		}
-		mIsNotifyRefresh = true;
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
-					refreshFailEnd();
-					return;
-				}
-				HashSet<Integer> ids = new HashSet<Integer>();
-				for (IndexGiftNew gift : mGiftData.limit) {
-					ids.add(gift.id);
-				}
-				for (IndexGiftNew gift : mGiftData.news) {
-					ids.add(gift.id);
-				}
-				ReqRefreshGift reqData = new ReqRefreshGift();
-				reqData.ids = ids;
-				Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
-						.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
-
-							@Override
-							public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
-							                       Retrofit retrofit) {
-								if (!mCanShowUI) {
-									return;
-								}
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().isSuccess()) {
-										// 数据刷新成功，进行更新
-										HashMap<String, IndexGiftNew> respData = response.body().getData();
-										ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-										updateCircle(respData, waitDelIndexs, mGiftData.limit);
-										delIndex(mGiftData.limit, waitDelIndexs);
-										waitDelIndexs.clear();
-										updateCircle(respData, waitDelIndexs, mGiftData.news);
-										delIndex(mGiftData.news, waitDelIndexs);
-										int y = mScrollView.getScrollY();
-										updateLimitData(mGiftData.limit);
-										updateNewData(mGiftData.news);
-										mScrollView.smoothScrollTo(0, y);
-									}
-								}
-								mIsNotifyRefresh = false;
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								mIsNotifyRefresh = false;
-							}
-						});
+		if (action == ObserverManager.STATUS.GIFT_UPDATE_PART) {
+			if (mIsSwipeRefresh || mIsNotifyRefresh || mGiftData == null) {
+				return;
 			}
-		});
+			mIsNotifyRefresh = true;
+			Global.THREAD_POOL.execute(new Runnable() {
+				@Override
+				public void run() {
+					if (!NetworkUtil.isConnected(getContext())) {
+						refreshFailEnd();
+						return;
+					}
+					HashSet<Integer> ids = new HashSet<Integer>();
+					for (IndexGiftNew gift : mGiftData.limit) {
+						ids.add(gift.id);
+					}
+					for (IndexGiftNew gift : mGiftData.news) {
+						ids.add(gift.id);
+					}
+					ReqRefreshGift reqData = new ReqRefreshGift();
+					reqData.ids = ids;
+					Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
+							.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+
+								@Override
+								public void onResponse(final Response<JsonRespBase<HashMap<String, IndexGiftNew>>>
+										                       response,
+								                       Retrofit retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
+									if (response != null && response.isSuccess()) {
+										if (response.body() != null && response.body().isSuccess()) {
+											// 数据刷新成功，进行更新
+											ThreadUtil.runInThread(new Runnable() {
+												@Override
+												public void run() {
+													HashMap<String, IndexGiftNew> respData = response.body().getData();
+													ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+													updateCircle(respData, waitDelIndexs, mGiftData.limit);
+													delIndex(mGiftData.limit, waitDelIndexs);
+													waitDelIndexs.clear();
+													updateCircle(respData, waitDelIndexs, mGiftData.news);
+													delIndex(mGiftData.news, waitDelIndexs);
+													Message msg = Message.obtain();
+													msg.what = ID_CIRCLE;
+													msg.obj = mGiftData;
+													mHandler.sendMessage(msg);
+												}
+											});
+										}
+									}
+									mIsNotifyRefresh = false;
+								}
+
+								@Override
+								public void onFailure(Throwable t) {
+									mIsNotifyRefresh = false;
+								}
+							});
+				}
+			});
+		}
 	}
 
 	public void scrollToPos(final int type) {
@@ -526,7 +543,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mHandler.removeCallbacks(mRefreshRunnable);
+		if (mHandler != null) {
+			mHandler.removeCallbacks(mRefreshRunnable);
+		}
 	}
 
 	@Override
@@ -575,5 +594,69 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void onItemClick(IndexGiftNew gift, View v, int position) {
+		switch (v.getId()) {
+			case R.id.rl_recommend:
+				IntentUtil.jumpGiftDetail(getContext(), gift.id);
+				break;
+			case R.id.btn_send:
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+					// 对于0元抢，先跳转到游戏详情
+					IntentUtil.jumpGiftDetail(getContext(), gift.id);
+				} else {
+					PayManager.getInstance().seizeGift(getContext(), gift, (GiftButton) v);
+				}
+				break;
+		}
+	}
+
+	private static class UpdateHandler extends Handler {
+
+		private WeakReference<GiftFragment> mFragWeakLink;
+
+		public UpdateHandler(GiftFragment frag) {
+			mFragWeakLink = new WeakReference<GiftFragment>(frag);
+		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public void handleMessage(Message msg) {
+			if (mFragWeakLink == null || mFragWeakLink.get() == null) {
+				return;
+			}
+			GiftFragment fragment = mFragWeakLink.get();
+			int y = fragment.mScrollView.getScrollY();
+			switch (msg.what) {
+				case ID_BANNER:
+					fragment.updateBanners((ArrayList<IndexBanner>) msg.obj);
+					break;
+				case ID_ZERO:
+					fragment.updateZeroData((ArrayList<IndexGiftNew>) msg.obj);
+					break;
+				case ID_LIKE:
+					fragment.updateLikeData((ArrayList<IndexGiftLike>) msg.obj);
+					break;
+				case ID_LIMIT:
+					fragment.updateLimitData((ArrayList<IndexGiftNew>) msg.obj);
+					break;
+				case ID_NEWS:
+					fragment.updateNewData((ArrayList<IndexGiftNew>) msg.obj);
+					break;
+				case ID_ALL:
+					fragment.updateData((IndexGift) msg.obj);
+					break;
+				case ID_CIRCLE:
+					IndexGift g = (IndexGift) msg.obj;
+					fragment.updateZeroData(g.zero);
+					fragment.updateLimitData(g.limit);
+					fragment.updateNewData(g.news);
+					break;
+				default:
+			}
+			fragment.mScrollView.smoothScrollTo(0, y);
+		}
 	}
 }

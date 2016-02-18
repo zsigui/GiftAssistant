@@ -171,7 +171,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	}
 
 	public void setContext(Context context) {
-		mContext = context;
+		mContext = context.getApplicationContext();
 	}
 
 	public void startDownload() {

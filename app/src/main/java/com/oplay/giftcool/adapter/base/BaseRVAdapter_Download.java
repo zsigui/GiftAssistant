@@ -1,6 +1,5 @@
 package com.oplay.giftcool.adapter.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -133,7 +133,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		((Activity) mContext).runOnUiThread(new Runnable() {
+		ThreadUtil.runInUIThread(new Runnable() {
 			@Override
 			public void run() {
 				if (appInfo != null) {

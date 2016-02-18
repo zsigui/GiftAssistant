@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,18 +60,19 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	private TextView tvUserClear;
 	private TextView tvPwdClear;
 	private EditText etPwd;
+	private EditText etClearFocus;
 	//使用条款先注释掉，估计后面还要改回来
-//	private CheckedTextView ctvAgreeLaw;
+	private CheckedTextView ctvRememberPwd;
 //	private TextView tvLaw;
 	private TextView btnLogin;
 	private TextView tvAnotherLogin;
 	private TextView tvForgetPwd;
 	private ImageView ivMore;
 	private PopupWindow mAccountPopup;
-	private MaxRowListView mPopupListView;
 	private AccountAdapter mAccountAdapter;
 	private AccountAdapter mCompleteAdapter;
 	private ArrayList<String> mData;
+	private LinearLayout llUser;
 	private boolean mNeedEncrypt = true;
 
 	public static OuwanLoginFragment newInstance() {
@@ -81,24 +83,26 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_login_ouwan);
 		etUser = getViewById(R.id.et_input);
+		etClearFocus = getViewById(R.id.et_clear_focus);
 		tvUserClear = getViewById(R.id.tv_user_clear);
 		tvPwdClear = getViewById(R.id.tv_pwd_clear);
 		etPwd = getViewById(R.id.et_pwd);
-//		ctvAgreeLaw = getViewById(R.id.ctv_law);
+		ctvRememberPwd = getViewById(R.id.ctv_remember_pwd);
 //		tvLaw = getViewById(R.id.tv_law);
 		btnLogin = getViewById(R.id.btn_send);
 		tvAnotherLogin = getViewById(R.id.tv_another_login);
 		tvForgetPwd = getViewById(R.id.tv_forget_pwd);
 		ivMore = getViewById(R.id.iv_more);
+		llUser = getViewById(R.id.ll_input);
 	}
 
 	@Override
 	protected void setListener() {
 		getViewById(R.id.ll_pwd).setOnClickListener(this);
-		getViewById(R.id.ll_input).setOnClickListener(this);
+		llUser.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
 //		tvLaw.setOnClickListener(this);
-//		ctvAgreeLaw.setOnClickListener(this);
+		ctvRememberPwd.setOnClickListener(this);
 		tvAnotherLogin.setOnClickListener(this);
 		tvUserClear.setOnClickListener(this);
 		tvPwdClear.setOnClickListener(this);
@@ -107,15 +111,18 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		etPwd.setOnEditorActionListener(this);
 		ivMore.setOnClickListener(this);
 		etUser.setOnFocusChangeListener(this);
+		etPwd.setOnFocusChangeListener(this);
 	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin);
-//		ctvAgreeLaw.setChecked(true);
+		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
 		btnLogin.setEnabled(false);
-		etUser.requestFocus();
-		InputMethodUtil.showSoftInput(getActivity());
+		initHint();
+	}
+
+	private void initHint() {
 		mData = AccountManager.getInstance().readOuwanAccount();
 		if (mData != null && mData.size() > 0) {
 			String[] s = mData.get(0).split(",");
@@ -123,13 +130,22 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			if (AssistantApp.getInstance().isRememberPwd() && (s.length == 2 && !TextUtils.isEmpty(s[1]))) {
 				etPwd.setText(s[1]);
 				mNeedEncrypt = false;
+				etClearFocus.requestFocus();
+			} else {
+				etPwd.requestFocus();
+				InputMethodUtil.showSoftInput(getActivity());
 			}
+			ivMore.setVisibility(View.VISIBLE);
+		} else {
+			etUser.requestFocus();
+			InputMethodUtil.showSoftInput(getActivity());
+			ivMore.setVisibility(View.GONE);
 		}
 		mAccountAdapter = new AccountAdapter(getContext(), mData, true);
 		mCompleteAdapter = new AccountAdapter(getContext(), mData, true);
 		View popup = View.inflate(getContext(), R.layout.listview_account_popup, null);
-		mPopupListView = getViewById(popup, R.id.lv_popup_list_content);
-		mPopupListView.setAdapter(mAccountAdapter);
+		MaxRowListView popupListView = getViewById(popup, R.id.lv_popup_list_content);
+		popupListView.setAdapter(mAccountAdapter);
 		etUser.setAdapter(mCompleteAdapter);
 		mAccountPopup = new PopupWindow(popup, LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.MATCH_PARENT, true);
@@ -137,6 +153,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		mCompleteAdapter.setListener(this);
 		mAccountPopup.setOutsideTouchable(true);
 		mAccountPopup.setBackgroundDrawable(new BitmapDrawable());
+		etUser.setDropDownBackgroundDrawable(null);
 	}
 
 	@Override
@@ -157,22 +174,25 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			case R.id.tv_forget_pwd:
 				OuwanSDKManager.getInstance().showForgetPswView(getContext());
 				break;
-//			case R.id.ctv_law:
-//				if (ctvAgreeLaw.isChecked()) {
-//					ctvAgreeLaw.setChecked(false);
-//				} else {
-//					ctvAgreeLaw.setChecked(true);
-//				}
-//				break;
+			case R.id.ctv_remember_pwd:
+				if (ctvRememberPwd.isChecked()) {
+					ctvRememberPwd.setChecked(false);
+					AssistantApp.getInstance().setIsRememberPwd(false);
+				} else {
+					ctvRememberPwd.setChecked(true);
+					AssistantApp.getInstance().setIsRememberPwd(true);
+				}
+				break;
 			case R.id.iv_more:
+				etClearFocus.requestFocus();
+				InputMethodUtil.hideSoftInput(getActivity());
 				if (mData == null || mData.size() == 0) {
 					return;
 				}
-				etUser.clearFocus();
 				if (mAccountPopup.isShowing()) {
 					mAccountPopup.dismiss();
 				} else {
-					mAccountPopup.showAsDropDown(etUser);
+					mAccountPopup.showAsDropDown(llUser);
 				}
 				break;
 			case R.id.tv_another_login:
@@ -194,6 +214,13 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 				etPwd.setSelection(etPwd.getText().length());
 				etPwd.requestFocus();
 				break;
+			default:
+				if (mAccountPopup != null && mAccountPopup.isShowing()) {
+					mAccountPopup.dismiss();
+				}
+				if (etUser.isPopupShowing()) {
+					etUser.dismissDropDown();
+				}
 		}
 	}
 
@@ -219,13 +246,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 					showToast("网络连接失败");
 					return;
 				}
-				if (mNeedEncrypt) {
-					AccountManager.getInstance().writeOuwanAccount(login.getUsername() + "," + login.getPassword(),
-							mData, false);
-				} else {
-					AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
-							mData, false);
-				}
+
+				final long start = System.currentTimeMillis();
 				Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login))
 						.enqueue(new Callback<JsonRespBase<UserModel>>() {
 							@Override
@@ -238,7 +260,13 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										MainActivity.sIsTodayFirstOpen = true;
 										ScoreManager.getInstance().resetLocalTaskState();
-										KLog.i("userUpdate", "LoginSuccess.userModel = " + userModel + ", setUser");
+										if (AssistantApp.getInstance().isRememberPwd()) {
+											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
+															+ login.getPassword(), mData, false);
+										} else {
+											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
+													mData, false);
+										}
 										AccountManager.getInstance().setUser(userModel);
 										if (getActivity() != null) {
 											((BaseAppCompatActivity) getActivity()).handleBackPressed();
@@ -281,13 +309,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		switch (actionId) {
 			case EditorInfo.IME_ACTION_NEXT:
-				if (TextUtils.isEmpty(etPwd.getText().toString().trim())) {
-					etPwd.requestFocus();
-					etPwd.setSelection(etPwd.getText().toString().length());
-				} else {
-					etUser.requestFocus();
-					etUser.setSelection(etUser.getText().toString().length());
-				}
+				etPwd.requestFocus();
+				etPwd.setSelection(etPwd.getText().toString().length());
 				break;
 			case EditorInfo.IME_ACTION_DONE:
 				handleLogin();
@@ -303,28 +326,36 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	public void onItemClick(String item, View view, int position) {
+		String[] s = item.split(",");
 		switch (view.getId()) {
 			case R.id.ll_item:
-				String[] s = item.split(",");
 				if (s.length == 2) {
 					etUser.setText(s[0]);
 					etPwd.setText(s[1]);
+					etClearFocus.requestFocus();
 				} else {
 					etUser.setText(s[0]);
+					etPwd.requestFocus();
 				}
-				etUser.dismissDropDown();
-				if (mAccountPopup != null && mAccountPopup.isShowing()) {
-					mAccountPopup.dismiss();
-				}
+
 				break;
 			case R.id.iv_account_list_delete:
+				if (s[0].equals(etUser.getText().toString().trim())) {
+					etUser.setText("");
+					etPwd.setText("");
+					etUser.requestFocus();
+				}
 				AccountManager.getInstance().writeOuwanAccount(item, mData, true);
-				if (mAccountPopup != null && mAccountPopup.isShowing()) {
-					mAccountPopup.dismiss();
+				if (mData == null || mData.size() == 0) {
+					ivMore.setVisibility(View.GONE);
 				}
 				mCompleteAdapter.notifyDataChanged();
 				mAccountAdapter.notifyDataChanged();
 				break;
+		}
+		etUser.dismissDropDown();
+		if (mAccountPopup != null && mAccountPopup.isShowing()) {
+			mAccountPopup.dismiss();
 		}
 	}
 

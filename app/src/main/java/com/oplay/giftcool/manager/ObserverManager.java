@@ -17,13 +17,6 @@ import java.util.Map;
  */
 public class ObserverManager {
 
-	public class STATUS {
-		// 可以设置32个tag
-		public static final int UPDATE_INDEX = 0x00000001;
-		public static final int UPDATE_DETAIL = 0x00000002;
-		public static final int UPDATE_ALL = 0xFFFFFFFF;
-	}
-
 	private static ObserverManager sInstance;
 
 	private ObserverManager(){}
@@ -104,9 +97,11 @@ public class ObserverManager {
 		}
 	}
 
-
-
 	public void notifyGiftUpdate() {
+		notifyGiftUpdate(STATUS.DEFAULT_FOR_ALL);
+	}
+
+	public void notifyGiftUpdate(int action) {
 		for (GiftUpdateListener observer : mGiftObservers.values()) {
 			if (observer != null) {
 				if (observer instanceof Fragment && ((Fragment)observer).isRemoving()) {
@@ -121,7 +116,7 @@ public class ObserverManager {
 							"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
 					continue;
 				}
-				observer.onGiftUpdate();
+				observer.onGiftUpdate(action);
 			}
 		}
 	}
@@ -158,7 +153,13 @@ public class ObserverManager {
 	 * 礼包状态变更监听接口
 	 */
 	public interface GiftUpdateListener {
-		void onGiftUpdate();
+		void onGiftUpdate(int action);
+	}
+
+	public interface STATUS {
+		int DEFAULT_FOR_ALL= 0x0;
+		int GIFT_UPDATE_ALL = 0x010;
+		int GIFT_UPDATE_PART = 0x11;
 	}
 
 	public interface UserActionListener {

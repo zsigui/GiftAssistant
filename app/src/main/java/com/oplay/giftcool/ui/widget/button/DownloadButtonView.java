@@ -57,6 +57,7 @@ public class DownloadButtonView extends RelativeLayout {
 		mDownloadTextView = (TextView) findViewById(R.id.btn_download_text);
 		mProgressBar.setMax(100);
 		mProgressText = "%d%%";
+		setProgressVisible(true);
 	}
 
 	public void setDisableText(String disableText) {
@@ -66,7 +67,6 @@ public class DownloadButtonView extends RelativeLayout {
 	public void setText(CharSequence charSequence) {
 		mDownloadTextView.setText(charSequence);
 		mProgressBar.setVisibility(GONE);
-		setBackgroundResource(R.drawable.selector_btn_download_green);
 	}
 
 	public void setText(int stringId) {
@@ -144,7 +144,7 @@ public class DownloadButtonView extends RelativeLayout {
 			} else {
 				mDownloadTextView.setText(mCurStateText);
 			}
-			setBackgroundResource(mCurStateBackground);
+			mDownloadTextView.setBackgroundResource(mCurStateBackground);
 			setProgress(mCurDownloadProgress);
 		}
 		return mAppStatus;

@@ -202,7 +202,8 @@ public class PayManager {
 											}
 										}
 										ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
-										ObserverManager.getInstance().notifyGiftUpdate();
+										ObserverManager.getInstance()
+												.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 										return;
 									}
 									if (response.body() != null) {
@@ -290,7 +291,8 @@ public class PayManager {
 												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
 											}
 										}
-										ObserverManager.getInstance().notifyGiftUpdate();
+										ObserverManager.getInstance()
+												.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 										return;
 									}
 									if (response.body() != null) {

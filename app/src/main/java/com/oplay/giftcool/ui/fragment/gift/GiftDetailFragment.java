@@ -136,9 +136,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				@Override
 				public void share() {
 					if (mData == null || mData.giftData == null || mData.gameData == null) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d("mData = " + mData);
-						}
 						ToastUtil.showShort("页面出错，请重新进入");
 						return;
 					}
@@ -303,7 +300,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis(), 1000) {
+		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
@@ -312,7 +309,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			@Override
 			public void onFinish() {
 				mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
-				btnSend.setState(GiftTypeUtil.getItemViewType(mData.giftData));
+				if (!mIsNotifyRefresh) {
+					lazyLoad();
+					mIsNotifyRefresh = true;
+				}
 			}
 		};
 		mTimer.start();
@@ -414,7 +414,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				if (mData == null) {
 					return;
 				}
-				if (mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE
+				if (AssistantApp.getInstance().isAllowDownload()
+						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE
 						&& !isInstalledGame()) {
 					return;
 				}
