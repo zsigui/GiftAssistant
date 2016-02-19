@@ -41,4 +41,11 @@ public class ThreadUtil {
 	public static void runInUIThread(Runnable task, long delayMillis) {
 		sHandler.postDelayed(task, delayMillis);
 	}
+
+	public static void destory() {
+		if (sHandler != null) {
+			sHandler.removeCallbacksAndMessages(null);
+			sHandler = null;
+		}
+	}
 }

@@ -50,6 +50,7 @@ import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 import retrofit.Callback;
@@ -95,6 +96,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		Bundle bundle = new Bundle();
 		bundle.putInt(KeyConfig.KEY_DATA, id);
 		fragment.setArguments(bundle);
+		fragment.mDataRunnable = new DataRunnable(fragment);
 		return fragment;
 	}
 
@@ -298,9 +300,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (mTimer != null) {
 			mTimer.cancel();
 		}
-		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal, 1000) {
+		mTimer = new CountDownTimer(mData.giftData.remainStartTime, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
@@ -347,52 +348,71 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 	}
 
-	@Override
-	protected void lazyLoad() {
-		refreshInitConfig();
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
-					refreshFailEnd();
-					return;
-				}
-				ReqGiftDetail data = new ReqGiftDetail();
-				data.id = mId;
-				Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data))
-						.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
-							@Override
-							public void onResponse(Response<JsonRespBase<GiftDetail>> response, Retrofit retrofit) {
-								if (!mCanShowUI) {
-									return;
-								}
-								if (response != null && response.code() == 200) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										refreshSuccessEnd();
-										updateData(response.body().getData());
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
-									}
-								}
-								// 加载错误页面也行
-								refreshFailEnd();
-							}
+	private static class DataRunnable implements Runnable {
 
-							@Override
-							public void onFailure(Throwable t) {
-								if (!mCanShowUI) {
+		private WeakReference<GiftDetailFragment> mWeakFragment;
+
+		public DataRunnable(GiftDetailFragment fragment) {
+			mWeakFragment = new WeakReference<GiftDetailFragment>(fragment);
+		}
+
+		@Override
+		public void run() {
+			if (mWeakFragment == null || mWeakFragment.get() == null) {
+				return;
+			}
+			final GiftDetailFragment f = mWeakFragment.get();
+			if (!NetworkUtil.isConnected(f.getContext())) {
+				f.refreshFailEnd();
+				return;
+			}
+			ReqGiftDetail data = new ReqGiftDetail();
+			data.id = f.mId;
+			Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data))
+					.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
+						@Override
+						public void onResponse(Response<JsonRespBase<GiftDetail>> response, Retrofit retrofit) {
+							if (!f.mCanShowUI) {
+								return;
+							}
+							if (response != null && response.code() == 200) {
+								Global.sServerTimeDiffLocal =
+										System.currentTimeMillis() - response.headers().getDate("Date").getTime();
+								if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									f.refreshSuccessEnd();
+									f.updateData(response.body().getData());
 									return;
 								}
 								if (AppDebugConfig.IS_DEBUG) {
-									KLog.e(t);
+									KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
 								}
-								refreshFailEnd();
 							}
-						});
-			}
-		});
+							// 加载错误页面也行
+							f.refreshFailEnd();
+						}
+
+						@Override
+						public void onFailure(Throwable t) {
+							if (!f.mCanShowUI) {
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(t);
+							}
+							f.refreshFailEnd();
+						}
+					});
+		}
+	}
+
+	private DataRunnable mDataRunnable;
+
+	@Override
+	protected void lazyLoad() {
+		refreshInitConfig();
+		if (mDataRunnable != null) {
+			Global.THREAD_POOL.execute(mDataRunnable);
+		}
 
 	}
 
@@ -505,14 +525,16 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	@Override
 	public void onProgressUpdate(String url, final int percent, long speedBytesPers) {
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
-					btnDownload.setProgress(percent);
+		if (getActivity() != null) {
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+						btnDownload.setProgress(percent);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override

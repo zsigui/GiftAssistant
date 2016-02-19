@@ -31,6 +31,7 @@ import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -135,6 +136,7 @@ public class AssistantApp extends Application {
 	public void exit() {
 		try {
 			ClockService.stopService(getApplicationContext());
+			ThreadUtil.destory();
 			setGlobalInit(false);
 			if (ImageLoader.getInstance().isInited()) {
 				ImageLoader.getInstance().clearMemoryCache();

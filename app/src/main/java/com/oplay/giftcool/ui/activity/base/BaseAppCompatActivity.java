@@ -333,15 +333,15 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		if (AppDebugConfig.IS_DEBUG) {
 			ViewServer.get(this).removeWindow(this);
+			AssistantApp.getRefWatcher(this).watch(this);
 		}
 		if (ImageLoader.getInstance().isInited()) {
 			ImageLoader.getInstance().clearMemoryCache();
 		}
 		release();
-		AssistantApp.getRefWatcher(this).watch(this);
+		super.onDestroy();
 	}
 
 	@Override
@@ -361,7 +361,10 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		mNeedWorkCallback = false;
 		mApp = null;
 		mToolbar = null;
-		mLoadingDialog = null;
+		if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
+			mLoadingDialog.dismiss();
+			mLoadingDialog = null;
+		}
 		mLoadingFragment = null;
 		// 封装加载和等待等页面的管理器对象
 		mViewManager = null;

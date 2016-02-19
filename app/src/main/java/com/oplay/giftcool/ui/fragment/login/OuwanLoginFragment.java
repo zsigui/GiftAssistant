@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,7 +61,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	private EditText etPwd;
 	private EditText etClearFocus;
 	//使用条款先注释掉，估计后面还要改回来
-	private CheckedTextView ctvRememberPwd;
+//	private CheckedTextView ctvRememberPwd;
 //	private TextView tvLaw;
 	private TextView btnLogin;
 	private TextView tvAnotherLogin;
@@ -87,7 +86,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		tvUserClear = getViewById(R.id.tv_user_clear);
 		tvPwdClear = getViewById(R.id.tv_pwd_clear);
 		etPwd = getViewById(R.id.et_pwd);
-		ctvRememberPwd = getViewById(R.id.ctv_remember_pwd);
+//		ctvRememberPwd = getViewById(R.id.ctv_remember_pwd);
 //		tvLaw = getViewById(R.id.tv_law);
 		btnLogin = getViewById(R.id.btn_send);
 		tvAnotherLogin = getViewById(R.id.tv_another_login);
@@ -102,7 +101,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		llUser.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
 //		tvLaw.setOnClickListener(this);
-		ctvRememberPwd.setOnClickListener(this);
+//		ctvRememberPwd.setOnClickListener(this);
 		tvAnotherLogin.setOnClickListener(this);
 		tvUserClear.setOnClickListener(this);
 		tvPwdClear.setOnClickListener(this);
@@ -117,7 +116,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin);
-		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
+//		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
 		btnLogin.setEnabled(false);
 		initHint();
 	}
@@ -174,15 +173,15 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			case R.id.tv_forget_pwd:
 				OuwanSDKManager.getInstance().showForgetPswView(getContext());
 				break;
-			case R.id.ctv_remember_pwd:
-				if (ctvRememberPwd.isChecked()) {
-					ctvRememberPwd.setChecked(false);
-					AssistantApp.getInstance().setIsRememberPwd(false);
-				} else {
-					ctvRememberPwd.setChecked(true);
-					AssistantApp.getInstance().setIsRememberPwd(true);
-				}
-				break;
+//			case R.id.ctv_remember_pwd:
+//				if (ctvRememberPwd.isChecked()) {
+//					ctvRememberPwd.setChecked(false);
+//					AssistantApp.getInstance().setIsRememberPwd(false);
+//				} else {
+//					ctvRememberPwd.setChecked(true);
+//					AssistantApp.getInstance().setIsRememberPwd(true);
+//				}
+//				break;
 			case R.id.iv_more:
 				etClearFocus.requestFocus();
 				InputMethodUtil.hideSoftInput(getActivity());

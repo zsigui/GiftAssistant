@@ -77,6 +77,7 @@ public class BannerTypeUtil {
 					break;
 				case ACTION_DEFAULT:
 				default:
+					ToastUtil.showShort("请下载最新版本，当前版本尚未实现该功能！");
 
 			}
 		} catch (Throwable t) {

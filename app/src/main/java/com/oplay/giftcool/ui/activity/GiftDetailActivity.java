@@ -121,6 +121,17 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	}
 
 	@Override
+	public void release() {
+		super.release();
+		mOnShareListener = null;
+		if (ivLimitTag != null && ivLimitTag.getBackground() != null) {
+			ivLimitTag.getBackground().setCallback(null);
+		}
+		ivLimitTag = null;
+		ivShare = null;
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (AppDebugConfig.IS_DEBUG) {

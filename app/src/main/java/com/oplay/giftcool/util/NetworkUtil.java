@@ -49,14 +49,15 @@ public class NetworkUtil {
 	 * 获取ConnectivityManager
 	 */
 	public static ConnectivityManager getConnectivityManager(Context context) {
-		return context == null ? null : (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		return context == null ? null : (ConnectivityManager) context.getApplicationContext().getSystemService(Context
+				.CONNECTIVITY_SERVICE);
 	}
 
 	/**
 	 * 获取ConnectivityManager
 	 */
 	public static TelephonyManager getTelephonyManager(Context context) {
-		return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		return (TelephonyManager) context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 	}
 
 	/**
@@ -66,7 +67,7 @@ public class NetworkUtil {
 	 */
 	public static boolean isConnected(Context context) {
 		if (context != null) {
-			NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+			NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
 			return net != null && net.isConnected();
 		} else {
 			return false;
@@ -79,7 +80,7 @@ public class NetworkUtil {
 	 * @return boolean 不管wifi，还是mobile net，只有当前在连接状态（可有效传输数据）才返回true,反之false。
 	 */
 	public static boolean isConnectedOrConnecting(Context context) {
-		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
+		NetworkInfo[] nets = getConnectivityManager(context.getApplicationContext()).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
 				if (net.isConnectedOrConnecting()) {
@@ -91,7 +92,7 @@ public class NetworkUtil {
 	}
 
 	public static NetType getConnectedType(Context context) {
-		NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+		NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
 		if (net != null) {
 			switch (net.getType()) {
 				case ConnectivityManager.TYPE_WIFI:
@@ -109,7 +110,7 @@ public class NetworkUtil {
 	 * 是否存在有效的WIFI连接
 	 */
 	public static boolean isWifiConnected(Context context) {
-		NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+		NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
 		return net != null && net.getType() == ConnectivityManager.TYPE_WIFI && net.isConnected();
 	}
 
@@ -119,7 +120,7 @@ public class NetworkUtil {
 	 * @return boolean
 	 */
 	public static boolean isMobileConnected(Context context) {
-		NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+		NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
 		return net != null && net.getType() == ConnectivityManager.TYPE_MOBILE && net.isConnected();
 	}
 
@@ -127,6 +128,7 @@ public class NetworkUtil {
 	 * 检测网络是否为可用状态
 	 */
 	public static boolean isAvailable(Context context) {
+		context = context.getApplicationContext();
 		return isWifiAvailable(context) || (isMobileAvailable(context) && isMobileEnabled(context));
 	}
 
@@ -140,7 +142,7 @@ public class NetworkUtil {
 	 * @return boolean wifi为可用状态（不一定成功连接，即Connected）即返回ture
 	 */
 	public static boolean isWifiAvailable(Context context) {
-		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
+		NetworkInfo[] nets = getConnectivityManager(context.getApplicationContext()).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
 				if (net.getType() == ConnectivityManager.TYPE_WIFI) {
@@ -162,7 +164,7 @@ public class NetworkUtil {
 	 * @return boolean
 	 */
 	public static boolean isMobileAvailable(Context context) {
-		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
+		NetworkInfo[] nets = getConnectivityManager(context.getApplicationContext()).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
 				if (net.getType() == ConnectivityManager.TYPE_MOBILE) {
@@ -182,7 +184,7 @@ public class NetworkUtil {
 		try {
 			Method getMobileDataEnabledMethod = ConnectivityManager.class.getDeclaredMethod("getMobileDataEnabled");
 			getMobileDataEnabledMethod.setAccessible(true);
-			return (Boolean) getMobileDataEnabledMethod.invoke(getConnectivityManager(context));
+			return (Boolean) getMobileDataEnabledMethod.invoke(getConnectivityManager(context.getApplicationContext()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -196,7 +198,7 @@ public class NetworkUtil {
 	 * @return boolean
 	 */
 	public static boolean printNetworkInfo(Context context) {
-		ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context
+		ConnectivityManager connectivity = (ConnectivityManager) context.getApplicationContext().getSystemService(Context
 				.CONNECTIVITY_SERVICE);
 		if (connectivity != null) {
 			NetworkInfo in = connectivity.getActiveNetworkInfo();
@@ -230,7 +232,7 @@ public class NetworkUtil {
 	 * {@link android.net.ConnectivityManager#TYPE_ETHERNET}...
 	 */
 	public static int getConnectedTypeINT(Context context) {
-		NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
+		NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
 		if (net != null) {
 			KLog.i(TAG, "NetworkInfo: " + net.toString());
 			return net.getType();
@@ -248,7 +250,7 @@ public class NetworkUtil {
 	 * {@link android.telephony.TelephonyManager#NETWORK_TYPE_LTE}...
 	 */
 	public static int getTelNetworkTypeINT(Context context) {
-		return getTelephonyManager(context).getNetworkType();
+		return getTelephonyManager(context.getApplicationContext()).getNetworkType();
 	}
 
 	/**
@@ -268,10 +270,9 @@ public class NetworkUtil {
 	 * EHRPD   3G CDMA2000向LTE 4G的中间产物 Evolved High Rate Packet Data HRPD的升级
 	 * HSPAP   3G HSPAP 比 HSDPA 快些
 	 *
-	 * @return {@link  com.litesuits.common.assist.Network.NetWorkType}
 	 */
 	public static NetWorkType getNetworkType(Context context) {
-		int type = getConnectedTypeINT(context);
+		int type = getConnectedTypeINT(context.getApplicationContext());
 		switch (type) {
 			case ConnectivityManager.TYPE_WIFI:
 				return NetWorkType.Wifi;
