@@ -27,6 +27,7 @@ import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
+import retrofit.Call;
 import retrofit.Response;
 
 /**
@@ -143,6 +144,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 //			webData.url = WebViewUrl.SCORE_DETAIL_NOTE + "?need_validate=1";
 //			banner.extData = AssistantApp.getInstance().getGson().toJson(webData, WebData.class);
 //			AssistantApp.getInstance().setBroadcastBanner(banner);
+			Call<JsonRespBase<InitAppResult>> d =  Global.getNetEngine().initAPP(reqData);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
 				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {

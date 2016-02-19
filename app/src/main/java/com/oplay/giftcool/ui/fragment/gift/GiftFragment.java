@@ -44,14 +44,15 @@ import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -382,6 +383,8 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		}
 	}
 
+	private Call<JsonRespBase<HashMap<String, IndexGiftNew>>> mRefreshCall = null;
+
 	@Override
 	public void onGiftUpdate(int action) {
 		if (action == ObserverManager.STATUS.GIFT_UPDATE_ALL) {
@@ -410,45 +413,74 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					}
 					ReqRefreshGift reqData = new ReqRefreshGift();
 					reqData.ids = ids;
-					Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
-							.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+					if (mRefreshCall == null) {
+						mRefreshCall = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
+					} else {
+						mRefreshCall = mRefreshCall.clone();
+					}
+					try {
+						Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response = mRefreshCall.execute();
+						if (response != null && response.isSuccess() && mCanShowUI) {
+							if (response.body() != null && response.body().isSuccess()) {
+								// 数据刷新成功，进行更新
+								HashMap<String, IndexGiftNew> respData = response.body().getData();
+								ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+								updateCircle(respData, waitDelIndexs, mGiftData.limit);
+								delIndex(mGiftData.limit, waitDelIndexs);
+								waitDelIndexs.clear();
+								updateCircle(respData, waitDelIndexs, mGiftData.news);
+								delIndex(mGiftData.news, waitDelIndexs);
+								Message msg = Message.obtain();
+								msg.what = ID_CIRCLE;
+								msg.obj = mGiftData;
+								mHandler.sendMessage(msg);
+								response = null;
+							}
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						mIsNotifyRefresh = false;
+					}
 
-								@Override
-								public void onResponse(final Response<JsonRespBase<HashMap<String, IndexGiftNew>>>
-										                       response,
-								                       Retrofit retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess()) {
-										if (response.body() != null && response.body().isSuccess()) {
-											// 数据刷新成功，进行更新
-											ThreadUtil.runInThread(new Runnable() {
-												@Override
-												public void run() {
-													HashMap<String, IndexGiftNew> respData = response.body().getData();
-													ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-													updateCircle(respData, waitDelIndexs, mGiftData.limit);
-													delIndex(mGiftData.limit, waitDelIndexs);
-													waitDelIndexs.clear();
-													updateCircle(respData, waitDelIndexs, mGiftData.news);
-													delIndex(mGiftData.news, waitDelIndexs);
-													Message msg = Message.obtain();
-													msg.what = ID_CIRCLE;
-													msg.obj = mGiftData;
-													mHandler.sendMessage(msg);
-												}
-											});
-										}
-									}
-									mIsNotifyRefresh = false;
-								}
-
-								@Override
-								public void onFailure(Throwable t) {
-									mIsNotifyRefresh = false;
-								}
-							});
+//					mRefreshCall.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+//
+//								@Override
+//								public void onResponse(final Response<JsonRespBase<HashMap<String, IndexGiftNew>>>
+//										                       response,
+//								                       Retrofit retrofit) {
+//									if (!mCanShowUI) {
+//										return;
+//									}
+//									if (response != null && response.isSuccess()) {
+//										if (response.body() != null && response.body().isSuccess()) {
+//											// 数据刷新成功，进行更新
+//											ThreadUtil.runInThread(new Runnable() {
+//												@Override
+//												public void run() {
+//													HashMap<String, IndexGiftNew> respData = response.body().getData();
+//													ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+//													updateCircle(respData, waitDelIndexs, mGiftData.limit);
+//													delIndex(mGiftData.limit, waitDelIndexs);
+//													waitDelIndexs.clear();
+//													updateCircle(respData, waitDelIndexs, mGiftData.news);
+//													delIndex(mGiftData.news, waitDelIndexs);
+//													Message msg = Message.obtain();
+//													msg.what = ID_CIRCLE;
+//													msg.obj = mGiftData;
+//													mHandler.sendMessage(msg);
+//												}
+//											});
+//										}
+//									}
+//									mIsNotifyRefresh = false;
+//								}
+//
+//								@Override
+//								public void onFailure(Throwable t) {
+//									mIsNotifyRefresh = false;
+//								}
+//							});
 				}
 			});
 		}

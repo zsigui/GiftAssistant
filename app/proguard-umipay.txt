@@ -8,7 +8,11 @@
 -ignorewarnings
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/* # 混淆时所采用的算法
 
+
 -keepattributes Signature
+-keepattributes Exceptions
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
 
 -dontnote android.os.SystemProperties
 -dontnote com.google.android.gms.ads.identifier.**
