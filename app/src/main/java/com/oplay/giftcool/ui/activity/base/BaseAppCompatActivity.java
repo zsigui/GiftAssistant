@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.debug.hv.ViewServer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -68,7 +67,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			getWindow().setStatusBarColor(statusColor);
 		}
 		if (AppDebugConfig.IS_DEBUG) {
-			ViewServer.get(this).addWindow(this);
+//			ViewServer.get(this).addWindow(this);
 		}
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
 		initView();
@@ -269,7 +268,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	protected void onResume() {
 		super.onResume();
 		if (AppDebugConfig.IS_DEBUG) {
-			ViewServer.get(this).setFocusedWindow(this);
+//			ViewServer.get(this).setFocusedWindow(this);
 		}
 	}
 
@@ -334,8 +333,8 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	protected void onDestroy() {
 		if (AppDebugConfig.IS_DEBUG) {
-			ViewServer.get(this).removeWindow(this);
-			AssistantApp.getRefWatcher(this).watch(this);
+//			ViewServer.get(this).removeWindow(this);
+//			AssistantApp.getRefWatcher(this).watch(this);
 		}
 		if (ImageLoader.getInstance().isInited()) {
 			ImageLoader.getInstance().clearMemoryCache();

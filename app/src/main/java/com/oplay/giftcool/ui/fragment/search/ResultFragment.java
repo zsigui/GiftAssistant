@@ -13,19 +13,23 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGameListAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.NestedListView;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 
 /**
  * Created by zsigui on 15-12-22.
  */
-public class ResultFragment extends BaseFragment implements View.OnClickListener, OnItemClickListener<IndexGameNew> {
+public class ResultFragment extends BaseFragment implements View.OnClickListener, OnItemClickListener<IndexGameNew>{
 
 	private final static String PAGE_NAME = "搜索结果页";
 	private ScrollView mContainer;
@@ -79,6 +83,24 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	protected void processLogic(Bundle savedInstanceState) {
 		mGameAdapter = new NestedGameListAdapter(getContext(), this);
 		mGiftAdapter = new NestedGiftListAdapter(getContext());
+		mGiftAdapter.setListener(new OnItemClickListener<IndexGiftNew>() {
+			@Override
+			public void onItemClick(IndexGiftNew gift, View v, int position) {
+				switch (v.getId()) {
+					case R.id.rl_recommend:
+						IntentUtil.jumpGiftDetail(getContext(), gift.id);
+						break;
+					case R.id.btn_send:
+						if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+							// 对于0元抢，先跳转到游戏详情
+							IntentUtil.jumpGiftDetail(getContext(), gift.id);
+						} else {
+							PayManager.getInstance().seizeGift(getContext(), gift, (GiftButton) v);
+						}
+						break;
+				}
+			}
+		});
 
 		if (getArguments() != null) {
 			mData = (SearchDataResult) getArguments().getSerializable(KeyConfig.KEY_DATA);

@@ -257,7 +257,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		ObserverManager.getInstance().removeUserUpdateListener(this);
 		release();
-		AssistantApp.getRefWatcher(getActivity()).watch(this);
+//		AssistantApp.getRefWatcher(getActivity()).watch(this);
 	}
 
 	@Override

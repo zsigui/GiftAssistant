@@ -41,7 +41,7 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 		mPayCode = payCode;
 		mAppInfo = payCode.gameInfo;
 		if (mAppInfo != null) {
-			mAppInfo.initAppInfoStatus(getContext());
+			mAppInfo.initAppInfoStatus(getContext().getApplicationContext());
 		}
 		if (tvGiftCode != null) {
 			tvGiftCode.setText(Html.fromHtml(String.format("礼包码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));

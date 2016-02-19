@@ -79,6 +79,9 @@
      *;
 }
 
+-keep class com.android.** { *; }
+-keep public class com.bigkoo.convenientbanner.ConvenientBanner { public *; }
+
 
 
 

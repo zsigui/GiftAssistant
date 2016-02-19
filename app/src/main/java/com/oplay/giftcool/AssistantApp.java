@@ -1,7 +1,6 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.Build;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -33,8 +32,6 @@ import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.squareup.okhttp.OkHttpClient;
 import com.tendcloud.tenddata.TCAgent;
 
@@ -86,12 +83,12 @@ public class AssistantApp extends Application {
 	private boolean mIsPlayDownloadComplete = false;
 
 	// LeakCanary 用于检测内存泄露
-	private RefWatcher mRefWatcher;
+//	private RefWatcher mRefWatcher;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mRefWatcher = LeakCanary.install(this);
+//		mRefWatcher = LeakCanary.install(this);
 		// enabled StrictMode only in TEST
 		KLog.init(AppDebugConfig.IS_DEBUG);
 		if (AppDebugConfig.IS_DEBUG) {
@@ -126,9 +123,9 @@ public class AssistantApp extends Application {
 	/**
 	 * get a watcher to watch whether exits the problem of memory leak
 	 */
-	public static RefWatcher getRefWatcher(Context context) {
-		return ((AssistantApp) context.getApplicationContext()).mRefWatcher;
-	}
+//	public static RefWatcher getRefWatcher(Context context) {
+//		return ((AssistantApp) context.getApplicationContext()).mRefWatcher;
+//	}
 
 	/**
 	 * do work to release the resource when app exit
