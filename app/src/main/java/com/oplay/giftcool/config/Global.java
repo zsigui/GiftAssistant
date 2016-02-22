@@ -22,6 +22,7 @@ public class Global {
 	/* 外部缓存存储位置 */
 	public final static String EXTERNAL_CACHE = "/gift_cool/cache";
 	public final static String IMG_CACHE_PATH = EXTERNAL_CACHE + "/imgs";
+	public final static String NET_CACHE_PATH = EXTERNAL_CACHE + "/net";
 	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
 	public final static int GIFTCOOL_GAME_ID = 2000705;
 

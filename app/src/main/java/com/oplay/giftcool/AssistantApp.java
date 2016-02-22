@@ -28,16 +28,23 @@ import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.tendcloud.tenddata.TCAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -163,7 +170,36 @@ public class AssistantApp extends Application {
 				.serializeNulls()
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();
+		File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH);
+		Cache cache = new Cache(httpCacheDir, 10 * 1024 * 1024);
+		Interceptor interceptor = new Interceptor() {
+			@Override
+			public Response intercept(Chain chain) throws IOException {
+				Request request = chain.request();
+				if (!NetworkUtil.isConnected(getApplicationContext())) {
+					request = request.newBuilder()
+							.cacheControl(CacheControl.FORCE_CACHE)
+							.build();
+				}
+				Response response = chain.proceed(request);
+				if (!NetworkUtil.isConnected(getApplicationContext())) {
+					response.newBuilder()
+							.header("Cache-Control", "public, max-age=0")
+							.removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+							.build();
+				} else {
+					int maxStale = 60 * 60 * 24 * 2; // 无网络时，超时时间为2天
+					response.newBuilder()
+							.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+							.removeHeader("Pragma")
+							.build();
+				}
+				return response;
+			}
+		};
 		OkHttpClient httpClient = new OkHttpClient();
+		httpClient.networkInterceptors().add(interceptor);
+		httpClient.setCache(cache);
 		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
 		httpClient.setReadTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS);
 		if (AppDebugConfig.IS_DEBUG) {

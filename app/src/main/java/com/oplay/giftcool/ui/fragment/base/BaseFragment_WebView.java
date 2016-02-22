@@ -46,7 +46,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+		mContentView = super.onCreateView(inflater, container, savedInstanceState);
 		initWebView();
 		return mContentView;
 	}
@@ -281,6 +281,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
 		}
+		KLog.e(AppDebugConfig.TAG_WEBVIEW, "mWebView = " + mWebView);
 		if (mWebView != null) {
 			mWebView.loadUrl(url);
 		}
