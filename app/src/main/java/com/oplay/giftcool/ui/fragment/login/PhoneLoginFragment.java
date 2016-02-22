@@ -135,7 +135,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etPhone, etCode, tvPhoneClear, tvCodeClear, btnLogin);
+		InputTextUtil.initPswFilter(etPhone, etCode, tvPhoneClear, tvCodeClear, btnLogin, false);
 //		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
 		initHint();
@@ -261,7 +261,6 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
 											&& response.body().getCode() == StatusCode.SUCCESS) {
-										KLog.e(response.body().getData());
 										showToast("短信已经发送，请注意接收");
 										return;
 									}
@@ -373,8 +372,6 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		KLog.e("test-test", "v.getId = " + v.getId() + ", etPhone.id = " + R.id.et_input + ", action_id = " + actionId
-		 + ", next_id = " + EditorInfo.IME_ACTION_NEXT);
 		switch (actionId) {
 			case EditorInfo.IME_ACTION_NEXT:
 				etCode.requestFocus();

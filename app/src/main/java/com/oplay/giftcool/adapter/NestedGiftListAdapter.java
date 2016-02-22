@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
@@ -40,7 +41,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	}
 
 	public NestedGiftListAdapter(Context context, List<IndexGiftNew> data) {
-		mContext = context.getApplicationContext();
+		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext() : context);
 		this.mData = data;
 	}
 
@@ -207,8 +208,10 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	}
 
 	public void setDisabledField(ViewHolder viewHolder, int tvVisibility, Spanned tvText) {
-		viewHolder.tvCount.setVisibility(tvVisibility);
-		viewHolder.tvCount.setText(tvText);
+		if (viewHolder.tvCount != null) {
+			viewHolder.tvCount.setVisibility(tvVisibility);
+			viewHolder.tvCount.setText(tvText);
+		}
 	}
 
 	/**

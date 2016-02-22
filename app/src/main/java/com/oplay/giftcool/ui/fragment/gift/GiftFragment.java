@@ -442,45 +442,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					} finally {
 						mIsNotifyRefresh = false;
 					}
-
-//					mRefreshCall.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
-//
-//								@Override
-//								public void onResponse(final Response<JsonRespBase<HashMap<String, IndexGiftNew>>>
-//										                       response,
-//								                       Retrofit retrofit) {
-//									if (!mCanShowUI) {
-//										return;
-//									}
-//									if (response != null && response.isSuccess()) {
-//										if (response.body() != null && response.body().isSuccess()) {
-//											// 数据刷新成功，进行更新
-//											ThreadUtil.runInThread(new Runnable() {
-//												@Override
-//												public void run() {
-//													HashMap<String, IndexGiftNew> respData = response.body().getData();
-//													ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-//													updateCircle(respData, waitDelIndexs, mGiftData.limit);
-//													delIndex(mGiftData.limit, waitDelIndexs);
-//													waitDelIndexs.clear();
-//													updateCircle(respData, waitDelIndexs, mGiftData.news);
-//													delIndex(mGiftData.news, waitDelIndexs);
-//													Message msg = Message.obtain();
-//													msg.what = ID_CIRCLE;
-//													msg.obj = mGiftData;
-//													mHandler.sendMessage(msg);
-//												}
-//											});
-//										}
-//									}
-//									mIsNotifyRefresh = false;
-//								}
-//
-//								@Override
-//								public void onFailure(Throwable t) {
-//									mIsNotifyRefresh = false;
-//								}
-//							});
 				}
 			});
 		}

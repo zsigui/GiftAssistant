@@ -277,14 +277,11 @@ public class AccountManager {
 			// 当天登录过，无须再次重新更新 session
 			if (DateUtil.isToday(getUserSesion().lastUpdateTime)) {
 				// 只更新用户信息
-				KLog.e("lastUpdateTime is today");
 				updateUserInfo();
 				return;
 			}
 			// session只能保持7天，一旦超时，需要重新登录
 			if (getUserSesion().lastUpdateTime + 7 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
-				KLog.e("lastUpdateTime = " + getUserSesion().lastUpdateTime
-						+ ", currentTime = " + System.currentTimeMillis());
 				ToastUtil.showShort("登录超时，需要重新登录");
 				setUser(null);
 				return;
@@ -394,7 +391,6 @@ public class AccountManager {
 	}
 
 	private void writeToHistory(String value, String key, ArrayList<String> history, boolean isRemove) {
-		KLog.e("test-test", "write.history = " + history + ", value = " + value + ", key = " + key);
 		if (TextUtils.isEmpty(value) || (value.contains(",") && value.indexOf(",") == 0)) {
 			return;
 		}
@@ -414,7 +410,7 @@ public class AccountManager {
 			if (history.size() > 15) {
 				history.remove(14);
 			}
-			history.add(value);
+			history.add(0, value);
 		}
 		StringBuilder historyStr = new StringBuilder();
 		for (String s : history) {

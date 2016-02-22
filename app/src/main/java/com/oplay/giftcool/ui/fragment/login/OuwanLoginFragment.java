@@ -72,7 +72,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	private AccountAdapter mCompleteAdapter;
 	private ArrayList<String> mData;
 	private LinearLayout llUser;
-	private boolean mNeedEncrypt = true;
+	public static boolean sNeedEncrypt = true;
 
 	public static OuwanLoginFragment newInstance() {
 		return new OuwanLoginFragment();
@@ -115,7 +115,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin);
+		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, true);
 //		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
 		btnLogin.setEnabled(false);
 		initHint();
@@ -128,7 +128,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			etUser.setText(s[0]);
 			if (AssistantApp.getInstance().isRememberPwd() && (s.length == 2 && !TextUtils.isEmpty(s[1]))) {
 				etPwd.setText(s[1]);
-				mNeedEncrypt = false;
+				sNeedEncrypt = false;
 				etClearFocus.requestFocus();
 			} else {
 				etPwd.requestFocus();
@@ -227,12 +227,13 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		et.setText("");
 		et.requestFocus();
 		et.setSelection(0);
+		sNeedEncrypt = true;
 	}
 
 	private void handleLogin() {
 		showLoading();
 		final ReqLogin login = new ReqLogin();
-		if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), mNeedEncrypt)) {
+		if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
 			hideLoading();
 			showToast("账号密码格式不符合要求");
 			return;
@@ -332,11 +333,11 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 					etUser.setText(s[0]);
 					etPwd.setText(s[1]);
 					etClearFocus.requestFocus();
+					sNeedEncrypt = false;
 				} else {
 					etUser.setText(s[0]);
 					etPwd.requestFocus();
 				}
-
 				break;
 			case R.id.iv_account_list_delete:
 				if (s[0].equals(etUser.getText().toString().trim())) {

@@ -40,15 +40,15 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 	public void setGiftCode(PayCode payCode) {
 		mPayCode = payCode;
 		mAppInfo = payCode.gameInfo;
-		if (mAppInfo != null) {
-			mAppInfo.initAppInfoStatus(AssistantApp.getInstance().getApplicationContext());
-		}
 		if (tvGiftCode != null) {
 			tvGiftCode.setText(Html.fromHtml(String.format("礼包码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));
 		}
 		if (getContext() != null) {
 			ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
 			cmb.setPrimaryClip(ClipData.newPlainText("礼包码", mPayCode.giftCode));
+			if (mAppInfo != null) {
+				mAppInfo.initAppInfoStatus(getContext());
+			}
 		}
 	}
 
@@ -75,7 +75,6 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 	public void onConfirm() {
 		if (mAppInfo != null  && AssistantApp.getInstance().isAllowDownload()) {
 			mAppInfo.handleOnClick(getFragmentManager());
-			return;
 		}
 		dismissAllowingStateLoss();
 	}
