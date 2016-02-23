@@ -41,7 +41,8 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	}
 
 	public NestedGiftListAdapter(Context context, List<IndexGiftNew> data) {
-		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext() : context);
+		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext()
+				: context.getApplicationContext());
 		this.mData = data;
 	}
 
