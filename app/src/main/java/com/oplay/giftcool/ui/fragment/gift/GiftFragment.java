@@ -64,7 +64,8 @@ import retrofit.Retrofit;
  * @email zsigui@foxmail.com
  * @date 2015/12/13
  */
-public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener, com.oplay.giftcool.listener.OnItemClickListener<IndexGiftNew> {
+public class GiftFragment extends BaseFragment_Refresh implements View.OnClickListener, OnItemClickListener,
+		com.oplay.giftcool.listener.OnItemClickListener<IndexGiftNew> {
 
 	private final static String PAGE_NAME = "礼包首页";
 	private static final int ID_BANNER = 1;
@@ -247,13 +248,6 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_FRAG, "lazyLoad.Thread start() ");
 				}
-				if (!NetworkUtil.isConnected(getContext())) {
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_FRAG, "lazyLoad.Thread net failed ");
-					}
-					refreshFailEnd();
-					return;
-				}
 				ReqIndexGift data = new ReqIndexGift();
 				data.appNames = Global.getInstalledAppNames();
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
@@ -413,11 +407,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 					}
 					ReqRefreshGift reqData = new ReqRefreshGift();
 					reqData.ids = ids;
-					if (mRefreshCall == null) {
-						mRefreshCall = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
-					} else {
-						mRefreshCall = mRefreshCall.clone();
-					}
+					mRefreshCall = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
 					try {
 						Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response = mRefreshCall.execute();
 						if (response != null && response.isSuccess() && mCanShowUI) {
@@ -425,6 +415,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 								// 数据刷新成功，进行更新
 								HashMap<String, IndexGiftNew> respData = response.body().getData();
 								ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+								updateCircle(respData, waitDelIndexs, mGiftData.zero);
+								delIndex(mGiftData.zero, waitDelIndexs);
+								waitDelIndexs.clear();
 								updateCircle(respData, waitDelIndexs, mGiftData.limit);
 								delIndex(mGiftData.limit, waitDelIndexs);
 								waitDelIndexs.clear();

@@ -8,22 +8,22 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-    public static final int TYPE_COUNT = 13;
+	public static final int TYPE_COUNT = 13;
 
-    // 限量礼包类型，可抢，limit
-    public static final int TYPE_LIMIT_SEIZE = 0;
-    // 限量礼包类型，等待抢，disabled - text
-    public static final int TYPE_LIMIT_WAIT_SEIZE = 1;
-    // 限量礼包类型，已结束, disabled
-    public static final int TYPE_LIMIT_FINISHED = 2;
-    // 正常礼包类型，可抢，normal
-    public static final int TYPE_NORMAL_SEIZE = 3;
-    // 正常礼包类型，可淘号，disabled - text
-    public static final int TYPE_NORMAL_SEARCH = 4;
-    // 正常礼包类型，等待抢号，disabled - text
-    public static final int TYPE_NORMAL_WAIT_SEIZE = 5;
-    // 正常礼包类型，等待淘号，disabled - text
-    public static final int TYPE_NORMAL_WAIT_SEARCH = 6;
+	// 限量礼包类型，可抢，limit
+	public static final int TYPE_LIMIT_SEIZE = 0;
+	// 限量礼包类型，等待抢，disabled - text
+	public static final int TYPE_LIMIT_WAIT_SEIZE = 1;
+	// 限量礼包类型，已结束, disabled
+	public static final int TYPE_LIMIT_FINISHED = 2;
+	// 正常礼包类型，可抢，normal
+	public static final int TYPE_NORMAL_SEIZE = 3;
+	// 正常礼包类型，可淘号，disabled - text
+	public static final int TYPE_NORMAL_SEARCH = 4;
+	// 正常礼包类型，等待抢号，disabled - text
+	public static final int TYPE_NORMAL_WAIT_SEIZE = 5;
+	// 正常礼包类型，等待淘号，disabled - text
+	public static final int TYPE_NORMAL_WAIT_SEARCH = 6;
 	// 正常礼包类型，已结束, disabled
 	public static final int TYPE_NORMAL_FINISHED = 7;
 	// 限量礼包类型，已抢号，disabled
@@ -60,10 +60,16 @@ public class GiftTypeUtil {
 	public static final int GIFT_TYPE_ZERO_SEIZE = 4;
 
 	public static int getItemViewType(IndexGiftNew gift) {
-		//KLog.e("gift_data : status = " + gift.status + ", gifttype = " + gift.giftType + ", giftstatus = " + gift.seizeStatus);
+		//KLog.e("gift_data : status = " + gift.status + ", gifttype = " + gift.giftType + ", giftstatus = " + gift
+		// .seizeStatus);
 		if (gift.seizeStatus != SEIZE_TYPE_NEVER) {
 			switch (gift.seizeStatus) {
 				case SEIZE_TYPE_SEIZED:
+					if (gift.status == STATUS_SEARCH
+							&& (gift.giftType == GIFT_TYPE_NORMAL
+							|| gift.giftType == GIFT_TYPE_NORMAL_FREE)) {
+						return TYPE_NORMAL_SEARCH;
+					}
 					if (gift.giftType == GIFT_TYPE_ZERO_SEIZE
 							|| gift.giftType == GIFT_TYPE_LIMIT) {
 						return TYPE_LIMIT_SEIZED;
@@ -86,8 +92,7 @@ public class GiftTypeUtil {
 					case STATUS_FINISHED:
 						return TYPE_LIMIT_FINISHED;
 				}
-			}
-			else if (gift.giftType == GIFT_TYPE_LIMIT) {
+			} else if (gift.giftType == GIFT_TYPE_LIMIT) {
 				// 珍贵礼包 状态判断
 				switch (gift.status) {
 					case STATUS_WAIT_SEIZE:
@@ -117,5 +122,5 @@ public class GiftTypeUtil {
 			} // else finished
 		}
 		return TYPE_ERROR;
-    }
+	}
 }
