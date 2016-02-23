@@ -35,6 +35,15 @@
 
 -keep class com.facebook.rebound.** { *; }
 
+# Umeng
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
 # Support v4
 -keep class android.support.v4.** { *; }
 -keep interface android.support.v4.** { *; }

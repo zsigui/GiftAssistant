@@ -34,6 +34,8 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 import com.squareup.okhttp.OkHttpClient;
 import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.AnalyticsConfig;
+import com.umeng.analytics.MobclickAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
@@ -51,6 +53,7 @@ import retrofit.Retrofit;
 public class AssistantApp extends Application {
 
 	private final static String TD_APP_ID = "7E57533EDCF044DA1BF657D786E0FDF7";
+	private final static String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
@@ -98,7 +101,15 @@ public class AssistantApp extends Application {
 			KLog.d("Gift Cool App is Start Now");
 		}
 		sInstance = this;
+
+		//初始化TalkingData
 		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
+		//初始化友盟
+		AnalyticsConfig.setAppkey(this, UMENG_APP_KEY);
+		AnalyticsConfig.setChannel("m" + getChannelId());   //友盟渠道号不能纯数字
+		AnalyticsConfig.enableEncrypt(true);
+		MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
+
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
@@ -141,6 +152,7 @@ public class AssistantApp extends Application {
 				ImageLoader.getInstance().destroy();
 			}
 			DownloadNotificationManager.cancelDownload(getApplicationContext());
+			MobclickAgent.onKillProcess(this);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "exit exception : " + e);

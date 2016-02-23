@@ -248,6 +248,7 @@ public class DrawerFragment extends BaseFragment {
 
 	@Override
 	public String getPageName() {
-		return "侧边栏";
+		//侧边栏不做统计
+		return "";
 	}
 }
