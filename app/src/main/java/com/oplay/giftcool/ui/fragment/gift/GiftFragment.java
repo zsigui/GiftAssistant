@@ -382,6 +382,9 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 	@Override
 	public void onGiftUpdate(int action) {
 		if (action == ObserverManager.STATUS.GIFT_UPDATE_ALL) {
+            if (mIsSwipeRefresh) {
+                return;
+            }
 			mRefreshLayout.setRefreshing(true);
 			onRefresh();
 			return;
