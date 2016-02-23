@@ -32,7 +32,6 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 		String json = gson.toJson(value, type);
 		KLog.d("req json = " + json);
 		int cmd = getCmdByJson(json);
-		KLog.d("req cmd = " + cmd);
 		TestActivity.REQ_DATA = json + "\n请求cmd = " + cmd;
 		byte[] data = NetDataEncrypt.getInstance().encrypt(json, cmd);
 		return RequestBody.create(MEDIA_TYPE, data);

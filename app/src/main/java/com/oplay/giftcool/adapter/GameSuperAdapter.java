@@ -190,25 +190,35 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
 			case IndexTypeUtil.ITEM_BANNER:
-				if (mBannerVH != null) {
-					return mBannerVH;
+				if (mBannerVH == null) {
+					return new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false));
 				}
-				return new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false));
 			case IndexTypeUtil.ITEM_HOT:
-				if (mGameHotVH != null) {
-					return mGameHotVH;
+				if (mGameHotVH == null) {
+					mGameHotVH = new GameHotVH(mInflater.inflate(R.layout.view_game_hot, parent, false));
+					mGameHotVH.rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
+					mGameHotVH.rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager
+
+							.VERTICAL));
+					mGameHotVH.adapter = new IndexGameHotWithTitleAdapter(mContext);
+					mGameHotVH.rvContainer.setAdapter(mGameHotVH.adapter);
 				}
-				return new GameHotVH(mInflater.inflate(R.layout.view_game_hot, parent, false));
+				return mGameHotVH;
 			case IndexTypeUtil.ITEM_RECOMMEND:
-				if (mRecommendVH != null) {
-					return mRecommendVH;
+				if (mRecommendVH == null) {
+					mRecommendVH = new RecommendVH(mInflater.inflate(R.layout.view_game_recommend, parent, false));
 				}
-				return new RecommendVH(mInflater.inflate(R.layout.view_game_recommend, parent, false));
+				return mRecommendVH;
 			case IndexTypeUtil.ITEM_NEW:
-				if (mGameNewVH != null) {
-					return mGameNewVH;
+				if (mGameNewVH == null) {
+					mGameNewVH = new GameNewVH(mInflater.inflate(R.layout.view_game_new, parent, false));
+					mGameNewVH.rvContainer.setLayoutManager(new GameSuperLinearLayoutManager(mGameNewVH.rvContainer));
+					mGameNewVH.rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
+
+					mGameNewVH.adapter = new IndexGameNewWithTitleAdapter(mContext);
+					mGameNewVH.rvContainer.setAdapter(mGameNewVH.adapter);
 				}
-				return new GameNewVH(mInflater.inflate(R.layout.view_game_new, parent, false));
+				return mGameNewVH;
 			default:
 				throw new IllegalArgumentException("bad viewType : " + viewType);
 		}
@@ -309,7 +319,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		BannerTypeUtil.handleBanner(mContext, banner);
 	}
 
-	class BannerVH extends BaseRVHolder {
+	static class BannerVH extends BaseRVHolder {
 
 		ConvenientBanner mBanner;
 
@@ -319,7 +329,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 	}
 
-	class GameHotVH extends BaseRVHolder {
+	static class GameHotVH extends BaseRVHolder {
 
 		RecyclerView rvContainer;
 		IndexGameHotWithTitleAdapter adapter;
@@ -327,15 +337,10 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		public GameHotVH(View itemView) {
 			super(itemView);
 			rvContainer = getViewById(R.id.lv_content);
-			rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
-			rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager
-					.VERTICAL));
-			adapter = new IndexGameHotWithTitleAdapter(mContext);
-			rvContainer.setAdapter(adapter);
 		}
 	}
 
-	class RecommendVH extends BaseRVHolder {
+	static class RecommendVH extends BaseRVHolder {
 
 		ImageView ivBanner;
 		ImageView ivIcon;
@@ -354,7 +359,7 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		}
 	}
 
-	class GameNewVH extends BaseRVHolder {
+	static class GameNewVH extends BaseRVHolder {
 
 		RecyclerView rvContainer;
 		IndexGameNewWithTitleAdapter adapter;
@@ -362,10 +367,6 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		public GameNewVH(View itemView) {
 			super(itemView);
 			rvContainer = getViewById(R.id.lv_content);
-			rvContainer.setLayoutManager(new GameSuperLinearLayoutManager(rvContainer));
-			rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-			adapter = new IndexGameNewWithTitleAdapter(mContext);
-			rvContainer.setAdapter(adapter);
 		}
 	}
 

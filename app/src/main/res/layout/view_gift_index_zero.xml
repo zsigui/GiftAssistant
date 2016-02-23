@@ -31,7 +31,7 @@
 	<View style = "@style/HDividerView" />
 
 	<android.support.v7.widget.RecyclerView
-			android:id = "@+id/rv_zero"
+			android:id = "@+id/rv_zero_content"
 			style = "@style/DefaultRecyclerView"
 			android:layout_height = "164dp" />
 

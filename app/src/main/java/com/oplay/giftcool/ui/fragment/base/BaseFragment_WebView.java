@@ -202,15 +202,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				if (mViewManager != null) {
 					mViewManager.showErrorRetry();
 				}
-				if (mWebView != null) {
-					mWebView.setVisibility(View.GONE);
-				}
 			} else {
 				if (mViewManager != null) {
 					mViewManager.showContent();
-				}
-				if (mWebView != null) {
-					mWebView.setVisibility(View.VISIBLE);
 				}
 			}
 			// 必须page load finish 才能重新setScrollY
@@ -229,6 +223,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);
+			}
+			if (mViewManager != null) {
+				mViewManager.showErrorRetry();
 			}
 		}
 	}

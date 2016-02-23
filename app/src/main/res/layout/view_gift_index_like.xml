@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id = "@+id/ll_like"
+              style = "@style/IndexModuleLayout">
+
+	<View
+			style = "@style/HDividerView"
+			android:layout_height = "@dimen/di_index_module_gap" />
+
+	<RelativeLayout
+			android:id = "@+id/rl_hot_all"
+			style = "@style/IndexModuleTitleLayout"
+			android:background = "@color/co_white"
+			android:clickable = "true" >
+
+		<TextView
+				android:id = "@+id/hot_light"
+				style = "@style/DefaultTextView.Header"
+				android:text = "▌"
+				android:textColor = "@color/co_common_app_main_bg" />
+
+		<TextView
+				android:layout_toRightOf = "@id/hot_light"
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_index_gift_like" />
+
+		<TextView style = "@style/DefaultTextView.More" />
+
+	</RelativeLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<android.support.v7.widget.RecyclerView
+			android:id = "@+id/rv_like_content"
+			style = "@style/DefaultRecyclerView"
+			android:layout_height = "138dp" />
+
+</LinearLayout >

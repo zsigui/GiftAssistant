@@ -131,7 +131,7 @@ public class GiftFragment extends BaseFragment_Refresh implements View.OnClickLi
 		mNewView = getViewById(R.id.rv_new_content);
 		((TextView) getViewById(R.id.tv_limit_hint)).setText(Html.fromHtml("(每天<font " +
 				"color='#f85454'>20:00</font>开抢10款)"));
-		mZeroView = getViewById(R.id.rv_zero);
+		mZeroView = getViewById(R.id.rv_zero_content);
 		((TextView) getViewById(R.id.tv_zero_limit)).setText(Html.fromHtml("(每天<font " +
 				"color='#f85454'>20:00</font>开抢3款)"));
 	}

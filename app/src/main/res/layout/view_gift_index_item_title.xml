@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id = "@+id/rl_hot_all"
+              style = "@style/IndexModuleTitleLayout"
+              android:background = "@drawable/selector_white_module"
+              android:orientation = "horizontal"
+              android:gravity = "center_vertical"
+              android:layout_marginTop = "@dimen/di_index_module_gap"
+              android:layout_marginBottom = "@dimen/di_divider_height"
+              android:clickable = "true" >
+
+	<TextView
+			android:id = "@+id/hot_light"
+			style = "@style/DefaultTextView.Header"
+			android:text = "▌"
+			android:textColor = "@color/co_common_app_main_bg" />
+
+	<TextView
+			android:layout_toRightOf = "@id/hot_light"
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "match_parent"
+			android:text = "@string/st_index_gift_new" />
+
+
+</LinearLayout >

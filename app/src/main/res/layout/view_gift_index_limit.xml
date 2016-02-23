@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              style = "@style/IndexModuleLayout" >
+
+	<View
+			style = "@style/HDividerView"
+			android:layout_height = "@dimen/di_index_module_gap" />
+
+	<RelativeLayout
+			android:id = "@+id/rl_limit_all"
+			style = "@style/IndexModuleTitleLayout" >
+
+		<TextView
+				android:id = "@+id/new_limit"
+				style = "@style/DefaultTextView.Header"
+				android:text = "▌"
+				android:textColor = "@color/co_common_app_main_bg" />
+
+		<TextView
+				android:id = "@+id/tv_limit"
+				android:layout_toRightOf = "@+id/new_limit"
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_index_gift_limit" />
+
+		<TextView
+				android:id = "@+id/tv_limit_hint"
+				style = "@style/DefaultTextView.Text"
+				android:layout_toRightOf = "@+id/tv_limit"
+				android:paddingLeft = "8dp" />
+
+		<TextView style = "@style/DefaultTextView.More" />
+
+	</RelativeLayout >
+
+	<View
+			style = "@style/HDividerView" />
+
+	<android.support.v7.widget.RecyclerView
+			android:id = "@+id/rv_limit_content"
+			style = "@style/DefaultRecyclerView"
+			android:layout_height = "164dp" />
+</LinearLayout >
