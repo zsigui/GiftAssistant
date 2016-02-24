@@ -190,6 +190,40 @@ public class IntentUtil {
 		return intent;
 	}
 
+//	private static ConfirmDialog mConfirmDialog;
+//
+//	private static void loginConfirm(final Context context, final int type) {
+//		if (!(context instanceof FragmentActivity)) {
+//			return;
+//		}
+//		if (mConfirmDialog != null) {
+//			mConfirmDialog.dismissAllowingStateLoss();
+//			mConfirmDialog = null;
+//		}
+//		mConfirmDialog = ConfirmDialog.newInstance();
+//		mConfirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//			@Override
+//			public void onCancel() {
+//				mConfirmDialog.dismissAllowingStateLoss();
+//				mConfirmDialog = null;
+//			}
+//
+//			@Override
+//			public void onConfirm() {
+//				Intent intent = new Intent(context, LoginActivity.class);
+//				intent.putExtra(KeyConfig.KEY_TYPE, type);
+//				context.startActivity(intent);
+//				mConfirmDialog.dismissAllowingStateLoss();
+//				mConfirmDialog = null;
+//			}
+//		});
+//		FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+//		Context appContext = AssistantApp.getInstance().getApplicationContext();
+//		mConfirmDialog.setTitle(appContext.getResources().getString(R.string.st_hint_dialog_login_title));
+//		mConfirmDialog.setContent(appContext.getResources().getString(R.string.st_hint_dialog_login_content));
+//		mConfirmDialog.show(fm, appContext.getResources().getString(R.string.st_hint_dialog_login_tag));
+//	}
+
 	/**
 	 * 跳转登录界面（根据最后一次登录判断）
 	 */
@@ -205,6 +239,7 @@ public class IntentUtil {
 	 * 跳转登录界面
 	 */
 	public static void jumpLogin(Context context, int type) {
+		ToastUtil.showShort("需要先登录～");
 		Intent intent = new Intent(context, LoginActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
 		context.startActivity(intent);

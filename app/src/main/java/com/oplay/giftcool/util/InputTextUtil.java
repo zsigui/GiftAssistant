@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-11.
@@ -65,7 +64,6 @@ public class InputTextUtil {
 						}
 					}
 					if (!s.toString().equals(sOrigin)) {
-						KLog.e("test");
 						if (isOuwan) {
 							OuwanLoginFragment.sNeedEncrypt = true;
 						}
@@ -114,7 +112,6 @@ public class InputTextUtil {
 						}
 					}
 					if (!s.toString().equals(sOrigin)) {
-						KLog.e("test");
 						if (isOuwan) {
 							OuwanLoginFragment.sNeedEncrypt = true;
 						}

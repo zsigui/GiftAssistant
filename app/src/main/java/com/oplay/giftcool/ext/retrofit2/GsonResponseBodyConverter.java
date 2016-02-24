@@ -1,7 +1,10 @@
 package com.oplay.giftcool.ext.retrofit2;
 
 import com.google.gson.Gson;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 import com.squareup.okhttp.ResponseBody;
@@ -33,6 +36,9 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), cmd);
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_ENCRYPT, "response = " + json);
+				KLog.file(AppDebugConfig.TAG_ENCRYPT,
+						StorageUtils.getOwnCacheDirectory(AssistantApp.getInstance().getApplicationContext(),
+								Global.LOGGING_CACHE_PATH), "response = " + json);
 			}
 			return gson.fromJson(json, type);
 		} catch (Exception e) {

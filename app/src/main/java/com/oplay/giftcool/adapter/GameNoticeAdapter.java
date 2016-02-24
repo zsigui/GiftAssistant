@@ -149,7 +149,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterL
 			tvTag = getViewById(R.id.tv_tag);
 			ivGift = getViewById(R.id.iv_gift);
 			ivIcon = getViewById(R.id.iv_icon);
-			tvPlay = getViewById(R.id.tv_play);
+			tvPlay = getViewById(R.id.tv_content);
 			tvSize = getViewById(R.id.tv_size);
 			tvGift = getViewById(R.id.tv_gift);
 			btnDownload = getViewById(R.id.tv_download);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:id = "@+id/ll_like"
+              android:background="@color/co_transparent"
               style = "@style/IndexModuleLayout">
 
 	<View
@@ -10,7 +11,7 @@
 	<RelativeLayout
 			android:id = "@+id/rl_hot_all"
 			style = "@style/IndexModuleTitleLayout"
-			android:background = "@color/co_white"
+			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
@@ -33,6 +34,7 @@
 	<android.support.v7.widget.RecyclerView
 			android:id = "@+id/rv_like_content"
 			style = "@style/DefaultRecyclerView"
+			android:background="@color/co_white"
 			android:layout_height = "138dp" />
 
 </LinearLayout >

@@ -45,6 +45,7 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.DensityUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -65,6 +66,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	private final static String PAGE_NAME = "礼包详情";
 	private ImageView ivIcon;
+	private ImageView ivExclusive;
 	private TextView tvName;
 	private TextView tvConsume;
 	private TextView tvScore;
@@ -81,9 +83,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	private ImageView ivLimit;
 	private DownloadButtonView btnDownload;
 	private LinearLayout downloadLayout;
-	private LinearLayout llZero;
 	private DeletedTextView tvOriginPrice;
-	private TextView tvZeroRemain;
 
 	private GiftDetail mData;
 	private IndexGameNew mAppInfo;
@@ -102,8 +102,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_gift_detail);
+		initViewManger(R.layout.fragment_gift_detail);
 		ivIcon = getViewById(R.id.iv_icon);
+		ivExclusive = getViewById(R.id.iv_exclusive);
 		tvName = getViewById(R.id.tv_name);
 		tvConsume = getViewById(R.id.tv_consume);
 		tvScore = getViewById(R.id.tv_score);
@@ -120,9 +121,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		ivLimit = getViewById(R.id.iv_limit);
 		btnDownload = getViewById(R.id.btn_download);
 		downloadLayout = getViewById(R.id.ll_download);
-		llZero = getViewById(R.id.ll_zero);
 		tvOriginPrice = getViewById(R.id.tv_src);
-		tvZeroRemain = getViewById(R.id.tv_zero_remain);
 	}
 
 	@Override
@@ -186,7 +185,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //		mViewManager.showContent();
 		mData = data;
 		final IndexGiftNew giftData = data.giftData;
-		tvName.setText(String.format("[%s]%s", (mData.gameData == null ? "" : mData.gameData.name), giftData.name));
+		tvName.setText(giftData.name);
 		if (getActivity() instanceof GiftDetailActivity) {
 			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
 				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_limit);
@@ -215,7 +214,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		btnCopy.setVisibility(View.GONE);
 		tvScore.setVisibility(View.GONE);
 		btnSend.setVisibility(View.VISIBLE);
-		llZero.setVisibility(View.GONE);
 		if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			tvConsume.setVisibility(View.VISIBLE);
 			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
@@ -232,33 +230,25 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				tvScore.setText(String.valueOf(giftData.score));
 				tvBean.setText(String.valueOf(giftData.bean));
 			}
+			tvRemain.setVisibility(View.VISIBLE);
 			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
 				tvScore.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
 				tvBean.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
-				llZero.setVisibility(View.VISIBLE);
 				tvOriginPrice.setText(
 						Html.fromHtml(String.format("<line-through>原价 <font color='#f85454'>¥%d</font>",
 								giftData.originPrice)));
 				tvOriginPrice.setPaint(mApp.getResources().getColor(R.color.co_common_app_main_bg), 3);
-				tvZeroRemain.setText(
-						Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d</font>个", giftData.remainCount)));
-
+				tvOriginPrice.setVisibility(View.VISIBLE);
+				setRemainProgress(giftData);
 			} else {
-				tvRemain.setVisibility(View.VISIBLE);
 				switch (state) {
-					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-						tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>",
-								giftData.remainCount)));
-						break;
 					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 						tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>",
 								giftData.searchCount)));
 						break;
+					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
 					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-						int progress = giftData.remainCount * 100 / giftData.totalCount;
-						tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
-						pbPercent.setVisibility(View.VISIBLE);
-						pbPercent.setProgress(progress);
+						setRemainProgress(giftData);
 						break;
 					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
@@ -283,13 +273,20 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 		if (!mIsNotifyRefresh) {
 			tvContent.setText(giftData.content);
-			tvDeadline.setText(DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm") + " ~ "
-					+ DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm"));
+			tvDeadline.setText(String.format("%s ~ %s" , DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
+					DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm")));
 			tvUsage.setText(giftData.usage);
 			initDownload(mData.gameData);
 		}
 
 
+	}
+
+	private void setRemainProgress(IndexGiftNew giftData) {
+		int progress = giftData.remainCount * 100 / giftData.totalCount;
+		tvRemain.setText(Html.fromHtml(String.format("剩%d%%", progress)));
+		pbPercent.setVisibility(View.VISIBLE);
+		pbPercent.setProgress(progress);
 	}
 
 	private void setDeadCount() {
@@ -302,6 +299,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
 		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
+		KLog.d("log_test", "seize_time = " + seizeTime + ", remain = " + (seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal));
 		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -330,6 +328,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			ivLimit.setImageResource(R.drawable.ic_tag_0_seize);
 		} else {
 			ivLimit.setVisibility(View.GONE);
+		}
+		if (giftData.exclusive == 1) {
+			ivExclusive.setVisibility(View.VISIBLE);
+			tvName.setPadding(DensityUtil.dip2px(getContext().getApplicationContext(), 4), 0, 0, 0);
+		} else {
+			ivExclusive.setVisibility(View.GONE);
+			tvName.setPadding(DensityUtil.dip2px(getContext().getApplicationContext(), 14), 0, 0, 0);
 		}
 	}
 
@@ -562,9 +567,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		ivLimit = null;
 		btnDownload = null;
 		downloadLayout = null;
-		llZero = null;
 		tvOriginPrice = null;
-		tvZeroRemain = null;
 		mData = null;
 		mAppInfo = null;
 	}

@@ -84,5 +84,7 @@ public class IndexGiftNew implements Serializable{
 	// 剩余开抢时间，单位:s
 	@SerializedName("remain_time")
 	public int remainStartTime;
-
+	// 专享礼包类型, 1: 礼包酷专享
+	@SerializedName("exclusive")
+	public int exclusive;
 }

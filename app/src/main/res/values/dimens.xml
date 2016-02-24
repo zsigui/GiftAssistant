@@ -63,6 +63,9 @@
 
 	<dimen name = "di_module_bigger_height" >48dp</dimen >
 
+	<dimen name = "di_gift_common_pb_radius" >3dp</dimen >
+	<dimen name = "di_gift_common_pb_diameter" >6dp</dimen >
+
 
 	<!-- 主页-礼包页面 -->
 

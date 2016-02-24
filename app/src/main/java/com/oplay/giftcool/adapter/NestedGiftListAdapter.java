@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -108,7 +109,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		// inflate 页面，设置 holder
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = inflateView(parent, viewHolder, type);
+			convertView = inflateView(parent, viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
@@ -116,6 +117,15 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 
 		final IndexGiftNew gift = mData.get(position);
 
+		setData(position, convertView, viewHolder, type, gift);
+
+		return convertView;
+	}
+
+	/**
+	 * 设置列表数据
+	 */
+	private void setData(int position, View convertView, ViewHolder viewHolder, int type, IndexGiftNew gift) {
 		setCommonField(viewHolder, gift);
 		viewHolder.btnSend.setTag(TAG_POS, position);
 		convertView.setTag(TAG_POS, position);
@@ -123,22 +133,15 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		viewHolder.btnSend.setOnClickListener(this);
 		convertView.setOnClickListener(this);
 		// 设置数据和按键状态
-		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE) {
-
-			viewHolder.tvScore.setVisibility(View.VISIBLE);
+		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE
+				|| type == GiftTypeUtil.TYPE_LIMIT_SEIZE
+				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
+			viewHolder.llMoney.setVisibility(View.VISIBLE);
+			viewHolder.tvCount.setVisibility(View.GONE);
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			int percent = gift.remainCount * 100 / gift.totalCount;
-			if (percent > 0 && percent < 10) {
-				viewHolder.tvPercent.setText("剩余  " + percent + "%");
-			} else if (percent >= 10 && percent < 100) {
-				viewHolder.tvPercent.setText("剩余 " + percent + "%");
-			} else {
-				viewHolder.tvPercent.setText("剩余" + percent + "%");
-			}
+			viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
 			viewHolder.pbPercent.setProgress(percent);
-
-		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE
-				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
 			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
 				// 只用积分
@@ -160,110 +163,87 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 				viewHolder.tvOr.setVisibility(View.VISIBLE);
 				viewHolder.tvBean.setVisibility(View.VISIBLE);
 			}
-			viewHolder.tvRemain.setText(Html.fromHtml(String.format("剩余 <font color='#ffaa17'>%d个</font>",
-					gift.remainCount)));
 		} else {
 			switch (type) {
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift.seizeTime)));
+							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+									.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
 				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
 				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-					setDisabledField(viewHolder, View.GONE, null);
+					setDisabledField(viewHolder, View.INVISIBLE, null);
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift.seizeTime)));
+							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+									.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift.searchTime)));
+							Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
+									.searchTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift.searchCount)));
+							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
+									.searchCount)));
 					break;
 			}
 		}
-
-		return convertView;
 	}
 
 	/**
 	 * 设置几个类型下的通用配置
 	 */
-	private void setCommonField(final ViewHolder viewHolder, final IndexGiftNew gift) {
-		ViewUtil.showImage(viewHolder.ivIcon, gift.img);
-		viewHolder.tvTitle.setText(String.format("[%s]%s", gift.gameName, gift.name));
+	private void setCommonField(final ViewHolder itemHolder, final IndexGiftNew gift) {
+		ViewUtil.showImage(itemHolder.ivIcon, gift.img);
+		itemHolder.tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
 		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-			viewHolder.ivLimit.setVisibility(View.VISIBLE);
+			itemHolder.ivLimit.setVisibility(View.VISIBLE);
 		} else {
-			viewHolder.ivLimit.setVisibility(View.GONE);
+			itemHolder.ivLimit.setVisibility(View.GONE);
 		}
-		viewHolder.tvContent.setText(String.format("%s", gift.content));
+		if (gift.exclusive == 1) {
+			itemHolder.ivExclusive.setVisibility(View.VISIBLE);
+		} else {
+			itemHolder.ivExclusive.setVisibility(View.GONE);
+		}
+		itemHolder.tvContent.setText(String.format("%s", gift.content));
 	}
 
-	public void setDisabledField(ViewHolder viewHolder, int tvVisibility, Spanned tvText) {
-		if (viewHolder.tvCount != null) {
-			viewHolder.tvCount.setVisibility(tvVisibility);
-			viewHolder.tvCount.setText(tvText);
-		}
+	public void setDisabledField(ViewHolder itemHolder, int tvVisibility, Spanned tvText) {
+		itemHolder.llMoney.setVisibility(View.GONE);
+		itemHolder.pbPercent.setVisibility(View.GONE);
+		itemHolder.tvPercent.setVisibility(View.GONE);
+		itemHolder.tvCount.setVisibility(tvVisibility);
+		itemHolder.tvCount.setText(tvText);
 	}
 
 	/**
 	 * 根据XML填充convertView
 	 */
-	private View inflateView(ViewGroup parent, ViewHolder viewHolder, int type) {
+	private View inflateView(ViewGroup parent, ViewHolder viewHolder) {
 		View convertView;
 		LayoutInflater inflater = LayoutInflater.from(mContext);
-		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE ) {
-			convertView = inflater.inflate(R.layout.item_index_gift_new_normal, parent, false);
-			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
-			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
-			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
-			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
-			viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
-			viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-		} else if (type == GiftTypeUtil.TYPE_LIMIT_SEIZE || type ==  GiftTypeUtil.TYPE_ZERO_SEIZE) {
-			convertView = inflater.inflate(R.layout.item_index_gift_new_limit, parent, false);
-			viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-			viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
-			viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
-			viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
-			viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-			viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
-			viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
-			viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
-			viewHolder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_text);
-		} else {
-			convertView = inflater.inflate(R.layout.item_index_gift_new_disabled, parent, false);
-			switch (type) {
-				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-					viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
-					viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
-					viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-					viewHolder.tvTitle = ViewUtil.getViewById(convertView, R.id.tv_name);
-					viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_play);
-					viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-					break;
-			}
-		}
+		convertView = inflater.inflate(R.layout.item_index_gift_new_list, parent, false);
+		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+		viewHolder.ivExclusive = ViewUtil.getViewById(convertView, R.id.iv_exclusive);
+		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
+		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+		viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+		viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
+		viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
+		viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
+		viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
+		viewHolder.llMoney = ViewUtil.getViewById(convertView, R.id.ll_money);
+		viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
+		viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
+		viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
 		convertView.setTag(viewHolder);
 		return convertView;
 	}
@@ -300,15 +280,16 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	static class ViewHolder {
 		ImageView ivIcon;
 		ImageView ivLimit;
-		TextView tvTitle;
+		ImageView ivExclusive;
+		TextView tvName;
 		TextView tvContent;
 		GiftButton btnSend;
 		TextView tvScore;
 		TextView tvOr;
 		TextView tvBean;
-		TextView tvRemain;
 		TextView tvCount;
 		TextView tvPercent;
+		LinearLayout llMoney;
 		ProgressBar pbPercent;
 	}
 }

@@ -22,13 +22,13 @@ public class ClockService extends Service {
 
 
 	public static void stopService(Context context) {
-		Intent intent = new Intent(context, ClockService.class);
-		context.stopService(intent);
+//		Intent intent = new Intent(context, ClockService.class);
+//		context.stopService(intent);
 	}
 
 	public static void startService(Context context) {
-		Intent intent = new Intent(context, ClockService.class);
-		context.startService(intent);
+//		Intent intent = new Intent(context, ClockService.class);
+//		context.startService(intent);
 	}
 
 	@Override

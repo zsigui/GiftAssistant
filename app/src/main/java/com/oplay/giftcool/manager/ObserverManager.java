@@ -37,37 +37,55 @@ public class ObserverManager {
 	public void addUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mUserObservers.containsKey(key)) return;
 		mUserObservers.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addUserUpdateListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
-		mUserObservers.remove(observer.getClass().getName());
+		UserUpdateListener removed = mUserObservers.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeUserUpdateListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void addGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mGiftObservers.containsKey(key)) return;
 		mGiftObservers.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addGiftUpdateListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
-		mGiftObservers.remove(observer.getClass().getName());
+		GiftUpdateListener removed = mGiftObservers.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeGiftUpdateListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void addUserActionListener(UserActionListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mUserActionListeners.containsKey(key)) return;
 		mUserActionListeners.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addUserActionListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeActionListener(UserActionListener observer) {
 		if (observer == null) return;
-		mUserActionListeners.remove(observer.getClass().getName());
+		UserActionListener removed = mUserActionListeners.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeActionListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void notifyUserUpdate() {

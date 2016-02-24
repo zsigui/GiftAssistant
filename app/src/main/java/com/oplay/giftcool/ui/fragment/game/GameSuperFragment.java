@@ -44,11 +44,13 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 		mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-					ImageLoader.getInstance().resume();
-				} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
-						|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-					ImageLoader.getInstance().pause();
+				if (ImageLoader.getInstance().isInited()) {
+					if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+						ImageLoader.getInstance().resume();
+					} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
+							|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+						ImageLoader.getInstance().pause();
+					}
 				}
 			}
 
