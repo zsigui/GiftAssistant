@@ -41,27 +41,18 @@
 					android:visibility = "gone" />
 		</RelativeLayout >
 
-		<ImageView
-				android:id = "@+id/iv_exclusive"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:layout_marginTop = "4dp"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:contentDescription = "@null"
-				android:visibility = "gone"
-				android:src = "@drawable/ic_exclusive" />
-
 		<TextView
 				android:id = "@+id/tv_name"
 				style = "@style/DefaultTextView.Header"
 				android:layout_width = "match_parent"
 				android:layout_alignTop = "@+id/rl_icon"
-				android:paddingLeft = "@dimen/di_index_item_margin_left"
+				android:paddingLeft = "14dp"
 				android:layout_marginTop = "4dp"
 				android:layout_toLeftOf = "@+id/btn_send"
-				android:layout_toRightOf = "@+id/iv_exclusive"
+				android:layout_toRightOf = "@+id/rl_icon"
+				android:drawablePadding = "6dp"
 				android:gravity = "center_vertical"
-				android:text="圣诞礼包" />
+				android:text = "圣诞礼包" />
 
 		<TextView
 				android:id = "@+id/tv_consume"
@@ -118,7 +109,7 @@
 				android:layout_height = "@dimen/di_gift_common_pb_diameter"
 				android:layout_alignTop = "@+id/tv_remain"
 				android:layout_marginLeft = "4dp"
-				android:layout_marginTop = "4dp"
+				android:layout_marginTop = "5dp"
 				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_toRightOf = "@+id/tv_remain"
 				android:max = "100"
@@ -175,7 +166,7 @@
 				android:layout_alignParentRight = "true"
 				android:layout_marginLeft = "10dp"
 				android:layout_alignTop = "@+id/tv_name"
-				android:text="等抢号"
+				android:text = "等抢号"
 				android:background = "@drawable/selector_btn_red"
 				android:textColor = "@color/co_white" />
 	</RelativeLayout >

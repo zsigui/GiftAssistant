@@ -18,6 +18,7 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GiftTypeUtil;
@@ -31,6 +32,7 @@ import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -51,6 +53,8 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	private IndexGift mData;
 	private Context mContext;
 	private LayoutInflater mInflater;
+	private WeakReference<BannerVH> mBannerWR;
+	private View.OnTouchListener mTouchListener;
 
 	public GiftAdapter(Context context) {
 		mContext = context;
@@ -61,11 +65,18 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		mData = data;
 	}
 
+	public void setTouchListener(View.OnTouchListener touchListener) {
+		mTouchListener = touchListener;
+	}
+
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
 			case TYPE_BANNER:
-				return new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false));
+				if (mBannerWR == null || mBannerWR.get() == null) {
+					mBannerWR =  new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false)));
+				}
+				return mBannerWR.get();
 			case TYPE_ZERO:
 				ZeroVH zeroVH = new ZeroVH(mInflater.inflate(R.layout.view_gift_index_zero, parent, false));
 				LinearLayoutManager llmZero = new LinearLayoutManager(mContext);
@@ -108,10 +119,16 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		if (getItemCount() == 0 || holder == null) {
+			return;
+		}
 		int type = getItemViewType(position);
 		switch (type) {
 			case TYPE_BANNER:
-				updateBanners((BannerVH) holder, mData.banner);
+				BannerVH bannerVH = (BannerVH) holder;
+				if (mTouchListener != null)
+					bannerVH.mBanner.setOnTouchListener(mTouchListener);
+				updateBanners(bannerVH, mData.banner);
 				break;
 			case TYPE_ZERO:
 				ZeroVH zeroVH = ((ZeroVH) holder);
@@ -229,9 +246,9 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			itemHolder.ivLimit.setVisibility(View.GONE);
 		}
 		if (gift.exclusive == 1) {
-			itemHolder.ivExclusive.setVisibility(View.VISIBLE);
+			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
 		} else {
-			itemHolder.ivExclusive.setVisibility(View.GONE);
+			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		}
 		itemHolder.tvContent.setText(String.format("%s", gift.content));
 	}
@@ -274,13 +291,26 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				.setOnItemClickListener(this);
 		if (data.size() == 1) {
 			bannerVH.mBanner.setCanLoop(false);
+			bannerVH.mBanner.stopTurning();
 		} else {
 			bannerVH.mBanner.setCanLoop(true);
 			bannerVH.mBanner.setScrollDuration(500);
 			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
-			bannerVH.mBanner.startTurning(5000);
+			bannerVH.mBanner.startTurning(AppConfig.BANNER_LOOP_TIME);
 		}
 
+	}
+
+	public void startBanner() {
+		if (mBannerWR != null && mBannerWR.get() != null) {
+			mBannerWR.get().mBanner.startTurning(AppConfig.BANNER_LOOP_TIME);
+		}
+	}
+
+	public void stopBanner() {
+		if (mBannerWR != null && mBannerWR.get() != null) {
+			mBannerWR.get().mBanner.stopTurning();
+		}
 	}
 
 	public boolean updateData(IndexGift data) {
@@ -420,7 +450,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	static class ItemHolder extends BaseRVHolder {
 		ImageView ivIcon;
 		ImageView ivLimit;
-		ImageView ivExclusive;
 		TextView tvName;
 		TextView tvContent;
 		GiftButton btnSend;
@@ -437,7 +466,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			itemView.setBackgroundResource(R.drawable.selector_white_module);
 			ivIcon = getViewById(R.id.iv_icon);
 			ivLimit = getViewById(R.id.iv_limit);
-			ivExclusive = getViewById(R.id.iv_exclusive);
 			tvName = getViewById(R.id.tv_name);
 			tvContent = getViewById(R.id.tv_content);
 			btnSend = getViewById(R.id.btn_send);

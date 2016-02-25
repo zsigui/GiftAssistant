@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.game;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -56,6 +57,21 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
 
 		});
+		mAdapter.setTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_MOVE:
+						mRefreshLayout.setEnabled(false);
+						break;
+					case MotionEvent.ACTION_UP:
+					case MotionEvent.ACTION_CANCEL:
+						mRefreshLayout.setEnabled(true);
+						break;
+				}
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -64,7 +80,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
 		// 设置RecyclerView的LayoutManager
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		mAdapter = new GameSuperAdapter(getActivity(), this);
+		mAdapter = new GameSuperAdapter(getActivity());
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);
 		mIsPrepared = mNoMoreLoad = true;

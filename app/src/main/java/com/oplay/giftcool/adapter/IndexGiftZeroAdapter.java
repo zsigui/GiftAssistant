@@ -92,7 +92,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 										ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS
 												.GIFT_UPDATE_ALL);
 									}
-								}, 3000);
+								}, 2500);
 							}
 						}
 					};

@@ -300,7 +300,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 	}
 
 	@Override
-	public void onUserUpdate() {
+	public void onUserUpdate(int action) {
 		setConsume(mBeanConsume, mScoreConsume, mConsumeType);
 	}
 }

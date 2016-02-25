@@ -208,7 +208,7 @@ public class PayManager {
 									}
 									if (response.body() != null) {
 										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
-											AccountManager.getInstance().setUser(null);
+											AccountManager.getInstance().notifyUserAll(null);
 											ToastUtil.showShort(context.getResources().getString(R.string
 													.st_hint_un_login));
 											IntentUtil.jumpLogin(context);
@@ -297,7 +297,7 @@ public class PayManager {
 									}
 									if (response.body() != null) {
 										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
-											AccountManager.getInstance().setUser(null);
+											AccountManager.getInstance().notifyUserAll(null);
 											ToastUtil.showShort(context.getResources().getString(R.string
 													.st_hint_un_login));
 											IntentUtil.jumpLogin(context);

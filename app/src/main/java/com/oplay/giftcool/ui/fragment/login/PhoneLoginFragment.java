@@ -334,7 +334,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
 										MainActivity.sIsTodayFirstOpen = true;
 										AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
-										AccountManager.getInstance().setUser(userModel);
+										AccountManager.getInstance().notifyUserAll(userModel);
 										ScoreManager.getInstance().resetLocalTaskState();
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;

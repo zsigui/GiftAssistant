@@ -89,6 +89,10 @@ public class ObserverManager {
 	}
 
 	public void notifyUserUpdate() {
+		notifyUserUpdate(STATUS.DEFAULT_FOR_ALL);
+	}
+
+	public void notifyUserUpdate(int action) {
 		for (Map.Entry<String, UserUpdateListener> entry : mUserObservers.entrySet()) {
 			UserUpdateListener observer = entry.getValue();
 			try {
@@ -105,7 +109,7 @@ public class ObserverManager {
 								"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
 						continue;
 					}
-					observer.onUserUpdate();
+					observer.onUserUpdate(action);
 				}
 			} catch (Throwable e) {
 				if (AppDebugConfig.IS_DEBUG) {
@@ -115,6 +119,9 @@ public class ObserverManager {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void notifyGiftUpdate() {
 		notifyGiftUpdate(STATUS.DEFAULT_FOR_ALL);
 	}
@@ -164,7 +171,7 @@ public class ObserverManager {
 	 * 账号状态变更监听接口
 	 */
 	public interface UserUpdateListener {
-		void onUserUpdate();
+		void onUserUpdate(int action);
 	}
 
 	/**
@@ -178,6 +185,8 @@ public class ObserverManager {
 		int DEFAULT_FOR_ALL= 0x0;
 		int GIFT_UPDATE_ALL = 0x010;
 		int GIFT_UPDATE_PART = 0x11;
+		int USER_UPDATE_ALL = 0x020;
+		int USER_UPDATE_PART = 0x021;
 	}
 
 	public interface UserActionListener {

@@ -45,7 +45,6 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
-import com.oplay.giftcool.util.DensityUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -66,7 +65,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	private final static String PAGE_NAME = "礼包详情";
 	private ImageView ivIcon;
-	private ImageView ivExclusive;
 	private TextView tvName;
 	private TextView tvConsume;
 	private TextView tvScore;
@@ -104,7 +102,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_gift_detail);
 		ivIcon = getViewById(R.id.iv_icon);
-		ivExclusive = getViewById(R.id.iv_exclusive);
 		tvName = getViewById(R.id.tv_name);
 		tvConsume = getViewById(R.id.tv_consume);
 		tvScore = getViewById(R.id.tv_score);
@@ -299,7 +296,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
 		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
-		KLog.d("log_test", "seize_time = " + seizeTime + ", remain = " + (seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal));
 		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -309,9 +305,18 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			@Override
 			public void onFinish() {
 				mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
-				if (!mIsNotifyRefresh) {
-					lazyLoad();
-					mIsNotifyRefresh = true;
+				if (getActivity() != null) {
+					((BaseAppCompatActivity)getActivity()).getHandler().postDelayed(new Runnable() {
+
+						@Override
+						public void run() {
+							ToastUtil.showShort("自动刷新抢ing");
+							if (!mIsNotifyRefresh) {
+								mIsNotifyRefresh = true;
+								lazyLoad();
+							}
+						}
+					}, 2500);
 				}
 			}
 		};
@@ -330,11 +335,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			ivLimit.setVisibility(View.GONE);
 		}
 		if (giftData.exclusive == 1) {
-			ivExclusive.setVisibility(View.VISIBLE);
-			tvName.setPadding(DensityUtil.dip2px(getContext().getApplicationContext(), 4), 0, 0, 0);
+			tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
 		} else {
-			ivExclusive.setVisibility(View.GONE);
-			tvName.setPadding(DensityUtil.dip2px(getContext().getApplicationContext(), 14), 0, 0, 0);
+			tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		}
 	}
 

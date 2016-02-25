@@ -5,13 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
-import com.oplay.giftcool.adapter.other.FixHeightLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -94,16 +95,18 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 				switch (newState) {
 					case RecyclerView.SCROLL_STATE_IDLE:
+						if (mAdapter != null) {
+							mAdapter.startBanner();
+						}
 						if (ImageLoader.getInstance().isInited()) {
 							ImageLoader.getInstance().resume();
 						}
 						break;
 					case RecyclerView.SCROLL_STATE_DRAGGING:
-						if (ImageLoader.getInstance().isInited()) {
-							ImageLoader.getInstance().stop();
-						}
-						break;
 					case RecyclerView.SCROLL_STATE_SETTLING:
+						if (mAdapter != null) {
+							mAdapter.stopBanner();
+						}
 						if (ImageLoader.getInstance().isInited()) {
 							ImageLoader.getInstance().stop();
 						}
@@ -116,13 +119,28 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 				super.onScrolled(recyclerView, dx, dy);
 			}
 		});
+		mAdapter.setTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_MOVE:
+						mRefreshLayout.setEnabled(false);
+						break;
+					case MotionEvent.ACTION_UP:
+					case MotionEvent.ACTION_CANCEL:
+						mRefreshLayout.setEnabled(true);
+						break;
+				}
+				return false;
+			}
+		});
 		ObserverManager.getInstance().addGiftUpdateListener(this);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-		FixHeightLinearLayoutManager llm = new FixHeightLinearLayoutManager(getContext(),
+		LinearLayoutManager llm = new LinearLayoutManager(getContext(),
 				LinearLayoutManager.VERTICAL, false);
 		DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
 				llm.getOrientation());
@@ -300,6 +318,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
 	@Override
 	public void onGiftUpdate(int action) {
+		if (!mIsPrepared) {
+			mIsNotifyRefresh = mIsSwipeRefresh = false;
+			return;
+		}
 		if (action == ObserverManager.STATUS.GIFT_UPDATE_ALL) {
 			if (mIsSwipeRefresh) {
 				return;

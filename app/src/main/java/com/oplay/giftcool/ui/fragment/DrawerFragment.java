@@ -112,7 +112,7 @@ public class DrawerFragment extends BaseFragment {
 				if (AccountManager.getInstance().isLogin()) {
 					IntentUtil.jumpUserInfo(getContext());
 				} else {
-					IntentUtil.jumpLogin(getContext());
+					IntentUtil.jumpLoginNoToast(getContext());
 				}
 				closeDrawer();
 				break;
@@ -241,9 +241,11 @@ public class DrawerFragment extends BaseFragment {
 	}
 
 	@Override
-	public void onUserUpdate() {
-		super.onUserUpdate();
-		updateData();
+	public void onUserUpdate(int action) {
+		super.onUserUpdate(action);
+		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
+			updateData();
+		}
 	}
 
 	@Override

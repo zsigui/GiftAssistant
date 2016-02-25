@@ -97,7 +97,7 @@ public class ScoreManager {
 
 				@Override
 				public void onConfirm() {
-					IntentUtil.jumpLogin(context);
+					IntentUtil.jumpLoginNoToast(context);
 					unloginDialog.dismissAllowingStateLoss();
 					AppDebugConfig.trace(context, "未登录欢迎弹窗", "点击登录");
 				}

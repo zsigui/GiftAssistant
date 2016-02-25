@@ -108,6 +108,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 								@Override
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
 										retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (response != null && response.isSuccess()) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
@@ -120,6 +123,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 
 								@Override
 								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
 									refreshFailEnd();
 								}
 							});
@@ -147,6 +153,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 									@Override
 									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
 											retrofit) {
+										if (!mCanShowUI) {
+											return;
+										}
 										if (response != null && response.isSuccess()) {
 											moreLoadSuccessEnd();
 											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
@@ -159,6 +168,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 
 									@Override
 									public void onFailure(Throwable t) {
+										if (!mCanShowUI) {
+											return;
+										}
 										moreLoadFailEnd();
 									}
 								});

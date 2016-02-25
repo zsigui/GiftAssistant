@@ -4,4 +4,4 @@
 		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		android:id = "@+id/banner"
 		style = "@style/Banner"
-		app:canLoop = "true" />
+		app:canLoop = "false" />

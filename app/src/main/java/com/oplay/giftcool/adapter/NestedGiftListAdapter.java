@@ -209,9 +209,9 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 			itemHolder.ivLimit.setVisibility(View.GONE);
 		}
 		if (gift.exclusive == 1) {
-			itemHolder.ivExclusive.setVisibility(View.VISIBLE);
+			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
 		} else {
-			itemHolder.ivExclusive.setVisibility(View.GONE);
+			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		}
 		itemHolder.tvContent.setText(String.format("%s", gift.content));
 	}
@@ -232,7 +232,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		convertView = inflater.inflate(R.layout.item_index_gift_new_list, parent, false);
 		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-		viewHolder.ivExclusive = ViewUtil.getViewById(convertView, R.id.iv_exclusive);
 		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
 		viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
@@ -280,7 +279,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	static class ViewHolder {
 		ImageView ivIcon;
 		ImageView ivLimit;
-		ImageView ivExclusive;
 		TextView tvName;
 		TextView tvContent;
 		GiftButton btnSend;

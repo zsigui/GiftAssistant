@@ -228,6 +228,14 @@ public class IntentUtil {
 	 * 跳转登录界面（根据最后一次登录判断）
 	 */
 	public static void jumpLogin(Context context) {
+		ToastUtil.showShort("需要先登录~");
+		jumpLoginNoToast(context);
+	}
+
+	/**
+	 * 跳转登录界面（根据最后一次登录判断）
+	 */
+	public static void jumpLoginNoToast(Context context) {
 		if (AccountManager.getInstance().isPhoneLogin()) {
 			jumpLogin(context, KeyConfig.TYPE_ID_PHONE_LOGIN);
 		} else {
@@ -239,7 +247,6 @@ public class IntentUtil {
 	 * 跳转登录界面
 	 */
 	public static void jumpLogin(Context context, int type) {
-		ToastUtil.showShort("需要先登录～");
 		Intent intent = new Intent(context, LoginActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
 		context.startActivity(intent);
