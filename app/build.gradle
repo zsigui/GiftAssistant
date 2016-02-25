@@ -80,4 +80,5 @@ dependencies {
 	compile project(':third:ouwansdk')
 	compile project(':third:convenientbanner')
 //	compile project(':third:viewserver')
+	compile 'com.umeng.analytics:analytics:latest.integration'
 }

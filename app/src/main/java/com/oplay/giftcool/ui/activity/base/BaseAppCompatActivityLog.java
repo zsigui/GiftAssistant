@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * @author micle
@@ -60,6 +61,7 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
         }
 	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
 		    TCAgent.onPause(this);
+            MobclickAgent.onPause(this);
 	    }
     }
 
@@ -77,6 +79,7 @@ public class BaseAppCompatActivityLog extends AppCompatActivity {
         }
 	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
 		    TCAgent.onResume(this);
+            MobclickAgent.onResume(this);
 	    }
     }
 
