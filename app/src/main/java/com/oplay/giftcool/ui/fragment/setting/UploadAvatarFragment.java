@@ -222,7 +222,7 @@ public class UploadAvatarFragment extends BaseFragment {
 											ImageLoader.getInstance().getDiskCache().remove(model.userInfo.avatar);
 										} catch (Throwable ignored) {}
 										model.userInfo.avatar = response.body().getData().avatar;
-										AccountManager.getInstance().setUser(model);
+										AccountManager.getInstance().notifyUserAll(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										return;
 									}

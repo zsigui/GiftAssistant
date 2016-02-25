@@ -66,10 +66,28 @@ public class AccountManager {
 		return mUser;
 	}
 
+
+	/**
+	 * 设置当前用户，默认进行 USER_UPDATE_PART 状态通知
+	 * @param user
+	 */
+	public void notifyUserPart(UserModel user) {
+		notifyUser(user, false);
+	}
+
+	/**
+	 * 设置当前用户，默认进行 USER_UPDATE_ALL 状态通知
+	 * @param user
+	 */
+	public void notifyUserAll(UserModel user) {
+		notifyUser(user, true);
+	}
+
 	/**
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
+	 * @param notifyAll 是否进行 USER_UPDATE_ALL 状态通知
 	 */
-	public void setUser(UserModel user) {
+	private void notifyUser(UserModel user, boolean notifyAll) {
 		if (mUser != null && mUser.userInfo != null) {
 			lastLoginType = mUser.userInfo.loginType;
 			if (user != null && user.userInfo != null) {
@@ -81,8 +99,12 @@ public class AccountManager {
 		}
 		mUser = user;
 		// 当用户变化，需要进行通知
-		ObserverManager.getInstance().notifyUserUpdate();
-		ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
+		if (notifyAll) {
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
+			ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
+		} else {
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PART);
+		}
 
 
 		// 同步cookie
@@ -146,7 +168,7 @@ public class AccountManager {
 												&& response.body().getCode() == StatusCode.SUCCESS) {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
-											setUser(user);
+											notifyUserAll(user);
 											return;
 										}
 										if (AppDebugConfig.IS_DEBUG) {
@@ -172,7 +194,7 @@ public class AccountManager {
 
 	private void sessionFailed(JsonRespBase response) {
 		if (response != null && response.getCode() == StatusCode.ERR_UN_LOGIN) {
-			setUser(null);
+			notifyUserAll(null);
 			ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
 		}
 	}
@@ -201,9 +223,7 @@ public class AccountManager {
 											user.userInfo.score = info.score;
 											user.userInfo.bean = info.bean;
 											user.userInfo.giftCount = info.giftCount;
-											KLog.d(AppDebugConfig.TAG_MANAGER, "金额= " + info.score + ", " + info.bean
-													+ ", " + info.giftCount);
-											setUser(user);
+											notifyUserPart(user);
 											return;
 										}
 										if (AppDebugConfig.IS_DEBUG) {
@@ -283,7 +303,7 @@ public class AccountManager {
 			// session只能保持7天，一旦超时，需要重新登录
 			if (getUserSesion().lastUpdateTime + 7 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
 				ToastUtil.showShort("登录超时，需要重新登录");
-				setUser(null);
+				notifyUserAll(null);
 				return;
 			}
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
@@ -303,10 +323,7 @@ public class AccountManager {
 								if (response.body() != null) {
 									if (response.body().isSuccess()) {
 										mUser.userSession.session = response.body().getData().session;
-										if (AppDebugConfig.IS_DEBUG) {
-											KLog.d("req_new_session = " + mUser.userSession.session);
-										}
-										setUser(mUser);
+										notifyUserPart(mUser);
 										// 请求更新数据
 										updateUserInfo();
 										return;
@@ -317,7 +334,7 @@ public class AccountManager {
 											KLog.d("session is not sync, err msg = " + response.body().getMsg());
 										}
 										// 重置登录信息，表示未登录
-										setUser(null);
+										notifyUserAll(null);
 										return;
 									}
 								}
@@ -362,7 +379,7 @@ public class AccountManager {
 				});
 			}
 		});
-		AccountManager.getInstance().setUser(null);
+		AccountManager.getInstance().notifyUserAll(null);
 	}
 
 	public ArrayList<String> obtainPhoneAccount() {

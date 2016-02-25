@@ -43,22 +43,9 @@ public class ClockService extends Service {
 		}
 		if (mTimer == null) {
 			mTimer = new Timer();
+			// 每隔30秒通知所有可见UI界面重新请求数据刷新界面
+			mTimer.schedule(new ClockTimer(), 0, 30 * 1000);
 		}
-		// 每隔10秒通知所有可见UI界面重新请求数据刷新界面
-		mTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.v(AppDebugConfig.TAG_SERVICE, "Time Clock execute, Request Refresh UI");
-				}
-				ThreadUtil.runInUIThread(new Runnable() {
-					@Override
-					public void run() {
-						ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
-					}
-				});
-			}
-		}, 0, 60 * 1000);
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -67,9 +54,27 @@ public class ClockService extends Service {
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.d(AppDebugConfig.TAG_SERVICE, "Stop Round Connect");
 		}
-		// 结束时关闭轮询
-		mTimer.cancel();
-		mTimer.purge();
-		mTimer = null;
+		if (mTimer != null) {
+			// 结束时关闭轮询
+			mTimer.cancel();
+			mTimer.purge();
+			mTimer = null;
+		}
+	}
+
+	static class ClockTimer extends TimerTask {
+
+		@Override
+		public void run() {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.v(AppDebugConfig.TAG_SERVICE, "Time Clock execute, Request Refresh UI");
+			}
+			ThreadUtil.runInUIThread(new Runnable() {
+				@Override
+				public void run() {
+					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
+				}
+			});
+		}
 	}
 }

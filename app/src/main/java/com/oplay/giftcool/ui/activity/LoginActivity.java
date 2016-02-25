@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.activity;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
 import com.oplay.giftcool.ui.fragment.login.PhoneLoginFragment;
 
 /**
@@ -26,7 +27,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 			replaceFragWithTitle(R.id.fl_container, PhoneLoginFragment.newInstance(),
 					getResources().getString(R.string.st_login_phone_title), false);
 		} else {
-			replaceFragWithTitle(R.id.fl_container, PhoneLoginFragment.newInstance(),
+			replaceFragWithTitle(R.id.fl_container, OuwanLoginFragment.newInstance(),
 					getResources().getString(R.string.st_login_ouwan_title), false);
 		}
 	}

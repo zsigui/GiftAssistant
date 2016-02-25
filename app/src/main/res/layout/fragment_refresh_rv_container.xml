@@ -10,6 +10,7 @@
 	<android.support.v7.widget.RecyclerView
 			android:id = "@+id/lv_content"
 			android:background = "@color/co_transparent"
+			android:animateLayoutChanges = "false"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent" />
 </com.oplay.giftcool.ui.widget.layout.RefreshLayout >

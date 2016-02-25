@@ -138,7 +138,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
-		AccountManager.getInstance().setUser(user);
+		AccountManager.getInstance().notifyUserAll(user);
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 

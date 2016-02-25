@@ -180,7 +180,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 	}
 
 	@Override
-	public void onUserUpdate() {
+	public void onUserUpdate(int action) {
 		if (mInSetting) {
 			return;
 		}

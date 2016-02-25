@@ -2,7 +2,6 @@ package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,7 +35,6 @@ import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
@@ -287,8 +285,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
-	public void onUserUpdate() {
-		updateToolBar();
+	public void onUserUpdate(int action) {
+		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
+			updateToolBar();
+		}
 	}
 
 
@@ -330,31 +330,31 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private void handleFirstOpen() {
 		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null
-				&& hasLoadPic()) {
+				&& hasLoadPic() && mHandler != null) {
 			sIsTodayFirstOpenForBroadcast = false;
-			ThreadUtil.runInUIThread(new Runnable() {
+			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
 					dialog.show(getSupportFragmentManager(), "broadcast");
 				}
-			}, 0);
+			}, 1000);
 
-		}
-		if (sIsTodayFirstOpen) {
+		} else if (sIsTodayFirstOpen && mHandler != null) {
 				sIsTodayFirstOpen = false;
 			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
-			new Handler().postDelayed(new Runnable() {
+			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					if (AccountManager.getInstance().isLogin()) {
 						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
 								AccountManager.getInstance().getUser());
 					} else {
-						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this, null);
+						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
+								null);
 					}
 				}
-			}, 0);
+			}, 3000);
 		}
 	}
 
@@ -379,7 +379,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private boolean handleUpdateApp() {
 
 		final UpdateInfo updateInfo = mApp.getUpdateInfo();
-		if (!mHasShowUpdate && updateInfo != null && updateInfo.checkoutUpdateInfo(this)) {
+		if (!mHasShowUpdate && updateInfo != null && updateInfo.checkoutUpdateInfo(this)
+				&& mHandler != null) {
 			mHasShowUpdate = true;
 			final IndexGameNew appInfo = new IndexGameNew();
 			appInfo.id = Global.GIFTCOOL_GAME_ID;
@@ -393,7 +394,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			appInfo.versionName = updateInfo.versionName;
 			appInfo.size = appInfo.getApkFileSizeStr();
 			appInfo.initAppInfoStatus(this);
-			new Handler().postDelayed(new Runnable() {
+			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
 					BaseFragment_Dialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content);

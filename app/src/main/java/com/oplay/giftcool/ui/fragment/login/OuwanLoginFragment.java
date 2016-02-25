@@ -267,7 +267,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
 													mData, false);
 										}
-										AccountManager.getInstance().setUser(userModel);
+										AccountManager.getInstance().notifyUserAll(userModel);
 										if (getActivity() != null) {
 											((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										}

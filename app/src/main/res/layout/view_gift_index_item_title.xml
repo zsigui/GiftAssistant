@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id = "@+id/ll_new"
+              style = "@style/IndexModuleTitleLayout"
+              android:background = "@color/co_white"
+              android:orientation = "horizontal"
+              android:gravity = "center_vertical"
+              android:layout_marginTop = "@dimen/di_index_module_gap"
+              android:clickable = "true" >
+
+	<TextView
+			style = "@style/DefaultTextView.Header"
+			android:text = "▌"
+			android:textColor = "@color/co_common_app_main_bg" />
+
+	<TextView
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "match_parent"
+			android:text = "@string/st_index_gift_new" />
+
+
+</LinearLayout >

@@ -136,7 +136,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 										UserModel model = AccountManager.getInstance().getUser();
 										model.userInfo.nick = response.body().getData().nick;
-										AccountManager.getInstance().setUser(model);
+										AccountManager.getInstance().notifyUserAll(model);
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
 										ToastUtil.showShort("修改成功");
 										getActivity().onBackPressed();

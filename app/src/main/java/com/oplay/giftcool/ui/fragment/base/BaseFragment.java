@@ -122,8 +122,8 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 			if (mViewManager != null) {
 				mViewManager.setOnRetryListener(mRetryListener);
 			}
-			setListener();
 			processLogic(savedInstanceState);
+			setListener();
 		}
 		mIsPrepared = true;
 		mCanShowUI = true;
@@ -279,6 +279,10 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
 	@Override
 	public void onGiftUpdate(int action) {
+		if (!mIsPrepared) {
+			mIsNotifyRefresh = mIsSwipeRefresh = false;
+			return;
+		}
 		if (mIsSwipeRefresh || mIsNotifyRefresh) {
 			return;
 		}
@@ -287,7 +291,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	}
 
 	@Override
-	public void onUserUpdate() {
+	public void onUserUpdate(int action) {
 
 	}
 }

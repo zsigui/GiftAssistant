@@ -31,6 +31,7 @@ public class Global {
 	public static long sServerTimeDiffLocal;
 	/* Retrofit网络请求接口引擎 */
 	private static NetEngine sNetEngine;
+	public static boolean sCanRefreshSeize = true;
 
 	/* ImageLoader默认图片加载配置 */
 	public static final DisplayImageOptions IMAGE_OPTIONS = new DisplayImageOptions.Builder()

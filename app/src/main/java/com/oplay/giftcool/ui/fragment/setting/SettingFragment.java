@@ -204,8 +204,10 @@ public class SettingFragment extends BaseFragment {
 	}
 
 	@Override
-	public void onUserUpdate() {
-		updateData();
+	public void onUserUpdate(int action) {
+		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
+			updateData();
+		}
 	}
 
 	@Override

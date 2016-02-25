@@ -21,6 +21,7 @@ import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -83,7 +84,16 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 						@Override
 						public void onFinish() {
 							contentHolder.tvTagSeize.setText("刷新抢");
-							ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
+							if (Global.sCanRefreshSeize) {
+								Global.sCanRefreshSeize = false;
+								ThreadUtil.runInUIThread(new Runnable() {
+									@Override
+									public void run() {
+										ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS
+												.GIFT_UPDATE_ALL);
+									}
+								}, 2500);
+							}
 						}
 					};
 					timer.start();

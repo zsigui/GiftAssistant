@@ -94,6 +94,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 								                       Retrofit
 										retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (response != null && response.isSuccess() && response.body() != null &&
 											response.body().getCode() == StatusCode.SUCCESS) {
 										refreshSuccessEnd();
@@ -107,6 +110,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 								@Override
 								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}

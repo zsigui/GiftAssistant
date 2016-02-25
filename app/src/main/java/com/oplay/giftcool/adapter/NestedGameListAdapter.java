@@ -54,10 +54,10 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 		o.initAppInfoStatus(mContext);
 		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
 		if (o.playCount < 10000) {
-			bgaViewHolderHelper.setText(R.id.tv_play,
+			bgaViewHolderHelper.setText(R.id.tv_content,
 					Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
 		} else {
-			bgaViewHolderHelper.setText(R.id.tv_play,
+			bgaViewHolderHelper.setText(R.id.tv_content,
 					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
 							(float) o.playCount / 10000)));
 		}

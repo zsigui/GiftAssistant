@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameNoticeAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
@@ -57,7 +58,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 				return;
 			}
 			ArrayList<IndexGameNew> remainData = new ArrayList<>(10);
-			for (int i = 0; i<10; i++) {
+			for (int i = 0; i < 10; i++) {
 				remainData.add(mData.get(i));
 			}
 			if (!mInPage || mIsRunning) {
@@ -80,143 +81,157 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_refresh_rv_container);
+		initViewManger(R.layout.fragment_refresh_rv_container);
 		mDataView = getViewById(R.id.lv_content);
 	}
 
-    @Override
-    protected void setListener() {
+	@Override
+	protected void setListener() {
+		mDataView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				if (ImageLoader.getInstance().isInited()) {
+					if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+						ImageLoader.getInstance().resume();
+					} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
+							|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+						ImageLoader.getInstance().pause();
+					}
+				}
+			}
+		});
+	}
 
-    }
-
-    @Override
+	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		ReqPageData data = new ReqPageData();
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
-        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), llm.getOrientation());
+		DividerItemDecoration decoration = new DividerItemDecoration(getContext(), llm.getOrientation());
 		mDataView.setLayoutManager(llm);
-        mDataView.addItemDecoration(decoration);
+		mDataView.addItemDecoration(decoration);
 		mAdapter = new GameNoticeAdapter(getActivity());
 		mDataView.setAdapter(mAdapter);
-	    mViewManager.showContent();
+		mViewManager.showContent();
 	}
 
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
 
-        Global.THREAD_POOL.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (NetworkUtil.isConnected(getContext())) {
-                    mReqPageObj.data.page = 1;
-                    Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
-                            .enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-                                @Override
-                                public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
-                                        retrofit) {
-	                                if (!mCanShowUI) {
-		                                return;
-	                                }
-                                    if (response != null && response.isSuccess() &&
-		                                    response.body().getCode() == StatusCode.SUCCESS) {
-                                        refreshSuccessEnd();
-                                        OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-	                                    refreshLoadState(backObj.data, backObj.isEndPage);
-                                        updateData(backObj.data);
-                                        return;
-                                    }
-	                                refreshFailEnd();
-                                }
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (NetworkUtil.isConnected(getContext())) {
+					mReqPageObj.data.page = 1;
+					Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
+							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+								@Override
+								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response,
+								                       Retrofit
+										retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
+									if (response != null && response.isSuccess() &&
+											response.body().getCode() == StatusCode.SUCCESS) {
+										refreshSuccessEnd();
+										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+										refreshLoadState(backObj.data, backObj.isEndPage);
+										updateData(backObj.data);
+										return;
+									}
+									refreshFailEnd();
+								}
 
-                                @Override
-                                public void onFailure(Throwable t) {
-	                                if (!mCanShowUI) {
-		                                return;
-	                                }
-	                                if (AppDebugConfig.IS_DEBUG) {
-		                                KLog.e(AppDebugConfig.TAG_FRAG, t);
-	                                }
-	                                refreshFailEnd();
-                                }
-                            });
-                } else {
-	                refreshFailEnd();
-                }
-            }
-        });
+								@Override
+								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.e(AppDebugConfig.TAG_FRAG, t);
+									}
+									refreshFailEnd();
+								}
+							});
+				} else {
+					refreshFailEnd();
+				}
+			}
+		});
 	}
 
-    /**
-     * 加载更多数据
-     */
-    @Override
-    protected void loadMoreData() {
+	/**
+	 * 加载更多数据
+	 */
+	@Override
+	protected void loadMoreData() {
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
 			mReqPageObj.data.page = mLastPage + 1;
-            Global.THREAD_POOL.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (NetworkUtil.isConnected(getContext())) {
-                        Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
-                                .enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-                                    @Override
-                                    public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
-                                            retrofit) {
-	                                    if (!mCanShowUI) {
-		                                    return;
-	                                    }
-                                        if (response != null && response.isSuccess() &&
-		                                        response.body().getCode() == StatusCode.SUCCESS) {
-	                                        moreLoadSuccessEnd();
-                                            OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-                                            setLoadState(backObj.data, backObj.isEndPage);
-                                            addMoreData(backObj.data);
-                                            return;
-                                        }
-	                                    moreLoadFailEnd();
-                                    }
+			Global.THREAD_POOL.execute(new Runnable() {
+				@Override
+				public void run() {
+					if (NetworkUtil.isConnected(getContext())) {
+						Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
+								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+									@Override
+									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
+											                       response, Retrofit
+											retrofit) {
+										if (!mCanShowUI) {
+											return;
+										}
+										if (response != null && response.isSuccess() &&
+												response.body().getCode() == StatusCode.SUCCESS) {
+											moreLoadSuccessEnd();
+											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+											setLoadState(backObj.data, backObj.isEndPage);
+											addMoreData(backObj.data);
+											return;
+										}
+										moreLoadFailEnd();
+									}
 
-                                    @Override
-                                    public void onFailure(Throwable t) {
-	                                    if (!mCanShowUI) {
-		                                    return;
-	                                    }
-	                                    moreLoadFailEnd();
-                                    }
-                                });
-                    } else {
-	                    moreLoadFailEnd();
-                    }
-                }
-            });
+									@Override
+									public void onFailure(Throwable t) {
+										if (!mCanShowUI) {
+											return;
+										}
+										moreLoadFailEnd();
+									}
+								});
+					} else {
+						moreLoadFailEnd();
+					}
+				}
+			});
 		}
 	}
 
-    public void updateData(ArrayList<IndexGameNew> data) {
-	    if (data == null || data.size() == 0) {
-		    mViewManager.showEmpty();
-		    return;
-	    }
-        mViewManager.showContent();
-        mHasData = true;
-        mData = data;
-        mAdapter.updateData(mData);
-        mLastPage = 1;
-    }
+	public void updateData(ArrayList<IndexGameNew> data) {
+		if (data == null || data.size() == 0) {
+			mViewManager.showEmpty();
+			return;
+		}
+		mViewManager.showContent();
+		mHasData = true;
+		mData = data;
+		mAdapter.updateData(mData);
+		mLastPage = 1;
+	}
 
-    private void addMoreData(ArrayList<IndexGameNew> moreData) {
-        if (moreData == null) {
-            return;
-        }
-        mData.addAll(moreData);
-        mAdapter.updateData(mData);
-        mLastPage += 1;
-    }
+	private void addMoreData(ArrayList<IndexGameNew> moreData) {
+		if (moreData == null) {
+			return;
+		}
+		mData.addAll(moreData);
+		mAdapter.updateData(mData);
+		mLastPage += 1;
+	}
 
 	/*@Override
 	public void onPause() {
@@ -248,6 +263,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 			mIsRunning = true;
 		}
 	}
+
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;

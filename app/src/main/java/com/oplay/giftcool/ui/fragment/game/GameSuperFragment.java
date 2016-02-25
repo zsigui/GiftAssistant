@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.game;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,15 +45,32 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 		mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-					ImageLoader.getInstance().resume();
-				} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
-						|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-					ImageLoader.getInstance().pause();
+				if (ImageLoader.getInstance().isInited()) {
+					if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+						ImageLoader.getInstance().resume();
+					} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
+							|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+						ImageLoader.getInstance().pause();
+					}
 				}
 			}
 
 
+		});
+		mAdapter.setTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_MOVE:
+						mRefreshLayout.setEnabled(false);
+						break;
+					case MotionEvent.ACTION_UP:
+					case MotionEvent.ACTION_CANCEL:
+						mRefreshLayout.setEnabled(true);
+						break;
+				}
+				return false;
+			}
 		});
 	}
 
@@ -62,7 +80,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
 		// 设置RecyclerView的LayoutManager
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		mAdapter = new GameSuperAdapter(getActivity(), this);
+		mAdapter = new GameSuperAdapter(getActivity());
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);
 		mIsPrepared = mNoMoreLoad = true;
