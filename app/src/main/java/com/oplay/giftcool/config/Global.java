@@ -66,6 +66,10 @@ public class Global {
 		return sNetEngine;
 	}
 
+	public static void resetNetEngine() {
+		sNetEngine = AssistantApp.getInstance().getRetrofit().create(NetEngine.class);
+	}
+
 	/**
 	 * 公用线程池，处理异步任务
 	 */

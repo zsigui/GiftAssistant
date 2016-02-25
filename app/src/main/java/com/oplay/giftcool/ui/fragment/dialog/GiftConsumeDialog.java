@@ -182,7 +182,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 				// 可选积分或偶玩豆支付方式，但积分和偶玩豆都不足
 				tvContent.setText(Html.fromHtml(String.format(BEAN_SCORE_BOTH_NOT_ENOUGH, mScoreConsume,
 						mBeanConsume), mImageGetter, null));
-				setPositiveBtnText("充值余额");
+				setPositiveBtnText("增加余额");
 				mWrapperListener = mGetBeanListener;
 			} else {
 				// 可选积分或偶玩豆支付方式，积分和偶玩豆至少可抢一种

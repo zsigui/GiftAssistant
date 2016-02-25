@@ -112,6 +112,19 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		}
 	}
 
+//	@Override
+//	public boolean canChildScrollUp() {
+//		if (mRecyclerView != null) {
+//			if (mRecyclerView.getTop() == 0
+//					&& mRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		}
+//		return super.canChildScrollUp();
+//	}
+
 	/**
 	 * 获取ListView对象
 	 */

@@ -8,10 +8,13 @@ public class WebViewUrl {
 	public static final String URL_DOMAIN = ".ouwan.com";
 	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/";
 	public static final String URL_BASE = "http://libao.ouwan.com/";
+	// 分享的Icon地址
 	public static final String ICON_GCOOL = "http://lb-cdn.ymapp.com/static/img/icon192_192.png";
 
+	public static String REAL_URL = TEST_URL_BASE;
+
 	public static String getBaseUrl() {
-		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
+		return AppConfig.TEST_MODE ? REAL_URL : URL_BASE;
 	}
 
 	public static final String GAME_DETAIL = getBaseUrl() + "m/game-detail/";

@@ -13,7 +13,13 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -55,6 +61,42 @@ public class SplashActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void processLogic() {
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (AppConfig.TEST_MODE) {
+			final TestChoiceDialog dialog = TestChoiceDialog.newInstances();
+			dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+				@Override
+				public void onCancel() {
+					ToastUtil.showShort("不做修改");
+					initAction();
+					dialog.dismissAllowingStateLoss();
+				}
+
+				@Override
+				public void onConfirm() {
+					ToastUtil.showShort("使用新的地址重新加载");
+					String[] s = dialog.getContent().split("\n");
+					NetUrl.REAL_URL = s[0].trim();
+					if (s.length > 1) {
+						WebViewUrl.REAL_URL = s[1].trim();
+					}
+					AssistantApp.getInstance().resetInitForTest();
+					initAction();
+					dialog.dismissAllowingStateLoss();
+				}
+			});
+			dialog.setCancelable(false);
+			dialog.show(getSupportFragmentManager(), "init");
+			return;
+		}
+		initAction();
+	}
+
+	private void initAction() {
 		if (!mApp.isGlobalInit()) {
 
 			mFirstInitTime = System.currentTimeMillis();

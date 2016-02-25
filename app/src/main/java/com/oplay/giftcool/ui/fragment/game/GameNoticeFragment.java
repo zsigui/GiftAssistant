@@ -130,18 +130,19 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
 								@Override
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response,
-								                       Retrofit
-										retrofit) {
+								                       Retrofit retrofit) {
 									if (!mCanShowUI) {
 										return;
 									}
-									if (response != null && response.isSuccess() &&
-											response.body().getCode() == StatusCode.SUCCESS) {
-										refreshSuccessEnd();
-										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-										refreshLoadState(backObj.data, backObj.isEndPage);
-										updateData(backObj.data);
-										return;
+									if (response != null && response.isSuccess()) {
+										if (response.body() != null &&
+												response.body().getCode() == StatusCode.SUCCESS) {
+											refreshSuccessEnd();
+											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+											refreshLoadState(backObj.data, backObj.isEndPage);
+											updateData(backObj.data);
+											return;
+										}
 									}
 									refreshFailEnd();
 								}
@@ -185,13 +186,14 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 										if (!mCanShowUI) {
 											return;
 										}
-										if (response != null && response.isSuccess() &&
-												response.body().getCode() == StatusCode.SUCCESS) {
-											moreLoadSuccessEnd();
-											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-											setLoadState(backObj.data, backObj.isEndPage);
-											addMoreData(backObj.data);
-											return;
+										if (response != null && response.isSuccess()) {
+											if (response.body() != null && response.body().isSuccess()) {
+												moreLoadSuccessEnd();
+												OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+												setLoadState(backObj.data, backObj.isEndPage);
+												addMoreData(backObj.data);
+												return;
+											}
 										}
 										moreLoadFailEnd();
 									}

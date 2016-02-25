@@ -28,6 +28,8 @@ public class AppDebugConfig {
 	public static final boolean IS_PERM_DEBUG = true;
 	public static final boolean IS_TCAGENT_SHOW = false;
 
+
+
     public static final String TAG_APP = "gcool_debug_app";
 
     public static final String TAG_FRAG = "gcool_debug_fragment";

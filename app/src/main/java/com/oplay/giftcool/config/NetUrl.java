@@ -16,8 +16,10 @@ public class NetUrl {
 	 */
 	public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
 
+	public static String REAL_URL = TEST_URL_BASE;
+
 	public static String getBaseUrl() {
-		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
+		return AppConfig.TEST_MODE ? REAL_URL : URL_BASE;
 	}
 
 

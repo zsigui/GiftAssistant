@@ -219,6 +219,17 @@ public class AssistantApp extends Application {
 	}
 
 	/**
+	 * 重设网络并重初始化，测试使用
+	 */
+	public void resetInitForTest() {
+		if (AppConfig.TEST_MODE) {
+			initRetrofit();
+			Global.resetNetEngine();
+			Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+		}
+	}
+
+	/**
 	 * initial the configuration of Universal-Image-Loader
 	 */
 	public void initImageLoader() {
