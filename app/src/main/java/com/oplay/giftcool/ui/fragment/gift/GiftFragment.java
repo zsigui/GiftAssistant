@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
@@ -97,18 +96,18 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						if (mAdapter != null) {
 							mAdapter.startBanner();
 						}
-						if (ImageLoader.getInstance().isInited()) {
-							ImageLoader.getInstance().resume();
-						}
+//						if (ImageLoader.getInstance().isInited()) {
+//							ImageLoader.getInstance().resume();
+//						}
 						break;
 					case RecyclerView.SCROLL_STATE_DRAGGING:
 					case RecyclerView.SCROLL_STATE_SETTLING:
 						if (mAdapter != null) {
 							mAdapter.stopBanner();
 						}
-						if (ImageLoader.getInstance().isInited()) {
-							ImageLoader.getInstance().stop();
-						}
+//						if (ImageLoader.getInstance().isInited()) {
+//							ImageLoader.getInstance().stop();
+//						}
 						break;
 				}
 			}
@@ -433,8 +432,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						}
 						break;
 					case 4:
+						KLog.d("test-test", rvContainer.getChildCount() + " , y =" +rvContainer.getChildAt(4).getY());
 						if (rvContainer != null && rvContainer.getChildCount() >= 5) {
-							rvContainer.smoothScrollToPosition(4);
+							rvContainer.scrollTo(0, (int) rvContainer.getChildAt(4).getY());
 						}
 						break;
 				}
@@ -471,23 +471,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		toBeSet.totalCount = data.totalCount;
 		toBeSet.remainCount = data.remainCount;
 		toBeSet.code = data.code;
-	}
-
-	@Override
-	public void onHiddenChanged(boolean hidden) {
-		super.onHiddenChanged(hidden);
-		if (mIsResume && !hidden) {
-			ClockService.startService(getContext());
-			if (mAdapter != null) {
-				mAdapter.startBanner();
-			}
-		} else {
-			ClockService.stopService(getContext());
-			if (mAdapter != null) {
-				mAdapter.stopBanner();
-			}
-		}
-		mIsVisible = !hidden;
 	}
 
 	@Override

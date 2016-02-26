@@ -17,11 +17,19 @@ public class WebViewUrl {
 		return AppConfig.TEST_MODE ? REAL_URL : URL_BASE;
 	}
 
-	public static final String GAME_DETAIL = getBaseUrl() + "m/game-detail/";
-	public static final String GIFT_DETAIL = getBaseUrl() + "m/gift/";
-	public static final String OUWAN_BEAN_DETAIL = getBaseUrl() + "m/ouwan-coin/";
-	public static final String OUWAN_BEAN_DETAIL_NOTE = getBaseUrl() + "m/ouwanb-intro/";
-	public static final String SCORE_DETAIL = getBaseUrl() + "m/integral/";
-	public static final String SCORE_DETAIL_NOTE = getBaseUrl() + "m/integral-intro/";
+	public static final String GAME_DETAIL = "m/game-detail/";
+	public static final String GIFT_DETAIL = "m/gift/";
+	public static final String OUWAN_BEAN_DETAIL = "m/ouwan-coin/";
+	public static final String OUWAN_BEAN_DETAIL_NOTE = "m/ouwanb-intro/";
+	public static final String SCORE_DETAIL = "m/integral/";
+	public static final String SCORE_DETAIL_NOTE = "m/integral-intro/";
 
+	public static String getWebUrl(String url) {
+		if (AppConfig.TEST_MODE) {
+			if (getBaseUrl() != null && !getBaseUrl().endsWith("/")) {
+				REAL_URL += "/";
+			}
+		}
+		return getBaseUrl() + GAME_DETAIL;
+	}
 }

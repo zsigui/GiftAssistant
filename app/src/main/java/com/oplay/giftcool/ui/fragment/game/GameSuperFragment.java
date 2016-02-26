@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameSuperAdapter;
 import com.oplay.giftcool.config.Global;
@@ -46,17 +45,17 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
 				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-					if (ImageLoader.getInstance().isInited()) {
-						ImageLoader.getInstance().resume();
-					}
+//					if (ImageLoader.getInstance().isInited()) {
+//						ImageLoader.getInstance().resume();
+//					}
 					if (mAdapter != null) {
 						mAdapter.startBanner();
 					}
 				} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
 						|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-					if (ImageLoader.getInstance().isInited()) {
-						ImageLoader.getInstance().pause();
-					}
+//					if (ImageLoader.getInstance().isInited()) {
+//						ImageLoader.getInstance().pause();
+//					}
 					if (mAdapter != null) {
 						mAdapter.stopBanner();
 					}

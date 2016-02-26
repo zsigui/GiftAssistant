@@ -90,7 +90,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 			mReqPageObj.data.labelType = mTagId;
 		}
 
-		mAdapter = new NestedGameListAdapter(getContext(), this);
+		mAdapter = new NestedGameListAdapter(getContext(), null, this);
 		mDataView.setAdapter(mAdapter);
 	}
 

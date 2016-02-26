@@ -3,7 +3,6 @@ package com.oplay.giftcool.ui.fragment.game;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameTagAdapter;
@@ -13,12 +12,10 @@ import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -41,9 +38,6 @@ public class GameTypeFragment extends BaseFragment {
 	private int[] mResIds = new int[]{R.drawable.ic_tag_arpg, R.drawable.ic_tag_card, R.drawable.ic_tag_supernatural,
 			R.drawable.ic_tag_action, R.drawable.ic_tag_stategy, R.drawable.ic_tag_round};
 
-	private OnItemClickListener<GameTypeMain> mMainItemClickListener;
-	private OnItemClickListener<GameTypeMain> mTagItemClickListener;
-
 	public static GameTypeFragment newInstance() {
 		return new GameTypeFragment();
 	}
@@ -57,18 +51,6 @@ public class GameTypeFragment extends BaseFragment {
 
 	@Override
 	protected void setListener() {
-		mMainItemClickListener = new OnItemClickListener<GameTypeMain>() {
-			@Override
-			public void onItemClick(GameTypeMain item, View view, int position) {
-				IntentUtil.jumpGameTagList(getContext(), item.id, item.name);
-			}
-		};
-		mTagItemClickListener = new OnItemClickListener<GameTypeMain>() {
-			@Override
-			public void onItemClick(GameTypeMain item, View view, int position) {
-				IntentUtil.jumpGameTagList(getContext(), item.id, item.name);
-			}
-		};
 	}
 
 	@Override
@@ -84,12 +66,10 @@ public class GameTypeFragment extends BaseFragment {
 
 		mTagView.setLayoutManager(tagLayoutManager);
 		mTypeMainView.setLayoutManager(typeLayoutManager);
-		mGameTypeMainAdapter = new GameTypeMainAdapter(mTypeMainView);
-		mTagAdapter = new GameTagAdapter(mTagView);
+		mGameTypeMainAdapter = new GameTypeMainAdapter(getContext());
+		mTagAdapter = new GameTagAdapter(getContext());
 		mTypeMainView.setAdapter(mGameTypeMainAdapter);
 		mTagView.setAdapter(mTagAdapter);
-		mGameTypeMainAdapter.setItemClickListener(mMainItemClickListener);
-		mTagAdapter.setItemClickListener(mTagItemClickListener);
 		mViewManager.showContent();
 	}
 

@@ -77,7 +77,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 			s.add(mGameKey);
 			mReqPageObj.data.appNames = s;
 		}
-		mAdapter = new GiftLikeListAdapter(getContext());
+		mAdapter = new GiftLikeListAdapter(getContext(), null);
 		mDataView.setAdapter(mAdapter);
 
 	}

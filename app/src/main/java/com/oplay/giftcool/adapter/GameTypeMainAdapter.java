@@ -1,58 +1,64 @@
 package com.oplay.giftcool.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.adapter.base.BaseRVAdapter;
+import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-
-import java.util.ArrayList;
-
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 
 /**
  * Created by zsigui on 16-1-10.
  */
-public class GameTypeMainAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
+public class GameTypeMainAdapter extends BaseRVAdapter<GameTypeMain> implements View.OnClickListener{
 
-	private OnItemClickListener<GameTypeMain> mItemClickListener;
+	private static final int TAG_POSITION = 0XFFFF1234;
 
-	public GameTypeMainAdapter(RecyclerView recyclerView) {
-		super(recyclerView, R.layout.item_grid_game_type_main);
-	}
-
-	public GameTypeMainAdapter(RecyclerView recyclerView, ArrayList<GameTypeMain> data) {
-		this(recyclerView);
-		this.mDatas = data;
-	}
-
-	public void setItemClickListener(OnItemClickListener<GameTypeMain> itemClickListener) {
-		mItemClickListener = itemClickListener;
+	public GameTypeMainAdapter(Context context) {
+		super(context);
 	}
 
 	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final GameTypeMain o) {
-		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		ViewUtil.showImage((ImageView) bgaViewHolderHelper.getView(R.id.iv_icon), o.icon);
-		bgaViewHolderHelper.getView(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mItemClickListener != null) {
-					mItemClickListener.onItemClick(o, null, i);
-				}
-			}
-		});
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		return new TypeHolder(LayoutInflater.from(mContext).inflate(R.layout.item_grid_game_type_main, parent, false));
 	}
 
-	public void updateData(ArrayList<GameTypeMain> data) {
-		if (this.mDatas == null)
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		TypeHolder typeHolder =(TypeHolder) holder;
+		GameTypeMain o = getItem(position);
+		typeHolder.tvName.setText(o.name);
+		ViewUtil.showImage(typeHolder.ivIcon, o.icon);
+		typeHolder.itemView.setOnClickListener(this);
+		typeHolder.itemView.setTag(TAG_POSITION, position);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (mData == null || v.getTag(TAG_POSITION) == null) {
 			return;
-		this.mDatas = data;
-		notifyDataSetChanged();
+		}
+		GameTypeMain o = getItem((Integer)v.getTag(TAG_POSITION));
+		IntentUtil.jumpGameTagList(mContext, o.id, o.name);
+	}
+
+	static class TypeHolder extends BaseRVHolder {
+		TextView tvName;
+		ImageView ivIcon;
+
+		public TypeHolder(View itemView) {
+			super(itemView);
+			tvName = getViewById(R.id.tv_name);
+			ivIcon = getViewById(R.id.iv_icon);
+		}
 	}
 
 }

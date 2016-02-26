@@ -68,8 +68,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		int id = getArguments().getInt(KEY_ID);
 		int status = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
 		String statusBarColor = getArguments().getString(KEY_COLOR, "f85454");
-		String url = WebViewUrl.GAME_DETAIL + "?id=" + id + "&theme=" + statusBarColor + "&status=" + status +
-				"&download=" + mApp.isAllowDownload();
+		String url = String.format("%s?id=%d&theme=%s&status=%d&download=%s",
+				WebViewUrl.getWebUrl(WebViewUrl.GAME_DETAIL), id, statusBarColor, status, mApp.isAllowDownload());
 		AccountManager.getInstance().syncCookie();
 		loadUrl(url);
 	}

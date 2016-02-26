@@ -23,7 +23,7 @@ public class LoginActivity extends BaseAppCompatActivity {
 		if (getIntent() != null)
 			type = getIntent().getIntExtra(KeyConfig.KEY_TYPE, 0);
 
-		if (type == 0) {
+		if (type != KeyConfig.TYPE_ID_OUWAN_LOGIN) {
 			replaceFragWithTitle(R.id.fl_container, PhoneLoginFragment.newInstance(),
 					getResources().getString(R.string.st_login_phone_title), false);
 		} else {

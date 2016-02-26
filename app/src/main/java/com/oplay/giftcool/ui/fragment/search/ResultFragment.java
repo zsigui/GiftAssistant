@@ -81,7 +81,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		mGameAdapter = new NestedGameListAdapter(getContext(), this);
+		mGameAdapter = new NestedGameListAdapter(getContext(), null, this);
 		mGiftAdapter = new NestedGiftListAdapter(getContext());
 		mGiftAdapter.setListener(new OnItemClickListener<IndexGiftNew>() {
 			@Override
@@ -122,7 +122,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 			return;
 		}
 		if (mData != null) {
-			mGameAdapter.setDatas(mData.games);
+			mGameAdapter.setData(mData.games);
 			mGiftAdapter.setData(mData.gifts);
 			if (mData.games == null || mData.games.size() == 0) {
 				llGift.setVisibility(View.GONE);

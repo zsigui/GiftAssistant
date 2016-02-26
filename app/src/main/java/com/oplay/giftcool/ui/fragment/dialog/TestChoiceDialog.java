@@ -42,7 +42,7 @@ public class TestChoiceDialog extends BaseFragment_Dialog {
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.tv_normal:
-				tvContent.setText("http://lbapi.ouwan.com/api/\nhttp://giftcool.ouwan.com/");
+				tvContent.setText("http://lbapi.ouwan.com/api/\nhttp://libao.ouwan.com/");
 				break;
 			case R.id.tv_test:
 				tvContent.setText("http://test.lbapi.ouwan.com/api/\nhttp://test.giftcool.ouwan.com/");

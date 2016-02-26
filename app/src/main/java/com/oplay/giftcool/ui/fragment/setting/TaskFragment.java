@@ -50,6 +50,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private ListView mDataView;
 	private ArrayList<ScoreMission> mData;
 	private ScoreTaskAdapter mAdapter;
+	private int mCurFinishedTask = 0;
 
 
 	public static TaskFragment newInstance() {
@@ -82,12 +83,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		AccountManager.getInstance().updatePartUserInfo();
 	}
 
-	private long mTime = 0;
-
 	@Override
 	public void onResume() {
 		super.onResume();
-		mTime = System.currentTimeMillis();
 		ObserverManager.getInstance().addUserUpdateListener(this);
 		ObserverManager.getInstance().addUserActionListener(this);
 	}
@@ -111,11 +109,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 								}
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-										refreshSuccessEnd();
 										mData = response.body().getData().missions;
 										setTaskIcon(mData);
 										mData = resort(mData);
 										mAdapter.updateData(mData);
+										refreshSuccessEnd();
 										return;
 									}
 									if (AppDebugConfig.IS_FRAG_DEBUG) {
@@ -212,11 +210,17 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		if (data == null) {
 			return null;
 		}
+		mCurFinishedTask = 0;
 		ArrayList<ScoreMission> result = new ArrayList<>();
 		addNewTaskType("期待任务", TaskTypeUtil.MISSION_TYPE_FUTURE, result, data);
 		addNewTaskType("新手任务", TaskTypeUtil.MISSION_TYPE_TIRO, result, data);
 		addNewTaskType("日常任务", TaskTypeUtil.MISSION_TYPE_DAILY, result, data);
 		addNewTaskType("连续任务", TaskTypeUtil.MISSION_TYPE_CONTINUOUS, result, data);
+		if (mCurFinishedTask == data.size()) {
+			mCurFinishedTask = -1;
+			AccountManager.getInstance().getUserInfo().isCompleteTodayMission = true;
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
+		}
 		return result;
 	}
 
@@ -230,6 +234,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					|| TaskTypeUtil.ID_DOWNLOAD_SPECIFIED.equals(mission.id))
 					&& !AssistantApp.getInstance().isAllowDownload()) {
 				// 不允许下载，不添加
+				mCurFinishedTask++;
 				continue;
 			}
 			// 最后完成时间是今天，标志为已经完成
@@ -242,6 +247,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					mission.isFinished = true;
 					rawTasks.add(mission);
 					rawFinishedIndex = (rawFinishedIndex == -1 ? rawTasks.size() - 1 : rawFinishedIndex);
+					mCurFinishedTask++;
 				} else {
 					mission.isFinished = false;
 					if (rawFinishedIndex == -1) {
@@ -351,6 +357,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	public void onUserUpdate(int action) {
 		if (tvScore != null && AccountManager.getInstance().isLogin()) {
 			tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
+		}
+		if (mCurFinishedTask == -1) {
+			// 为所有任务完成，通知主界面更新通知，忽略
+			return;
 		}
 		if (mIsNotifyRefresh) {
 			return;

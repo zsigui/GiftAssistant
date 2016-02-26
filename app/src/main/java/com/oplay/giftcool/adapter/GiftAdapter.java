@@ -31,6 +31,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		long startTime = System.currentTimeMillis();
 		switch (viewType) {
 			case TYPE_BANNER:
 				if (mBannerWR == null || mBannerWR.get() == null) {
@@ -91,7 +93,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				LinearLayoutManager llmLike = new LinearLayoutManager(mContext);
 				llmLike.setOrientation(LinearLayoutManager.HORIZONTAL);
 				likeVH.rvContainer.setLayoutManager(llmLike);
-				likeVH.rvAdapter = new IndexGiftLikeAdapter(likeVH.rvContainer);
+				likeVH.rvAdapter = new IndexGiftLikeAdapter(mContext);
 				// 加载数据
 				likeVH.rvContainer.setAdapter(likeVH.rvAdapter);
 				return likeVH;
@@ -111,6 +113,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_NEW_ITEM:
 				ItemHolder limitItemVH = new ItemHolder(mInflater.inflate(R.layout.item_index_gift_new_list, parent,
 						false));
+				KLog.d(AppDebugConfig.TAG_ADAPTER, "onCreateViewHolder.time = " + (System.currentTimeMillis() - startTime));
 				return limitItemVH;
 			default:
 				return null;
