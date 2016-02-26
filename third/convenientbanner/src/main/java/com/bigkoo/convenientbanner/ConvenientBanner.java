@@ -95,6 +95,7 @@ public class ConvenientBanner<T> extends LinearLayout {
     }
 
 
+
     static class AdSwitchTask implements Runnable {
 
         private final WeakReference<ConvenientBanner> reference;

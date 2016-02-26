@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -82,7 +80,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_refresh_rv_container);
+		initViewManger(R.layout.fragment_refresh_custome_rv_container);
 		rvContainer = getViewById(R.id.lv_content);
 	}
 
@@ -115,21 +113,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 				super.onScrolled(recyclerView, dx, dy);
-			}
-		});
-		mAdapter.setTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-					case MotionEvent.ACTION_MOVE:
-						mRefreshLayout.setEnabled(false);
-						break;
-					case MotionEvent.ACTION_UP:
-					case MotionEvent.ACTION_CANCEL:
-						mRefreshLayout.setEnabled(true);
-						break;
-				}
-				return false;
 			}
 		});
 		ObserverManager.getInstance().addGiftUpdateListener(this);
@@ -300,17 +283,54 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mAdapter.updateData(mGiftData);
 	}
 
+	private boolean mIsResume = false;
+	private boolean mIsVisible = false;
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		ClockService.startService(getContext().getApplicationContext());
+		if (mIsVisible) {
+			ClockService.startService(getContext().getApplicationContext());
+			if (mAdapter != null) {
+				mAdapter.startBanner();
+			}
+		}
+		mIsResume = true;
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+		if (mAdapter != null) {
+			mAdapter.stopBanner();
+		}
+		mIsResume = false;
 		ClockService.stopService(getContext().getApplicationContext());
 	}
+
+
+	@Override
+	protected void onUserVisible() {
+		super.onUserVisible();
+		if (mIsResume) {
+			ClockService.startService(getContext());
+			if (mAdapter != null) {
+				mAdapter.startBanner();
+			}
+		}
+		mIsVisible = true;
+	}
+
+	@Override
+	protected void onUserInvisible() {
+		super.onUserInvisible();
+		ClockService.stopService(getContext());
+		if (mAdapter != null) {
+			mAdapter.stopBanner();
+		}
+		mIsVisible = false;
+	}
+
 
 	private Call<JsonRespBase<HashMap<String, IndexGiftNew>>> mRefreshCall = null;
 
@@ -453,11 +473,18 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
-		if (hidden) {
-			ClockService.stopService(getContext());
-		} else {
+		if (mIsResume && !hidden) {
 			ClockService.startService(getContext());
+			if (mAdapter != null) {
+				mAdapter.startBanner();
+			}
+		} else {
+			ClockService.stopService(getContext());
+			if (mAdapter != null) {
+				mAdapter.stopBanner();
+			}
 		}
+		mIsVisible = !hidden;
 	}
 
 	@Override

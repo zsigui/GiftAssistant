@@ -228,7 +228,7 @@ public class IntentUtil {
 	 * 跳转登录界面（根据最后一次登录判断）
 	 */
 	public static void jumpLogin(Context context) {
-		ToastUtil.showShort("需要先登录~");
+		ToastUtil.showShort("请先登录噢~");
 		jumpLoginNoToast(context);
 	}
 

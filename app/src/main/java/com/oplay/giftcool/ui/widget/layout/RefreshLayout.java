@@ -184,25 +184,48 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
 				// 按下
-				mYDown = (int) event.getRawY();
+				mYDown = (int) event.getY();
+				mXDown = (int) event.getX();
+				mIsHorizontal = false;
 				break;
-
-			case MotionEvent.ACTION_MOVE:
-				// 移动
-				mLastY = (int) event.getRawY();
-				break;
-
 			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
 				// 抬起
 				if (canLoad()) {
 					loadData();
 				}
+				mIsHorizontal = false;
+				requestDisallowInterceptTouchEvent(false);
 				break;
 			default:
 				break;
 		}
+		return super.dispatchTouchEvent(event) && !mIsHorizontal;
+	}
 
-		return super.dispatchTouchEvent(event);
+	private boolean mIsHorizontal = false;
+	private int mXDown;
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		if (mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) {
+			requestDisallowInterceptTouchEvent(true);
+			return false;
+		}
+		switch (ev.getAction()) {
+			case MotionEvent.ACTION_MOVE:
+				// 移动
+				mLastY = (int) ev.getY();
+				int xDiff = Math.abs((int)ev.getX() - mXDown);
+				int yDiff = Math.abs((int)ev.getY() - mYDown);
+				if (xDiff > yDiff) {
+					mIsHorizontal = true;
+					requestDisallowInterceptTouchEvent(true);
+					return false;
+				}
+				break;
+		}
+		return super.onInterceptTouchEvent(ev);
 	}
 
 	/**

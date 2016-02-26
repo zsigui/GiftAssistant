@@ -294,7 +294,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			bannerVH.mBanner.stopTurning();
 		} else {
 			bannerVH.mBanner.setCanLoop(true);
-			bannerVH.mBanner.setScrollDuration(500);
 			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
 			bannerVH.mBanner.startTurning(AppConfig.BANNER_LOOP_TIME);
 		}
