@@ -175,6 +175,8 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
 			viewHolder.llMoney.setVisibility(View.VISIBLE);
 			viewHolder.tvCount.setVisibility(View.GONE);
+			viewHolder.tvPercent.setVisibility(View.VISIBLE);
+			viewHolder.pbPercent.setVisibility(View.VISIBLE);
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			int percent = gift.remainCount * 100 / gift.totalCount;
 			viewHolder.tvPercent.setText(String.format("剩%d%%", percent));

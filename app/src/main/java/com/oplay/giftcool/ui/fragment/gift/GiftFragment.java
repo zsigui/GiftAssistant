@@ -89,6 +89,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		rvContainer.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				if (AppDebugConfig.IS_FRAG_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_ADAPTER, "onScrollListener.newState = " + newState);
+				}
 				switch (newState) {
 					case RecyclerView.SCROLL_STATE_IDLE:
 						if (mAdapter != null) {
