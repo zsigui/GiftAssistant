@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
@@ -310,6 +311,11 @@ public class IntentUtil {
 	 * 添加Q群信息
 	 */
 	public static boolean joinQQGroup(Context context, String qqKey) {
+        String qqPackageName = "com.tencent.mobileqq";
+        if (!InstallAppUtil.isAppInstalled(AssistantApp.getInstance().getApplicationContext(), qqPackageName)) {
+            ToastUtil.showShort("请先安装QQ");
+            return false;
+        }
 		Intent intent = new Intent();
 		intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq" +
 				".com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + qqKey));

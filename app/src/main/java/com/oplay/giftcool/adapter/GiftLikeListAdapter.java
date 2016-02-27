@@ -51,6 +51,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 			holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
 			holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 			holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_remain);
+            convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}

@@ -9,31 +9,42 @@
     android:paddingLeft="@dimen/di_index_hoz_module_margin_left"
     android:paddingRight="@dimen/di_index_hoz_module_margin_left">
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/iv_icon"
-        style="@style/DefaultImageView.Icon"
-        app:riv_border_color="@color/co_stroke_bg"
-        app:riv_border_width="@dimen/di_icon_border_size"
-        app:riv_corner_radius="@dimen/di_icon_radius"
-        app:riv_oval="false"/>
+    <RelativeLayout
+        android:id="@+id/rl_icon"
+        android:layout_width="@dimen/di_icon_diameter"
+        android:layout_height="@dimen/di_icon_diameter"
+        android:background="@color/co_transparent">
 
-    <ImageView
-        android:id="@+id/iv_limit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/di_index_item_margin_left"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@id/iv_icon"
-        android:src="@drawable/ic_score"/>
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:riv_border_color="@color/co_stroke_bg"
+            app:riv_border_width="@dimen/di_icon_border_size"
+            app:riv_corner_radius="@dimen/di_icon_radius"
+            app:riv_oval="false"/>
+
+        <ImageView
+            android:id="@+id/iv_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/di_icon_border_size"
+            android:layout_marginRight="@dimen/di_icon_border_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_tag_limit"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_name"
         style="@style/DefaultTextView.Header"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/iv_limit"
+        android:layout_marginTop="@dimen/di_index_item_margin_left"
+        android:layout_toRightOf="@+id/rl_icon"
         android:paddingLeft="4dp"
         android:text="[暴打魏蜀吴]新手礼包"/>
 
@@ -44,7 +55,7 @@
         android:layout_below="@+id/tv_name"
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="6dp"
-        android:layout_toRightOf="@+id/iv_icon"
+        android:layout_toRightOf="@+id/rl_icon"
         android:gravity="center_vertical"
         android:text="30钻石，5000金币，武器经验卡x6，100块神魂石，10000颗迷魂珠"/>
 
@@ -54,22 +65,22 @@
         android:layout_below="@+id/tv_content"
         android:layout_marginLeft="@dimen/di_index_item_margin_left"
         android:layout_marginTop="4dp"
-        android:layout_toRightOf="@+id/iv_icon"
+        android:layout_toRightOf="@+id/rl_icon"
         android:text="有效期：2015.10.30 10:00 ~ 2016.10.30 10:00"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/iv_icon"
-        android:layout_below="@+id/iv_icon"
+        android:layout_alignLeft="@+id/rl_icon"
+        android:layout_below="@+id/rl_icon"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="8dp">
 
         <TextView
             android:id="@+id/tv_gift_code"
             style="@style/DefaultTextView.Text"
-            android:layout_height="33dp"
             android:layout_width="244dp"
+            android:layout_height="33dp"
             android:layout_marginRight="10dp"
             android:background="@color/co_gift_code_bg"
             android:gravity="left|center_vertical"

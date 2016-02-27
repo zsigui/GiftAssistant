@@ -30,6 +30,6 @@ public class WebViewUrl {
 				REAL_URL += "/";
 			}
 		}
-		return getBaseUrl() + GAME_DETAIL;
+		return getBaseUrl() + url;
 	}
 }

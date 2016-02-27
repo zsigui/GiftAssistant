@@ -65,6 +65,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 			holder.tvGift = ViewUtil.getViewById(convertView, R.id.tv_gift);
 			holder.ivGift = ViewUtil.getViewById(convertView, R.id.iv_gift);
 			holder.tvDownload = ViewUtil.getViewById(convertView, R.id.tv_download);
+            convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -290,7 +291,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 		switch (appStatus) {
 			case DOWNLOADABLE:
 			case UPDATABLE:
-				if (NetworkUtil.isWifiAvailable(mContext)) {
+				if (NetworkUtil.isWifiAvailable(AssistantApp.getInstance().getApplicationContext())) {
 					startDownload();
 				} else {
 					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();

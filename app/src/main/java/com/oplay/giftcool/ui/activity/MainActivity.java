@@ -22,7 +22,6 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -340,22 +339,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 			}, 1000);
 
-		} else if (sIsTodayFirstOpen && mHandler != null) {
-				sIsTodayFirstOpen = false;
-			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (AccountManager.getInstance().isLogin()) {
-						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
-								AccountManager.getInstance().getUser());
-					} else {
-						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
-								null);
-					}
-				}
-			}, 3000);
 		}
+//        if (sIsTodayFirstOpen && mHandler != null) {
+//				sIsTodayFirstOpen = false;
+//			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
+//			mHandler.postDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					if (AccountManager.getInstance().isLogin()) {
+//						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
+//								AccountManager.getInstance().getUser());
+//					} else {
+//						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
+//								null);
+//					}
+//				}
+//			}, 3000);
+//		}
 	}
 
 	private boolean hasLoadPic() {

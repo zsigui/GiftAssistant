@@ -82,7 +82,6 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 
 	@Override
 	protected void lazyLoad() {
-			reloadPage();
 	}
 
 	@Override

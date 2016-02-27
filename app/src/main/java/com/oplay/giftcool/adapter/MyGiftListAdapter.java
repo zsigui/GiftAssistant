@@ -5,86 +5,121 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
-import com.oplay.giftcool.util.DensityUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
-
-import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
+import java.util.List;
 
 /**
  * Created by zsigui on 16-1-7.
  */
-public class MyGiftListAdapter extends BGAAdapterViewAdapter<IndexGiftNew> {
+public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener {
 
-	private OnItemClickListener<IndexGiftNew> mItemClickListener;
 	private int mType;
 
-	public MyGiftListAdapter(Context context, int type) {
-		super(context.getApplicationContext(), R.layout.item_list_my_gift);
-		mType = type;
-	}
+    public MyGiftListAdapter(Context context, List<IndexGiftNew> objects, int type) {
+        super(context, objects);
+        this.mType = type;
+    }
 
+    public void updateData(ArrayList<IndexGiftNew> data) {
+        if (data == null) {
+            return;
+        }
+        mListData = data;
+        notifyDataSetChanged();
+    }
 
-	public void setItemClickListener(OnItemClickListener<IndexGiftNew> itemClickListener) {
-		mItemClickListener = itemClickListener;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (getCount() == 0) {
+            return null;
+        }
 
-	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final IndexGiftNew o) {
-		bgaViewHolderHelper.setText(R.id.tv_name, String.format("[%s]%s", o.gameName, o.name));
-		if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.VISIBLE);
-			bgaViewHolderHelper.getView(R.id.tv_name).setPadding(DensityUtil.dip2px(mContext, 4), 0, 0, 0);
-		} else {
-			bgaViewHolderHelper.setVisibility(R.id.iv_limit, View.GONE);
-			bgaViewHolderHelper.getView(R.id.tv_name).setPadding(DensityUtil.dip2px(mContext, 7), 0, 0, 0);
-		}
-		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
-		bgaViewHolderHelper.setText(R.id.tv_content, o.content);
-		bgaViewHolderHelper.setText(R.id.tv_deadline, DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm") + " ~ "
-				+ DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm"));
-		bgaViewHolderHelper.setText(R.id.tv_gift_code,
-				Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", o.code)));
-		if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
-			bgaViewHolderHelper.getView(R.id.btn_copy).setEnabled(false);
-			bgaViewHolderHelper.setText(R.id.btn_copy, "已结束");
-		} else {
-			bgaViewHolderHelper.getView(R.id.btn_copy).setEnabled(true);
-			bgaViewHolderHelper.setText(R.id.btn_copy, "复制");
-			bgaViewHolderHelper.getView(R.id.btn_copy).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-					cmb.setPrimaryClip(ClipData.newPlainText("礼包码", o.code));
-					ToastUtil.showShort("已复制");
-				}
-			});
-		}
-		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mItemClickListener != null) {
-					mItemClickListener.onItemClick(o, v, i);
-				}
-			}
-		});
-	}
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = mLayoutInflater.inflate(R.layout.item_list_my_gift, parent, false);
+            holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+            holder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
+            holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+            holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+            holder.tvDeadline = ViewUtil.getViewById(convertView, R.id.tv_deadline);
+            holder.tvGiftCode = ViewUtil.getViewById(convertView, R.id.tv_gift_code);
+            holder.btnCopy = ViewUtil.getViewById(convertView, R.id.btn_copy);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-	public void updateData(ArrayList<IndexGiftNew> data) {
-		if (data == null)
-			return;
-		mDatas = data;
-		notifyDataSetChanged();
-	}
+        IndexGiftNew o = getItem(position);
+        holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
+        if (o.exclusive == 1) {
+            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
+        } else {
+            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
+        if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+            holder.ivLimit.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivLimit.setVisibility(View.GONE);
+        }
+        ViewUtil.showImage(holder.ivIcon, o.img);
+        holder.tvContent.setText(o.content);
+        holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
+                DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
+        holder.tvGiftCode.setText(Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", o.code)));
+        if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
+            holder.btnCopy.setEnabled(false);
+            holder.btnCopy.setText("已结束");
+        } else {
+            holder.btnCopy.setEnabled(true);
+            holder.btnCopy.setText("复制");
+        }
+        holder.btnCopy.setOnClickListener(this);
+        holder.btnCopy.setTag(TAG_POSITION, position);
+        convertView.setOnClickListener(this);
+        convertView.setTag(TAG_POSITION, position);
+        return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mListData == null || v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        IndexGiftNew item = getItem((Integer)v.getTag(TAG_POSITION));
+        switch (v.getId()) {
+            case R.id.btn_copy:
+                ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                cmb.setPrimaryClip(ClipData.newPlainText("礼包码", item.code));
+                ToastUtil.showShort("已复制");
+                break;
+            case R.id.rl_recommend:
+                IntentUtil.jumpGiftDetail(mContext, item.id);
+                break;
+        }
+    }
+
+    static class ViewHolder {
+        TextView tvName;
+        ImageView ivIcon;
+        ImageView ivLimit;
+        TextView tvContent;
+        TextView tvDeadline;
+        TextView tvGiftCode;
+        TextView btnCopy;
+    }
 }
