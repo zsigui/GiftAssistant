@@ -79,7 +79,8 @@
 				style = "@style/DefaultTextView.LoginPoint"
 				android:layout_marginLeft = "10dp"
 				android:layout_height = "match_parent"
-				android:textColor = "@color/co_btn_green"
+				android:textColor = "@color/co_btn_grey"
+				android:enabled = "false"
 				android:text = "@string/st_login_phone_send_code" />
 	</LinearLayout >
 

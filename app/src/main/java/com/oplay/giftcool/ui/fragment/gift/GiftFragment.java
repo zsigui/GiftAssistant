@@ -172,9 +172,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 									("Date").getTime();
 							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
 								// 获取数据成功
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_FRAG, "response = " + response.body().getData());
-								}
 								refreshSuccessEnd();
 								updateData(response.body().getData());
 								return;
@@ -415,6 +412,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
+				KLog.d("test-test", "rvContainer = " + rvContainer + ", count = " + (rvContainer == null? -1 : rvContainer.getChildCount())
+				+ ", getY = " + (rvContainer == null ? -1 : (rvContainer.getChildCount() > 2? -2:rvContainer.getChildAt(2).getY()) ));
 				switch (type) {
 					case 1:
 						if (rvContainer != null && rvContainer.getChildCount() >= 2) {
@@ -432,7 +431,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						}
 						break;
 					case 4:
-						KLog.d("test-test", rvContainer.getChildCount() + " , y =" +rvContainer.getChildAt(4).getY());
 						if (rvContainer != null && rvContainer.getChildCount() >= 5) {
 							rvContainer.scrollTo(0, (int) rvContainer.getChildAt(4).getY());
 						}

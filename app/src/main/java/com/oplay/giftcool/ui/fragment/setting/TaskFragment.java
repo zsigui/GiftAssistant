@@ -216,7 +216,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		addNewTaskType("新手任务", TaskTypeUtil.MISSION_TYPE_TIRO, result, data);
 		addNewTaskType("日常任务", TaskTypeUtil.MISSION_TYPE_DAILY, result, data);
 		addNewTaskType("连续任务", TaskTypeUtil.MISSION_TYPE_CONTINUOUS, result, data);
-		if (mCurFinishedTask == data.size()) {
+		if (mCurFinishedTask == result.size()) {
 			mCurFinishedTask = -1;
 			AccountManager.getInstance().getUserInfo().isCompleteTodayMission = true;
 			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
@@ -264,6 +264,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			rawTitle.name = String.format(taskTypeName + "(%d/%d)", rawFinished, rawTotal);
 			result.add(rawTitle);
 			result.addAll(rawTasks);
+			mCurFinishedTask++;
 		}
 	}
 

@@ -31,7 +31,6 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -72,7 +71,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		long startTime = System.currentTimeMillis();
 		switch (viewType) {
 			case TYPE_BANNER:
 				if (mBannerWR == null || mBannerWR.get() == null) {
@@ -113,7 +111,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_NEW_ITEM:
 				ItemHolder limitItemVH = new ItemHolder(mInflater.inflate(R.layout.item_index_gift_new_list, parent,
 						false));
-				KLog.d(AppDebugConfig.TAG_ADAPTER, "onCreateViewHolder.time = " + (System.currentTimeMillis() - startTime));
 				return limitItemVH;
 			default:
 				return null;
@@ -161,6 +158,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				final IndexGiftNew gift = mData.news.get(position - 5);
 				type = GiftTypeUtil.getItemViewType(gift);
 				ItemHolder viewHolder = (ItemHolder) holder;
+				viewHolder.itemView.setBackgroundResource(R.drawable.selector_white_module);
 				setData(position, type, gift, viewHolder);
 		}
 	}
@@ -467,7 +465,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 		public ItemHolder(View itemView) {
 			super(itemView);
-			itemView.setBackgroundResource(R.drawable.selector_white_module);
 			ivIcon = getViewById(R.id.iv_icon);
 			ivLimit = getViewById(R.id.iv_limit);
 			tvName = getViewById(R.id.tv_name);

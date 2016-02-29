@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
 
 /**
@@ -22,7 +24,8 @@ public class InputTextUtil {
 	 */
 	public static void initPswFilter(final EditText etOne, final EditText etTwo,
 	                                 final TextView oneClear, final TextView twoClear,
-	                                 final TextView tvSend, final boolean isOuwan) {
+	                                 final TextView tvSend, final TextView tvCode,
+	                                 final boolean isOuwan) {
 		if (etOne != null) {
 			etOne.addTextChangedListener(new TextWatcher() {
 				@Override
@@ -61,6 +64,17 @@ public class InputTextUtil {
 							tvSend.setEnabled(false);
 						} else {
 							tvSend.setEnabled(true);
+						}
+					}
+					if (tvCode != null) {
+						if (TextUtils.isEmpty(etOne.getText())) {
+							tvCode.setEnabled(false);
+							tvCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color
+									.co_btn_grey));
+						} else {
+							tvCode.setEnabled(true);
+							tvCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color
+									.co_btn_green));
 						}
 					}
 					if (!s.toString().equals(sOrigin)) {

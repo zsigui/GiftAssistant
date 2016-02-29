@@ -115,7 +115,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, true);
+		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, null, true);
 //		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
 		btnLogin.setEnabled(false);
 		initHint();
