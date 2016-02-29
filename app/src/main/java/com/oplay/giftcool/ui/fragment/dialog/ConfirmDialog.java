@@ -1,7 +1,6 @@
 package com.oplay.giftcool.ui.fragment.dialog;
 
 import android.support.annotation.DrawableRes;
-import android.text.Spannable;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.TextView;
@@ -12,6 +11,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 /**
  * Created by zsigui on 16-1-6.
  */
+@SuppressWarnings("ResourceType")
 public class ConfirmDialog extends BaseFragment_Dialog{
 
 	private TextView tvContent;

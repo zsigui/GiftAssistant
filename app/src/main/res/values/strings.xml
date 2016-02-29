@@ -10,6 +10,7 @@
 	<!-- -->
 	<string name = "err_setting" >去设置</string >
 
+	<string name = "st_title_stress" >▌</string >
 	<!-- 侧边栏 -->
 	<string name = "st_drawer_open">打开</string>
 	<string name = "st_drawer_close">关闭</string>
@@ -75,7 +76,7 @@
 	<!-- 设置 - 关于 -->
 	<string name = "st_about_title" >关于礼包酷</string >
 	<string name = "st_about_update" >检查更新</string >
-	<string name = "st_about_checking_update" >检查中...</string>
+	<string name = "st_about_checking_update" >检查中…</string>
 	<string name = "st_about_update_text" >当前已是最新版本</string >
 	<string name = "st_about_wait_update_text" >待更新版本: %s</string >
 	<string name = "st_about_check_update_failed" >检查更新失败！</string>

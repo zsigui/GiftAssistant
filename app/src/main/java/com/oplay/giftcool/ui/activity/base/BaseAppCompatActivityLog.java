@@ -13,7 +13,7 @@ import com.umeng.analytics.MobclickAgent;
  * @email zsigui@foxmail.com
  * @date 2015/12/19
  */
-public class BaseAppCompatActivityLog extends AppCompatActivity {
+public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

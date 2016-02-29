@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.dialog;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
         return dialog;
     }
 
+    @SuppressLint("AddJavascriptInterface")
     @Override
     protected void bindViewWithData(View contentView, @Nullable Bundle savedInstanceState) {
         mProgressBar = (ProgressBar) contentView.findViewById(R.id.pb_percent);

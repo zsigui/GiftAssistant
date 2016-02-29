@@ -4,5 +4,4 @@
           android:layout_width = "match_parent"
           android:paddingTop = "20dp"
           android:paddingBottom = "20dp"
-          android:gravity="center"
-          android:text = "策略塔防" />
+          android:gravity="center" />
