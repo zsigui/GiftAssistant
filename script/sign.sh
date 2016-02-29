@@ -6,6 +6,5 @@ do
         rm -rf $var
     fi
 done
-d=`date +%Y%m%d%H%M`
 jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 keystore ../app/keystore/gift_cool.keystore -keypass ouwan_giftcool_key -storepass ouwan_giftcool_store -signedjar giftcool-unalign.apk app-release.encrypted.apk GiftCool
-zipalign -v 4 giftcool-unalign.apk "giftcool-v1.0.4-$d".apk
+zipalign -v 4 giftcool-unalign.apk giftcool-v1.0.4.apk
