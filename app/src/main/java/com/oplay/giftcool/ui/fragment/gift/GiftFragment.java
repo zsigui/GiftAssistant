@@ -412,8 +412,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				KLog.d("test-test", "rvContainer = " + rvContainer + ", count = " + (rvContainer == null? -1 : rvContainer.getChildCount())
-				+ ", getY = " + (rvContainer == null ? -1 : (rvContainer.getChildCount() > 2? -2:rvContainer.getChildAt(2).getY()) ));
 				switch (type) {
 					case 1:
 						if (rvContainer != null && rvContainer.getChildCount() >= 2) {

@@ -62,6 +62,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 				remainData.add(mData.get(i));
 			}
 			if (!mInPage || mIsRunning) {
+				mNoMoreLoad = false;
 				updateData(remainData);
 			}
 		}

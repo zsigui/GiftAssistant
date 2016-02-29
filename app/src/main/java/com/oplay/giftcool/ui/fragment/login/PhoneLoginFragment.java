@@ -343,6 +343,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
 										AccountManager.getInstance().notifyUserAll(userModel);
 										ScoreManager.getInstance().resetLocalTaskState();
+										ScoreManager.getInstance().toastByCallback(userModel, false);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}

@@ -52,22 +52,25 @@
 			android:orientation = "horizontal"
 			android:layout_centerHorizontal = "true"
 			android:layout_below = "@+id/tv_name"
+			android:paddingLeft = "4dp"
+			android:paddingRight = "4dp"
 			android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
 			android:gravity = "center" >
 
 		<ProgressBar
-				android:id="@+id/pb_percent"
-				style="?android:attr/progressBarStyleHorizontal"
-				android:layout_width="0dp"
-				android:layout_weight="1"
-				android:layout_height="@dimen/di_gift_common_pb_diameter"
-				android:max="100"
-				android:progressDrawable="@drawable/shape_progress_bar_orange"/>
+				android:id = "@+id/pb_percent"
+				style = "?android:attr/progressBarStyleHorizontal"
+				android:layout_width = "0dp"
+				android:layout_weight = "1"
+				android:layout_height = "@dimen/di_gift_common_pb_diameter"
+				android:max = "100"
+				android:layout_marginRight = "3dp"
+				android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
 		<TextView
-				android:id="@+id/tv_percent"
-				style="@style/DefaultTextView.Text"
-				android:text="100%"/>
+				android:id = "@+id/tv_percent"
+				style = "@style/DefaultTextView.Text"
+				android:text = "100%" />
 	</LinearLayout >
 
 </RelativeLayout >

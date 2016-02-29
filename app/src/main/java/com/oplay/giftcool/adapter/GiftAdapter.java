@@ -18,11 +18,13 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
  * Created by zsigui on 16-2-23.
  */
 public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.convenientbanner.listener
-        .OnItemClickListener, View.OnClickListener {
+        .OnItemClickListener, View.OnClickListener, FooterListener {
 
 	private static final int TAG_POS = 0x1234FFFF;
 	public static final int TYPE_DEFAULT = 110;
@@ -49,12 +51,14 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	public static final int TYPE_LIMIT = TYPE_DEFAULT + 3;
 	public static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 4;
 	public static final int TYPE_NEW_ITEM = TYPE_DEFAULT + 5;
+	public static final int TYPE_FOOTER = TYPE_DEFAULT + 11;
 
 	private IndexGift mData;
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private WeakReference<BannerVH> mBannerWR;
 	private View.OnTouchListener mTouchListener;
+	private boolean mShowFooter = false;
 
 	public GiftAdapter(Context context) {
 		mContext = context;
@@ -72,6 +76,8 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
+			case TYPE_FOOTER:
+				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent, false));
 			case TYPE_BANNER:
 				if (mBannerWR == null || mBannerWR.get() == null) {
 					mBannerWR =  new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false)));
@@ -124,6 +130,8 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		}
 		int type = getItemViewType(position);
 		switch (type) {
+			case TYPE_FOOTER:
+				return;
 			case TYPE_BANNER:
 				BannerVH bannerVH = (BannerVH) holder;
 				if (mTouchListener != null)
@@ -326,19 +334,25 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 	@Override
 	public int getItemCount() {
+		int count;
 		if (mData == null) {
-			return 0;
+			count = 0;
 		} else if (mData.news == null) {
-			return 5;
+			count = 5;
 		} else {
-			return 5 + mData.news.size();
+			count = 5 + mData.news.size();
 		}
+		return mShowFooter && count != 0 ? count + 1:count;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
 		if (position >= 5) {
-			return TYPE_NEW_ITEM;
+			if (mShowFooter && position == getItemCount() - 1) {
+				return TYPE_FOOTER;
+			} else {
+				return TYPE_NEW_ITEM;
+			}
 		} else {
 			return TYPE_DEFAULT + position;
 		}
@@ -387,6 +401,16 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 					PayManager.getInstance().seizeGift(mContext, gift, (GiftButton) v);
 				}
 				break;
+		}
+	}
+
+	@Override
+	public void showFooter(boolean isShow) {
+		mShowFooter = isShow;
+		if (mShowFooter) {
+			notifyItemInserted(getItemCount() - 1);
+		} else {
+			notifyItemRemoved(getItemCount());
 		}
 	}
 

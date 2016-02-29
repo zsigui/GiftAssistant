@@ -260,6 +260,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										MainActivity.sIsTodayFirstOpen = true;
 										ScoreManager.getInstance().resetLocalTaskState();
+										ScoreManager.getInstance().toastByCallback(userModel, false);
 										if (AssistantApp.getInstance().isRememberPwd()) {
 											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
 															+ login.getPassword(), mData, false);

@@ -240,7 +240,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			} else {
 				switch (state) {
 					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-						tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font>",
+						tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font> 次",
 								giftData.searchCount)));
 						break;
 					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
