@@ -51,7 +51,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		ViewUtil.showImage(contentHolder.ivIcon, data.img);
 		contentHolder.itemView.setOnClickListener(this);
 		contentHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
-		contentHolder.tvSrc.setText(String.format("原:¥%d", data.originPrice));
+		contentHolder.tvSrc.setText(String.format("值:¥%d", data.originPrice));
 		contentHolder.tvSrc.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 		contentHolder.tvName.setText(data.name);
 		contentHolder.tvGameName.setText(data.gameName);

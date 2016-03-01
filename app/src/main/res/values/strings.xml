@@ -30,7 +30,7 @@
 	<string name = "st_gift_wait_seize" >等抢号</string >
 	<string name = "st_gift_seize" >抢号</string >
 	<!-- 礼包详情 -->
-	<string name = "st_gift_consume" >价值</string >
+	<string name = "st_gift_consume" >消耗</string >
 	<string name = "st_gift_content" >▌礼包内容</string >
 	<string name = "st_gift_deadline" >▌礼包使用期限</string >
 	<string name = "st_gift_usage" >▌礼包兑换方式</string >

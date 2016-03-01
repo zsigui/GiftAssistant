@@ -232,7 +232,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				tvScore.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
 				tvBean.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
 				tvOriginPrice.setText(
-						Html.fromHtml(String.format("<line-through>原价 <font color='#f85454'>¥%d</font>",
+						Html.fromHtml(String.format("<line-through>价值 <font color='#f85454'>¥%d</font>",
 								giftData.originPrice)));
 				tvOriginPrice.setPaint(mApp.getResources().getColor(R.color.co_common_app_main_bg), 3);
 				tvOriginPrice.setVisibility(View.VISIBLE);
