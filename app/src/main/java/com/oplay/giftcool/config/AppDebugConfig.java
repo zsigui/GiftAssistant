@@ -48,6 +48,8 @@ public class AppDebugConfig {
 
 	public static final String TAG_ADAPTER = "gcool_debug_adapter";
 
+	public static final String TAG_WARN = "gcool_debug_warning";
+
 
 
 
