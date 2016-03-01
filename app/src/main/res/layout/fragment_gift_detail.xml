@@ -38,17 +38,21 @@
 					android:layout_marginRight = "@dimen/di_icon_border_size"
 					android:layout_marginBottom = "@dimen/di_icon_border_size"
 					android:contentDescription = "@null"
-					android:visibility = "gone"/>
+					android:visibility = "gone" />
 		</RelativeLayout >
 
 		<TextView
 				android:id = "@+id/tv_name"
 				style = "@style/DefaultTextView.Header"
 				android:layout_width = "match_parent"
-				android:layout_marginLeft = "14dp"
-				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_alignTop = "@+id/rl_icon"
-				android:layout_toRightOf = "@+id/rl_icon" />
+				android:paddingLeft = "14dp"
+				android:layout_marginTop = "4dp"
+				android:layout_toLeftOf = "@+id/btn_send"
+				android:layout_toRightOf = "@+id/rl_icon"
+				android:drawablePadding = "6dp"
+				android:gravity = "center_vertical"
+				android:text = "圣诞礼包" />
 
 		<TextView
 				android:id = "@+id/tv_consume"
@@ -56,7 +60,7 @@
 				android:layout_below = "@+id/tv_name"
 				android:layout_marginLeft = "14dp"
 				android:layout_marginRight = "5dp"
-				android:layout_marginTop = "10dp"
+				android:layout_marginTop = "8dp"
 				android:visibility = "gone"
 				android:layout_toRightOf = "@+id/rl_icon"
 				android:text = "@string/st_gift_consume" />
@@ -93,20 +97,20 @@
 				android:id = "@+id/tv_remain"
 				style = "@style/DefaultTextView.Text"
 				android:layout_below = "@+id/tv_consume"
-				android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
+				android:layout_marginLeft = "14dp"
 				android:layout_marginTop = "7dp"
 				android:visibility = "gone"
-				android:layout_toRightOf = "@+id/rl_icon" />
+				android:layout_toRightOf = "@+id/tv_src" />
 
 		<ProgressBar
 				android:id = "@+id/pb_percent"
 				style = "?android:attr/progressBarStyleHorizontal"
 				android:layout_width = "120dp"
-				android:layout_height = "8dp"
+				android:layout_height = "@dimen/di_gift_common_pb_diameter"
 				android:layout_alignTop = "@+id/tv_remain"
-				android:layout_marginLeft = "8dp"
-				android:layout_marginTop = "3dp"
-				android:layout_toLeftOf = "@+id/ll_send"
+				android:layout_marginLeft = "4dp"
+				android:layout_marginTop = "5dp"
+				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_toRightOf = "@+id/tv_remain"
 				android:max = "100"
 				android:visibility = "gone"
@@ -142,41 +146,27 @@
 				android:textColor = "@color/co_white" />
 
 		<!-- 0元抢 -->
-		<LinearLayout
-				android:id = "@+id/ll_zero"
+		<com.oplay.giftcool.ui.widget.DeletedTextView
+				android:id = "@+id/tv_src"
+				style = "@style/DefaultTextView.Text"
 				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
 				android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
 				android:layout_marginRight = "5dp"
 				android:layout_marginTop = "7dp"
 				android:layout_below = "@+id/tv_consume"
 				android:layout_toRightOf = "@+id/rl_icon"
+				android:maxWidth = "80dp"
 				android:visibility = "gone"
-				android:orientation = "horizontal" >
-
-			<com.oplay.giftcool.ui.widget.DeletedTextView
-					android:id = "@+id/tv_src"
-					style = "@style/DefaultTextView.Text"
-					android:layout_width = "wrap_content"
-					android:maxWidth = "80dp"
-					android:gravity = "left|center_vertical" />
-
-			<TextView
-					android:id = "@+id/tv_zero_remain"
-					android:layout_marginLeft = "10dp"
-					style = "@style/DefaultTextView.Text" />
-		</LinearLayout >
+				android:gravity = "left|center_vertical" />
 
 		<com.oplay.giftcool.ui.widget.button.GiftButton
 				android:id = "@+id/btn_send"
 				style = "@style/DefaultTextView"
 				android:layout_height = "@dimen/di_btn_height"
 				android:layout_alignParentRight = "true"
-				android:layout_alignTop = "@+id/tv_gift_code"
 				android:layout_marginLeft = "10dp"
-				android:layout_marginTop = "1dp"
-				android:layout_alignParentTop = "true"
-				android:visibility = "gone"
+				android:layout_alignTop = "@+id/tv_name"
+				android:text = "等抢号"
 				android:background = "@drawable/selector_btn_red"
 				android:textColor = "@color/co_white" />
 	</RelativeLayout >
@@ -259,7 +249,7 @@
 			android:id = "@+id/ll_download"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:orientation="vertical"
+			android:orientation = "vertical"
 			android:gravity = "center" >
 
 		<View style = "@style/HDividerView" />

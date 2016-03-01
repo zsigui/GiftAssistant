@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.PageTransformer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -93,9 +94,12 @@ public class ConvenientBanner<T> extends LinearLayout {
         adSwitchTask = new AdSwitchTask(this);
     }
 
+
+
     static class AdSwitchTask implements Runnable {
 
         private final WeakReference<ConvenientBanner> reference;
+        private long last = System.currentTimeMillis();
 
         AdSwitchTask(ConvenientBanner convenientBanner) {
             this.reference = new WeakReference<ConvenientBanner>(convenientBanner);
@@ -108,12 +112,18 @@ public class ConvenientBanner<T> extends LinearLayout {
             if(convenientBanner != null){
                 if (convenientBanner.viewPager != null && convenientBanner.turning) {
                     int page = convenientBanner.viewPager.getCurrentItem() + 1;
+                    long curTime = System.currentTimeMillis();
+                    Log.d("ConvenientBanner", "viewPager = " + page + ", elapseTime = " + (curTime - last) + "ms");
+                    last = curTime;
                     convenientBanner.viewPager.setCurrentItem(page);
+                    convenientBanner.removeCallbacks(convenientBanner.adSwitchTask);
                     convenientBanner.postDelayed(convenientBanner.adSwitchTask, convenientBanner.autoTurningTime);
                 }
             }
         }
     }
+
+
 
 	@Override
 	public void setOnTouchListener(OnTouchListener onTouchListener) {

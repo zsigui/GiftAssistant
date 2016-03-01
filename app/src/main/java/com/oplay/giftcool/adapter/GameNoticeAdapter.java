@@ -1,7 +1,6 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.listener.FooterListener;
@@ -118,16 +118,10 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterL
 	@Override
 	public void showFooter(boolean isShow) {
 		mHasFooter = isShow;
-		notifyDataSetChanged();
-	}
-
-	class FooterHolder extends BaseRVHolder {
-
-		AnimationDrawable animDrawable;
-
-		public FooterHolder(View itemView) {
-			super(itemView);
-			animDrawable = (AnimationDrawable) getViewById(R.id.iv_anim).getBackground();
+		if (mHasFooter) {
+			notifyItemInserted(getItemCount() - 1);
+		} else {
+			notifyItemRemoved(getItemCount());
 		}
 	}
 
@@ -149,7 +143,7 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterL
 			tvTag = getViewById(R.id.tv_tag);
 			ivGift = getViewById(R.id.iv_gift);
 			ivIcon = getViewById(R.id.iv_icon);
-			tvPlay = getViewById(R.id.tv_play);
+			tvPlay = getViewById(R.id.tv_content);
 			tvSize = getViewById(R.id.tv_size);
 			tvGift = getViewById(R.id.tv_gift);
 			btnDownload = getViewById(R.id.tv_download);

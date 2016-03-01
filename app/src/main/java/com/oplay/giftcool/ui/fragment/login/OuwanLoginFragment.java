@@ -115,7 +115,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, true);
+		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, null, true);
 //		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
 		btnLogin.setEnabled(false);
 		initHint();
@@ -260,6 +260,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										MainActivity.sIsTodayFirstOpen = true;
 										ScoreManager.getInstance().resetLocalTaskState();
+										ScoreManager.getInstance().toastByCallback(userModel, false);
 										if (AssistantApp.getInstance().isRememberPwd()) {
 											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
 															+ login.getPassword(), mData, false);
@@ -267,7 +268,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 											AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
 													mData, false);
 										}
-										AccountManager.getInstance().setUser(userModel);
+										AccountManager.getInstance().notifyUserAll(userModel);
 										if (getActivity() != null) {
 											((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										}

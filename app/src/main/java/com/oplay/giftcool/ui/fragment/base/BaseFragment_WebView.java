@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
@@ -46,7 +47,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+		mContentView = super.onCreateView(inflater, container, savedInstanceState);
 		initWebView();
 		return mContentView;
 	}
@@ -138,7 +139,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				cacheDir = getActivity().getCacheDir();
 			}
 			if (cacheDir != null) {
-				if (!NetworkUtil.isAvailable(getContext())) {
+				if (!NetworkUtil.isAvailable(AssistantApp.getInstance().getApplicationContext())) {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
 					}
@@ -202,15 +203,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				if (mViewManager != null) {
 					mViewManager.showErrorRetry();
 				}
-				if (mWebView != null) {
-					mWebView.setVisibility(View.GONE);
-				}
 			} else {
 				if (mViewManager != null) {
 					mViewManager.showContent();
-				}
-				if (mWebView != null) {
-					mWebView.setVisibility(View.VISIBLE);
 				}
 			}
 			// 必须page load finish 才能重新setScrollY
@@ -229,6 +224,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);
+			}
+			if (mViewManager != null) {
+				mViewManager.showErrorRetry();
 			}
 		}
 	}
@@ -280,6 +278,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	public void loadUrl(String url) {
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
+            KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + url);
 		}
 		if (mWebView != null) {
 			mWebView.loadUrl(url);
@@ -293,6 +292,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	public void postUrl(String url, byte[] postData) {
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, url);
+            KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + url);
 		}
 		if (mWebView != null) {
 			mWebView.postUrl(url, postData);

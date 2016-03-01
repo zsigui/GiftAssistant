@@ -7,6 +7,7 @@ import com.nineoldandroids.view.ViewHelper;
 /**
  * Created by zsigui on 16-1-20.
  */
+@SuppressWarnings("ResourceType")
 public class FlipPageTransformer extends GCTransformer
 {
 	private static final float ROTATION = 180.0F;

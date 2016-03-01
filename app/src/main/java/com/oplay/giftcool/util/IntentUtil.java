@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
@@ -190,10 +191,52 @@ public class IntentUtil {
 		return intent;
 	}
 
+//	private static ConfirmDialog mConfirmDialog;
+//
+//	private static void loginConfirm(final Context context, final int type) {
+//		if (!(context instanceof FragmentActivity)) {
+//			return;
+//		}
+//		if (mConfirmDialog != null) {
+//			mConfirmDialog.dismissAllowingStateLoss();
+//			mConfirmDialog = null;
+//		}
+//		mConfirmDialog = ConfirmDialog.newInstance();
+//		mConfirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//			@Override
+//			public void onCancel() {
+//				mConfirmDialog.dismissAllowingStateLoss();
+//				mConfirmDialog = null;
+//			}
+//
+//			@Override
+//			public void onConfirm() {
+//				Intent intent = new Intent(context, LoginActivity.class);
+//				intent.putExtra(KeyConfig.KEY_TYPE, type);
+//				context.startActivity(intent);
+//				mConfirmDialog.dismissAllowingStateLoss();
+//				mConfirmDialog = null;
+//			}
+//		});
+//		FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+//		Context appContext = AssistantApp.getInstance().getApplicationContext();
+//		mConfirmDialog.setTitle(appContext.getResources().getString(R.string.st_hint_dialog_login_title));
+//		mConfirmDialog.setContent(appContext.getResources().getString(R.string.st_hint_dialog_login_content));
+//		mConfirmDialog.show(fm, appContext.getResources().getString(R.string.st_hint_dialog_login_tag));
+//	}
+
 	/**
 	 * 跳转登录界面（根据最后一次登录判断）
 	 */
 	public static void jumpLogin(Context context) {
+		ToastUtil.showShort("请先登录噢~");
+		jumpLoginNoToast(context);
+	}
+
+	/**
+	 * 跳转登录界面（根据最后一次登录判断）
+	 */
+	public static void jumpLoginNoToast(Context context) {
 		if (AccountManager.getInstance().isPhoneLogin()) {
 			jumpLogin(context, KeyConfig.TYPE_ID_PHONE_LOGIN);
 		} else {
@@ -268,6 +311,11 @@ public class IntentUtil {
 	 * 添加Q群信息
 	 */
 	public static boolean joinQQGroup(Context context, String qqKey) {
+        String qqPackageName = "com.tencent.mobileqq";
+        if (!InstallAppUtil.isAppInstalled(AssistantApp.getInstance().getApplicationContext(), qqPackageName)) {
+            ToastUtil.showShort("请先安装QQ");
+            return false;
+        }
 		Intent intent = new Intent();
 		intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq" +
 				".com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + qqKey));

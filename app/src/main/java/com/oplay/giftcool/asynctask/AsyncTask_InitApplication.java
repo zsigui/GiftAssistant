@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
@@ -59,6 +60,18 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		return null;
 	}
 
+	/**
+	 * 在此处进行对旧版的处理操作
+	 */
+	public void doClearWorkForOldVer() {
+		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
+		if (oldVer < 3) {
+			// 清除旧版的账号存储信息
+			SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
+			SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+		}
+	}
+
 
 	/**
 	 * 判断是否今日首次登录
@@ -97,6 +110,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.e("initAndCheckUpdate failed!");
 			}
 		}
+
+		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP
 		judgeFirstOpenToday();
 		ScoreManager.getInstance().resetLocalTaskState();
@@ -123,7 +138,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.e(AppDebugConfig.TAG_APP, e);
 			}
 		}
-		AccountManager.getInstance().setUser(user);
+		AccountManager.getInstance().notifyUserAll(user);
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 

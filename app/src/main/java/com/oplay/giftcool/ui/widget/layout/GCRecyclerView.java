@@ -7,9 +7,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
-import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
-
 /**
  * Created by zsigui on 16-2-2.
  */
@@ -37,18 +34,17 @@ public class GCRecyclerView extends RecyclerView {
 	private float startX;
 	private float startY;
 	private VelocityTracker mTracker;
-	private boolean mIsDragged = false;
+	private boolean mIsHorizontal = false;
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
 
-		// 已经处于拖曳状态
-		if (ev.getAction() == MotionEvent.ACTION_MOVE && mIsDragged) {
-			return true;
+		if (ev.getAction() == MotionEvent.ACTION_MOVE && mIsHorizontal) {
+			getParent().requestDisallowInterceptTouchEvent(true);
+			return false;
 		}
 
-		boolean needIntercept = false;
 		switch (ev.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				startX = ev.getX();
@@ -63,36 +59,35 @@ public class GCRecyclerView extends RecyclerView {
 			case MotionEvent.ACTION_MOVE:
 				mTracker.addMovement(ev);
 				mTracker.computeCurrentVelocity(1, 1000);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_UTIL, "velocity = " + VelocityTrackerCompat.getXVelocity(mTracker,
-							POINTER_X)
-							+ ", tan = " + Math.abs((ev.getY() - startY) / (ev.getX() - startX)));
-				}
-				if (abs(ev.getX(), startX) > MOVE_MIN_DISTANCE
-						&& abs((ev.getY() - startY), (ev.getX() - startX)) <= MOVE_MIN_TAN) {
-					mIsDragged = true;
-					needIntercept = true;
+				int xDiff = (int) abs(ev.getX(), startX);
+				int yDiff = (int) abs(ev.getY(), startY);
+				if (xDiff > yDiff
+						|| VelocityTrackerCompat.getXVelocity(mTracker, POINTER_X)
+						> VelocityTrackerCompat.getYVelocity(mTracker, POINTER_Y)) {
+					mIsHorizontal = true;
+					requestDisallowInterceptTouchEvent(true);
+					return false;
 				}
 				break;
+		}
+
+		return super.onInterceptTouchEvent(ev);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		switch (ev.getAction()) {
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
-				mIsDragged = false;
-				if (VelocityTrackerCompat.getXVelocity(mTracker, POINTER_X) > MOVE_MIN_VELOCITY
-						&& abs((ev.getY() - startY), (ev.getX() - startX)) <= MOVE_MIN_TAN) {
-					needIntercept = true;
-				}
+				mIsHorizontal = false;
+				requestDisallowInterceptTouchEvent(false);
 				if (mTracker != null) {
 					mTracker.recycle();
 					mTracker = null;
 				}
 				break;
 		}
-		boolean finalResult = needIntercept || super.onInterceptTouchEvent(ev);
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_UTIL, "needIntercept = " + needIntercept + ", finalResult = " + finalResult);
-		}
-
-		return finalResult;
+		return super.dispatchTouchEvent(ev);
 	}
 
 	private float abs(float old, float cur) {

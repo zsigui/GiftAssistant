@@ -1,32 +1,35 @@
 package com.oplay.giftcool.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnFinishListener;
+import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.List;
 
-import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewHolder;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
-
 /**
  * Created by zsigui on 15-12-23.
  */
-public class SearchHistoryAdapter extends BaseAdapter implements OnFinishListener {
+public class SearchHistoryAdapter extends BaseListAdapter<String> implements OnFinishListener, View.OnClickListener {
 
 	private static final int TYPE_NORMAL = 0;
 	private static final int TYPE_CLEAR = 1;
+    private static final int TAG_TYPE = 0x12344444;
 
-	private boolean mIsHistory;
+    private boolean mIsHistory;
 	private List<String> mKeywords;
 	private OnClearListener mClearListener;
 
-	public SearchHistoryAdapter(List<String> keywords, boolean isHistory) {
+	public SearchHistoryAdapter(Context context, List<String> keywords, boolean isHistory) {
+        super(context, keywords);
 		mIsHistory = isHistory;
 		mKeywords = keywords;
 	}
@@ -43,7 +46,7 @@ public class SearchHistoryAdapter extends BaseAdapter implements OnFinishListene
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public String getItem(int position) {
 		if (getCount() == 0) {
 			return null;
 		}
@@ -73,44 +76,39 @@ public class SearchHistoryAdapter extends BaseAdapter implements OnFinishListene
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		if (getItem(position) == null) {
+		if (getCount() == 0) {
 			return null;
 		}
 
 
 		int type = getItemViewType(position);
 		if (AppDebugConfig.IS_FRAG_DEBUG) {
-			KLog.v(getItem(position));
+			KLog.d(AppDebugConfig.TAG_ADAPTER, getItem(position) + ", type = " + type);
 		}
-		BGAAdapterViewHolder viewHolder;
-		if (type == TYPE_NORMAL) {
-			viewHolder = BGAAdapterViewHolder.dequeueReusableAdapterViewHolder(convertView, parent,
-					R.layout.item_list_history);
-			BGAViewHolderHelper helper = viewHolder.getViewHolderHelper();
-			helper.setText(R.id.tv_search_text, mKeywords.get(position));
-			helper.getView(R.id.rl_search_history).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (mClearListener != null) {
-						mClearListener.onSearchPerform(mKeywords.get(position));
-					}
-				}
-			});
-		} else {
-			viewHolder = BGAAdapterViewHolder.dequeueReusableAdapterViewHolder(convertView, parent,
-					R.layout.item_list_history_clear);
-			BGAViewHolderHelper helper = viewHolder.getViewHolderHelper();
-			helper.getView(R.id.ll_history_clear).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (mClearListener != null) {
-						mClearListener.onClearPerform();
-					}
-					updateData(null, true);
-				}
-			});
-		}
-		return viewHolder.getViewHolderHelper().getConvertView();
+        switch (type) {
+            case TYPE_NORMAL:
+                NormalHolder holder;
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_history, parent,
+                            false);
+                    holder = new NormalHolder();
+                    holder.tvKey = ViewUtil.getViewById(convertView, R.id.tv_search_text);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (NormalHolder) convertView.getTag();
+                }
+                holder.tvKey.setText(mKeywords.get(position));
+                break;
+            case TYPE_CLEAR:
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_history_clear, parent, false);
+                }
+                break;
+        }
+        convertView.setTag(TAG_POSITION, position);
+        convertView.setTag(TAG_TYPE, type);
+        convertView.setOnClickListener(this);
+		return convertView;
 	}
 
 	@Override
@@ -137,9 +135,33 @@ public class SearchHistoryAdapter extends BaseAdapter implements OnFinishListene
 		}
 	}
 
-	public interface OnClearListener{
-		public void onClearPerform();
+    @Override
+    public void onClick(View v) {
+        if (mListData == null || v.getTag(TAG_TYPE) == null) {
+            return;
+        }
+        switch ((Integer)v.getTag(TAG_TYPE)) {
+            case TYPE_NORMAL:
+                if (mClearListener != null) {
+                    mClearListener.onSearchPerform(mKeywords.get((Integer) v.getTag(TAG_POSITION)));
+                }
+                break;
+            case TYPE_CLEAR:
+                if (mClearListener != null) {
+                    mClearListener.onClearPerform();
+                }
+                updateData(null, true);
+                break;
+        }
+    }
 
-		public void onSearchPerform(String keyword);
+    public interface OnClearListener{
+        void onClearPerform();
+
+        void onSearchPerform(String keyword);
 	}
+
+    static class NormalHolder {
+        TextView tvKey;
+    }
 }

@@ -37,40 +37,62 @@ public class ObserverManager {
 	public void addUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mUserObservers.containsKey(key)) return;
 		mUserObservers.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addUserUpdateListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeUserUpdateListener(UserUpdateListener observer) {
 		if (observer == null) return;
-		mUserObservers.remove(observer.getClass().getName());
+		UserUpdateListener removed = mUserObservers.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeUserUpdateListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void addGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mGiftObservers.containsKey(key)) return;
 		mGiftObservers.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addGiftUpdateListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeGiftUpdateListener(GiftUpdateListener observer) {
 		if (observer == null) return;
-		mGiftObservers.remove(observer.getClass().getName());
+		GiftUpdateListener removed = mGiftObservers.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeGiftUpdateListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void addUserActionListener(UserActionListener observer) {
 		if (observer == null) return;
 		String key = observer.getClass().getName();
-		if (mUserActionListeners.containsKey(key)) return;
 		mUserActionListeners.put(key, observer);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "addUserActionListener : add " + observer.getClass().getName());
+		}
 	}
 
 	public void removeActionListener(UserActionListener observer) {
 		if (observer == null) return;
-		mUserActionListeners.remove(observer.getClass().getName());
+		UserActionListener removed = mUserActionListeners.remove(observer.getClass().getName());
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_MANAGER, "removeActionListener : remove "
+					+ (removed == null ? "null" : removed.getClass().getName()));
+		}
 	}
 
 	public void notifyUserUpdate() {
+		notifyUserUpdate(STATUS.DEFAULT_FOR_ALL);
+	}
+
+	public void notifyUserUpdate(int action) {
 		for (Map.Entry<String, UserUpdateListener> entry : mUserObservers.entrySet()) {
 			UserUpdateListener observer = entry.getValue();
 			try {
@@ -87,7 +109,7 @@ public class ObserverManager {
 								"isRemove = " + observer + ", " + ((Activity) observer).isFinishing());
 						continue;
 					}
-					observer.onUserUpdate();
+					observer.onUserUpdate(action);
 				}
 			} catch (Throwable e) {
 				if (AppDebugConfig.IS_DEBUG) {
@@ -97,6 +119,9 @@ public class ObserverManager {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void notifyGiftUpdate() {
 		notifyGiftUpdate(STATUS.DEFAULT_FOR_ALL);
 	}
@@ -146,7 +171,7 @@ public class ObserverManager {
 	 * 账号状态变更监听接口
 	 */
 	public interface UserUpdateListener {
-		void onUserUpdate();
+		void onUserUpdate(int action);
 	}
 
 	/**
@@ -160,6 +185,8 @@ public class ObserverManager {
 		int DEFAULT_FOR_ALL= 0x0;
 		int GIFT_UPDATE_ALL = 0x010;
 		int GIFT_UPDATE_PART = 0x11;
+		int USER_UPDATE_ALL = 0x020;
+		int USER_UPDATE_PART = 0x021;
 	}
 
 	public interface UserActionListener {

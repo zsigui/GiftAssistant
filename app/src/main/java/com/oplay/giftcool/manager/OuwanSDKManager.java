@@ -6,7 +6,6 @@ import android.os.Handler;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.model.data.resp.UserSession;
 import com.socks.library.KLog;
 
@@ -85,7 +84,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 		GameUserInfo sdkUser = new GameUserInfo();
 		sdkUser.setOpenId(user.openId);
 		UmipayAccount account;
-		if (AccountManager.getInstance().getUserInfo().loginType == UserTypeUtil.TYPE_POHNE) {
+		if (AccountManager.getInstance().isPhoneLogin()) {
 			account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_PHONE);
 			account.setUserName(AccountManager.getInstance().getUserInfo().username);
 		} else {

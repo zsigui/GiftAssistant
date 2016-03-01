@@ -28,7 +28,7 @@
 
 				<!-- 0元抢模块 -->
 				<include
-						layout = "@layout/view_index_zero" />
+						layout = "@layout/view_gift_index_zero" />
 
 				<!-- 猜你喜欢模块 -->
 				<LinearLayout

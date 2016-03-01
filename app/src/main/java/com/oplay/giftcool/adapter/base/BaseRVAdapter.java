@@ -3,6 +3,7 @@ package com.oplay.giftcool.adapter.base;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 16-1-16.
  */
-public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter {
+public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements OnFinishListener {
 
 	protected ArrayList<T> mData;
 	protected OnItemClickListener<T> mListener;
@@ -58,4 +59,8 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter {
 		notifyDataSetChanged();
 	}
 
+	@Override
+	public void release() {
+
+	}
 }

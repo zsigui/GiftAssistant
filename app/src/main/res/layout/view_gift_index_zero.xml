@@ -3,12 +3,13 @@
 <LinearLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/ll_zero"
+		android:background="@color/co_transparent"
 		style = "@style/IndexModuleLayout" >
 
 	<RelativeLayout
 			android:id = "@+id/rl_zero"
 			style = "@style/IndexModuleTitleLayout"
-			android:background = "@color/co_white"
+			android:background = "@drawable/selector_white_module"
 			android:paddingLeft = "10dp"
 			android:clickable = "true" >
 
@@ -31,8 +32,9 @@
 	<View style = "@style/HDividerView" />
 
 	<android.support.v7.widget.RecyclerView
-			android:id = "@+id/rv_zero"
+			android:id = "@+id/rv_zero_content"
 			style = "@style/DefaultRecyclerView"
+			android:background="@color/co_white"
 			android:layout_height = "164dp" />
 
 </LinearLayout >

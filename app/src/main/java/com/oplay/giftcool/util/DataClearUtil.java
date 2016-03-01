@@ -16,14 +16,16 @@ public class DataClearUtil {
 	 * 清除本应用SharedPreference(/data/data/com.xxx.xxx/shared_prefs)
 	 */
 	public static void cleanSharedPreference(Context context) {
-		Util_System_File.delete(new File("/data/data/" + context.getPackageName() + "/shared_prefs"));
+		Util_System_File.delete(new File(String.format("%s%s%s", context.getFilesDir().getPath(),
+				context.getPackageName(), "/shared_prefs")));
 	}
 
 	/**
 	 * 清除本应用所有数据库(/data/data/com.xxx.xxx/databases)
 	 */
 	public static void cleanDatabase(Context context) {
-		Util_System_File.delete(new File("/data/data/" + context.getPackageName() + "/databases"));
+		Util_System_File.delete(new File(String.format("%s%s%s", context.getFilesDir().getPath(),
+				context.getPackageName(), "/databases")));
 	}
 
 	/**

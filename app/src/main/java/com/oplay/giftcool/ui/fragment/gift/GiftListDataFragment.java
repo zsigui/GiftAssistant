@@ -2,14 +2,18 @@ package com.oplay.giftcool.ui.fragment.gift;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -18,6 +22,8 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -36,7 +42,7 @@ import retrofit.Retrofit;
  * <br/>
  * Created by zsigui on 15-12-29.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> implements OnItemClickListener<IndexGiftNew> {
 
 	private static final String KEY_DATA = "key_news_data";
 	private static final String KEY_URL = "key_url";
@@ -96,6 +102,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			mUrl = getArguments().getString(KEY_URL);
 			mDate = getArguments().getString(KEY_DATE);
 		}
+		mAdapter.setListener(this);
 		mDataView.setAdapter(mAdapter);
 		if (mData != null) {
 			mNoMoreLoad = mData.size() < 10;
@@ -325,5 +332,22 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> {
 	@Override
 	public String getPageName() {
 		return "礼包列表";
+	}
+
+	@Override
+	public void onItemClick(IndexGiftNew gift, View v, int position) {
+		switch (v.getId()) {
+			case R.id.rl_recommend:
+				IntentUtil.jumpGiftDetail(getContext(), gift.id);
+				break;
+			case R.id.btn_send:
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+					// 对于0元抢，先跳转到游戏详情
+					IntentUtil.jumpGiftDetail(getContext(), gift.id);
+				} else {
+					PayManager.getInstance().seizeGift(getContext(), gift, (GiftButton) v);
+				}
+				break;
+		}
 	}
 }

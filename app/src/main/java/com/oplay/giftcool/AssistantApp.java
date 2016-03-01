@@ -34,6 +34,8 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 import com.squareup.okhttp.OkHttpClient;
 import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.AnalyticsConfig;
+import com.umeng.analytics.MobclickAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
@@ -51,6 +53,7 @@ import retrofit.Retrofit;
 public class AssistantApp extends Application {
 
 	private final static String TD_APP_ID = "7E57533EDCF044DA1BF657D786E0FDF7";
+	private final static String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
@@ -98,7 +101,15 @@ public class AssistantApp extends Application {
 			KLog.d("Gift Cool App is Start Now");
 		}
 		sInstance = this;
+
+		//初始化TalkingData
 		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
+		//初始化友盟
+		AnalyticsConfig.setAppkey(this, UMENG_APP_KEY);
+		AnalyticsConfig.setChannel("m" + getChannelId());   //友盟渠道号不能纯数字
+		AnalyticsConfig.enableEncrypt(true);
+		MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
+
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
@@ -141,6 +152,7 @@ public class AssistantApp extends Application {
 				ImageLoader.getInstance().destroy();
 			}
 			DownloadNotificationManager.cancelDownload(getApplicationContext());
+			MobclickAgent.onKillProcess(this);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "exit exception : " + e);
@@ -163,7 +175,37 @@ public class AssistantApp extends Application {
 				.serializeNulls()
 				.setDateFormat("yyyy-MM-dd HH:mm")
 				.create();
+//		File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH);
+//		Cache cache = new Cache(httpCacheDir, 10 * 1024 * 1024);
+//		Interceptor interceptor = new Interceptor() {
+//			@Override
+//			public Response intercept(Interceptor.Chain chain) throws IOException {
+//				Request request = chain.request();
+//				if (!NetworkUtil.isConnected(getApplicationContext())) {
+//					request = request.newBuilder()
+//							.cacheControl(CacheControl.FORCE_CACHE)
+//							.build();
+//				}
+//				Response response = chain.proceed(request);
+//				if (NetworkUtil.isConnected(getApplicationContext())) {
+//					String cacheControl = request.cacheControl().toString();
+//					response.newBuilder()
+//							.header("Cache-Control", cacheControl)
+//							.removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+//							.build();
+//				} else {
+//					response.newBuilder()
+//							.header("Cache-Control", "public, only-if-cached, max-stale=" + (60 * 60 * 24 * 2))
+//							.removeHeader("Pragma")
+//							.build();
+//				}
+//				return response;
+//			}
+//		};
 		OkHttpClient httpClient = new OkHttpClient();
+//		httpClient.interceptors().add(interceptor);
+//		httpClient.networkInterceptors().add(interceptor);
+//		httpClient.setCache(cache);
 		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
 		httpClient.setReadTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS);
 		if (AppDebugConfig.IS_DEBUG) {
@@ -174,6 +216,17 @@ public class AssistantApp extends Application {
 				.addConverterFactory(GsonConverterFactory.create(mGson))
 				.client(httpClient)
 				.build();
+	}
+
+	/**
+	 * 重设网络并重初始化，测试使用
+	 */
+	public void resetInitForTest() {
+		if (AppConfig.TEST_MODE) {
+			initRetrofit();
+			Global.resetNetEngine();
+			Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+		}
 	}
 
 	/**

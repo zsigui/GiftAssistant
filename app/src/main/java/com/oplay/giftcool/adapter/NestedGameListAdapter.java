@@ -3,36 +3,34 @@ package com.oplay.giftcool.adapter;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
-import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import cn.bingoogolapple.androidcommon.adapter.BGAAdapterViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
+import java.util.List;
 
 /**
  * Created by zsigui on 15-12-28.
  */
-public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> implements View.OnClickListener,
-		OnDownloadStatusChangeListener, OnFinishListener {
+public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> implements View.OnClickListener,
+		OnDownloadStatusChangeListener{
 
 	private static final int TAG_POSITION = 0xFFF11133;
 	private static final int TAG_URL = 0xffff1111;
@@ -41,50 +39,67 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 	private HashMap<String, IndexGameNew> mPackageNameMap;
 	private HashMap<String, TextView> mUrlDownloadBtn;
 
-	public NestedGameListAdapter(Context context, OnItemClickListener<IndexGameNew> listener) {
-		super(context.getApplicationContext(), R.layout.item_index_game_new);
+	public NestedGameListAdapter(Context context, List<IndexGameNew> objects,
+	                             OnItemClickListener<IndexGameNew> listener) {
+		super(context, objects);
 		mListener = listener;
 		mPackageNameMap = new HashMap<>();
 		mUrlDownloadBtn = new HashMap<>();
-		ApkDownloadManager.getInstance(context.getApplicationContext()).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(context).addDownloadStatusListener(this);
 	}
 
 	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, int i, final IndexGameNew o) {
-		o.initAppInfoStatus(mContext);
-		bgaViewHolderHelper.setText(R.id.tv_name, o.name);
-		if (o.playCount < 10000) {
-			bgaViewHolderHelper.setText(R.id.tv_play,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
-		} else {
-			bgaViewHolderHelper.setText(R.id.tv_play,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
-							(float) o.playCount / 10000)));
+	public View getView(int position, View convertView, ViewGroup parent) {
+		if (getCount() == 0) {
+			return null;
 		}
-		bgaViewHolderHelper.setText(R.id.tv_size, o.size);
+
+		ViewHolder holder;
+		if (convertView == null) {
+			holder = new ViewHolder();
+			convertView = mLayoutInflater.inflate(R.layout.item_index_game_new, parent, false);
+			holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+			holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+			holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+			holder.tvGift = ViewUtil.getViewById(convertView, R.id.tv_gift);
+			holder.ivGift = ViewUtil.getViewById(convertView, R.id.iv_gift);
+			holder.tvDownload = ViewUtil.getViewById(convertView, R.id.tv_download);
+            convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		IndexGameNew o = getItem(position);
+		o.initAppInfoStatus(mContext);
+		holder.tvName.setText(o.name);
+		if (o.playCount > 10000) {
+			holder.tvContent.setText(Html.fromHtml(
+					String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
+							(float) o.playCount / 10000)));
+		} else {
+			holder.tvContent.setText(Html.fromHtml(
+					String.format("<font color='#ffaa17'>%d人</font>在玩",
+							o.playCount)));
+		}
 		if (o.totalCount > 0) {
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.VISIBLE);
-			bgaViewHolderHelper.setText(R.id.tv_gift,
-					Html.fromHtml(String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
+			holder.ivGift.setVisibility(View.VISIBLE);
+			holder.tvGift.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
 							o.giftName, o.totalCount)));
 		} else {
-			bgaViewHolderHelper.setText(R.id.tv_gift, "暂时还木有礼包");
-			bgaViewHolderHelper.setVisibility(R.id.iv_gift, View.GONE);
+			holder.tvGift.setText("暂时还木有礼包");
+			holder.ivGift.setVisibility(View.GONE);
 		}
-		// n款礼包
-		ViewUtil.showImage(bgaViewHolderHelper.<ImageView>getView(R.id.iv_icon), o.img);
-//		bgaViewHolderHelper.getView(R.id.rl_recommend).setOnClickListener(this);
-		View convertView = bgaViewHolderHelper.getConvertView();
-		convertView.setTag(TAG_POSITION, i);
+		ViewUtil.showImage(holder.ivIcon, o.img);
 		convertView.setOnClickListener(this);
-		TextView downloadBtn = bgaViewHolderHelper.getView(R.id.tv_download);
-
-		downloadBtn.setOnClickListener(this);
-		downloadBtn.setTag(TAG_POSITION, i);
-		downloadBtn.setTag(TAG_URL, o.downloadUrl);
-		initDownloadBtnStatus(downloadBtn, o.appStatus);
+		convertView.setTag(TAG_POSITION, position);
+		convertView.setOnClickListener(this);
+		holder.tvDownload.setOnClickListener(this);
+		holder.tvDownload.setTag(TAG_POSITION, position);
+		holder.tvDownload.setTag(TAG_URL, o.downloadUrl);
+		initDownloadBtnStatus(holder.tvDownload, o.appStatus);
 		mPackageNameMap.put(o.packageName, o);
-		mUrlDownloadBtn.put(o.downloadUrl, downloadBtn);
+		mUrlDownloadBtn.put(o.downloadUrl, holder.tvDownload);
+		return convertView;
 	}
 
 	@Override
@@ -93,10 +108,9 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 			final Object tag = v.getTag(TAG_POSITION);
 			if (tag instanceof Integer) {
 				final int position = (Integer) tag;
-				if (position < mDatas.size()) {
-					final IndexGameNew appInfo = mDatas.get(position);
+				if (position < mListData.size()) {
+					final IndexGameNew appInfo = mListData.get(position);
 					if (mListener != null) {
-						KLog.e("appInfo.id = " + appInfo.id + ", appInfo.name = " + appInfo.name + ", position = " + position);
 						mListener.onItemClick(appInfo, v, position);
 					}
 				}
@@ -158,12 +172,17 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 		}
 	}
 
-
-	public void updateData(ArrayList<IndexGameNew> games) {
-		this.mDatas = games;
-		notifyDataSetChanged();
+	public void setData(ArrayList<IndexGameNew> data) {
+		mListData = data;
 	}
 
+	public void updateData(ArrayList<IndexGameNew> data) {
+		if (data == null) {
+			return;
+		}
+		mListData = data;
+		notifyDataSetChanged();
+	}
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
 		Util_System_Runtime.getInstance().runInUiThread(new Runnable() {
@@ -186,10 +205,17 @@ public class NestedGameListAdapter extends BGAAdapterViewAdapter<IndexGameNew> i
 			mUrlDownloadBtn = null;
 		}
 		mContext = null;
-		mDatas = null;
-		mOnItemChildCheckedChangeListener = null;
-		mOnItemChildClickListener = null;
-		mOnItemChildLongClickListener = null;
+		mListData = null;
 		mListener = null;
+	}
+
+
+	static class ViewHolder {
+		TextView tvName;
+		TextView tvGift;
+		TextView tvContent;
+		TextView tvDownload;
+		ImageView ivIcon;
+		ImageView ivGift;
 	}
 }

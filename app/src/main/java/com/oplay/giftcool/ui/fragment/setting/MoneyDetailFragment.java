@@ -63,26 +63,25 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 					WebViewDialog dialog;
 					if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
 						dialog = WebViewDialog.newInstance(
-                                mApp.getResources().getString(R.string.st_wallet_bean_note), WebViewUrl.OUWAN_BEAN_DETAIL_NOTE);
+                                mApp.getResources().getString(R.string.st_wallet_bean_note), WebViewUrl.getWebUrl(WebViewUrl.OUWAN_BEAN_DETAIL_NOTE));
 					} else {
 						dialog = WebViewDialog.newInstance(
-								mApp.getResources().getString(R.string.st_wallet_score_note), WebViewUrl.SCORE_DETAIL_NOTE);
+								mApp.getResources().getString(R.string.st_wallet_score_note), WebViewUrl.getWebUrl(WebViewUrl.SCORE_DETAIL_NOTE));
 					}
 					dialog.show(getChildFragmentManager(), WebViewDialog.class.getSimpleName());
 				}
 			});
 		}
 		if (type == KeyConfig.TYPE_ID_DETAIL_BEAN) {
-			loadUrl(WebViewUrl.OUWAN_BEAN_DETAIL);
+			loadUrl(WebViewUrl.getWebUrl(WebViewUrl.OUWAN_BEAN_DETAIL));
 		} else {
-			loadUrl(WebViewUrl.SCORE_DETAIL);
+			loadUrl(WebViewUrl.getWebUrl(WebViewUrl.SCORE_DETAIL));
 		}
 		mIsSwipeRefresh = true;
 	}
 
 	@Override
 	protected void lazyLoad() {
-			reloadPage();
 	}
 
 	@Override

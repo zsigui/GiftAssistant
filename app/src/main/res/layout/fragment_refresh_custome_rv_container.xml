@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.oplay.giftcool.ui.widget.layout.RefreshLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/srl_layout"
+		android:orientation = "vertical"
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:background = "@color/co_transparent" >
+
+	<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
+			android:id = "@+id/lv_content"
+			android:background = "@color/co_transparent"
+			android:animateLayoutChanges = "false"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent" />
+</com.oplay.giftcool.ui.widget.layout.RefreshLayout >

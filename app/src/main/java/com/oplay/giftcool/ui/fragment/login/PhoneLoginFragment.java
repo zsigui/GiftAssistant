@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -83,6 +84,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		public void run() {
 			if (sSendCodeRemainTime == 0) {
 				btnSendCode.setEnabled(true);
+				btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_green));
 				btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
 			} else {
 				sSendCodeRemainTime--;
@@ -135,9 +137,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etPhone, etCode, tvPhoneClear, tvCodeClear, btnLogin, false);
+		InputTextUtil.initPswFilter(etPhone, etCode, tvPhoneClear, tvCodeClear, btnLogin, btnSendCode, false);
 //		ctvAgreeLaw.setChecked(true);
 		btnLogin.setEnabled(false);
+		btnSendCode.setEnabled(false);
 		initHint();
 	}
 
@@ -201,6 +204,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 				break;
 			case R.id.tv_user_clear:
 				clearText(etPhone);
+				btnSendCode.setEnabled(false);
+				btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
 				break;
 			case R.id.tv_code_clear:
 				clearText(etCode);
@@ -238,16 +243,18 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 			return;
 		}
 		btnSendCode.setEnabled(false);
+		btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
 		sSendCodeRemainTime = RESEND_DURATION;
+		mHandler.postDelayed(setTimeRunnable, 1000);
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
+				if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
 					hideLoading();
 					showToast("发送失败 - 网络异常");
+					sSendCodeRemainTime = 0;
 					return;
 				}
-				mHandler.postDelayed(setTimeRunnable, 1000);
 
 
 				Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_FIRST, new JsonReqBase<ReqLogin>(login))
@@ -334,8 +341,9 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
 										MainActivity.sIsTodayFirstOpen = true;
 										AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
-										AccountManager.getInstance().setUser(userModel);
+										AccountManager.getInstance().notifyUserAll(userModel);
 										ScoreManager.getInstance().resetLocalTaskState();
+										ScoreManager.getInstance().toastByCallback(userModel, false);
 										((BaseAppCompatActivity) getActivity()).handleBackPressed();
 										return;
 									}

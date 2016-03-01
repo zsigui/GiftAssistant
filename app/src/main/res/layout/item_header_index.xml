@@ -9,7 +9,7 @@
 	<TextView
 			android:id="@+id/tv_light"
 			style = "@style/DefaultTextView.Header"
-			android:text="▌"
+			android:text="@string/st_title_stress"
 			android:textColor="@color/co_common_app_main_bg"/>
 	<TextView
 			android:id="@+id/tv_title"

@@ -1,43 +1,52 @@
 package com.oplay.giftcool.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.adapter.base.BaseRVAdapter;
+import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.ui.widget.button.TagButton;
-
-import java.util.ArrayList;
-
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
+import com.oplay.giftcool.util.IntentUtil;
 
 /**
  * Created by zsigui on 16-1-10.
  */
-public class GameTagAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
+public class GameTagAdapter extends BaseRVAdapter<GameTypeMain> implements View.OnClickListener{
 
-	private OnItemClickListener<GameTypeMain> mItemClickListener;
 
-	public GameTagAdapter(RecyclerView recyclerView) {
-		super(recyclerView, R.layout.item_grid_game_type_tag);
-	}
+	private static final int TAG_POSITION = 0xFFFF1444;
 
-	public GameTagAdapter(RecyclerView recyclerView, ArrayList<GameTypeMain> data) {
-		this(recyclerView);
-		this.mDatas = data;
-	}
-
-	public void setItemClickListener(OnItemClickListener<GameTypeMain> itemClickListener) {
-		mItemClickListener = itemClickListener;
+	public GameTagAdapter(Context context) {
+		super(context);
 	}
 
 	@Override
-	protected void fillData(BGAViewHolderHelper bgaViewHolderHelper, final int i, final GameTypeMain o) {
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		return new TagHolder(LayoutInflater.from(mContext).inflate(R.layout.item_grid_game_type_tag, parent, false));
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+		TagHolder tagHolder =(TagHolder) holder;
+		GameTypeMain o = getItem(position);
+		tagHolder.tvTag.setText(o.name);
+		tagHolder.tvTag.setState(getState(position));
+		tagHolder.itemView.setOnClickListener(this);
+		tagHolder.itemView.setTag(TAG_POSITION, position);
+	}
+
+	/**
+	 * 获取要显示的背景状态
+	 */
+	private int getState(int pos) {
 		int state = TagButton.STATE_NONE;
-		int k = i + i/15;
-		if (i >= 15 && k % 3== 2) {
+		int k = pos + pos/15;
+		if (pos >= 15 && k % 3== 2) {
 			k = k % 15 - 2;
 		}
 		switch (k) {
@@ -57,22 +66,24 @@ public class GameTagAdapter extends BGARecyclerViewAdapter<GameTypeMain> {
 				state = TagButton.STATE_LIGHT_GREEN;
 				break;
 		}
-		bgaViewHolderHelper.setText(R.id.tv_tag, o.name);
-		((TagButton) bgaViewHolderHelper.getView(R.id.tv_tag)).setState(state);
-		bgaViewHolderHelper.getView(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mItemClickListener != null) {
-					mItemClickListener.onItemClick(o, null, i);
-				}
-			}
-		});
+		return state;
 	}
 
-	public void updateData(ArrayList<GameTypeMain> data) {
-		if (data == null)
+	@Override
+	public void onClick(View v) {
+		if (mData == null || v.getTag(TAG_POSITION) == null) {
 			return;
-		this.mDatas = data;
-		notifyDataSetChanged();
+		}
+		GameTypeMain o = getItem((Integer)v.getTag(TAG_POSITION));
+		IntentUtil.jumpGameTagList(mContext, o.id, o.name);
+	}
+
+	static class TagHolder extends BaseRVHolder {
+		TagButton tvTag;
+
+		public TagHolder(View itemView) {
+			super(itemView);
+			tvTag = getViewById(R.id.tv_tag);
+		}
 	}
 }

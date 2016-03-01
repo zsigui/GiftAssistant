@@ -142,7 +142,7 @@ public class NetworkUtil {
 	 * @return boolean wifi为可用状态（不一定成功连接，即Connected）即返回ture
 	 */
 	public static boolean isWifiAvailable(Context context) {
-		NetworkInfo[] nets = getConnectivityManager(context.getApplicationContext()).getAllNetworkInfo();
+		NetworkInfo[] nets = getConnectivityManager(context).getAllNetworkInfo();
 		if (nets != null) {
 			for (NetworkInfo net : nets) {
 				if (net.getType() == ConnectivityManager.TYPE_WIFI) {

@@ -27,12 +27,6 @@ public class IndexGiftNew implements Serializable{
 	// 礼包获取类型 0 未抢 1 抢号 2 淘号
 	@SerializedName("code_type")
 	public int seizeStatus;
-    // 是否为限量礼包
-    @SerializedName("is_limit")
-    /**
-     * @deprecated
-     */
-    public boolean isLimit = false;
 	// 礼包状态 0 删除， 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束， 6 下架 (0, 6状态不关注)
 	@SerializedName("status")
 	public int status;
@@ -75,7 +69,7 @@ public class IndexGiftNew implements Serializable{
 	// 礼包码
 	@SerializedName("gift_key")
 	public String code;
-	// 礼包类型 1 普通 2 限量 4 0元抢
+	// 礼包类型 1 普通免费 2 普通 3 限量 4 0元抢
 	@SerializedName("plan_type")
 	public int giftType;
 	// 原价
@@ -84,5 +78,7 @@ public class IndexGiftNew implements Serializable{
 	// 剩余开抢时间，单位:s
 	@SerializedName("remain_time")
 	public int remainStartTime;
-
+	// 专享礼包类型, 1: 礼包酷专享
+	@SerializedName("exclusive")
+	public int exclusive;
 }

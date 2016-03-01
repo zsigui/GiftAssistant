@@ -112,7 +112,7 @@ public class DrawerFragment extends BaseFragment {
 				if (AccountManager.getInstance().isLogin()) {
 					IntentUtil.jumpUserInfo(getContext());
 				} else {
-					IntentUtil.jumpLogin(getContext());
+					IntentUtil.jumpLoginNoToast(getContext());
 				}
 				closeDrawer();
 				break;
@@ -241,13 +241,16 @@ public class DrawerFragment extends BaseFragment {
 	}
 
 	@Override
-	public void onUserUpdate() {
-		super.onUserUpdate();
-		updateData();
+	public void onUserUpdate(int action) {
+		super.onUserUpdate(action);
+		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
+			updateData();
+		}
 	}
 
 	@Override
 	public String getPageName() {
-		return "侧边栏";
+		//侧边栏不做统计
+		return "";
 	}
 }

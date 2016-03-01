@@ -67,7 +67,7 @@
 			android:gravity = "center_vertical" />
 
 	<TextView
-			android:id = "@+id/tv_play"
+			android:id = "@+id/tv_content"
 			style = "@style/DefaultTextView.Text.Note"
 			android:layout_width = "60dp"
 			android:layout_below = "@+id/tv_name"
@@ -81,16 +81,16 @@
 			style = "@style/DefaultTextView.Text.Note"
 			android:layout_width = "match_parent"
 			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_alignTop = "@+id/tv_play"
+			android:layout_alignTop = "@+id/tv_content"
 			android:layout_toLeftOf = "@+id/ll_send"
-			android:layout_toRightOf = "@+id/tv_play"
+			android:layout_toRightOf = "@+id/tv_content"
 			android:gravity = "center_vertical" />
 
 	<TextView
 			android:id = "@+id/tv_gift"
 			style = "@style/DefaultTextView.Text"
 			android:gravity = "left"
-			android:layout_below = "@+id/tv_play"
+			android:layout_below = "@+id/tv_content"
 			android:layout_marginLeft = "7dp"
 			android:layout_marginTop = "6dp"
 			android:layout_toRightOf = "@+id/rl_icon" />

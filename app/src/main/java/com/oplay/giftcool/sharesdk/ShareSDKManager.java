@@ -121,7 +121,7 @@ public class ShareSDKManager {
 				title,
 				gift.content,
 				b_desc,
-				WebViewUrl.GIFT_DETAIL + "?plan_id=" + gift.id,
+				String.format("%s?plan_id=%d", WebViewUrl.getWebUrl(WebViewUrl.GIFT_DETAIL), gift.id),
 				gift.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
 						ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
 	}

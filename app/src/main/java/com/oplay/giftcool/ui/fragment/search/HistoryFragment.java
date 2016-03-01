@@ -47,7 +47,7 @@ public class HistoryFragment extends BaseFragment {
             data = getArguments().getStringArrayList(KEY_DATA);
             isHistory = getArguments().getBoolean(KEY_IS_HISTORY);
         }
-        mAdapter = new SearchHistoryAdapter(data, isHistory);
+        mAdapter = new SearchHistoryAdapter(getContext(), data, isHistory);
 	}
 
 	@Override

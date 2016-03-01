@@ -16,8 +16,10 @@ public class NetUrl {
 	 */
 	public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
 
+	public static String REAL_URL = TEST_URL_BASE;
+
 	public static String getBaseUrl() {
-		return AppConfig.TEST_MODE ? TEST_URL_BASE : URL_BASE;
+		return AppConfig.TEST_MODE ? REAL_URL : URL_BASE;
 	}
 
 
@@ -25,15 +27,21 @@ public class NetUrl {
 	 * 礼包/游戏搜索
 	 */
 	public static final String GET_SEARCH = "gift_search";
+
 	/**
-	 * 礼包首页
+	 * 礼包首页-新鲜出炉列表
 	 */
-	public static final String GIFT_GET_INDEX = "gift_index";
+	public static final String GIFT_GET_INDEX_NEW = "new_gift_list";
 
 	/**
 	 * 礼包-刷新数据
 	 */
 	public static final String GIFT_REFRESH = "gift_update";
+
+	/**
+	 * 礼包首页
+	 */
+	public static final String GIFT_GET_INDEX = "gift_index";
 
 	/**
 	 * 猜你喜欢

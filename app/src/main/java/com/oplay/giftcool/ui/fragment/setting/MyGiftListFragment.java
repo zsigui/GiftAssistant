@@ -1,7 +1,6 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
@@ -11,14 +10,12 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.StatusCode;
-import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -66,15 +63,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 		if (getArguments() != null) {
 			mType = getArguments().getInt(KeyConfig.KEY_DATA);
 		}
-		mAdapter = new MyGiftListAdapter(getContext(), mType);
-		mAdapter.setItemClickListener(new OnItemClickListener<IndexGiftNew>() {
-			@Override
-			public void onItemClick(IndexGiftNew item, View view, int position) {
-				IntentUtil.jumpGiftDetail(getContext(), item.id);
-			}
-		});
-		/*mDataView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		mDataView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));*/
+		mAdapter = new MyGiftListAdapter(getContext(), null, mType);
 		mDataView.setAdapter(mAdapter);
 	}
 
@@ -94,6 +83,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
 								                       Retrofit
 										retrofit) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (response != null && response.isSuccess() && response.body() != null &&
 											response.body().getCode() == StatusCode.SUCCESS) {
 										refreshSuccessEnd();
@@ -107,6 +99,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
 								@Override
 								public void onFailure(Throwable t) {
+									if (!mCanShowUI) {
+										return;
+									}
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.e(AppDebugConfig.TAG_FRAG, t);
 									}

@@ -144,6 +144,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 
 		}
 		tvNick.setText(nick);
+		mIsNotifyRefresh = false;
 	}
 
 	@Override
@@ -204,8 +205,14 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 	}
 
 	@Override
-	public void onUserUpdate() {
-		lazyLoad();
+	public void onUserUpdate(int action) {
+		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
+			if (mIsNotifyRefresh) {
+				return;
+			}
+			mIsNotifyRefresh = true;
+			lazyLoad();
+		}
 	}
 
 	@Override
@@ -232,7 +239,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				return;
 		}
 		if (code != ObserverManager.UserActionListener.ACTION_CODE_FAILED) {
-			onUserUpdate();
+			onUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
 		}
 	}
 }

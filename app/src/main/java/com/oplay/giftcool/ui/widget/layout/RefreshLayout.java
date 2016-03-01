@@ -112,6 +112,19 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		}
 	}
 
+//	@Override
+//	public boolean canChildScrollUp() {
+//		if (mRecyclerView != null) {
+//			if (mRecyclerView.getTop() == 0
+//					&& mRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		}
+//		return super.canChildScrollUp();
+//	}
+
 	/**
 	 * 获取ListView对象
 	 */
@@ -171,25 +184,51 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
 				// 按下
-				mYDown = (int) event.getRawY();
+				mYDown = (int) event.getY();
+				mXDown = (int) event.getX();
+				if (canLoad()) {
+					loadData();
+				}
+				mIsHorizontal = false;
 				break;
-
-			case MotionEvent.ACTION_MOVE:
-				// 移动
-				mLastY = (int) event.getRawY();
-				break;
-
 			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
 				// 抬起
 				if (canLoad()) {
 					loadData();
 				}
+				mIsHorizontal = false;
+				requestDisallowInterceptTouchEvent(false);
 				break;
 			default:
 				break;
 		}
+		return super.dispatchTouchEvent(event) && !mIsHorizontal;
+	}
 
-		return super.dispatchTouchEvent(event);
+	private boolean mIsHorizontal = false;
+	private int mXDown;
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		if (mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) {
+			requestDisallowInterceptTouchEvent(true);
+			return false;
+		}
+		switch (ev.getAction()) {
+			case MotionEvent.ACTION_MOVE:
+				// 移动
+				mLastY = (int) ev.getY();
+				int xDiff = Math.abs((int)ev.getX() - mXDown);
+				int yDiff = Math.abs((int)ev.getY() - mYDown);
+				if (xDiff > yDiff) {
+					mIsHorizontal = true;
+					requestDisallowInterceptTouchEvent(true);
+					return false;
+				}
+				break;
+		}
+		return super.onInterceptTouchEvent(ev);
 	}
 
 	/**
@@ -198,7 +237,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 * @return
 	 */
 	private boolean canLoad() {
-		return mCanShowLoad && (isBottom() && !isLoading && isPullUp());
+		return mCanShowLoad && !isLoading && isBottom() && isPullUp();
 	}
 
 	/**
@@ -210,12 +249,13 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		} else if (mRecyclerView != null && mRecyclerView.getLayoutManager() != null) {
 			View lastChildView = mRecyclerView.getLayoutManager()
 					.getChildAt(mRecyclerView.getLayoutManager().getChildCount() - 1);
-			int lastChildBottom = lastChildView.getBottom();
-			int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
+//			int lastChildBottom = lastChildView.getBottom();
+//			int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
 
 			int lastPosition = mRecyclerView.getLayoutManager().getPosition(lastChildView);
-			if (lastChildBottom <= recyclerBottom
-					&& lastPosition == mRecyclerView.getLayoutManager().getItemCount() - 1) {
+//			if (lastChildBottom <= recyclerBottom
+//					&& lastPosition == mRecyclerView.getLayoutManager().getItemCount() - 1) {
+			if (lastPosition == mRecyclerView.getLayoutManager().getItemCount() - 1) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d("slip to end ");
 				}
@@ -261,7 +301,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 
 			} else if (mRecyclerView != null && mRecyclerView.getAdapter() != null
 					&& mRecyclerView.getAdapter() instanceof FooterListener) {
-				((FooterListener)mRecyclerView.getAdapter()).showFooter(true);
+				((FooterListener) mRecyclerView.getAdapter()).showFooter(true);
 			}
 		} else {
 			if (mListView != null && mListView.getAdapter() != null) {
@@ -272,7 +312,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 				}
 			} else if (mRecyclerView != null && mRecyclerView.getAdapter() != null
 					&& mRecyclerView.getAdapter() instanceof FooterListener) {
-				((FooterListener)mRecyclerView.getAdapter()).showFooter(false);
+				((FooterListener) mRecyclerView.getAdapter()).showFooter(false);
 			}
 			mYDown = 0;
 			mLastY = 0;

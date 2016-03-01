@@ -3,6 +3,7 @@ package com.oplay.giftcool.util;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
@@ -30,7 +31,7 @@ public class ChannelUtil {
 	 */
 	public static int getChannelId(Context context) {
 
-		if (AppDebugConfig.IS_DEBUG) {
+		if (AppConfig.TEST_MODE) {
 			return 10000;
 		}
 		ZipFile zipFile = null;

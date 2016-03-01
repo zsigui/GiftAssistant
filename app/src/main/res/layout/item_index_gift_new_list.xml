@@ -42,26 +42,28 @@
 			android:layout_alignTop = "@+id/rl_icon"
 			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
 			android:layout_marginTop = "4dp"
-			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_toLeftOf = "@+id/btn_send"
 			android:layout_toRightOf = "@+id/rl_icon"
+			android:drawablePadding = "4dp"
+			android:gravity = "center_vertical"
 			android:text = "[暴打魏蜀吴]新手礼包" />
 
 	<TextView
-			android:id = "@+id/tv_play"
+			android:id = "@+id/tv_content"
 			style = "@style/DefaultTextView.Text"
 			android:layout_width = "match_parent"
 			android:layout_below = "@+id/tv_name"
 			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_marginTop = "8dp"
-			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_marginTop = "28dp"
 			android:layout_toRightOf = "@+id/rl_icon"
 			android:gravity = "center_vertical" />
 
 	<LinearLayout
 			android:id = "@+id/ll_money"
-			android:layout_width = "120dp"
+			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
-			android:layout_below = "@+id/tv_play"
+			android:minWidth = "70dp"
+			android:layout_below = "@+id/tv_name"
 			android:layout_marginLeft = "7dp"
 			android:layout_marginTop = "6dp"
 			android:layout_toRightOf = "@+id/rl_icon" >
@@ -89,32 +91,44 @@
 	</LinearLayout >
 
 	<TextView
-			android:id = "@+id/tv_new_text"
+			android:id = "@+id/tv_count"
 			style = "@style/DefaultTextView.Text"
-			android:layout_width = "match_parent"
-			android:layout_alignTop = "@+id/ll_money"
-			android:layout_marginLeft = "7dp"
-			android:layout_toLeftOf = "@+id/ll_send"
-			android:layout_toRightOf = "@+id/ll_money"
-			android:drawablePadding = "4dp"
-			android:gravity = "left"
-			android:text = "剩余 5个" />
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:text = "@null"
+			android:visibility = "visible" />
 
-	<LinearLayout
-			android:id = "@+id/ll_send"
-			android:layout_width = "wrap_content"
-			android:layout_height = "70dp"
+	<TextView
+			android:id = "@+id/tv_percent"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "3dp"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/ll_money" />
+
+	<ProgressBar
+			android:id = "@+id/pb_percent"
+			style = "?android:attr/progressBarStyleHorizontal"
+			android:layout_width = "72dp"
+			android:layout_height = "@dimen/di_gift_common_pb_diameter"
+			android:layout_alignTop = "@+id/tv_percent"
+			android:layout_marginLeft = "4dp"
+			android:layout_marginTop = "6dp"
+			android:layout_marginRight = "6dp"
+			android:layout_toLeftOf = "@+id/btn_send"
+			android:layout_toRightOf = "@+id/tv_percent"
+			android:max = "100"
+			android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
+	<com.oplay.giftcool.ui.widget.button.GiftButton
+			android:id = "@+id/btn_send"
+			style = "@style/DefaultTextView"
+			android:layout_height = "@dimen/di_btn_height"
 			android:layout_alignParentRight = "true"
-			android:layout_marginLeft = "@dimen/di_index_hoz_module_margin_left"
-			android:background = "@color/co_transparent"
-			android:gravity = "center" >
-
-		<com.oplay.giftcool.ui.widget.button.GiftButton
-				android:id = "@+id/btn_send"
-				style = "@style/DefaultTextView"
-				android:layout_height = "@dimen/di_btn_height"
-				android:background = "@drawable/selector_btn_red"
-				android:text = "@string/st_gift_seize"
-				android:textColor = "@color/co_white" />
-	</LinearLayout >
+			android:layout_alignTop = "@+id/tv_name"
+			android:background = "@drawable/selector_btn_orange"
+			android:text = "抢号"
+			android:textColor = "@color/co_white" />
 </RelativeLayout >

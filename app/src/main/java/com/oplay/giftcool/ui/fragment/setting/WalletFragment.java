@@ -101,8 +101,8 @@ public class WalletFragment extends BaseFragment {
 	}
 
 	@Override
-	public void onUserUpdate() {
-		super.onUserUpdate();
+	public void onUserUpdate(int action) {
+		super.onUserUpdate(action);
 		try {
 			if (AccountManager.getInstance().isLogin()) {
 				if (tvBean != null) {
