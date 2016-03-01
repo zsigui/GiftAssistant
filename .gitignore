@@ -8,4 +8,6 @@
 !script/*.sh
 !script/*.py
 *.apk
+apk/
+captures/
 

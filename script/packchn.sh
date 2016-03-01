@@ -68,11 +68,17 @@ DATE=`date +%Y%m%d%H%m`
 for i in ${CHNARRAY[@]}
 do
     DESTAPK=${OUTPUTDIR}/${NAME}_v${VERSION}_${i}_${DATE}.apk
-    CHNFILE=${METADIR}/$(echo ${i} | base64)${EXTENSION}
-    touch ${CHNFILE}
     cp ${SOURCE} ${DESTAPK}
-    echo Compressed ${CHNFILE} to ${DESTAPK}
-    zip -q -m ${DESTAPK} ${CHNFILE}
+    if [ "${i}" == "0" ]
+    then
+        # 0 渠道包表示默认渠道号,直接复制即可
+        echo "pack 0 : do nothing"
+    else
+        CHNFILE=${METADIR}/$(echo ${i} | base64)${EXTENSION}
+        touch ${CHNFILE}
+        echo Compressed ${CHNFILE} to ${DESTAPK}
+        zip -q -m ${DESTAPK} ${CHNFILE}
+    fi
 done
 rm -r ${METADIR}
 
