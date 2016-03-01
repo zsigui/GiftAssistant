@@ -12,7 +12,6 @@ import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
-import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
@@ -31,7 +30,7 @@ import java.util.List;
  * Created by zsigui on 15-12-28.
  */
 public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> implements View.OnClickListener,
-		OnDownloadStatusChangeListener, OnFinishListener {
+		OnDownloadStatusChangeListener{
 
 	private static final int TAG_POSITION = 0xFFF11133;
 	private static final int TAG_URL = 0xffff1111;
@@ -46,7 +45,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 		mListener = listener;
 		mPackageNameMap = new HashMap<>();
 		mUrlDownloadBtn = new HashMap<>();
-		ApkDownloadManager.getInstance(context.getApplicationContext()).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(context).addDownloadStatusListener(this);
 	}
 
 	@Override
@@ -71,6 +70,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 		}
 
 		IndexGameNew o = getItem(position);
+		o.initAppInfoStatus(mContext);
 		holder.tvName.setText(o.name);
 		if (o.playCount > 10000) {
 			holder.tvContent.setText(Html.fromHtml(

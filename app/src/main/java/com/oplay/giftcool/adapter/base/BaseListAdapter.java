@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.socks.library.KLog;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.List;
  *         date 16-1-12
  *         description
  */
-public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAdapter<T>{
+public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAdapter<T>, OnFinishListener{
 
 	protected static final int TAG_POSITION = 0xFFF11133;
 	protected static final int TAG_URL = 0xffff1111;
@@ -60,6 +61,11 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 	public void updateData(List<T> newData) {
 		mListData.clear();
 		mListData.addAll(newData);
+	}
+
+	@Override
+	public void release() {
+
 	}
 
 	@Override
