@@ -20,4 +20,7 @@ public class SearchDataResult implements Serializable{
 
 	@SerializedName("plan_data")
 	public ArrayList<IndexGiftNew> gifts;
+
+	@SerializedName("guess_data")
+	public ArrayList<IndexGiftNew> guessGift;
 }

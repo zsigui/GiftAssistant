@@ -36,7 +36,7 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 		@Override
 		public void onComplete(Object o) {
 			ToastUtil.showShort(getString(R.string.st_share_result_success));
-			// 通知发放积分
+			// 通知发放金币
 			ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
 			finish();
 		}

@@ -81,13 +81,13 @@ public class AccountAdapter extends BaseListAdapter<String> implements Filterabl
 
 		@Override
 		protected FilterResults performFiltering(CharSequence prefix) {
-			if (mListData == null) {
+			if (mData == null) {
 				return null;
 			}
 			FilterResults results = new FilterResults();
 			ArrayList<String> newValues = new ArrayList<>();
 			String prefixStr = prefix.toString().toLowerCase();
-			for (String s : mListData) {
+			for (String s : mData) {
 				if (s.toLowerCase().startsWith(prefixStr)) {
 					newValues.add(s);
 				}
@@ -102,7 +102,7 @@ public class AccountAdapter extends BaseListAdapter<String> implements Filterabl
 			if (results == null || results.count == 0) {
 				notifyDataSetInvalidated();
 			} else {
-				mListData = (ArrayList<String>) results.values;
+				mData = (ArrayList<String>) results.values;
 				notifyDataSetChanged();
 			}
 		}

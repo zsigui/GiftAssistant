@@ -135,7 +135,7 @@ public class IntentUtil {
 	}
 
 	/**
-	 * 跳转积分任务界面
+	 * 跳转金币任务界面
 	 */
 	public static void jumpEarnScore(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -301,6 +301,9 @@ public class IntentUtil {
 	 * 跳转活动页面
 	 */
 	public static void jumpActivityWeb(Context context, String url, String title) {
+		if (MixUtil.isUrlNeedLoginFirst(context, url)) {
+			return;
+		}
 		Intent intent = new Intent(context, WebActivity.class);
 		intent.putExtra(KeyConfig.KEY_URL, url);
 		intent.putExtra(KeyConfig.KEY_DATA, title);

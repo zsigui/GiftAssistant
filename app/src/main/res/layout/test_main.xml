@@ -11,12 +11,44 @@
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content" >
 
+        <EditText
+            android:id="@+id/tv_session"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="SESSION"/>
+        <EditText
+            android:id="@+id/tv_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="UID"/>
 		<EditText
-				android:id="@+id/tv_send_data"
+				android:id="@+id/tv_base_url"
 				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
-				android:minHeight="100dp"
-				android:text="默认测试数据"/>
+				android:singleLine="true"
+				android:hint="请求基本地址"/>
+		<EditText
+				android:id="@+id/tv_api"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:singleLine="true"
+				android:hint="请求API"/>
+
+		<EditText
+				android:id="@+id/tv_header"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:minHeight="80dp"
+				android:singleLine="false"
+				android:hint="请求Header(key:xxx val:xxx，1行1个)"/>
+
+		<EditText
+				android:id="@+id/tv_content"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:minHeight="80dp"
+				android:singleLine="false"
+				android:hint="请求Body(JSON结构体)"/>
 
 		<Button
 				android:id="@+id/btn_send"
@@ -25,15 +57,20 @@
 				android:text="发送测试数据"/>
 
 
-		<TextView
-				android:id = "@+id/tv_back_data"
+		<EditText
+				android:id="@+id/tv_back_data"
 				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content" />
-		<TextView
-				android:id = "@+id/tv_real_data"
-				android:layout_marginTop="30dp"
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content" />
+				android:layout_height = "wrap_content"
+				android:minHeight="80dp"
+				android:singleLine="false"
+				android:hint="返回结果"/>
 
+		<EditText
+				android:id="@+id/tv_log"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				android:minHeight="80dp"
+				android:singleLine="false"
+				android:hint="LOG输出"/>
 	</LinearLayout >
 </ScrollView >

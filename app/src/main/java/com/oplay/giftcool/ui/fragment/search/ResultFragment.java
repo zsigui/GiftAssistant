@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -26,6 +25,8 @@ import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 
+import java.util.ArrayList;
+
 /**
  * Created by zsigui on 15-12-22.
  */
@@ -33,16 +34,16 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	private final static String PAGE_NAME = "搜索结果页";
 	private ScrollView mContainer;
-	private RelativeLayout mGameBar;
 	private NestedListView mGameView;
-	private RelativeLayout mGiftBar;
 	private NestedListView mGiftView;
+	private NestedListView mGuessGiftView;
 	private LinearLayout llGame;
 	private LinearLayout llGift;
+	private LinearLayout llGuessGift;
 
-	private NestedGiftListAdapter mGiftAdapter;
 	private NestedGameListAdapter mGameAdapter;
-	private SearchDataResult mData;
+	private NestedGiftListAdapter mGiftAdapter;
+	private NestedGiftListAdapter mGuessGiftAdapter;
 
 	public static ResultFragment newInstance(SearchDataResult data) {
 		ResultFragment fragment = new ResultFragment();
@@ -62,28 +63,24 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		}
 		mContainer = getViewById(R.id.sv_container);
 		mGameView = getViewById(R.id.lv_game);
-		mGameBar = getViewById(R.id.rl_game);
 		mGiftView = getViewById(R.id.lv_gift);
-		mGiftBar = getViewById(R.id.rl_gift);
+		mGuessGiftView = getViewById(R.id.lv_like);
 		llGame = getViewById(R.id.ll_game);
 		llGift = getViewById(R.id.ll_gift);
+		llGuessGift = getViewById(R.id.ll_like);
 
 		((TextView) getViewById(R.id.tv_game_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>游戏</font>"));
 		((TextView) getViewById(R.id.tv_gift_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>礼包</font>"));
+		((TextView) getViewById(R.id.tv_like_title)).setText(Html.fromHtml("猜你喜欢的 <font color='#f85454'>礼包</font>"));
 
 	}
 
 	@Override
 	protected void setListener() {
-		mGameBar.setOnClickListener(this);
-		mGiftBar.setOnClickListener(this);
-	}
-
-	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-		mGameAdapter = new NestedGameListAdapter(getContext(), null, this);
-		mGiftAdapter = new NestedGiftListAdapter(getContext());
-		mGiftAdapter.setListener(new OnItemClickListener<IndexGiftNew>() {
+		/**
+		 * 定义礼包项的点击事件
+		 */
+		OnItemClickListener<IndexGiftNew> giftItemClickListener = new OnItemClickListener<IndexGiftNew>() {
 			@Override
 			public void onItemClick(IndexGiftNew gift, View v, int position) {
 				switch (v.getId()) {
@@ -100,14 +97,25 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 						break;
 				}
 			}
-		});
+		};
+		mGiftAdapter.setListener(giftItemClickListener);
+		mGuessGiftAdapter.setListener(giftItemClickListener);
+	}
 
+	@Override
+	protected void processLogic(Bundle savedInstanceState) {
+		mGameAdapter = new NestedGameListAdapter(getContext(), null, this);
+		mGiftAdapter = new NestedGiftListAdapter(getContext());
+		mGuessGiftAdapter = new NestedGiftListAdapter(getContext());
+
+		SearchDataResult data = null;
 		if (getArguments() != null) {
-			mData = (SearchDataResult) getArguments().getSerializable(KeyConfig.KEY_DATA);
+			data = (SearchDataResult) getArguments().getSerializable(KeyConfig.KEY_DATA);
 		}
 		mGameView.setAdapter(mGameAdapter);
 		mGiftView.setAdapter(mGiftAdapter);
-		updateData(mData);
+		mGuessGiftView.setAdapter(mGuessGiftAdapter);
+		updateData(data);
 		mContainer.smoothScrollTo(0, 0);
 	}
 
@@ -121,33 +129,26 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 				|| mContainer == null) {
 			return;
 		}
-		if (mData != null) {
-			mGameAdapter.setData(mData.games);
-			mGiftAdapter.setData(mData.gifts);
-			if (mData.games == null || mData.games.size() == 0) {
-				llGift.setVisibility(View.GONE);
-			} else {
-				llGift.setVisibility(View.VISIBLE);
-			}
-			if (mData.gifts == null || mData.gifts.size() == 0
-					|| !AssistantApp.getInstance().isAllowDownload()) {
-				llGame.setVisibility(View.GONE);
-			} else {
-				llGame.setVisibility(View.VISIBLE);
-			}
+		mGameAdapter.setData(data.games);
+		mGiftAdapter.setData(data.gifts);
+		mGuessGiftAdapter.setData(data.guessGift);
+		if (!AssistantApp.getInstance().isAllowDownload()) {
+			data.games = null;
 		}
+		showDataView(data.games, llGame);
+		showDataView(data.gifts, llGift);
+		showDataView(data.guessGift, llGuessGift);
 		mGameAdapter.updateData(data.games);
 		mGiftAdapter.updateData(data.gifts);
+		mGuessGiftAdapter.updateData(data.guessGift);
 		mContainer.smoothScrollTo(0, 0);
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.rl_game:
-				break;
-			case R.id.rl_gift:
-				break;
+	private void showDataView(ArrayList data, View v) {
+		if (data == null || data.size() == 0) {
+			v.setVisibility(View.GONE);
+		} else {
+			v.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -160,12 +161,12 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	public void release() {
 		super.release();
 		mContainer = null;
-		mGameBar = null;
 		mGameView = null;
-		mGiftBar = null;
 		mGiftView = null;
+		mGuessGiftView = null;
 		llGame = null;
 		llGift = null;
+		llGuessGift = null;
 		if (mGameAdapter != null) {
 			mGameAdapter.release();
 			mGameAdapter = null;
@@ -174,7 +175,10 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 			mGiftAdapter.release();
 			mGiftAdapter = null;
 		}
-		mData = null;
+		if (mGuessGiftAdapter != null) {
+			mGuessGiftAdapter.release();
+			mGuessGiftAdapter = null;
+		}
 	}
 
 	@Override

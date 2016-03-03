@@ -41,13 +41,6 @@ public class BannerTypeUtil {
 						banner.title = context.getResources().getString(R.string.st_web_default_title_name);
 					}
 					WebData data = AssistantApp.getInstance().getGson().fromJson(banner.extData, WebData.class);
-					int index = data.url.indexOf("need_validate");
-					if ((index != -1 && "1".equals(data.url.substring(index + 14, index + 15)))
-							&& !AccountManager.getInstance().isLogin()) {
-						ToastUtil.showShort("请先登录!");
-						IntentUtil.jumpLogin(context);
-						return;
-					}
 					IntentUtil.jumpActivityWeb(context, data.url, banner.title);
 					break;
 				case ACTION_GAME_DETAIL:

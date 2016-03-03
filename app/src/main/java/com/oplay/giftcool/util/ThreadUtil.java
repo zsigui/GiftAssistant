@@ -32,6 +32,12 @@ public class ThreadUtil {
 		sHandler.post(task);
 	}
 
+	public static void remove(Runnable task) {
+		if (sHandler != null) {
+			sHandler.removeCallbacks(task);
+		}
+	}
+
 	/**
 	 * 在UI线程延时执行任务
 	 *
@@ -42,7 +48,7 @@ public class ThreadUtil {
 		sHandler.postDelayed(task, delayMillis);
 	}
 
-	public static void destory() {
+	public static void destroy() {
 		if (sHandler != null) {
 			sHandler.removeCallbacksAndMessages(null);
 			sHandler = null;

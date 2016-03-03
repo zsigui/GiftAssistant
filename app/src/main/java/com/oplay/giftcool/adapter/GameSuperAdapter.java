@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
-import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
@@ -27,16 +26,14 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
-import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.ext.holder.BannerHolderCreator;
 import com.oplay.giftcool.model.AppStatus;
-import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_Runtime;
 
@@ -53,10 +50,76 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 	private Context mContext;
 	private LayoutInflater mInflater;
 
-	private WeakReference<BannerVH> mBannerWR;
 	private GameHotVH mGameHotVH;
 	private RecommendVH mRecommendVH;
 	private GameNewVH mGameNewVH;
+
+	// banner
+	private WeakReference<BannerVH> mBannerWR;
+	private IndexBanner mDefaultBanner;
+	private BannerHolderCreator mBannerHolderCreator;
+	private int[] mBannerIndicatorDrawable;
+	private ArrayList<String> mBannerData;
+
+
+	public GameSuperAdapter(Context context) {
+		mContext = context;
+		mInflater = LayoutInflater.from(mContext);
+		ApkDownloadManager.getInstance(mContext).addDownloadStatusListener(this);
+		initDefaultBannerConfig();
+	}
+
+	public void setData(IndexGameSuper data) {
+		mData = data;
+	}
+
+	private void initDefaultBannerConfig() {
+		mBannerHolderCreator = new BannerHolderCreator();
+		mBannerIndicatorDrawable = new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected};
+		mDefaultBanner = new IndexBanner();
+		mDefaultBanner.url = "drawable://" + R.drawable.ic_banner_empty_default;
+		mDefaultBanner.type = BannerTypeUtil.ACTION_SCORE_TASK;
+		mBannerData = new ArrayList<>();
+	}
+
+	/**
+	 * 更新轮播图内容
+	 */
+	private void updateBanners(BannerVH bannerVH) {
+		if (bannerVH == null || mData == null) {
+			return;
+		}
+		if (mData.banner == null) {
+			mData.banner = new ArrayList<>();
+		}
+		ArrayList<IndexBanner> banners = mData.banner;
+		if (banners.size() == 0) {
+			mData.banner.add(mDefaultBanner);
+		}
+		mData.banner = banners;
+		mBannerData.clear();
+		for (IndexBanner banner : banners) {
+			mBannerData.add(banner.url);
+		}
+		ConvenientBanner banner = bannerVH.mBanner;
+		banner.setPages(mBannerHolderCreator, mBannerData);
+		if (mBannerData.size() == 1) {
+			banner.setCanLoop(false);
+			banner.stopTurning();
+		} else {
+			banner.setCanLoop(true);
+			banner.startTurning(AppConfig.BANNER_LOOP_TIME);
+		}
+
+	}
+
+	public void updateHotData(ArrayList<IndexGameNew> data) {
+		if (data == null || mGameHotVH == null || mData == null) {
+			return;
+		}
+		mData.hot = data;
+		mGameHotVH.adapter.updateData(mData.hot);
+	}
 
 	private View.OnClickListener mRecItemClickListener = new View.OnClickListener() {
 		@Override
@@ -76,86 +139,6 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			}
 		}
 	};
-
-	private OnItemClickListener<IndexGameNew> mItemClickListener = new OnItemClickListener<IndexGameNew>
-			() {
-		@Override
-		public void onItemClick(IndexGameNew item, View view, int position) {
-			try {
-				// !!! 此处由于点击事件被应用于多处，故 position 不准备，勿用
-				if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
-					item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
-				} else {
-					IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
-				}
-			} catch (Throwable e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.e(e);
-				}
-			}
-		}
-	};
-	private View.OnTouchListener mTouchListener;
-
-	public GameSuperAdapter(Context context) {
-		mContext = context;
-		mInflater = LayoutInflater.from(mContext);
-		ApkDownloadManager.getInstance(mContext).addDownloadStatusListener(this);
-	}
-
-	public void setData(IndexGameSuper data) {
-		mData = data;
-	}
-
-	public void setTouchListener(View.OnTouchListener touchListener) {
-		mTouchListener = touchListener;
-	}
-
-	private void updateBanners(BannerVH bannerVH, ArrayList<IndexBanner> banners) {
-		if (banners == null || bannerVH == null || mData == null) {
-			return;
-		}
-		if (banners.size() == 0) {
-			IndexBanner banner = new IndexBanner();
-			banner.url = "drawable://" + R.drawable.ic_banner_empty_default;
-			banner.type = BannerTypeUtil.ACTION_SCORE_TASK;
-			banners.add(banner);
-		}
-		mData.banner = banners;
-		ArrayList<String> data = new ArrayList<>();
-		for (IndexBanner banner : banners) {
-			data.add(banner.url);
-		}
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				Global.getBannerHeight(mContext));
-		bannerVH.mBanner.setLayoutParams(lp);
-		bannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
-
-			@Override
-			public NetworkImageHolderView createHolder() {
-				return new NetworkImageHolderView();
-			}
-		}, data)
-				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
-				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
-				.setOnItemClickListener(this);
-		if (data.size() == 1) {
-			bannerVH.mBanner.setCanLoop(false);
-			bannerVH.mBanner.stopTurning();
-		} else {
-			bannerVH.mBanner.setCanLoop(true);
-			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
-			bannerVH.mBanner.startTurning(AppConfig.BANNER_LOOP_TIME);
-		}
-	}
-
-	public void updateHotData(ArrayList<IndexGameNew> data) {
-		if (data == null || mGameHotVH == null || mData == null) {
-			return;
-		}
-		mData.hot = data;
-		mGameHotVH.adapter.updateData(mData.hot);
-	}
 
 	public void updateRecommendData(IndexGameNew data) {
 		if (data == null || mRecommendVH == null || mData == null) {
@@ -193,14 +176,24 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 		switch (viewType) {
 			case IndexTypeUtil.ITEM_BANNER:
 				if (mBannerWR == null || mBannerWR.get() == null) {
-					mBannerWR =  new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false)));
+					mBannerWR = new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner,
+							parent, false)));
 				}
-				return mBannerWR.get();
+				BannerVH bannerVH = mBannerWR.get();
+				ConvenientBanner banner = bannerVH.mBanner;
+				banner.setPageIndicator(mBannerIndicatorDrawable);
+				banner.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+				banner.setOnItemClickListener(this);
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+						Global.getBannerHeight(mContext));
+				banner.setLayoutParams(lp);
+				return bannerVH;
 			case IndexTypeUtil.ITEM_HOT:
 				if (mGameHotVH == null) {
 					mGameHotVH = new GameHotVH(mInflater.inflate(R.layout.view_game_hot, parent, false));
 					mGameHotVH.rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
-					mGameHotVH.rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext, LinearLayoutManager
+					mGameHotVH.rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext,
+							LinearLayoutManager
 							.VERTICAL));
 					mGameHotVH.adapter = new IndexGameHotWithTitleAdapter(mContext);
 					mGameHotVH.rvContainer.setAdapter(mGameHotVH.adapter);
@@ -215,7 +208,8 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				if (mGameNewVH == null) {
 					mGameNewVH = new GameNewVH(mInflater.inflate(R.layout.view_game_new, parent, false));
 					mGameNewVH.rvContainer.setLayoutManager(new GameSuperLinearLayoutManager(mGameNewVH.rvContainer));
-					mGameNewVH.rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
+					mGameNewVH.rvContainer.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager
+							.VERTICAL));
 
 					mGameNewVH.adapter = new IndexGameNewWithTitleAdapter(mContext);
 					mGameNewVH.rvContainer.setAdapter(mGameNewVH.adapter);
@@ -244,15 +238,10 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			return;
 		switch (getItemViewType(position)) {
 			case IndexTypeUtil.ITEM_BANNER:
-
-				BannerVH bannerVH = (BannerVH) holder;
-				if (mTouchListener != null)
-				bannerVH.mBanner.setOnTouchListener(mTouchListener);
-				updateBanners(bannerVH, mData.banner);
+				updateBanners((BannerVH) holder);
 				break;
 			case IndexTypeUtil.ITEM_HOT:
 				mGameHotVH = (GameHotVH) holder;
-				mGameHotVH.adapter.setListener(mItemClickListener);
 				updateHotData(mData.hot);
 				break;
 			case IndexTypeUtil.ITEM_RECOMMEND:
@@ -261,7 +250,6 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 				break;
 			case IndexTypeUtil.ITEM_NEW:
 				mGameNewVH = (GameNewVH) holder;
-				mGameNewVH.adapter.setListener(mItemClickListener);
 				updateNewData(mData.news);
 				break;
 		}

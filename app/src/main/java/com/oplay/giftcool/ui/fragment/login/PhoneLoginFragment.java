@@ -344,7 +344,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 										AccountManager.getInstance().notifyUserAll(userModel);
 										ScoreManager.getInstance().resetLocalTaskState();
 										ScoreManager.getInstance().toastByCallback(userModel, false);
-										((BaseAppCompatActivity) getActivity()).handleBackPressed();
+										((BaseAppCompatActivity) getActivity()).onBack();
 										return;
 									}
 									ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());

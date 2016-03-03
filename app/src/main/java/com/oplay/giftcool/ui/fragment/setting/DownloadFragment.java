@@ -78,7 +78,7 @@ public class DownloadFragment extends BaseFragment implements OnDownloadStatusCh
 //	@Override
 //	public void onResume() {
 //		super.onResume();
-//		mListData = ApkDownloadManager.getInstance(getActivity()).getDownloadList();
+//		mData = ApkDownloadManager.getInstance(getActivity()).getDownloadList();
 //		mAdapter.notifyDataSetUpdated();
 //	}
 

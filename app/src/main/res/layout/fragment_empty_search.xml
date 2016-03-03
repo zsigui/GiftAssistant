@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView
+<LinearLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:contentDescription = "@null"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
-		android:scaleType = "centerInside"
-		android:src = "@drawable/pic_empty_search" />
+		android:gravity = "center"
+		android:orientation = "vertical" >
+
+	<ImageView
+			android:contentDescription = "@null"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:scaleType = "centerInside"
+			android:src = "@drawable/pic_empty_search" />
+
+	<TextView
+			android:id = "@+id/btn_hope_gift"
+			style = "@style/DefaultTextView"
+			android:layout_height = "@dimen/di_btn_height"
+			android:textColor = "@color/co_white"
+			android:background = "@drawable/selector_btn_orange"
+			android:clickable = "true"
+			android:text = "@string/st_search_empty_hope" />
+</LinearLayout >

@@ -15,7 +15,7 @@ import com.oplay.giftcool.ui.fragment.dialog.WebViewDialog;
 
 /**
  *
- * 偶玩豆和积分明细
+ * 偶玩豆和金币明细
  *
  * Created by zsigui on 16-1-6.
  */

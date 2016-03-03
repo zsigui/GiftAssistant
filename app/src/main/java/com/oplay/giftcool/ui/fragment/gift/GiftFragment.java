@@ -52,6 +52,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	private final static String PAGE_NAME = "礼包首页";
 	private static final int ID_UPDATE = 6;
 
+	public static final int POS_BANNER = 0;
+	public static final int POS_ZERO = 1;
+	public static final int POS_LIKE = 2;
+	public static final int POS_LIMIT = 3;
+	public static final int POS_NEW = 4;
+
 	private RecyclerView rvContainer;
 	private GiftAdapter mAdapter;
 
@@ -289,11 +295,11 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	public void onResume() {
 		super.onResume();
 		if (mIsVisible) {
-			ClockService.startService(getContext().getApplicationContext());
 			if (mAdapter != null) {
 				mAdapter.startBanner();
 			}
 		}
+		ClockService.startService(mApp);
 		mIsResume = true;
 	}
 
@@ -304,15 +310,15 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			mAdapter.stopBanner();
 		}
 		mIsResume = false;
-		ClockService.stopService(getContext().getApplicationContext());
+		ClockService.stopService(mApp);
 	}
 
 
 	@Override
 	protected void onUserVisible() {
 		super.onUserVisible();
+		ClockService.startService(mApp);
 		if (mIsResume) {
-			ClockService.startService(getContext());
 			if (mAdapter != null) {
 				mAdapter.startBanner();
 			}
@@ -323,7 +329,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	@Override
 	protected void onUserInvisible() {
 		super.onUserInvisible();
-		ClockService.stopService(getContext());
+		ClockService.stopService(mApp);
 		if (mAdapter != null) {
 			mAdapter.stopBanner();
 		}
@@ -413,26 +419,30 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			@Override
 			public void run() {
 				switch (type) {
-					case 1:
-						if (rvContainer != null && rvContainer.getChildCount() >= 2) {
+					case POS_BANNER:
+						if (rvContainer != null) {
+							rvContainer.smoothScrollToPosition(0);
+						}
+						break;
+					case POS_ZERO:
+						if (rvContainer != null) {
 							rvContainer.smoothScrollToPosition(1);
 						}
 						break;
-					case 2:
-						if (rvContainer != null && rvContainer.getChildCount() >= 3) {
+					case POS_LIKE:
+						if (rvContainer != null) {
 							rvContainer.smoothScrollToPosition(2);
 						}
 						break;
-					case 3:
-						if (rvContainer != null && rvContainer.getChildCount() >= 4) {
+					case POS_LIMIT:
+						if (rvContainer != null) {
 							rvContainer.smoothScrollToPosition(3);
 						}
 						break;
-					case 4:
-						if (rvContainer != null && rvContainer.getChildCount() >= 5) {
-							rvContainer.scrollTo(0, (int) rvContainer.getChildAt(4).getY());
+					case POS_NEW:
+						if (rvContainer != null) {
+							rvContainer.smoothScrollToPosition(4);
 						}
-						break;
 				}
 			}
 		});
@@ -472,6 +482,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		if (mHandler != null) {
 			mHandler.removeCallbacks(mRefreshRunnable);
 		}

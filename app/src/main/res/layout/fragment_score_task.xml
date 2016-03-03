@@ -15,7 +15,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "我当前拥有的积分:  " />
+				android:text = "我当前拥有的金币:  " />
 
 		<CheckedTextView
 				android:id="@+id/tv_score"

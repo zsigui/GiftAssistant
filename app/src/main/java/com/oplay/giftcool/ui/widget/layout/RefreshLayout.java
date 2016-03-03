@@ -153,7 +153,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 							super.onScrolled(recyclerView, dx, dy);
 							mLastY = dy;
 							if (canLoad()) {
-								mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
+								//mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
 								loadData();
 							}
 						}

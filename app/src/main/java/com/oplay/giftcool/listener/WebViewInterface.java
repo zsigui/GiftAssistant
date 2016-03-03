@@ -17,6 +17,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
 
@@ -206,7 +207,7 @@ public class WebViewInterface extends Observable {
 					if (MainActivity.sGlobalHolder == null) {
 						IntentUtil.jumpGiftNewList(mHostActivity);
 					} else {
-						MainActivity.sGlobalHolder.jumpToIndexGift(4);
+						MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
 						mHostActivity.finish();
 					}
 					break;

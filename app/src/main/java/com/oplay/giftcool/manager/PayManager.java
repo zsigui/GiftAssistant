@@ -67,7 +67,7 @@ public class PayManager {
 			return WebViewInterface.RET_OTHER_ERR;
 		}
 		long nowClickTime = System.currentTimeMillis();
-		if (nowClickTime - mLastClickTime <= 1000) {
+		if (nowClickTime - mLastClickTime <= Global.CLICK_TIME_INTERVAL) {
 			return WebViewInterface.RET_OTHER_ERR;
 		}
 		mLastClickTime = nowClickTime;
@@ -114,11 +114,11 @@ public class PayManager {
 		}
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 				&& gift.score <= AccountManager.getInstance().getUserInfo().score) {
-			// 只有积分支付方式且积分充足，直接执行抢号
+			// 只有金币支付方式且金币充足，直接执行抢号
 			handleScorePay(context, gift, button, true);
 			return;
 		}
-		// 积分或偶玩豆支付方式
+		// 金币或偶玩豆支付方式
 		final GiftConsumeDialog consumeDialog = GiftConsumeDialog.newInstance();
 		consumeDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
@@ -145,8 +145,8 @@ public class PayManager {
 					AppDebugConfig.trace(context, "抢礼包", "偶玩豆支付", kv);
 					handleBeanPay(context, gift, button, true);
 				} else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
-					kv.put("价格", "积分 " + gift.score);
-					AppDebugConfig.trace(context, "抢礼包", "积分支付", kv);
+					kv.put("价格", "金币 " + gift.score);
+					AppDebugConfig.trace(context, "抢礼包", "金币支付", kv);
 					handleScorePay(context, gift, button, true);
 				} else {
 					ToastUtil.showShort("选择支付类型有误，请重新选择");
@@ -246,7 +246,7 @@ public class PayManager {
 	}
 
 	/**
-	 * 处理使用积分抢号的一系列请求
+	 * 处理使用金币抢号的一系列请求
 	 */
 	private void handleScorePay(final Context context, final IndexGiftNew gift, final GiftButton button,
 	                            final boolean isSeize) {

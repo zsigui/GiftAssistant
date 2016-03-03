@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -69,6 +68,18 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		ClockService.startService(getContext());
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		ClockService.stopService(getContext());
+	}
+
+	@Override
 	protected void initView(Bundle savedInstanceState) {
 		initViewManger(R.layout.fragment_refresh_lv_container);
 		mDataView = getViewById(R.id.lv_content);
@@ -77,6 +88,12 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 	@Override
 	protected void setListener() {
 		ObserverManager.getInstance().addGiftUpdateListener(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeGiftUpdateListener(this);
 	}
 
 	@Override
@@ -109,7 +126,6 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			mRefreshLayout.setCanShowLoad(mData.size() >= 6);
 			updateData(mData);
 		}
-		startClockService();
 	}
 
 	@Override
@@ -301,22 +317,6 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			}
 			i++;
 		}
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		stopClockService();
-	}
-
-	private void startClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().startService(intent);
-	}
-
-	private void stopClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().stopService(intent);
 	}
 
 	private void setGiftUpdateInfo(IndexGiftNew toBeSet, IndexGiftNew data) {

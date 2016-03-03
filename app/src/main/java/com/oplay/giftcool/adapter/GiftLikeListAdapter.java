@@ -31,7 +31,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 		if (data == null) {
 			return;
 		}
-		mListData = data;
+		mData = data;
 		notifyDataSetChanged();
 	}
 
@@ -78,7 +78,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 
 	@Override
 	public void onClick(View v) {
-		if (mListData == null || v.getTag(TAG_POSITION) == null) {
+		if (mData == null || v.getTag(TAG_POSITION) == null) {
 			return;
 		}
 		Integer pos = (Integer)v.getTag(TAG_POSITION);

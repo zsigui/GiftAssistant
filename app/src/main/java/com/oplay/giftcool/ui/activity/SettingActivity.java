@@ -53,6 +53,12 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		super.initMenu(toolbar);
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+	}
+
 	public void showRightBtn(int visibility, String text) {
 		if (mToolbar == null)
 			return;
@@ -171,12 +177,6 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		KLog.e("setting", "onNewIntent is call");
 		super.onNewIntent(intent);
 		handleRedirect(intent);
-	}
-
-	@Override
-	protected void doBeforeFinish() {
-		super.doBeforeFinish();
-		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	@Override

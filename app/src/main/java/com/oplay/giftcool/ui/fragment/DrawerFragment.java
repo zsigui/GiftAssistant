@@ -17,7 +17,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
-import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.DrawerModel;
@@ -73,6 +72,12 @@ public class DrawerFragment extends BaseFragment {
 		mAdapter = new DrawerAdapter(getContext().getApplicationContext());
 		mAdapter.setData(initDrawerItem());
 		rvContent.setAdapter(mAdapter);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	@Override
@@ -227,8 +232,8 @@ public class DrawerFragment extends BaseFragment {
 		tvNick = null;
 		ivIcon = null;
 		if (rvContent != null) {
-			if (mAdapter != null && mAdapter instanceof OnFinishListener) {
-				((OnFinishListener) mAdapter).release();
+			if (mAdapter != null) {
+				mAdapter.release();
 			}
 			rvContent.setAdapter(null);
 			mAdapter = null;

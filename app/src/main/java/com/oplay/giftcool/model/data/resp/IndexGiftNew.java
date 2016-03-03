@@ -30,10 +30,10 @@ public class IndexGiftNew implements Serializable{
 	// 礼包状态 0 删除， 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束， 6 下架 (0, 6状态不关注)
 	@SerializedName("status")
 	public int status;
-	// 支付类型 0 未知， 1 积分， 2 偶玩豆， 3 积分或偶玩豆
+	// 支付类型 0 未知， 1 金币， 2 偶玩豆， 3 金币或偶玩豆
 	@SerializedName("price_type")
 	public int priceType;
-    // 抢号需要换取积分
+    // 抢号需要换取金币
     @SerializedName("point_price")
     public int score;
     // 抢号需要换取的偶玩豆

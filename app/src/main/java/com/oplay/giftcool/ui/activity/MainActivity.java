@@ -47,6 +47,9 @@ import java.io.File;
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
 	private static final String TAG_EXIT = "com.oplay.giftcool.MainActivity.exit";
+
+	public static final int INDEX_GIFT = 0;
+	public static final int INDEX_GAME = 1;
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
 	// 判断是否今日首次打开APP
@@ -67,7 +70,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
 	// 当前选项卡下标
-	private int mCurrentIndex = 0;
 	private DrawerLayout mDrawerLayout;
 	private DrawerFragment mDrawerFragment;
 
@@ -89,10 +91,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	protected void initView() {
@@ -155,6 +157,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
 	protected void processLogic() {
 		ObserverManager.getInstance().addUserUpdateListener(this);
 
@@ -163,7 +170,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 
 		// 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
-		setCurSelected(mCurrentIndex);
+		setCurSelected(INDEX_GIFT);
 
 	}
 
@@ -172,7 +179,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			ctv.setChecked(false);
 			ctv.setTextColor(getResources().getColor(R.color.co_tab_index_text_normal));
 		}
-		mCurrentIndex = position;
 		mCtvs[position].setChecked(true);
 		mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
 		if (position == 0) {
@@ -202,18 +208,18 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
-		for (int i = 0; i < mCtvs.length; i++) {
-			if (v.getId() == mCtvs[i].getId()) {
-				setCurSelected(i);
+		for (int pos = 0; pos < mCtvs.length; pos++) {
+			if (v.getId() == mCtvs[pos].getId()) {
+				setCurSelected(pos);
 				return;
 			}
 		}
 		switch (v.getId()) {
 			case R.id.ctv_gift:
-				setCurSelected(0);
+				setCurSelected(INDEX_GIFT);
 				break;
 			case R.id.ctv_game:
-				setCurSelected(1);
+				setCurSelected(INDEX_GAME);
 				break;
 			case R.id.sl_search:
 				IntentUtil.jumpSearch(MainActivity.this);
@@ -251,7 +257,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public void onBackPressed() {
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
-			ObserverManager.getInstance().removeUserUpdateListener(this);
 			mApp.exit();
 			// 发送退出指令
 			Intent intent = new Intent(this, MainActivity.class);
@@ -264,23 +269,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	public void jumpToIndexGame(int gamePosition) {
-		setCurSelected(1);
-		if(mGameFragment != null) {
+		setCurSelected(INDEX_GAME);
+		if (mGameFragment != null) {
 			mGameFragment.setPagePosition(gamePosition);
 		}
 	}
 
 	public void jumpToIndexGift(final int giftPosition) {
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-
-				setCurSelected(0);
-				if (mGiftFragment != null) {
-					mGiftFragment.scrollToPos(giftPosition);
-				}
-			}
-		});
+		setCurSelected(INDEX_GIFT);
+		if (mGiftFragment != null) {
+			mGiftFragment.scrollToPos(giftPosition);
+		}
 	}
 
 	@Override
@@ -291,40 +290,48 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 
+	/**
+	 * 侧边栏提示数组
+	 */
 	private SparseIntArray mHintCount = new SparseIntArray();
 
 	/**
 	 * 更新侧边栏和顶部导航栏信息
 	 */
-	public void updateHintState(int key, int count) {
-		if (count < -1 || mDrawerFragment == null) {
-			return;
-		}
-		int val = mHintCount.get(key);
-		if (val == 0) {
-			// 原先不存在该键值
-			if (count != 0) {
-				mHintCount.put(key, count);
-				mDrawerFragment.updateCount(key, count);
-				ivHint.setVisibility(View.VISIBLE);
-				mDrawerFragment.updateCount(key, count);
-			}
-		} else {
-			// 原先已经存在该键值
-			if (count == 0) {
-				// 移除该键值
-				mHintCount.delete(key);
-				if (mHintCount.size() > 0) {
-					ivHint.setVisibility(View.VISIBLE);
-				} else {
-					ivHint.setVisibility(View.GONE);
+	public void updateHintState(final int key, final int count) {
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (count < -1 || mDrawerFragment == null) {
+					return;
 				}
-			} else {
-				mHintCount.put(key, count);
-				ivHint.setVisibility(View.VISIBLE);
+				int val = mHintCount.get(key, 0);
+				if (val == 0) {
+					// 原先不存在该键值
+					if (count != 0) {
+						mHintCount.put(key, count);
+						ivHint.setVisibility(View.VISIBLE);
+						mDrawerFragment.updateCount(key, count);
+					}
+				} else {
+					// 原先已经存在该键值
+					if (count == 0) {
+						// 移除该键值
+						mHintCount.delete(key);
+						if (mHintCount.size() > 0) {
+							ivHint.setVisibility(View.VISIBLE);
+						} else {
+							ivHint.setVisibility(View.GONE);
+						}
+					} else {
+						mHintCount.put(key, count);
+						ivHint.setVisibility(View.VISIBLE);
+					}
+					mDrawerFragment.updateCount(key, count);
+				}
 			}
-			mDrawerFragment.updateCount(key, count);
-		}
+		}, 1000);
+
 	}
 
 	private void handleFirstOpen() {
@@ -374,6 +381,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	/**
 	 * 处理更新逻辑
+	 *
 	 * @return　是否有更新
 	 */
 	private boolean handleUpdateApp() {
@@ -412,7 +420,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		// 保持一个Activity的全局对象
 		sGlobalHolder = null;
 		// 底部Tabs
-		 llTab = null;
+		llTab = null;
 		mCtvs = null;
 		ivProfile = null;
 		tvGiftCount = null;

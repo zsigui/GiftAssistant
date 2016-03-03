@@ -108,8 +108,8 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 			final Object tag = v.getTag(TAG_POSITION);
 			if (tag instanceof Integer) {
 				final int position = (Integer) tag;
-				if (position < mListData.size()) {
-					final IndexGameNew appInfo = mListData.get(position);
+				if (position < mData.size()) {
+					final IndexGameNew appInfo = mData.get(position);
 					if (mListener != null) {
 						mListener.onItemClick(appInfo, v, position);
 					}
@@ -173,14 +173,14 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 	}
 
 	public void setData(ArrayList<IndexGameNew> data) {
-		mListData = data;
+		mData = data;
 	}
 
 	public void updateData(ArrayList<IndexGameNew> data) {
 		if (data == null) {
 			return;
 		}
-		mListData = data;
+		mData = data;
 		notifyDataSetChanged();
 	}
 	@Override
@@ -205,7 +205,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 			mUrlDownloadBtn = null;
 		}
 		mContext = null;
-		mListData = null;
+		mData = null;
 		mListener = null;
 	}
 

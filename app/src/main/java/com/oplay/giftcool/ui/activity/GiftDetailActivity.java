@@ -151,12 +151,12 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	}
 
 	@Override
-	public void handleBackPressed() {
+	public boolean onBack() {
 		InputMethodUtil.hideSoftInput(this);
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
-			return;
+			return false;
 		}
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
@@ -169,6 +169,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
 		}
+		return true;
 	}
 
 

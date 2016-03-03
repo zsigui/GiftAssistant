@@ -144,7 +144,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 			viewHolder.pbPercent.setProgress(percent);
 			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
-				// 只用积分
+				// 只用金币
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);
 				viewHolder.tvOr.setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 				viewHolder.tvOr.setVisibility(View.GONE);
 				viewHolder.tvScore.setVisibility(View.GONE);
 			} else {
-				// 积分 或 偶玩豆
+				// 金币 或 偶玩豆
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvBean.setText(String.valueOf(gift.bean));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);

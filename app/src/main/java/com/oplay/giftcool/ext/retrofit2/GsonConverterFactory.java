@@ -1,7 +1,6 @@
 package com.oplay.giftcool.ext.retrofit2;
 
 import com.google.gson.Gson;
-import com.oplay.giftcool.ext.retrofit2.http.Cmd;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 
@@ -39,13 +38,7 @@ public final class GsonConverterFactory extends Converter.Factory {
 
 	@Override
 	public Converter<ResponseBody, ?> fromResponseBody(Type type, Annotation[] annotations) {
-		int cmd = 0;
-		for (Annotation annotation : annotations) {
-			if (annotation instanceof Cmd) {
-				cmd = ((Cmd) annotation).value();
-			}
-		}
-		return new GsonResponseBodyConverter<>(gson, type, cmd);
+		return new GsonResponseBodyConverter<>(gson, type);
 	}
 
 	@Override public Converter<?, RequestBody> toRequestBody(Type type, Annotation[] annotations) {

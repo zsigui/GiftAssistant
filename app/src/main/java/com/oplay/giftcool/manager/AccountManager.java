@@ -14,6 +14,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -28,10 +29,12 @@ import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
 
+import cn.jpush.android.api.JPushInterface;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -69,6 +72,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，默认进行 USER_UPDATE_PART 状态通知
+	 *
 	 * @param user
 	 */
 	public void notifyUserPart(UserModel user) {
@@ -77,6 +81,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，默认进行 USER_UPDATE_ALL 状态通知
+	 *
 	 * @param user
 	 */
 	public void notifyUserAll(UserModel user) {
@@ -85,6 +90,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
+	 *
 	 * @param notifyAll 是否进行 USER_UPDATE_ALL 状态通知
 	 */
 	private void notifyUser(UserModel user, boolean notifyAll) {
@@ -149,7 +155,9 @@ public class AccountManager {
 		return mUser == null ? null : mUser.userSession;
 	}
 
-
+	/**
+	 * 重新请求服务器以更新用户全部信息
+	 */
 	public void updateUserInfo() {
 		if (isLogin()) {
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
@@ -169,6 +177,7 @@ public class AccountManager {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
 											notifyUserAll(user);
+											updateJPushTagAndAlias();
 											return;
 										}
 										if (AppDebugConfig.IS_DEBUG) {
@@ -192,6 +201,9 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 登录态失效
+	 */
 	private void sessionFailed(JsonRespBase response) {
 		if (response != null && response.getCode() == StatusCode.ERR_UN_LOGIN) {
 			notifyUserAll(null);
@@ -200,7 +212,7 @@ public class AccountManager {
 	}
 
 	/**
-	 * 更新用户部分信息: 偶玩豆，积分，礼包数
+	 * 更新用户部分信息: 偶玩豆，金币，礼包数
 	 */
 	public void updatePartUserInfo() {
 		if (isLogin()) {
@@ -271,7 +283,9 @@ public class AccountManager {
 		}
 	}
 
-
+	/**
+	 * 登录或者登出后进行全局的浏览器Cookie重设
+	 */
 	public void syncCookie() {
 		ArrayList<String> cookies = null;
 		if (isLogin()) {
@@ -311,6 +325,9 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 更新Session的实际网络请求方法
+	 */
 	private void updateSessionNetRequest() {
 		if (NetworkUtil.isConnected(mContext)) {
 			Global.getNetEngine().updateSession(new JsonReqBase<String>())
@@ -355,6 +372,23 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 更新Jpush的别名和标签信息（暂只设置别名）
+	 */
+	private void updateJPushTagAndAlias() {
+		if (!isLogin()) {
+			// 用户不处于登录状态，不进行别名标记
+			JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));
+			return;
+		}
+		// 使用uid进行别名标记
+		String alias = Coder_Md5.md5(String.valueOf(getUserInfo().uid));
+		JPushInterface.setAlias(mContext, alias, new JPushTagsAliasCallback(mContext));
+	}
+
+	/**
+	 * 登出当前账号，会通知服务器并刷新整个页面
+	 */
 	public void logout() {
 		if (!isLogin()) {
 			return;
@@ -382,15 +416,6 @@ public class AccountManager {
 		AccountManager.getInstance().notifyUserAll(null);
 	}
 
-	public ArrayList<String> obtainPhoneAccount() {
-		ArrayList<String> result = new ArrayList<String>();
-		return result;
-	}
-
-	public ArrayList<String> obtainOuwanAccount() {
-		return null;
-	}
-
 	public void writePhoneAccount(String val, ArrayList<String> history, boolean isRemove) {
 		writeToHistory(val, SPConfig.KEY_LOGIN_PHONE, history, isRemove);
 	}
@@ -407,6 +432,14 @@ public class AccountManager {
 		return readFromHistory(SPConfig.KEY_LOGIN_OUWAN);
 	}
 
+	/**
+	 * 调用此方法向SP写入登录账号记录信息
+	 *
+	 * @param value    待新添加的值
+	 * @param key      SP中存放的key，分偶玩和手机登录
+	 * @param history  历史记录数据列表
+	 * @param isRemove 是否移除键值操作
+	 */
 	private void writeToHistory(String value, String key, ArrayList<String> history, boolean isRemove) {
 		if (TextUtils.isEmpty(value) || (value.contains(",") && value.indexOf(",") == 0)) {
 			return;
@@ -439,6 +472,12 @@ public class AccountManager {
 		SPUtil.putString(mContext, SPConfig.SP_LOGIN_FILE, key, historyStr.toString());
 	}
 
+	/**
+	 * 调用该方法从SP中读取保存的登录账号记录信息
+	 *
+	 * @param key SP中的Key，区分偶玩和手机登录
+	 * @return 历史记录列表
+	 */
 	private ArrayList<String> readFromHistory(String key) {
 		String history = SPUtil.getString(mContext, SPConfig.SP_LOGIN_FILE, key, null);
 		ArrayList<String> result = null;

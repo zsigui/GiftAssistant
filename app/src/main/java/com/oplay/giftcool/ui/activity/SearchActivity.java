@@ -6,9 +6,13 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
+import com.oplay.giftcool.model.data.resp.PromptData;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
+import com.oplay.giftcool.model.data.resp.SearchPromptResult;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -16,6 +20,7 @@ import com.oplay.giftcool.ui.fragment.LoadingFragment;
 import com.oplay.giftcool.ui.fragment.NetErrorFragment;
 import com.oplay.giftcool.ui.fragment.search.EmptySearchFragment;
 import com.oplay.giftcool.ui.fragment.search.HistoryFragment;
+import com.oplay.giftcool.ui.fragment.search.PromptFragment;
 import com.oplay.giftcool.ui.fragment.search.ResultFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.NetworkUtil;
@@ -25,6 +30,7 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -32,7 +38,7 @@ import retrofit.Retrofit;
 /**
  * Created by zsigui on 15-12-22.
  */
-public class SearchActivity extends BaseAppCompatActivity {
+public class SearchActivity extends BaseAppCompatActivity implements OnSearchListener {
 
 	private SearchLayout mSearchLayout;
 	/*private SearchEngine mEngine;*/
@@ -40,9 +46,11 @@ public class SearchActivity extends BaseAppCompatActivity {
 	private ResultFragment mResultFragment;
 	private EmptySearchFragment mEmptySearchFragment;
 	private HistoryFragment mHistoryFragment;
+	private PromptFragment mPromptFragment;
 	private NetErrorFragment mNetErrorFragment;
 
-    private String mLastSearchKey = "";
+	private String mLastSearchKey = "";
+	private String mLastInputKey = "";
 
 	@Override
 	protected void initView() {
@@ -53,12 +61,11 @@ public class SearchActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 		obtainHistoryData();
-		/*mEngine = mApp.getRetrofit().create(SearchEngine.class);*/
 		mSearchLayout.setCanGetFocus(true);
-		mSearchLayout.setIsAutoSendRequest(true);
 		mSearchLayout.setIsAutoSendRequest(false);
+		mSearchLayout.setAutoPopupPrompt(true);
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
-		displayHistoryUI(mHistoryData, true);
+		displayHistoryUI(mHistoryData);
 	}
 
 
@@ -90,9 +97,9 @@ public class SearchActivity extends BaseAppCompatActivity {
 			return;
 		}
 
-        if (mHistoryData.contains(newKey)) {
-            mHistoryData.remove(newKey);
-        }
+		if (mHistoryData.contains(newKey)) {
+			mHistoryData.remove(newKey);
+		}
 
 		// 添加搜索记录，精简个数到10个以内
 		mHistoryData.add(0, newKey);
@@ -108,28 +115,41 @@ public class SearchActivity extends BaseAppCompatActivity {
 			KLog.d("put saveHistory = " + builder.toString());
 		}
 		SPUtil.putString(getApplicationContext(),
-                SPConfig.SP_SEARCH_FILE,
-                SPConfig.KEY_SEARCH_INDEX,
-                builder.toString());
+				SPConfig.SP_SEARCH_FILE,
+				SPConfig.KEY_SEARCH_INDEX,
+				builder.toString());
 	}
 
 	public void clearHistory() {
 		mHistoryData.clear();
 		SPUtil.putString(getApplicationContext(),
-                SPConfig.SP_SEARCH_FILE,
-                SPConfig.KEY_SEARCH_INDEX,
-                "");
+				SPConfig.SP_SEARCH_FILE,
+				SPConfig.KEY_SEARCH_INDEX,
+				"");
 	}
 
 	/**
-	 * 显示历史记录或者提示信息
+	 * 显示历史记录信息
 	 */
-	private void displayHistoryUI(ArrayList<String> data, boolean isHistory) {
+	private void displayHistoryUI(ArrayList<String> data) {
 		if (mHistoryFragment == null) {
-			mHistoryFragment = HistoryFragment.newInstance(data, isHistory);
+			mHistoryFragment = HistoryFragment.newInstance(data);
 		}
-		mHistoryFragment.updateData(data, isHistory);
+		mHistoryFragment.updateHistoryData(data);
 		reattachFrag(R.id.fl_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
+	}
+
+	/**
+	 * 显示提示信息
+	 *
+	 * @param data
+	 */
+	private void displayPromptUI(ArrayList<PromptData> data) {
+		if (mPromptFragment == null) {
+			mPromptFragment = PromptFragment.newInstance(data);
+		}
+		mPromptFragment.updateData(data);
+		reattachFrag(R.id.fl_container, mPromptFragment, mPromptFragment.getClass().getSimpleName());
 	}
 
 	/**
@@ -159,18 +179,21 @@ public class SearchActivity extends BaseAppCompatActivity {
 	 * 显示网络错误提示
 	 */
 	private void displayNetworkErrUI() {
-        if ("".equals(mLastSearchKey) ||
-                !mLastSearchKey.equals(mSearchLayout.getKeyword())) {
-            return;
-        }
+		if ("".equals(mLastSearchKey) ||
+				!mLastSearchKey.equals(mSearchLayout.getKeyword())) {
+			return;
+		}
 		if (mNetErrorFragment == null) {
 			mNetErrorFragment = NetErrorFragment.newInstance();
 		}
-        reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
 	}
 
-	public void sendSearchRequest(String keyword) {
+	public void sendSearchRequest(String keyword, int id) {
+		mSearchLayout.setAutoPopupPrompt(false);
 		mSearchLayout.setText(keyword);
+		mLastInputKey = keyword;
+		mSearchLayout.setAutoPopupPrompt(true);
 		mSearchLayout.sendSearchRequest(keyword);
 	}
 
@@ -183,6 +206,12 @@ public class SearchActivity extends BaseAppCompatActivity {
 		mEmptySearchFragment = null;
 		mHistoryFragment = null;
 		mNetErrorFragment = null;
+		if (mCallPrompt != null) {
+			mCallPrompt.cancel();
+		}
+		if (mCallResult != null) {
+			mCallResult.cancel();
+		}
 	}
 
 
@@ -196,107 +225,149 @@ public class SearchActivity extends BaseAppCompatActivity {
 		reattachFrag(R.id.fl_container, mLoadingFragment, LoadingFragment.class.getSimpleName());
 	}
 
+	private Call<JsonRespBase<SearchDataResult>> mCallResult;
+	private Call<JsonRespBase<SearchPromptResult>> mCallPrompt;
+	private long mLastCommitTime = System.currentTimeMillis();
+
 	private class SearchActionListener implements SearchLayout.OnSearchActionListener {
+
 		@Override
 		public void onSearchPerform(String keyword) {
-			ScoreManager.getInstance().reward(ScoreManager.RewardType.SEARCH);
-			saveHistoryData(keyword);
-            mLastSearchKey = keyword;
-			if (NetworkUtil.isConnected(SearchActivity.this)) {
-				displayLoadingUI();
-				AppDebugConfig.trace(getApplicationContext(), "搜索", "关键字: " + keyword);
-				ReqSearchKey data = new ReqSearchKey();
-				data.searchKey = keyword;
-				Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data))
-						.enqueue(new Callback<JsonRespBase<SearchDataResult>>() {
-							@Override
-							public void onResponse(Response<JsonRespBase<SearchDataResult>> response, Retrofit retrofit) {
-								if (!mNeedWorkCallback) {
-									return;
-								}
-								if (response != null && response.code() == 200) {
-									if (response.body() != null && response.body().isSuccess()) {
-										SearchDataResult data = response.body().getData();
-										// 检验Key返回数据是否是当前需要的
-										if (!mLastSearchKey.equals(mSearchLayout.getKeyword())) {
-											// 丢弃这次搜索结果
-											// 不更新
-											return;
-										}
-										if (data.games == null && data.gifts == null) {
-											displayEmptyUI();
-											return;
-										}
-										// display list h  ere
-										displayDataUI(data);
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(response.body());
-									}
-								}
-								displayNetworkErrUI();
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								if (!mNeedWorkCallback) {
-									return;
-								}
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.e(AppDebugConfig.TAG_SEARCH, t);
-								}
-								// 提示网络错误
-								displayNetworkErrUI();
-							}
-						});
-			} else {
+			mLastSearchKey = keyword;
+			if (!NetworkUtil.isConnected(SearchActivity.this)) {
 				displayNetworkErrUI();
+				return;
 			}
+			long curTime = System.currentTimeMillis();
+			if (curTime - mLastCommitTime < Global.CLICK_TIME_INTERVAL) {
+				// 防止重复提交
+				mLastCommitTime = curTime;
+				return;
+			}
+			saveHistoryData(keyword);
+			ScoreManager.getInstance().reward(ScoreManager.RewardType.SEARCH);
+			displayLoadingUI();
+			if (mCallResult != null) {
+				mCallResult.cancel();
+			}
+			AppDebugConfig.trace(getApplicationContext(), "搜索", "关键字: " + keyword);
+			ReqSearchKey data = new ReqSearchKey();
+			data.searchKey = keyword;
+			mCallResult = Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data));
+			mCallResult.enqueue(new Callback<JsonRespBase<SearchDataResult>>() {
+				@Override
+				public void onResponse(Response<JsonRespBase<SearchDataResult>> response, Retrofit retrofit) {
+					if (!mNeedWorkCallback) {
+						return;
+					}
+					if (response != null && response.code() == 200) {
+						if (response.body() != null && response.body().isSuccess()) {
+							SearchDataResult data = response.body().getData();
+							// 检验Key返回数据是否是当前需要的
+							if (!mSearchLayout.getKeyword().trim().equals(mLastSearchKey)) {
+								// 丢弃这次搜索结果
+								// 不更新
+								return;
+							}
+							if ((data.games == null || data.games.size() == 0)
+									&& (data.gifts == null || data.gifts.size() == 0)) {
+								displayEmptyUI();
+								return;
+							}
+							// display list here
+							displayDataUI(data);
+							return;
+						}
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.e(response.body());
+						}
+					}
+					displayNetworkErrUI();
+				}
+
+				@Override
+				public void onFailure(Throwable t) {
+					if (!mNeedWorkCallback) {
+						return;
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.e(AppDebugConfig.TAG_SEARCH, t);
+					}
+					// 提示网络错误
+					displayNetworkErrUI();
+				}
+			});
 		}
 
 		@Override
 		public void onSearchCleared() {
-            // 取消上一轮搜索
-            //mEngine.getSearchPrompt(mLastSearchKey).cancel();
-			displayHistoryUI(mHistoryData, true);
+			// 取消上一轮搜索
+			displayHistoryUI(mHistoryData);
+			if (mCallPrompt != null) {
+				mCallPrompt.cancel();
+			}
+			if (mCallResult != null) {
+				mCallResult.cancel();
+			}
 		}
-
 
 
 		@Override
 		public void onSearchPromptPerform(String keyword) {
-//			if (NetworkUtil.isConnected(SearchActivity.this)) {
-//				mEngine.getSearchPrompt(keyword).enqueue(new Callback<JsonRespSearchPrompt>() {
-//					@Override
-//					public void onResponse(Response<JsonRespSearchPrompt> response, Retrofit retrofit) {
-//						if (response.code() == 200) {
-//							if (response.body().getCode() == StatusCode.SUCCESS) {
-//								SearchPromptResult data = response.body().getData();
-//								// 检验Key返回数据是否是当前需要的
-//								if (!data.keyword.trim().equals(mSearchLayout.getKeyword())) {
-//									// 丢弃这次搜索结果
-//									// 不更新
-//									return;
-//								}
-//								// display list here
-//								displayHistoryUI(data.promptList, false);
-//								return;
-//							}
-//							if (AppDebugConfig.IS_DEBUG) {
-//								KLog.e(response.body());
-//							}
-//						}
-//					}
-//
-//					@Override
-//					public void onFailure(Throwable t) {
-//						if (AppDebugConfig.IS_FRAG_DEBUG) {
-//							KLog.e(t);
-//						}
-//					}
-//				});
-//			} // end if
+            if (mLastInputKey.equals("")) {
+                displayPromptUI(null);
+            }
+			if (!NetworkUtil.isConnected(SearchActivity.this)) {
+				if (!mLastInputKey.equals(keyword)) {
+					displayPromptUI(null);
+				}
+				mLastInputKey = keyword;
+				return;
+			}
+			mLastInputKey = keyword;
+			if (mCallPrompt != null) {
+				mCallPrompt.cancel();
+			}
+			ReqSearchKey reqData = new ReqSearchKey();
+			reqData.searchKey = keyword;
+			mCallPrompt = Global.getNetEngine().obtainSearchPrompt(new JsonReqBase<ReqSearchKey>(reqData));
+			mCallPrompt.enqueue(new Callback<JsonRespBase<SearchPromptResult>>() {
+				@Override
+				public void onResponse(Response<JsonRespBase<SearchPromptResult>> response, Retrofit
+						retrofit) {
+					String curKeyWord = mSearchLayout.getKeyword().trim();
+					if (response != null && response.code() == 200) {
+						if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+							SearchPromptResult data = response.body().getData();
+							// 检验Key返回数据是否是当前需要的
+							if (!curKeyWord.equals(data.keyword)) {
+								// 丢弃这次搜索结果
+								// 不更新
+								return;
+							}
+							// display list here
+							displayPromptUI(data.promptList);
+							return;
+						}
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.e(response.body());
+						}
+					}
+					if (curKeyWord.equals(mLastInputKey)) {
+						displayPromptUI(null);
+					}
+				}
+
+				@Override
+				public void onFailure(Throwable t) {
+					if (AppDebugConfig.IS_FRAG_DEBUG) {
+						KLog.e(t);
+					}
+					if (mSearchLayout.getKeyword().trim().equals(mLastInputKey)) {
+						displayPromptUI(null);
+					}
+				}
+			});
 
 		}
 	} // end internal class

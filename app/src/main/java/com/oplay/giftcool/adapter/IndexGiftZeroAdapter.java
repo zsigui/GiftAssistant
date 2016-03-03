@@ -2,8 +2,8 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -25,14 +26,14 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Created by zsigui on 15-12-24.
  */
 public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements View.OnClickListener {
 
-	private static final int TAG_TIMER = 0x11223344;
+	private final String mDefaultTime = "00:00:00";
+	private long mSeizeTime = 0;
+	private ZeroCountTimer mCountTimer;
 
 	public IndexGiftZeroAdapter(Context context) {
 		super(context.getApplicationContext());
@@ -56,49 +57,31 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		contentHolder.tvName.setText(data.name);
 		contentHolder.tvGameName.setText(data.gameName);
 		contentHolder.tvTagSeize.setEnabled(false);
-		Object obj = contentHolder.tvTagSeize.getTag(TAG_TIMER);
-		if (obj != null) {
-			WeakReference<CountDownTimer> counter = (WeakReference<CountDownTimer>) obj;
-			if (counter.get() != null) {
-				counter.get().cancel();
-			}
-			counter.clear();
-		}
 		contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
+		if (data.status == GiftTypeUtil.STATUS_WAIT_SEIZE
+				&& (mSeizeTime < 0 || System.currentTimeMillis() > mSeizeTime)) {
+			mSeizeTime = DateUtil.getTime(data.seizeTime);
+			if (mCountTimer == null) {
+				mCountTimer = new ZeroCountTimer(mSeizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal,
+						Global.COUNTDOWN_INTERVAL);
+				mCountTimer.start();
+			} else {
+				mCountTimer.restart(System.currentTimeMillis() - mSeizeTime + Global.sServerTimeDiffLocal);
+			}
+		}
+		if (mCountTimer != null) {
+			mCountTimer.removeTextView(position);
+		}
 		if (data.seizeStatus != GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			contentHolder.tvTagSeize.setText("已抢号");
 		} else {
 			switch (data.status) {
 				case GiftTypeUtil.STATUS_WAIT_SEIZE:
-					contentHolder.tvTagSeize.setText(mContext.getResources().getString(R.string.st_0_gift_wait_seize));
+					contentHolder.tvTagSeize.setText(mDefaultTime);
 					contentHolder.tvTagSeize.setBackgroundResource(R.drawable.ic_0_seize_btn_count);
-					long seizeTime = DateUtil.getTime(data.seizeTime);
-					CountDownTimer timer = new CountDownTimer(seizeTime - System.currentTimeMillis()
-							+ Global.sServerTimeDiffLocal, 1000) {
-
-						@Override
-						public void onTick(long millisUntilFinished) {
-							contentHolder.tvTagSeize.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
-						}
-
-						@Override
-						public void onFinish() {
-							contentHolder.tvTagSeize.setText("刷新抢");
-							if (Global.sCanRefreshSeize) {
-								Global.sCanRefreshSeize = false;
-								ThreadUtil.runInUIThread(new Runnable() {
-									@Override
-									public void run() {
-										ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS
-												.GIFT_UPDATE_ALL);
-									}
-								}, 2500);
-							}
-						}
-					};
-					timer.start();
-					WeakReference<CountDownTimer> weakReference = new WeakReference<CountDownTimer>(timer);
-					contentHolder.tvTagSeize.setTag(TAG_TIMER, weakReference);
+					if (mCountTimer != null) {
+						mCountTimer.addTextView(position, contentHolder.tvTagSeize);
+					}
 					break;
 				case GiftTypeUtil.STATUS_SEIZE:
 					contentHolder.tvTagSeize.setEnabled(true);
@@ -134,7 +117,72 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		}
 	}
 
-	class ContentHolder extends BaseRVHolder {
+	@Override
+	public void release() {
+		super.release();
+		if (mCountTimer != null) {
+			mCountTimer.cancel();
+			mCountTimer = null;
+		}
+	}
+
+	static class ZeroCountTimer extends CountTimer {
+
+		private SparseArray<TextView> tvs;
+		private boolean mIsInAddOrRemove = false;
+
+		public ZeroCountTimer(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+			tvs = new SparseArray<>(6);
+		}
+
+		public synchronized void addTextView(int key, TextView tv) {
+			mIsInAddOrRemove = true;
+			if (tvs.get(key) == null)
+				tvs.append(key, tv);
+			mIsInAddOrRemove = false;
+		}
+
+		public synchronized void removeTextView(int key) {
+			mIsInAddOrRemove = true;
+			tvs.remove(key);
+			mIsInAddOrRemove = false;
+		}
+
+		public void setText(String s) {
+			for (int i = tvs.size() - 1; i >= 0; i--) {
+				TextView t = tvs.valueAt(i);
+				if (t == null) {
+					tvs.removeAt(i);
+					continue;
+				}
+				t.setText(s);
+			}
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			if (mIsInAddOrRemove) {
+				return;
+			}
+			String s = DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss");
+			setText(s);
+		}
+
+		@Override
+		public void onFinish() {
+			setText("刷新抢");
+			ThreadUtil.runInUIThread(new Runnable() {
+				@Override
+				public void run() {
+					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS
+							.GIFT_UPDATE_ALL);
+				}
+			}, 2500);
+		}
+	}
+
+	static class ContentHolder extends BaseRVHolder {
 		ImageView ivIcon;
 		TextView tvSrc;
 		TextView tvGameName;

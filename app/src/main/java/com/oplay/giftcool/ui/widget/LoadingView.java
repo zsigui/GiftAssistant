@@ -31,7 +31,9 @@ public class LoadingView extends ImageView{
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		mDrawable = (AnimationDrawable) getBackground();
+		if (getBackground() != null && getBackground() instanceof AnimationDrawable) {
+			mDrawable = (AnimationDrawable) getBackground();
+		}
 	}
 
 	@Override

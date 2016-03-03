@@ -270,7 +270,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										}
 										AccountManager.getInstance().notifyUserAll(userModel);
 										if (getActivity() != null) {
-											((BaseAppCompatActivity) getActivity()).handleBackPressed();
+											((BaseAppCompatActivity) getActivity()).onBack();
 										}
 										return;
 									}

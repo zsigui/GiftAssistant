@@ -29,6 +29,16 @@ public class NetUrl {
 	public static final String GET_SEARCH = "gift_search";
 
 	/**
+	 * 礼包/游戏搜索-关键词提示
+	 */
+	public static final String GET_SEARCH_KEY = "/api/tip_for_search";
+
+	/**
+	 * 礼包/游戏搜索-热门搜索推荐
+	 */
+	public static final String GET_SEARCH_HOT_DATA = "/api/tip_for_search";
+
+	/**
 	 * 礼包首页-新鲜出炉列表
 	 */
 	public static final String GIFT_GET_INDEX_NEW = "new_gift_list";
@@ -202,14 +212,14 @@ public class NetUrl {
 
 
 
-	/* 积分接口 */
+	/* 金币接口 */
 
 	/**
-	 * 获取积分任务
+	 * 获取金币任务
 	 */
 	public static final String SCORE_GET_TASK = "mission/get_points_mission_list";
 	/**
-	 * 请求积分奖励
+	 * 请求金币奖励
 	 */
 	public static final String SCORE_REWARD = "mission/reward_points_by_mission_name";
 

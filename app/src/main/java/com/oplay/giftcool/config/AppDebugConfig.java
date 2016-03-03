@@ -50,6 +50,8 @@ public class AppDebugConfig {
 
 	public static final String TAG_WARN = "gcool_debug_warning";
 
+	public static final String TAG_JPUSH = "gcool_debug_jpush";
+
 
 
 

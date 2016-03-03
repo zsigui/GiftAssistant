@@ -325,7 +325,7 @@
 		<item name = "android:typeface" >monospace</item >
 	</style >
 
-	<!-- 积分任务 -->
+	<!-- 金币任务 -->
 	<style name = "IndexModuleLayout.Score" >
 		<item name = "android:layout_height" >73dp</item >
 		<item name = "android:paddingLeft" >16dp</item >

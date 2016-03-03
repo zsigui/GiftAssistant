@@ -90,7 +90,6 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
 	@Override
@@ -104,6 +103,12 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		setData();
 	}
 
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+		ObserverManager.getInstance().removeActionListener(this);
+	}
 
 	private void setData() {
 		UserInfo user = AccountManager.getInstance().getUserInfo();
@@ -186,12 +191,6 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				OuwanSDKManager.getInstance().showOuwanModifyPwdView(getActivity());
 				break;
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override

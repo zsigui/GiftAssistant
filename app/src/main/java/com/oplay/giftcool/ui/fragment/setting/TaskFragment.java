@@ -27,6 +27,7 @@ import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -45,7 +46,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		ObserverManager.UserActionListener {
 
 
-	private final static String PAGE_NAME = "积分任务";
+	private final static String PAGE_NAME = "金币任务";
 	private TextView tvScore;
 	private ListView mDataView;
 	private ArrayList<ScoreMission> mData;
@@ -72,6 +73,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	protected void setListener() {
+		ObserverManager.getInstance().addUserUpdateListener(this);
+		ObserverManager.getInstance().addUserActionListener(this);
 	}
 
 	@Override
@@ -84,10 +87,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		ObserverManager.getInstance().addUserUpdateListener(this);
-		ObserverManager.getInstance().addUserActionListener(this);
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override
@@ -305,7 +308,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			if (MainActivity.sGlobalHolder == null) {
 				IntentUtil.jumpGameNewList(getContext());
 			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGame(2);
+				MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_SUPER);
 				getActivity().finish();
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
@@ -346,12 +349,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				KLog.e("error id " + id);
 			}
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override

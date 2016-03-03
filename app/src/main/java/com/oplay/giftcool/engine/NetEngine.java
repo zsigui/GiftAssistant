@@ -12,6 +12,7 @@ import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
+import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
@@ -28,6 +29,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
+import com.oplay.giftcool.model.data.resp.SearchPromptResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
@@ -62,11 +64,24 @@ public interface NetEngine {
 	@POST(NetUrl.APP_VERSION_UPDATE)
 	Call<JsonRespBase<UpdateInfo>> checkUpdate(@Body JsonReqBase<ReqInitApp> reqData);
 
+	/* -------------- 搜索 ---------------- */
 	/**
 	 * 游戏/礼包搜索
 	 */
 	@POST(NetUrl.GET_SEARCH)
 	Call<JsonRespBase<SearchDataResult>> obtainSearchResult(@Body JsonReqBase<ReqSearchKey> reqData);
+
+	/**
+	 * 关键词提示
+	 */
+	@POST(NetUrl.GET_SEARCH_KEY)
+	Call<JsonRespBase<SearchPromptResult>> obtainSearchPrompt(@Body JsonReqBase<ReqSearchKey> reqData);
+
+	/**
+	 * 热门搜索
+	 */
+	@POST(NetUrl.GET_SEARCH_HOT_DATA)
+	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainSearchHotData(@Body JsonReqBase<ReqSearchHot> reqData);
 
 	/* -------------- 礼包接口 --------------- */
 	/**
@@ -203,16 +218,16 @@ public interface NetEngine {
 	@POST(NetUrl.USER_GET_PART_INFO)
 	Call<JsonRespBase<UserInfo>> getUserPartInfo(@Body JsonReqBase<Void> reqData);
 
-	/* ---------------- 积分接口  ---------------- */
+	/* ---------------- 金币接口  ---------------- */
 
 	/**
-	 * 获取积分任务
+	 * 获取金币任务
 	 */
 	@POST(NetUrl.SCORE_GET_TASK)
 	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<String> reqData);
 
 	/**
-	 * 获取积分任务奖励
+	 * 获取金币任务奖励
 	 */
 	@POST(NetUrl.SCORE_REWARD)
 	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
