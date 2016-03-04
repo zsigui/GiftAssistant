@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -23,7 +22,6 @@ import com.socks.library.KLog;
 import net.youmi.android.libs.common.util.Util_System_Intent;
 import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.common.v2.download.model.IFileDownloadTaskExtendObject;
-import net.youmi.android.libs.common.v2.network.NetworkStatus;
 
 import java.io.File;
 
@@ -291,7 +289,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 		switch (appStatus) {
 			case DOWNLOADABLE:
 			case UPDATABLE:
-				if (NetworkUtil.isWifiAvailable(AssistantApp.getInstance().getApplicationContext())) {
+				if (NetworkUtil.isWifiAvailable(mContext)) {
 					startDownload();
 				} else {
 					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
@@ -300,13 +298,13 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 						@Override
 						public void onCancel() {
-							confirmDialog.dismiss();
+							confirmDialog.dismissAllowingStateLoss();
 						}
 
 						@Override
 						public void onConfirm() {
 							startDownload();
-							confirmDialog.dismiss();
+							confirmDialog.dismissAllowingStateLoss();
 						}
 					});
 					confirmDialog.show(fragmentManager, "download");
@@ -324,21 +322,22 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 				break;
 			case RESUMABLE:
 			case RETRYABLE:
-				if (NetworkStatus.getNetworkType(mContext) == NetworkStatus.Type.TYPE_WIFI) {
+				if (NetworkUtil.isWifiAvailable(mContext)) {
 					restartDownload();
 				} else {
-					ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 					confirmDialog.setTitle("提示");
 					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
 					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 						@Override
 						public void onCancel() {
-
+							confirmDialog.dismissAllowingStateLoss();
 						}
 
 						@Override
 						public void onConfirm() {
 							startDownload();
+							confirmDialog.dismissAllowingStateLoss();
 						}
 					});
 					confirmDialog.show(fragmentManager, "download");

@@ -144,4 +144,10 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 			}
 		});
 	}
+
+	@Override
+	public void release() {
+		super.release();
+		ApkDownloadManager.getInstance(mContext).removeDownloadStatusListener(this);
+	}
 }
