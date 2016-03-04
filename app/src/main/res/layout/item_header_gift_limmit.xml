@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "horizontal"
+              android:layout_width = "wrap_content"
+              android:layout_height = "wrap_content"
+              android:gravity="center_vertical">
+        <View
+        android:layout_width="@dimen/di_timeline_thickness"
+        android:layout_height = "match_parent"
+        android:layout_marginLeft="@dimen/di_limmit_margin_left"
+        android:background="@color/co_divider_bg" />
+
+        <View
+                android:layout_width="@dimen/di_timeline_point_diameter"
+                android:layout_height="@dimen/di_timeline_point_diameter"
+                android:layout_marginTop="@dimen/di_timeline_point_diameter"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="-4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:background="@drawable/ic_timeline_point" />
+        <FrameLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop="@dimen/di_timeline_point_diameter"
+                android:layout_marginLeft="@dimen/di_timeline_point_diameter"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/ic_timeline_tv_bg" >
+        <TextView
+                android:id="@+id/item_header_tv_gift_limmit_tv"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:textColor="@color/co_white"
+                android:layout_marginLeft="1dp"
+                android:textSize="12sp"
+                android:text="today"
+                />
+        </FrameLayout >
+</LinearLayout >

@@ -17,6 +17,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.NetErrorFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftLikeListFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftLimmitListDataFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftMutilDayFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -176,8 +177,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	}
 
 	private void displayGiftLimitUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
-		replaceFrag(R.id.fl_container, GiftMutilDayFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT_BY_PAGE),
-				GiftMutilDayFragment.class.getSimpleName(), false);
+		replaceFrag(R.id.fl_container, GiftLimmitListDataFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT_BY_PAGE),
+				GiftLimmitListDataFragment.class.getSimpleName(), false);
 	}
 
 	private void displayGiftNewUI(ArrayList<TimeDataList<IndexGiftNew>> data) {

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		android:id = "@+id/rl_recommend"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:layout_height = "@dimen/di_limmit_item__height"
+		android:paddingLeft = "4dp" >
+	<View
+			android:layout_width="@dimen/di_timeline_thickness"
+			android:layout_height = "match_parent"
+			android:background="@color/co_divider_bg" />
+	<View
+			android:layout_width="match_parent"
+			android:layout_height = "@dimen/di_timeline_thickness"
+			android:layout_alignParentBottom="true"
+			android:background="@color/co_divider_bg" />
+	<RelativeLayout
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_marginTop="8dp"
+			android:layout_marginLeft="@dimen/di_limmit_margin_left">
+	<RelativeLayout
+			android:id = "@+id/rl_icon"
+			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_height = "@dimen/di_icon_diameter"
+			android:background = "@color/co_transparent" >
+
+		<com.makeramen.roundedimageview.RoundedImageView
+				android:id = "@+id/iv_icon"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:scaleType = "centerCrop"
+				app:riv_border_color = "@color/co_stroke_bg"
+				app:riv_border_width = "@dimen/di_icon_border_size"
+				app:riv_corner_radius = "@dimen/di_icon_radius"
+				app:riv_oval = "false" />
+
+		<ImageView
+				android:id = "@+id/iv_limit"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:layout_alignParentBottom = "true"
+				android:layout_alignParentRight = "true"
+				android:layout_marginRight = "@dimen/di_icon_border_size"
+				android:layout_marginBottom = "@dimen/di_icon_border_size"
+				android:contentDescription = "@null"
+				android:src = "@drawable/ic_tag_limit" />
+	</RelativeLayout >
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "match_parent"
+			android:layout_alignTop = "@+id/rl_icon"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "4dp"
+			android:layout_toLeftOf = "@+id/btn_send"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:drawablePadding = "4dp"
+			android:gravity = "center_vertical"
+			android:text = "[暴打魏蜀吴]新手礼包" />
+
+	<TextView
+			android:id = "@+id/tv_content"
+			style = "@style/DefaultTextView.Text"
+			android:layout_width = "match_parent"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "28dp"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:gravity = "center_vertical" />
+
+	<LinearLayout
+			android:id = "@+id/ll_money"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:minWidth = "70dp"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "7dp"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/rl_icon" >
+
+		<TextView
+				android:id = "@+id/tv_score"
+				style = "@style/DefaultTextView.Text"
+				android:drawableLeft = "@drawable/ic_score"
+				android:drawablePadding = "4dp"
+				android:text = "100" />
+
+		<TextView
+				android:id = "@+id/tv_or"
+				style = "@style/DefaultTextView.Text"
+				android:layout_marginLeft = "5dp"
+				android:layout_marginRight = "5dp"
+				android:text = "@string/st_gift_or" />
+
+		<TextView
+				android:id = "@+id/tv_bean"
+				style = "@style/DefaultTextView.Text"
+				android:drawableLeft = "@drawable/ic_bean"
+				android:drawablePadding = "4dp"
+				android:text = "100" />
+	</LinearLayout >
+
+	<TextView
+			android:id = "@+id/tv_count"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:text = "@null"
+			android:visibility = "visible" />
+
+	<TextView
+			android:id = "@+id/tv_percent"
+			style = "@style/DefaultTextView.Text"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "3dp"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/ll_money" />
+
+	<ProgressBar
+			android:id = "@+id/pb_percent"
+			style = "?android:attr/progressBarStyleHorizontal"
+			android:layout_width = "72dp"
+			android:layout_height = "@dimen/di_gift_common_pb_diameter"
+			android:layout_alignTop = "@+id/tv_percent"
+			android:layout_marginLeft = "4dp"
+			android:layout_marginTop = "6dp"
+			android:layout_marginRight = "6dp"
+			android:layout_toLeftOf = "@+id/btn_send"
+			android:layout_toRightOf = "@+id/tv_percent"
+			android:max = "100"
+			android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
+	<com.oplay.giftcool.ui.widget.button.GiftButton
+			android:id = "@+id/btn_send"
+			style = "@style/DefaultTextView"
+			android:layout_height = "@dimen/di_btn_height"
+			android:layout_alignParentRight = "true"
+			android:layout_alignTop = "@+id/tv_name"
+			android:background = "@drawable/selector_btn_orange"
+			android:text = "抢号"
+			android:textColor = "@color/co_white" />
+	</RelativeLayout>
+</RelativeLayout >
