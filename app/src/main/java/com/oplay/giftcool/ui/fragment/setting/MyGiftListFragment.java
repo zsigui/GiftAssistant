@@ -9,7 +9,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -87,7 +87,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 										return;
 									}
 									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == StatusCode.SUCCESS) {
+											response.body().getCode() == NetStatusCode.SUCCESS) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 										refreshLoadState(backObj.data, backObj.isEndPage);
@@ -151,7 +151,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 									                       retrofit) {
 
 								if (response != null && response.isSuccess() && response.body() != null &&
-										response.body().getCode() == StatusCode.SUCCESS) {
+										response.body().getCode() == NetStatusCode.SUCCESS) {
 									moreLoadSuccessEnd();
 									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 									setLoadState(backObj.data, backObj.isEndPage);

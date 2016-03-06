@@ -21,7 +21,7 @@ import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -267,7 +267,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 								hideLoading();
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
-											&& response.body().getCode() == StatusCode.SUCCESS) {
+											&& response.body().getCode() == NetStatusCode.SUCCESS) {
 										showToast("短信已经发送，请注意接收");
 										return;
 									}
@@ -336,7 +336,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 								hideLoading();
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
-											&& response.body().getCode() == StatusCode.SUCCESS) {
+											&& response.body().getCode() == NetStatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
 										MainActivity.sIsTodayFirstOpen = true;

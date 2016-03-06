@@ -13,7 +13,7 @@ import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
@@ -94,9 +94,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		rvContainer.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				if (AppDebugConfig.IS_FRAG_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_ADAPTER, "onScrollListener.newState = " + newState);
-				}
 				switch (newState) {
 					case RecyclerView.SCROLL_STATE_IDLE:
 						if (mAdapter != null) {
@@ -176,7 +173,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						if (response != null && response.isSuccess()) {
 							Global.sServerTimeDiffLocal = System.currentTimeMillis() - response.headers().getDate
 									("Date").getTime();
-							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								// 获取数据成功
 								refreshSuccessEnd();
 								updateData(response.body().getData());
@@ -441,7 +438,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						break;
 					case POS_NEW:
 						if (rvContainer != null) {
-							rvContainer.smoothScrollToPosition(4);
+							rvContainer.smoothScrollToPosition(5);
 						}
 				}
 			}

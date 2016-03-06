@@ -12,7 +12,7 @@ import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
@@ -28,6 +28,7 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -111,7 +112,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 									return;
 								}
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										mData = response.body().getData().missions;
 										setTaskIcon(mData);
 										mData = resort(mData);
@@ -316,7 +317,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			if (MainActivity.sGlobalHolder == null) {
 				IntentUtil.jumpGiftNewList(getContext());
 			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGift(4);
+				MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
 				getActivity().finish();
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {

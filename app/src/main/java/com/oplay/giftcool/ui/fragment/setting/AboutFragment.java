@@ -10,7 +10,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -90,7 +90,7 @@ public class AboutFragment extends BaseFragment {
 										return;
 									}
 									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == StatusCode.SUCCESS) {
+											response.body().getCode() == NetStatusCode.SUCCESS) {
 										mUpdateInfo = response.body().getData();
 										if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
 											setUpdate(String.format(mContext.getResources().getString(R.string

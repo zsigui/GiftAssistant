@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
@@ -153,7 +153,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			Call<JsonRespBase<InitAppResult>> d =  Global.getNetEngine().initAPP(reqData);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
-				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 					if (response.body().getData() != null) {
 						if (response.body().getData().initAppConfig != null) {
 							if (AppDebugConfig.IS_DEBUG) {

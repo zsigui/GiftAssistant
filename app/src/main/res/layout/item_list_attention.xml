@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		android:id = "@+id/rl_recommend"
+		style = "@style/IndexListItemLayout"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
+		android:layout_width = "match_parent"
+		android:paddingRight = "@dimen/di_index_hoz_module_margin_left" >
+
+	<RelativeLayout
+			android:id = "@+id/rl_icon"
+			android:layout_width = "70dp"
+			android:layout_height = "70dp"
+			android:background = "@color/co_transparent" >
+
+		<com.makeramen.roundedimageview.RoundedImageView
+				android:id = "@+id/iv_icon"
+				style = "@style/DefaultImageView.Icon"
+				app:riv_border_color = "@color/co_stroke_bg"
+				app:riv_border_width = "1dip"
+				app:riv_corner_radius = "15dp"
+				app:riv_oval = "false" />
+	</RelativeLayout >
+
+	<TextView
+			android:id = "@+id/tv_name"
+			style = "@style/DefaultTextView.Header"
+			android:layout_width = "match_parent"
+			android:layout_alignTop = "@+id/rl_icon"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "4dp"
+			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:gravity = "center_vertical"
+			android:text = "暴打魏蜀吴" />
+
+	<TextView
+			android:id = "@+id/tv_content"
+			style = "@style/DefaultTextView.Text.Note"
+			android:layout_width = "70dp"
+			android:layout_below = "@+id/tv_name"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_marginTop = "12dp"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:gravity = "center_vertical"
+			android:text = "3.4万人在玩" />
+
+	<TextView
+			android:id = "@+id/tv_size"
+			style = "@style/DefaultTextView.Text.Note"
+			android:layout_width = "match_parent"
+			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+			android:layout_alignTop = "@+id/tv_content"
+			android:layout_toLeftOf = "@+id/ll_send"
+			android:layout_toRightOf = "@+id/tv_content"
+			android:gravity = "center_vertical"
+			android:text = "128.5M" />
+
+	<TextView
+			android:id = "@+id/tv_count"
+			style = "@style/DefaultTextView.Text"
+			android:layout_width = "70dp"
+			android:gravity = "left"
+			android:layout_below = "@+id/tv_content"
+			android:layout_marginLeft = "7dp"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/rl_icon"
+			android:text = "共12款礼包" />
+
+	<TextView
+			android:id = "@+id/tv_remain"
+			style = "@style/DefaultTextView.Text"
+			android:gravity = "left"
+			android:layout_below = "@+id/tv_content"
+			android:layout_marginLeft = "7dp"
+			android:layout_marginTop = "6dp"
+			android:layout_toRightOf = "@+id/tv_count"
+			android:text = "今日新增2款" />
+
+	<TextView
+			android:id = "@+id/btn_quick_focus"
+			style = "@style/DefaultTextView"
+			android:layout_alignParentRight = "true"
+			android:layout_marginLeft = "@dimen/di_index_hoz_module_margin_left"
+			android:layout_height = "@dimen/di_btn_height"
+			android:layout_alignTop = "@+id/tv_name"
+			android:background = "@drawable/selector_btn_grey"
+			android:text = "@string/st_my_attention_btn_quick"
+			android:textColor = "@color/co_white" />
+</RelativeLayout >

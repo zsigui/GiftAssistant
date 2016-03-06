@@ -9,7 +9,7 @@ import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
@@ -147,7 +147,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 										return;
 									}
 									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == StatusCode.SUCCESS) {
+											response.body().getCode() == NetStatusCode.SUCCESS) {
 										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 										refreshLoadState(backObj.data, backObj.isEndPage);

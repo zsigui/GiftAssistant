@@ -179,6 +179,24 @@ public class IntentUtil {
 	}
 
 	/**
+	 * 跳转我的关注界面
+	 */
+	public static void jumpMyAttention(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_ATTENTION);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转消息中心
+	 */
+	public static void jumpMessageCentral(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
+		context.startActivity(intent);
+	}
+
+	/**
 	 * 跳转下载管理界面
 	 */
 	public static void jumpDownloadManager(Context context) {
@@ -292,8 +310,11 @@ public class IntentUtil {
 	/**
 	 * 跳转礼包首页
 	 */
-	public static void jumpHome(Context context) {
+	public static void jumpHome(Context context, boolean isNewTask) {
 		Intent intent = new Intent(context, MainActivity.class);
+		if (isNewTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
 		context.startActivity(intent);
 	}
 
@@ -332,4 +353,5 @@ public class IntentUtil {
 			return false;
 		}
 	}
+
 }

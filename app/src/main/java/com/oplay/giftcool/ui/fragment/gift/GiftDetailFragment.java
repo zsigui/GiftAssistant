@@ -20,7 +20,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
@@ -161,7 +161,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		} else {
 			downloadLayout.setVisibility(View.VISIBLE);
 		}
-//		mViewManager.showLoading();
+		mViewManager.showLoading();
 	}
 
 	@Override
@@ -174,13 +174,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	private void updateData(GiftDetail data) {
 		if (data == null || data.giftData == null) {
-//			mViewManager.showEmpty();
-			ToastUtil.showShort("传递参数获取数据为空");
-			getActivity().finish();
+			ToastUtil.showShort("该请求数据可能已经过期");
+			mViewManager.showEmpty();
 			return;
 		}
 		mHasData = true;
-//		mViewManager.showContent();
+		mViewManager.showContent();
 		mData = data;
 		final IndexGiftNew giftData = data.giftData;
 		tvName.setText(giftData.name);
@@ -389,7 +388,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 							if (response != null && response.code() == 200) {
 								Global.sServerTimeDiffLocal =
 										System.currentTimeMillis() - response.headers().getDate("Date").getTime();
-								if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+								if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 									f.refreshSuccessEnd();
 									f.updateData(response.body().getData());
 									return;

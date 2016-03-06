@@ -2,11 +2,14 @@ package com.oplay.giftcool.ui.fragment.search;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.util.IntentUtil;
 
 /**
  * Created by zsigui on 15-12-22.
@@ -17,7 +20,8 @@ public class EmptySearchFragment extends BaseFragment {
 
 	private String mName;
 	private int mId;
-	private TextView tvHopeGift;
+	private ImageView btnHopeGift;
+
 
 	public static EmptySearchFragment newInstance() {
 		return new EmptySearchFragment();
@@ -35,12 +39,12 @@ public class EmptySearchFragment extends BaseFragment {
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_empty_search);
-		tvHopeGift = getViewById(R.id.btn_hope_gift);
+		btnHopeGift = getViewById(R.id.btn_hope_gift);
 	}
 
 	@Override
 	protected void setListener() {
-		tvHopeGift.setOnClickListener(this);
+		btnHopeGift.setOnClickListener(this);
 	}
 
 	@Override
@@ -63,6 +67,11 @@ public class EmptySearchFragment extends BaseFragment {
 		switch (v.getId()) {
 			case R.id.btn_hope_gift:
 				// 弹出提示窗
+				if (!AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpLogin(getContext());
+					return;
+				}
+				DialogManager.getInstance().showHopeGift(getChildFragmentManager(), mId, mName, mId == 0);
 				break;
 		}
 	}

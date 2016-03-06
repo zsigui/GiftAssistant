@@ -161,7 +161,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
 			if (MainActivity.sGlobalHolder == null) {
-				IntentUtil.jumpHome(GiftDetailActivity.this);
+				IntentUtil.jumpHome(GiftDetailActivity.this, false);
 			}
 			finish();
 		} else {

@@ -58,7 +58,7 @@ import retrofit.Retrofit;
  */
 public class AssistantApp extends Application {
 
-	private final static String TD_APP_ID = "7E57533EDCF044DA1BF657D786E0FDF7";
+	private final static String TD_APP_ID = "0CC59F66C9823F0D3EF90AC61D9735FB";
 	private final static String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;

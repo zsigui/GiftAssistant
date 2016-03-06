@@ -17,6 +17,19 @@ import java.util.TimeZone;
  */
 public class DateUtil {
 
+	/**
+	 * 提取时间，针对 yyyy-MM-dd HH:mm:ss 格式
+	 */
+	public static String optDate(String date) {
+		String result;
+		if (isToday(date)) {
+			result = "今日 " + date.substring(11, 16);
+		} else {
+			result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10), date.substring(11, 16));
+		}
+		return result;
+	}
+
 	public static String formatTime(String timeStr, String format) {
 		if (TextUtils.isEmpty(timeStr))
 			return null;
@@ -27,8 +40,8 @@ public class DateUtil {
 		} catch (ParseException e) {
 			// not print
 		}
-		return (result == null?
-				(timeStr.length() > format.length() ? timeStr.substring(0, format.length()): timeStr)
+		return (result == null ?
+				(timeStr.length() > format.length() ? timeStr.substring(0, format.length()) : timeStr)
 				: result);
 	}
 
@@ -64,7 +77,7 @@ public class DateUtil {
 	 * 获取当前日期n天前后的日期字符串
 	 *
 	 * @param format 日期字符串格式化格式
-	 * @param day 日期，0代表当天，-n之前，+n之后
+	 * @param day    日期，0代表当天，-n之前，+n之后
 	 * @return
 	 */
 	public static String getDate(String format, int day) {

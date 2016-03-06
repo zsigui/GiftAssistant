@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android = "http://schemas.android.com/apk/res/android"
+       android:layout_width = "match_parent"
+       android:layout_height = "wrap_content" >
+
+	<TextView
+			android:id = "@+id/tv_hint"
+			android:layout_width = "match_parent"
+			style = "@style/DefaultTextView.Text"
+			android:singleLine = "false"
+			android:gravity = "left|top"
+			android:textSize = "14sp"
+			android:background = "@color/co_common_hint_bg"
+			android:drawablePadding = "15dp"
+			android:padding = "15dp"
+			android:layout_alignParentTop = "true"
+			android:drawableLeft = "@drawable/ic_msg_hint"
+			android:text = "@string/st_my_attention_msg_hint" />
+</merge >

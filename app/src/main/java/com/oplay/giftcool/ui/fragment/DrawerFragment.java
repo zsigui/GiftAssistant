@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,12 +25,13 @@ import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.StringUtil;
-import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
 /**
+ * 侧边栏视图
+ *
  * Created by zsigui on 16-1-21.
  */
 public class DrawerFragment extends BaseFragment {
@@ -112,22 +114,56 @@ public class DrawerFragment extends BaseFragment {
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
+		Context context = getContext();
+		// 与登录状态无关的
 		switch (v.getId()) {
-			case R.id.drawer_header:
-				if (AccountManager.getInstance().isLogin()) {
-					IntentUtil.jumpUserInfo(getContext());
-				} else {
-					IntentUtil.jumpLoginNoToast(getContext());
-				}
-				closeDrawer();
+			case KeyConfig.TYPE_ID_SETTING:
+				IntentUtil.jumpSetting(context);
+				break;
+			case KeyConfig.TYPE_ID_DOWNLOAD:
+				IntentUtil.jumpDownloadManager(context);
 				break;
 		}
+		if (!AccountManager.getInstance().isLogin()) {
+			// 未登录下的
+			switch (v.getId()) {
+				case R.id.drawer_header:
+					IntentUtil.jumpLoginNoToast(context);
+					break;
+			}
+		} else {
+			// 需要登录
+			switch (v.getId()) {
+				case R.id.drawer_header:
+					IntentUtil.jumpUserInfo(context);
+					break;
+				case KeyConfig.TYPE_ID_MY_GIFT_CODE:
+					IntentUtil.jumpMyGift(context);
+					break;
+				case KeyConfig.TYPE_ID_WALLET:
+					IntentUtil.jumpMyWallet(context);
+					break;
+				case KeyConfig.TYPE_ID_SCORE_TASK:
+					IntentUtil.jumpEarnScore(context);
+					break;
+				case KeyConfig.TYPE_ID_MSG:
+					IntentUtil.jumpMessageCentral(context);
+					break;
+				case KeyConfig.TYPE_ID_MY_ATTENTION:
+					IntentUtil.jumpMyAttention(context);
+					break;
+			}
+		}
+		closeDrawer();
 	}
 
 	public void setup(DrawerLayout drawer) {
 		this.drawerLayout = drawer;
 	}
 
+	/**
+	 * 关闭侧边栏
+	 */
 	public void closeDrawer() {
 		if (drawerLayout != null) {
 			if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -136,77 +172,27 @@ public class DrawerFragment extends BaseFragment {
 		}
 	}
 
+	/**
+	 * 初始化侧边栏列表信息
+	 */
 	private ArrayList<DrawerModel> initDrawerItem() {
 		SparseArray<DrawerModel> modelArray = new SparseArray<>();
 		modelArray.put(KeyConfig.TYPE_ID_MY_GIFT_CODE,
-				new DrawerModel(R.drawable.ic_drawer_gift, "我的礼包", new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (AccountManager.getInstance().isLogin()) {
-							IntentUtil.jumpMyGift(getContext());
-						} else {
-							IntentUtil.jumpLogin(getContext());
-						}
-						closeDrawer();
-
-					}
-				}));
+				new DrawerModel(KeyConfig.TYPE_ID_MY_GIFT_CODE, R.drawable.ic_drawer_gift, "我的礼包", this));
 		modelArray.put(KeyConfig.TYPE_ID_WALLET,
-				new DrawerModel(R.drawable.ic_drawer_wallet, "我的钱包",
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (AccountManager.getInstance().isLogin()) {
-							IntentUtil.jumpMyWallet(getContext());
-						} else {
-							IntentUtil.jumpLogin(getContext());
-						}
-						closeDrawer();
-					}
-				}));
+				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet, "我的钱包", this));
 		modelArray.put(KeyConfig.TYPE_ID_SCORE_TASK,
-				new DrawerModel(R.drawable.ic_drawer_score_task, "每日任务", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (AccountManager.getInstance().isLogin()) {
-					IntentUtil.jumpEarnScore(getContext());
-					if (!AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
-						updateCount(KeyConfig.TYPE_ID_SCORE_TASK, -1);
-						// 每次更新登录状态之前只显示一次作为提示
-						AccountManager.getInstance().getUserInfo().isCompleteTodayMission = true;
-					}
-				} else {
-					IntentUtil.jumpLogin(getContext());
-				}
-				closeDrawer();
-			}
-		}));
-		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(R.drawable.ic_drawer_message, "消息中心", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ToastUtil.showShort("敬请期待");
-			}
-		}));
+				new DrawerModel(KeyConfig.TYPE_ID_SCORE_TASK, R.drawable.ic_drawer_score_task, "每日任务", this));
+		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
+				"消息中心", this));
+		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
+				.ic_drawer_message, "我的关注", this));
 		if (AssistantApp.getInstance().isAllowDownload()) {
 			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD,
-					new DrawerModel(R.drawable.ic_drawer_download, "下载管理",
-					new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					IntentUtil.jumpDownloadManager(getContext());
-					closeDrawer();
-				}
-			}));
+					new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download, "下载管理", this));
 		}
 		modelArray.put(KeyConfig.TYPE_ID_SETTING,
-				new DrawerModel(R.drawable.ic_drawer_setting, "设置", new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				IntentUtil.jumpSetting(getContext());
-				closeDrawer();
-			}
-		}));
+				new DrawerModel(KeyConfig.TYPE_ID_SETTING, R.drawable.ic_drawer_setting, "设置", this));
 		mData = modelArray;
 		ArrayList<DrawerModel> result = new ArrayList<>();
 		for (int i = 0; i < mData.size(); i++) {
@@ -215,15 +201,19 @@ public class DrawerFragment extends BaseFragment {
 		return result;
 	}
 
+	/**
+	 * 更新侧边栏提示状态
+	 */
 	public void updateCount(int key, int count) {
 		if (mData == null || count < -1)
 			return;
 		DrawerModel m = mData.get(key);
 		if (m != null) {
 			m.count = count;
-			mAdapter.notifyDataSetChanged();
+			mAdapter.notifyItemChanged(mData.indexOfKey(key));
 		}
 	}
+
 
 	@Override
 	public void release() {

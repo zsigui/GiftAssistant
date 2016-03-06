@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeDataList;
@@ -105,7 +105,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
-					if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						displayGiftNewUI(response.body().getData());
 						return;
 					}
@@ -144,7 +144,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
-					if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						displayGiftLimitUI(response.body().getData());
 						return;
 					}

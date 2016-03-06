@@ -7,7 +7,7 @@ package com.oplay.giftcool.config;
  * <br />
  * Created by zsigui on 15-12-22.
  */
-public abstract interface StatusCode {
+public abstract interface NetStatusCode {
 
 	/**
 	 * 成功

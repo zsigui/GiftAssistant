@@ -24,6 +24,7 @@
 	<color name = "co_common_content_bg" >#e7e7e7</color >
 	<color name = "co_common_text_main" >#333333</color >
 	<color name = "co_common_text_second" >#888888</color >
+	<color name = "co_common_hint_bg" >#fffbe9</color >
 
 	<!-- 游戏详情主题颜色表 -->
 	<color name = "co_rainbow_color_1">#343754</color>

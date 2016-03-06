@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.PushTypeUtil;
+import com.oplay.giftcool.model.data.resp.PushMessageExtra;
 import com.socks.library.KLog;
 
 import cn.jpush.android.api.JPushInterface;
@@ -48,10 +50,12 @@ public class JPushReceiver extends BroadcastReceiver {
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				// 用户点击了通知，打开对应界面
 				// 不显示在状态栏的自定义消息，根据需要进行额外工作
+				String extra = intent.getExtras().getString(JPushInterface.EXTRA_EXTRA);
 				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" + intent
-							.getExtras().getString(JPushInterface.EXTRA_EXTRA));
+					KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" + extra);
 				}
+				PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra.class);
+				PushTypeUtil.handleMessage(context, msg);
 			}
 		}
 	}

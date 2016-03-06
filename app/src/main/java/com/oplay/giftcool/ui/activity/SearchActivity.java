@@ -6,7 +6,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
@@ -157,11 +157,11 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 *
 	 * @param data
 	 */
-	private void displayDataUI(SearchDataResult data) {
+	private void displayDataUI(SearchDataResult data, String name, int id) {
 		if (mResultFragment == null) {
 			mResultFragment = ResultFragment.newInstance(data);
 		}
-		mResultFragment.updateData(data);
+		mResultFragment.updateData(data, name, id);
 		reattachFrag(R.id.fl_container, mResultFragment, mResultFragment.getClass().getSimpleName());
 	}
 
@@ -170,7 +170,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayEmptyUI() {
 		if (mEmptySearchFragment == null) {
-			mEmptySearchFragment = EmptySearchFragment.newInstance();
+			mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
 		}
 		reattachFrag(R.id.fl_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
 	}
@@ -194,7 +194,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		mSearchLayout.setText(keyword);
 		mLastInputKey = keyword;
 		mSearchLayout.setAutoPopupPrompt(true);
-		mSearchLayout.sendSearchRequest(keyword);
+		mSearchLayout.sendSearchRequest(keyword, id);
 	}
 
 	@Override
@@ -232,7 +232,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	private class SearchActionListener implements SearchLayout.OnSearchActionListener {
 
 		@Override
-		public void onSearchPerform(String keyword) {
+		public void onSearchPerform(String keyword, final int id) {
 			mLastSearchKey = keyword;
 			if (!NetworkUtil.isConnected(SearchActivity.this)) {
 				displayNetworkErrUI();
@@ -275,7 +275,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 								return;
 							}
 							// display list here
-							displayDataUI(data);
+							displayDataUI(data, mLastSearchKey, id);
 							return;
 						}
 						if (AppDebugConfig.IS_DEBUG) {
@@ -337,7 +337,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 						retrofit) {
 					String curKeyWord = mSearchLayout.getKeyword().trim();
 					if (response != null && response.code() == 200) {
-						if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+						if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 							SearchPromptResult data = response.body().getData();
 							// 检验Key返回数据是否是当前需要的
 							if (!curKeyWord.equals(data.keyword)) {

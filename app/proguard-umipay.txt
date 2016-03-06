@@ -63,3 +63,10 @@
 -keep public class com.ipaynow.plugin.utils.PreSignMessageUtil{ <fields>; <methods>; }
 -keep public class com.ipaynow.plugin.api.IpaynowPlugin{ <fields>; <methods>; }
 -keep class com.junnet.heepay.** { *; }
+#TalkingData
+-keep public class com.tendcloud.tenddata.** { public protected *;}
+-keepclassmembers class ** {
+     public void *(***);
+ }
+-keep class com.talkingdata.sdk.TalkingDataSDK {public *;}
+-keep class com.apptalkingdata.** {*;}

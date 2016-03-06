@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:layout_height = "match_parent"
-              android:layout_width="match_parent"
+              android:layout_width = "match_parent"
               android:orientation = "vertical" >
 
 	<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
@@ -15,20 +15,40 @@
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:paddingBottom = "10dp"
-				android:paddingLeft = "16dp"
+				android:paddingLeft = "@dimen/di_dialog_content_padding"
 				android:paddingTop = "10dp"
-				android:text = "@string/st_dialog_hint_title"
+				android:text = "@string/st_dialog_hope_gift_title"
 				android:textColor = "@color/co_common_app_second_bg_green" />
 
 		<View style = "@style/HDividerView" />
 
-		<TextView
-				android:id = "@+id/tv_content"
+		<EditText
+				android:id = "@+id/tv_name"
+				style = '@style/DefaultTextView.Text'
+				android:layout_marginTop = "10dp"
+				android:layout_marginLeft = "@dimen/di_dialog_content_padding"
+				android:layout_marginRight = "@dimen/di_dialog_content_padding"
+				android:padding = "10dp"
 				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:padding = "16dp"
+				android:gravity = "left|center_vertical"
+				android:textColor = "@color/co_common_text_main"
+				android:hint = "@string/st_dialog_hope_gift_name_hint"
+				android:background = "@drawable/shape_rect_dialog_hope_light_grey" />
+
+		<EditText
+				android:id = "@+id/tv_note"
+				style = '@style/DefaultTextView.Text'
+				android:layout_marginTop = "7dp"
+				android:layout_marginLeft = "@dimen/di_dialog_content_padding"
+				android:layout_marginRight = "@dimen/di_dialog_content_padding"
+				android:padding = "10dp"
+				android:layout_width = "match_parent"
+				android:layout_height = "80dp"
 				android:singleLine = "false"
-				android:textColor = "@color/co_black" />
+				android:gravity = "left|top"
+				android:textColor = "@color/co_common_text_main"
+				android:hint = "@string/st_dialog_hope_gift_note_hint"
+				android:background = "@drawable/shape_rect_dialog_hope_light_grey" />
 
 		<LinearLayout
 				android:layout_width = "match_parent"
@@ -38,12 +58,21 @@
 				android:padding = "16dp" >
 
 			<TextView
+					android:id = "@+id/btn_cancel"
+					style = "@style/ButtonText"
+					android:layout_width = "90dp"
+					android:layout_marginRight = "8dp"
+					android:background = "@drawable/shape_rect_btn_grey"
+					android:text = "@string/st_dialog_btn_cancel" />
+
+
+			<TextView
 					android:id = "@+id/btn_confirm"
 					style = "@style/ButtonText"
 					android:layout_width = "90dp"
 					android:layout_marginLeft = "8dp"
 					android:background = "@drawable/selector_btn_green"
-					android:text = "@string/st_dialog_btn_confirm" />
+					android:text = "@string/st_dialog_hope_gift_btn_confirm" />
 		</LinearLayout >
 
 	</LinearLayout >

@@ -106,6 +106,7 @@
 	<dimen name = "di_dialog_title_padding_left">20dp</dimen>
 	<dimen name = "di_dialog_title_padding_top_bottom">10dp</dimen>
 	<dimen name = "di_dialog_content_padding">16dp</dimen>
+	<dimen name = "di_dialog_margin_left_right">16dp</dimen>
 	<dimen name = "di_dialog_content_item_padding_right">10dp</dimen>
 	<dimen name = "di_dialog_content_item_drawable_gap">4dp</dimen>
 

@@ -7,7 +7,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -183,7 +183,7 @@ public class PayManager {
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
@@ -207,7 +207,7 @@ public class PayManager {
 										return;
 									}
 									if (response.body() != null) {
-										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+										if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
 											AccountManager.getInstance().notifyUserAll(null);
 											ToastUtil.showShort(context.getResources().getString(R.string
 													.st_hint_un_login));
@@ -268,7 +268,7 @@ public class PayManager {
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
@@ -296,7 +296,7 @@ public class PayManager {
 										return;
 									}
 									if (response.body() != null) {
-										if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+										if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
 											AccountManager.getInstance().notifyUserAll(null);
 											ToastUtil.showShort(context.getResources().getString(R.string
 													.st_hint_un_login));

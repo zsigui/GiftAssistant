@@ -10,6 +10,8 @@ import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 /**
+ * 活动WEB页面
+ *
  * Created by zsigui on 16-1-29.
  */
 public class ActivityFragment extends BaseFragment_WebView {

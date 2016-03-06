@@ -21,7 +21,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
@@ -214,7 +214,7 @@ public class UploadAvatarFragment extends BaseFragment {
 							public void onResponse(Response<JsonRespBase<ModifyAvatar>> response, Retrofit retrofit) {
 								hideLoading();
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										ImageLoader.getInstance().displayImage(
 												response.body().getData().avatar, ivAvatar, Global.AVATAR_IMAGE_LOADER);
 										UserModel model = AccountManager.getInstance().getUser();

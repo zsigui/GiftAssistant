@@ -49,6 +49,8 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 
     private final static String PAGE_NAME = "历史搜索页";
     private static final String KEY_DATA = "key_history_data";
+    private final int PAGE_ITEM_SIZE = 6;
+    private final int FIRST_PAGE = 1;
 
     private TextView tvClear;
     private TextView tvEmptyHistory;
@@ -62,7 +64,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 
     // data
     private JsonReqBase<ReqSearchHot> mReqBase;
-    private int mLastPage = 0;
+    private int mLastPage = FIRST_PAGE;
 
     private Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> mCall;
     private SearchHistoryHotAdapter mHotAdapter;
@@ -113,8 +115,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 
         ReqSearchHot reqData = new ReqSearchHot();
         reqData.pageId = mLastPage;
-        reqData.pageSize = 6;
-        reqData.data = data;
+        reqData.pageSize = PAGE_ITEM_SIZE;
         mReqBase = new JsonReqBase<>(reqData);
 
         AutoMeasureGridLayoutManager gridLayoutManager = new AutoMeasureGridLayoutManager(getContext(), 2);
@@ -162,8 +163,20 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
                 }
                 if (response != null && response.isSuccess()) {
                     if (response.body() != null && response.body().isSuccess()) {
-                        updateHotData(response.body().getData().data);
+                        OneTypeDataList<IndexGameNew> model = response.body().getData();
+                        if (model.pageSize == 0 || model.isEndPage || model.data == null) {
+                            // 已到最后一页，重新开始
+                            mLastPage = FIRST_PAGE;
+                        }
+                        updateHotData(model.data);
+                        return;
                     }
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null ? "解析失败" : response.body().error()));
+                    }
+                }
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_FRAG, (response == null? "返回出错" : "错误码: " + response.code()));
                 }
                 showHotState(TYPE_ERROR);
             }
@@ -264,9 +277,6 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
      * 更新历史记录列表数据
      */
     public void updateHistoryData(List<String> data) {
-        if (mReqBase != null) {
-            mReqBase.data.data = data;
-        }
         if (data == null || data.isEmpty()) {
             if (AppDebugConfig.IS_DEBUG) {
                 KLog.d("test-test", "data = null");

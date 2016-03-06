@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              xmlns:app = "http://schemas.android.com/apk/res-auto"
+              android:orientation = "vertical"
+              android:layout_marginTop = "@dimen/di_index_module_gap"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+
+	<RelativeLayout
+			android:id = "@+id/rl_msg"
+			style = "@style/IndexModuleTitleLayout"
+			android:background = "@drawable/selector_white_module"
+			android:paddingTop = "25dp"
+			android:paddingBottom = "10dp"
+			android:layout_height = "wrap_content" >
+
+		<com.makeramen.roundedimageview.RoundedImageView
+				android:id = "@+id/iv_icon"
+				android:layout_width = "@dimen/di_icon_diameter_smaller"
+				android:layout_height = "@dimen/di_icon_diameter_smaller"
+				android:scaleType = "centerCrop"
+				android:src = "@drawable/ic_img_default"
+				app:riv_border_color = "@color/co_stroke_bg"
+				app:riv_border_width = "@dimen/di_icon_border_size"
+				app:riv_corner_radius = "@dimen/di_icon_radius_smaller"
+				app:riv_oval = "false" />
+
+		<TextView
+				android:id = "@+id/tv_name"
+				style = "@style/DefaultTextView.Header"
+				android:layout_toRightOf = "@+id/iv_icon"
+				android:layout_alignTop = "@+id/iv_icon"
+				android:layout_marginLeft = "@dimen/di_index_module_gap"
+				android:textColor = "@color/co_tabs_indicator_common_bg" />
+
+		<ImageView
+				android:id = "@+id/iv_hint"
+				android:layout_width = "6dp"
+				android:layout_height = "6dp"
+				android:layout_centerVertical = "true"
+				android:layout_alignTop = "@+id/iv_icon"
+				android:layout_marginTop = "4dp"
+				android:layout_alignParentRight = "true"
+				android:contentDescription = "@null"
+				android:src = "@drawable/shape_hint_count_red" />
+
+		<TextView
+				android:id = "@+id/tv_content"
+				style = "@style/DefaultTextView.Text"
+				android:singleLine = "false"
+				android:gravity = "left"
+				android:layout_below = "@+id/tv_name"
+				android:paddingTop = "8dp"
+				android:lineSpacingExtra = "2dp"
+				android:paddingRight = "20dp"
+				android:layout_alignLeft = "@id/tv_name"
+				android:maxLines = "3"
+				android:ellipsize = "end"
+				android:textColor = "@color/co_common_text_main" />
+
+	</RelativeLayout >
+
+	<LinearLayout
+			android:id = "@+id/ll_to_get"
+			style = "@style/IndexModuleTitleLayout"
+			android:background = "@drawable/selector_white_module"
+			android:gravity = "center_vertical"
+			android:layout_marginTop = "@dimen/di_divider_height"
+			android:orientation = "horizontal" >
+
+		<TextView
+				android:id = "@+id/tv_time"
+				style = "@style/DefaultTextView.Text"
+				android:layout_width = "0dp"
+				android:layout_weight = "1"
+				android:gravity = "left"
+				android:text = "2月26日 22:00" />
+
+		<TextView
+				android:id = "@+id/btn_send"
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_msg_push_list_get"
+				android:drawablePadding = "5dp"
+				android:drawableRight = "@drawable/ic_arrow_more" />
+	</LinearLayout >
+</LinearLayout >

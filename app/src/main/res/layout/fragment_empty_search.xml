@@ -13,12 +13,10 @@
 			android:scaleType = "centerInside"
 			android:src = "@drawable/pic_empty_search" />
 
-	<TextView
+	<ImageView
 			android:id = "@+id/btn_hope_gift"
-			style = "@style/DefaultTextView"
-			android:layout_height = "@dimen/di_btn_height"
+			style = "@style/DefaultImageView"
 			android:textColor = "@color/co_white"
-			android:background = "@drawable/selector_btn_orange"
-			android:clickable = "true"
-			android:text = "@string/st_search_empty_hope" />
+			android:background = "@drawable/ic_hope_gift"
+			android:clickable = "true" />
 </LinearLayout >

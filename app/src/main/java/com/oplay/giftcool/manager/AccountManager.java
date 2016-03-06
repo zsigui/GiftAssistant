@@ -10,8 +10,8 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
@@ -173,7 +173,7 @@ public class AccountManager {
 								public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
 									if (response != null && response.isSuccess()) {
 										if (response.body() != null
-												&& response.body().getCode() == StatusCode.SUCCESS) {
+												&& response.body().getCode() == NetStatusCode.SUCCESS) {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
 											notifyUserAll(user);
@@ -205,7 +205,7 @@ public class AccountManager {
 	 * 登录态失效
 	 */
 	private void sessionFailed(JsonRespBase response) {
-		if (response != null && response.getCode() == StatusCode.ERR_UN_LOGIN) {
+		if (response != null && response.getCode() == NetStatusCode.ERR_UN_LOGIN) {
 			notifyUserAll(null);
 			ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
 		}
@@ -229,7 +229,7 @@ public class AccountManager {
 								public void onResponse(Response<JsonRespBase<UserInfo>> response, Retrofit retrofit) {
 									if (response != null && response.isSuccess()) {
 										if (response.body() != null
-												&& response.body().getCode() == StatusCode.SUCCESS) {
+												&& response.body().getCode() == NetStatusCode.SUCCESS) {
 											UserInfo info = response.body().getData();
 											UserModel user = getUser();
 											user.userInfo.score = info.score;
@@ -345,7 +345,7 @@ public class AccountManager {
 										updateUserInfo();
 										return;
 									}
-									if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+									if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
 										// 更新session不同步
 										if (AppDebugConfig.IS_DEBUG) {
 											KLog.d("session is not sync, err msg = " + response.body().getMsg());
@@ -415,6 +415,45 @@ public class AccountManager {
 		});
 		AccountManager.getInstance().notifyUserAll(null);
 	}
+
+	/**
+	 * 获取未读推送消息数量
+	 */
+	public void obtainUnreadPushMessageCount() {
+		if (!isLogin()) {
+			// 未登录，推送消息默认为0
+			return;
+		}
+		Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>())
+				.enqueue(new Callback<JsonRespBase<Void>>() {
+					@Override
+					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+						if (response != null && response.isSuccess()) {
+							if (response.body() != null && response.body().isSuccess()) {
+
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+										+ (response.body() == null ? "解析出错" : response.body().error()));
+							}
+							return;
+						}
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+									+ (response == null ? "返回出错" : response.code()));
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-" + t.getMessage());
+						}
+					}
+				});
+	}
+
 
 	public void writePhoneAccount(String val, ArrayList<String> history, boolean isRemove) {
 		writeToHistory(val, SPConfig.KEY_LOGIN_PHONE, history, isRemove);
