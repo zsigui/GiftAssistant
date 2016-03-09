@@ -139,6 +139,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
 
 		ReqIndexGift data = new ReqIndexGift();
+		data.pageSize = 20;
 		mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
 		mLastPage = 1;
 	}

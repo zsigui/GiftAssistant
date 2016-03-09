@@ -322,10 +322,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 			// 分享限量礼包
-			IntentUtil.jumpGiftLimitList(getContext());
+			IntentUtil.jumpGiftLimitList(getContext(), false);
 		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
 			// 使用偶玩豆购买限量礼包，跳转今日限量界面
-			IntentUtil.jumpGiftLimitList(getContext());
+			IntentUtil.jumpGiftLimitList(getContext(), false);
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
 			// 跳转指定游戏界面，暂无
 			try {

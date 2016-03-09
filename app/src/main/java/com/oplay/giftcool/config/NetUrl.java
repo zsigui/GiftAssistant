@@ -270,6 +270,6 @@ public class NetUrl {
 	/**
 	 * 获取消息中心未读消息数量
 	 */
-	public static final String MESSAGE_UNREAD_COUNT = "change_jpush_message_status/";
+	public static final String MESSAGE_UNREAD_COUNT = "message_unread_count/";
 
 }

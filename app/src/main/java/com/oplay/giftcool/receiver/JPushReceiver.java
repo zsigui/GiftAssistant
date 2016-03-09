@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.PushTypeUtil;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.PushMessageExtra;
 import com.socks.library.KLog;
 
@@ -56,6 +57,7 @@ public class JPushReceiver extends BroadcastReceiver {
 				}
 				PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra.class);
 				PushTypeUtil.handleMessage(context, msg);
+				AccountManager.getInstance().obtainUnreadPushMessageCount();
 			}
 		}
 	}

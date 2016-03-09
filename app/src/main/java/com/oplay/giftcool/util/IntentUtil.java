@@ -65,9 +65,12 @@ public class IntentUtil {
 	/**
 	 * 跳转限量礼包列表界面
 	 */
-	public static void jumpGiftLimitList(Context context) {
+	public static void jumpGiftLimitList(Context context, boolean needNewTask) {
 		Intent intent = new Intent(context, GiftListActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
+		if (needNewTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
 		context.startActivity(intent);
 	}
 

@@ -11,5 +11,5 @@ public class MyAttention extends IndexGiftLike {
 	 * 是否关注
 	 */
 	@SerializedName("is_focus")
-	public boolean isFocus;
+	public boolean isFocus = true;
 }

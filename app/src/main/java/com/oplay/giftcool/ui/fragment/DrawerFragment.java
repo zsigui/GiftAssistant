@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 /**
  * 侧边栏视图
- *
+ * <p/>
  * Created by zsigui on 16-1-21.
  */
 public class DrawerFragment extends BaseFragment {
@@ -115,25 +115,25 @@ public class DrawerFragment extends BaseFragment {
 	public void onClick(View v) {
 		super.onClick(v);
 		Context context = getContext();
-		// 与登录状态无关的
-		switch (v.getId()) {
-			case KeyConfig.TYPE_ID_SETTING:
-				IntentUtil.jumpSetting(context);
-				break;
-			case KeyConfig.TYPE_ID_DOWNLOAD:
-				IntentUtil.jumpDownloadManager(context);
-				break;
-		}
+
 		if (!AccountManager.getInstance().isLogin()) {
-			// 未登录下的
 			switch (v.getId()) {
+				// 未登录下的
 				case R.id.drawer_header:
 					IntentUtil.jumpLoginNoToast(context);
 					break;
+				case KeyConfig.TYPE_ID_SETTING:
+					IntentUtil.jumpSetting(context);
+					break;
+				case KeyConfig.TYPE_ID_DOWNLOAD:
+					IntentUtil.jumpDownloadManager(context);
+					break;
+				default:
+					IntentUtil.jumpLogin(context);
 			}
 		} else {
-			// 需要登录
 			switch (v.getId()) {
+				// 需要登录
 				case R.id.drawer_header:
 					IntentUtil.jumpUserInfo(context);
 					break;
@@ -151,6 +151,13 @@ public class DrawerFragment extends BaseFragment {
 					break;
 				case KeyConfig.TYPE_ID_MY_ATTENTION:
 					IntentUtil.jumpMyAttention(context);
+					break;
+				// 与登录无关
+				case KeyConfig.TYPE_ID_SETTING:
+					IntentUtil.jumpSetting(context);
+					break;
+				case KeyConfig.TYPE_ID_DOWNLOAD:
+					IntentUtil.jumpDownloadManager(context);
 					break;
 			}
 		}
@@ -238,8 +245,13 @@ public class DrawerFragment extends BaseFragment {
 	@Override
 	public void onUserUpdate(int action) {
 		super.onUserUpdate(action);
-		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
-			updateData();
+		switch (action) {
+			case ObserverManager.STATUS.USER_UPDATE_ALL:
+				updateData();
+				break;
+			case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
+//				updateCount(KeyConfig.TYPE_ID_MSG, AccountManager.getInstance().getUnreadMessageCount());
+				break;
 		}
 	}
 

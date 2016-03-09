@@ -47,7 +47,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 
 	private static final String PAGE_NAME = "我的关注页面";
 
-	private final int PAGE_SIZE = 1;
+	private final int PAGE_SIZE = 5;
 
 	private String DIALOG_QUICK_TITLE;
 	private String DIALOG_QUICK_CONTENT;
@@ -219,13 +219,17 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 	 * 移除特定数据
 	 */
 	private void removeData(int gameId) {
-		for (int i = mData.size() - 1; i > 0; i--) {
+		for (int i = mData.size() - 1; i >= 0; i--) {
 			if (mData.get(i).id == gameId) {
 				mData.remove(i);
 				break;
 			}
 		}
 		updateData(mData);
+		if (!mIsNotifyRefresh) {
+			mIsNotifyRefresh = true;
+			lazyLoad();
+		}
 	}
 
 	@Override

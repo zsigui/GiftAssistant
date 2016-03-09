@@ -284,8 +284,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	public void onUserUpdate(int action) {
-		if (action == ObserverManager.STATUS.USER_UPDATE_ALL) {
-			updateToolBar();
+		switch (action) {
+			case ObserverManager.STATUS.USER_UPDATE_ALL:
+				updateToolBar();
+				break;
+			case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
+				int msgCount = AccountManager.getInstance().getUnreadMessageCount();
+				updateHintState(KeyConfig.TYPE_ID_MSG, msgCount);
+				break;
 		}
 	}
 
@@ -330,7 +336,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					mDrawerFragment.updateCount(key, count);
 				}
 			}
-		}, 1000);
+		}, 300);
 
 	}
 

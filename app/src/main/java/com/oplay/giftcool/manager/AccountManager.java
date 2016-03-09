@@ -16,6 +16,7 @@ import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
+import com.oplay.giftcool.model.data.resp.MessageCount;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -59,6 +60,7 @@ public class AccountManager {
 	}
 
 	private UserModel mUser;
+	private int mUnreadMessageCount = 0;
 	private int lastLoginType = UserTypeUtil.TYPE_POHNE;
 
 	public boolean isPhoneLogin() {
@@ -120,6 +122,9 @@ public class AccountManager {
 		} else {
 			NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
 		}
+
+		// 更新未读消息数量
+		obtainUnreadPushMessageCount();
 
 		if (isLogin()) {
 			OuwanSDKManager.getInstance().login();
@@ -416,21 +421,38 @@ public class AccountManager {
 		AccountManager.getInstance().notifyUserAll(null);
 	}
 
+	private void setUnreadMessageCount(int unreadMessageCount) {
+		mUnreadMessageCount = unreadMessageCount;
+	}
+
+	/**
+	 * 获取未读消息数量
+	 *
+	 * @return
+	 */
+	public int getUnreadMessageCount() {
+		return mUnreadMessageCount;
+	}
+
 	/**
 	 * 获取未读推送消息数量
 	 */
 	public void obtainUnreadPushMessageCount() {
 		if (!isLogin()) {
 			// 未登录，推送消息默认为0
+			setUnreadMessageCount(0);
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
 			return;
 		}
 		Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>())
-				.enqueue(new Callback<JsonRespBase<Void>>() {
+				.enqueue(new Callback<JsonRespBase<MessageCount>>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+					public void onResponse(Response<JsonRespBase<MessageCount>> response, Retrofit retrofit) {
 						if (response != null && response.isSuccess()) {
 							if (response.body() != null && response.body().isSuccess()) {
-
+								setUnreadMessageCount(response.body().getData().count);
+								ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
+										.USER_UPDATE_PUSH_MESSAGE);
 								return;
 							}
 							if (AppDebugConfig.IS_DEBUG) {

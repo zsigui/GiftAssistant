@@ -26,6 +26,7 @@ import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
+import com.oplay.giftcool.model.data.resp.MessageCount;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
@@ -278,5 +279,5 @@ public interface NetEngine {
 	 * 获取当前未读推送消息数量
 	 */
 	@POST(NetUrl.MESSAGE_UNREAD_COUNT)
-	Call<JsonRespBase<Void>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
+	Call<JsonRespBase<MessageCount>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
 }

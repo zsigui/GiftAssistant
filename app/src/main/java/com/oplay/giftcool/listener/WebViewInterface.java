@@ -175,7 +175,7 @@ public class WebViewInterface extends Observable {
 					IntentUtil.jumpGiftNewList(mHostActivity);
 					break;
 				case 1:
-					IntentUtil.jumpGiftLimitList(mHostActivity);
+					IntentUtil.jumpGiftLimitList(mHostActivity, false);
 					break;
 				case 2:
 					IntentUtil.jumpGiftHotList(mHostActivity, "");

@@ -1,10 +1,10 @@
 package com.oplay.giftcool.config;
 
 import android.content.Context;
-import android.content.Intent;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.model.data.resp.PushMessageExtra;
-import com.oplay.giftcool.ui.activity.GiftListActivity;
+import com.oplay.giftcool.model.data.resp.PushMessageGift;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.IntentUtil;
@@ -17,33 +17,44 @@ import com.socks.library.KLog;
  */
 public class PushTypeUtil {
 
-	public static final int ACTION_GIFT_ZERO = 1;
-	public static final int ACTION_GIFT_LIMIT = 2;
-	public static final int ACTION_GIFT_NEW = 3;
+	// 推送行
+	public static final int ACTION_GIFT = 1;
+
+	// 礼包推送的key类型
+	public static final int GIFT_KEY_ZERO = 1;
+	public static final int GIFT_KEY_LIMIT = 2;
+	public static final int GIFT_KEY_NORMAL = 3;
 
 	public static void handleMessage(Context context, PushMessageExtra data) {
-		if (MainActivity.sGlobalHolder == null) {
-			IntentUtil.jumpHome(context, true);
-		}
+
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.d(AppDebugConfig.TAG_JPUSH, "MainActivity = " + MainActivity.sGlobalHolder + ", type = " + data.type
 					+ " , extra = " + data.extraJson);
 		}
 		switch (data.type) {
-			case ACTION_GIFT_ZERO:
-				if (MainActivity.sGlobalHolder != null) {
-					MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_ZERO);
-				}
-				break;
-			case ACTION_GIFT_LIMIT:
-				Intent intent = new Intent(context, GiftListActivity.class);
-				intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
-				break;
-			case ACTION_GIFT_NEW:
-				if (MainActivity.sGlobalHolder != null) {
-					MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
+			case ACTION_GIFT:
+				PushMessageGift messageGift =
+						AssistantApp.getInstance().getGson().fromJson(data.extraJson, PushMessageGift.class);
+				switch (messageGift.giftType) {
+					case GIFT_KEY_ZERO:
+						if (MainActivity.sGlobalHolder == null) {
+							IntentUtil.jumpHome(context, true);
+						}
+						if (MainActivity.sGlobalHolder != null) {
+							MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_ZERO);
+						}
+						break;
+					case GIFT_KEY_LIMIT:
+						IntentUtil.jumpGiftLimitList(context, true);
+						break;
+					case GIFT_KEY_NORMAL:
+						if (MainActivity.sGlobalHolder == null) {
+							IntentUtil.jumpHome(context, true);
+						}
+						if (MainActivity.sGlobalHolder != null) {
+							MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
+						}
+						break;
 				}
 				break;
 		}

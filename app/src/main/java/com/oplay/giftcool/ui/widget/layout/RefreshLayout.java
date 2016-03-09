@@ -198,7 +198,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 					loadData();
 				}
 				mIsHorizontal = false;
-				requestDisallowInterceptTouchEvent(false);
 				break;
 			default:
 				break;
@@ -212,7 +211,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		if (mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) {
-			requestDisallowInterceptTouchEvent(true);
 			return false;
 		}
 		switch (ev.getAction()) {
@@ -223,7 +221,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 				int yDiff = Math.abs((int)ev.getY() - mYDown);
 				if (xDiff > yDiff) {
 					mIsHorizontal = true;
-					requestDisallowInterceptTouchEvent(true);
 					return false;
 				}
 				break;

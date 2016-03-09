@@ -394,7 +394,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				IntentUtil.jumpGiftHotList(mContext, null);
 				break;
 			case R.id.rl_limit_all:
-				IntentUtil.jumpGiftLimitList(mContext);
+				IntentUtil.jumpGiftLimitList(mContext, false);
 				break;
 			case R.id.rl_recommend:
 				if (gift != null) {
