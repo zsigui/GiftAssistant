@@ -3,6 +3,7 @@ package com.oplay.giftcool.adapter.other;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.model.data.resp.TimeDataList;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
@@ -27,40 +29,42 @@ import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.debug.Debug_Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by mink on 16-03-04.
  */
-public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener, StickyListHeadersAdapter {
+public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener, StickyListHeadersAdapter {
 
 	private static final int TAG_POS = 0xFF331234;
 
-	private List<String> mDate;
-	private List<IndexGiftNew> mData;
+	private List<TimeData<IndexGiftNew>> mTimeData;
 	private Context mContext;
 	private OnItemClickListener<IndexGiftNew> mListener;
+	private HashMap<String,String> calendar;
 
 
-	public LimmitGiftListAdapter(Context context) {
-		this(context, null, null);
+	public LimitGiftListAdapter(Context context) {
+		this(context, null);
 	}
 
-	public LimmitGiftListAdapter(Context context, List<IndexGiftNew> data,List<String> date) {
+	public LimitGiftListAdapter(Context context, List<TimeData<IndexGiftNew>> data) {
 		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext()
 				: context.getApplicationContext());
-		this.mData = data;
-		this.mDate = date;
+		this.mTimeData = data;
 	}
 
-	public void updateData(List<IndexGiftNew> data) {
-		this.mData = data;
+	public void updateData(List<TimeData<IndexGiftNew>> data) {
+		this.mTimeData = data;
 		notifyDataSetChanged();
 	}
 
@@ -72,23 +76,25 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		mListener = listener;
 	}
 
-	public List<IndexGiftNew> getData() {
-		return mData;
+
+	public List<TimeData<IndexGiftNew>> getData() {
+		return mTimeData;
 	}
 
-	public void setData(List<IndexGiftNew> data,List<String> date) {
-		mData = data;
-		mDate = date;
+
+	public void setData(List<TimeData<IndexGiftNew>> data) {
+		this.mTimeData = data;
 	}
+
 
 	@Override
 	public int getCount() {
-		return mData == null ? 0 : mData.size();
+		return mTimeData == null ? 0 : mTimeData.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return getCount() == 0 ? null : mData.get(position);
+		return getCount() == 0 ? null : mTimeData.get(position);
 	}
 
 	@Override
@@ -107,7 +113,7 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	 */
 	@Override
 	public int getItemViewType(int position) {
-		return GiftTypeUtil.getItemViewType(mData.get(position));
+		return GiftTypeUtil.getItemViewType(mTimeData.get(position).data);
 	}
 
 	@Override
@@ -128,13 +134,8 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		}
 
 
-		final IndexGiftNew gift = mData.get(position);
-		String date = "";
-		try {
-			date = mDate.get(position);
-		}catch (Throwable e){
-			Debug_Log.e(e);
-		}
+		final IndexGiftNew gift = mTimeData.get(position).data;
+		String date  = mTimeData.get(position).date;
 
 		setData(position, convertView, viewHolder, type, gift, date);
 
@@ -249,7 +250,7 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	private View inflateView(ViewGroup parent, ViewHolder viewHolder) {
 		View convertView;
 		LayoutInflater inflater = LayoutInflater.from(mContext);
-		convertView = inflater.inflate(R.layout.item_index_gift_limmit_list, parent, false);
+		convertView = inflater.inflate(R.layout.item_index_gift_limit_list, parent, false);
 		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
@@ -271,8 +272,8 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		try {
 			if (v.getTag(TAG_POS) != null) {
 				Integer pos = (Integer) v.getTag(TAG_POS);
-				if (mData != null && pos < mData.size()) {
-					IndexGiftNew gift = mData.get(pos);
+				if (mTimeData != null && pos < mTimeData.size()) {
+					IndexGiftNew gift = mTimeData.get(pos).data;
 					if (mListener != null) {
 						mListener.onItemClick(gift, v, pos);
 					}
@@ -289,7 +290,7 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	public void release() {
 		mContext = null;
 		mListener = null;
-		mData = null;
+		mTimeData = null;
 	}
 
 	@Override
@@ -299,7 +300,6 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		}
 		HeaderViewHolder headerViewHolder = null;
 
-		// inflate 页面，设置 holder
 		if (convertView == null) {
 			headerViewHolder = new HeaderViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -309,13 +309,21 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		} else {
 			headerViewHolder = (HeaderViewHolder) convertView.getTag();
 		}
-		headerViewHolder.tv_date.setText(mDate.get(position));
+		headerViewHolder.tv_date.setText(formatDateTime(mTimeData.get(position).date));
 		return convertView;
 	}
 
 	@Override
 	public long getHeaderId(int position) {
-		return mDate.get(position).subSequence(0, 1).charAt(0);
+		//用item数据的日期首次在列表中出现位置作为id
+		String date = formatDateTime(mTimeData.get(position).date);
+		for(int i= 0; i< mTimeData.size();i++){
+			String d = formatDateTime(mTimeData.get(i).date);
+			if(d.equals(date) ){
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -374,5 +382,73 @@ public class LimmitGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		return list;
 	}
 
+	public String formatDateTime(String time){
+		String date = "";
+		try {
+			if(calendar == null){
+				calendar = new HashMap<String,String>();
+			}
+			date = calendar.get(time);
+			if (date == null) {
+				date = formatDateTimeHelper(time);
+				calendar.put(time, date);
+			}
+		}catch (Throwable e){
+			Debug_Log.e(e);
+		}
+		return date;
+	}
+
+	/**
+	 * 格式化时间
+	 * @param time
+	 * @return
+	 */
+	private static String formatDateTimeHelper(String time) {
+		SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if(TextUtils.isEmpty(time)){
+			return "";
+		}
+		Date date = null;
+		try {
+
+			date = format.parse(time);
+			Calendar current = Calendar.getInstance();
+			Calendar today = Calendar.getInstance();	//今天
+
+			today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+			today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+			today.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH));
+			//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+			today.set( Calendar.HOUR_OF_DAY, 0);
+			today.set( Calendar.MINUTE, 0);
+			today.set(Calendar.SECOND, 0);
+
+			Calendar yesterday = Calendar.getInstance();	//昨天
+
+			yesterday.set(Calendar.YEAR, current.get(Calendar.YEAR));
+			yesterday.set(Calendar.MONTH, current.get(Calendar.MONTH));
+			yesterday.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH) - 1);
+			yesterday.set( Calendar.HOUR_OF_DAY, 0);
+			yesterday.set( Calendar.MINUTE, 0);
+			yesterday.set(Calendar.SECOND, 0);
+
+			current.setTime(date);
+			current.set( Calendar.HOUR_OF_DAY, 0);
+			current.set(Calendar.MINUTE, 0);
+			current.set(Calendar.SECOND, 30);
+
+			if(current.after(today)){
+				return "今天";
+			}else if(current.before(today) && current.after(yesterday)){
+				return "昨天";
+			}else{
+				return "以前";
+			}
+		} catch (ParseException e) {
+			Debug_Log.e(e);
+		}
+		return time;
+	}
 
 }

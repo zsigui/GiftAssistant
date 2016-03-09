@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.oplay.giftcool.ui.widget.layout.RefreshLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/srl_layout"
-		android:orientation = "vertical"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
-		android:background = "@color/co_transparent" >
+		android:background = "@color/co_transparent"
+		android:orientation = "vertical" >
 
 	<com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersListView
 			android:id = "@+id/lv_content"
-			style="@style/DefaultListView"
-			android:background = "@color/co_white"
+			style = "@style/DefaultListView"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
 			android:animationCache = "false"
+			android:background = "@color/co_white"
 			android:cacheColorHint = "@null"
+			android:divider = "@null"
 			android:drawSelectorOnTop = "false"
 			android:fadingEdge = "none"
 			android:fadingEdgeLength = "0dp"
@@ -22,6 +23,5 @@
 			android:headerDividersEnabled = "false"
 			android:listSelector = "@null"
 			android:scrollbarStyle = "insideOverlay"
-			android:scrollingCache = "false"
-			android:divider="@null"/>
+			android:scrollingCache = "false" />
 </com.oplay.giftcool.ui.widget.layout.RefreshLayout >

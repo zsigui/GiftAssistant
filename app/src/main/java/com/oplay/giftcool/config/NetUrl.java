@@ -57,6 +57,10 @@ public class NetUrl {
 	 * 每日限量-某日某页
 	 */
 	public static final String GIFT_GET_ALL_LIMIT_BY_PAGE = "day_limit_list_by_page";
+	/**
+	 * 每日限量-某页
+	 */
+	public static final String GIFT_GET_LIMIT_BY_PAGE = "day_limit_list_by_page_v2/";
 
 	/**
 	 * 每日新增-全部

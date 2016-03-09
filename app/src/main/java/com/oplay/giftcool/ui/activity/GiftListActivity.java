@@ -10,14 +10,18 @@ import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.engine.NetEngine;
+import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.LimitGiftListData;
+import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.model.data.resp.TimeDataList;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
+import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.NetErrorFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftLikeListFragment;
-import com.oplay.giftcool.ui.fragment.gift.GiftLimmitListDataFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftLimitListDataFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftMutilDayFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -54,7 +58,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		super.initMenu(toolbar);
 		switch (type) {
 			case KeyConfig.TYPE_ID_GIFT_LIMIT:
-				setBarTitle("今日限量礼包");
+				setBarTitle("限量礼包");
 				break;
 			case KeyConfig.TYPE_ID_GIFT_NEW:
 				setBarTitle("新鲜出炉礼包");
@@ -137,16 +141,20 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			displayNetworkErrUI();
 			return;
 		}
-		mEngine.obtainGiftLimit(new JsonReqBase<String>()).enqueue(new Callback<JsonRespGiftList>() {
+		ReqPageData data = new ReqPageData();
+		final JsonReqBase<ReqPageData> mReqPageObj = new JsonReqBase<ReqPageData>(data);
+		mReqPageObj.data.page = 1;
+		mReqPageObj.data.pageSize = 30;
+		mEngine.obtainGiftLimitByPage(mReqPageObj).enqueue(new Callback<JsonRespLimitGiftList>() {
 			@Override
-			public void onResponse(Response<JsonRespGiftList> response, Retrofit retrofit) {
+			public void onResponse(Response<JsonRespLimitGiftList> response, Retrofit retrofit) {
 				if (!mNeedWorkCallback) {
 					return;
 				}
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
 					if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-						displayGiftLimitUI(response.body().getData());
+						displayGiftLimitUI(response.body().getData(),mReqPageObj.data.pageSize);
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {
@@ -176,9 +184,9 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				GiftLikeListFragment.class.getSimpleName(), false);
 	}
 
-	private void displayGiftLimitUI(ArrayList<TimeDataList<IndexGiftNew>> data) {
-		replaceFrag(R.id.fl_container, GiftLimmitListDataFragment.newInstance(data, NetUrl.GIFT_GET_ALL_LIMIT_BY_PAGE),
-				GiftLimmitListDataFragment.class.getSimpleName(), false);
+	private void displayGiftLimitUI(LimitGiftListData<TimeData<IndexGiftNew>> data,int pagesize) {
+		replaceFrag(R.id.fl_container, GiftLimitListDataFragment.newInstance(data, pagesize),
+				GiftLimitListDataFragment.class.getSimpleName(), false);
 	}
 
 	private void displayGiftNewUI(ArrayList<TimeDataList<IndexGiftNew>> data) {

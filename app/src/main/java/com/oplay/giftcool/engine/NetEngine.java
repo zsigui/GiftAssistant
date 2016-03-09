@@ -34,6 +34,7 @@ import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
+import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
@@ -92,6 +93,16 @@ public interface NetEngine {
 	 */
 	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
 	Call<JsonRespGiftList> obtainGiftLimit(@Body JsonReqBase<String> reqData);
+	/**
+	 * 更新 首页-礼包-限量礼包 页面的数据
+	 */
+	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
+	Call<JsonRespBase<HashMap<String, IndexGiftNew>>> updateGiftLimit(@Body JsonReqBase<ReqRefreshGift> reqData);
+	/**
+	 * 获取 首页-礼包-限量礼包 页面的数据
+	 */
+	@POST(NetUrl.GIFT_GET_LIMIT_BY_PAGE)
+	Call<JsonRespLimitGiftList> obtainGiftLimitByPage(@Body JsonReqBase<ReqPageData> reqData);
 
 	/**
 	 * 获取 首页-礼包-新鲜出炉礼包 页面的数据
