@@ -32,9 +32,7 @@ public class CommonUtil {
 			return;
 		}
 		MobileInfoModel model = MobileInfoModel.getInstance();
-		if (!model.isInit()) {
-			initMobileInfoModel(AssistantApp.getInstance().getApplicationContext());
-		}
+		initMobileInfoModel(AssistantApp.getInstance().getApplicationContext());
 		reqBase.imsi = model.getImsi();
 		reqBase.imei = model.getImei();
 		reqBase.cid = model.getCid();
@@ -72,6 +70,7 @@ public class CommonUtil {
 			} else {
 				model.setInit(true);
 			}
+			AssistantApp.getInstance().addInterceptorToRetrofit();
 		}
 	}
 }

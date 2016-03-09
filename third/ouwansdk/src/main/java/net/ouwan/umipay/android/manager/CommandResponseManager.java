@@ -60,7 +60,7 @@ public class CommandResponseManager {
 	 * 处理拉取用户列表结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleGetAccountsResult(Context context, CommandResponse response) {
 		if (response == null) {
@@ -78,7 +78,7 @@ public class CommandResponseManager {
 	 * 处理初始化结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleInitResult(Context context, CommandResponse response) {
 		ListenerManager.callbackInitFinish(response.getCode(), response.getMsg());
@@ -90,7 +90,7 @@ public class CommandResponseManager {
 	 * 处理短信验证码结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleVerificateSMSResult(Context context, CommandResponse response,
 	                                              Interface_Verificate_SMS_Listener listener) {
@@ -112,7 +112,7 @@ public class CommandResponseManager {
 	 * 处理登录结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleLoginResult(Context context, CommandResponse response, Interface_Account_Listener_Login
 			listener) {
@@ -138,7 +138,7 @@ public class CommandResponseManager {
 	 * 处理注册结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleRegistResult(Context context, CommandResponse response,
 	                                       Interface_Account_Listener_Register
@@ -165,7 +165,7 @@ public class CommandResponseManager {
 	 * 处理快速注册结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleQuickRegistResult(Context context, CommandResponse response,
 	                                            Interface_Account_Listener_Register
@@ -192,7 +192,7 @@ public class CommandResponseManager {
 	 * 处理登录结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleThirdLoginResult(Context context, CommandResponse response,
 	                                           Interface_Account_Listener_Login
@@ -219,7 +219,7 @@ public class CommandResponseManager {
 	 * 处理登录结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handleDeleteAccountResult(Context context, CommandResponse response) {
 		int code = response.getCode();
@@ -235,7 +235,7 @@ public class CommandResponseManager {
 	 * 处理登录结果
 	 *
 	 * @param context  context
-	 * @param response {@link net.ouwan.umipay.android.asynctask.CommandResponse}命令字返回结果
+	 * @param response {@link CommandResponse}命令字返回结果
 	 */
 	private static void handlePushRoleInfoResult(Context context, CommandResponse response) {
 		int code = response.getCode();

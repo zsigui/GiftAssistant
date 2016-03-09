@@ -26,13 +26,13 @@ import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
-import com.oplay.giftcool.model.data.resp.MessageCount;
+import com.oplay.giftcool.model.data.resp.message.MessageCount;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
-import com.oplay.giftcool.model.data.resp.PushMessage;
+import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
@@ -118,13 +118,15 @@ public interface NetEngine {
 	/**
 	 * 获取 首页-礼包-每日限量礼包 页面的数据
 	 */
-	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
-	Call<JsonRespGiftList> obtainGiftLimit(@Body JsonReqBase<String> reqData);
+//	接口废弃
+//	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
+//	Call<JsonRespGiftList> obtainGiftLimit(@Body JsonReqBase<String> reqData);
 	/**
 	 * 更新 首页-礼包-限量礼包 页面的数据
 	 */
-	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
-	Call<JsonRespBase<HashMap<String, IndexGiftNew>>> updateGiftLimit(@Body JsonReqBase<ReqRefreshGift> reqData);
+//	接口废弃
+//	@POST(NetUrl.GIFT_GET_ALL_LIMIT)
+//	Call<JsonRespBase<HashMap<String, IndexGiftNew>>> updateGiftLimit(@Body JsonReqBase<ReqRefreshGift> reqData);
 	/**
 	 * 获取 首页-礼包-限量礼包 页面的数据
 	 */

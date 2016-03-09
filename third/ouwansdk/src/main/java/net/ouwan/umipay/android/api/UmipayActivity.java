@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -1478,8 +1480,62 @@ public class UmipayActivity extends Activity implements TextView.OnEditorActionL
 		}
 	}
 
+	/**
+	 * 重新调整布局大小
+	 */
+	private void resize(){
+		try {
+			//直接获取dimens对应的width和marginLeft，更新横竖屏切换后布局的大小
+			int width = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen", "umipay_main_diglog_width"));
+			int marginLeft = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen", "umipay_main_diglog_autologin_marginleft"));
+
+			//调整Tab布局大小
+			for(int i = 0;i < mTabViewFlipper.getChildCount();i++){
+				View v = mTabViewFlipper.getChildAt(i);
+				ViewGroup.LayoutParams lp= v.getLayoutParams();
+				lp.width = width;
+				v.setLayoutParams(lp);
+			}
+
+			//调整登陆、注册界面布局大小
+			for(int i = 0;i < mContectViewFlipper.getChildCount();i++) {
+				View v = mContectViewFlipper.getChildAt(i);
+				ViewGroup.LayoutParams lp= v.getLayoutParams();
+				lp.width = width;
+				v.setLayoutParams(lp);
+			}
+
+			//调整自动登陆的marginLeft(避免与[忘记密码]错位重叠)
+			if(mAutoLoginLayout != null) {
+				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mAutoLoginLayout.getLayoutParams();
+				lp.setMargins(marginLeft, 0, 0, 0);
+				mAutoLoginLayout.setLayoutParams(lp);
+			}
+
+			//绑定手机、注册成功界面调整布局大小
+			if(mOnView == BIND_MOBILE_VIEW || mOnView == REG_SUCCESS_View) {
+				View mContentLayout = findViewById(Util_Resource.getIdByReflection(this, "id",
+						"umipay_main_content_layout"));
+				if (mContentLayout != null) {
+					ViewGroup.LayoutParams lp= mContentLayout.getLayoutParams();
+					lp.width = width;
+					mContentLayout.setLayoutParams(lp);
+				}
+			}
+
+			//隐藏账户下拉列表
+			if(mPopupWindow != null){
+				mPopupWindow.dismiss();
+			}
+		}catch (Throwable e){
+			Debug_Log.e(e);
+		}
+	}
+
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+	    //横竖屏切换时重新调整布局大小
+	    resize();
     }
 }

@@ -1,6 +1,7 @@
 package net.ouwan.umipay.android.asynctask;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -9,7 +10,9 @@ import net.ouwan.umipay.android.Utils.Util_Package;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameRolerInfo;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
+import net.ouwan.umipay.android.api.UmipayService;
 import net.ouwan.umipay.android.config.ConstantString;
+import net.ouwan.umipay.android.config.SDKCacheConfig;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
 import net.ouwan.umipay.android.config.SDKDebugConfig;
 import net.ouwan.umipay.android.debug.Debug_Log;
@@ -66,7 +69,7 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 		this.mServerUrl = GameParamInfo.getInstance(context).isTestMode() ? Coder_SDKPswCoder.decode
 				(ConstantString.TEST_SERVER_URL, ConstantString.SERVER_URL_KEY) : Coder_SDKPswCoder.decode
 				(ConstantString
-				.SERVER_URL, ConstantString.SERVER_URL_KEY);
+						.SERVER_URL, ConstantString.SERVER_URL_KEY);
 		mExtResponse = extResponse;
 	}
 
@@ -133,14 +136,14 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 			if (rolerInfo != null && TextUtils.isEmpty(rolerInfo.getServerId())) {
 				gsid = rolerInfo.getServerId();
 			}
-			Basic_JSONUtil.putString(mParams, "imei", imei);
-			Basic_JSONUtil.putString(mParams, "imsi", imsi);
-			Basic_JSONUtil.putString(mParams, "cid", cid);
-			Basic_JSONUtil.putString(mParams, "mac", mac);
-			Basic_JSONUtil.putString(mParams, "sig", sig);
-			Basic_JSONUtil.putInt(mParams, "chn", chn);
-			Basic_JSONUtil.putInt(mParams, "subchn", subchn);
-			Basic_JSONUtil.putString(mParams, "gsid", gsid);
+			Basic_JSONUtil.put(mParams, "imei", imei);
+			Basic_JSONUtil.put(mParams, "imsi", imsi);
+			Basic_JSONUtil.put(mParams, "cid", cid);
+			Basic_JSONUtil.put(mParams, "mac", mac);
+			Basic_JSONUtil.put(mParams, "sig", sig);
+			Basic_JSONUtil.put(mParams, "chn", chn);
+			Basic_JSONUtil.put(mParams, "subchn", subchn);
+			Basic_JSONUtil.put(mParams, "gsid", gsid);
 		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}
@@ -148,6 +151,7 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 
 	private void getResponse(final CommandResponse response) {
 		try {
+			long startTime = System.currentTimeMillis();
 			if (mParams == null || mParams.length() == 0) {
 				response.setCode(UmipaySDKStatusCode.ERR_11_ERR_PACK);
 				return;
@@ -250,8 +254,21 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 				}
 				response.setCode(errorCode);
 				response.setMsg(errorMsg);
+				if(SDKCacheConfig.getInstance(mContext).isEnableErrorReport()) {
+					try {
+						//记录错误log并收集当前相关信息，考虑到需要测试网络状况等，所以放到service里面在后台执行相关操作
+						Intent serviceIntent = new Intent(mContext, UmipayService.class);
+						serviceIntent.putExtra("action", UmipayService.ACTION_ERROR_REPORT);
+						serviceIntent.putExtra("errorCode", errorCode);
+						serviceIntent.putExtra("errorMsg", errorMsg);
+						serviceIntent.putExtra("ttl", System.currentTimeMillis() - startTime);
+						serviceIntent.putExtra("timestamp", System.currentTimeMillis());
+						mContext.startService(serviceIntent);
+					} catch (Throwable e) {
+						Debug_Log.e(e);
+					}
+				}
 				return;
-
 			}
 
 			//解包消息

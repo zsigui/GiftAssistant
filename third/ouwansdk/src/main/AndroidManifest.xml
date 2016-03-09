@@ -17,19 +17,17 @@
 	<!--银联插件3.1.0新增权限-->
 	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
 	<!--易联支付需要权限 -->
-	<uses-permission android:name = "android.permission.READ_SMS" />
-	<uses-permission android:name = "android.permission.RECEIVE_SMS" />
 	<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name = "android.permission.RECORD_AUDIO" />
 	<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
-
-	<uses-feature android:name = "android.hardware.camera" />
-
-	<uses-permission android:name = "android.permission.CAMERA" />
-	<uses-permission android:name = "android.hardware.camera.autofocus" />
-	<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-	<uses-permission android:name = "android.permission.RECORD_VIDEO" />
+	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
+	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
+	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
+	<!--<uses-feature android:name = "android.hardware.camera" />-->
+	<!--<uses-permission android:name = "android.permission.CAMERA" />-->
+	<!--<uses-permission android:name = "android.hardware.camera.autofocus" />-->
+	<!--<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
+	<!--<uses-permission android:name = "android.permission.RECORD_VIDEO" />-->
 
 
 	<!-- 汇付宝-微信支付需要权限-->
@@ -74,21 +72,38 @@
 		<!--银联支付activity-->
 		<!-- 插件入口界面 -->
 		<activity
-				android:name = "com.payeco.android.plugin.PayecoPluginLoadingActivity"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "portrait"
+				android:name="com.payeco.android.plugin.PayecoPluginLoadingActivity"
+				android:launchMode="singleTask"
+				android:screenOrientation="portrait"
 				/>
+
 		<!-- 插件拍照界面 -->
 		<activity
-				android:name = "com.payeco.android.plugin.PayecoCameraActivity"
-				android:screenOrientation = "portrait"
+				android:name="com.payeco.android.plugin.PayecoCameraActivity"
+				android:screenOrientation="portrait"
 				/>
+
 		<!-- 插件录像界面 -->
 		<activity
-				android:name = "com.payeco.android.plugin.PayecoVedioActivity"
-				android:process = "com.payeco.android.plugin.vedio"
-				android:screenOrientation = "landscape"
+				android:name="com.payeco.android.plugin.PayecoVedioActivity"
+				android:screenOrientation="landscape"
+				android:process="com.payeco.android.plugin.vedio"
 				/>
+
+		<!--百度插件部分  -->
+		<service
+				android:name="com.baidu.location.f"
+				android:enabled="true"
+				android:process=":remote" >
+			<intent-filter>
+				<action android:name="com.baidu.location.service_v2.2" >
+				</action>
+			</intent-filter>
+		</service>
+		<!-- meta-data需要写在application中 -->
+		<meta-data
+				android:name="com.baidu.lbsapi.API_KEY"
+				android:value="DhNxS47YIr3CNdocGoAcy1ts" />
 		<!--易联需要添加的activity-->
 		<!--汇付宝-微信支付需要添加的activity-->
 		<activity

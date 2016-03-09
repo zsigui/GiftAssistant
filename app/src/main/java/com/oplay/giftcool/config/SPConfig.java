@@ -20,11 +20,13 @@ public class SPConfig {
 	public static final String KEY_USER_INFO = "kljizckuiqew";
 	public static final String KEY_LOGIN_LAST_OPEN_TIME = "login_last_open_time";
 	// 上次开启应用时间
-	public static final String KEY_DOWNLOAD_LAST_TIME = "download_last_time";
-	public static final String KEY_SHARE_LIMIT_LAST_TIME = "share_limit_last_time";
-	public static final String KEY_SHARE_NORMAL_LAST_TIME = "share_normal_last_time";
-	public static final String KEY_SEARCH_LAST_TIME = "search_last_time";
-	public static final String KEY_BUY_BY_BEAN_LAST_TIME = "buy_by_bean_last_time";
+//	public static final String KEY_DOWNLOAD_LAST_TIME = "download_last_time";
+//	public static final String KEY_SHARE_LIMIT_LAST_TIME = "share_limit_last_time";
+//	public static final String KEY_SHARE_NORMAL_LAST_TIME = "share_normal_last_time";
+//	public static final String KEY_SEARCH_LAST_TIME = "search_last_time";
+//	public static final String KEY_BUY_BY_BEAN_LAST_TIME = "buy_by_bean_last_time";
+	public static final String KEY_LAST_OPEN_APP_TIME = "last_open_app_time";
+	public static final String KEY_LAST_PUSH_TIME = "last_push_message_time";
 
 
 	/* 已输入账号资料 */

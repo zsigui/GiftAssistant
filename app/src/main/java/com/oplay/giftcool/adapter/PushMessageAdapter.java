@@ -14,7 +14,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.TypeStatusCode;
-import com.oplay.giftcool.model.data.resp.PushMessage;
+import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;

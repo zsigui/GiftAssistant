@@ -140,7 +140,7 @@ public class LocalPasswordManager {
 			jsonObject.remove(key);
 
 			String enc_psw = encodePassword(password);
-			Basic_JSONUtil.putString(jsonObject, key, enc_psw);
+			Basic_JSONUtil.put(jsonObject, key, enc_psw);
 
 			String json_str = jsonObject.toString();
 			String base64 = Coder_Base64.encode(json_str);

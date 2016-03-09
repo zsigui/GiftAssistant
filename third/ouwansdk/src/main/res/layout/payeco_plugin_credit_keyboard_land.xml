@@ -113,6 +113,7 @@
                         android:paddingLeft="5.0dip"
                         android:singleLine="true"
                         android:textColor="#000"
+                        android:textColorHint="#687887"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -176,6 +177,7 @@
                     android:paddingLeft="5.0dip"
                     android:singleLine="true"
                     android:textColor="#000"
+                    android:textColorHint="#687887"
                     android:textSize="@dimen/payeco_pwkeyboard_button_textsize" />
             </LinearLayout>
             <Button
@@ -299,24 +301,20 @@
                             style="@style/payeco_keyboardDigitButton_hx"
                             android:layout_weight="1" />
 
-                          <FrameLayout
+                   <LinearLayout
+                            android:id="@+id/payeco_digit_clear"
+                            style="@style/payeco_keyboardDigitButton_hx"
                             android:layout_width="0px"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
-                            android:background="#C8C7CC" >
-
-                            <Button
-                                android:id="@+id/payeco_digit_clear"
-                                style="@style/payeco_keyboardDigitButton_hx"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent" />
+                            android:clickable="true" >
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:background="@drawable/payeco_plugin_back" />
-                        </FrameLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
                 </LinearLayout>

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -99,12 +100,10 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			Serializable data = getArguments().getSerializable(KEY_DATA);
 			if (data != null) {
 				LimitGiftListData<TimeData<IndexGiftNew>> timeData = (LimitGiftListData<TimeData<IndexGiftNew>>) data;
-				if (timeData != null) {
-					mData = timeData.data;
-					mAdapter.setData(mData);
-					mHasData = true;
-					mLastPage = 1;
-				}
+				mData = timeData.data;
+				mAdapter.setData(mData);
+				mHasData = true;
+				mLastPage = 1;
 			}
 		}
 		mAdapter.setListener(this);
@@ -123,10 +122,11 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 		super.onDestroyView();
 		stopClockService();
 	}
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
-		Global.THREAD_POOL.execute(new LoadDataByPageRunnable(1,mPageSize));
+		Global.THREAD_POOL.execute(new LoadDataByPageRunnable(1, mPageSize));
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			return;
 		}
 		mIsNotifyRefresh = true;
-		if(mUpdateGiftRunnable != null) {
+		if (mUpdateGiftRunnable != null) {
 			Global.THREAD_POOL.execute(mUpdateGiftRunnable);
 		}
 	}
@@ -152,9 +152,10 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			if (mLodingView != null) {
 				mLodingView.setVisibility(View.VISIBLE);
 			}
-			Global.THREAD_POOL.execute(new LoadDataByPageRunnable(++mLastPage,mPageSize));
+			Global.THREAD_POOL.execute(new LoadDataByPageRunnable(++mLastPage, mPageSize));
 		}
 	}
+
 	@Override
 	protected void moreLoadSuccessEnd() {
 		super.moreLoadSuccessEnd();
@@ -170,6 +171,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			mLodingView.setVisibility(View.GONE);
 		}
 	}
+
 	//刷新重置页面
 	public void refreshData(ArrayList<TimeData<IndexGiftNew>> data) {
 		if (data == null) {
@@ -270,33 +272,43 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 	@Override
 	public void release() {
 		super.release();
+		if (mUpdateGiftRunnable != null) {
+			mUpdateGiftRunnable.clear();
+		}
 	}
 
 
 	/**
 	 * 加载指定页礼包
 	 */
-	private class LoadDataByPageRunnable implements Runnable{
+	private class LoadDataByPageRunnable implements Runnable {
 		private JsonReqBase<ReqPageData> mReqPageObj;
+		private Call<JsonRespLimitGiftList> mCallLoad;
 
 		/**
-		 *
-		 * @param page 指定加载页数
+		 * @param page     指定加载页数
 		 * @param pageSize 指定每页大小
 		 */
-		public LoadDataByPageRunnable(int page,int pageSize){
+		public LoadDataByPageRunnable(int page, int pageSize) {
 			mReqPageObj = new JsonReqBase<ReqPageData>(new ReqPageData());
 			mReqPageObj.data.page = page;
 			mReqPageObj.data.pageSize = pageSize;
 		}
+
 		@Override
 		public void run() {
+			if (!mCanShowUI) {
+				return;
+			}
 			if (!NetworkUtil.isConnected(getContext())) {
 				mViewManager.showErrorRetry();
 				return;
 			}
-			Global.getNetEngine().obtainGiftLimitByPage(mReqPageObj).enqueue(new Callback
-					<JsonRespLimitGiftList>() {
+			if (mCallLoad != null) {
+				mCallLoad.cancel();
+			}
+			mCallLoad = Global.getNetEngine().obtainGiftLimitByPage(mReqPageObj);
+			mCallLoad.enqueue(new Callback<JsonRespLimitGiftList>() {
 				@Override
 				public void onResponse(Response<JsonRespLimitGiftList> response, Retrofit retrofit) {
 					if (!mCanShowUI) {
@@ -304,25 +316,26 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 					}
 					if (response != null && response.isSuccess()) {
 						LimitGiftListData<TimeData<IndexGiftNew>> data = response.body().getData();
-						if(data.page == 1) {
+						if (data.page == 1) {
 							//初始化成功
 							refreshSuccessEnd();
 							mData = data.data;
 							refreshLoadState(mData, false);//是否最后一页
 							mLastPage = 1;
 							refreshData(mData);
-						}else{
+						} else {
 							//加载更多成功
-							setLoadState(data.data, (data.data == null || data.data.size() == 0 || data.data.size() < data.pageSize));
+							setLoadState(data.data, (data.data == null || data.data.size() == 0 || data.data.size() <
+									data.pageSize));
 							addMoreData(data.data);
 							moreLoadSuccessEnd();
 						}
 						return;
 					}
-					if(mReqPageObj.data.page == 1) {
+					if (mReqPageObj.data.page == 1) {
 						//刷新失败
 						refreshFailEnd();
-					}else {
+					} else {
 						//加载更多失败
 						moreLoadFailEnd();
 					}
@@ -333,10 +346,10 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 					if (!mCanShowUI) {
 						return;
 					}
-					if(mReqPageObj.data.page == 1) {
+					if (mReqPageObj.data.page == 1) {
 						//刷新失败
 						refreshFailEnd();
-					}else {
+					} else {
 						//加载更多失败
 						moreLoadFailEnd();
 					}
@@ -345,45 +358,65 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			});
 		}
 	}
+
 	/**
 	 * 用于更新礼包的Runnable
 	 */
-	private class UpdateGiftRunnable implements Runnable{
+	private class UpdateGiftRunnable implements Runnable {
+
+		private Call<JsonRespBase<HashMap<String, IndexGiftNew>>> mCallUpdate;
+
 		@Override
 		public void run() {
+			if (!mCanShowUI) {
+				return;
+			}
+			if (!NetworkUtil.isConnected(getContext())) {
+				return;
+			}
 			HashSet<Integer> ids = new HashSet<Integer>();
 			for (TimeData<IndexGiftNew> timedata : mData) {
 				IndexGiftNew gift = timedata.data;
 				ids.add(gift.id);
 			}
+			if (mCallUpdate != null) {
+				mCallUpdate.cancel();
+			}
 			ReqRefreshGift reqData = new ReqRefreshGift();
 			reqData.ids = ids;
-			Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
-					.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+			mCallUpdate = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
+			mCallUpdate.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
 
-						@Override
-						public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
-						                       Retrofit retrofit) {
-							if (response != null && response.isSuccess()) {
-								if (response.body() != null && response.body().isSuccess()) {
-									// 数据刷新成功，进行更新
-									HashMap<String, IndexGiftNew> respData = response.body().getData();
-									ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-									updateCircle(respData, waitDelIndexs, mData);
-									delIndex(mData, waitDelIndexs);
-									int y = mDataView.getScrollY();
-									refreshData(mData);
-									mDataView.smoothScrollBy(y, 0);
-								}
-							}
-							mIsNotifyRefresh = false;
+				@Override
+				public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
+				                       Retrofit retrofit) {
+					if (!mCanShowUI) {
+						return;
+					}
+					if (response != null && response.isSuccess()) {
+						if (response.body() != null && response.body().isSuccess()) {
+							// 数据刷新成功，进行更新
+							HashMap<String, IndexGiftNew> respData = response.body().getData();
+							ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+							updateCircle(respData, waitDelIndexs, mData);
+							delIndex(mData, waitDelIndexs);
+							int y = mDataView.getScrollY();
+							refreshData(mData);
+							mDataView.smoothScrollBy(y, 0);
 						}
+					}
+					mIsNotifyRefresh = false;
+				}
 
-						@Override
-						public void onFailure(Throwable t) {
-							mIsNotifyRefresh = false;
-						}
-					});
+				@Override
+				public void onFailure(Throwable t) {
+					mIsNotifyRefresh = false;
+				}
+			});
+		}
+
+		public void clear() {
+
 		}
 	}
 

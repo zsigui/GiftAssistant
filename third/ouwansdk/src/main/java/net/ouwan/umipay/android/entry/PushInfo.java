@@ -157,13 +157,13 @@ public class PushInfo implements Serializable {
 	public JSONObject toJsonObject() {
 		try {
 			JSONObject jsonObject = new JSONObject();
-			Basic_JSONUtil.putInt(jsonObject, "pid", mId);
-			Basic_JSONUtil.putString(jsonObject, "piu", mIconUrl);
-			Basic_JSONUtil.putString(jsonObject, "title", mTitle);
-			Basic_JSONUtil.putString(jsonObject, "ct", mContent);
-			Basic_JSONUtil.putString(jsonObject, "url", mUri);
-			Basic_JSONUtil.putLong(jsonObject, "st", mShowTime_ms);
-			Basic_JSONUtil.putInt(jsonObject, "t", mType);
+			Basic_JSONUtil.put(jsonObject, "pid", mId);
+			Basic_JSONUtil.put(jsonObject, "piu", mIconUrl);
+			Basic_JSONUtil.put(jsonObject, "title", mTitle);
+			Basic_JSONUtil.put(jsonObject, "ct", mContent);
+			Basic_JSONUtil.put(jsonObject, "url", mUri);
+			Basic_JSONUtil.put(jsonObject, "st", mShowTime_ms);
+			Basic_JSONUtil.put(jsonObject, "t", mType);
 			return jsonObject;
 		} catch (Throwable e) {
 			Debug_Log.e(e);

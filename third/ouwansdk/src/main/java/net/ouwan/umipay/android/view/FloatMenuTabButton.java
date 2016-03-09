@@ -88,7 +88,7 @@ public class FloatMenuTabButton extends FrameLayout {
 						ICON_STRING_ID[mBtnType]));
 			}
 			if (mBtnType == BBS || mBtnType == ACCOUNT || mBtnType == GIFT) {
-				FrameLayout.LayoutParams layoutParams = (LayoutParams) bubble_tv.getLayoutParams();
+				LayoutParams layoutParams = (LayoutParams) bubble_tv.getLayoutParams();
 				layoutParams.width = Util_System_Display.dip2px(mContext, 8);
 				layoutParams.height = Util_System_Display.dip2px(mContext, 8);
 				layoutParams.setMargins(0, Util_System_Display.dip2px(mContext, 3), 0, 0);

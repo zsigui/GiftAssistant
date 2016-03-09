@@ -7,9 +7,13 @@ package com.oplay.giftcool.config;
  */
 public class ConstString {
 
+	public static final String TEXT_HEADER = "pn=%s&vc=%d&vn=%s&chn=%d";
+
 	public static final String TEXT_NET_ERROR = "网络连接错误";
-	public static final String TEXT_EXECUTE_ERROR = "执行出错，提交失败";
-	public static final String TEXT_SUCCESS = "提交成功";
+	public static final String TEXT_EXECUTE_ERROR = "执行出错，请求失败";
+
+	public static final String TEXT_LOGIN_FIRST = "请求失败,请先登录";
+	public static final String TEXT_HOPE_GIFT_SUCCESS = "求礼包成功";
 
 	public static final String TEXT_SEIZE = "开抢时间：<font color='#ffaa17'>%s</font>";
 	public static final String TEXT_SEARCH = "开淘时间：<font color='#ffaa17'>%s</font>";

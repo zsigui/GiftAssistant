@@ -75,6 +75,8 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 		private int showhelp;
 		@SerializedName("showaccount")
 		private int showaccount;
+		@SerializedName("uploaderrmsg")
+		private int uploaderrmsg;
 		@SerializedName("redpointtime")
 		private int redpointtime;
 		@SerializedName("epayidentify")
@@ -208,6 +210,14 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 
 		public void setOuwan(Cmd_Init_Data_Config_Ouwan ouwan) {
 			this.ouwan = ouwan;
+		}
+
+		public void setEnableErrorReport(int uploaderrmsg){
+			this.uploaderrmsg = uploaderrmsg;
+		}
+
+		public int getEnableErrorReport(){
+			return this.uploaderrmsg;
 		}
 	}
 

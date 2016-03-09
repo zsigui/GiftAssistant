@@ -7,7 +7,7 @@ package com.oplay.giftcool.config;
  * <br />
  * Created by zsigui on 15-12-22.
  */
-public abstract interface NetStatusCode {
+public abstract class NetStatusCode {
 
 	/**
 	 * 成功
@@ -63,7 +63,12 @@ public abstract interface NetStatusCode {
 
 	/* ******** 用户相关状态码 1002x ~ 1003x ********* */
 	/**
+	 * 用户服务出错
+	 */
+	public static int ERR_BAD_SERVER = 10032;
+	/**
 	 * 未登录
 	 */
 	public static int ERR_UN_LOGIN = 10037;
+
 }

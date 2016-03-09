@@ -21,7 +21,6 @@ import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
-import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
@@ -231,65 +230,92 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		viewHolder.btnSend.setOnClickListener(this);
 		viewHolder.itemView.setOnClickListener(this);
 		// 设置数据和按键状态
-		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE
-				|| type == GiftTypeUtil.TYPE_LIMIT_SEIZE
-				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
-			viewHolder.llMoney.setVisibility(View.VISIBLE);
-			viewHolder.tvCount.setVisibility(View.GONE);
-			viewHolder.tvPercent.setVisibility(View.VISIBLE);
-			viewHolder.pbPercent.setVisibility(View.VISIBLE);
+		switch (type) {
+			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+			case GiftTypeUtil.TYPE_ZERO_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
+			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+				viewHolder.llMoney.setVisibility(View.VISIBLE);
+				viewHolder.tvCount.setVisibility(View.GONE);
+				viewHolder.tvScore.setText(String.valueOf(gift.score));
+				setPercentState(viewHolder, type, gift);
+				setMoneyState(viewHolder, gift);
+				break;
+			default:
+				switch (type) {
+					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+										.seizeTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+										.seizeTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
+										.searchTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+					case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
+										.searchCount)));
+						break;
+				}
+
+		}
+	}
+
+	/**
+	 * 设置消耗额度状态
+	 */
+	private void setMoneyState(ItemHolder viewHolder, IndexGiftNew gift) {
+		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			int percent = gift.remainCount * 100 / gift.totalCount;
-			viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
-			viewHolder.pbPercent.setProgress(percent);
-			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
-				// 只用金币
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				viewHolder.tvScore.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.GONE);
-				viewHolder.tvBean.setVisibility(View.GONE);
-			} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
-				// 只用偶玩豆
-				viewHolder.tvBean.setText(String.valueOf(gift.bean));
-				viewHolder.tvBean.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.GONE);
-				viewHolder.tvScore.setVisibility(View.GONE);
-			} else {
-				// 金币 或 偶玩豆
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				viewHolder.tvBean.setText(String.valueOf(gift.bean));
-				viewHolder.tvScore.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.VISIBLE);
-				viewHolder.tvBean.setVisibility(View.VISIBLE);
-			}
+			viewHolder.tvScore.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.GONE);
+			viewHolder.tvBean.setVisibility(View.GONE);
+		} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
+			// 只用偶玩豆
+			viewHolder.tvBean.setText(String.valueOf(gift.bean));
+			viewHolder.tvBean.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.GONE);
+			viewHolder.tvScore.setVisibility(View.GONE);
 		} else {
-			switch (type) {
-				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format(ConstString.TEXT_SEIZE, gift.seizeTime)));
-					break;
-				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-					setDisabledField(viewHolder, View.INVISIBLE, null);
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format(ConstString.TEXT_SEIZE, gift.seizeTime)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format(ConstString.TEXT_SEARCH, gift.searchTime)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format(ConstString.TEXT_SEARCHED, gift.searchCount)));
-					break;
-			}
+			// 积分 或 偶玩豆
+			viewHolder.tvScore.setText(String.valueOf(gift.score));
+			viewHolder.tvBean.setText(String.valueOf(gift.bean));
+			viewHolder.tvScore.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.VISIBLE);
+			viewHolder.tvBean.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
+	 * 设置显示百分比的显示状态
+	 */
+	private void setPercentState(ItemHolder viewHolder, int type, IndexGiftNew gift) {
+		viewHolder.tvPercent.setVisibility(View.GONE);
+		viewHolder.pbPercent.setVisibility(View.GONE);
+		switch (type) {
+			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+			case GiftTypeUtil.TYPE_ZERO_SEIZE:
+				viewHolder.tvPercent.setVisibility(View.VISIBLE);
+				viewHolder.pbPercent.setVisibility(View.VISIBLE);
+				int percent = gift.remainCount * 100 / gift.totalCount;
+				viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
+				viewHolder.pbPercent.setProgress(percent);
+
 		}
 	}
 

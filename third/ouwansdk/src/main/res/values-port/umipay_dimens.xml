@@ -2,5 +2,6 @@
 
 	<!-- Default screen margins, per the Android Design guidelines. -->
 	<dimen name = "umipay_main_diglog_width" >300dp</dimen >
+	<dimen name = "umipay_main_diglog_autologin_marginleft" >3dp</dimen >
 
 </resources >

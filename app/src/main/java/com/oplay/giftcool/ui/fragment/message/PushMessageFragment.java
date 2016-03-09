@@ -13,7 +13,7 @@ import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
-import com.oplay.giftcool.model.data.resp.PushMessage;
+import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;

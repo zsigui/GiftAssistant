@@ -176,13 +176,13 @@ public class GameParamInfo implements Interface_Serializable {
 	public String serialize() {
 		try {
 			JSONObject jO = new JSONObject();
-			Basic_JSONUtil.putString(jO, KEY_APPID, mAppId);
-			Basic_JSONUtil.putString(jO, KEY_APPSEC, mAppSecret);
-			Basic_JSONUtil.putString(jO, KEY_CHANNELID, mChannelId);
-			Basic_JSONUtil.putString(jO, KEY_CHILDCHANNELID, mSubChannelId);
-			Basic_JSONUtil.putBoolean(jO, KEY_TESTMODE, mTestMode);
-			Basic_JSONUtil.putBoolean(jO, KEY_SINGLEPAY, mSinglePayMode);
-			Basic_JSONUtil.putInt(jO, KEY_MINFEE, mMinFee);
+			Basic_JSONUtil.put(jO, KEY_APPID, mAppId);
+			Basic_JSONUtil.put(jO, KEY_APPSEC, mAppSecret);
+			Basic_JSONUtil.put(jO, KEY_CHANNELID, mChannelId);
+			Basic_JSONUtil.put(jO, KEY_CHILDCHANNELID, mSubChannelId);
+			Basic_JSONUtil.put(jO, KEY_TESTMODE, mTestMode);
+			Basic_JSONUtil.put(jO, KEY_SINGLEPAY, mSinglePayMode);
+			Basic_JSONUtil.put(jO, KEY_MINFEE, mMinFee);
 			return jO.toString();
 		} catch (Throwable e) {
 			Debug_Log.e(e);

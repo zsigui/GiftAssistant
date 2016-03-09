@@ -1,4 +1,4 @@
-//package net.ouwan.umipay.android.view;
+package net.ouwan.umipay.android.view;//package net.ouwan.umipay.android.view;
 //
 //import android.app.Dialog;
 //import android.content.Context;

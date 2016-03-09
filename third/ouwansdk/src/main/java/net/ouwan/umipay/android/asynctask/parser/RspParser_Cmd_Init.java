@@ -53,8 +53,8 @@ public class RspParser_Cmd_Init extends CommonRspParser<Gson_Cmd_Init> {
 					cacheConfig.setEnableVisitorMode(cmdInitDataConfig.getIsevm() == 1);
 					cacheConfig.setEnableFloatMemu(cmdInitDataConfig.getIsefm() == 1);
 					cacheConfig.setEnableHttps(cmdInitDataConfig.getHttps() == 1);
+					cacheConfig.setEnableErrorReport(cmdInitDataConfig.getEnableErrorReport() == 1);
 
-					//测试，暂时全部设置为都显示
 					cacheConfig.setShowGift(cmdInitDataConfig.getShowgift() == 1);
 					cacheConfig.setShowMsg(cmdInitDataConfig.getShowmsg() == 1);
 					cacheConfig.setShowBbs(cmdInitDataConfig.getShowbbs() == 1);

@@ -66,6 +66,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				onWebPageFinished();
+				if (!mSettings.getLoadsImagesAutomatically()) {
+					mSettings.setLoadsImagesAutomatically(true);
+				}
 			}
 
 			@Override
@@ -98,10 +101,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				onWebProgressChangedMethod(newProgress);
 			}
 		});
-		// 关闭硬件加速，否则部分手机（如vivo）WebView会很卡
+		// 开启硬件加速，否则部分手机（如vivo）WebView会很卡
 		if (Build.VERSION.SDK_INT >= 11) {
 			mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-			AppDebugConfig.logMethodWithParams(this, mWebView.isHardwareAccelerated());
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WEBVIEW, "isHardwareAccelerated = " + mWebView.isHardwareAccelerated());
+			}
 		}
 		// 下载监听
 		mWebView.setDownloadListener(this);
@@ -127,6 +132,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			WebView.setWebContentsDebuggingEnabled(true);
+			mSettings.setLoadsImagesAutomatically(true);
+		} else {
+			mSettings.setLoadsImagesAutomatically(false);
 		}
 		try {
 			File cacheDir = null;

@@ -193,7 +193,7 @@ public class DrawerFragment extends BaseFragment {
 		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
 				"消息中心", this));
 		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
-				.ic_drawer_message, "我的关注", this));
+				.ic_drawer_my_attention, "我的关注", this));
 		if (AssistantApp.getInstance().isAllowDownload()) {
 			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD,
 					new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download, "下载管理", this));

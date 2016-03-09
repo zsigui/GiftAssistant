@@ -94,9 +94,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			return;
 		}
 
-		// 初始化网络下载模块
-		assistantApp.initRetrofit();
-
+		// 存储打开APP时间
+		SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
 
 		// 初始化设备配置
 		assistantApp.initAppConfig();
@@ -104,6 +104,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		if (!MobileInfoModel.getInstance().isInit()) {
 			CommonUtil.initMobileInfoModel(mContext);
 		}
+
+		// 初始化网络下载模块, 需要在initMobileInfoModel后设置
+		assistantApp.initRetrofit();
 		// 初始化配置，获取更新信息
 		if (!initAndCheckUpdate()) {
 			if (AppDebugConfig.IS_DEBUG) {

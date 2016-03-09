@@ -8,6 +8,7 @@ import android.webkit.CookieSyncManager;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -16,11 +17,11 @@ import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
-import com.oplay.giftcool.model.data.resp.MessageCount;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
+import com.oplay.giftcool.model.data.resp.message.MessageCount;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
@@ -292,19 +293,20 @@ public class AccountManager {
 	 * 登录或者登出后进行全局的浏览器Cookie重设
 	 */
 	public void syncCookie() {
-		ArrayList<String> cookies = null;
+		ArrayList<String> cookies = new ArrayList<String>();
+		String expiredDate = DateUtil.getGmtDate(48);
 		if (isLogin()) {
-			cookies = new ArrayList<String>();
-			String expiredDate = DateUtil.getGmtDate(48);
 			cookies.add(String.format("cuid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					getUserSesion().uid, WebViewUrl.URL_DOMAIN, expiredDate));
 			cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					getUserSesion().session, WebViewUrl.URL_DOMAIN, expiredDate));
-			cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
-					AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
-			cookies.add(String.format("cid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
-					MobileInfoModel.getInstance().getCid(), WebViewUrl.URL_DOMAIN, expiredDate));
 		}
+		cookies.add(String.format("version=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
+				AppConfig.SDK_VER, WebViewUrl.URL_DOMAIN, expiredDate));
+		cookies.add(String.format("cid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
+				MobileInfoModel.getInstance().getCid(), WebViewUrl.URL_DOMAIN, expiredDate));
+		cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
+				AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
 		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}
 

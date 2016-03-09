@@ -8,6 +8,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -92,17 +93,27 @@ public class DialogManager {
 					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
 						hideLoadingDialog();
 						if (response != null && response.isSuccess()) {
-							if (response.body() != null && response.body().isSuccess()) {
-								ToastUtil.showShort(ConstString.TEXT_SUCCESS);
-								if (dialog != null) {
-									dialog.dismissAllowingStateLoss();
+							JsonRespBase<Void> resp = response.body();
+							if (resp != null) {
+								if (resp.isSuccess()) {
+									ToastUtil.showShort(ConstString.TEXT_HOPE_GIFT_SUCCESS);
+									if (dialog != null) {
+										dialog.dismissAllowingStateLoss();
+									}
+								} else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
+										|| resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
+									// 登录状态失效
+									ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+									AccountManager.getInstance().notifyUserAll(null);
+								} else {
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
+												response.body().error()));
+									}
 								}
 								return;
 							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" : response.body()
-										.error()));
-							}
+							return;
 						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));

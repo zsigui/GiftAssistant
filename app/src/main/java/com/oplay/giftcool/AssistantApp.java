@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.asynctask.AsyncTask_InitApplication;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
@@ -29,6 +30,7 @@ import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
@@ -45,6 +47,7 @@ import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.jpush.android.api.BasicPushNotificationBuilder;
@@ -90,6 +93,9 @@ public class AssistantApp extends Application {
 	private boolean mIsSaveFlow = false;
 	// 是否启用下载完成提示音
 	private boolean mIsPlayDownloadComplete = false;
+
+	// 说明今日是否推送过消息
+	private boolean mIsPushedToday = false;
 
 	// LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -199,12 +205,16 @@ public class AssistantApp extends Application {
 		ImageLoader.getInstance().clearMemoryCache();
 	}
 
-	public void initRetrofit() {
+	public void initGson() {
 		mGson = new GsonBuilder()
 				.registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
 				.serializeNulls()
-				.setDateFormat("yyyy-MM-dd HH:mm")
+				.setDateFormat("yyyy-MM-dd HH:mm:ss")
 				.create();
+	}
+
+	public void initRetrofit() {
+		initGson();
 //		File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH);
 //		Cache cache = new Cache(httpCacheDir, 10 * 1024 * 1024);
 //		Interceptor interceptor = new Interceptor() {
@@ -232,20 +242,8 @@ public class AssistantApp extends Application {
 //				return response;
 //			}
 //		};
-		Interceptor interceptor = new Interceptor() {
-			@Override
-			public Response intercept(Chain chain) throws IOException {
-				String header = String.format("pn=%s&vc=%d&vn=%s&chn=%d",
-						AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-						AppConfig.SDK_VER_NAME, getChannelId());
-				Request newRequest = chain.request().newBuilder()
-						.addHeader("X-Client-Info", header)
-						.build();
-				return chain.proceed(newRequest);
-			}
-		};
+
 		OkHttpClient httpClient = new OkHttpClient();
-		httpClient.interceptors().add(interceptor);
 //		httpClient.networkInterceptors().add(interceptor);
 //		httpClient.setCache(cache);
 		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -258,6 +256,7 @@ public class AssistantApp extends Application {
 				.addConverterFactory(GsonConverterFactory.create(mGson))
 				.client(httpClient)
 				.build();
+		addInterceptorToRetrofit();
 	}
 
 	/**
@@ -327,10 +326,16 @@ public class AssistantApp extends Application {
 		setIsPlayDownloadComplete(mIsPlayDownloadComplete);
 	}
 
+	/**
+	 * 是否进行自动检查更新
+	 */
 	public boolean isShouldAutoCheckUpdate() {
 		return mShouldAutoCheckUpdate;
 	}
 
+	/**
+	 * 设置是否自动检查更新
+	 */
 	public void setShouldAutoCheckUpdate(boolean shouldAutoCheckUpdate) {
 		mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
 		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_CHECK_UPDATE,
@@ -457,6 +462,9 @@ public class AssistantApp extends Application {
 		return SPUtil.getString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, null);
 	}
 
+	/**
+	 * 设置启动闪屏图的地址
+	 */
 	public void setStartImg(String startImg) {
 		if (TextUtils.isEmpty(startImg)) {
 			return;
@@ -465,10 +473,16 @@ public class AssistantApp extends Application {
 		SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);
 	}
 
+	/**
+	 * 获取活动弹窗
+	 */
 	public IndexBanner getBroadcastBanner() {
 		return mBroadcastBanner;
 	}
 
+	/**
+	 * 设置活动弹窗内容
+	 */
 	public void setBroadcastBanner(IndexBanner broadcastBanner) {
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.d(AppDebugConfig.TAG_APP, "broadcastBanner = " + broadcastBanner);
@@ -482,6 +496,9 @@ public class AssistantApp extends Application {
 		}
 	}
 
+	/**
+	 * 获取渠道ID
+	 */
 	public int getChannelId() {
 		if (mChannelId == -1) {
 			mChannelId = ChannelUtil.getChannelId(this);
@@ -489,5 +506,49 @@ public class AssistantApp extends Application {
 		return mChannelId;
 	}
 
+	/**
+	 * 今日是否已经进行了推送
+	 */
+	public boolean isPushedToday() {
+		if (!mIsPushedToday) {
+			long storeTime = SPUtil.getLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, 0);
+			if (storeTime != 0 && DateUtil.isToday(storeTime)) {
+				mIsPushedToday = true;
+			}
+		}
+		return mIsPushedToday;
+	}
 
+	/**
+	 * 设置今日已经进行了推送
+	 */
+	public void setPushedToday() {
+		mIsPushedToday = true;
+		SPUtil.putLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, System.currentTimeMillis());
+	}
+
+	/**
+	 * 往Retrofit网络框架添加网络请求拦截器
+	 */
+	public void addInterceptorToRetrofit() {
+		if (mRetrofit != null) {
+			Interceptor interceptor = new Interceptor() {
+				@Override
+				public Response intercept(Chain chain) throws IOException {
+					String header = String.format(ConstString.TEXT_HEADER,
+							AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+							AppConfig.SDK_VER_NAME, getChannelId());
+					Request newRequest = chain.request().newBuilder()
+							.addHeader("X-Client-Info", header)
+							.build();
+					return chain.proceed(newRequest);
+				}
+			};
+			List<Interceptor> interceptors = mRetrofit.client().interceptors();
+			if (interceptors.size() > 0) {
+				interceptors.remove(0);
+			}
+			interceptors.add(0, interceptor);
+		}
+	}
 }

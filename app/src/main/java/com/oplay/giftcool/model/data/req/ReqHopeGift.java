@@ -15,6 +15,6 @@ public class ReqHopeGift implements Serializable {
 	@SerializedName("app_name")
 	public String gameName;
 
-	@SerializedName("note")
+	@SerializedName("remarks")
 	public String note;
 }

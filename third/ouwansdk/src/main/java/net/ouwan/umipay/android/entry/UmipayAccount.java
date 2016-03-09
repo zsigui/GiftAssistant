@@ -226,16 +226,16 @@ public class UmipayAccount implements Interface_Serializable {
 	@Override
 	public String serialize() {
 		JSONObject jo = new JSONObject();
-		Basic_JSONUtil.putInt(jo, KEY_UID, mUid);
-		Basic_JSONUtil.putString(jo, KEY_USERNAME, mUserName);
-		Basic_JSONUtil.putString(jo, KEY_PSW, mPsw);
-		Basic_JSONUtil.putString(jo, KEY_TOKEN, mToken);
-		Basic_JSONUtil.putBoolean(jo, KEY_REMENBER_PSW, mRemenberPsw);
-		Basic_JSONUtil.putLong(jo, KEY_LAST_LOGIN_TIME, mLastLoginTime_ms);
-		Basic_JSONUtil.putString(jo, KEY_OAUTH_ID, mOauthID);
-		Basic_JSONUtil.putInt(jo, KEY_OAUTH_TYPE, mOauthType);
-		Basic_JSONUtil.putInt(jo, KEY_OAUTH_EXPIRE, mOauthExpire);
-		Basic_JSONUtil.putString(jo, KEY_OAUTH_TOKEN, mOauthToken);
+		Basic_JSONUtil.put(jo, KEY_UID, mUid);
+		Basic_JSONUtil.put(jo, KEY_USERNAME, mUserName);
+		Basic_JSONUtil.put(jo, KEY_PSW, mPsw);
+		Basic_JSONUtil.put(jo, KEY_TOKEN, mToken);
+		Basic_JSONUtil.put(jo, KEY_REMENBER_PSW, mRemenberPsw);
+		Basic_JSONUtil.put(jo, KEY_LAST_LOGIN_TIME, mLastLoginTime_ms);
+		Basic_JSONUtil.put(jo, KEY_OAUTH_ID, mOauthID);
+		Basic_JSONUtil.put(jo, KEY_OAUTH_TYPE, mOauthType);
+		Basic_JSONUtil.put(jo, KEY_OAUTH_EXPIRE, mOauthExpire);
+		Basic_JSONUtil.put(jo, KEY_OAUTH_TOKEN, mOauthToken);
 		return jo.toString();
 	}
 

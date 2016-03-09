@@ -117,8 +117,8 @@ public class JsHandler_Pay_With_Payeco extends JsHandler_abstract_Params_NoPsw_H
 					if (mJsFn != null) {
 						JSONObject data = new JSONObject();
 						try {
-							Basic_JSONUtil.putInt(data, "a", code);
-							Basic_JSONUtil.putString(data, "b", respDesc);
+							Basic_JSONUtil.put(data, "a", code);
+							Basic_JSONUtil.put(data, "b", respDesc);
 						} catch (Exception ignored) {
 						}
 						String dataJson = data.toString();

@@ -118,29 +118,29 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 				String lc = Locale.getDefault().getLanguage();
 				int service = SDKConstantConfig.UMIPAY_SDK_SERVICE;
 
-				Basic_JSONUtil.putString(params, "bd", bd);
-				Basic_JSONUtil.putString(params, "andid", andid);
-				Basic_JSONUtil.putString(params, "dd", dd);
-				Basic_JSONUtil.putString(params, "dv", dv);
-				Basic_JSONUtil.putString(params, "po", po);
-				Basic_JSONUtil.putString(params, "board", board);
-				Basic_JSONUtil.putString(params, "brand", brand);
-				Basic_JSONUtil.putString(params, "device", device);
-				Basic_JSONUtil.putBoolean(params, "ie", ie);
-				Basic_JSONUtil.putInt(params, "sw", sw);
-				Basic_JSONUtil.putInt(params, "sh", sh);
-				Basic_JSONUtil.putInt(params, "sd", sd);
-				Basic_JSONUtil.putInt(params, "ver", ver);
-				Basic_JSONUtil.putString(params, "pn", pn);
-				Basic_JSONUtil.putString(params, "av", av);
-				Basic_JSONUtil.putInt(params, "avc", avc);
-				Basic_JSONUtil.putString(params, "apn", apn);
-				Basic_JSONUtil.putString(params, "cn", cn);
-				Basic_JSONUtil.putString(params, "sds", sds);
-				Basic_JSONUtil.putInt(params, "attr", attr);
-				Basic_JSONUtil.putString(params, "cc", cc);
-				Basic_JSONUtil.putString(params, "lc", lc);
-				Basic_JSONUtil.putInt(params, "service", service);
+				Basic_JSONUtil.put(params, "bd", bd);
+				Basic_JSONUtil.put(params, "andid", andid);
+				Basic_JSONUtil.put(params, "dd", dd);
+				Basic_JSONUtil.put(params, "dv", dv);
+				Basic_JSONUtil.put(params, "po", po);
+				Basic_JSONUtil.put(params, "board", board);
+				Basic_JSONUtil.put(params, "brand", brand);
+				Basic_JSONUtil.put(params, "device", device);
+				Basic_JSONUtil.put(params, "ie", ie);
+				Basic_JSONUtil.put(params, "sw", sw);
+				Basic_JSONUtil.put(params, "sh", sh);
+				Basic_JSONUtil.put(params, "sd", sd);
+				Basic_JSONUtil.put(params, "ver", ver);
+				Basic_JSONUtil.put(params, "pn", pn);
+				Basic_JSONUtil.put(params, "av", av);
+				Basic_JSONUtil.put(params, "avc", avc);
+				Basic_JSONUtil.put(params, "apn", apn);
+				Basic_JSONUtil.put(params, "cn", cn);
+				Basic_JSONUtil.put(params, "sds", sds);
+				Basic_JSONUtil.put(params, "attr", attr);
+				Basic_JSONUtil.put(params, "cc", cc);
+				Basic_JSONUtil.put(params, "lc", lc);
+				Basic_JSONUtil.put(params, "service", service);
 			}
 		}.execute();
 	}
@@ -167,8 +167,8 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 				byte[] user_bytes = user.getBytes();
 				byte[] bytedata = Coder_Md5.concatByteArrays(psw_md5_bytes, user_bytes);
 				String psw_md5 = Coder_Md5.md5(bytedata);
-				Basic_JSONUtil.putString(params, "username", user);
-				Basic_JSONUtil.putString(params, "password", psw_md5);
+				Basic_JSONUtil.put(params, "username", user);
+				Basic_JSONUtil.put(params, "password", psw_md5);
 			}
 		}.execute();
 	}
@@ -177,9 +177,9 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_SMSOP, this) {
 			@Override
 			public void addSpecificParams(JSONObject params) {
-				Basic_JSONUtil.putInt(params, "type", type);
-				Basic_JSONUtil.putString(params, "mobile", mobile);
-				Basic_JSONUtil.putString(params, "code", code);
+				Basic_JSONUtil.put(params, "type", type);
+				Basic_JSONUtil.put(params, "mobile", mobile);
+				Basic_JSONUtil.put(params, "code", code);
 			}
 		}.execute();
 	}
@@ -191,9 +191,9 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_OPENREGISTER, this, extResponse) {
 			@Override
 			public void addSpecificParams(JSONObject params) {
-				Basic_JSONUtil.putString(params, "username", username);
-				Basic_JSONUtil.putString(params, "password", psw);
-				Basic_JSONUtil.putString(params, "mobile", phoneNum);
+				Basic_JSONUtil.put(params, "username", username);
+				Basic_JSONUtil.put(params, "password", psw);
+				Basic_JSONUtil.put(params, "mobile", phoneNum);
 			}
 		}.execute();
 	}
@@ -218,11 +218,11 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_OPENTHIRDLOGIN, this, extResponse) {
 			@Override
 			public void addSpecificParams(JSONObject params) {
-				Basic_JSONUtil.putString(params, "openid", openid);
-				Basic_JSONUtil.putString(params, "token", token);
-				Basic_JSONUtil.putInt(params, "type", type);
-				Basic_JSONUtil.putInt(params, "expire", expire);
-				Basic_JSONUtil.putString(params, "authdata", authdata);
+				Basic_JSONUtil.put(params, "openid", openid);
+				Basic_JSONUtil.put(params, "token", token);
+				Basic_JSONUtil.put(params, "type", type);
+				Basic_JSONUtil.put(params, "expire", expire);
+				Basic_JSONUtil.put(params, "authdata", authdata);
 			}
 		}.execute();
 	}
@@ -231,7 +231,7 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_OPENUSERDELETE, this) {
 			@Override
 			public void addSpecificParams(JSONObject params) {
-				Basic_JSONUtil.putString(params, "username", username);
+				Basic_JSONUtil.put(params, "username", username);
 			}
 		}.execute();
 	}
@@ -246,15 +246,15 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 							.getOpenId();
 				} catch (Throwable ignore) {
 				}
-				Basic_JSONUtil.putString(params, "openid", openid);
-				Basic_JSONUtil.putInt(params, "type", type);
-				Basic_JSONUtil.putString(params, "svrid", gameRolerInfo.getServerId());
-				Basic_JSONUtil.putString(params, "svrname", gameRolerInfo.getServerName());
-				Basic_JSONUtil.putString(params, "rid", gameRolerInfo.getRoleId());
-				Basic_JSONUtil.putString(params, "rname", gameRolerInfo.getRoleName());
-				Basic_JSONUtil.putString(params, "rgrade", gameRolerInfo.getRoleLevel());
-				Basic_JSONUtil.putInt(params, "balance", gameRolerInfo.getBalance());
-				Basic_JSONUtil.putString(params, "vip", gameRolerInfo.getVip());
+				Basic_JSONUtil.put(params, "openid", openid);
+				Basic_JSONUtil.put(params, "type", type);
+				Basic_JSONUtil.put(params, "svrid", gameRolerInfo.getServerId());
+				Basic_JSONUtil.put(params, "svrname", gameRolerInfo.getServerName());
+				Basic_JSONUtil.put(params, "rid", gameRolerInfo.getRoleId());
+				Basic_JSONUtil.put(params, "rname", gameRolerInfo.getRoleName());
+				Basic_JSONUtil.put(params, "rgrade", gameRolerInfo.getRoleLevel());
+				Basic_JSONUtil.put(params, "balance", gameRolerInfo.getBalance());
+				Basic_JSONUtil.put(params, "vip", gameRolerInfo.getVip());
 			}
 		}.execute();
 	}
@@ -281,7 +281,7 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 					openid = currentAccount.getGameUserInfo().getOpenId();
 				} catch (Throwable ignored) {
 				}
-				Basic_JSONUtil.putString(params, "openid", openid);
+				Basic_JSONUtil.put(params, "openid", openid);
 			}
 		}.execute();
 	}

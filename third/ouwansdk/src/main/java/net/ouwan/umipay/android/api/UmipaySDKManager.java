@@ -27,7 +27,7 @@ import net.ouwan.umipay.android.view.UmipayLoginInfoDialog;
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
-import net.youmi.android.libs.common.v2.network.NetworkStatus;
+import net.youmi.android.libs.common.network.Util_Network_Status;
 import net.youmi.android.libs.platform.coder.Coder_SDKPswCoder;
 import net.youmi.android.libs.platform.global.Global_DeveloperConfig;
 import net.youmi.android.libs.platform.global.Global_Runtime_ClientId;
@@ -68,7 +68,7 @@ public class UmipaySDKManager {
 
 			if (context == null || gameparams == null || TextUtils.isEmpty(gameparams.getAppId()) || TextUtils.isEmpty
 					(gameparams.getAppSecret()) || initListener == null || accountListener == null) {
-				ListenerManager.callbackInitFinish(net.ouwan.umipay.android.api.UmipaySDKStatusCode.PARAMETER_ERR,
+				ListenerManager.callbackInitFinish(UmipaySDKStatusCode.PARAMETER_ERR,
 						null);
 				return;
 			}
@@ -150,6 +150,7 @@ public class UmipaySDKManager {
 
 			//运行push
 			PushPullAlarmManager.getInstance(context).startPolling();
+
 		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}
@@ -357,7 +358,7 @@ public class UmipaySDKManager {
 			String imsi = runtime_cid.getImsi();
 			String cid = runtime_cid.getCid();
 			String androidid = Global_Runtime_SystemInfo.getAndroidId(context);
-			String apn = NetworkStatus.getApn(context);
+			String apn = Util_Network_Status.getApn(context);
 
 			if (Basic_StringUtil.isNullOrEmpty(openid) || Basic_StringUtil.isNullOrEmpty(sid)) {
 				Debug_Log.d("缺少用户相关信息，充值失败");

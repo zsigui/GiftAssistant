@@ -16,7 +16,7 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.junnet.heepay.ui.base.Constant;
+import com.heepay.plugin.activity.Constant;
 
 import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
@@ -539,7 +539,7 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		try {
-			if (resultCode == Constant.RESULT_CODE_WELCOME_ERROR || resultCode == Constant.RESULT_CODE_WELCOME) {
+			if (resultCode == Constant.RESULTCODE) {
 				//来自汇付宝的activity的返回
 				if (null != data) {
 					data.setAction(JsHandler_Pay_With_WECHAT.WECHAT_PUKGUIN_PAYEND_ACTION);

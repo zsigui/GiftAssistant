@@ -24,18 +24,20 @@
 	<!--银联插件3.1.0新增权限-->
 	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
 	<!--易联支付需要权限 -->
-	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
-	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
 	<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />
-	<!--<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />-->
-	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
+	<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
 
+	<!--读取短信权限,本APP不需要-->
+	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
+	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
+	<!-- 二次风险验证需要照相权限,默认去掉 -->
 	<!--<uses-feature android:name = "android.hardware.camera" />-->
 	<!--<uses-feature android:name = "android.hardware.camera.autofocus" />-->
-
 	<!--<uses-permission android:name = "android.permission.CAMERA" />-->
-	<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+	<!-- 录像权限,无须 -->
+	<!--<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
+	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
 	<!--<uses-permission android:name = "android.permission.RECORD_VIDEO" />-->
 
 

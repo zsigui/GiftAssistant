@@ -43,14 +43,15 @@ import java.util.Locale;
 /**
  * Created by mink on 16-03-04.
  */
-public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener, StickyListHeadersAdapter {
+public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener,
+		StickyListHeadersAdapter {
 
 	private static final int TAG_POS = 0xFF331234;
 
 	private List<TimeData<IndexGiftNew>> mTimeData;
 	private Context mContext;
 	private OnItemClickListener<IndexGiftNew> mListener;
-	private HashMap<String,String> calendar;
+	private HashMap<String, String> calendar;
 
 
 	public LimitGiftListAdapter(Context context) {
@@ -135,9 +136,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 
 		final IndexGiftNew gift = mTimeData.get(position).data;
-		String date  = mTimeData.get(position).date;
-
-		setData(position, convertView, viewHolder, type, gift, date);
+		setData(position, convertView, viewHolder, type, gift);
 
 		return convertView;
 	}
@@ -145,7 +144,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	/**
 	 * 设置列表数据
 	 */
-	private void setData(int position, View convertView, ViewHolder viewHolder, int type, IndexGiftNew gift, String date) {
+	private void setData(int position, View convertView, ViewHolder viewHolder, int type, IndexGiftNew gift) {
 		setCommonField(viewHolder, gift);
 		viewHolder.btnSend.setTag(TAG_POS, position);
 		convertView.setTag(TAG_POS, position);
@@ -153,67 +152,92 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		viewHolder.btnSend.setOnClickListener(this);
 		convertView.setOnClickListener(this);
 		// 设置数据和按键状态
-		if (type == GiftTypeUtil.TYPE_NORMAL_SEIZE
-				|| type == GiftTypeUtil.TYPE_LIMIT_SEIZE
-				|| type == GiftTypeUtil.TYPE_ZERO_SEIZE) {
-			viewHolder.llMoney.setVisibility(View.VISIBLE);
-			viewHolder.tvCount.setVisibility(View.GONE);
+		switch (type) {
+			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+			case GiftTypeUtil.TYPE_ZERO_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
+			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+				viewHolder.llMoney.setVisibility(View.VISIBLE);
+				viewHolder.tvCount.setVisibility(View.GONE);
+				viewHolder.tvScore.setText(String.valueOf(gift.score));
+				setPercentState(viewHolder, type, gift);
+				setMoneyState(viewHolder, gift);
+				break;
+			default:
+				switch (type) {
+					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+										.seizeTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
+										.seizeTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
+										.searchTime)));
+						break;
+					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+					case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+						setDisabledField(viewHolder, View.VISIBLE,
+								Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
+										.searchCount)));
+						break;
+				}
+
+		}
+	}
+
+	/**
+	 * 设置消耗额度状态
+	 */
+	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
+		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			int percent = gift.remainCount * 100 / gift.totalCount;
-			viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
-			viewHolder.pbPercent.setProgress(percent);
-			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
-				// 只用积分
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				viewHolder.tvScore.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.GONE);
-				viewHolder.tvBean.setVisibility(View.GONE);
-			} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
-				// 只用偶玩豆
-				viewHolder.tvBean.setText(String.valueOf(gift.bean));
-				viewHolder.tvBean.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.GONE);
-				viewHolder.tvScore.setVisibility(View.GONE);
-			} else {
-				// 积分 或 偶玩豆
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				viewHolder.tvBean.setText(String.valueOf(gift.bean));
-				viewHolder.tvScore.setVisibility(View.VISIBLE);
-				viewHolder.tvOr.setVisibility(View.VISIBLE);
-				viewHolder.tvBean.setVisibility(View.VISIBLE);
-			}
+			viewHolder.tvScore.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.GONE);
+			viewHolder.tvBean.setVisibility(View.GONE);
+		} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
+			// 只用偶玩豆
+			viewHolder.tvBean.setText(String.valueOf(gift.bean));
+			viewHolder.tvBean.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.GONE);
+			viewHolder.tvScore.setVisibility(View.GONE);
 		} else {
-			switch (type) {
-				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-									.seizeTime)));
-					break;
-				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-				case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-				case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-				case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-					setDisabledField(viewHolder, View.INVISIBLE, null);
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-									.seizeTime)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
-									.searchTime)));
-					break;
-				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
-									.searchCount)));
-					break;
-			}
+			// 积分 或 偶玩豆
+			viewHolder.tvScore.setText(String.valueOf(gift.score));
+			viewHolder.tvBean.setText(String.valueOf(gift.bean));
+			viewHolder.tvScore.setVisibility(View.VISIBLE);
+			viewHolder.tvOr.setVisibility(View.VISIBLE);
+			viewHolder.tvBean.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
+	 * 设置显示百分比的显示状态
+	 */
+	private void setPercentState(ViewHolder viewHolder, int type, IndexGiftNew gift) {
+		viewHolder.tvPercent.setVisibility(View.GONE);
+		viewHolder.pbPercent.setVisibility(View.GONE);
+		switch (type) {
+			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+			case GiftTypeUtil.TYPE_ZERO_SEIZE:
+				viewHolder.tvPercent.setVisibility(View.VISIBLE);
+				viewHolder.pbPercent.setVisibility(View.VISIBLE);
+				int percent = gift.remainCount * 100 / gift.totalCount;
+				viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
+				viewHolder.pbPercent.setProgress(percent);
+
 		}
 	}
 
@@ -236,6 +260,9 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		itemHolder.tvContent.setText(String.format("%s", gift.content));
 	}
 
+	/**
+	 * 设置等待等几个项的显示状态
+	 */
 	public void setDisabledField(ViewHolder itemHolder, int tvVisibility, Spanned tvText) {
 		itemHolder.llMoney.setVisibility(View.GONE);
 		itemHolder.pbPercent.setVisibility(View.GONE);
@@ -317,9 +344,9 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	public long getHeaderId(int position) {
 		//用item数据的日期首次在列表中出现位置作为id
 		String date = formatDateTime(mTimeData.get(position).date);
-		for(int i= 0; i< mTimeData.size();i++){
+		for (int i = 0; i < mTimeData.size(); i++) {
 			String d = formatDateTime(mTimeData.get(i).date);
-			if(d.equals(date) ){
+			if (d.equals(date)) {
 				return i;
 			}
 		}
@@ -348,52 +375,54 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		public TextView tv_date;
 
 	}
-	private static ArrayList<IndexGiftNew> praseDateFromTimeDataList(ArrayList<TimeDataList<IndexGiftNew>> data){
+
+	private static ArrayList<IndexGiftNew> praseDateFromTimeDataList(ArrayList<TimeDataList<IndexGiftNew>> data) {
 		ArrayList list = new ArrayList<IndexGiftNew>();
-		try { Collections.sort(data, new Comparator<TimeDataList<IndexGiftNew>>() {
-			@Override
-			public int compare(TimeDataList<IndexGiftNew> lhs, TimeDataList<IndexGiftNew> rhs) {
+		try {
+			Collections.sort(data, new Comparator<TimeDataList<IndexGiftNew>>() {
+				@Override
+				public int compare(TimeDataList<IndexGiftNew> lhs, TimeDataList<IndexGiftNew> rhs) {
 
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-				//将字符串形式的时间转化为Date类型的时间
-				try {
-					Date a = sdf.parse(lhs.date);
-					Date b = sdf.parse(rhs.date);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+					//将字符串形式的时间转化为Date类型的时间
+					try {
+						Date a = sdf.parse(lhs.date);
+						Date b = sdf.parse(rhs.date);
 
-					//Date类的一个方法，如果a早于b返回true，否则返回false
-					if (a.before(b))
-						return 1;
-					else
-						return -1;
-				} catch (Throwable e) {
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.e(AppDebugConfig.TAG_FRAG, e);
+						//Date类的一个方法，如果a早于b返回true，否则返回false
+						if (a.before(b))
+							return 1;
+						else
+							return -1;
+					} catch (Throwable e) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.e(AppDebugConfig.TAG_FRAG, e);
+						}
 					}
+					return -1;
 				}
-				return -1;
-			}
-		});
+			});
 			for (TimeDataList<IndexGiftNew> d : data) {
 				list.addAll(d.data);
 			}
-		}catch (Throwable e){
+		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}
 		return list;
 	}
 
-	public String formatDateTime(String time){
+	public String formatDateTime(String time) {
 		String date = "";
 		try {
-			if(calendar == null){
-				calendar = new HashMap<String,String>();
+			if (calendar == null) {
+				calendar = new HashMap<String, String>();
 			}
 			date = calendar.get(time);
 			if (date == null) {
 				date = formatDateTimeHelper(time);
 				calendar.put(time, date);
 			}
-		}catch (Throwable e){
+		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}
 		return date;
@@ -401,12 +430,13 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 	/**
 	 * 格式化时间
+	 *
 	 * @param time
 	 * @return
 	 */
 	private static String formatDateTimeHelper(String time) {
 		SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		if(TextUtils.isEmpty(time)){
+		if (TextUtils.isEmpty(time)) {
 			return "";
 		}
 		Date date = null;
@@ -414,35 +444,35 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 			date = format.parse(time);
 			Calendar current = Calendar.getInstance();
-			Calendar today = Calendar.getInstance();	//今天
+			Calendar today = Calendar.getInstance();    //今天
 
 			today.set(Calendar.YEAR, current.get(Calendar.YEAR));
 			today.set(Calendar.MONTH, current.get(Calendar.MONTH));
-			today.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH));
+			today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
 			//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
-			today.set( Calendar.HOUR_OF_DAY, 0);
-			today.set( Calendar.MINUTE, 0);
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE, 0);
 			today.set(Calendar.SECOND, 0);
 
-			Calendar yesterday = Calendar.getInstance();	//昨天
+			Calendar yesterday = Calendar.getInstance();    //昨天
 
 			yesterday.set(Calendar.YEAR, current.get(Calendar.YEAR));
 			yesterday.set(Calendar.MONTH, current.get(Calendar.MONTH));
-			yesterday.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH) - 1);
-			yesterday.set( Calendar.HOUR_OF_DAY, 0);
-			yesterday.set( Calendar.MINUTE, 0);
+			yesterday.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH) - 1);
+			yesterday.set(Calendar.HOUR_OF_DAY, 0);
+			yesterday.set(Calendar.MINUTE, 0);
 			yesterday.set(Calendar.SECOND, 0);
 
 			current.setTime(date);
-			current.set( Calendar.HOUR_OF_DAY, 0);
+			current.set(Calendar.HOUR_OF_DAY, 0);
 			current.set(Calendar.MINUTE, 0);
 			current.set(Calendar.SECOND, 30);
 
-			if(current.after(today)){
+			if (current.after(today)) {
 				return "今天";
-			}else if(current.before(today) && current.after(yesterday)){
+			} else if (current.before(today) && current.after(yesterday)) {
 				return "昨天";
-			}else{
+			} else {
 				return "以前";
 			}
 		} catch (ParseException e) {

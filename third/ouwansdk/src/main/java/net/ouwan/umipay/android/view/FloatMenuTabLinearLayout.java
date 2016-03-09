@@ -36,7 +36,7 @@ public class FloatMenuTabLinearLayout extends LinearLayout {
             return;
         }
         try {
-            LinearLayout.LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lp.gravity = Gravity.CENTER_VERTICAL;
             setLayoutParams(lp);
             setOrientation(HORIZONTAL);
@@ -76,7 +76,7 @@ public class FloatMenuTabLinearLayout extends LinearLayout {
             if (v instanceof FloatMenuTabButton) {
 	            ((FloatMenuTabButton) v).update();
 	            if(v.getVisibility() == VISIBLE){
-		            LinearLayout.LayoutParams lp = (LayoutParams) v.getLayoutParams();
+		            LayoutParams lp = (LayoutParams) v.getLayoutParams();
 		            if(visibleView == 0 ){
 			            lp.setMargins(Util_System_Display.dip2px(mContext, 6),0,0,0);
 		            }else{
@@ -115,7 +115,7 @@ public class FloatMenuTabLinearLayout extends LinearLayout {
                     //只显示FloatMenuTabButton
                     final int childWidth = child.getMeasuredWidth();
                     final int childHeight = child.getMeasuredHeight();
-                    final LinearLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                    final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                     //直接居中处理
                     childTop = paddingTop + ((childSpace - childHeight) / 2) + lp.topMargin - lp.bottomMargin;
 

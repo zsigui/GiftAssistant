@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
@@ -21,6 +20,7 @@ import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.PushInfo;
 import net.ouwan.umipay.android.interfaces.Interface_GetPush_Listener;
+import net.ouwan.umipay.android.manager.ErrorReportManager;
 import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.ProxyPushCacheManager;
 import net.ouwan.umipay.android.manager.UmipayCommandTaskManager;
@@ -43,6 +43,8 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
 	public static final int ACTION_RUN = 2;
 	public static final int ACTION_FLOATMENU_PULL = 3;
 	public static final int ACTION_JS_NOTIFICATION = 4;
+	public static final int ACTION_ERROR_REPORT = 5;
+
 	Handler mHandler;
 
 	public UmipayService() {
@@ -87,6 +89,10 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
 				case ACTION_JS_NOTIFICATION: {
 					PushInfo pushInfo = (PushInfo) intent.getSerializableExtra("pushinfo");
 					showNotify(pushInfo);
+					break;
+				}
+				case ACTION_ERROR_REPORT: {
+					errorReport(intent);
 					break;
 				}
 				default:
@@ -150,28 +156,6 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
 		// 通知图标
 		CharSequence tickerText = lastPushInfo.getTitle();
 		long when = lastPushInfo.getShowTime_ms(); // 通知产生的时间，会在通知信息里显示
-		// 用上面的属性初始化Nofification
-		Notification notification;
-		if (Build.VERSION.SDK_INT >= 22) {
-			notification = new Notification.Builder(getApplicationContext())
-					.setWhen(when)
-					.setTicker(tickerText)
-					.setSmallIcon(icon)
-					.setContentText(lastPushInfo.getContent())
-					.setContentTitle(lastPushInfo.getTitle())
-					.build();
-		} else {
-			notification = new NotificationCompat.Builder(getApplicationContext())
-					.setWhen(when)
-					.setTicker(tickerText)
-					.setSmallIcon(icon)
-					.setContentText(lastPushInfo.getContent())
-					.setContentTitle(lastPushInfo.getTitle())
-					.build();
-		}
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		notification.sound = null;
-		notification.defaults |= Notification.DEFAULT_VIBRATE;
 		Intent notificationIntent = new Intent(this, UmipayService.class);
 		notificationIntent.putExtra("action", ACTION_RUN);
 		notificationIntent.putExtra("pushinfo", lastPushInfo);
@@ -179,7 +163,20 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
 				notificationIntent, PendingIntent.FLAG_ONE_SHOT
 						| PendingIntent.FLAG_UPDATE_CURRENT
 		);
-		notification.contentIntent = contentIntent;
+		// 用上面的属性初始化Nofification
+		Notification notification;
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+		builder.setSmallIcon(icon);
+		builder.setTicker(tickerText);
+		builder.setWhen(when);
+		notification = builder
+				.setContentTitle(lastPushInfo.getTitle())
+				.setContentText(lastPushInfo.getContent())
+				.setContentIntent(contentIntent).build();
+
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		notification.sound = null;
+		notification.defaults |= Notification.DEFAULT_VIBRATE;
 
 
 		Bitmap bitmap = Util_ImageLoader.syncLoadBitmap(getApplicationContext(), lastPushInfo.getIconUrl());
@@ -239,6 +236,23 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
 				startActivity(gameintent);
 			}
 
+		} catch (Throwable e) {
+			Debug_Log.e(e);
+		}
+	}
+
+	private void errorReport(Intent intent) {
+		Debug_Log.dd("UmipayService errorReport");
+		if (intent == null) {
+			return;
+		}
+		try {
+			int errorCode = intent.getIntExtra("errorCode", 0);
+			String errorMsg = intent.getStringExtra("errorMsg");
+			long ttl = intent.getLongExtra("ttl", 0l);
+			long timestamp = intent.getLongExtra("timestamp", 0l);
+			//记录错误log并收集当前相关信息，考虑到需要测试网络状况等，所以放到service里面在后台执行相关操作
+			ErrorReportManager.getInstance(UmipayService.this).report(mHandler, errorCode, errorMsg, ttl, timestamp);
 		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}

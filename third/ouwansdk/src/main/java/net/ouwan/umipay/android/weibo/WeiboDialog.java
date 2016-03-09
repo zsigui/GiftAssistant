@@ -88,7 +88,7 @@ public class WeiboDialog extends Dialog{
 		this.mWebView.setVerticalScrollBarEnabled(false);
 		this.mWebView.setHorizontalScrollBarEnabled(false);
 		this.mWebView.getSettings().setJavaScriptEnabled(true);
-		this.mWebView.setWebViewClient(new WeiboDialog.WeiboWebViewClient());
+		this.mWebView.setWebViewClient(new WeiboWebViewClient());
 		this.mWebView.loadUrl(this.mUrl);
 		this.mWebView.setLayoutParams(FILL);
 		this.mWebView.setVisibility(4);

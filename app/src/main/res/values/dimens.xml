@@ -79,12 +79,14 @@
 	<dimen name = "di_index_list_item_gap" >12dp</dimen >
 	<dimen name = "di_index_list_item_width" >94dp</dimen >
 
+	<dimen name = "di_gift_percent_margin_left" >5dp</dimen >
+
 	<!-- 主页-礼包页面-限抢礼包-->
-	<dimen name = "di_limmit_item__height" >85dp</dimen >
-	<dimen name = "di_limmit_margin_left" >4dp</dimen >
+	<dimen name = "di_limit_item_height" >94dp</dimen >
+	<dimen name = "di_limit_margin_left" >4dp</dimen >
 	<dimen name = "di_timeline_point_diameter" >8dp</dimen >
 	<dimen name = "di_timeline_thickness">0.5dp</dimen>
-	<dimen name = "di_giftlimmit_padding">4dp</dimen>
+	<dimen name = "di_gift_limit_padding">4dp</dimen>
 
 	<!-- 主页-游戏-精品 -->
 	<dimen name = "di_index_game_recommend_iv_height" >176dp</dimen >

@@ -11,6 +11,7 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.LimitGiftListData;
 import com.oplay.giftcool.model.data.resp.TimeData;
@@ -157,7 +158,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-						displayGiftLimitUI(response.body().getData());
+						displayGiftLimitUI(response.body().getData(), mReqPageObj.data.pageSize);
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {

@@ -14,7 +14,7 @@ import net.youmi.android.libs.platform.coder.Coder_SDKPswCoder;
  *         description
  */
 public class SDKConstantConfig {
-	public static final int UMIPAY_SDK_VERSION = 355;
+	public static final int UMIPAY_SDK_VERSION = 356;
 	public static final int SDK_ID = 13;
 	public static final int API_SDK_VERSION = 103;
 	public static final int SDK_PLATFORM_ANDROID = 3;

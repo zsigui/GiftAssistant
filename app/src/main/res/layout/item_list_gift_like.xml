@@ -40,7 +40,7 @@
 			android:layout_width = "70dp"
 			android:layout_below = "@+id/tv_name"
 			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_marginTop = "12dp"
+			android:layout_marginTop = "7dp"
 			android:layout_toRightOf = "@+id/rl_icon"
 			android:gravity = "center_vertical"
 			android:text = "3.4万人在玩" />
@@ -63,7 +63,7 @@
 			android:gravity = "left"
 			android:layout_below = "@+id/tv_content"
 			android:layout_marginLeft = "7dp"
-			android:layout_marginTop = "6dp"
+			android:layout_marginTop = "5dp"
 			android:layout_toRightOf = "@+id/rl_icon"
 			android:text = "共12款礼包" />
 
@@ -73,9 +73,9 @@
 			android:gravity = "left"
 			android:layout_below = "@+id/tv_content"
 			android:layout_marginLeft = "7dp"
-			android:layout_marginTop = "6dp"
+			android:layout_alignTop = "@+id/tv_count"
 			android:layout_toRightOf = "@+id/tv_count"
-			android:text = "今日新增2款" />
+			android:text = "最新礼包:" />
 
 
 	<!--<LinearLayout

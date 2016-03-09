@@ -30,6 +30,14 @@ public class ConstantString {
 	//http://test.gw2.umipay.com/mp/gw/pay/
 	public final static String TEST_SERVER_URL =
 			"0b1217410c4b4e115143161e03475018425b0f40021b4c535c5a160b461603421b1359414a";
+	//服务器域名 gw2.umipay.com
+	public final static String SERVER_HOSTNAME = "0411511f4309081555494c530b5d";
+	//错误上报服务器地址 http://upload.gw2.umipay.com/mp/gw/
+	public final static String ERRORREPORT_SERVER_URL = "0b1217410c4b4e10445c0d51001e05410518135d0a1203491d54560b1954141a531417";
+	//阿里DNS域名解析服务器地址 223.5.5.5
+	public final static String ERRORREPORT_DNSPROVIDER = "5154501f034a544b01";
+	//百度链接 www.baidu.com
+	public final static String BAIDU_HOSTNAME = "1411141f54050801411e015f09";
 
 	//  https://pay.umipay.com
 	public final static String HOST_HTTPS = "0b121741455e4e4a44511b1e115d0b46564f48530c0f";

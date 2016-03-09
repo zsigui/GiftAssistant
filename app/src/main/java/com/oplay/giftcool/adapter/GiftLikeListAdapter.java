@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 猜你喜欢礼包列表适配器
+ *
  * Created by zsigui on 15-12-30.
  */
 public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implements View.OnClickListener {
@@ -51,7 +53,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 			holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
 			holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 			holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_remain);
-            convertView.setTag(holder);
+			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
@@ -60,16 +62,14 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 		holder.tvName.setText(o.name);
 		if (o.playCount > 10000) {
 			holder.tvContent.setText(Html.fromHtml(
-					String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
-							(float) o.playCount / 10000)));
+					String.format("<font color='#ffaa17'>%.1f万人</font>在玩", (float) o.playCount / 10000)));
 		} else {
 			holder.tvContent.setText(Html.fromHtml(
-					String.format("<font color='#ffaa17'>%d人</font>在玩",
-							o.playCount)));
+					String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
 		}
 		holder.tvSize.setText(o.size);
-		holder.tvCount.setText( Html.fromHtml(String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
-		holder.tvRemain.setText(Html.fromHtml(String.format("今日新增<font color='#ffaa17'>%d</font>款", o.newCount)));
+		holder.tvCount.setText(Html.fromHtml(String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
+		holder.tvRemain.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%s</font>", o.giftName)));
 		ViewUtil.showImage(holder.ivIcon, o.img);
 		convertView.setOnClickListener(this);
 		convertView.setTag(TAG_POSITION, position);
@@ -81,7 +81,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 		if (mData == null || v.getTag(TAG_POSITION) == null) {
 			return;
 		}
-		Integer pos = (Integer)v.getTag(TAG_POSITION);
+		Integer pos = (Integer) v.getTag(TAG_POSITION);
 		IntentUtil.jumpGameDetail(mContext, getItem(pos).id, GameTypeUtil.JUMP_STATUS_GIFT);
 	}
 

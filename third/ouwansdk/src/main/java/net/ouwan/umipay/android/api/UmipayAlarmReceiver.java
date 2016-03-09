@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.manager.PushPullAlarmManager;
-import net.youmi.android.libs.common.v2.network.NetworkStatus;
+import net.youmi.android.libs.common.network.Util_Network_Status;
 
 import java.util.Date;
 
@@ -24,8 +24,8 @@ public class UmipayAlarmReceiver extends BroadcastReceiver {
 			String action = intent.getAction();
 			if ("android.net.conn.CONNECTIVITY_CHANGE".equals(action)) {
 				Debug_Log.dd("Network change");
-				if (NetworkStatus.isNetworkAvailable(context)) {
-					if ("wifi" == NetworkStatus.getApn(context)) {
+				if (Util_Network_Status.isNetworkAvailable(context)) {
+					if ("wifi" == Util_Network_Status.getApn(context)) {
 						PushPullAlarmManager.getInstance(context).startPolling();
 					}
 				}

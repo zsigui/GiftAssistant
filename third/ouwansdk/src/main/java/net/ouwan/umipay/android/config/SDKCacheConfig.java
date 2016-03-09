@@ -89,6 +89,10 @@ public class SDKCacheConfig implements Interface_Serializable {
 	 */
 	private boolean mIsInitEpaySDK = false;
 	/**
+	 * @Fields mEnableErrorReport :是否允许错误上报
+	 */
+	private boolean mEnableErrorReport = false;
+	/**
 	 * @Fields mLastInitEpaySDKIMSI :上一次初始化宜支付SDK时的imei
 	 */
 	private String mLastInitEpaySDKIMSI;
@@ -150,30 +154,31 @@ public class SDKCacheConfig implements Interface_Serializable {
 	@Override
 	public String serialize() {
 		JSONObject object = new JSONObject();
-		Basic_JSONUtil.putBoolean(object, "mAutoLogin", mAutoLogin);
-		Basic_JSONUtil.putBoolean(object, "mRemenberPsw", mRemenberPsw);
-		Basic_JSONUtil.putBoolean(object, "mEnableQuickReg", mEnableQuickReg);
-		Basic_JSONUtil.putBoolean(object, "mEnableViewPsw", mEnableViewPsw);
-		Basic_JSONUtil.putBoolean(object, "mEnableVisitorMode", mEnableVisitorMode);
-		Basic_JSONUtil.putBoolean(object, "mEnableHttps", mEnableHttps);
-		Basic_JSONUtil.putBoolean(object, "mEnableFloatMemu", mEnableFloatMemu);
-		Basic_JSONUtil.putBoolean(object, "mEnableOtherLogin", mEnableOtherLogin);
-		Basic_JSONUtil.putBoolean(object, "mIsShowAccount", mIsShowAccount);
-		Basic_JSONUtil.putBoolean(object, "mIsShowGift", mIsShowGift);
-		Basic_JSONUtil.putBoolean(object, "mIsShowMsg", mIsShowMsg);
-		Basic_JSONUtil.putBoolean(object, "mIsShowBbs", mIsShowBbs);
-		Basic_JSONUtil.putBoolean(object, "mIsShowHelp", mIsShowHelp);
-		Basic_JSONUtil.putBoolean(object, "mEnableBbsRedPoint", mEnableBbsRedPoint);
-		Basic_JSONUtil.putBoolean(object, "mEnableFloatMemuDialog", mEnableFloatMemuDialog);
-		Basic_JSONUtil.putBoolean(object, "mIsInitEpaySDK", mIsInitEpaySDK);
-		Basic_JSONUtil.putString(object, "mLastInitEpaySDKIMSI", mLastInitEpaySDKIMSI);
-		Basic_JSONUtil.putString(object, "mEpayIdentify", mEpayIdentify);
-		Basic_JSONUtil.putInt(object, "mRedpointTime", mRedpointTime);
-		Basic_JSONUtil.putString(object, "mOuwanPackageName", mOuwanPackageName);
-		Basic_JSONUtil.putString(object, "mOuwanCommunityUrl", mOuwanCommunityUrl);
-		Basic_JSONUtil.putString(object, "mOuwanDownloadUrl", mOuwanDownloadUrl);
-		Basic_JSONUtil.putString(object, "mExitDialogDownloadBtnText", mExitDialogDownloadBtnText);
-		Basic_JSONUtil.putString(object, "mExitDialogCommunityBtnText", mExitDialogCommunityBtnText);
+		Basic_JSONUtil.put(object, "mAutoLogin", mAutoLogin);
+		Basic_JSONUtil.put(object, "mRemenberPsw", mRemenberPsw);
+		Basic_JSONUtil.put(object, "mEnableQuickReg", mEnableQuickReg);
+		Basic_JSONUtil.put(object, "mEnableViewPsw", mEnableViewPsw);
+		Basic_JSONUtil.put(object, "mEnableVisitorMode", mEnableVisitorMode);
+		Basic_JSONUtil.put(object, "mEnableHttps", mEnableHttps);
+		Basic_JSONUtil.put(object, "mEnableFloatMemu", mEnableFloatMemu);
+		Basic_JSONUtil.put(object, "mEnableOtherLogin", mEnableOtherLogin);
+		Basic_JSONUtil.put(object, "mIsShowAccount", mIsShowAccount);
+		Basic_JSONUtil.put(object, "mIsShowGift", mIsShowGift);
+		Basic_JSONUtil.put(object, "mIsShowMsg", mIsShowMsg);
+		Basic_JSONUtil.put(object, "mIsShowBbs", mIsShowBbs);
+		Basic_JSONUtil.put(object, "mIsShowHelp", mIsShowHelp);
+		Basic_JSONUtil.put(object, "mEnableBbsRedPoint", mEnableBbsRedPoint);
+		Basic_JSONUtil.put(object, "mEnableFloatMemuDialog", mEnableFloatMemuDialog);
+		Basic_JSONUtil.put(object, "mIsInitEpaySDK", mIsInitEpaySDK);
+		Basic_JSONUtil.put(object, "mEnableErrorReport", mEnableErrorReport);
+		Basic_JSONUtil.put(object, "mLastInitEpaySDKIMSI", mLastInitEpaySDKIMSI);
+		Basic_JSONUtil.put(object, "mEpayIdentify", mEpayIdentify);
+		Basic_JSONUtil.put(object, "mRedpointTime", mRedpointTime);
+		Basic_JSONUtil.put(object, "mOuwanPackageName", mOuwanPackageName);
+		Basic_JSONUtil.put(object, "mOuwanCommunityUrl", mOuwanCommunityUrl);
+		Basic_JSONUtil.put(object, "mOuwanDownloadUrl", mOuwanDownloadUrl);
+		Basic_JSONUtil.put(object, "mExitDialogDownloadBtnText", mExitDialogDownloadBtnText);
+		Basic_JSONUtil.put(object, "mExitDialogCommunityBtnText", mExitDialogCommunityBtnText);
 		return object.toString();
 	}
 
@@ -211,6 +216,7 @@ public class SDKCacheConfig implements Interface_Serializable {
 			mEnableFloatMemuDialog = Basic_JSONUtil.getBoolean(object,
 					"mEnableFloatMemuDialog", true);
 			mIsInitEpaySDK = Basic_JSONUtil.getBoolean(object, "mIsInitEpaySDK", false);
+			mEnableErrorReport = Basic_JSONUtil.getBoolean(object, "mEnableErrorReport", false);
 			mLastInitEpaySDKIMSI = Basic_JSONUtil.getString(object, "mLastInitEpaySDKIMSI", null);
 			mEpayIdentify = Basic_JSONUtil.getString(object, "mEpayIdentify", null);
 			mRedpointTime = Basic_JSONUtil.getInt(object, "mRedpointTime", 0);
@@ -372,6 +378,14 @@ public class SDKCacheConfig implements Interface_Serializable {
 
 	public void setInitEpaySDK(boolean isInitEpaySDK) {
 		mIsInitEpaySDK = isInitEpaySDK;
+	}
+
+	public boolean isEnableErrorReport() {
+		return mEnableErrorReport;
+	}
+
+	public void setEnableErrorReport(boolean enableErrorReport) {
+		mEnableErrorReport = enableErrorReport;
 	}
 
 	public String getLastInitEpaySDKIMSI() {

@@ -41,7 +41,6 @@
 	<TextView
 			android:id = "@+id/tv_gift"
 			style = "@style/DefaultTextView.ItemSubTitle"
-			android:textColor = "@color/co_btn_orange"
 			android:layout_below = "@+id/tv_game_name" />
 
 </RelativeLayout >

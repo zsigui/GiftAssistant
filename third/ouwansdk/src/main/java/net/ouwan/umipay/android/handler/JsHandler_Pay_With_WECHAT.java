@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.junnet.heepay.ui.activity.WelcomeActivity;
-import com.junnet.heepay.ui.base.Constant;
+import com.heepay.plugin.api.HeepayPlugin;
 
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
@@ -30,16 +29,20 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 	//
 	Bundle _payInfoBundle;
 
+	// 支付初始化后返回的一个支付码 初始化才返回
 	String token_id = "";
-	String agent_id = "";
+	// 商家生成的订单号 初始化才回返回
 	String bill_no = "";
+	String agent_id = "";
+	//支付类型,30为微信支付，22为支付宝支付
+	String _payType = "30";
 
 	public static final String WECHAT_PUKGUIN_PAYEND_ACTION = "com.junnet.heepay.payend.umipay_Action";
 
 
 
 	@Override
-	protected JSONObject toHandler(Interface_SDK_Handler sdkHandler,
+	protected JSONObject toHandler(final Interface_SDK_Handler sdkHandler,
 	                               Interface_Browser_Handler browserHandler, JSONObject params) {
 
 		try {
@@ -73,16 +76,15 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 			if (token_id == null || agent_id == null || bill_no == null) {
 				return toSimpleCodeJson(Err_Params);
 			}
-			_payInfoBundle = new Bundle();
-			_payInfoBundle.putString("tid",token_id);
-			_payInfoBundle.putInt("aid",
-					Integer.parseInt(agent_id));
-
-			_payInfoBundle.putString("bn", bill_no);
-			sdkHandler.getActivity().startActivityForResult(
-					new Intent(context, WelcomeActivity.class)
-							.putExtras(_payInfoBundle),
-					Constant.REQUEST_CODE_INIT);
+			final String paramStr = token_id + ","
+					+ agent_id + "," + bill_no
+					+ "," + _payType;
+			sdkHandler.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					HeepayPlugin.pay(sdkHandler.getActivity(), paramStr);
+				}
+			});
 			JSONObject res = toSimpleCodeJson(OK);
 			//监听回调
 			IntentFilter filter = new IntentFilter();
@@ -112,12 +114,18 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 			String result_message = "";
 			try{
 				if(WECHAT_PUKGUIN_PAYEND_ACTION.equals(action)) {
-					code = intent.getExtras().getString("result_code");
-					result_message =  intent.getExtras().getString("result_message");
-					//交易状态成功:00 交易状态失败:01 交易状态取消:02 交易状态未知:03
-
-					//返回PE007错误码表示未安装微信
-					errorCode =  intent.getExtras().getString("error_code");
+					String respCode = intent.getExtras().getString("respCode");
+					//更新后支付结果状态（01成功/00处理中(多数情况下是用户取消，少数情况是掉单)/-1 失败）
+					//目前后台交易状态成功:00 交易状态失败:01 交易状态取消:02 交易状态未知:03
+					if("01".equals(respCode)){
+						code = "00";
+					}else if("-1".equals(respCode)){
+						code = "01";
+					}else if("00".equals(respCode)){
+						code = "02";
+					}else{
+						code = "03";
+					}
 				}
 			}catch (Throwable e) {
 				Debug_Log.e(e);
@@ -127,9 +135,9 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 					if (mJsFn != null) {
 						JSONObject data = new JSONObject();
 						try {
-							Basic_JSONUtil.putString(data, "a", code);
-							Basic_JSONUtil.putString(data, "b", result_message);
-							Basic_JSONUtil.putString(data, "c", errorCode);
+							Basic_JSONUtil.put(data, "a", code);
+							Basic_JSONUtil.put(data, "b", result_message);
+							Basic_JSONUtil.put(data, "c", errorCode);
 						} catch (Exception ignored) {
 						}
 						String dataJson = data.toString();
