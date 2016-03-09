@@ -13,8 +13,8 @@ import java.util.ArrayList;
  *         description
  */
 public class InitAppConfig implements Serializable{
-	@SerializedName("qq")
-	public ArrayList<String> qqInfo;
+	@SerializedName("qq_v2")
+	public ArrayList<InitQQ> qqInfo;
 
 	@SerializedName("start_img")
 	public String startImgUrl;

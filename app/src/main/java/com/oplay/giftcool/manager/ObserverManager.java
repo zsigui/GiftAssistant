@@ -187,18 +187,19 @@ public class ObserverManager {
 		int GIFT_UPDATE_PART = 0x11;
 		int USER_UPDATE_ALL = 0x020;
 		int USER_UPDATE_PART = 0x021;
+		int USER_UPDATE_PUSH_MESSAGE = 0x022;
 	}
 
 	public interface UserActionListener {
-		public static final int ACTION_DEFAULT = 0;
-		public static final int ACTION_MODIFY_PSW = 1;
-		public static final int ACTION_CHANGE_PHONE = 2;
-		public static final int ACTION_BIND_PHONE = 3;
-		public static final int ACTION_BIND_OUWAN = 4;
+		int ACTION_DEFAULT = 0;
+		int ACTION_MODIFY_PSW = 1;
+		int ACTION_CHANGE_PHONE = 2;
+		int ACTION_BIND_PHONE = 3;
+		int ACTION_BIND_OUWAN = 4;
 
-		public static final int ACTION_CODE_DEFAULT = -1;
-		public static final int ACTION_CODE_FAILED = 0;
-		public static final int ACTION_CODE_SUCCESS = 1;
+		int ACTION_CODE_DEFAULT = -1;
+		int ACTION_CODE_FAILED = 0;
+		int ACTION_CODE_SUCCESS = 1;
 		void onUserActionFinish(int action, int code);
 	}
 }

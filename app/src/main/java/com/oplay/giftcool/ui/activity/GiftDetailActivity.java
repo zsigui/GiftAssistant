@@ -151,17 +151,17 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	}
 
 	@Override
-	public void handleBackPressed() {
+	public boolean onBack() {
 		InputMethodUtil.hideSoftInput(this);
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
-			return;
+			return false;
 		}
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
 			if (MainActivity.sGlobalHolder == null) {
-				IntentUtil.jumpHome(GiftDetailActivity.this);
+				IntentUtil.jumpHome(GiftDetailActivity.this, false);
 			}
 			finish();
 		} else {
@@ -169,6 +169,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
 		}
+		return true;
 	}
 
 

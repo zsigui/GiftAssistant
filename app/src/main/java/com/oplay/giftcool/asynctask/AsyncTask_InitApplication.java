@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
@@ -150,23 +150,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
 		try {
-//			KLog.e("initAppConfig = true" );
-//			IndexBanner banner = new IndexBanner();
-//			banner.url = "drawable://" + R.drawable.pic_welcome_lottery;
-//			banner.type = BannerTypeUtil.ACTION_WEB;
-//			WebData webData = new WebData();
-//			webData.titleName = "抽奖活动";
-//			webData.url = WebViewUrl.SCORE_DETAIL_NOTE + "?need_validate=1";
-//			banner.extData = AssistantApp.getInstance().getGson().toJson(webData, WebData.class);
-//			AssistantApp.getInstance().setBroadcastBanner(banner);
 			Call<JsonRespBase<InitAppResult>> d =  Global.getNetEngine().initAPP(reqData);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
-				if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 					if (response.body().getData() != null) {
 						if (response.body().getData().initAppConfig != null) {
 							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + response.body().getData());
+								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + response.body().getData().initAppConfig.startImgUrl);
 							}
 							AssistantApp.getInstance().setAllowDownload(response.body().getData().initAppConfig
 									.isShowDownload);

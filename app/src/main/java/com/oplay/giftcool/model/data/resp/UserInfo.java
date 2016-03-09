@@ -53,7 +53,7 @@ public class UserInfo implements Serializable {
 	public String phone;
 
 	/**
-	 * 用户积分
+	 * 用户金币
 	 */
 	@SerializedName("points")
 	public int score;

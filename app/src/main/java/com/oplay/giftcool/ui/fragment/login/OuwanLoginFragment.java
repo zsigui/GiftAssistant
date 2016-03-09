@@ -19,7 +19,7 @@ import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -255,7 +255,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 								hideLoading();
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
-											&& response.body().getCode() == StatusCode.SUCCESS) {
+											&& response.body().getCode() == NetStatusCode.SUCCESS) {
 										UserModel userModel = response.body().getData();
 										userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 										MainActivity.sIsTodayFirstOpen = true;
@@ -270,7 +270,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 										}
 										AccountManager.getInstance().notifyUserAll(userModel);
 										if (getActivity() != null) {
-											((BaseAppCompatActivity) getActivity()).handleBackPressed();
+											((BaseAppCompatActivity) getActivity()).onBack();
 										}
 										return;
 									}

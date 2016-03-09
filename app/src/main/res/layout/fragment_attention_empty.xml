@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent" >
+
+	<include
+			layout = "@layout/view_my_attention_hint" />
+
+	<ImageView
+			android:id = "@+id/iv_empty"
+			android:contentDescription = "@null"
+			android:src = "@drawable/pic_data_empty"
+			android:scaleType = "centerInside"
+			android:layout_centerInParent = "true"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content" />
+
+	<TextView
+			android:id = "@+id/btn_to_get"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_centerHorizontal = "true"
+			android:background = "@drawable/selector_btn_green"
+			android:text = "@string/st_my_attention_empty_btn"
+			android:layout_marginTop = "10dp"
+			android:textSize = "@dimen/common_text"
+			android:paddingLeft = "@dimen/common_text_padding_left_right"
+			android:paddingRight = "@dimen/common_text_padding_left_right"
+			android:paddingTop = "@dimen/common_text_padding_top_bottom"
+			android:paddingBottom = "@dimen/common_text_padding_top_bottom"
+			android:textColor = "@color/co_white"
+			android:layout_below = "@+id/iv_empty" />
+
+</RelativeLayout >

@@ -8,6 +8,8 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 
 /**
+ * 加载出错页面
+ *
  * Created by zsigui on 15-12-22.
  */
 public class NetErrorFragment extends BaseFragment implements View.OnClickListener {

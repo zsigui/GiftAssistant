@@ -44,7 +44,7 @@ public class GiftTypeUtil {
 	public static final int STATUS_WAIT_SEARCH = 3;
 	public static final int STATUS_SEARCH = 4;
 	public static final int STATUS_FINISHED = 5;
-	// 1 积分， 2 偶玩豆， 3 积分或偶玩豆
+	// 1 金币， 2 偶玩豆， 3 金币或偶玩豆
 	public static final int PAY_TYPE_NONE = 0;
 	public static final int PAY_TYPE_SCORE = 1;
 	public static final int PAY_TYPE_BEAN = 2;

@@ -21,11 +21,13 @@ import java.util.List;
 public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implements SwipeRefreshLayout
 		.OnRefreshListener, RefreshLayout.OnLoadListener {
 
+	public static final int PAGE_FIRST = 1;
+
 	protected ArrayList<DataType> mData;
 	protected RefreshLayout mRefreshLayout;
 	protected boolean mIsLoadMore = false;
 	protected boolean mNoMoreLoad = false;
-	protected int mLastPage = 0;
+	protected int mLastPage = PAGE_FIRST;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,8 +71,8 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	protected void refreshLoadState(Object data, boolean isEndPage) {
 		if (data != null && data instanceof List) {
-			mRefreshLayout.setCanShowLoad(((List)data).size() > 5);
-			mNoMoreLoad = isEndPage || ((List)data).size() < 10;
+			mRefreshLayout.setCanShowLoad(!isEndPage || (((List)data).size() > 5));
+			mNoMoreLoad = isEndPage;
 		} else {
 			mNoMoreLoad = isEndPage || data == null;
 			mRefreshLayout.setCanShowLoad(true);

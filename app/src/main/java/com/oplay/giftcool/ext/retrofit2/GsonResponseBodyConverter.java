@@ -1,10 +1,7 @@
 package com.oplay.giftcool.ext.retrofit2;
 
 import com.google.gson.Gson;
-import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 import com.squareup.okhttp.ResponseBody;
@@ -22,23 +19,17 @@ import retrofit.Converter;
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 	private final Gson gson;
 	private final Type type;
-	private final int cmd;
-
-	GsonResponseBodyConverter(Gson gson, Type type, int cmd) {
+	GsonResponseBodyConverter(Gson gson, Type type) {
 		this.gson = gson;
 		this.type = type;
-		this.cmd = cmd;
 	}
 
 	@Override
 	public T convert(ResponseBody value) throws IOException {
 		try {
-			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), cmd);
+			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), 0);
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_ENCRYPT, "response = " + json);
-				KLog.file(AppDebugConfig.TAG_ENCRYPT,
-						StorageUtils.getOwnCacheDirectory(AssistantApp.getInstance().getApplicationContext(),
-								Global.LOGGING_CACHE_PATH), "response = " + json);
 			}
 			return gson.fromJson(json, type);
 		} catch (Exception e) {

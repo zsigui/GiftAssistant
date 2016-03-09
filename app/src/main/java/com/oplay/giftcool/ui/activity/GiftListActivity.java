@@ -7,10 +7,10 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.engine.NetEngine;
-import com.oplay.giftcool.model.data.req.ReqPageData;
+import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.LimitGiftListData;
 import com.oplay.giftcool.model.data.resp.TimeData;
@@ -20,9 +20,12 @@ import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.NetErrorFragment;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftLikeListFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftLimitListDataFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftMutilDayFragment;
+import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -110,7 +113,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
-					if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						displayGiftNewUI(response.body().getData());
 						return;
 					}
@@ -153,8 +156,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 				mIsLoading = false;
 				if (response != null && response.isSuccess()) {
-					if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
-						displayGiftLimitUI(response.body().getData(),mReqPageObj.data.pageSize);
+					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+						displayGiftLimitUI(response.body().getData());
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {
@@ -208,6 +211,28 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			});
 		}
 		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+	}
+
+	@Override
+	public boolean onBack() {
+		InputMethodUtil.hideSoftInput(this);
+		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
+				&& ((OnBackPressListener) getTopFragment()).onBack()) {
+			// back事件被处理
+			return false;
+		}
+		if (!popFrag() && !isFinishing()) {
+			mNeedWorkCallback = false;
+			if (MainActivity.sGlobalHolder == null) {
+				IntentUtil.jumpHome(this, false);
+			}
+			finish();
+		} else {
+			if (getTopFragment() instanceof BaseFragment) {
+				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
+			}
+		}
+		return true;
 	}
 
 }

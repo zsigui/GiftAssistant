@@ -12,7 +12,7 @@ import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -137,7 +137,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 									}
 									if (response != null && response.isSuccess()) {
 										if (response.body() != null &&
-												response.body().getCode() == StatusCode.SUCCESS) {
+												response.body().getCode() == NetStatusCode.SUCCESS) {
 											refreshSuccessEnd();
 											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
 											refreshLoadState(backObj.data, backObj.isEndPage);

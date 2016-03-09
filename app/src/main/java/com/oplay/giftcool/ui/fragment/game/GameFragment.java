@@ -20,6 +20,10 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 	private ViewPager mPager;
 	private SmartTabLayout mTabLayout;
 
+	public static int INDEX_SUPER = 0;
+	public static int INDEX_TYPE = 1;
+	public static int INDEX_NOTICE = 2;
+
 	private String[] mTabTitle = new String[]{"精品", "分类", "榜单"};
 	private GameSuperFragment mSuperFragment;
 	private GameTypeFragment mTypeFragment;

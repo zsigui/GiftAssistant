@@ -180,7 +180,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 			ThreadUtil.runInUIThread(new Runnable() {
 				@Override
 				public void run() {
-					// 点击下载30秒后，请求奖励积分
+					// 点击下载30秒后，请求奖励金币
 					ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 				}
 			}, 30 * 1000);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content" >
+
+	<include layout = "@layout/view_my_attention_hint" />
+
+	<com.oplay.giftcool.ui.widget.layout.RefreshLayout
+			xmlns:android = "http://schemas.android.com/apk/res/android"
+			android:id = "@+id/srl_layout"
+			android:orientation = "vertical"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:layout_marginTop = "@dimen/di_index_module_gap"
+			android:background = "@color/co_white" >
+
+		<ListView
+				android:id = "@+id/lv_content"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:dividerHeight = "@dimen/di_divider_height"
+				style = "@style/ListScrollBar"
+				android:divider = "@color/co_divider_bg" />
+	</com.oplay.giftcool.ui.widget.layout.RefreshLayout >
+</LinearLayout >

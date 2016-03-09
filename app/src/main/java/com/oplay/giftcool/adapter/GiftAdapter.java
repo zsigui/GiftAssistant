@@ -15,18 +15,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
-import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.ext.holder.BannerHolderCreator;
 import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.PayManager;
-import com.oplay.giftcool.model.NetworkImageHolderView;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -38,51 +38,81 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
+ * 礼包首页的 Adapter, 实现多种布局配置
+ * <p/>
  * Created by zsigui on 16-2-23.
  */
 public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.convenientbanner.listener
-        .OnItemClickListener, View.OnClickListener, FooterListener {
+		.OnItemClickListener, View.OnClickListener, FooterListener {
 
 	private static final int TAG_POS = 0x1234FFFF;
-	public static final int TYPE_DEFAULT = 110;
-	public static final int TYPE_BANNER = TYPE_DEFAULT;
-	public static final int TYPE_ZERO = TYPE_DEFAULT + 1;
-	public static final int TYPE_LIKE = TYPE_DEFAULT + 2;
-	public static final int TYPE_LIMIT = TYPE_DEFAULT + 3;
-	public static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 4;
-	public static final int TYPE_NEW_ITEM = TYPE_DEFAULT + 5;
-	public static final int TYPE_FOOTER = TYPE_DEFAULT + 11;
+	private static final int TYPE_DEFAULT = 110;
+	private static final int TYPE_BANNER = TYPE_DEFAULT;
+	private static final int TYPE_ZERO = TYPE_DEFAULT + 1;
+	private static final int TYPE_LIKE = TYPE_DEFAULT + 2;
+	private static final int TYPE_LIMIT = TYPE_DEFAULT + 3;
+	private static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 4;
+	private static final int TYPE_NEW_ITEM = TYPE_DEFAULT + 5;
+	private static final int TYPE_FOOTER = TYPE_DEFAULT + 11;
+	private static final int COUNT_HEADER = 5;
+
+
+	// default data
+	private final Spanned TITLE_ZERO = Html.fromHtml("(每天<font color='#f85454'>20:00</font>开抢3款)");
+	private final Spanned TITLE_LIMIT = Html.fromHtml("(每天<font color='#f85454'>20:00</font>开抢10款)");
 
 	private IndexGift mData;
 	private Context mContext;
 	private LayoutInflater mInflater;
-	private WeakReference<BannerVH> mBannerWR;
-	private View.OnTouchListener mTouchListener;
 	private boolean mShowFooter = false;
+
+	// banner
+	private WeakReference<BannerVH> mBannerWR;
+	private IndexBanner mDefaultBanner;
+	private BannerHolderCreator mBannerHolderCreator;
+	private int[] mBannerIndicatorDrawable;
+	private ArrayList<String> mBannerData;
+
 
 	public GiftAdapter(Context context) {
 		mContext = context;
 		mInflater = LayoutInflater.from(mContext);
+		initDefaultBannerConfig();
+	}
+
+	private void initDefaultBannerConfig() {
+		mBannerHolderCreator = new BannerHolderCreator();
+		mBannerIndicatorDrawable = new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected};
+		mDefaultBanner = new IndexBanner();
+		mDefaultBanner.url = "drawable://" + R.drawable.ic_banner_empty_default;
+		mDefaultBanner.type = BannerTypeUtil.ACTION_SCORE_TASK;
+		mBannerData = new ArrayList<>();
 	}
 
 	public void setData(IndexGift data) {
 		mData = data;
 	}
 
-	public void setTouchListener(View.OnTouchListener touchListener) {
-		mTouchListener = touchListener;
-	}
-
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
 			case TYPE_FOOTER:
-				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent, false));
+				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent,
+						false));
 			case TYPE_BANNER:
 				if (mBannerWR == null || mBannerWR.get() == null) {
-					mBannerWR =  new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner, parent, false)));
+					mBannerWR = new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner,
+							parent, false)));
 				}
-				return mBannerWR.get();
+				BannerVH bannerVH = mBannerWR.get();
+				ConvenientBanner banner = bannerVH.mBanner;
+				banner.setPageIndicator(mBannerIndicatorDrawable);
+				banner.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+				banner.setOnItemClickListener(this);
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+						Global.getBannerHeight(mContext));
+				banner.setLayoutParams(lp);
+				return bannerVH;
 			case TYPE_ZERO:
 				ZeroVH zeroVH = new ZeroVH(mInflater.inflate(R.layout.view_gift_index_zero, parent, false));
 				LinearLayoutManager llmZero = new LinearLayoutManager(mContext);
@@ -111,16 +141,43 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				limitVH.rvContainer.setAdapter(limitVH.rvAdapter);
 				return limitVH;
 			case TYPE_NEW_HEAD:
-				ItemTitleVH titleVH = new ItemTitleVH(mInflater.inflate(R.layout.view_gift_index_item_title, parent,
-						false));
-				return titleVH;
+				return new ItemTitleVH(mInflater.inflate(R.layout.view_gift_index_item_title, parent, false));
 			case TYPE_NEW_ITEM:
-				ItemHolder limitItemVH = new ItemHolder(mInflater.inflate(R.layout.item_index_gift_new_list, parent,
-						false));
-				return limitItemVH;
+				return new ItemHolder(mInflater.inflate(R.layout.item_index_gift_new_list, parent, false));
 			default:
 				return null;
 		}
+	}
+
+	/**
+	 * 更新轮播图内容
+	 */
+	private void updateBanners(BannerVH bannerVH) {
+		if (bannerVH == null || mData == null) {
+			return;
+		}
+		if (mData.banner == null) {
+			mData.banner = new ArrayList<>();
+		}
+		ArrayList<IndexBanner> banners = mData.banner;
+		if (banners.size() == 0) {
+			mData.banner.add(mDefaultBanner);
+		}
+		mData.banner = banners;
+		mBannerData.clear();
+		for (IndexBanner banner : banners) {
+			mBannerData.add(banner.url);
+		}
+		ConvenientBanner banner = bannerVH.mBanner;
+		banner.setPages(mBannerHolderCreator, mBannerData);
+		if (mBannerData.size() == 1) {
+			banner.setCanLoop(false);
+			banner.stopTurning();
+		} else {
+			banner.setCanLoop(true);
+			banner.startTurning(AppConfig.BANNER_LOOP_TIME);
+		}
+
 	}
 
 	@Override
@@ -133,16 +190,12 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_FOOTER:
 				return;
 			case TYPE_BANNER:
-				BannerVH bannerVH = (BannerVH) holder;
-				if (mTouchListener != null)
-					bannerVH.mBanner.setOnTouchListener(mTouchListener);
-				updateBanners(bannerVH, mData.banner);
+				updateBanners((BannerVH) holder);
 				break;
 			case TYPE_ZERO:
 				ZeroVH zeroVH = ((ZeroVH) holder);
 				zeroVH.rvAdapter.updateData(mData.zero);
-				zeroVH.tvSubTitle.setText(Html.fromHtml("(每天<font " +
-						"color='#f85454'>20:00</font>开抢3款)"));
+				zeroVH.tvSubTitle.setText(TITLE_ZERO);
 				break;
 			case TYPE_LIKE:
 				LikeVH likeVH = ((LikeVH) holder);
@@ -152,18 +205,17 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_LIMIT:
 				LimitVH limitVH = ((LimitVH) holder);
 				limitVH.rvAdapter.updateData(mData.limit);
-				limitVH.tvSubTitle.setText(Html.fromHtml("(每天<font " +
-						"color='#f85454'>20:00</font>开抢10款)"));
+				limitVH.tvSubTitle.setText(TITLE_LIMIT);
 				limitVH.rlTitle.setOnClickListener(this);
 				break;
 			case TYPE_NEW_HEAD:
 				break;
 			default:
 				if (mData.news == null || mData.news.size() == 0
-						|| mData.news.size() <= position - 5) {
+						|| mData.news.size() <= position - COUNT_HEADER) {
 					return;
 				}
-				final IndexGiftNew gift = mData.news.get(position - 5);
+				final IndexGiftNew gift = mData.news.get(position - COUNT_HEADER);
 				type = GiftTypeUtil.getItemViewType(gift);
 				ItemHolder viewHolder = (ItemHolder) holder;
 				viewHolder.itemView.setBackgroundResource(R.drawable.selector_white_module);
@@ -192,7 +244,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			viewHolder.pbPercent.setProgress(percent);
 			if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
 					&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
-				// 只用积分
+				// 只用金币
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);
 				viewHolder.tvOr.setVisibility(View.GONE);
@@ -204,7 +256,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				viewHolder.tvOr.setVisibility(View.GONE);
 				viewHolder.tvScore.setVisibility(View.GONE);
 			} else {
-				// 积分 或 偶玩豆
+				// 金币 或 偶玩豆
 				viewHolder.tvScore.setText(String.valueOf(gift.score));
 				viewHolder.tvBean.setText(String.valueOf(gift.bean));
 				viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -215,8 +267,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			switch (type) {
 				case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-									gift.seizeTime)));
+							Html.fromHtml(String.format(ConstString.TEXT_SEIZE, gift.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 				case GiftTypeUtil.TYPE_NORMAL_FINISHED:
@@ -227,19 +278,16 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-									gift.seizeTime)));
+							Html.fromHtml(String.format(ConstString.TEXT_SEIZE, gift.seizeTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
-									gift.searchTime)));
+							Html.fromHtml(String.format(ConstString.TEXT_SEARCH, gift.searchTime)));
 					break;
 				case GiftTypeUtil.TYPE_NORMAL_SEARCH:
 				case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
 					setDisabledField(viewHolder, View.VISIBLE,
-							Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次",
-									gift.searchCount)));
+							Html.fromHtml(String.format(ConstString.TEXT_SEARCHED, gift.searchCount)));
 					break;
 			}
 		}
@@ -272,44 +320,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		itemHolder.tvCount.setText(tvText);
 	}
 
-	private void updateBanners(BannerVH bannerVH, ArrayList<IndexBanner> banners) {
-		if (banners == null || bannerVH == null || mData == null) {
-			return;
-		}
-		if (banners.size() == 0) {
-			IndexBanner banner = new IndexBanner();
-			banner.url = "drawable://" + R.drawable.ic_banner_empty_default;
-			banner.type = BannerTypeUtil.ACTION_SCORE_TASK;
-			banners.add(banner);
-		}
-		mData.banner = banners;
-		ArrayList<String> data = new ArrayList<>();
-		for (IndexBanner banner : banners) {
-			data.add(banner.url);
-		}
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				Global.getBannerHeight(mContext));
-		bannerVH.mBanner.setLayoutParams(lp);
-		bannerVH.mBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
-
-			@Override
-			public NetworkImageHolderView createHolder() {
-				return new NetworkImageHolderView();
-			}
-		}, data)
-				.setPageIndicator(new int[]{R.drawable.ic_banner_point_normal, R.drawable.ic_banner_point_selected})
-				.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
-				.setOnItemClickListener(this);
-		if (data.size() == 1) {
-			bannerVH.mBanner.setCanLoop(false);
-			bannerVH.mBanner.stopTurning();
-		} else {
-			bannerVH.mBanner.setCanLoop(true);
-			//mBannerVH.mBanner.getViewPager().setPageTransformer(true, new CubePageTransformer());
-			bannerVH.mBanner.startTurning(AppConfig.BANNER_LOOP_TIME);
-		}
-
-	}
 
 	public void startBanner() {
 		if (mBannerWR != null && mBannerWR.get() != null) {
@@ -338,16 +348,16 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		if (mData == null) {
 			count = 0;
 		} else if (mData.news == null) {
-			count = 5;
+			count = COUNT_HEADER;
 		} else {
-			count = 5 + mData.news.size();
+			count = COUNT_HEADER + mData.news.size();
 		}
-		return mShowFooter && count != 0 ? count + 1:count;
+		return mShowFooter && count != 0 ? count + 1 : count;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		if (position >= 5) {
+		if (position >= COUNT_HEADER) {
 			if (mShowFooter && position == getItemCount() - 1) {
 				return TYPE_FOOTER;
 			} else {
@@ -374,17 +384,17 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		if (v.getId() == R.id.rl_recommend
 				|| v.getId() == R.id.btn_send) {
 			Integer pos = (Integer) v.getTag(TAG_POS);
-			if (pos == null || pos < 5 || pos - 5 >= mData.news.size()) {
+			if (pos == null || pos < COUNT_HEADER || pos - COUNT_HEADER >= mData.news.size()) {
 				return;
 			}
-			gift = mData.news.get(pos - 5);
+			gift = mData.news.get(pos - COUNT_HEADER);
 		}
 		switch (v.getId()) {
 			case R.id.rl_hot_all:
 				IntentUtil.jumpGiftHotList(mContext, null);
 				break;
 			case R.id.rl_limit_all:
-				IntentUtil.jumpGiftLimitList(mContext);
+				IntentUtil.jumpGiftLimitList(mContext, false);
 				break;
 			case R.id.rl_recommend:
 				if (gift != null) {

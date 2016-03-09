@@ -29,6 +29,7 @@ import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.socks.library.KLog;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -37,7 +38,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * @date 2015/12/13
  */
 public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog implements View.OnClickListener,
-		FragmentManager.OnBackStackChangedListener, OnFinishListener {
+		FragmentManager.OnBackStackChangedListener, OnFinishListener, OnBackPressListener {
 
 	protected AssistantApp mApp;
 	protected Toolbar mToolbar;
@@ -49,7 +50,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	protected boolean mIsLoading;
-//	protected Handler mHandler = null;
 	protected Handler mHandler = new Handler(Looper.myLooper());
 
 	// 保存当前栈顶对象
@@ -65,9 +65,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		int statusColor = getStatusBarColor();
 		if (Build.VERSION.SDK_INT >= 21) {
 			getWindow().setStatusBarColor(statusColor);
-		}
-		if (AppDebugConfig.IS_DEBUG) {
-//			ViewServer.get(this).addWindow(this);
 		}
 		getSupportFragmentManager().addOnBackStackChangedListener(this);
 		initView();
@@ -142,7 +139,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.iv_bar_back) {
-			handleBackPressed();
+			onBack();
 		}
 	}
 
@@ -267,9 +264,13 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (AppDebugConfig.IS_DEBUG) {
-//			ViewServer.get(this).setFocusedWindow(this);
-		}
+		JPushInterface.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		JPushInterface.onPause(this);
 	}
 
 	/**
@@ -294,12 +295,12 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	/**
 	 * 执行fragment出栈 或者 activity终结操作
 	 */
-	public void handleBackPressed() {
+	public boolean onBack() {
 		InputMethodUtil.hideSoftInput(this);
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
-			return;
+			return false;
 		}
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
@@ -310,6 +311,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
 			}
 		}
+		return true;
 	}
 
 	protected void doBeforeFinish() {
@@ -327,7 +329,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	@Override
 	public void onBackPressed() {
-		handleBackPressed();
+		onBack();
 	}
 
 	@Override

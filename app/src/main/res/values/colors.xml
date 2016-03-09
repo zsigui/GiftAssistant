@@ -24,6 +24,7 @@
 	<color name = "co_common_content_bg" >#e7e7e7</color >
 	<color name = "co_common_text_main" >#333333</color >
 	<color name = "co_common_text_second" >#888888</color >
+	<color name = "co_common_hint_bg" >#fffbe9</color >
 
 	<!-- 游戏详情主题颜色表 -->
 	<color name = "co_rainbow_color_1">#343754</color>
@@ -66,7 +67,7 @@
 	<color name = "co_tab_index_text_selected" >#F85454</color >
 	<color name = "co_tab_index_bg" >#f7f7f7</color >
 
-	<!-- 设置 - 积分任务 -->
+	<!-- 设置 - 金币任务 -->
 	<color name = "co_get_green" >#26C687</color >
 	<color name = "co_lost_red" >#F85454</color >
 

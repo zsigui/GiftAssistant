@@ -2,7 +2,6 @@ package com.oplay.giftcool.ui.fragment.setting;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,7 +10,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -22,10 +21,9 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
-
-import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.Response;
@@ -71,27 +69,7 @@ public class AboutFragment extends BaseFragment {
 		mContext = getContext();
 		tvUpdate.setText(mContext.getResources().getString(R.string.st_about_checking_update));
 		tvVersion.setText("礼包酷 " + AppConfig.SDK_VER_NAME);
-		tvQQ.setText(getQQInfo());
-	}
-
-	//根据初始化结果配置官方QQ群信息
-	private String getQQInfo() {
-		ArrayList<String> qqInfo = mApp.getQQInfo();
-		String qqStrLocal = "515318514";
-		String qqStrServer = "";
-		if (qqInfo != null && qqInfo.size() > 0) {
-			for (String qq : qqInfo) {
-				qqStrServer = qq + ',';
-			}
-			if (qqStrServer.length() > 0) {
-				qqStrServer = qqStrServer.substring(0, qqStrServer.length() - 1);
-			}
-		}
-		if (TextUtils.isEmpty(qqStrServer)) {
-			return qqStrLocal;
-		} else {
-			return qqStrServer;
-		}
+		tvQQ.setText(MixUtil.getQQInfo()[0]);
 	}
 
 	@Override
@@ -112,7 +90,7 @@ public class AboutFragment extends BaseFragment {
 										return;
 									}
 									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == StatusCode.SUCCESS) {
+											response.body().getCode() == NetStatusCode.SUCCESS) {
 										mUpdateInfo = response.body().getData();
 										if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
 											setUpdate(String.format(mContext.getResources().getString(R.string
@@ -161,7 +139,7 @@ public class AboutFragment extends BaseFragment {
 				handleUpdate();
 				break;
 			case R.id.rl_qq:
-				IntentUtil.joinQQGroup(getContext(), "8MdlDK-VEslpLGRDOIlcqZUbSYuv0pNb");
+				IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
 				break;
 		}
 	}

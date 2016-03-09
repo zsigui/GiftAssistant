@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class SearchPromptResult implements Serializable {
 
-	@SerializedName("keyword")
+	@SerializedName("search_word")
 	public String keyword;
 
-	@SerializedName("prompts")
-	public ArrayList<String> promptList;
+	@SerializedName("app_dict_list")
+	public ArrayList<PromptData> promptList;
 }

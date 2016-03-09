@@ -1,9 +1,12 @@
 package com.oplay.giftcool.engine;
 
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.model.data.req.ReqChangeFocus;
+import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.data.req.ReqGetCode;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
+import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.req.ReqLogin;
@@ -12,6 +15,7 @@ import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
+import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
@@ -22,12 +26,16 @@ import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
+import com.oplay.giftcool.model.data.resp.MessageCount;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
+import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
+import com.oplay.giftcool.model.data.resp.PushMessage;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
+import com.oplay.giftcool.model.data.resp.SearchPromptResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
@@ -63,11 +71,30 @@ public interface NetEngine {
 	@POST(NetUrl.APP_VERSION_UPDATE)
 	Call<JsonRespBase<UpdateInfo>> checkUpdate(@Body JsonReqBase<ReqInitApp> reqData);
 
+	/* -------------- 搜索 ---------------- */
 	/**
 	 * 游戏/礼包搜索
 	 */
 	@POST(NetUrl.GET_SEARCH)
 	Call<JsonRespBase<SearchDataResult>> obtainSearchResult(@Body JsonReqBase<ReqSearchKey> reqData);
+
+	/**
+	 * 关键词提示
+	 */
+	@POST(NetUrl.GET_SEARCH_KEY)
+	Call<JsonRespBase<SearchPromptResult>> obtainSearchPrompt(@Body JsonReqBase<ReqSearchKey> reqData);
+
+	/**
+	 * 热门搜索
+	 */
+	@POST(NetUrl.GET_SEARCH_HOT_DATA)
+	Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> obtainSearchHotData(@Body JsonReqBase<ReqSearchHot> reqData);
+
+	/**
+	 * 搜索 - 求礼包
+	 */
+	@POST(NetUrl.COMMIT_HOPE_GIFT)
+	Call<JsonRespBase<Void>> commitHopeGift(@Body JsonReqBase<ReqHopeGift> reqData);
 
 	/* -------------- 礼包接口 --------------- */
 	/**
@@ -214,16 +241,16 @@ public interface NetEngine {
 	@POST(NetUrl.USER_GET_PART_INFO)
 	Call<JsonRespBase<UserInfo>> getUserPartInfo(@Body JsonReqBase<Void> reqData);
 
-	/* ---------------- 积分接口  ---------------- */
+	/* ---------------- 金币接口  ---------------- */
 
 	/**
-	 * 获取积分任务
+	 * 获取金币任务
 	 */
 	@POST(NetUrl.SCORE_GET_TASK)
 	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<String> reqData);
 
 	/**
-	 * 获取积分任务奖励
+	 * 获取金币任务奖励
 	 */
 	@POST(NetUrl.SCORE_REWARD)
 	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
@@ -231,4 +258,37 @@ public interface NetEngine {
 	/* ---------------- 应用接口  ---------------- */
 	@POST(NetUrl.APP_POST_FEEDBACK)
 	Call<JsonRespBase<TaskReward>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
+
+
+	/* ------------- 消息中心 --------------- */
+
+	/**
+	 * 获取推送消息列表
+	 */
+	@POST(NetUrl.MESSAGE_PUSH_LIST)
+	Call<JsonRespBase<OneTypeDataList<PushMessage>>> obtainPushMessage(@Body JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 关注/取消关注游戏状态
+	 */
+	@POST(NetUrl.GAME_FOCUS_CHANGE)
+	Call<JsonRespBase<Void>> changeGameFocus(@Body JsonReqBase<ReqChangeFocus> reqData);
+
+	/**
+	 * 获取已关注游戏列表信息
+	 */
+	@POST(NetUrl.GAME_FOCUS_LIST)
+	Call<JsonRespBase<OneTypeDataList<MyAttention>>> obtainAttentionMessage(@Body JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 修改推送消息状态
+	 */
+	@POST(NetUrl.MESSAGE_CHANGE_STATUS)
+	Call<JsonRespBase<Void>> changePushMessageStatus(@Body JsonReqBase<ReqChangeMessageStatus> reqData);
+
+	/**
+	 * 获取当前未读推送消息数量
+	 */
+	@POST(NetUrl.MESSAGE_UNREAD_COUNT)
+	Call<JsonRespBase<MessageCount>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
 }

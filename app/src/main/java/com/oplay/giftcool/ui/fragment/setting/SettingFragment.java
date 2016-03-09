@@ -85,6 +85,12 @@ public class SettingFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+	}
+
+	@Override
 	protected void lazyLoad() {
 
 	}

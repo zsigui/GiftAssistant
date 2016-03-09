@@ -29,6 +29,21 @@ public class NetUrl {
 	public static final String GET_SEARCH = "gift_search";
 
 	/**
+	 * 礼包/游戏搜索-关键词提示
+	 */
+	public static final String GET_SEARCH_KEY = "tip_for_search";
+
+	/**
+	 * 礼包/游戏搜索-热门搜索推荐
+	 */
+	public static final String GET_SEARCH_HOT_DATA = "gift_hot_search";
+
+	/**
+	 * 提交求礼包申请
+	 */
+	public static final String COMMIT_HOPE_GIFT = "ask_gift/";
+
+	/**
 	 * 礼包首页-新鲜出炉列表
 	 */
 	public static final String GIFT_GET_INDEX_NEW = "new_gift_list";
@@ -206,14 +221,14 @@ public class NetUrl {
 
 
 
-	/* 积分接口 */
+	/* 金币接口 */
 
 	/**
-	 * 获取积分任务
+	 * 获取金币任务
 	 */
 	public static final String SCORE_GET_TASK = "mission/get_points_mission_list";
 	/**
-	 * 请求积分奖励
+	 * 请求金币奖励
 	 */
 	public static final String SCORE_REWARD = "mission/reward_points_by_mission_name";
 
@@ -233,4 +248,32 @@ public class NetUrl {
 	 * 应用版本更新
 	 */
 	public static final String APP_VERSION_UPDATE = "update_version";
+
+	/* 消息接口 */
+
+	/**
+	 * 推送消息列表数据
+	 */
+	public static final String MESSAGE_PUSH_LIST = "jpush_message_list/";
+
+	/**
+	 * 关注/取消关注游戏
+	 */
+	public static final String GAME_FOCUS_CHANGE = "change_focus_game/";
+
+	/**
+	 * 关注游戏列表
+	 */
+	public static final String GAME_FOCUS_LIST = "focus_game_list/";
+
+	/**
+	 * 修改推送消息状态
+	 */
+	public static final String MESSAGE_CHANGE_STATUS = "change_jpush_message_status/";
+
+	/**
+	 * 获取消息中心未读消息数量
+	 */
+	public static final String MESSAGE_UNREAD_COUNT = "message_unread_count/";
+
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,7 +30,6 @@ import java.io.File;
  */
 public class SplashActivity extends BaseAppCompatActivity {
 
-	private Handler mHandler = new Handler();
 	private long mLastClickTime = 0;
 	private long mFirstInitTime = 0;
 

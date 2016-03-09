@@ -26,12 +26,15 @@ public class Global {
 	public final static String LOGGING_CACHE_PATH = EXTERNAL_CACHE + "/log";
 	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
 	public final static int GIFTCOOL_GAME_ID = 2000705;
+    /* 倒计时时间间隔，单位:ms */
+	public final static int COUNTDOWN_INTERVAL = 1000;
+    /* 重复点击的时间间隔，单位:ms */
+    public final static int CLICK_TIME_INTERVAL = 500;
 
 	/* 全局服务器与本地手机时间差，单位:ms */
 	public static long sServerTimeDiffLocal;
 	/* Retrofit网络请求接口引擎 */
 	private static NetEngine sNetEngine;
-	public static boolean sCanRefreshSeize = true;
 
 	/* ImageLoader默认图片加载配置 */
 	public static final DisplayImageOptions IMAGE_OPTIONS = new DisplayImageOptions.Builder()
@@ -59,6 +62,7 @@ public class Global {
 			.cacheInMemory(true)
 			.cacheOnDisk(true)
 			.build();
+
 	public static NetEngine getNetEngine() {
 		if (sNetEngine == null) {
 			sNetEngine =AssistantApp.getInstance().getRetrofit().create(NetEngine.class);

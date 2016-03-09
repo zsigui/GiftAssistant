@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements OnFinishListener {
 
+    protected static final int TAG_POSITION = 0x1234478f;
+
 	protected ArrayList<T> mData;
 	protected OnItemClickListener<T> mListener;
 	protected Context mContext;

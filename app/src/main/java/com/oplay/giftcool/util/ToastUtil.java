@@ -67,7 +67,7 @@ public class ToastUtil {
 	}
 
 	/**
-	 * 提示获取积分
+	 * 提示获取金币
 	 */
 	public static void showScoreReward(String taskName, int rewardCount) {
 		Context context = AssistantApp.getInstance().getApplicationContext();

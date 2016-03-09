@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.AccountManager;
@@ -133,7 +133,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
 								}
 								mIsLoading = false;
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										UserModel model = AccountManager.getInstance().getUser();
 										model.userInfo.nick = response.body().getData().nick;
 										AccountManager.getInstance().notifyUserAll(model);

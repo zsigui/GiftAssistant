@@ -5,11 +5,12 @@ android {
     buildToolsVersion BUILD_TOOL_SDK_VERSION
 
     defaultConfig {
-        applicationId "com.oplay.giftcool"
+        applicationId PACKAGE_NAME
         minSdkVersion BUILD_MIN_SDK_VERSION as int
         targetSdkVersion BUILD_TARGET_SDK_VERSION as int
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
+	    manifestPlaceholders = [ jpushAppKey:JPUSH_APPKEY, qqAppKey:QQ_APPKEY ]
     }
 
 	signingConfigs {

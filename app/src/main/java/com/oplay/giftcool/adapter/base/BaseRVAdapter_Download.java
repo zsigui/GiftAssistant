@@ -1,17 +1,22 @@
 package com.oplay.giftcool.adapter.base;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
@@ -104,8 +109,18 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 				return;
 			}
 			final IndexGameNew appInfo = mData.get(position);
-			if (mListener != null) {
-				mListener.onItemClick(appInfo, v, position);
+//			if (mListener != null) {
+//				mListener.onItemClick(appInfo, v, position);
+//			}
+			switch (v.getId()) {
+				case R.id.tv_download:
+					if (!AppStatus.DISABLE.equals(appInfo.appStatus)) {
+						appInfo.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
+					}
+					break;
+				default:
+					IntentUtil.jumpGameDetail(mContext, appInfo.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+					break;
 			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {

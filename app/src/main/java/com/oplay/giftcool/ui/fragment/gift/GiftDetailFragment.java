@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,11 +14,13 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
@@ -85,7 +86,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 	private GiftDetail mData;
 	private IndexGameNew mAppInfo;
-	private CountDownTimer mTimer;
+	private CountTimer mTimer;
 	private int mId;
 
 
@@ -160,26 +161,25 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		} else {
 			downloadLayout.setVisibility(View.VISIBLE);
 		}
-//		mViewManager.showLoading();
+		mViewManager.showLoading();
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-
+		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
 		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
 	}
 
 	private void updateData(GiftDetail data) {
 		if (data == null || data.giftData == null) {
-//			mViewManager.showEmpty();
-			ToastUtil.showShort("传递参数获取数据为空");
-			getActivity().finish();
+			ToastUtil.showShort("该请求数据可能已经过期");
+			mViewManager.showEmpty();
 			return;
 		}
 		mHasData = true;
-//		mViewManager.showContent();
+		mViewManager.showContent();
 		mData = data;
 		final IndexGiftNew giftData = data.giftData;
 		tvName.setText(giftData.name);
@@ -240,7 +240,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			} else {
 				switch (state) {
 					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-						tvRemain.setText(Html.fromHtml(String.format("已淘号 <font color='#ffaa17'>%d</font> 次",
+						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCHED,
 								giftData.searchCount)));
 						break;
 					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
@@ -250,11 +250,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
 					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
 						tvRemain.setVisibility(View.VISIBLE);
-						tvRemain.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
 								giftData.seizeTime)));
 						break;
 					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-						tvRemain.setText(Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
+						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
 								giftData.searchTime)));
 						break;
 				}
@@ -264,7 +264,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			tvConsume.setVisibility(View.GONE);
 			tvCode.setVisibility(View.VISIBLE);
 			btnCopy.setVisibility(View.VISIBLE);
-			tvCode.setText(Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", giftData.code)));
+			tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
 		}
 		setDeadCount();
 
@@ -296,7 +296,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
 		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
-		mTimer = new CountDownTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal, 1000) {
+		mTimer = new CountTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal,
+				Global.COUNTDOWN_INTERVAL) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
@@ -387,7 +388,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 							if (response != null && response.code() == 200) {
 								Global.sServerTimeDiffLocal =
 										System.currentTimeMillis() - response.headers().getDate("Date").getTime();
-								if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+								if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 									f.refreshSuccessEnd();
 									f.updateData(response.body().getData());
 									return;
@@ -453,6 +454,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 	}
 
+	/**
+	 * 判断是否安装了游戏，如果没有，弹窗提示下载安装
+	 */
 	private boolean isInstalledGame() {
 		HashSet<String> appNames = Global.getInstalledAppNames();
 		for (String name : appNames) {

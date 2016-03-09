@@ -14,8 +14,10 @@ import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.message.PushMessageFragment;
 import com.oplay.giftcool.ui.fragment.setting.DownloadFragment;
 import com.oplay.giftcool.ui.fragment.setting.FeedBackFragment;
+import com.oplay.giftcool.ui.fragment.setting.MyAttentionFragment;
 import com.oplay.giftcool.ui.fragment.setting.MyGiftFragment;
 import com.oplay.giftcool.ui.fragment.setting.SetNickFragment;
 import com.oplay.giftcool.ui.fragment.setting.SettingFragment;
@@ -51,6 +53,12 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 	@Override
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	public void showRightBtn(int visibility, String text) {
@@ -146,6 +154,14 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 				replaceFragWithTitle(R.id.fl_container, SetNickFragment.newInstance(),
 						getResources().getString(R.string.st_user_set_avatar_title));
 				break;
+			case KeyConfig.TYPE_ID_MY_ATTENTION:
+				replaceFragWithTitle(R.id.fl_container, MyAttentionFragment.newInstance(),
+						getResources().getString(R.string.st_my_attention_title));
+				break;
+			case KeyConfig.TYPE_ID_MSG:
+				replaceFragWithTitle(R.id.fl_container, PushMessageFragment.newInstance(),
+						getResources().getString(R.string.st_msg_central_title));
+				break;
 			default:
 				if (AppDebugConfig.IS_FRAG_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_FRAG, "type = " + mType);
@@ -171,12 +187,6 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		KLog.e("setting", "onNewIntent is call");
 		super.onNewIntent(intent);
 		handleRedirect(intent);
-	}
-
-	@Override
-	protected void doBeforeFinish() {
-		super.doBeforeFinish();
-		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	@Override

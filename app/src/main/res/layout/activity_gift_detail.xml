@@ -41,7 +41,7 @@
 						android:id = "@+id/tv_bar_title"
 						android:layout_width = "wrap_content"
 						android:layout_height = "?actionBarSize"
-						android:maxWidth="200dp"
+						android:maxWidth = "200dp"
 						android:gravity = "center_vertical"
 						android:singleLine = "true"
 						android:paddingRight = "5dp"
@@ -61,6 +61,7 @@
 					android:layout_height = "?actionBarSize"
 					android:background = "?actionBarItemBackground"
 					android:scaleType = "centerInside"
+					android:visibility = "gone"
 					android:src = "@drawable/ic_toolbar_share" />
 		</LinearLayout >
 

@@ -74,7 +74,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		final int endIndexOfDownloading = mDownloadManagerInstance.getEndOfDownloading();
 		final int endIndexOfPaused = mDownloadManagerInstance.getEndOfPaused();
 		final int endIndexOfDownloaded = mDownloadManagerInstance.getEndOfFinished();
-		if (endIndexOfDownloading > mListData.size()) return;
+		if (endIndexOfDownloading > mData.size()) return;
 		mEndIndexOfDownloading = endIndexOfDownloading >= 0 ? endIndexOfDownloading : 0;
 		mEndIndexOfPaused = endIndexOfPaused;
 		mEndIndexOfDownloaded = endIndexOfDownloaded;
@@ -97,7 +97,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final GameDownloadInfo appInfo = mListData.get(position);
+		final GameDownloadInfo appInfo = mData.get(position);
 		final String rawUrl = appInfo.downloadUrl;
 		mMap_Url_ViewHolder.put(rawUrl, holder);
 		holder.mIvIcon.setTag(rawUrl);
@@ -170,11 +170,11 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 				return;
 			}
 			final int position = (Integer) tag;
-			if (position >= mListData.size()) {
+			if (position >= mData.size()) {
 				return;
 			}
 
-			final GameDownloadInfo appInfo = mListData.get(position);
+			final GameDownloadInfo appInfo = mData.get(position);
 			switch (v.getId()) {
 				// 下载按钮响应
 				case R.id.tv_downloading_action:

@@ -16,17 +16,45 @@ import android.widget.FrameLayout;
  */
 public class LoadAndRetryViewManager {
 
-	public static final int DEFAULT_NO_VIEW_ID = 0;
-	public static int DEFAULT_LOAD_VIEW_ID = DEFAULT_NO_VIEW_ID;
-	public static int DEFAULT_ERROR_RETRY_VIEW_ID = DEFAULT_NO_VIEW_ID;
-	public static int DEFAULT_EMPTY_VIEW_ID = DEFAULT_NO_VIEW_ID;
+	private static final int DEFAULT_NO_VIEW_ID = 0;
+	private static int DEFAULT_LOAD_VIEW_ID = DEFAULT_NO_VIEW_ID;
+	private static int DEFAULT_ERROR_RETRY_VIEW_ID = DEFAULT_NO_VIEW_ID;
+	private static int DEFAULT_EMPTY_VIEW_ID = DEFAULT_NO_VIEW_ID;
 
-	private static OnRetryListener DEFAULT_LISTENER = new OnRetryListener() {
-		@Override
-		public void onRetry(View retryView) {
-
+	/**
+	 * 设置默认全局加载视图资源ID
+	 */
+	public static void setDefaultLoadViewId(int defaultLoadViewId) {
+		if (defaultLoadViewId < 0) {
+			return;
 		}
-	};
+		DEFAULT_LOAD_VIEW_ID = defaultLoadViewId;
+	}
+
+	/**
+	 * 设置默认全局访问出错重试视图资源ID
+	 */
+	public static void setDefaultErrorRetryViewId(int defaultErrorRetryViewId) {
+		if (defaultErrorRetryViewId < 0) {
+			return;
+		}
+		DEFAULT_ERROR_RETRY_VIEW_ID = defaultErrorRetryViewId;
+	}
+
+	/**
+	 * 设置默认全局空视图资源ID
+	 */
+	public static void setDefaultEmptyViewId(int defaultEmptyViewId) {
+		if (defaultEmptyViewId < 0) {
+			return;
+		}
+		DEFAULT_EMPTY_VIEW_ID = defaultEmptyViewId;
+	}
+
+	/**
+	 * 不同视图状态
+	 */
+	private static final int TYPE_DEFAULT = -1;
 	private static final int TYPE_CONTENT = 0;
 	private static final int TYPE_LOAD = 1;
 	private static final int TYPE_ERROR_RETRY = 2;
@@ -34,6 +62,7 @@ public class LoadAndRetryViewManager {
 
 	private FrameLayout mContainer;
 	private Context mContext;
+
 	private View mContentView;
 	private View mLoadingView;
 	private View mErrorRetryView;
@@ -41,6 +70,7 @@ public class LoadAndRetryViewManager {
 	private OnRetryListener mOnRetryListener;
 
 	private Handler mHandler;
+	private int mLastType = TYPE_DEFAULT;
 
 
 	public static LoadAndRetryViewManager generate(Context context) {
@@ -101,6 +131,10 @@ public class LoadAndRetryViewManager {
 
 	public void showContent() {
 		showThread(TYPE_CONTENT);
+	}
+
+	public void showLast() {
+		showThread(mLastType);
 	}
 
 	public void setContentView(@LayoutRes int id) {
@@ -182,26 +216,33 @@ public class LoadAndRetryViewManager {
 	}
 
 	private void show(int type) {
+		if (type == mLastType) {
+			return;
+		}
 		mContainer.removeAllViews();
 		switch (type) {
 			case TYPE_LOAD:
 				if (mLoadingView != null) {
 					mContainer.addView(mLoadingView);
+					mLastType = TYPE_LOAD;
 				}
 				break;
 			case TYPE_CONTENT:
 				if (mContentView != null) {
 					mContainer.addView(mContentView);
+					mLastType =TYPE_CONTENT;
 				}
 				break;
 			case TYPE_EMPTY:
 				if (mEmptyView != null) {
 					mContainer.addView(mEmptyView);
+					mLastType = TYPE_EMPTY;
 				}
 				break;
 			case TYPE_ERROR_RETRY:
 				if (mErrorRetryView != null) {
 					mContainer.addView(mErrorRetryView);
+					mLastType = TYPE_ERROR_RETRY;
 					if (mOnRetryListener != null) {
 						mOnRetryListener.onRetry(mErrorRetryView);
 					}

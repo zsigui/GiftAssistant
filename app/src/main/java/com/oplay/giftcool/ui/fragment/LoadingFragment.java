@@ -7,7 +7,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.socks.library.KLog;
 
 /**
- *
+ * 加载页面
  *
  * Created by zsigui on 15-12-23.
  */

@@ -10,4 +10,5 @@
 *.apk
 apk/
 captures/
-
+app/keystore/
+pic/

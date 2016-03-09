@@ -152,6 +152,15 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		mFragName = fragName;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+	}
 
 	protected void refreshInitConfig() {
 		mIsLoading = true;
@@ -207,6 +216,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	 */
 	protected void onUserVisible() {
 		if (!mIsPrepared || mIsLoading || mHasData) {
+			if (mViewManager != null) {
+				mViewManager.showLast();
+			}
 			return;
 		}
 		lazyLoad();
@@ -254,10 +266,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		ObserverManager.getInstance().removeGiftUpdateListener(this);
-		ObserverManager.getInstance().removeUserUpdateListener(this);
 		release();
-//		AssistantApp.getRefWatcher(getActivity()).watch(this);
 	}
 
 	@Override

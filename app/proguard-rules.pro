@@ -91,7 +91,16 @@
 -keep class com.android.** { *; }
 -keep public class com.bigkoo.convenientbanner.ConvenientBanner { public *; }
 
+# protobuf
+-dontwarn com.google.**
+-keep class com.google.protobuf.** {*;}
 
+# jpush
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
 
 
 # Android

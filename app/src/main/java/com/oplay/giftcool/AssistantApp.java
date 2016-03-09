@@ -1,6 +1,7 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
+import android.app.PendingIntent;
 import android.os.Build;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -24,25 +25,30 @@ import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
+import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
-import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
-import com.tendcloud.tenddata.TCAgent;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.BasicPushNotificationBuilder;
+import cn.jpush.android.api.JPushInterface;
 import retrofit.Retrofit;
 
 /**
@@ -52,14 +58,14 @@ import retrofit.Retrofit;
  */
 public class AssistantApp extends Application {
 
-	private final static String TD_APP_ID = "7E57533EDCF044DA1BF657D786E0FDF7";
+	private final static String TD_APP_ID = "0CC59F66C9823F0D3EF90AC61D9735FB";
 	private final static String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
 
 	private UpdateInfo mUpdateInfo;
-	private ArrayList<String> mQQInfo;
+	private ArrayList<InitQQ> mQQInfo;
 	private String mStartImg;
 	private IndexBanner mBroadcastBanner;
 	private int mChannelId = -1;
@@ -88,6 +94,14 @@ public class AssistantApp extends Application {
 	// LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
 
+	public static AssistantApp getInstance() {
+		return sInstance;
+	}
+
+	public Retrofit getRetrofit() {
+		return mRetrofit;
+	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -103,32 +117,47 @@ public class AssistantApp extends Application {
 		sInstance = this;
 
 		//初始化TalkingData
-		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
-		//初始化友盟
-		AnalyticsConfig.setAppkey(this, UMENG_APP_KEY);
-		AnalyticsConfig.setChannel("m" + getChannelId());   //友盟渠道号不能纯数字
-		AnalyticsConfig.enableEncrypt(true);
-		MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
-
+//		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
+		initUmeng();
+		initJPush();
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
+	/**
+	 * 初始化极光推送
+	 */
+	private void initJPush() {
+		JPushInterface.init(this);
+		JPushInterface.setDebugMode(AppConfig.TEST_MODE);
+		// 设置通知静默时间，不震动和响铃，晚上10点30分-早上8点
+		JPushInterface.setSilenceTime(this, 22, 30, 8, 0);
+		// 设置默认的通知栏样式
+		BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(this);
+		builder.statusBarDrawable = R.drawable.ic_stat_notify;
+		builder.notificationFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+		JPushInterface.setDefaultPushNotificationBuilder(builder);
+		// 设置保留最近通知条数 5
+		JPushInterface.setLatestNotificationNumber(this, 5);
+	}
+
+	/**
+	 * 初始化友盟
+	 */
+	private void initUmeng() {
+		AnalyticsConfig.setAppkey(this, UMENG_APP_KEY);
+		AnalyticsConfig.setChannel("m" + getChannelId());   //友盟渠道号不能纯数字
+		AnalyticsConfig.enableEncrypt(true);
+		MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
+	}
+
 	public void initLoadingView() {
-		LoadAndRetryViewManager.DEFAULT_EMPTY_VIEW_ID = R.layout.fragment_data_empty;
-		LoadAndRetryViewManager.DEFAULT_LOAD_VIEW_ID = R.layout.fragment_data_loading;
+		LoadAndRetryViewManager.setDefaultEmptyViewId(R.layout.fragment_data_empty);
+		LoadAndRetryViewManager.setDefaultLoadViewId(R.layout.fragment_data_loading);
 		// 加载失败，错误或者重试
-		LoadAndRetryViewManager.DEFAULT_ERROR_RETRY_VIEW_ID = R.layout.fragment_error_net;
-	}
-
-	public static AssistantApp getInstance() {
-		return sInstance;
-	}
-
-	public Retrofit getRetrofit() {
-		return mRetrofit;
+		LoadAndRetryViewManager.setDefaultErrorRetryViewId(R.layout.fragment_error_net);
 	}
 
 	/**
@@ -143,9 +172,10 @@ public class AssistantApp extends Application {
 	 */
 	public void exit() {
 		try {
-			ClockService.stopService(getApplicationContext());
-			ThreadUtil.destory();
+			ThreadUtil.destroy();
 			setGlobalInit(false);
+			JPushInterface.clearLocalNotifications(this);
+			JPushInterface.onKillProcess(this);
 			if (ImageLoader.getInstance().isInited()) {
 				ImageLoader.getInstance().clearMemoryCache();
 				ImageLoader.getInstance().stop();
@@ -202,8 +232,20 @@ public class AssistantApp extends Application {
 //				return response;
 //			}
 //		};
+		Interceptor interceptor = new Interceptor() {
+			@Override
+			public Response intercept(Chain chain) throws IOException {
+				String header = String.format("pn=%s&vc=%d&vn=%s&chn=%d",
+						AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+						AppConfig.SDK_VER_NAME, getChannelId());
+				Request newRequest = chain.request().newBuilder()
+						.addHeader("X-Client-Info", header)
+						.build();
+				return chain.proceed(newRequest);
+			}
+		};
 		OkHttpClient httpClient = new OkHttpClient();
-//		httpClient.interceptors().add(interceptor);
+		httpClient.interceptors().add(interceptor);
 //		httpClient.networkInterceptors().add(interceptor);
 //		httpClient.setCache(cache);
 		httpClient.setConnectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -313,6 +355,15 @@ public class AssistantApp extends Application {
 		mShouldPushMsg = shouldPushMsg;
 		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_ACCEPT_PUSH,
 				shouldPushMsg);
+		if (shouldPushMsg) {
+			if (JPushInterface.isPushStopped(this)) {
+				JPushInterface.resumePush(this);
+			}
+		} else {
+			if (!JPushInterface.isPushStopped(this)) {
+				JPushInterface.stopPush(this);
+			}
+		}
 	}
 
 	public boolean isShouldAutoInstall() {
@@ -394,11 +445,11 @@ public class AssistantApp extends Application {
 		mUpdateInfo = updateInfo;
 	}
 
-	public ArrayList<String> getQQInfo() {
+	public ArrayList<InitQQ> getQQInfo() {
 		return mQQInfo;
 	}
 
-	public void setQQInfo(ArrayList<String> QQInfo) {
+	public void setQQInfo(ArrayList<InitQQ> QQInfo) {
 		mQQInfo = QQInfo;
 	}
 

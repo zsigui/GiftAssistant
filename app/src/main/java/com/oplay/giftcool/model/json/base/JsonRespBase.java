@@ -1,7 +1,7 @@
 package com.oplay.giftcool.model.json.base;
 
 import com.google.gson.annotations.SerializedName;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 
 import java.io.Serializable;
 
@@ -64,6 +64,6 @@ public class JsonRespBase<T> implements Serializable {
 	}
 
 	public boolean isSuccess() {
-		return getCode() == StatusCode.SUCCESS;
+		return getCode() == NetStatusCode.SUCCESS;
 	}
 }

@@ -33,7 +33,7 @@ public class ScoreMission implements Serializable {
 	public int icon;
 
 	/**
-	 * 奖励积分
+	 * 奖励金币
 	 */
 	@SerializedName("reward_points")
 	public int rewardScore;

@@ -8,7 +8,7 @@ import android.view.View;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameSuperAdapter;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -144,7 +144,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 										return;
 									}
 									if (response != null && response.isSuccess()) {
-										if (response.body() != null && response.body().getCode() == StatusCode
+										if (response.body() != null && response.body().getCode() == NetStatusCode
 												.SUCCESS) {
 											updateData(response.body().getData());
 											refreshSuccessEnd();

@@ -70,10 +70,10 @@ public class ScoreManager {
 
 	public void toastByCallback(TaskReward task, boolean needNotify) {
 		if (task != null && task.rewardPoints != 0 && AccountManager.getInstance().isLogin()) {
-			// 评论任务完成，奖励积分
+			// 评论任务完成，奖励金币
 			ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
 			if (needNotify) {
-				// 通知刷新积分
+				// 通知刷新金币
 				AccountManager.getInstance().updatePartUserInfo();
 			}
 			setInWorking(false);
@@ -106,10 +106,10 @@ public class ScoreManager {
 		} else if (task.rewardPoints > 0) {
 			final WelcomeDialog loginDialog;
 			if (task.rewardPoints >= 100) {
-				// 首次登录积分 >= 100
+				// 首次登录金币 >= 100
 				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login_first);
 			} else {
-				// 再次登录积分 < 100
+				// 再次登录金币 < 100
 				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login);
 			}
 			loginDialog.setScore(task.rewardPoints);
@@ -125,7 +125,7 @@ public class ScoreManager {
 				public void onConfirm() {
 					IntentUtil.jumpEarnScore(context);
 					loginDialog.dismissAllowingStateLoss();
-					AppDebugConfig.trace(context, "登录欢迎弹窗", "跳转积分任务");
+					AppDebugConfig.trace(context, "登录欢迎弹窗", "跳转金币任务");
 				}
 			});
 			loginDialog.show(fm, WelcomeDialog.class.getSimpleName());
@@ -192,7 +192,7 @@ public class ScoreManager {
 									}
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.d(AppDebugConfig.TAG_MANAGER,
-												"积分获取-" + (response.body() == null?"解析失败" : response.body().error()));
+												"金币获取-" + (response.body() == null?"解析失败" : response.body().error()));
 									}
 								}
 							}

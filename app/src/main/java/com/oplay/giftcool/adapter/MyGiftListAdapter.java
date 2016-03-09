@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -38,7 +39,7 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
         if (data == null) {
             return;
         }
-        mListData = data;
+        mData = data;
         notifyDataSetChanged();
     }
 
@@ -80,7 +81,7 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
         holder.tvContent.setText(o.content);
         holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
                 DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
-        holder.tvGiftCode.setText(Html.fromHtml(String.format("礼包码: <font color='#ffaa17'>%s</font>", o.code)));
+        holder.tvGiftCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, o.code)));
         if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
             holder.btnCopy.setEnabled(false);
             holder.btnCopy.setText("已结束");
@@ -97,7 +98,7 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
 
     @Override
     public void onClick(View v) {
-        if (mListData == null || v.getTag(TAG_POSITION) == null) {
+        if (mData == null || v.getTag(TAG_POSITION) == null) {
             return;
         }
         IndexGiftNew item = getItem((Integer)v.getTag(TAG_POSITION));

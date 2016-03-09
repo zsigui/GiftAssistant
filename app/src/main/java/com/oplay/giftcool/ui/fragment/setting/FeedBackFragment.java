@@ -2,13 +2,13 @@ package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
@@ -24,6 +24,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -37,13 +38,14 @@ import retrofit.Retrofit;
 public class FeedBackFragment extends BaseFragment implements TextWatcher, TextView.OnEditorActionListener {
 
 	private final static String PAGE_NAME = "意见反馈";
-	private RadioButton rbFunction;
-	private RadioButton rbPay;
-	private RadioButton rbOther;
+//	private RadioButton rbFunction;
+//	private RadioButton rbPay;
+//	private RadioButton rbOther;
 	private EditText etContent;
 	private TextView tvContentCount;
 	private EditText etPhone;
 	private TextView btnSend;
+	private TextView tvTypeTitle;
 
 	public static FeedBackFragment newInstance() {
 		return new FeedBackFragment();
@@ -58,13 +60,14 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 			return;
 		}
 		setContentView(R.layout.fragment_feedback);
-		rbFunction = getViewById(R.id.rb_function);
-		rbPay = getViewById(R.id.rb_pay);
-		rbOther = getViewById(R.id.rb_other);
+//		rbFunction = getViewById(R.id.rb_function);
+//		rbPay = getViewById(R.id.rb_pay);
+//		rbOther = getViewById(R.id.rb_other);
 		etContent = getViewById(R.id.et_content);
 		tvContentCount = getViewById(R.id.tv_content_count);
 		etPhone = getViewById(R.id.et_phone);
 		btnSend = getViewById(R.id.btn_send);
+		tvTypeTitle = getViewById(R.id.tv_type_title);
 	}
 
 	@Override
@@ -72,11 +75,14 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 		btnSend.setOnClickListener(this);
 		etContent.addTextChangedListener(this);
 		etContent.setOnEditorActionListener(this);
+		tvTypeTitle.setOnClickListener(this);
 	}
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		etContent.requestFocus();
+		tvTypeTitle.setText(Html.fromHtml(String.format("%s  <font color='#f85454'>%s</font>",
+				getResources().getString(R.string.st_feedback_type_title), MixUtil.getQQInfo()[0])));
 		InputMethodUtil.showSoftInput(getActivity());
 	}
 
@@ -91,6 +97,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 		switch (v.getId()) {
 			case R.id.btn_send:
 				handleCommit();
+				break;
+			case R.id.tv_type_title:
+				IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
 				break;
 		}
 	}
@@ -133,7 +142,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 			return;
 		}
 		if (etContent.getText().toString().trim().length() < 10) {
-			ToastUtil.showShort("反馈信息有点少，麻烦更详细地描述你的反馈");
+			ToastUtil.showShort("反馈信息有点少，麻烦更详细地描述你的反馈(不少于10个字)");
 			return;
 		}
 
@@ -148,13 +157,14 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 				ReqFeedBack feedBack = new ReqFeedBack();
 				feedBack.contact = etPhone.getText().toString();
 				feedBack.content = etContent.getText().toString();
-				if (rbFunction.isChecked()) {
-					feedBack.type = 1;
-				} else if (rbPay.isChecked()) {
-					feedBack.type = 2;
-				} else if (rbOther.isChecked()) {
-					feedBack.type = 3;
-				}
+				feedBack.type = 1;
+//				if (rbFunction.isChecked()) {
+//					feedBack.type = 1;
+//				} else if (rbPay.isChecked()) {
+//					feedBack.type = 2;
+//				} else if (rbOther.isChecked()) {
+//					feedBack.type = 3;
+//				}
 				Global.getNetEngine().postFeedBack(new JsonReqBase<ReqFeedBack>(feedBack))
 						.enqueue(new Callback<JsonRespBase<TaskReward>>() {
 							@Override
@@ -164,7 +174,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 									if (response.body() != null && response.body().isSuccess()) {
 										ToastUtil.showShort("反馈成功，谢谢你");
 										ScoreManager.getInstance().toastByCallback(response.body().getData());
-										((BaseAppCompatActivity)getActivity()).handleBackPressed();
+										((BaseAppCompatActivity)getActivity()).onBack();
 										return;
 									}
 									ToastUtil.showShort("提交失败-" + (response.body() == null ?

@@ -22,8 +22,8 @@ import com.oplay.giftcool.util.ReflectUtil;
  */
 public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverManager.UserUpdateListener {
 
-	private static final String TITLE_BEAN_SCORE = "积分或偶玩豆消耗";
-	private static final String TITLE_SCORE = "积分消耗";
+	private static final String TITLE_BEAN_SCORE = "金币或偶玩豆消耗";
+	private static final String TITLE_SCORE = "金币消耗";
 	private static final String TITLE_BEAN = "偶玩豆消耗";
 	private static final String REMAIN_BOTH = "余额：<img src='ic_score'/>%d 和 <img src='ic_bean'> %d";
 	private static final String REMAIN_SCORE = "余额：<img src='ic_score'/> %d";
@@ -56,7 +56,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 	private OnDialogClickListener mWrapperListener;
 
 	/**
-	 * 用于不足时包装原确定按键为赚积分接口
+	 * 用于不足时包装原确定按键为赚金币接口
 	 */
 	private OnDialogClickListener mGetScoreListener = new OnDialogClickListener() {
 		@Override
@@ -153,12 +153,12 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			mPayType = GiftTypeUtil.PAY_TYPE_SCORE;
 			tvRemain.setText(Html.fromHtml(String.format(REMAIN_SCORE, hasScore), mImageGetter, null));
 			if (hasScore < mScoreConsume) {
-				// 可选积分支付方式，但积分不足
+				// 可选金币支付方式，但金币不足
 				tvContent.setText(Html.fromHtml(String.format(SCORE_NOT_ENOUGH, mScoreConsume), mImageGetter, null));
-				setPositiveBtnText("赚积分");
+				setPositiveBtnText("赚金币");
 				mWrapperListener = mGetScoreListener;
 			} else {
-				// 可选积分支付方式，积分充足
+				// 可选金币支付方式，金币充足
 				tvContent.setText(Html.fromHtml(String.format(SCORE_ENOUGH, mBeanConsume), mImageGetter, null));
 			}
 		} else if (mConsumeType == GiftTypeUtil.PAY_TYPE_BEAN) {
@@ -179,13 +179,13 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 			mPayType = GiftTypeUtil.PAY_TYPE_SCORE;
 			tvRemain.setText(Html.fromHtml(String.format(REMAIN_BOTH, hasScore, hasBean), mImageGetter, null));
 			if (hasBean < mBeanConsume && hasScore < mScoreConsume) {
-				// 可选积分或偶玩豆支付方式，但积分和偶玩豆都不足
+				// 可选金币或偶玩豆支付方式，但金币和偶玩豆都不足
 				tvContent.setText(Html.fromHtml(String.format(BEAN_SCORE_BOTH_NOT_ENOUGH, mScoreConsume,
 						mBeanConsume), mImageGetter, null));
 				setPositiveBtnText("增加余额");
 				mWrapperListener = mGetBeanListener;
 			} else {
-				// 可选积分或偶玩豆支付方式，积分和偶玩豆至少可抢一种
+				// 可选金币或偶玩豆支付方式，金币和偶玩豆至少可抢一种
 				tvContent.setText(Html.fromHtml(String.format(BEAN_SCORE_BOTH_ENOUGH, mScoreConsume,
 						mBeanConsume), mImageGetter, null));
 			}
@@ -252,6 +252,12 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
 	protected void processLogic() {
 		setConsume(mBeanConsume, mScoreConsume, mConsumeType);
 		ObserverManager.getInstance().addUserUpdateListener(this);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
 	}
 
 	@Override

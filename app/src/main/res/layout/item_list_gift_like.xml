@@ -78,7 +78,7 @@
 			android:text = "今日新增2款" />
 
 
-	<LinearLayout
+	<!--<LinearLayout
 			android:id = "@+id/ll_send"
 			android:layout_width = "wrap_content"
 			android:layout_height = "70dp"
@@ -95,5 +95,5 @@
 				android:background = "@drawable/selector_btn_green"
 				android:text = "@string/st_game_download"
 				android:textColor = "@color/co_white" />
-	</LinearLayout >
+	</LinearLayout >-->
 </RelativeLayout >

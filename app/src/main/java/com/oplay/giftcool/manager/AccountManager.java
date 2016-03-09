@@ -10,11 +10,13 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.StatusCode;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
+import com.oplay.giftcool.model.data.resp.MessageCount;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -28,10 +30,12 @@ import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
 
+import cn.jpush.android.api.JPushInterface;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -56,6 +60,7 @@ public class AccountManager {
 	}
 
 	private UserModel mUser;
+	private int mUnreadMessageCount = 0;
 	private int lastLoginType = UserTypeUtil.TYPE_POHNE;
 
 	public boolean isPhoneLogin() {
@@ -69,6 +74,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，默认进行 USER_UPDATE_PART 状态通知
+	 *
 	 * @param user
 	 */
 	public void notifyUserPart(UserModel user) {
@@ -77,6 +83,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，默认进行 USER_UPDATE_ALL 状态通知
+	 *
 	 * @param user
 	 */
 	public void notifyUserAll(UserModel user) {
@@ -85,6 +92,7 @@ public class AccountManager {
 
 	/**
 	 * 设置当前用户，会引起监听该变化的接口调用进行通知
+	 *
 	 * @param notifyAll 是否进行 USER_UPDATE_ALL 状态通知
 	 */
 	private void notifyUser(UserModel user, boolean notifyAll) {
@@ -114,6 +122,9 @@ public class AccountManager {
 		} else {
 			NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
 		}
+
+		// 更新未读消息数量
+		obtainUnreadPushMessageCount();
 
 		if (isLogin()) {
 			OuwanSDKManager.getInstance().login();
@@ -149,7 +160,9 @@ public class AccountManager {
 		return mUser == null ? null : mUser.userSession;
 	}
 
-
+	/**
+	 * 重新请求服务器以更新用户全部信息
+	 */
 	public void updateUserInfo() {
 		if (isLogin()) {
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
@@ -165,10 +178,11 @@ public class AccountManager {
 								public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
 									if (response != null && response.isSuccess()) {
 										if (response.body() != null
-												&& response.body().getCode() == StatusCode.SUCCESS) {
+												&& response.body().getCode() == NetStatusCode.SUCCESS) {
 											UserModel user = getUser();
 											user.userInfo = response.body().getData().userInfo;
 											notifyUserAll(user);
+											updateJPushTagAndAlias();
 											return;
 										}
 										if (AppDebugConfig.IS_DEBUG) {
@@ -192,15 +206,18 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 登录态失效
+	 */
 	private void sessionFailed(JsonRespBase response) {
-		if (response != null && response.getCode() == StatusCode.ERR_UN_LOGIN) {
+		if (response != null && response.getCode() == NetStatusCode.ERR_UN_LOGIN) {
 			notifyUserAll(null);
 			ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
 		}
 	}
 
 	/**
-	 * 更新用户部分信息: 偶玩豆，积分，礼包数
+	 * 更新用户部分信息: 偶玩豆，金币，礼包数
 	 */
 	public void updatePartUserInfo() {
 		if (isLogin()) {
@@ -217,7 +234,7 @@ public class AccountManager {
 								public void onResponse(Response<JsonRespBase<UserInfo>> response, Retrofit retrofit) {
 									if (response != null && response.isSuccess()) {
 										if (response.body() != null
-												&& response.body().getCode() == StatusCode.SUCCESS) {
+												&& response.body().getCode() == NetStatusCode.SUCCESS) {
 											UserInfo info = response.body().getData();
 											UserModel user = getUser();
 											user.userInfo.score = info.score;
@@ -271,7 +288,9 @@ public class AccountManager {
 		}
 	}
 
-
+	/**
+	 * 登录或者登出后进行全局的浏览器Cookie重设
+	 */
 	public void syncCookie() {
 		ArrayList<String> cookies = null;
 		if (isLogin()) {
@@ -311,6 +330,9 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 更新Session的实际网络请求方法
+	 */
 	private void updateSessionNetRequest() {
 		if (NetworkUtil.isConnected(mContext)) {
 			Global.getNetEngine().updateSession(new JsonReqBase<String>())
@@ -328,7 +350,7 @@ public class AccountManager {
 										updateUserInfo();
 										return;
 									}
-									if (response.body().getCode() == StatusCode.ERR_UN_LOGIN) {
+									if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
 										// 更新session不同步
 										if (AppDebugConfig.IS_DEBUG) {
 											KLog.d("session is not sync, err msg = " + response.body().getMsg());
@@ -355,6 +377,23 @@ public class AccountManager {
 		}
 	}
 
+	/**
+	 * 更新Jpush的别名和标签信息（暂只设置别名）
+	 */
+	private void updateJPushTagAndAlias() {
+		if (!isLogin()) {
+			// 用户不处于登录状态，不进行别名标记
+			JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));
+			return;
+		}
+		// 使用uid进行别名标记
+		String alias = Coder_Md5.md5(String.valueOf(getUserInfo().uid));
+		JPushInterface.setAlias(mContext, alias, new JPushTagsAliasCallback(mContext));
+	}
+
+	/**
+	 * 登出当前账号，会通知服务器并刷新整个页面
+	 */
 	public void logout() {
 		if (!isLogin()) {
 			return;
@@ -382,14 +421,61 @@ public class AccountManager {
 		AccountManager.getInstance().notifyUserAll(null);
 	}
 
-	public ArrayList<String> obtainPhoneAccount() {
-		ArrayList<String> result = new ArrayList<String>();
-		return result;
+	private void setUnreadMessageCount(int unreadMessageCount) {
+		mUnreadMessageCount = unreadMessageCount;
 	}
 
-	public ArrayList<String> obtainOuwanAccount() {
-		return null;
+	/**
+	 * 获取未读消息数量
+	 *
+	 * @return
+	 */
+	public int getUnreadMessageCount() {
+		return mUnreadMessageCount;
 	}
+
+	/**
+	 * 获取未读推送消息数量
+	 */
+	public void obtainUnreadPushMessageCount() {
+		if (!isLogin()) {
+			// 未登录，推送消息默认为0
+			setUnreadMessageCount(0);
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
+			return;
+		}
+		Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>())
+				.enqueue(new Callback<JsonRespBase<MessageCount>>() {
+					@Override
+					public void onResponse(Response<JsonRespBase<MessageCount>> response, Retrofit retrofit) {
+						if (response != null && response.isSuccess()) {
+							if (response.body() != null && response.body().isSuccess()) {
+								setUnreadMessageCount(response.body().getData().count);
+								ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
+										.USER_UPDATE_PUSH_MESSAGE);
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+										+ (response.body() == null ? "解析出错" : response.body().error()));
+							}
+							return;
+						}
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+									+ (response == null ? "返回出错" : response.code()));
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-" + t.getMessage());
+						}
+					}
+				});
+	}
+
 
 	public void writePhoneAccount(String val, ArrayList<String> history, boolean isRemove) {
 		writeToHistory(val, SPConfig.KEY_LOGIN_PHONE, history, isRemove);
@@ -407,6 +493,14 @@ public class AccountManager {
 		return readFromHistory(SPConfig.KEY_LOGIN_OUWAN);
 	}
 
+	/**
+	 * 调用此方法向SP写入登录账号记录信息
+	 *
+	 * @param value    待新添加的值
+	 * @param key      SP中存放的key，分偶玩和手机登录
+	 * @param history  历史记录数据列表
+	 * @param isRemove 是否移除键值操作
+	 */
 	private void writeToHistory(String value, String key, ArrayList<String> history, boolean isRemove) {
 		if (TextUtils.isEmpty(value) || (value.contains(",") && value.indexOf(",") == 0)) {
 			return;
@@ -439,6 +533,12 @@ public class AccountManager {
 		SPUtil.putString(mContext, SPConfig.SP_LOGIN_FILE, key, historyStr.toString());
 	}
 
+	/**
+	 * 调用该方法从SP中读取保存的登录账号记录信息
+	 *
+	 * @param key SP中的Key，区分偶玩和手机登录
+	 * @return 历史记录列表
+	 */
 	private ArrayList<String> readFromHistory(String key) {
 		String history = SPUtil.getString(mContext, SPConfig.SP_LOGIN_FILE, key, null);
 		ArrayList<String> result = null;

@@ -94,7 +94,7 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 				}
 				break;
 			case R.id.tv_search_icon:
-				sendSearchRequest(mCurKeyWord);
+				sendSearchRequest(mCurKeyWord, 0);
 				break;
 			case R.id.tv_search_clear:
 				mEdtSearch.setText("");
@@ -110,14 +110,14 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 		mSearchActionListener = searchActionListener;
 	}
 
-	public void sendSearchRequest(String keyword) {
+	public void sendSearchRequest(String keyword, int id) {
 		if (TextUtils.isEmpty(mCurKeyWord)) {
 			KLog.w("the keyword is null or empty");
 			return;
 		}
 		if (mSearchActionListener != null) {
 			InputMethodUtil.hideSoftInput(mEdtSearch);
-			mSearchActionListener.onSearchPerform(mCurKeyWord);
+			mSearchActionListener.onSearchPerform(mCurKeyWord, id);
 		}
 	}
 
@@ -147,7 +147,7 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 			mDivider.setVisibility(View.VISIBLE);
 		}
 		if (mIsAutoSendRequest) {
-			sendSearchRequest(mCurKeyWord);
+			sendSearchRequest(mCurKeyWord, 0);
 			return;
 		}
 		if (mIsAutoPopupPrompt) {
@@ -193,7 +193,7 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 			KLog.v();
 		}
 		if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-			sendSearchRequest(mCurKeyWord);
+			sendSearchRequest(mCurKeyWord, 0);
 			return true;
 		}
 		return false;
@@ -261,7 +261,7 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
 		 *
 		 * @param keyword used to be searched
 		 */
-		void onSearchPerform(String keyword);
+		void onSearchPerform(String keyword, int id);
 
 		void onSearchCleared();
 

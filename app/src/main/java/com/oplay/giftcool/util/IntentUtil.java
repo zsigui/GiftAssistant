@@ -65,9 +65,12 @@ public class IntentUtil {
 	/**
 	 * 跳转限量礼包列表界面
 	 */
-	public static void jumpGiftLimitList(Context context) {
+	public static void jumpGiftLimitList(Context context, boolean needNewTask) {
 		Intent intent = new Intent(context, GiftListActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
+		if (needNewTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
 		context.startActivity(intent);
 	}
 
@@ -135,7 +138,7 @@ public class IntentUtil {
 	}
 
 	/**
-	 * 跳转积分任务界面
+	 * 跳转金币任务界面
 	 */
 	public static void jumpEarnScore(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -175,6 +178,24 @@ public class IntentUtil {
 	public static void jumpMyWallet(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转我的关注界面
+	 */
+	public static void jumpMyAttention(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_ATTENTION);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转消息中心
+	 */
+	public static void jumpMessageCentral(Context context) {
+		Intent intent = new Intent(context, SettingActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
 		context.startActivity(intent);
 	}
 
@@ -292,8 +313,11 @@ public class IntentUtil {
 	/**
 	 * 跳转礼包首页
 	 */
-	public static void jumpHome(Context context) {
+	public static void jumpHome(Context context, boolean isNewTask) {
 		Intent intent = new Intent(context, MainActivity.class);
+		if (isNewTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
 		context.startActivity(intent);
 	}
 
@@ -301,6 +325,9 @@ public class IntentUtil {
 	 * 跳转活动页面
 	 */
 	public static void jumpActivityWeb(Context context, String url, String title) {
+		if (MixUtil.isUrlNeedLoginFirst(context, url)) {
+			return;
+		}
 		Intent intent = new Intent(context, WebActivity.class);
 		intent.putExtra(KeyConfig.KEY_URL, url);
 		intent.putExtra(KeyConfig.KEY_DATA, title);
@@ -329,4 +356,5 @@ public class IntentUtil {
 			return false;
 		}
 	}
+
 }

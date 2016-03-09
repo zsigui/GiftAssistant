@@ -11,7 +11,7 @@ import com.oplay.giftcool.adapter.other.AutoMeasureGridLayoutManager;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -85,7 +85,7 @@ public class GameTypeFragment extends BaseFragment {
 							return;
 						}
 						if (response != null && response.isSuccess()) {
-							if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								refreshSuccessEnd();
 								updateData(response.body().getData());
 								return;

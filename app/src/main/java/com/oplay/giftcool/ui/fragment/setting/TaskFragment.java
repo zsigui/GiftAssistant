@@ -12,7 +12,7 @@ import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.StatusCode;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
@@ -27,6 +27,8 @@ import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.game.GameFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -45,7 +47,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		ObserverManager.UserActionListener {
 
 
-	private final static String PAGE_NAME = "积分任务";
+	private final static String PAGE_NAME = "金币任务";
 	private TextView tvScore;
 	private ListView mDataView;
 	private ArrayList<ScoreMission> mData;
@@ -72,6 +74,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	@Override
 	protected void setListener() {
+		ObserverManager.getInstance().addUserUpdateListener(this);
+		ObserverManager.getInstance().addUserActionListener(this);
 	}
 
 	@Override
@@ -84,10 +88,10 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		ObserverManager.getInstance().addUserUpdateListener(this);
-		ObserverManager.getInstance().addUserActionListener(this);
+	public void onDestroyView() {
+		super.onDestroyView();
+		ObserverManager.getInstance().removeUserUpdateListener(this);
+		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 									return;
 								}
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == StatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 										mData = response.body().getData().missions;
 										setTaskIcon(mData);
 										mData = resort(mData);
@@ -305,7 +309,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			if (MainActivity.sGlobalHolder == null) {
 				IntentUtil.jumpGameNewList(getContext());
 			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGame(2);
+				MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_SUPER);
 				getActivity().finish();
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
@@ -313,15 +317,15 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			if (MainActivity.sGlobalHolder == null) {
 				IntentUtil.jumpGiftNewList(getContext());
 			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGift(4);
+				MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
 				getActivity().finish();
 			}
 		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
 			// 分享限量礼包
-			IntentUtil.jumpGiftLimitList(getContext());
+			IntentUtil.jumpGiftLimitList(getContext(), false);
 		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
 			// 使用偶玩豆购买限量礼包，跳转今日限量界面
-			IntentUtil.jumpGiftLimitList(getContext());
+			IntentUtil.jumpGiftLimitList(getContext(), false);
 		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
 			// 跳转指定游戏界面，暂无
 			try {
@@ -346,12 +350,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				KLog.e("error id " + id);
 			}
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ObserverManager.getInstance().removeActionListener(this);
 	}
 
 	@Override

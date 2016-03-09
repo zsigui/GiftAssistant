@@ -24,13 +24,13 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 	protected static final int TAG_POSITION = 0xFFF11133;
 	protected static final int TAG_URL = 0xffff1111;
 
-	protected  List<T> mListData;
+	protected  List<T> mData;
 	protected Context mContext;
 	protected LayoutInflater mLayoutInflater;
 
 	public BaseListAdapter(Context context, List<T> objects) {
 		mContext = context.getApplicationContext();
-		mListData = objects;
+		mData = objects;
 		mLayoutInflater = LayoutInflater.from(context);
 	}
 
@@ -53,14 +53,14 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 	}
 
 	public void onDestroy() {
-		if (mListData != null) {
-			mListData.clear();
+		if (mData != null) {
+			mData.clear();
 		}
 	}
 
 	public void updateData(List<T> newData) {
-		mListData.clear();
-		mListData.addAll(newData);
+		mData.clear();
+		mData.addAll(newData);
 	}
 
 	@Override
@@ -75,12 +75,12 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 
 	@Override
 	public int getCount() {
-		return mListData == null ? 0 : mListData.size();
+		return mData == null ? 0 : mData.size();
 	}
 
 	@Override
 	public T getItem(int position) {
-		return getCount() == 0 ? null : mListData.get(position);
+		return getCount() == 0 ? null : mData.get(position);
 	}
 
 	@Override

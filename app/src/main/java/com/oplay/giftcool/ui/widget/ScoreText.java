@@ -8,7 +8,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.util.DensityUtil;
 
 /**
- * 积分任务,添加积分的状态
+ * 金币任务,添加金币的状态
  *
  * Created by zsigui on 16-1-6.
  */
