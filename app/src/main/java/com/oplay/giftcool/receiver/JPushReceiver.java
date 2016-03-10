@@ -3,14 +3,19 @@ package com.oplay.giftcool.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.PushMessageManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
 import com.socks.library.KLog;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -49,6 +54,9 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 自定义消息，内容:" + extra);
 					}
+					if (extra == null) {
+						return;
+					}
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
 					}
@@ -58,9 +66,21 @@ public class JPushReceiver extends BroadcastReceiver {
 				} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 					// 用户点击了通知，打开对应界面
 					// 不显示在状态栏的自定义消息，根据需要进行额外工作
-					String extra = intent.getExtras().getString(JPushInterface.EXTRA_EXTRA);
+					Bundle bundle = intent.getExtras();
+					if (AppDebugConfig.IS_STATISTICS_SHOW) {
+						Map<String, String> kv = new HashMap<>();
+						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
+						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 0);
+					}
+
+					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" + extra);
+					}
+					if (extra == null) {
+						return;
 					}
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
@@ -68,6 +88,19 @@ public class JPushReceiver extends BroadcastReceiver {
 					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra.class);
 					PushMessageManager.getInstance().handleShowMessage(context, msg);
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
+				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+					// 用户接收到通知
+					Bundle bundle = intent.getExtras();
+					if (AppDebugConfig.IS_STATISTICS_SHOW) {
+						Map<String, String> kv = new HashMap<>();
+						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
+						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 0);
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息");
+					}
 				}
 			} catch (Throwable t) {
 				if (AppDebugConfig.IS_DEBUG) {

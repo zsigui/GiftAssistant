@@ -49,10 +49,8 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 		itemHolder.tvName.setText(String.format(TITLE_MODULE, data.gameName));
 		itemHolder.tvContent.setText(String.format(CONTENT_MODULE, data.giftContent));
 		ViewUtil.showImage(itemHolder.ivIcon, data.img);
-		itemHolder.rlMsg.setOnClickListener(this);
-		itemHolder.rlMsg.setTag(TAG_POSITION, position);
-		itemHolder.llToGet.setOnClickListener(this);
-		itemHolder.llToGet.setTag(TAG_POSITION, position);
+		itemHolder.llMsg.setOnClickListener(this);
+		itemHolder.llMsg.setTag(TAG_POSITION, position);
 	}
 
 	@Override
@@ -62,7 +60,7 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 		}
 		PushMessage data = getItem((Integer) v.getTag(TAG_POSITION));
 		switch (v.getId()) {
-			case R.id.ll_to_get:
+			case R.id.ll_msg:
 				IntentUtil.jumpGiftDetail(mContext, data.giftId);
 				break;
 		}
@@ -76,7 +74,7 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 
 	static class ItemHolder extends BaseRVHolder {
 
-		RelativeLayout rlMsg;
+		RelativeLayout llMsg;
 		ImageView ivIcon;
 		TextView tvName;
 		ImageView ivHint;
@@ -86,7 +84,7 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 
 		public ItemHolder(View itemView) {
 			super(itemView);
-			rlMsg = getViewById(R.id.rl_msg);
+			llMsg = getViewById(R.id.ll_msg);
 			ivIcon = getViewById(R.id.iv_icon);
 			tvName = getViewById(R.id.tv_name);
 			ivHint = getViewById(R.id.iv_hint);

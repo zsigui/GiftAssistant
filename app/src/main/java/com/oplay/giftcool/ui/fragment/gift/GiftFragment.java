@@ -17,6 +17,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
@@ -283,7 +284,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mViewManager.showContent();
 		mHasData = true;
 		mGiftData = data;
-		mLastPage = 1;
 		mAdapter.updateData(mGiftData);
 	}
 
@@ -411,6 +411,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
 	/**
 	 * 移到到指定位置
+	 *
 	 * @param type
 	 */
 	public void scrollToPos(final int type) {
@@ -507,7 +508,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			return;
 		}
 		IndexBanner banner = mGiftData.banner.get(position);
-		AppDebugConfig.trace(getContext(), "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.GIFT_BANNER,
+				String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(getContext(), banner);
 	}
 

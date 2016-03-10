@@ -189,7 +189,7 @@ public class DrawerFragment extends BaseFragment {
 		modelArray.put(KeyConfig.TYPE_ID_WALLET,
 				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet, "我的钱包", this));
 		modelArray.put(KeyConfig.TYPE_ID_SCORE_TASK,
-				new DrawerModel(KeyConfig.TYPE_ID_SCORE_TASK, R.drawable.ic_drawer_score_task, "每日任务", this));
+				new DrawerModel(KeyConfig.TYPE_ID_SCORE_TASK, R.drawable.ic_drawer_score_task, "赚金币", this));
 		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
 				"消息中心", this));
 		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable

@@ -17,6 +17,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -46,6 +47,8 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -80,6 +83,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	private TextView tvCode;
 	private TextView btnCopy;
 	private ImageView ivLimit;
+	private TextView tvQQ;
 	private DownloadButtonView btnDownload;
 	private LinearLayout downloadLayout;
 	private DeletedTextView tvOriginPrice;
@@ -88,6 +92,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	private IndexGameNew mAppInfo;
 	private CountTimer mTimer;
 	private int mId;
+	private String QQ_TEXT;
 
 
 	public static GiftDetailFragment newInstance(int id) {
@@ -120,6 +125,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		btnDownload = getViewById(R.id.btn_download);
 		downloadLayout = getViewById(R.id.ll_download);
 		tvOriginPrice = getViewById(R.id.tv_src);
+		tvQQ = getViewById(R.id.tv_qq);
 	}
 
 	@Override
@@ -127,6 +133,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		btnCopy.setOnClickListener(this);
 		btnSend.setOnClickListener(this);
 		btnDownload.setOnClickListener(this);
+        tvQQ.setOnClickListener(this);
+		ivIcon.setOnClickListener(this);
 		ObserverManager.getInstance().addGiftUpdateListener(this);
 		ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
 		ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
@@ -150,7 +158,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		if (getArguments() == null) {
-			throw new IllegalStateException("need to set data here");
+			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+			return;
 		}
 		mId = getArguments().getInt(KeyConfig.KEY_DATA);
 		if (AppDebugConfig.IS_FRAG_DEBUG) {
@@ -162,6 +171,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			downloadLayout.setVisibility(View.VISIBLE);
 		}
 		mViewManager.showLoading();
+		QQ_TEXT = getResources().getString(R.string.st_gift_qq);
 	}
 
 	@Override
@@ -170,6 +180,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		ObserverManager.getInstance().removeGiftUpdateListener(this);
 		ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
 		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
+	}
+
+	public void updateData(int id) {
+		if (id <= 0) {
+			return;
+		}
+		mId = id;
+		lazyLoad();
 	}
 
 	private void updateData(GiftDetail data) {
@@ -211,6 +229,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		btnCopy.setVisibility(View.GONE);
 		tvScore.setVisibility(View.GONE);
 		btnSend.setVisibility(View.VISIBLE);
+		tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
 		if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			tvConsume.setVisibility(View.VISIBLE);
 			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
@@ -450,6 +469,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 					return;
 				}
 				PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend);
+				break;
+            case R.id.tv_qq:
+                IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
+                break;
+			case R.id.iv_icon:
+				if (mData != null && mData.gameData != null) {
+					IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
+				}
 				break;
 		}
 	}

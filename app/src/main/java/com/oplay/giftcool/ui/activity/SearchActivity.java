@@ -9,6 +9,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.resp.PromptData;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
@@ -250,7 +251,8 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			if (mCallResult != null) {
 				mCallResult.cancel();
 			}
-			AppDebugConfig.trace(getApplicationContext(), "搜索", "关键字: " + keyword);
+			StatisticsManager.getInstance().trace(getApplicationContext(),
+					StatisticsManager.ID.USER_SEARCH, "关键字: " + keyword);
 			ReqSearchKey data = new ReqSearchKey();
 			data.searchKey = keyword;
 			mCallResult = Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data));

@@ -35,11 +35,17 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 			// 获取包名
 			final String pnStr = intent.getData().getSchemeSpecificPart();
 			final String packName = Basic_StringUtil.getNotEmptyStringElseReturnNull(pnStr);
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + action + ", packName = " + packName);
+            }
 			if (packName == null || packName.equalsIgnoreCase(context.getPackageName())) {
 				return;
 			}
 			// 安装新应用
 			if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + action + ", packName = " + packName);
+                }
 				final GameDownloadInfo appInfo = ApkDownloadManager.getInstance(context)
 						.getAppInfoByPackageName(packName);
 				try {

@@ -28,7 +28,7 @@ setDefaultVar()
     [ -z ${METADIR} ] && METADIR=META-INF
 }
 
-while getopts :s:o:c:n:v:e: OPTION
+while getopts "s:o:c:n:v:e:" OPTION
 do
     case ${OPTION} in
             s)

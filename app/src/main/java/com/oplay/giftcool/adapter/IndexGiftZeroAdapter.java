@@ -19,6 +19,7 @@ import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
@@ -109,7 +110,14 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 				}
 				return;
 			}
-			IntentUtil.jumpGiftDetail(mContext, mData.get(position).id);
+			IndexGiftNew data = mData.get(position);
+			if (data != null) {
+				IntentUtil.jumpGiftDetail(mContext, data.id);
+				if (AppDebugConfig.IS_STATISTICS_SHOW) {
+					StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_ZERO_ITEM,
+							String.format("第%s项点击:[%s]%s", position, data.gameName, data.name));
+				}
+			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_ADAPTER, e);

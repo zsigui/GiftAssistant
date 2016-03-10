@@ -27,23 +27,34 @@ public class IntentUtil {
 	/**
 	 * 跳转wifi设置界面
 	 */
-    public static void jumpWifiSetting(Context context) {
-        Intent intent = new Intent();
-        intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
-        intent.putExtra("extra_prefs_show_button_bar", true);
-        intent.putExtra("extra_prefs_set_next_text", "完成");
-        intent.putExtra("extra_prefs_set_back_text", "返回");
-        intent.putExtra("wifi_enable_next_on_connect", true);
-        context.startActivity(intent);
-    }
+	public static void jumpWifiSetting(Context context) {
+		Intent intent = new Intent();
+		intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
+		intent.putExtra("extra_prefs_show_button_bar", true);
+		intent.putExtra("extra_prefs_set_next_text", "完成");
+		intent.putExtra("extra_prefs_set_back_text", "返回");
+		intent.putExtra("wifi_enable_next_on_connect", true);
+		context.startActivity(intent);
+	}
 
 	/**
 	 * 跳转礼包详情页面
 	 *
 	 * @param context 上下文
-	 * @param id 礼包id
+	 * @param id      礼包id
 	 */
 	public static void jumpGiftDetail(Context context, int id) {
+		jumpGiftDetail(context, id, false);
+	}
+
+	/**
+	 * 跳转礼包详情页面
+	 *
+	 * @param context 上下文
+	 * @param id      礼包id
+	 * @param newTask 是否添加新Task标志
+	 */
+	public static void jumpGiftDetail(Context context, int id, boolean newTask) {
 		Intent intent = new Intent(context, GiftDetailActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -87,10 +98,22 @@ public class IntentUtil {
 	 * 跳转游戏详情页面(游戏暂时用“游戏专区”固定)
 	 *
 	 * @param context 上下文
-	 * @param id 游戏id
-	 * @param status 跳转详情位置：1详情 2礼包
+	 * @param id      游戏id
+	 * @param status  跳转详情位置：1详情 2礼包
 	 */
 	public static void jumpGameDetail(Context context, int id, int status) {
+		jumpGameDetail(context, id, status, false);
+	}
+
+	/**
+	 * 跳转游戏详情页面(游戏暂时用“游戏专区”固定)
+	 *
+	 * @param context 上下文
+	 * @param id      游戏id
+	 * @param status  跳转详情位置：1详情 2礼包
+	 * @param newTask 新任务
+	 */
+	public static void jumpGameDetail(Context context, int id, int status, boolean newTask) {
 		Intent intent = new Intent(context, GameDetailActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -104,8 +127,8 @@ public class IntentUtil {
 	 * 跳转标签游戏列表界面
 	 *
 	 * @param context 上下文
-	 * @param type 显示列表类型
-	 * @param title 标题名
+	 * @param type    显示列表类型
+	 * @param title   标题名
 	 */
 	public static void jumpGameTagList(Context context, int type, String title) {
 		Intent intent = new Intent(context, GameListActivity.class);
@@ -338,11 +361,11 @@ public class IntentUtil {
 	 * 添加Q群信息
 	 */
 	public static boolean joinQQGroup(Context context, String qqKey) {
-        String qqPackageName = "com.tencent.mobileqq";
-        if (!InstallAppUtil.isAppInstalled(AssistantApp.getInstance().getApplicationContext(), qqPackageName)) {
-            ToastUtil.showShort("请先安装QQ");
-            return false;
-        }
+		String qqPackageName = "com.tencent.mobileqq";
+		if (!InstallAppUtil.isAppInstalled(AssistantApp.getInstance().getApplicationContext(), qqPackageName)) {
+			ToastUtil.showShort("请先安装QQ");
+			return false;
+		}
 		Intent intent = new Intent();
 		intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq" +
 				".com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + qqKey));

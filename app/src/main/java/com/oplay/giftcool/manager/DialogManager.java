@@ -2,6 +2,7 @@ package com.oplay.giftcool.manager;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -13,6 +14,7 @@ import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HopeGiftDialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftcool.util.NetworkUtil;
@@ -62,11 +64,13 @@ public class DialogManager {
 				if (dialog != null) {
 					dialog.dismissAllowingStateLoss();
 				}
+				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_HOPE_GIFT_QUICK);
 			}
 
 			@Override
 			public void onConfirm() {
 				handleHopeGiftRequest(fm, dialog, dialog.getGameId(), dialog.getName(), dialog.getNote());
+				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS);
 			}
 		};
 		dialog.setListener(dialogClickListener);
@@ -95,11 +99,36 @@ public class DialogManager {
 						if (response != null && response.isSuccess()) {
 							JsonRespBase<Void> resp = response.body();
 							if (resp != null) {
-								if (resp.isSuccess()) {
-									ToastUtil.showShort(ConstString.TEXT_HOPE_GIFT_SUCCESS);
-									if (dialog != null) {
-										dialog.dismissAllowingStateLoss();
+
+								if (resp.isSuccess()
+										|| resp.getCode() == NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT
+										|| resp.getCode() == NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT) {
+									// 构建确定弹窗
+									final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+									confirmDialog.setNegativeVisibility(View.GONE);
+									confirmDialog.setPositiveBtnText(mContext.getString(R.string
+											.st_dialog_btn_success_confirm));
+									dialog.dismissAllowingStateLoss();
+									String title;
+									String content;
+									switch (resp.getCode()) {
+										case NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT:
+											title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+											content = mContext.getString(R.string
+													.st_dialog_hope_gift_fail_game_limit_content);
+											break;
+										case NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT:
+											title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+											content = mContext.getString(R.string
+													.st_dialog_hope_gift_fail_total_limit_content);
+											break;
+										default:
+											title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
+											content = mContext.getString(R.string.st_dialog_hope_gift_success_title);
 									}
+									confirmDialog.setTitle(title);
+									confirmDialog.setContent(content);
+									confirmDialog.show(fm, "confirm");
 								} else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
 										|| resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
 									// 登录状态失效
@@ -111,6 +140,7 @@ public class DialogManager {
 												response.body().error()));
 									}
 								}
+
 								return;
 							}
 							return;

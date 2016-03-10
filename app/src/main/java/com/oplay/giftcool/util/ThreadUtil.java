@@ -29,7 +29,9 @@ public class ThreadUtil {
 	 * @param task
 	 */
 	public static void runInUIThread(Runnable task) {
-		sHandler.post(task);
+		if (sHandler != null) {
+			sHandler.post(task);
+		}
 	}
 
 	public static void remove(Runnable task) {

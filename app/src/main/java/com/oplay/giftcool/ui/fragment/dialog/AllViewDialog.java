@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -78,14 +79,13 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		AppDebugConfig.trace(getActivity(), "每日活动弹窗", "参与活动");
+		StatisticsManager.getInstance().trace(getActivity(), StatisticsManager.ID.APP_ACTIVITY, "参与活动");
 		BannerTypeUtil.handleBanner(getActivity(), mData);
 		dismissAllowingStateLoss();
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		AppDebugConfig.trace(getActivity(), "每日活动弹窗", "取消");
 		super.onCancel(dialog);
 	}
 }

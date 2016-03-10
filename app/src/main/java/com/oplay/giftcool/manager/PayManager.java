@@ -73,6 +73,7 @@ public class PayManager {
 		if (nowClickTime - mLastClickTime <= Global.CLICK_TIME_INTERVAL) {
 			return WebViewInterface.RET_OTHER_ERR;
 		}
+		staticsPaySuccess(context, StatisticsManager.ID.GIFT_SEIZE_CLICK, gift, 0);
 		mLastClickTime = nowClickTime;
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
@@ -138,18 +139,11 @@ public class PayManager {
 					return;
 				}
 				mLastDialogClickTime = nowClickTime;
-				Map<String, String> kv = new HashMap<String, String>();
-				kv.put("礼包名", gift.name);
-				kv.put("所属游戏名", gift.gameName);
-				kv.put("礼包类型", String.valueOf(gift.giftType));
+
 				// 根据选择类型判断支付方式
 				if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_BEAN) {
-					kv.put("价格", "偶玩豆 " + gift.bean);
-					AppDebugConfig.trace(context, "抢礼包", "偶玩豆支付", kv);
 					handleBeanPay(context, gift, button, true);
 				} else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
-					kv.put("价格", "金币 " + gift.score);
-					AppDebugConfig.trace(context, "抢礼包", "金币支付", kv);
 					handleScorePay(context, gift, button, true);
 				} else {
 					ToastUtil.showShort("选择支付类型有误，请重新选择");
@@ -190,12 +184,16 @@ public class PayManager {
 											.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
+										// 构造支付弹窗
 										PayCode codeData = response.body().getData();
 										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
 										dialog.setTitle(context.getResources().getString(R.string
 												.st_dialog_seize_success));
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
+										// 统计
+										staticsPaySuccess(context, StatisticsManager.ID.GIFT_BEAN_SEIZE, gift, 1);
+
 										if (button != null) {
 											if (isSeize) {
 												// 抢号状态
@@ -252,6 +250,7 @@ public class PayManager {
 		});
 	}
 
+
 	/**
 	 * 处理使用金币抢号的一系列请求
 	 */
@@ -279,7 +278,7 @@ public class PayManager {
 											.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
-
+										// 弹窗
 										PayCode codeData = response.body().getData();
 										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
 										if (codeData.gameInfo != null) {
@@ -292,6 +291,8 @@ public class PayManager {
 											dialog.setTitle(context.getResources().getString(R.string
 													.st_dialog_search_success));
 										}
+										// 统计
+										staticsPaySuccess(context, StatisticsManager.ID.GIFT_SCORE_SEIZE, gift, 2);
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
@@ -349,6 +350,34 @@ public class PayManager {
 						});
 			}
 		});
+	}
+
+	/**
+	 * 统计支付成功的抢礼包数据
+	 */
+	private void staticsPaySuccess(Context context, String tag, IndexGiftNew gift, int payType) {
+		Map<String, String> kv = new HashMap<String, String>();
+		kv.put("礼包名", gift.name);
+		kv.put("所属游戏名", gift.gameName);
+		kv.put("礼包类型", String.valueOf(gift.giftType));
+		String payTypeStr;
+		String payMoney;
+		switch (payType) {
+			case 1:
+				payTypeStr = "偶玩豆";
+				payMoney = String.valueOf(gift.bean);
+				break;
+			case 2:
+				payTypeStr = "金币";
+				payMoney = String.valueOf(gift.score);
+				break;
+			default:
+				payTypeStr = "未知";
+				payMoney = "未知";
+		}
+		kv.put("支付类型", payTypeStr);
+		kv.put("价格", payMoney);
+		StatisticsManager.getInstance().trace(context, tag, kv, gift.bean);
 	}
 
 

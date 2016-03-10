@@ -12,9 +12,12 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ import java.util.ArrayList;
  */
 public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implements View.OnClickListener {
 
-	private static final int TAG_ID = 0x2234ffff;
+	private static final int TAG_POS = 0x2234fff1;
 
 	public IndexGiftLimitAdapter(Context context) {
 		super(context);
@@ -49,14 +52,27 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		int percent = item.remainCount * 100 / item.totalCount;
 		itemHolder.pbPercent.setProgress(percent);
 		itemHolder.tvPercent.setText(String.format("%d%%", percent));
-		itemHolder.itemView.setTag(TAG_ID, item.id);
+		itemHolder.itemView.setTag(TAG_POS, item.id);
 		itemHolder.itemView.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
-		Integer i = v.getTag(TAG_ID) == null ? 0 : (Integer) v.getTag(TAG_ID);
-		IntentUtil.jumpGiftDetail(mContext, i);
+		try {
+			Integer i = v.getTag(TAG_POS) == null ? 0 : (Integer) v.getTag(TAG_POS);
+			IntentUtil.jumpGiftDetail(mContext, i);
+			if (AppDebugConfig.IS_STATISTICS_SHOW) {
+				IndexGiftNew data = mData.get(i);
+				if (data != null) {
+					StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_LIMIT_ITEM,
+							String.format("第%s项点击:[%s]%s", i, data.gameName, data.name));
+				}
+			}
+		} catch (Throwable t) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_ADAPTER, t);
+			}
+		}
 	}
 
 	static class ItemHolder extends BaseRVHolder {

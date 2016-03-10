@@ -13,7 +13,7 @@ CWD=$(dirname $(readlink -f $0))
 
 # 打包配置参数
 NAME=giftcool
-VERSION=1.0.5
+VERSION=1.0.6
 # 150000 is for weixin hongbao
 CHNNAMES=0,10000
 TEMPOUTPUT=${CWD}/../apk/temp-unsigned
@@ -28,7 +28,7 @@ STOREPASS=ouwan_giftcool_store
 KEYSTORENAME=giftcool
 
 
-while getopts :c:v:s: OPTION
+while getopts "c:v:s:" OPTION
 do
     case ${OPTION} in
         c)

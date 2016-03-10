@@ -4,9 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.socks.library.KLog;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * @author micle
@@ -59,10 +58,7 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
-		    TCAgent.onPause(this);
-            MobclickAgent.onPause(this);
-	    }
+        StatisticsManager.getInstance().onPause(this);
     }
 
     @Override
@@ -77,10 +73,7 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-	    if (AppDebugConfig.IS_TCAGENT_SHOW) {
-		    TCAgent.onResume(this);
-            MobclickAgent.onResume(this);
-	    }
+        StatisticsManager.getInstance().onResume(this);
     }
 
     @Override

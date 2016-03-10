@@ -17,11 +17,11 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -445,14 +445,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-				AppDebugConfig.trace(mApp, "更新弹窗", "取消更新");
 				confirmDialog.dismiss();
 				handleFirstOpen();
 			}
 
 			@Override
 			public void onConfirm() {
-				AppDebugConfig.trace(mApp, "更新弹窗", "点击更新");
+				StatisticsManager.getInstance().trace(mApp, StatisticsManager.ID.APP_UPDATE, "点击更新");
 				appInfo.startDownload();
 				confirmDialog.dismiss();
 				handleFirstOpen();

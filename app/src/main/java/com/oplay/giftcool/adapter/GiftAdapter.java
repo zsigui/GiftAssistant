@@ -19,13 +19,13 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
 import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.PayManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -400,7 +400,8 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			return;
 		}
 		IndexBanner banner = mData.banner.get(position);
-		AppDebugConfig.trace(mContext, "礼包首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_BANNER,
+				String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(mContext, banner);
 	}
 

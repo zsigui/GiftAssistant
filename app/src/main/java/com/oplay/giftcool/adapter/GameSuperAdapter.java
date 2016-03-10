@@ -19,7 +19,6 @@ import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.adapter.other.GameSuperLinearLayoutManager;
 import com.oplay.giftcool.adapter.other.HeaderFooterDividerItemDecoration;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -27,6 +26,7 @@ import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
@@ -302,7 +302,8 @@ public class GameSuperAdapter extends RecyclerView.Adapter implements OnDownload
 			return;
 		}
 		IndexBanner banner = mData.banner.get(position);
-		AppDebugConfig.trace(mContext, "游戏首页推荐位", String.format("第%d推广位，标题：%s", position, banner.title));
+		StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GAME_BANNER,
+				String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(mContext, banner);
 	}
 

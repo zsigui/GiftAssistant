@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
 import com.oplay.giftcool.model.data.resp.message.PushMessageApp;
+import com.oplay.giftcool.model.data.resp.message.PushMessageDetail;
+import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.DateUtil;
@@ -39,6 +41,10 @@ public class PushMessageManager {
 		public static final int ACTION_LONG_UNOPEN = 4;
 		// 启动应用推送
 		public static final int ACTION_WAKE = 5;
+		// 跳转礼包详情页面
+		public static final int ACTION_GIFT_DETAIL = 6;
+		// 跳转游戏详情页面
+		public static final int ACTION_GAME_DETAIL = 7;
 	}
 
 	// 本地JPUSH推送的Id
@@ -87,6 +93,12 @@ public class PushMessageManager {
 			case Status.ACTION_WAKE:
 				IntentUtil.jumpHome(context, true);
 				break;
+			case Status.ACTION_GIFT_DETAIL:
+				handleDetailAction(context, data, true);
+				break;
+			case Status.ACTION_GAME_DETAIL:
+				handleDetailAction(context, data, false);
+				break;
 		}
 	}
 
@@ -130,5 +142,25 @@ public class PushMessageManager {
 		notification.setNotificationId(LOCAL_JPUSH_ID);
 		JPushInterface.addLocalNotification(context, notification);
 		AssistantApp.getInstance().setPushedToday();
+	}
+
+	/**
+	 * 处理礼包/游戏详情页面
+	 */
+	private void handleDetailAction(Context context, PushMessageExtra message, boolean isGift) {
+		if (TextUtils.isEmpty(message.extraJson)) {
+			// 额外数据部分不能为空
+			return;
+		}
+		Gson gson = AssistantApp.getInstance().getGson();
+		PushMessageDetail data = gson.fromJson(message.extraJson, PushMessageDetail.class);
+		if (data.status == 0) {
+			data.status = GameTypeUtil.JUMP_STATUS_DETAIL;
+		}
+		if (isGift) {
+			IntentUtil.jumpGiftDetail(context, data.id, true);
+		} else {
+			IntentUtil.jumpGameDetail(context, data.id, data.status, true);
+		}
 	}
 }

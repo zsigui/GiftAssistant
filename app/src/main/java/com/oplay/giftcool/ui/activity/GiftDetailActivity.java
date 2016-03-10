@@ -12,14 +12,11 @@ import android.widget.ImageView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftDetailFragment;
-import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -33,10 +30,11 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	private ImageView ivShare;
 	private OnShareListener mOnShareListener;
 	private int mId;
+	private GiftDetailFragment mDetailFragment;
 
 	@Override
 	protected void processLogic() {
-		loadData();
+		loadData(getIntent());
 	}
 
 	@Override
@@ -55,19 +53,19 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		showLimitTag(false, 0);
 	}
 
-	public void loadData() {
-		if (getIntent() == null) {
+	public void loadData(Intent intent) {
+		if (intent == null) {
 			ToastUtil.showShort("跳转失败，获取不到礼包ID");
 			return;
 		}
 
-		handleIntent(getIntent());
+		handleIntent(intent);
 	}
 
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 			// 来自浏览器的URI请求
-			Uri uri = getIntent().getData();
+			Uri uri = intent.getData();
 			if (uri != null) {
 				try {
 					mId = Integer.parseInt(uri.getQueryParameter("plan_id"));
@@ -79,9 +77,14 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 				}
 			}
 		} else {
-			mId = getIntent().getIntExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_DEFAULT);
+			mId = intent.getIntExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_DEFAULT);
 		}
-		replaceFrag(R.id.fl_container, GiftDetailFragment.newInstance(mId), true);
+		if (mDetailFragment == null) {
+			mDetailFragment = GiftDetailFragment.newInstance(mId);
+			replaceFrag(R.id.fl_container, mDetailFragment, false);
+		} else {
+			mDetailFragment.updateData(mId);
+		}
 	}
 
 	public void setOnShareListener(OnShareListener shareClickListener) {
@@ -106,6 +109,12 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 				ivShare.setVisibility(View.GONE);
 			}
 		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		loadData(intent);
 	}
 
 	@Override
@@ -151,26 +160,10 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	}
 
 	@Override
-	public boolean onBack() {
-		InputMethodUtil.hideSoftInput(this);
-		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
-				&& ((OnBackPressListener) getTopFragment()).onBack()) {
-			// back事件被处理
-			return false;
+	protected void doBeforeFinish() {
+		super.doBeforeFinish();
+		if (MainActivity.sGlobalHolder == null) {
+			IntentUtil.jumpHome(this, false);
 		}
-		if (!popFrag() && !isFinishing()) {
-			mNeedWorkCallback = false;
-			if (MainActivity.sGlobalHolder == null) {
-				IntentUtil.jumpHome(GiftDetailActivity.this, false);
-			}
-			finish();
-		} else {
-			if (getTopFragment() instanceof BaseFragment) {
-				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
-			}
-		}
-		return true;
 	}
-
-
 }

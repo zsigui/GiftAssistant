@@ -14,6 +14,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -21,11 +22,9 @@ import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
-import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -114,6 +113,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 										OneTypeDataList<MyAttention> backObj = response.body().getData();
 										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
+										AccountManager.getInstance().obtainUnreadPushMessageCount();
 										return;
 									}
 									refreshFailEnd();
@@ -246,13 +246,8 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.btn_to_get:
-				// 跳转游戏榜单界面
-				if (MainActivity.sGlobalHolder == null) {
-					IntentUtil.jumpGameNewList(getContext());
-				} else {
-					MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_SUPER);
-					getActivity().finish();
-				}
+				// 跳转猜你喜欢列表界面
+				IntentUtil.jumpGiftHotList(getContext(), null);
 				break;
 		}
 	}

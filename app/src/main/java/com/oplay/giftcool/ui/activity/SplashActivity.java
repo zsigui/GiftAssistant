@@ -59,6 +59,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void processLogic() {
+//        MixUtil.createDesktopShortcut(getApplicationContext());
 	}
 
 	@Override
@@ -147,5 +148,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 			System.exit(0);
 		}
 	}
+
 
 }

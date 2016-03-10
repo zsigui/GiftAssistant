@@ -2,8 +2,6 @@ package com.oplay.giftcool;
 
 import android.app.Application;
 import android.app.PendingIntent;
-import android.os.Build;
-import android.os.StrictMode;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -25,6 +23,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -39,8 +38,6 @@ import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.umeng.analytics.AnalyticsConfig;
-import com.umeng.analytics.MobclickAgent;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
@@ -61,8 +58,6 @@ import retrofit.Retrofit;
  */
 public class AssistantApp extends Application {
 
-	private final static String TD_APP_ID = "0CC59F66C9823F0D3EF90AC61D9735FB";
-	private final static String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 	private static AssistantApp sInstance;
 	private Retrofit mRetrofit;
 	private Gson mGson;
@@ -116,17 +111,10 @@ public class AssistantApp extends Application {
 //		mRefWatcher = LeakCanary.install(this);
 		// enabled StrictMode only in TEST
 		KLog.init(AppDebugConfig.IS_DEBUG);
-		if (AppDebugConfig.IS_DEBUG) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-				StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().build());
-			}
-			KLog.d("Gift Cool App is Start Now");
-		}
 		sInstance = this;
 
-		//初始化TalkingData
-//		TCAgent.init(this, TD_APP_ID, getChannelId() + "");
-		initUmeng();
+		//初始化统计工具
+		StatisticsManager.getInstance().init(this, getChannelId());
 		initJPush();
 		initImageLoader();
 		// 初始配置加载列表
@@ -149,16 +137,6 @@ public class AssistantApp extends Application {
 		JPushInterface.setDefaultPushNotificationBuilder(builder);
 		// 设置保留最近通知条数 5
 		JPushInterface.setLatestNotificationNumber(this, 5);
-	}
-
-	/**
-	 * 初始化友盟
-	 */
-	private void initUmeng() {
-		AnalyticsConfig.setAppkey(this, UMENG_APP_KEY);
-		AnalyticsConfig.setChannel("m" + getChannelId());   //友盟渠道号不能纯数字
-		AnalyticsConfig.enableEncrypt(true);
-		MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
 	}
 
 	public void initLoadingView() {
@@ -190,7 +168,7 @@ public class AssistantApp extends Application {
 				ImageLoader.getInstance().destroy();
 			}
 			DownloadNotificationManager.cancelDownload(getApplicationContext());
-			MobclickAgent.onKillProcess(this);
+			StatisticsManager.getInstance().exit(this);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "exit exception : " + e);
@@ -266,6 +244,7 @@ public class AssistantApp extends Application {
 	 */
 	public void resetInitForTest() {
 		if (AppConfig.TEST_MODE) {
+			setGlobalInit(false);
 			initRetrofit();
 			Global.resetNetEngine();
 			Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));

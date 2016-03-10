@@ -88,7 +88,7 @@ public class MyAttentionListAdapter extends BaseListAdapter<MyAttention> impleme
 		}
 		holder.tvSize.setText(o.size);
 		holder.tvCount.setText(Html.fromHtml(String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
-		holder.tvRemain.setText(Html.fromHtml(String.format("今日新增<font color='#ffaa17'>%d</font>款", o.newCount)));
+		holder.tvRemain.setText(o.giftName);
 		ViewUtil.showImage(holder.ivIcon, o.img);
 		convertView.setOnClickListener(this);
 		convertView.setTag(TAG_POSITION, position);

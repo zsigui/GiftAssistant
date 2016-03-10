@@ -99,7 +99,6 @@ public class ScoreManager {
 				public void onConfirm() {
 					IntentUtil.jumpLoginNoToast(context);
 					unloginDialog.dismissAllowingStateLoss();
-					AppDebugConfig.trace(context, "未登录欢迎弹窗", "点击登录");
 				}
 			});
 			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
@@ -118,14 +117,12 @@ public class ScoreManager {
 				@Override
 				public void onCancel() {
 					loginDialog.dismissAllowingStateLoss();
-					AppDebugConfig.trace(context, "登录欢迎弹窗", "取消");
 				}
 
 				@Override
 				public void onConfirm() {
 					IntentUtil.jumpEarnScore(context);
 					loginDialog.dismissAllowingStateLoss();
-					AppDebugConfig.trace(context, "登录欢迎弹窗", "跳转金币任务");
 				}
 			});
 			loginDialog.show(fm, WelcomeDialog.class.getSimpleName());

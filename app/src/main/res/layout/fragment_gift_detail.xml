@@ -241,6 +241,16 @@
 					android:paddingRight = "18dp"
 					android:text = "@string/st_gift_hint_content" />
 
+			<TextView
+					android:id = "@+id/tv_qq"
+					style = "@style/DefaultTextView.Detail"
+					android:singleLine = "false"
+					android:paddingLeft = "15dp"
+					android:paddingRight = "18dp"
+					android:paddingTop = "15dp"
+					android:textColor = "@color/co_common_app_second_bg_orange"
+					android:text = "@string/st_gift_qq" />
+
 		</LinearLayout >
 
 	</ScrollView >

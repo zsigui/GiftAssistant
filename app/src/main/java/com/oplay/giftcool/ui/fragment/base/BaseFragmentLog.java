@@ -9,9 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.ui.fragment.base.stat.TdStatInterface;
-import com.tendcloud.tenddata.TCAgent;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * @author micle
@@ -31,13 +30,11 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
 			return;
 		}
 		if (!TextUtils.isEmpty(getPageName())) {
-			if (AppDebugConfig.IS_TCAGENT_SHOW) {
+			if (AppDebugConfig.IS_STATISTICS_SHOW) {
 				if (isVisibleToUser) {
-					TCAgent.onPageStart(getContext(), getPageName());
-					MobclickAgent.onPageStart(getPageName());
+					StatisticsManager.getInstance().onPageStart(getContext(), getPageName());
 				} else {
-					TCAgent.onPageEnd(getContext(), getPageName());
-					MobclickAgent.onPageEnd(getPageName());
+					StatisticsManager.getInstance().onPageEnd(getContext(), getPageName());
 				}
 			}
 		}
@@ -95,10 +92,7 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
 	public void onResume() {
 		super.onResume();
 		if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
-			if (AppDebugConfig.IS_TCAGENT_SHOW) {
-				TCAgent.onPageStart(getContext(), getPageName());
-				MobclickAgent.onPageStart(getPageName());
-			}
+			StatisticsManager.getInstance().onPageStart(getContext(), getPageName());
 		}
 		if (AppDebugConfig.IS_FRAG_DEBUG) {
 			AppDebugConfig.logMethodName(this);
@@ -117,9 +111,8 @@ public abstract class BaseFragmentLog extends Fragment implements TdStatInterfac
 	public void onPause() {
 		super.onPause();
 		if (!TextUtils.isEmpty(getPageName()) && getUserVisibleHint()) {
-			if (AppDebugConfig.IS_TCAGENT_SHOW) {
-				TCAgent.onPageEnd(getContext(), getPageName());
-				MobclickAgent.onPageEnd(getPageName());
+			if (AppDebugConfig.IS_STATISTICS_SHOW) {
+				StatisticsManager.getInstance().onPageEnd(getContext(), getPageName());
 			}
 		}
 		if (AppDebugConfig.IS_FRAG_DEBUG) {

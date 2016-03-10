@@ -237,7 +237,6 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 		mHasData = true;
 		mData = data;
 		mAdapter.updateData(mData);
-		mLastPage = 1;
 	}
 
 	private void addMoreData(ArrayList<IndexGiftNew> moreData) {

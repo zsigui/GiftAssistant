@@ -8,6 +8,7 @@ import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 /**
@@ -68,6 +69,14 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 				break;
 			default:
 				ToastUtil.showShort("传递类型错误 : " + mType);
+		}
+	}
+
+	@Override
+	protected void doBeforeFinish() {
+		super.doBeforeFinish();
+		if (MainActivity.sGlobalHolder == null) {
+			IntentUtil.jumpHome(this, false);
 		}
 	}
 }

@@ -8,26 +8,26 @@ SOURCEDIR=${CWD}/../apk/temp-unsigned
 OUTPUTDIR=${CWD}/../apk/output
 UNALIGNAPK=temp-unalign.apk
 
-while getopts :keystore:keypass:storepass:keyname:srcdir:outputdir: OPTION
+while getopts "keystore:keypass:storepass:keyname:srcdir:outputdir:" OPTION
 do
     case ${OPTION} in
         keystore)
-            KEYSTORE=$OPTARG
+            KEYSTORE=${OPTARG}
             ;;
         keypass)
-            KEYPASS=$OPTARG
+            KEYPASS=${OPTARG}
             ;;
         storepass)
-            STOREPASS=$OPTARG
+            STOREPASS=${OPTARG}
             ;;
         keyname)
-            KEYSTORENAME=$OPTARG
+            KEYSTORENAME=${OPTARG}
             ;;
         srcdir)
-            SOURCEDIR=$OPTARG
+            SOURCEDIR=${OPTARG}
             ;;
         outputdir)
-            OUTPUTDIR=$OPTARG
+            OUTPUTDIR=${OPTARG}
             ;;
         \?)
             echo "use variable of :keystore:keypass:storepass:keyname:srcdir:outputdir:"
@@ -42,6 +42,7 @@ done
 
 for APKFILE in `ls ${SOURCEDIR} | grep '.*apk$'`
 do
+    echo "keystore = " + ${KEYSTORE}
     SRCAPK=${SOURCEDIR}/${APKFILE}
     UNALIGNAPK=${SOURCEDIR}/temp_${APKFILE}
     OUTPUTNAME=${OUTPUTDIR}/${APKFILE}

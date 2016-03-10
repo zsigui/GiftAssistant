@@ -40,6 +40,7 @@
 	<string name = "st_gift_deadline" >▌礼包使用期限</string >
 	<string name = "st_gift_usage" >▌礼包兑换方式</string >
 	<string name = "st_gift_remark" >▌特别说明</string >
+	<string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
 	<string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
 	<!-- 游戏状态 -->
 	<string name = "st_tabs_home_gift" >礼包</string >
@@ -201,6 +202,13 @@
 	<string name = "st_dialog_hope_gift_name_hint">游戏名</string>
 	<string name = "st_dialog_hope_gift_note_hint">备注（可不填写）</string>
 	<string name = "st_dialog_hope_gift_btn_confirm" >提交</string >
+
+	<string name = "st_dialog_btn_success_confirm">我知道了</string>
+	<string name = "st_dialog_hope_gift_success_title">求礼包成功</string>
+	<string name = "st_dialog_hope_gift_success_content">该游戏新礼包上线会第一时间提醒您，请留意通知栏消息！</string>
+	<string name = "st_dialog_hope_gift_fail_title">求礼包失败</string>
+	<string name = "st_dialog_hope_gift_fail_game_limit_content">我们正努力为您准备礼包，请留意通知栏消息哦！</string>
+	<string name = "st_dialog_hope_gift_fail_total_limit_content">今天求礼包次数达到上限了哦，我们正努力为您准备礼包，请留意通知栏消息哦！</string>
 
 	<!-- 弹窗 - 取消关注 -->
 	<string name = "st_quick_focus_title">取消关注</string>
