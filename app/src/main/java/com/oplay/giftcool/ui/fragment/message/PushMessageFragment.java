@@ -9,8 +9,6 @@ import com.oplay.giftcool.adapter.PushMessageAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
-import com.oplay.giftcool.config.TypeStatusCode;
-import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
@@ -201,32 +199,32 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 		mLastPage += 1;
 	}
 
-	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
-
-	private void notifyHasRead() {
-		ArrayList<Integer> ids = new ArrayList<>();
-		for (PushMessage msg : mData) {
-			ids.add(msg.id);
-		}
-		if (mReqChangeObj == null) {
-			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
-			msg.status = TypeStatusCode.PUSH_READED;
-			mReqChangeObj = new JsonReqBase<>();
-		}
-		mReqChangeObj.data.pushMsgIds = ids;
-		Global.getNetEngine().changePushMessageStatus(mReqChangeObj)
-				.enqueue(new Callback<JsonRespBase<Void>>() {
-					@Override
-					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
-
-					}
-
-					@Override
-					public void onFailure(Throwable t) {
-
-					}
-				});
-	}
+//	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
+//
+//	private void notifyHasRead() {
+//		ArrayList<Integer> ids = new ArrayList<>();
+//		for (PushMessage msg : mData) {
+//			ids.add(msg.id);
+//		}
+//		if (mReqChangeObj == null) {
+//			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
+//			msg.status = TypeStatusCode.PUSH_READED;
+//			mReqChangeObj = new JsonReqBase<>();
+//		}
+//		mReqChangeObj.data.pushMsgIds = ids;
+//		Global.getNetEngine().changePushMessageStatus(mReqChangeObj)
+//				.enqueue(new Callback<JsonRespBase<Void>>() {
+//					@Override
+//					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+//
+//					}
+//
+//					@Override
+//					public void onFailure(Throwable t) {
+//
+//					}
+//				});
+//	}
 
 	@Override
 	public void release() {

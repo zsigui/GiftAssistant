@@ -10,6 +10,7 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
+import com.oplay.giftcool.adapter.other.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -126,7 +127,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-		LinearLayoutManager llm = new LinearLayoutManager(getContext(),
+		SnapLinearLayoutManager llm = new SnapLinearLayoutManager(getContext(),
 				LinearLayoutManager.VERTICAL, false);
 		DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
 				llm.getOrientation());
@@ -439,7 +440,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						break;
 					case POS_NEW:
 						if (rvContainer != null) {
-							rvContainer.smoothScrollToPosition(5);
+							rvContainer.smoothScrollToPosition(4);
 						}
 				}
 			}

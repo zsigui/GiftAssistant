@@ -77,6 +77,8 @@ public class AssistantApp extends Application {
 	private boolean mShouldAutoDeleteApk = false;
 	// 是否自动检查版本更新
 	private boolean mShouldAutoCheckUpdate = true;
+	// 是否自动关注
+	private boolean mShouldAutoFocus = true;
 	// 是否推送消息
 	private boolean mShouldPushMsg = true;
 	// 是否已经完成全局初始化
@@ -314,6 +316,8 @@ public class AssistantApp extends Application {
 				SPConfig.KEY_ACCEPT_PUSH, true);
 		mShouldAutoInstall = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
 				SPConfig.KEY_AUTO_INSTALL, false);
+		mShouldAutoFocus = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_AUTO_FOCUS, true);
 		mIsAllowDownload = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
 				SPConfig.KEY_IS_ALLOW_DOWNLOAD, true);
 		mIsSaveFlow = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
@@ -340,6 +344,22 @@ public class AssistantApp extends Application {
 		mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
 		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_CHECK_UPDATE,
 				shouldAutoCheckUpdate);
+	}
+
+	/**
+	 * 是否在抢礼包后自动关注游戏
+	 */
+	public boolean isShouldAutoFocus() {
+		return mShouldAutoFocus;
+	}
+
+	/**
+	 * 设置是否在抢礼包之后自动关注所属游戏
+	 */
+	public void setShouldAutoFocus(boolean shouldAutoFocus) {
+		mShouldAutoFocus = shouldAutoFocus;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_FOCUS,
+				shouldAutoFocus);
 	}
 
 	public void setIsRememberPwd(boolean isRememberPwd) {

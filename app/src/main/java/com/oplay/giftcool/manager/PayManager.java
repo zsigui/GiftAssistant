@@ -3,12 +3,15 @@ package com.oplay.giftcool.manager;
 import android.content.Context;
 import android.view.View;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.listener.WebViewInterface;
+import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.PayCode;
@@ -183,11 +186,12 @@ public class PayManager {
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode
+											.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
-
-										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
+										PayCode codeData = response.body().getData();
+										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
 										dialog.setTitle(context.getResources().getString(R.string
 												.st_dialog_seize_success));
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
@@ -200,6 +204,9 @@ public class PayManager {
 												// 淘号状态
 												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
 											}
+										}
+										if (codeData.gameInfo != null) {
+											doFocusOperation(codeData.gameInfo.id);
 										}
 										ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
 										ObserverManager.getInstance()
@@ -268,11 +275,16 @@ public class PayManager {
 							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
 								hideLoading(context);
 								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+									if (response.body() != null && response.body().getCode() == NetStatusCode
+											.SUCCESS) {
 										// 更新部分用户信息
 										AccountManager.getInstance().updatePartUserInfo();
 
-										GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
+										PayCode codeData = response.body().getData();
+										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
+										if (codeData.gameInfo != null) {
+											doFocusOperation(codeData.gameInfo.id);
+										}
 										if (isSeize) {
 											dialog.setTitle(context.getResources().getString(R.string
 													.st_dialog_seize_success));
@@ -335,6 +347,43 @@ public class PayManager {
 								ToastUtil.showShort("抢号失败 - 网络异常");
 							}
 						});
+			}
+		});
+	}
+
+
+	private JsonReqBase<ReqChangeFocus> mQuickFocusReqBase;
+
+	/**
+	 * 执行判断添加游戏关注
+	 */
+	private void doFocusOperation(int id) {
+		// 没有开启自动关注
+		if (!AssistantApp.getInstance().isShouldAutoFocus()) {
+			return;
+		}
+		if (mQuickFocusReqBase == null) {
+			ReqChangeFocus focus = new ReqChangeFocus();
+			focus.status = TypeStatusCode.FOCUS_ON;
+			mQuickFocusReqBase = new JsonReqBase<>(focus);
+		}
+		mQuickFocusReqBase.data.gameId = id;
+		Global.getNetEngine().changeGameFocus(mQuickFocusReqBase).enqueue(new Callback<JsonRespBase<Void>>() {
+			@Override
+			public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+				if (response != null && response.isSuccess()
+						&& response.body() != null && response.body().isSuccess()) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_MANAGER, "关注成功");
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, t);
+				}
 			}
 		});
 	}

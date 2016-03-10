@@ -27,9 +27,14 @@ import net.youmi.android.libs.common.util.Util_System_File;
 public class SettingFragment extends BaseFragment {
 
 	private final static String PAGE_NAME = "设置";
+	// 自动推送消息
 	private ToggleButton mBtnPush;
+	// 自动删除下载的安装包
 	private ToggleButton mBtnAutoDelete;
+	// 自动检查更新
 	private ToggleButton mBtnAutoCheckUpdate;
+	// 自动关注所抢礼包所属的游戏
+	private ToggleButton mBtnAutoFocus;
 	private TextView mVer;
 	private RelativeLayout mClearCache;
 	private RelativeLayout mFeedback;
@@ -46,6 +51,7 @@ public class SettingFragment extends BaseFragment {
 		mBtnPush = getViewById(R.id.tb_push);
 		mBtnAutoDelete = getViewById(R.id.tb_auto_delete);
 		mBtnAutoCheckUpdate = getViewById(R.id.tb_auto_check_update);
+		mBtnAutoFocus = getViewById(R.id.tb_auto_focus);
 		mVer = getViewById(R.id.tv_version);
 		mClearCache = getViewById(R.id.rl_clear);
 		mFeedback = getViewById(R.id.rl_feedback);
@@ -59,6 +65,7 @@ public class SettingFragment extends BaseFragment {
 		mBtnPush.setOnClickListener(this);
 		mBtnAutoDelete.setOnClickListener(this);
 		mBtnAutoCheckUpdate.setOnClickListener(this);
+		mBtnAutoFocus.setOnClickListener(this);
 		mClearCache.setOnClickListener(this);
 		mFeedback.setOnClickListener(this);
 		mAbout.setOnClickListener(this);
@@ -80,6 +87,11 @@ public class SettingFragment extends BaseFragment {
 			mBtnAutoDelete.toggleOn();
 		else
 			mBtnAutoDelete.toggleOff();
+		if (mApp.isShouldAutoFocus()) {
+			mBtnAutoFocus.toggleOn();
+		} else {
+			mBtnAutoFocus.toggleOff();
+		}
 		mVer.setText(AppConfig.SDK_VER_NAME);
 		updateData();
 	}
@@ -133,6 +145,19 @@ public class SettingFragment extends BaseFragment {
 					}
 				});
 				mBtnAutoDelete.toggle();
+				break;
+			case R.id.tb_auto_focus:
+				Global.THREAD_POOL.execute(new Runnable() {
+					@Override
+					public void run() {
+						if (mApp.isShouldAutoFocus()) {
+							mApp.setShouldAutoFocus(false);
+						} else {
+							mApp.setShouldAutoFocus(true);
+						}
+					}
+				});
+				mBtnAutoFocus.toggle();
 				break;
 			case R.id.tb_auto_check_update:
 				Global.THREAD_POOL.execute(new Runnable() {

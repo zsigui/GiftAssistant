@@ -65,6 +65,16 @@
 
 	<!-- 设置 -->
 	<string name = "st_setting_title" >设置</string >
+	<string name = "st_setting_accept_push" >接受推送消息</string >
+	<string name = "st_setting_auto_delete_package" >安装完成后自动删除安装包</string >
+	<string name = "st_setting_auto_focus" >抢礼包后自动关注所属游戏</string >
+	<string name = "st_setting_auto_update" >自动检查版本更新</string >
+	<string name = "st_setting_auto_clear_cache" >清除缓存</string >
+	<string name = "st_setting_auto_feedback" >意见反馈</string >
+	<string name = "st_setting_cur_version" >当前版本号</string >
+
+	<string name = "st_setting_about" >关于礼包酷</string >
+	<string name = "st_setting_logout" >退出当前账号</string >
 
 	<!-- 设置 - 消息中心 - 推送列表 -->
 	<string name = "st_msg_central_title">消息中心</string>

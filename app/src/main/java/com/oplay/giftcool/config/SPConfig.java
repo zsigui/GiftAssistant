@@ -41,6 +41,7 @@ public class SPConfig {
 	/* 全局设置记录 */
 	public static final String SP_APP_CONFIG_FILE = "aaaa";
 	public static final String KEY_AUTO_CHECK_UPDATE = "auto_check_update";
+	public static final String KEY_AUTO_FOCUS = "auto_focus";
 	public static final String KEY_REMEMBER_PWD = "remember_pwd";
 	public static final String KEY_AUTO_DELETE_APK = "auto_delete_apk";
 	public static final String KEY_ACCEPT_PUSH = "auto_accept_push";

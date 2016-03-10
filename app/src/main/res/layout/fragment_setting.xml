@@ -12,7 +12,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "接受推送消息" />
+				android:text = "@string/st_setting_accept_push" />
 
 		<include
 				android:id = "@+id/tb_push"
@@ -28,10 +28,26 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "安装完成后自动删除安装包" />
+				android:text = "@string/st_setting_auto_delete_package" />
 
 		<include
 				android:id = "@+id/tb_auto_delete"
+				layout = "@layout/view_toggle" />
+
+	</RelativeLayout >
+
+	<View style = "@style/HDividerView" />
+
+	<RelativeLayout
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:clickable = "true" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "@string/st_setting_auto_focus" />
+
+		<include
+				android:id = "@+id/tb_auto_focus"
 				layout = "@layout/view_toggle" />
 
 	</RelativeLayout >
@@ -43,7 +59,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "自动检查版本更新" />
+				android:text = "@string/st_setting_auto_update" />
 
 		<include
 				android:id = "@+id/tb_auto_check_update"
@@ -59,14 +75,13 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "当前版本号" />
+				android:text = "@string/st_setting_cur_version" />
 
 		<TextView
 				android:id = "@+id/tv_version"
 				style = "@style/DefaultTextView.Text"
 				android:layout_alignParentRight = "true"
-				android:paddingRight = "10dp"
-				android:text = "v1.0" />
+				android:paddingRight = "10dp" />
 
 	</RelativeLayout >
 
@@ -79,7 +94,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "清除缓存" />
+				android:text = "@string/st_setting_auto_clear_cache" />
 
 		<TextView
 				style = "@style/DefaultTextView.Text"
@@ -99,7 +114,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "意见反馈" />
+				android:text = "@string/st_setting_auto_feedback" />
 
 		<TextView
 				style = "@style/DefaultTextView.Text"
@@ -119,7 +134,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "关于礼包酷" />
+				android:text = "@string/st_setting_about" />
 
 		<TextView
 				style = "@style/DefaultTextView.Text"
@@ -139,7 +154,7 @@
 
 		<TextView
 				style = "@style/DefaultTextView.Header"
-				android:text = "退出当前账号" />
+				android:text = "@string/st_setting_logout" />
 		<TextView
 				style = "@style/DefaultTextView.Text"
 				android:layout_alignParentRight = "true"
