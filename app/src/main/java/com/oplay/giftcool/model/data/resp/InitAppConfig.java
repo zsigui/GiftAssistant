@@ -23,8 +23,14 @@ public class InitAppConfig implements Serializable{
 	public boolean isShowDownload;
 
 	/**
-	 * 是否具备抽奖功能
+	 * 启动页面活动图
 	 */
 	@SerializedName("activity")
 	public IndexBanner broadcastBanner;
+
+	/**
+	 * 是否显示抽奖功能
+	 */
+	@SerializedName("is_show_lottery")
+	public boolean isShowLotteryInTask = true;
 }

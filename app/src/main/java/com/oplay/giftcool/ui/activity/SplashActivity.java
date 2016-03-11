@@ -40,7 +40,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 		@Override
 		public void run() {
 			long initDuration = System.currentTimeMillis() - mFirstInitTime;
-			long minSplashDuration = 1234;
+			long minSplashDuration = 1000;
 			long maxInitDuration = 4000;
 			if ((mApp.isGlobalInit() && initDuration > minSplashDuration) || initDuration > maxInitDuration) {
 				judgeToMain();
@@ -107,6 +107,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void initView() {
+		AssistantApp.getInstance().initImageLoader();
 		ImageView iv = new ImageView(this);
 		iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
@@ -129,7 +130,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 			}
 		}
 		if (!useCacheImg) {
-			iv.setImageResource(R.drawable.pic_splash);
+			iv.setImageResource(R.drawable.pic_splash_2016);
 		}
 		setContentView(iv);
 	}
@@ -143,7 +144,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 	public void onBackPressed() {
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
 			mLastClickTime = System.currentTimeMillis();
-			mApp.exit();
+			mApp.appExit();
 			finish();
 			System.exit(0);
 		}

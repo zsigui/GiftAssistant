@@ -6,8 +6,8 @@ package com.oplay.giftcool.config;
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 6;
-	public static final String SDK_VER_NAME = "V1.0.5";
+	public static final int SDK_VER = 1100;
+	public static final String SDK_VER_NAME = "V1.1.0";
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 
 	/* 上传头像的大小 */
@@ -29,4 +29,5 @@ public class AppConfig {
 	/* Retrofit 访问网络连接超时时间，单位 ms */
 	public static final int NET_CONNECT_TIMEOUT = 8 * 1000;
 	public static final int NET_READ_TIMEOUT = 30 * 1000;
+
 }

@@ -301,11 +301,13 @@ public class AccountManager {
 			cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 					getUserSesion().session, WebViewUrl.URL_DOMAIN, expiredDate));
 		}
-		cookies.add(String.format("version=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
+		cookies.add(String.format("version=%d;Domain=%s;Expires=%s;Path=/;",
 				AppConfig.SDK_VER, WebViewUrl.URL_DOMAIN, expiredDate));
+		cookies.add(String.format("version_name=%s;Domain=%s;Expires=%s;Path=/;",
+				AppConfig.SDK_VER_NAME, WebViewUrl.URL_DOMAIN, expiredDate));
 		cookies.add(String.format("cid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
 				MobileInfoModel.getInstance().getCid(), WebViewUrl.URL_DOMAIN, expiredDate));
-		cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;HttpOnly",
+		cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;",
 				AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
 		syncCookie(WebViewUrl.URL_BASE, cookies);
 	}
@@ -350,6 +352,8 @@ public class AccountManager {
 										notifyUserPart(mUser);
 										// 请求更新数据
 										updateUserInfo();
+										StatisticsManager.getInstance().trace(mContext,
+												StatisticsManager.ID.USER_LOGIN_WITH_SESSION);
 										return;
 									}
 									if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {

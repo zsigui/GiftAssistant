@@ -20,11 +20,32 @@ import retrofit.Response;
  * @date 2015/12/27
  */
 public class ToastUtil {
+
+	private static final int DISTANCE_TO_TOP = 300;
+
+	private static Toast makeText(Context context, CharSequence text, int duration) {
+		Toast result = new Toast(context);
+
+		LayoutInflater inflate = (LayoutInflater)
+				context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = inflate.inflate(R.layout.view_toast_default, null);
+		TextView tv = (TextView) v.findViewById(R.id.tv_msg);
+		tv.setText(text);
+		result.setView(v);
+		result.setGravity(Gravity.CENTER, 0, 0);
+		result.setDuration(duration);
+		return result;
+	}
+
+	private static Toast makeText(Context context, @StringRes int textId, int duration) {
+		return makeText(context, context.getString(textId), duration);
+	}
+
 	public static void show(final CharSequence msg, final int duration) {
 		ThreadUtil.runInUIThread(new Runnable() {
 			@Override
 			public void run() {
-				Toast.makeText(AssistantApp.getInstance().getApplicationContext(), msg, duration).show();
+				makeText(AssistantApp.getInstance().getApplicationContext(), msg, duration).show();
 			}
 		});
 	}
@@ -33,7 +54,7 @@ public class ToastUtil {
 		ThreadUtil.runInUIThread(new Runnable() {
 			@Override
 			public void run() {
-				Toast.makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
+				makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
 			}
 		});
 	}
@@ -77,7 +98,7 @@ public class ToastUtil {
 		tvTask.setText(taskName);
 		tvScore.setText(String.valueOf(rewardCount));
 		Toast toast = new Toast(context);
-		toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 150);
+		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.setDuration(Toast.LENGTH_LONG);
 		toast.setView(v);
 		toast.show();

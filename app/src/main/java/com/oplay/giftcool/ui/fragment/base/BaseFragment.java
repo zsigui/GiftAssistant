@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -58,21 +59,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		@Override
 		public void onRetry(View retryView) {
 			View iv = getViewById(retryView, R.id.v_err);
-			iv.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					mHasData = false;
-					lazyLoad();
-				}
-			});
+			iv.setOnClickListener(BaseFragment.this);
 			View tv = getViewById(retryView, R.id.v_wifi);
-			tv.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					IntentUtil.jumpWifiSetting(getContext());
-				}
-			});
-
+			tv.setOnClickListener(BaseFragment.this);
 		}
 	};
 
@@ -103,10 +92,14 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// 避免多次从xml中加载布局文件
+		KLog.d(AppDebugConfig.TAG_WARN, "mContentView = " + mContentView
+		+ ", mIsPrepared = " + mIsPrepared + ", mHasData = " + mHasData
+		 + ", contentView.content = " + (mViewManager != null ? mViewManager.getContentView() : "null"));
 		if (mContentView == null) {
 			initView(savedInstanceState);
 		} else {
 			ViewGroup parent = (ViewGroup) mContentView.getParent();
+			KLog.d(AppDebugConfig.TAG_WARN, " parent = " + parent);
 			if (parent != null) {
 				parent.removeView(mContentView);
 			}
@@ -135,9 +128,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected void initViewManger(@LayoutRes int layoutResID) {
 		mViewManager = LoadAndRetryViewManager.generate(getContext(), layoutResID);
 		mContentView = mViewManager.getContainer();
-		if (((BaseAppCompatActivity) getActivity()).getHandler() != null) {
-			mViewManager.setHandler(((BaseAppCompatActivity) getActivity()).getHandler());
-		}
+//		if (((BaseAppCompatActivity) getActivity()).getHandler() != null) {
+//			mViewManager.setHandler(((BaseAppCompatActivity) getActivity()).getHandler());
+//		}
 	}
 
 	protected void setContentView(@LayoutRes int layoutResID) {
@@ -155,6 +148,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (mViewManager != null) {
+			mViewManager.showLast();
+		}
 	}
 
 	@Override
@@ -215,6 +211,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	 * fragment可见的情况下，会调用该方法，默认进行初始化等判断和执行懒加载方法
 	 */
 	protected void onUserVisible() {
+		if (mViewManager != null) {
+			mViewManager.showLast();
+		}
 		if (!mIsPrepared || mIsLoading || mHasData) {
 			if (mViewManager != null) {
 				mViewManager.showLast();
@@ -279,11 +278,20 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		mFragName = null;
 		// Fragment标题
 		mTitleName = null;
+		mIsPrepared = mIsLoading = mHasData = false;
 	}
 
 	@Override
 	public void onClick(View v) {
-
+		switch (v.getId()) {
+			case R.id.v_err:
+				mHasData = false;
+				lazyLoad();
+				break;
+			case R.id.v_wifi:
+				IntentUtil.jumpWifiSetting(getContext());
+				break;
+		}
 	}
 
 	@Override

@@ -11,7 +11,7 @@
 	<dimen name = "common_text_padding_left_right" >18dp</dimen >
 	<dimen name = "common_text_padding_top_bottom" >5dp</dimen >
 
-	<dimen name = "di_divider_height" >0.5dp</dimen >
+	<dimen name = "di_divider_height" >1dp</dimen >
 
 	<dimen name = "di_icon_diameter_smaller" >60dp</dimen >
 	<dimen name = "di_icon_diameter" >70dp</dimen >
@@ -79,6 +79,10 @@
 	<dimen name = "di_index_list_item_gap" >12dp</dimen >
 	<dimen name = "di_index_list_item_width" >94dp</dimen >
 
+
+	<dimen name = "di_index_list_item_margin_right" >12dp</dimen >
+	<dimen name = "di_index_list_item_progress_padding_right" >10dp</dimen >
+
 	<dimen name = "di_gift_percent_margin_left" >5dp</dimen >
 
 	<!-- 主页-礼包页面-限抢礼包-->
@@ -121,6 +125,8 @@
 
 	<dimen name = "di_dialog_welcome_content_width">220dp</dimen>
 
+	<dimen name = "di_toast_bg_radius" >6dp</dimen >
+	<dimen name = "di_toast_bg_width" >280dp</dimen >
 	<!-- default size of loading circle -->
 	<dimen name = "default_circle_view_size" >200dp</dimen >
 </resources >

@@ -73,7 +73,7 @@ public class PayManager {
 		if (nowClickTime - mLastClickTime <= Global.CLICK_TIME_INTERVAL) {
 			return WebViewInterface.RET_OTHER_ERR;
 		}
-		staticsPaySuccess(context, StatisticsManager.ID.GIFT_SEIZE_CLICK, gift, 0);
+		staticsPay(context, StatisticsManager.ID.GIFT_SEIZE_CLICK, gift, 0);
 		mLastClickTime = nowClickTime;
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
@@ -192,7 +192,7 @@ public class PayManager {
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
 										// 统计
-										staticsPaySuccess(context, StatisticsManager.ID.GIFT_BEAN_SEIZE, gift, 1);
+										staticsPay(context, StatisticsManager.ID.GIFT_BEAN_SEIZE, gift, 1);
 
 										if (button != null) {
 											if (isSeize) {
@@ -292,7 +292,7 @@ public class PayManager {
 													.st_dialog_search_success));
 										}
 										// 统计
-										staticsPaySuccess(context, StatisticsManager.ID.GIFT_SCORE_SEIZE, gift, 2);
+										staticsPay(context, StatisticsManager.ID.GIFT_SCORE_SEIZE, gift, 2);
 										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
 												GetCodeDialog.class.getSimpleName());
 										if (button != null) {
@@ -353,9 +353,9 @@ public class PayManager {
 	}
 
 	/**
-	 * 统计支付成功的抢礼包数据
+	 * 统计抢礼包时间，payType=1||2 分别表示成功的偶玩豆或金币支付事件，才用计算事件统计
 	 */
-	private void staticsPaySuccess(Context context, String tag, IndexGiftNew gift, int payType) {
+	private void staticsPay(Context context, String tag, IndexGiftNew gift, int payType) {
 		Map<String, String> kv = new HashMap<String, String>();
 		kv.put("礼包名", gift.name);
 		kv.put("所属游戏名", gift.gameName);
@@ -366,14 +366,16 @@ public class PayManager {
 			case 1:
 				payTypeStr = "偶玩豆";
 				payMoney = String.valueOf(gift.bean);
+				kv.put("__ct__", payMoney);
 				break;
 			case 2:
 				payTypeStr = "金币";
 				payMoney = String.valueOf(gift.score);
+				kv.put("__ct__", payMoney);
 				break;
 			default:
 				payTypeStr = "未知";
-				payMoney = "未知";
+				payMoney = "0";
 		}
 		kv.put("支付类型", payTypeStr);
 		kv.put("价格", payMoney);

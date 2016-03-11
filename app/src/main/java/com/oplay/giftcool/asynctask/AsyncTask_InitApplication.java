@@ -157,21 +157,23 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
 				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-					if (response.body().getData() != null) {
-						if (response.body().getData().initAppConfig != null) {
+					InitAppResult initData = response.body().getData();
+					if (initData != null) {
+						if (initData.initAppConfig != null) {
 							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + response.body().getData().initAppConfig.startImgUrl);
+								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + initData.initAppConfig.startImgUrl);
 							}
-							AssistantApp.getInstance().setAllowDownload(response.body().getData().initAppConfig
+							AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
 									.isShowDownload);
-							AssistantApp.getInstance().setQQInfo(response.body().getData().initAppConfig.qqInfo);
-							AssistantApp.getInstance().setStartImg(response.body().getData().initAppConfig
+							AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);
+							AssistantApp.getInstance().setStartImg(initData.initAppConfig
 									.startImgUrl);
-							AssistantApp.getInstance().setBroadcastBanner(response.body().getData().initAppConfig
+							AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
 									.broadcastBanner);
+							AssistantApp.getInstance().setHasLottery(initData.initAppConfig.isShowLotteryInTask);
 						}
-						if (response.body().getData().updateInfo != null) {
-							AssistantApp.getInstance().setUpdateInfo(response.body().getData().updateInfo);
+						if (initData.updateInfo != null) {
+							AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
 						}
 						return true;
 					}

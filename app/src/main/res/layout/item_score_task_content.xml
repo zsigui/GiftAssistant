@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		style = "@style/IndexModuleLayout.Score" >
 
-	<com.makeramen.roundedimageview.RoundedImageView
+	<ImageView
 			android:id="@+id/iv_icon"
-			style = "@style/DefaultImageView.Score"
-			app:riv_oval = "true" />
+			style = "@style/DefaultImageView.Score"/>
 
 	<TextView
 			android:id = "@+id/tv_name"

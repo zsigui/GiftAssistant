@@ -1,7 +1,6 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
-import android.app.PendingIntent;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -23,6 +22,8 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftcool.manager.AlarmClockManager;
+import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
@@ -47,7 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 import retrofit.Retrofit;
 
@@ -93,6 +93,8 @@ public class AssistantApp extends Application {
 
 	// 说明今日是否推送过消息
 	private boolean mIsPushedToday = false;
+	// 是否在任务栏显示每日抽奖入口
+	private boolean mHasLottery = true;
 
 	// LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -110,33 +112,28 @@ public class AssistantApp extends Application {
 		super.onCreate();
 //		mRefWatcher = LeakCanary.install(this);
 		// enabled StrictMode only in TEST
-		KLog.init(AppDebugConfig.IS_DEBUG);
 		sInstance = this;
 
-		//初始化统计工具
+		// 启动闹钟通知广播进程来唤醒服务
+		AlarmClockManager.getInstance().startWakeAlarm(this);
+		appInit();
+	}
+
+
+
+	/**
+	 * 执行APP的初始化工作
+	 */
+	public void appInit() {
+		KLog.init(AppDebugConfig.IS_DEBUG);
+		// 初始化统计工具
 		StatisticsManager.getInstance().init(this, getChannelId());
-		initJPush();
+		// 初始化推送SDK
+		PushMessageManager.getInstance().initPush(this);
 		initImageLoader();
 		// 初始配置加载列表
 		initLoadingView();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
-	}
-
-	/**
-	 * 初始化极光推送
-	 */
-	private void initJPush() {
-		JPushInterface.init(this);
-		JPushInterface.setDebugMode(AppConfig.TEST_MODE);
-		// 设置通知静默时间，不震动和响铃，晚上10点30分-早上8点
-		JPushInterface.setSilenceTime(this, 22, 30, 8, 0);
-		// 设置默认的通知栏样式
-		BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(this);
-		builder.statusBarDrawable = R.drawable.ic_stat_notify;
-		builder.notificationFlags = PendingIntent.FLAG_UPDATE_CURRENT;
-		JPushInterface.setDefaultPushNotificationBuilder(builder);
-		// 设置保留最近通知条数 5
-		JPushInterface.setLatestNotificationNumber(this, 5);
 	}
 
 	public void initLoadingView() {
@@ -154,24 +151,24 @@ public class AssistantApp extends Application {
 //	}
 
 	/**
-	 * do work to release the resource when app exit
+	 * do work to release the resource when app appExit
 	 */
-	public void exit() {
+	public void appExit() {
 		try {
+//			AlarmClockManager.getInstance().stopWakeAlarm(this);
 			ThreadUtil.destroy();
 			setGlobalInit(false);
-			JPushInterface.clearLocalNotifications(this);
-			JPushInterface.onKillProcess(this);
+			PushMessageManager.getInstance().exit(this);
 			if (ImageLoader.getInstance().isInited()) {
 				ImageLoader.getInstance().clearMemoryCache();
 				ImageLoader.getInstance().stop();
-				ImageLoader.getInstance().destroy();
+//				ImageLoader.getInstance().destroy();
 			}
 			DownloadNotificationManager.cancelDownload(getApplicationContext());
 			StatisticsManager.getInstance().exit(this);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_APP, "exit exception : " + e);
+				KLog.d(AppDebugConfig.TAG_APP, "appExit exception : " + e);
 			}
 		}
 	}
@@ -255,6 +252,10 @@ public class AssistantApp extends Application {
 	 * initial the configuration of Universal-Image-Loader
 	 */
 	public void initImageLoader() {
+		if (ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().resume();
+			return;
+		}
 		try {
 			final DisplayImageOptions options = Global.IMAGE_OPTIONS;
 			final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
@@ -550,4 +551,13 @@ public class AssistantApp extends Application {
 			interceptors.add(0, interceptor);
 		}
 	}
+	public boolean isHasLottery() {
+		return mHasLottery;
+	}
+
+	public void setHasLottery(boolean hasLottery) {
+		mHasLottery = hasLottery;
+	}
+
+
 }

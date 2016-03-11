@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameSuperAdapter;
+import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
@@ -69,7 +70,10 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 	protected void processLogic(Bundle savedInstanceState) {
 
 		// 设置RecyclerView的LayoutManager
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
+                LinearLayoutManager.VERTICAL);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(itemDecoration);
 		mAdapter = new GameSuperAdapter(getActivity());
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);

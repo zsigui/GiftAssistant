@@ -48,6 +48,7 @@
 					android:id = "@+id/ll_gift"
 					style = "@style/IndexModuleLayout"
 					android:layout_below = "@+id/ll_game"
+					android:background = "@color/co_transparent"
 					android:layout_marginTop = "7dp" >
 
 				<RelativeLayout

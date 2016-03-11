@@ -68,6 +68,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mLastPage = 1;
 		mRefreshLayout.setRefreshing(false);
 		mRefreshLayout.setEnabled(true);
+		mRefreshLayout.setCanShowLoad(true);
 		mNoMoreLoad = false;
 	}
 
@@ -79,6 +80,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 			mNoMoreLoad = isEndPage || data == null;
 			mRefreshLayout.setCanShowLoad(true);
 		}
+		mRefreshLayout.setRefreshing(false);
 	}
 
 	protected void setLoadState(Object data, boolean isEndPage) {
@@ -112,7 +114,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 			// return true 显示正在加载更多，return false 不显示
 			ToastUtil.showShort("没有更多新数据");
 			mRefreshLayout.setLoading(false);
-			//mRefreshLayout.setCanShowLoad(false);
+			mRefreshLayout.setCanShowLoad(false);
 			return;
 		}
 		loadMoreData();

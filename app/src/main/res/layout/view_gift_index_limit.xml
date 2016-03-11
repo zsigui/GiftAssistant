@@ -41,5 +41,5 @@
 			android:id = "@+id/rv_limit_content"
 			style = "@style/DefaultRecyclerView"
 			android:background="@color/co_white"
-			android:layout_height = "164dp" />
+			android:layout_height = "160dp" />
 </LinearLayout >

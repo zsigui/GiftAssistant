@@ -55,7 +55,8 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 		GameParamInfo gameParamInfo = new GameParamInfo();
 		gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
 		gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
-		gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
+//		gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
+		gameParamInfo.setTestMode(false);
 		gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
 		gameParamInfo.setSubChannelId("0");
 		UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {

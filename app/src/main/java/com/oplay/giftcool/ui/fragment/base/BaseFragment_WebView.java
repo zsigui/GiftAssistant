@@ -66,9 +66,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				onWebPageFinished();
-				if (!mSettings.getLoadsImagesAutomatically()) {
-					mSettings.setLoadsImagesAutomatically(true);
-				}
+//				if (!mSettings.getLoadsImagesAutomatically()) {
+//					mSettings.setLoadsImagesAutomatically(true);
+//				}
 			}
 
 			@Override
@@ -132,9 +132,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			WebView.setWebContentsDebuggingEnabled(true);
-			mSettings.setLoadsImagesAutomatically(true);
-		} else {
-			mSettings.setLoadsImagesAutomatically(false);
+//			mSettings.setLoadsImagesAutomatically(true);
+//		} else {
+//			mSettings.setLoadsImagesAutomatically(false);
 		}
 		try {
 			File cacheDir = null;

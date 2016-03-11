@@ -1,4 +1,9 @@
+giftcool
 storepass : ouwan_giftcool_store
 keypass : ouwan_giftcool_key
 alias : GiftCool
 
+nohelper
+storepass : oplayyoumi389
+keypass : oplayyoumi389
+alias : oplay_nohelper

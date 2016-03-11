@@ -27,6 +27,7 @@ import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -337,14 +338,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 								if (response != null && response.isSuccess()) {
 									if (response.body() != null
 											&& response.body().getCode() == NetStatusCode.SUCCESS) {
-										UserModel userModel = response.body().getData();
-										userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
-										MainActivity.sIsTodayFirstOpen = true;
-										AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
-										AccountManager.getInstance().notifyUserAll(userModel);
-										ScoreManager.getInstance().resetLocalTaskState();
-										ScoreManager.getInstance().toastByCallback(userModel, false);
-										((BaseAppCompatActivity) getActivity()).onBack();
+										doAfterSuccess(response, login);
 										return;
 									}
 									ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
@@ -367,6 +361,21 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 						});
 			}
 		});
+	}
+
+	/**
+	 * 成功登录后的处理
+	 */
+	private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
+		UserModel userModel = response.body().getData();
+		userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
+		MainActivity.sIsTodayFirstOpen = true;
+		AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
+		AccountManager.getInstance().notifyUserAll(userModel);
+		ScoreManager.getInstance().resetLocalTaskState();
+		ScoreManager.getInstance().toastByCallback(userModel, false);
+		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.USER_PHONE_LOGIN);
+		((BaseAppCompatActivity) getActivity()).onBack();
 	}
 
 

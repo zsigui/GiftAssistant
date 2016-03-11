@@ -291,8 +291,45 @@ public class ConvenientBanner<T> extends LinearLayout {
             // 停止翻页
             if (canTurn)stopTurning();
         }
+        switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                mLastX = (int) ev.getX();
+                mLastY = (int) ev.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                requestDisallowInterceptTouchEvent(false);
+        }
         return super.dispatchTouchEvent(ev);
     }
+
+    private int mLastX;
+    private int mLastY;
+    private boolean mIsDragged = false;
+
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (mIsDragged && ev.getAction() == MotionEvent.ACTION_MOVE) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+            return false;
+        }
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                int diffX = Math.abs((int)ev.getX() - mLastX);
+                int diffY = Math.abs((int)ev.getY() - mLastY);
+                if (diffX > diffY) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                    mIsDragged = true;
+                    return false;
+                }
+                break;
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+
 
     //获取当前的页面index
     public int getCurrentItem(){
@@ -362,4 +399,6 @@ public class ConvenientBanner<T> extends LinearLayout {
         this.canLoop = canLoop;
         viewPager.setCanLoop(canLoop);
     }
+
+
 }

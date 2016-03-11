@@ -44,6 +44,7 @@ public class DrawerFragment extends BaseFragment {
 	private DrawerLayout drawerLayout;
 	private SparseArray<DrawerModel> mData;
 	private DrawerAdapter mAdapter;
+	private ImageView ivEdit;
 
 	public static DrawerFragment newInstance(DrawerLayout drawerLayout) {
 		DrawerFragment fragment = new DrawerFragment();
@@ -59,6 +60,7 @@ public class DrawerFragment extends BaseFragment {
 		tvName = getViewById(R.id.tv_name);
 		ivIcon = getViewById(R.id.iv_icon);
 		rvContent = getViewById(R.id.drawer_content);
+		ivEdit = getViewById(R.id.iv_edit);
 	}
 
 	@Override
@@ -93,6 +95,8 @@ public class DrawerFragment extends BaseFragment {
 			ivIcon.setTag("");
 			tvNick.setText("点击注册/登录");
 			tvName.setText("");
+			ivEdit.setVisibility(View.GONE);
+
 		} else {
 			String nick;
 			String name;
@@ -107,6 +111,7 @@ public class DrawerFragment extends BaseFragment {
 			}
 			tvNick.setText(nick);
 			tvName.setText(name);
+			ivEdit.setVisibility(View.VISIBLE);
 			ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());
 		}
 	}

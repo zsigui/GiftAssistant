@@ -8,6 +8,7 @@ import android.webkit.WebView;
 
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
@@ -16,6 +17,8 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.ActivityFragment;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.IntentUtil;
@@ -96,8 +99,8 @@ public class WebViewInterface extends Observable {
 			}
 			((GameDetailFragment) mHostFragment).setDownloadBtn(isShow, mHostActivity, appInfo);
 			return RET_SUCCESS;
-		}catch (Throwable e) {
-			if(AppDebugConfig.IS_DEBUG) {
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
 			return RET_INTERNAL_ERR;
@@ -123,7 +126,7 @@ public class WebViewInterface extends Observable {
 	@JavascriptInterface
 	public int shareGift(String giftJson) {
 		try {
-			if (mHostActivity == null || mHostFragment == null ) {
+			if (mHostActivity == null || mHostFragment == null) {
 				return RET_INTERNAL_ERR;
 			}
 			try {
@@ -137,8 +140,8 @@ public class WebViewInterface extends Observable {
 				return RET_PARAM_ERR;
 			}
 			return RET_SUCCESS;
-		}catch (Throwable e) {
-			if(AppDebugConfig.IS_DEBUG) {
+		} catch (Throwable e) {
+			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
 			return RET_INTERNAL_ERR;
@@ -151,7 +154,8 @@ public class WebViewInterface extends Observable {
 			if (mHostActivity == null || mHostFragment == null) {
 				return RET_INTERNAL_ERR;
 			}
-			ShareSDKManager.getInstance(mHostActivity).shareGCool(mHostActivity, mHostFragment.getChildFragmentManager());
+			ShareSDKManager.getInstance(mHostActivity).shareGCool(mHostActivity, mHostFragment.getChildFragmentManager
+					());
 			return RET_SUCCESS;
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
@@ -219,5 +223,22 @@ public class WebViewInterface extends Observable {
 			}
 			return RET_INTERNAL_ERR;
 		}
+	}
+
+	/**
+	 * 跳转中奖记录页面
+	 *
+	 * @param title 标题
+	 * @param url   中奖记录地址
+	 */
+	public int jumpLotteryHistory(String title, String url) {
+		if (mHostActivity != null && !mHostActivity.isFinishing()
+				&& mHostActivity instanceof BaseAppCompatActivity) {
+			((BaseAppCompatActivity) mHostActivity)
+					.replaceFragWithTitle(R.id.fl_container, ActivityFragment.newInstance(url), "lottery_history",
+							title);
+			return RET_SUCCESS;
+		}
+		return RET_INTERNAL_ERR;
 	}
 }

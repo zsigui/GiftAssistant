@@ -25,10 +25,12 @@ public class IndexTypeUtil {
 	 * 游戏精品界面
 	 */
 	// 首页固定4项
-	public static  final int ITEM_INDEX_COUNT = 4;
+	public static final int ITEM_HEADER_COUNT = 4;
+	public static  final int ITEM_INDEX_COUNT = 5;
 
 	public static  final int ITEM_BANNER = 0;
 	public static final int ITEM_HOT = 1;
 	public static final int ITEM_RECOMMEND = 2;
-	public static final int ITEM_NEW = 3;
+	public static final int ITEM_TITLE = 3;
+	public static final int ITEM_NEW_NORMAL = 4;
 }

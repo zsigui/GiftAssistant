@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -43,6 +44,10 @@ import java.util.ArrayList;
 public class ResultFragment extends BaseFragment implements View.OnClickListener, OnItemClickListener<IndexGameNew> {
 
 	private final static String PAGE_NAME = "搜索结果页";
+
+	private static final Spanned TEXT_SEARCH_GAME = Html.fromHtml("搜到的 <font color='#f85454'>游戏</font>");
+	private static final Spanned TEXT_SEARCH_GIFT = Html.fromHtml("搜到的 <font color='#f85454'>礼包</font>");
+	private static final Spanned TEXT_SEARCH_LIKE = Html.fromHtml("猜你喜欢的 <font color='#f85454'>礼包</font>");
 	private RelativeLayout rlContainer;
 	private ScrollView mContainer;
 	private NestedListView mGameView;
@@ -86,9 +91,9 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		llGuessGift = getViewById(R.id.ll_like);
 		ivHopeGift = getViewById(R.id.iv_hope_gift);
 
-		((TextView) getViewById(R.id.tv_game_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>游戏</font>"));
-		((TextView) getViewById(R.id.tv_gift_title)).setText(Html.fromHtml("搜到的 <font color='#f85454'>礼包</font>"));
-		((TextView) getViewById(R.id.tv_like_title)).setText(Html.fromHtml("猜你喜欢的 <font color='#f85454'>礼包</font>"));
+		((TextView) getViewById(R.id.tv_game_title)).setText(TEXT_SEARCH_GAME);
+		((TextView) getViewById(R.id.tv_gift_title)).setText(TEXT_SEARCH_GIFT);
+		((TextView) getViewById(R.id.tv_like_title)).setText(TEXT_SEARCH_LIKE);
 
 	}
 

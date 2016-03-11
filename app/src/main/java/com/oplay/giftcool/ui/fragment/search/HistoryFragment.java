@@ -15,6 +15,8 @@ import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnSearchListener;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -26,6 +28,7 @@ import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.LoadingView;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.FlowLayout;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -60,6 +63,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
     private LoadingView ivLoading;
     private ImageView ivHotError;
     private boolean mHotInError = false;
+    private ImageView ivHopeGift;
     private SearchHistoryAdapter mHistoryAdapter;
 
     // data
@@ -91,7 +95,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         rvHotView = getViewById(R.id.rv_hot);
         ivHotError = getViewById(R.id.iv_hot_err);
         ivLoading = getViewById(R.id.iv_hot_load);
-
+        ivHopeGift = getViewById(R.id.iv_hope_gift);
     }
 
     @Override
@@ -100,6 +104,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         tvChange.setOnClickListener(this);
         tvClear.setOnClickListener(this);
         tagHistoryView.setOnTagClickListener(this);
+        ivHopeGift.setOnClickListener(this);
     }
 
     @Override
@@ -323,6 +328,14 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
                 break;
             case R.id.tv_clear:
                 handleClear();
+                break;
+            case R.id.iv_hope_gift:
+                // 弹窗提示
+                if (!AccountManager.getInstance().isLogin()) {
+                    IntentUtil.jumpLogin(getContext());
+                    return;
+                }
+                DialogManager.getInstance().showHopeGift(getChildFragmentManager(), 0, "", true);
                 break;
         }
     }

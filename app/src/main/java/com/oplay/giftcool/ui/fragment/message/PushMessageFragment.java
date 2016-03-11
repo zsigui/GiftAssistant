@@ -9,6 +9,7 @@ import com.oplay.giftcool.adapter.PushMessageAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
@@ -96,6 +97,7 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 								OneTypeDataList<PushMessage> backObj = response.body().getData();
 								refreshLoadState(backObj.data, backObj.isEndPage);
 								updateData(backObj.data);
+								AccountManager.getInstance().obtainUnreadPushMessageCount();
 								return;
 							}
 							refreshFailEnd();

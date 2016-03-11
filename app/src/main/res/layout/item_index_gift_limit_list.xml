@@ -5,7 +5,7 @@
 		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		android:layout_width = "match_parent"
 		android:layout_height = "@dimen/di_limit_item_height"
-		android:background="@drawable/selector_opacity_05"
+		android:background = "@drawable/selector_opacity_05"
 		android:paddingLeft = "4dp" >
 
 	<View
@@ -21,8 +21,7 @@
 
 	<RelativeLayout
 			style = "@style/IndexListItemLayout"
-			android:layout_marginLeft = "@dimen/di_limit_margin_left"
-			android:paddingRight = "@dimen/di_index_hoz_module_margin_left"
+			android:paddingRight = "@dimen/di_index_module_gap"
 			android:background = "@color/co_transparent" >
 
 		<RelativeLayout
@@ -62,6 +61,7 @@
 				android:layout_marginTop = "4dp"
 				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_toRightOf = "@+id/rl_icon"
+				android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
 				android:drawablePadding = "4dp"
 				android:gravity = "center_vertical"
 				android:text = "[暴打魏蜀吴]新手礼包" />
@@ -134,7 +134,7 @@
 				android:layout_alignTop = "@+id/tv_percent"
 				android:layout_marginLeft = "4dp"
 				android:layout_marginTop = "6dp"
-				android:layout_marginRight = "6dp"
+				android:layout_marginRight = "@dimen/di_index_list_item_progress_padding_right"
 				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_toRightOf = "@+id/tv_percent"
 				android:max = "100"

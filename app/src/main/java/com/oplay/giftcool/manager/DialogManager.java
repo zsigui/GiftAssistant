@@ -124,7 +124,7 @@ public class DialogManager {
 											break;
 										default:
 											title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
-											content = mContext.getString(R.string.st_dialog_hope_gift_success_title);
+											content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
 									}
 									confirmDialog.setTitle(title);
 									confirmDialog.setContent(content);

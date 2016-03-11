@@ -31,6 +31,9 @@ public class JPushReceiver extends BroadcastReceiver {
 				KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction());
 			}
 			try {
+				if (context == null) {
+					context = AssistantApp.getInstance().getApplicationContext();
+				}
 				if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
 					if (!JPushInterface.getConnectionState(context)) {
 						// 此时JPush连接中断
@@ -60,9 +63,11 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
 					}
-					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra.class);
+					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
+							.class);
+					PushMessageManager.getInstance().handleCustomMessage(context, msg, intent);
+//					PushMessageManager.getInstance().handleNotifyMessage(context, msg);
 
-					PushMessageManager.getInstance().handleShowMessage(context, msg);
 				} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 					// 用户点击了通知，打开对应界面
 					// 不显示在状态栏的自定义消息，根据需要进行额外工作
@@ -85,8 +90,9 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
 					}
-					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra.class);
-					PushMessageManager.getInstance().handleShowMessage(context, msg);
+					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
+							.class);
+					PushMessageManager.getInstance().handleNotifyMessage(context, msg, intent);
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
 				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 					// 用户接收到通知
@@ -99,7 +105,8 @@ public class JPushReceiver extends BroadcastReceiver {
 						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 0);
 					}
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息");
+						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "
+								+ bundle.getString(JPushInterface.EXTRA_EXTRA));
 					}
 				}
 			} catch (Throwable t) {

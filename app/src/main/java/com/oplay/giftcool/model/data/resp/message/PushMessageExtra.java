@@ -1,6 +1,7 @@
 package com.oplay.giftcool.model.data.resp.message;
 
 import com.google.gson.annotations.SerializedName;
+import com.oplay.giftcool.manager.PushMessageManager;
 
 import java.io.Serializable;
 
@@ -10,6 +11,12 @@ import java.io.Serializable;
  * Created by zsigui on 16-3-8.
  */
 public class PushMessageExtra implements Serializable {
+
+	/**
+	 * 是否静默
+	 */
+	@SerializedName("notify_type")
+	public int notifyType = PushMessageManager.NotifyType.DEFAULT;
 
 	/**
 	 * 推送类型
@@ -46,5 +53,11 @@ public class PushMessageExtra implements Serializable {
 	 */
 	@SerializedName("data")
 	public String extraJson;
+
+	/**
+	 * 展示渠道列表字符串，使用','分割，空时不过滤显示
+	 */
+	@SerializedName("chnid_list")
+	public String chnIdList;
 
 }

@@ -24,7 +24,7 @@ public class PushMessage implements Serializable {
 	/**
 	 * 跳转礼包详情ID
 	 */
-	@SerializedName("gift_type_id")
+	@SerializedName("gift_plan_id")
 	public int giftId;
 
 	/**

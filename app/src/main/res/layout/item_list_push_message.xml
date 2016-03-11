@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               xmlns:app = "http://schemas.android.com/apk/res-auto"
               android:orientation = "vertical"
-              android:id = "@+id/ll_msg"
               android:layout_marginTop = "@dimen/di_index_module_gap"
               android:layout_width = "match_parent"
               android:layout_height = "match_parent" >
@@ -11,6 +10,7 @@
 	<RelativeLayout
 			style = "@style/IndexModuleTitleLayout"
 			android:background = "@drawable/selector_white_module"
+			android:id = "@+id/rl_msg"
 			android:paddingTop = "25dp"
 			android:paddingBottom = "10dp"
 			android:layout_height = "wrap_content" >

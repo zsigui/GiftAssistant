@@ -1,5 +1,6 @@
 package com.oplay.giftcool.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -59,6 +60,9 @@ public class SystemUtil {
 		return ret;
 	}
 
+	/**
+	 * 根据应用的包名获取该应用的名称
+	 */
 	public static String getAppNameByPackName(Context context, String packageName) {
 		PackageManager pm = context.getPackageManager();
 		String name = null;
@@ -70,5 +74,18 @@ public class SystemUtil {
 			}
 		}
 		return name;
+	}
+
+	/**
+	 * 判断指定服务是否处于运行中
+	 */
+	public static boolean isServiceRunning(Context context, String serviceName) {
+		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		for (ActivityManager.RunningServiceInfo serviceInfo: manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (serviceName.equals(serviceInfo.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

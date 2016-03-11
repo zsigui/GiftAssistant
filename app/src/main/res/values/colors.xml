@@ -3,7 +3,7 @@
 
 	<color name = "co_transparent" >#00000000</color >
 	<color name = "co_white" >#FFFFFF</color >
-	<color name = "co_white_pressed" >#E1E1E1</color >
+	<color name = "co_white_pressed" >#F6F6F6</color >
 	<color name = "co_black" >#000000</color >
 
 	<color name = "co_opacity_05" >#0D000000</color >
@@ -34,7 +34,7 @@
 	<color name = "co_rainbow_color_5">#f85454</color>
 
 	<color name = "co_index_module_add_text" >#ff8543</color >
-	<color name = "co_divider_bg" >#e4e4e4</color >
+	<color name = "co_divider_bg" >#f4f4f4</color >
 	<color name = "co_stroke_bg" >#e4e4e4</color >
 	<color name = "co_reward_bg" >#ffb554</color>
 

@@ -54,7 +54,7 @@
 			android:layout_below = "@+id/tv_name"
 			android:paddingLeft = "4dp"
 			android:paddingRight = "4dp"
-			android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
+			android:layout_marginBottom = "14dp"
 			android:gravity = "center" >
 
 		<ProgressBar

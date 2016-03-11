@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -20,11 +21,13 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 16-1-7.
  */
-public class ScoreTaskAdapter extends BaseAdapter {
+public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListener {
 
+	private static final int TAG_POS = 0xFF121233;
 	private ArrayList<ScoreMission> mData;
 	private Context mContext;
 	private OnItemClickListener<ScoreMission> mItemListener;
+	private boolean mHasLottery;
 
 	public ScoreTaskAdapter(Context context, OnItemClickListener<ScoreMission> itemListener) {
 		this(context, null, itemListener);
@@ -49,6 +52,10 @@ public class ScoreTaskAdapter extends BaseAdapter {
 		mData = data;
 	}
 
+	public void setHasLottery(boolean hasLottery) {
+		mHasLottery = hasLottery;
+	}
+
 	@Override
 	public int getCount() {
 		return mData == null ? 0 : mData.size();
@@ -67,7 +74,8 @@ public class ScoreTaskAdapter extends BaseAdapter {
 	@Override
 	public int getItemViewType(int position) {
 		// 理论上0已经异常
-		return getCount() == 0 ? TaskTypeUtil.TYPE_HEADER : TaskTypeUtil.getItemViewType(mData.get(position).type);
+		return mHasLottery && position == 0 ?
+				TaskTypeUtil.TYPE_LOTTERY : TaskTypeUtil.getItemViewType(mData.get(position).type);
 	}
 
 	@Override
@@ -97,6 +105,11 @@ public class ScoreTaskAdapter extends BaseAdapter {
 					holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
 					holder.stScore = ViewUtil.getViewById(convertView, R.id.st_score);
 					holder.btnToDo = ViewUtil.getViewById(convertView, R.id.btn_todo);
+					break;
+				case TaskTypeUtil.TYPE_LOTTERY:
+					convertView = LayoutInflater.from(mContext)
+							.inflate(R.layout.item_score_task_lottery, parent, false);
+					holder.btnToDo = ViewUtil.getViewById(convertView, R.id.btn_lottery);
 					break;
 				default:
 					throw new IllegalStateException("error value of type : " + type);
@@ -146,17 +159,15 @@ public class ScoreTaskAdapter extends BaseAdapter {
 					holder.btnToDo.setText("去完成");
 					holder.btnToDo.setEnabled(true);
 				}
-				holder.btnToDo.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (mItemListener != null) {
-							mItemListener.onItemClick(mission, null, position);
-						}
-					}
-				});
+				holder.btnToDo.setTag(TAG_POS, position);
+				holder.btnToDo.setOnClickListener(this);
 				break;
 			case TaskTypeUtil.TYPE_HEADER:
 				holder.tvName.setText(mission.name);
+				break;
+			case TaskTypeUtil.TYPE_LOTTERY:
+				holder.btnToDo.setTag(TAG_POS, position);
+				holder.btnToDo.setOnClickListener(this);
 				break;
 			default:
 				throw new IllegalStateException("error value of type : " + type);
@@ -167,7 +178,21 @@ public class ScoreTaskAdapter extends BaseAdapter {
 		if (data == null)
 			return;
 		mData = data;
+		setHasLottery(AssistantApp.getInstance().isHasLottery());
+		if (AssistantApp.getInstance().isHasLottery()) {
+			mData.add(0, new ScoreMission());
+		}
 		notifyDataSetChanged();
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getTag(TAG_POS) == null)
+			return;
+		if (mItemListener != null) {
+			int pos = (Integer) v.getTag(TAG_POS);
+			mItemListener.onItemClick((ScoreMission) getItem(pos), v, pos);
+		}
 	}
 
 	static class ViewHolder {

@@ -23,6 +23,7 @@ public class WebViewUrl {
 	public static final String OUWAN_BEAN_DETAIL_NOTE = "m/ouwanb-intro/";
 	public static final String SCORE_DETAIL = "m/integral/";
 	public static final String SCORE_DETAIL_NOTE = "m/integral-intro/";
+	public static final String LOTTERY = "campaigns/2016/lottery/?need_validate=true";
 
 	public static String getWebUrl(String url) {
 		if (AppConfig.TEST_MODE) {

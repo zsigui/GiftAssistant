@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
@@ -76,6 +75,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (!AssistantApp.getInstance().isGlobalInit()) {
+			AssistantApp.getInstance().appInit();
+		}
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
 		createDrawer();
@@ -219,7 +221,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				setCurSelected(INDEX_GIFT);
 				break;
 			case R.id.ctv_game:
-				setCurSelected(INDEX_GAME);
+//				setCurSelected(INDEX_GAME);
 				break;
 			case R.id.sl_search:
 				IntentUtil.jumpSearch(MainActivity.this);
@@ -242,26 +244,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		if (intent != null) {
-			boolean isExit = intent.getBooleanExtra(TAG_EXIT, false);
-			if (isExit) {
-				finish();
-				System.exit(0);
-			}
-		}
-	}
-
-	@Override
 	public void onBackPressed() {
 
 		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
-			mApp.exit();
+			mApp.appExit();
 			// 发送退出指令
-			Intent intent = new Intent(this, MainActivity.class);
-			intent.putExtra(TAG_EXIT, true);
-			startActivity(intent);
+			finish();
+//			System.exit(0);
 		} else {
 			mLastClickTime = System.currentTimeMillis();
 			ToastUtil.showShort("再次点击退出应用");

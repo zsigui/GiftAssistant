@@ -1,110 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
 		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/rl_container"
 		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content"
-		android:background = "@color/co_transparent" >
+		android:layout_height = "match_parent" >
 
-	<LinearLayout
+	<ScrollView
+			xmlns:android = "http://schemas.android.com/apk/res/android"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:orientation = "vertical" >
+			android:background = "@color/co_transparent" >
 
-		<RelativeLayout
-				style = "@style/IndexModuleTitleLayout.Bigger"
-				android:layout_marginTop = "@dimen/di_index_module_gap" >
-
-			<TextView
-					style = "@style/DefaultTextView.Header"
-					android:layout_alignParentLeft = "true"
-					android:text = "@string/st_search_history_clear_title" />
-
-			<TextView
-					android:id = "@+id/tv_clear"
-					style = "@style/DefaultTextView.Text"
-					android:layout_alignParentRight = "true"
-					android:layout_height = "match_parent"
-					android:paddingLeft = "10dp"
-					android:text = "@string/st_search_history_clear_sub" />
-		</RelativeLayout >
-
-		<FrameLayout
+		<LinearLayout
 				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
-				android:layout_marginTop = "@dimen/di_divider_height"
-				android:background = "@color/co_white" >
+				android:orientation = "vertical" >
 
-			<com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout
-					android:id = "@+id/rl_history"
-					style = "@style/DefaultRelativeLayout"
-					android:paddingBottom = "12dp"
-					android:paddingLeft = "6dp"
-					android:paddingRight = "10dp"
-					android:paddingTop = "6dp"
-					android:visibility = "gone" />
+			<RelativeLayout
+					style = "@style/IndexModuleTitleLayout.Bigger"
+					android:layout_marginTop = "@dimen/di_index_module_gap" >
 
-			<TextView
-					android:id = "@+id/tv_history_empty"
-					style = "@style/DefaultTextView.Text"
+				<TextView
+						style = "@style/DefaultTextView.Header"
+						android:layout_alignParentLeft = "true"
+						android:text = "@string/st_search_history_clear_title" />
+
+				<TextView
+						android:id = "@+id/tv_clear"
+						style = "@style/DefaultTextView.Text"
+						android:layout_alignParentRight = "true"
+						android:layout_height = "match_parent"
+						android:paddingLeft = "10dp"
+						android:text = "@string/st_search_history_clear_sub" />
+			</RelativeLayout >
+
+			<FrameLayout
 					android:layout_width = "match_parent"
-					android:gravity = "center"
-					android:padding = "25dp"
-					android:text = "@string/st_search_history_empty"
-					android:textSize = "13sp"
-					android:visibility = "gone" />
-		</FrameLayout >
-
-		<RelativeLayout
-				android:id = "@+id/rl_hot"
-				style = "@style/IndexModuleTitleLayout.Bigger"
-				android:layout_marginTop = "@dimen/di_index_module_gap" >
-
-			<TextView
-					style = "@style/DefaultTextView.Header"
-					android:layout_alignParentLeft = "true"
-					android:text = "@string/st_search_history_hot_title" />
-
-			<TextView
-					android:id = "@+id/tv_change"
-					style = "@style/DefaultTextView.Text"
-					android:layout_alignParentRight = "true"
-					android:layout_height = "match_parent"
-					android:paddingLeft = "10dp"
-					android:text = "@string/st_search_history_hot_sub" />
-		</RelativeLayout >
-
-		<RelativeLayout
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:layout_marginTop = "@dimen/di_divider_height"
-				android:background = "@color/co_white" >
-
-			<android.support.v7.widget.RecyclerView
-					android:id = "@+id/rv_hot"
-					style = "@style/DefaultRecyclerView"
-					android:visibility = "gone" />
-
-			<ImageView
-					android:id = "@+id/iv_hot_err"
-					android:layout_width = "match_parent"
-					android:layout_height = "180dp"
-					android:layout_centerInParent = "true"
-					android:contentDescription = "@null"
-					android:scaleType = "centerInside"
-					android:src = "@drawable/pic_data_empty"
-					android:visibility = "gone" />
-
-			<com.oplay.giftcool.ui.widget.LoadingView
-					android:id = "@+id/iv_hot_load"
-					android:layout_width = "wrap_content"
 					android:layout_height = "wrap_content"
-					android:layout_centerInParent = "true"
-					android:layout_marginTop = "20dp"
-					android:layout_marginBottom = "20dp"
-					android:visibility = "gone" />
-		</RelativeLayout >
+					android:layout_marginTop = "@dimen/di_divider_height"
+					android:background = "@color/co_white" >
+
+				<com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout
+						android:id = "@+id/rl_history"
+						style = "@style/DefaultRelativeLayout"
+						android:paddingBottom = "12dp"
+						android:paddingLeft = "6dp"
+						android:paddingRight = "10dp"
+						android:paddingTop = "6dp"
+						android:visibility = "gone" />
+
+				<TextView
+						android:id = "@+id/tv_history_empty"
+						style = "@style/DefaultTextView.Text"
+						android:layout_width = "match_parent"
+						android:gravity = "center"
+						android:padding = "25dp"
+						android:text = "@string/st_search_history_empty"
+						android:textSize = "13sp"
+						android:visibility = "gone" />
+			</FrameLayout >
+
+			<RelativeLayout
+					android:id = "@+id/rl_hot"
+					style = "@style/IndexModuleTitleLayout.Bigger"
+					android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+				<TextView
+						style = "@style/DefaultTextView.Header"
+						android:layout_alignParentLeft = "true"
+						android:text = "@string/st_search_history_hot_title" />
+
+				<TextView
+						android:id = "@+id/tv_change"
+						style = "@style/DefaultTextView.Text"
+						android:layout_alignParentRight = "true"
+						android:layout_height = "match_parent"
+						android:paddingLeft = "10dp"
+						android:text = "@string/st_search_history_hot_sub" />
+			</RelativeLayout >
+
+			<RelativeLayout
+					android:layout_width = "match_parent"
+					android:layout_height = "wrap_content"
+					android:layout_marginTop = "@dimen/di_divider_height"
+					android:background = "@color/co_white" >
+
+				<android.support.v7.widget.RecyclerView
+						android:id = "@+id/rv_hot"
+						style = "@style/DefaultRecyclerView"
+						android:visibility = "gone" />
+
+				<ImageView
+						android:id = "@+id/iv_hot_err"
+						android:layout_width = "match_parent"
+						android:layout_height = "180dp"
+						android:layout_centerInParent = "true"
+						android:contentDescription = "@null"
+						android:scaleType = "centerInside"
+						android:src = "@drawable/pic_data_empty"
+						android:visibility = "gone" />
+
+				<com.oplay.giftcool.ui.widget.LoadingView
+						android:id = "@+id/iv_hot_load"
+						android:layout_width = "wrap_content"
+						android:layout_height = "wrap_content"
+						android:layout_centerInParent = "true"
+						android:layout_marginTop = "20dp"
+						android:layout_marginBottom = "20dp"
+						android:visibility = "gone" />
+			</RelativeLayout >
 
 
-	</LinearLayout >
-</ScrollView >
+		</LinearLayout >
+	</ScrollView >
 
+	<ImageView
+			android:id = "@+id/iv_hope_gift"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_alignParentRight = "true"
+			android:layout_alignParentBottom = "true"
+			android:layout_marginBottom = "100dp"
+			android:src = "@drawable/ic_hope_gift_side" />
+
+</RelativeLayout >

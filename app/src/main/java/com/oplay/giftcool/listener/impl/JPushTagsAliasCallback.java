@@ -32,7 +32,7 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
 			}
 		} else {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed : " + alias);
+				KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed : " + alias + ", code = " + code);
 			}
 			if (mRunnable == null) {
 				mRunnable = new Runnable() {

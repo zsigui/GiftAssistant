@@ -3,7 +3,7 @@
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:id = "@+id/rl_hot_all"
 		style = "@style/IndexModuleTitleLayout"
-		android:background="@color/co_white"
+		android:background="@drawable/selector_white_module"
 		android:clickable = "true" >
 
 	<TextView

@@ -217,7 +217,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 				final IndexGiftNew gift = mData.news.get(position - COUNT_HEADER);
 				type = GiftTypeUtil.getItemViewType(gift);
 				ItemHolder viewHolder = (ItemHolder) holder;
-				viewHolder.itemView.setBackgroundResource(R.drawable.selector_white_module);
 				setData(position, type, gift, viewHolder);
 		}
 	}
@@ -359,12 +358,33 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		}
 	}
 
-	public boolean updateData(IndexGift data) {
+	public boolean updateData(IndexGift data, int start, int end) {
 		if (data == null) {
 			return false;
 		}
+		if (start < 0) {
+			start = -1;
+		}
 		mData = data;
-		notifyDataSetChanged();
+		if (end < 0) {
+			end = getItemCount();
+		}
+		notifyItemRangeChanged(start, end - start);
+		return true;
+	}
+
+	public boolean addData(IndexGift data, int start, int end) {
+		if (data == null) {
+			return false;
+		}
+		if (start < 0) {
+			start = -1;
+		}
+		mData = data;
+		if (end < 0) {
+			end = getItemCount();
+		}
+		notifyItemRangeInserted(start, end - start);
 		return true;
 	}
 

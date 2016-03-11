@@ -50,6 +50,12 @@ public class StatisticsManager {
 		String USER_HOPE_GIFT_SUCCESS = "us000002";
 		// 求礼包-取消
 		String USER_HOPE_GIFT_QUICK = "us000003";
+		// 手机登录
+		String USER_PHONE_LOGIN = "us000004";
+		// 偶玩账号登录
+		String USER_OUWAN_LOGIN = "us000005";
+		// 登录状态保存方式登录
+		String USER_LOGIN_WITH_SESSION = "us000006";
 		// 更新弹窗
 		String APP_UPDATE = "ap000001";
 		// 活动弹窗
@@ -58,6 +64,7 @@ public class StatisticsManager {
 		String APP_PUSH_RECEIVED = "ap000003";
 		// 推送消息已打开
 		String APP_PUSH_OPENED = "ap000004";
+
 	}
 	private final String TC_APP_KEY = "0CC59F66C9823F0D3EF90AC61D9735FB";
 	private final String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
@@ -83,6 +90,9 @@ public class StatisticsManager {
 	 */
 	public void init(Context context, int channelId) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
+			if (mIsInit) {
+				return;
+			}
 			// TalkingData
 //			TCAgent.init(context, TC_APP_KEY,  String.valueOf(channelId));
 
@@ -158,7 +168,7 @@ public class StatisticsManager {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle);
 			}
-			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
+//			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
 			if (mIsInit) {
 //			TCAgent.onEvent(context, title, subtitle);
 				MobclickAgent.onEvent(context, id, subtitle);

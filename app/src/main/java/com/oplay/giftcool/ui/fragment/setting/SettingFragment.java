@@ -220,13 +220,14 @@ public class SettingFragment extends BaseFragment {
 				logoutDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 					@Override
 					public void onCancel() {
-						logoutDialog.dismiss();
+						logoutDialog.dismissAllowingStateLoss();
 					}
 
 					@Override
 					public void onConfirm() {
 						AccountManager.getInstance().logout();
-						logoutDialog.dismiss();
+						logoutDialog.dismissAllowingStateLoss();
+						getActivity().finish();
 					}
 				});
 				logoutDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());

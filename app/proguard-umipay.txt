@@ -56,6 +56,16 @@
 -keep class com.ut.device.** {*;}
 -dontwarn com.weibo.sdk.android.**
 -keep class com.weibo.sdk.android.** {*;}
+-dontwarn com.baidu.location.**
+-keep class com.baidu.location.** {*;}
+-dontwarn org.xbill.DNS.**
+-keep class org.xbill.DNS.** {*;}
+-keep class dig { public *; }
+-keep class jnamed { public *; }
+-keep class lookup { public *; }
+-keep class update { public *; }
+-keep class com.payco.android.plugin.** {*;}
+-keep class cn.gov.pbc.tsm.client.mobile.android.** {*;}
 #汇付宝-微信
 #-libraryjars libs/ HeepayService.jar
 -dontwarn com.junnet.heepay.**

@@ -1,13 +1,16 @@
 package com.oplay.giftcool.ui.widget;
 
 import android.content.Context;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.ui.widget.layout.RefreshLayout;
+import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -69,9 +72,11 @@ public class LoadAndRetryViewManager {
 	private View mEmptyView;
 	private OnRetryListener mOnRetryListener;
 
-	private Handler mHandler;
+
 	private int mLastType = TYPE_DEFAULT;
 
+
+	private ShowTypeRunnable mRunnable;
 
 	public static LoadAndRetryViewManager generate(Context context) {
 		return new LoadAndRetryViewManager(context);
@@ -125,6 +130,8 @@ public class LoadAndRetryViewManager {
 		showThread(TYPE_ERROR_RETRY);
 	}
 
+
+
 	public void showEmpty() {
 		showThread(TYPE_EMPTY);
 	}
@@ -134,6 +141,15 @@ public class LoadAndRetryViewManager {
 	}
 
 	public void showLast() {
+//		KLog.d(AppDebugConfig.TAG_WARN, "showLast was called");
+		if (mContainer.getChildCount() != 0 && mContainer.getChildAt(0).isShown()
+				&& mContainer.getChildAt(0).getVisibility() == View.VISIBLE
+				&& !(mContainer.getChildAt(0) instanceof RefreshLayout)) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, "no need to replace");
+			}
+			return;
+		}
 		showThread(mLastType);
 	}
 
@@ -177,37 +193,18 @@ public class LoadAndRetryViewManager {
 		mLoadingView = v;
 	}
 
-	public void setHandler(Handler handler) {
-		mHandler = handler;
-	}
-
 	private void showThread(final int type) {
 		if (isMainThread())
 		{
 			show(type);
 		} else
 		{
-			Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					show(type);
-				}
-			};
-			boolean b = handleRun(r);
-			while (!b) {
-				b = handleRun(r);
+			if (mRunnable == null) {
+				mRunnable = new ShowTypeRunnable();
 			}
+			mRunnable.setType(type);
+			mContainer.post(mRunnable);
 		}
-	}
-
-	private boolean handleRun(Runnable r) {
-		boolean b;
-		if (mHandler != null) {
-			b = mHandler.post(r);
-		} else {
-			b = mContainer.post(r);
-		}
-		return b;
 	}
 
 	private boolean isMainThread()
@@ -216,9 +213,6 @@ public class LoadAndRetryViewManager {
 	}
 
 	private void show(int type) {
-		if (type == mLastType) {
-			return;
-		}
 		mContainer.removeAllViews();
 		switch (type) {
 			case TYPE_LOAD:
@@ -227,10 +221,16 @@ public class LoadAndRetryViewManager {
 					mLastType = TYPE_LOAD;
 				}
 				break;
+			case TYPE_DEFAULT:
 			case TYPE_CONTENT:
 				if (mContentView != null) {
-					mContainer.addView(mContentView);
-					mLastType =TYPE_CONTENT;
+					FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+							ViewGroup.LayoutParams.MATCH_PARENT,
+							ViewGroup.LayoutParams.MATCH_PARENT
+					);
+					mContainer.addView(mContentView, lp);
+					mContentView.bringToFront();
+					mLastType = TYPE_CONTENT;
 				}
 				break;
 			case TYPE_EMPTY:
@@ -251,10 +251,24 @@ public class LoadAndRetryViewManager {
 		}
 	}
 
-    /**
+	/**
      * 进行重试回调接口
      */
     public interface OnRetryListener {
         void onRetry(View retryView);
     }
+
+	private class ShowTypeRunnable implements Runnable{
+
+		private int type;
+
+		public void setType(int type) {
+			this.type = type;
+		}
+
+		@Override
+		public void run() {
+			show(type);
+		}
+	}
 }

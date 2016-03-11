@@ -47,13 +47,11 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 			case IndexTypeUtil.ITEM_HEADER:
 				HeaderVH headerVH = (HeaderVH) holder;
 				headerVH.tvTitle.setText("新游推荐");
-				headerVH.setIsRecyclable(false);
 				headerVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
 				headerVH.itemView.setOnClickListener(this);
 				break;
 			case IndexTypeUtil.ITEM_NORMAL:
 				NormalVH normalVH = (NormalVH) holder;
-				normalVH.setIsRecyclable(false);
 				final IndexGameNew o = mData.get(position - 1);
 				o.initAppInfoStatus(mContext);
 				normalVH.tvName.setText(o.name);
@@ -103,7 +101,7 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 		return 1;
 	}
 
-	class HeaderVH extends BaseRVHolder {
+	static class HeaderVH extends BaseRVHolder {
 
 		TextView tvTitle;
 
@@ -113,7 +111,7 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 		}
 	}
 
-	class NormalVH extends BaseRVHolder {
+	static class NormalVH extends BaseRVHolder {
 
 		TextView tvName;
 		ImageView ivGift;

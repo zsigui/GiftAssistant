@@ -41,6 +41,7 @@
 	<TextView
 			android:id = "@+id/tv_gift"
 			style = "@style/DefaultTextView.ItemSubTitle"
-			android:layout_below = "@+id/tv_game_name" />
+			android:layout_below = "@+id/tv_game_name"
+			android:paddingBottom = "10dp" />
 
 </RelativeLayout >

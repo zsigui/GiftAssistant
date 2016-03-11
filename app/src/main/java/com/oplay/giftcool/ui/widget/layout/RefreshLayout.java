@@ -178,18 +178,14 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		 * @see android.view.ViewGroup#dispatchTouchEvent(android.view.MotionEvent)
 		 */
 	@Override
-	public boolean dispatchTouchEvent(MotionEvent event) {
-		final int action = event.getAction();
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		final int action = ev.getAction();
 
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
 				// 按下
-				mYDown = (int) event.getY();
-				mXDown = (int) event.getX();
-				if (canLoad()) {
-					loadData();
-				}
-				mIsHorizontal = false;
+				mYDown = (int) ev.getY();
+				mXDown = (int) ev.getX();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
@@ -197,16 +193,20 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 				if (canLoad()) {
 					loadData();
 				}
-				mIsHorizontal = false;
 				break;
 			default:
 				break;
 		}
-		return super.dispatchTouchEvent(event) && !mIsHorizontal;
+		return super.dispatchTouchEvent(ev);
 	}
 
 	private boolean mIsHorizontal = false;
 	private int mXDown;
+
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		return !(mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) && super.onTouchEvent(ev);
+	}
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -342,8 +342,8 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 	 *
 	 * @author mrsimple
 	 */
-	public static interface OnLoadListener {
-		public void onLoad();
+	public interface OnLoadListener {
+		void onLoad();
 	}
 }
 

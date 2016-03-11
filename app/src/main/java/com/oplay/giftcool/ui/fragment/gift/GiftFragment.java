@@ -179,7 +179,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								// 获取数据成功
 								refreshSuccessEnd();
-								updateData(response.body().getData());
+								updateData(response.body().getData(), 0, -1);
 								return;
 							}
 						}
@@ -205,8 +205,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		if (moreData == null) {
 			return;
 		}
+		int lastCount = mAdapter.getItemCount();
 		mGiftData.news.addAll(moreData);
-		mAdapter.updateData(mGiftData);
+		mAdapter.updateData(mGiftData, lastCount, -1);
 		mLastPage += 1;
 	}
 
@@ -265,7 +266,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
 	/* 更新控件数据 start */
 
-	public void updateData(IndexGift data) {
+	public void updateData(IndexGift data, int start, int end) {
 		if (data == null) {
 			if (!mHasData) {
 				mViewManager.showErrorRetry();
@@ -284,7 +285,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mViewManager.showContent();
 		mHasData = true;
 		mGiftData = data;
-		mAdapter.updateData(mGiftData);
+		mAdapter.updateData(mGiftData, start, end);
 	}
 
 	private boolean mIsResume = false;
@@ -348,7 +349,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			if (mIsSwipeRefresh) {
 				return;
 			}
-			mRefreshLayout.setRefreshing(true);
 			onRefresh();
 			return;
 		}
@@ -536,7 +536,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			int y = fragment.rvContainer.getScrollY();
 			switch (msg.what) {
 				case ID_UPDATE:
-					fragment.updateData((IndexGift) msg.obj);
+					fragment.refreshSuccessEnd();
+					fragment.updateData((IndexGift) msg.obj, 1, -1);
 					break;
 				default:
 			}
