@@ -231,6 +231,7 @@ public class WebViewInterface extends Observable {
 	 * @param title 标题
 	 * @param url   中奖记录地址
 	 */
+	@JavascriptInterface
 	public int jumpLotteryHistory(String title, String url) {
 		if (mHostActivity != null && !mHostActivity.isFinishing()
 				&& mHostActivity instanceof BaseAppCompatActivity) {
