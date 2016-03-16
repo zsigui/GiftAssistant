@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.oplay.giftcool.AssistantApp;
-import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
@@ -13,11 +12,10 @@ import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.GiftListActivity;
 import com.oplay.giftcool.ui.activity.LoginActivity;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.activity.WebActivity;
-
-import net.youmi.android.libs.common.util.Util_System_Intent;
 
 /**
  * @author JackieZhuang
@@ -342,12 +340,12 @@ public class IntentUtil {
 		if (!AssistantApp.getInstance().isGlobalInit()) {
 			AssistantApp.getInstance().appInit();
 		}
-//		Intent intent = new Intent(context, MainActivity.class);
-//		if (isNewTask) {
-//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		}
-//		context.startActivity(intent);
-		Util_System_Intent.startActivityByPackageName(context, AppConfig.PACKAGE_NAME);
+		Intent intent = new Intent(context, MainActivity.class);
+		if (isNewTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
+		context.startActivity(intent);
+//		Util_System_Intent.startActivityByPackageName(context, AppConfig.PACKAGE_NAME);
 	}
 
 	/**
