@@ -20,7 +20,6 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.other.HeaderFooterDividerItemDecoration;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -37,7 +36,6 @@ import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -364,8 +362,6 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
             return;
         }
         Integer pos = (Integer) v.getTag(IndexTypeUtil.TAG_POSITION);
-        KLog.d(AppDebugConfig.TAG_WARN, "pos = " + pos + ", id = " + v.getId() + ", R.id.rl_hot_all = " + R.id.rl_hot_all
-                + ", R.id.rl_recommend = " + R.id.rl_recommend + ", btn_download = " + R.id.tv_download);
         switch (v.getId()) {
             case R.id.rl_hot_all:
                 IntentUtil.jumpGameNewList(mContext);

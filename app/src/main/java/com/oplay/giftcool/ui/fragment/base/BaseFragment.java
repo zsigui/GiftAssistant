@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -92,14 +91,10 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// 避免多次从xml中加载布局文件
-		KLog.d(AppDebugConfig.TAG_WARN, "mContentView = " + mContentView
-		+ ", mIsPrepared = " + mIsPrepared + ", mHasData = " + mHasData
-		 + ", contentView.content = " + (mViewManager != null ? mViewManager.getContentView() : "null"));
 		if (mContentView == null) {
 			initView(savedInstanceState);
 		} else {
 			ViewGroup parent = (ViewGroup) mContentView.getParent();
-			KLog.d(AppDebugConfig.TAG_WARN, " parent = " + parent);
 			if (parent != null) {
 				parent.removeView(mContentView);
 			}

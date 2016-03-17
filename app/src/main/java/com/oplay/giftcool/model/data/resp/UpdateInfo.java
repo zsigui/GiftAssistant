@@ -39,6 +39,9 @@ public class UpdateInfo implements Serializable {
 	@SerializedName("filesize")
 	public long apkFileSize;
 
+	@SerializedName("update_percent")
+	public int updatePercent = 71;
+
 	public boolean checkoutUpdateInfo(Context context) {
 		return !(TextUtils.isEmpty(downloadUrl) || TextUtils.isEmpty(packageName) || TextUtils.isEmpty(content) ||
 				!Util_System_Package.checkAppUpdate(context, context.getPackageName(), versionCode) || apkFileSize ==

@@ -15,6 +15,8 @@ public class WelcomeDialog extends BaseFragment_Dialog {
 
 	private TextView tvScore;
 	private int mScore;
+	private int mPercent;
+	private TextView tvPercent;
 
 	public static WelcomeDialog newInstance(@LayoutRes int resId) {
 		WelcomeDialog dialog = new WelcomeDialog();
@@ -25,11 +27,13 @@ public class WelcomeDialog extends BaseFragment_Dialog {
 	@Override
 	protected void initView() {
 		tvScore = getViewById(R.id.tv_score);
+		tvPercent = getViewById(R.id.tv_percent);
 	}
 
 	@Override
 	protected void processLogic() {
 		setScore(mScore);
+		setPercent(mPercent);
 	}
 
 	@Override
@@ -45,4 +49,10 @@ public class WelcomeDialog extends BaseFragment_Dialog {
 		}
 	}
 
+	public void setPercent(int percent) {
+		mPercent = percent;
+		if (tvPercent != null) {
+			tvPercent.setText(String.format("%d%%", percent));
+		}
+	}
 }

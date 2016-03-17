@@ -85,6 +85,25 @@ public class PushMessageManager {
 		public static final int SLIENT_BUT_STATICS = 3;
 	}
 
+	/**
+	 * 设定通知优先级
+	 */
+	public static abstract class NotifyPriority {
+
+		/**
+		 * 低优先级
+		 */
+		public static final int LOW = -1;
+		/**
+		 * 正常通知方式
+		 */
+		public static final int NORMAL = 0;
+		/**
+		 * 着重提醒方式
+		 */
+		public static final int HIGH = 1;
+	}
+
 	// 本地JPUSH推送的Id
 	public static int LOCAL_JPUSH_ID = 10012;
 	private static final int BROADCAST_REQUEST = 1;
@@ -354,7 +373,7 @@ public class PushMessageManager {
 
 
 		builder.setTicker(msg.content);
-		builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+		builder.setPriority(msg.notifyPriority);
 
 		// 设置通知意图
 		intent.setAction(JPushInterface.ACTION_NOTIFICATION_OPENED);

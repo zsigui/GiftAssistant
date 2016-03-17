@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -17,7 +16,6 @@ import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-15.
@@ -64,7 +62,6 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 			mViewManager.showEmpty();
 			return;
 		}
-		KLog.e(AppDebugConfig.TAG_WEBVIEW, "mWebView = " + mWebView);
 		int id = getArguments().getInt(KEY_ID);
 		int status = getArguments().getInt(KEY_STATUS, GameTypeUtil.JUMP_STATUS_DETAIL);
 		String statusBarColor = getArguments().getString(KEY_COLOR, "f85454");

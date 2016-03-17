@@ -148,10 +148,10 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 									}
 									if (response != null && response.isSuccess() && response.body() != null &&
 											response.body().getCode() == NetStatusCode.SUCCESS) {
-										refreshSuccessEnd();
 										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
 										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
+										refreshSuccessEnd();
 										return;
 									}
 									refreshFailEnd();
@@ -169,7 +169,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 								}
 							});
 				} else {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 				}
 			}
 		});
@@ -190,7 +190,7 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					moreLoadFailEnd();
 					return;
 				}
 				Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj)

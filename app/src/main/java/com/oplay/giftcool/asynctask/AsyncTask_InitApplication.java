@@ -7,8 +7,8 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
@@ -22,7 +22,6 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.socks.library.KLog;
 
@@ -64,11 +63,18 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	 * 在此处进行对旧版的处理操作
 	 */
 	public void doClearWorkForOldVer() {
-		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
-		if (oldVer < 3) {
-			// 清除旧版的账号存储信息
-			SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
-			SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, 0);
+		if (oldVer != AppConfig.SDK_VER) {
+			if (oldVer < 3) {
+				// 清除旧版的账号存储信息
+				SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
+				SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+			}
+			// 写入最新版本信息
+			SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
+			// 清空今日登录状态
+			SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+			MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen = true;
 		}
 	}
 
@@ -76,14 +82,15 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	/**
 	 * 判断是否今日首次登录
 	 */
-	public void judgeFirstOpenToday() {
-		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
-		// 首次打开APP 或者 今日首次登录
-		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
-		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
-		// 写入当前时间
-		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
-	}
+//	public void judgeFirstOpenToday() {
+//		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+//		// 首次打开APP 或者 今日首次登录
+//		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
+//		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
+//		// 写入当前时间
+//		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
+//				.currentTimeMillis());
+//	}
 
 	/**
 	 * 需要在此完成一些APP全局常量初始化的获取工作
@@ -116,7 +123,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
 		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP
-		judgeFirstOpenToday();
+//		judgeFirstOpenToday();
 		ScoreManager.getInstance().resetLocalTaskState();
 
 		try {
@@ -153,16 +160,13 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
 		try {
-			Call<JsonRespBase<InitAppResult>> d =  Global.getNetEngine().initAPP(reqData);
+			Call<JsonRespBase<InitAppResult>> d = Global.getNetEngine().initAPP(reqData);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccess()) {
 				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 					InitAppResult initData = response.body().getData();
 					if (initData != null) {
 						if (initData.initAppConfig != null) {
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_APP, "initAppConfig = " + initData.initAppConfig.startImgUrl);
-							}
 							AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
 									.isShowDownload);
 							AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);

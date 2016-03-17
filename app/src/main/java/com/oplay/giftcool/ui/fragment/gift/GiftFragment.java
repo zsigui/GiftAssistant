@@ -257,7 +257,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 									}
 								});
 					} else {
-						mViewManager.showErrorRetry();
+						moreLoadFailEnd();
 					}
 				}
 			});

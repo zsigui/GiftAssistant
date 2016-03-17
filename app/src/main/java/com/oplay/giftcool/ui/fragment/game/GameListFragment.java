@@ -130,7 +130,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 								}
 							});
 				} else {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 				}
 			}
 		});
@@ -175,7 +175,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 									}
 								});
 					} else {
-						mViewManager.showErrorRetry();
+						moreLoadFailEnd();
 					}
 				}
 			});

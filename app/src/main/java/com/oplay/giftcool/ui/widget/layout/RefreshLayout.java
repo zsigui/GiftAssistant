@@ -185,7 +185,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 			case MotionEvent.ACTION_DOWN:
 				// 按下
 				mYDown = (int) ev.getY();
-				mXDown = (int) ev.getX();
+//				mXDown = (int) ev.getX();
 				break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
@@ -200,33 +200,33 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		return super.dispatchTouchEvent(ev);
 	}
 
-	private boolean mIsHorizontal = false;
-	private int mXDown;
-
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		return !(mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) && super.onTouchEvent(ev);
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		if (mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) {
-			return false;
-		}
-		switch (ev.getAction()) {
-			case MotionEvent.ACTION_MOVE:
-				// 移动
-				mLastY = (int) ev.getY();
-				int xDiff = Math.abs((int)ev.getX() - mXDown);
-				int yDiff = Math.abs((int)ev.getY() - mYDown);
-				if (xDiff > yDiff) {
-					mIsHorizontal = true;
-					return false;
-				}
-				break;
-		}
-		return super.onInterceptTouchEvent(ev);
-	}
+//	private boolean mIsHorizontal = false;
+//	private int mXDown;
+//
+//	@Override
+//	public boolean onTouchEvent(MotionEvent ev) {
+//		return !(mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) && super.onTouchEvent(ev);
+//	}
+//
+//	@Override
+//	public boolean onInterceptTouchEvent(MotionEvent ev) {
+//		if (mIsHorizontal && ev.getAction() == MotionEvent.ACTION_MOVE) {
+//			return false;
+//		}
+//		switch (ev.getAction()) {
+//			case MotionEvent.ACTION_MOVE:
+//				// 移动
+//				mLastY = (int) ev.getY();
+//				int xDiff = Math.abs((int)ev.getX() - mXDown);
+//				int yDiff = Math.abs((int)ev.getY() - mYDown);
+//				if (xDiff > yDiff) {
+//					mIsHorizontal = true;
+//					return false;
+//				}
+//				break;
+//		}
+//		return super.onInterceptTouchEvent(ev);
+//	}
 
 	/**
 	 * 是否可以加载更多, 条件是到了最底部, listview不在加载中, 且为上拉操作.

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.DownloadListener;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -21,6 +22,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
@@ -29,6 +31,8 @@ import com.socks.library.KLog;
 import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zsigui on 16-1-14.
@@ -44,6 +48,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	protected int mScrollY;
 	private boolean mInit = false;
 	private boolean mIsLoadingFailed;
+
+	private List<String> mTitles = new ArrayList<>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +89,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				Uri mUri = Uri.parse(url);
 				final String host = mUri.getHost();
 				//首先域名匹配
-				if (WebViewUrl.URL_BASE.contains(host) || NetUrl.URL_BASE.contains(host)) {
+				if (WebViewUrl.getBaseUrl().contains(host) || NetUrl.getBaseUrl().contains(host)) {
 					//其次路径匹配
 					hasFind = false;
 				} else {
@@ -99,6 +105,20 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public void onProgressChanged(WebView view, int newProgress) {
 				super.onProgressChanged(view, newProgress);
 				onWebProgressChangedMethod(newProgress);
+			}
+
+			@Override
+			public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+				return super.onJsBeforeUnload(view, url, message, result);
+			}
+
+			@Override
+			public void onReceivedTitle(WebView view, String title) {
+				super.onReceivedTitle(view, title);
+				if (getContext() != null && getContext() instanceof SetTitleListner) {
+					mTitles.add(title);
+					((SetTitleListner) getContext()).setBarTitle(title);
+				}
 			}
 		});
 		// 开启硬件加速，否则部分手机（如vivo）WebView会很卡
@@ -274,6 +294,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	public void goBack() {
 		if (mWebView != null && mWebView.canGoBack()) {
 			mWebView.goBack();
+			if (mTitles.size() > 1) {
+				mTitles.remove(mTitles.size() - 1);
+				if (getContext() != null && getContext() instanceof SetTitleListner) {
+					((SetTitleListner) getContext()).setBarTitle(mTitles.get(mTitles.size() - 1));
+				}
+			}
 		}
 	}
 

@@ -14,7 +14,6 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.listener.OnItemClickListener;
-import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -46,7 +45,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 
 	private static final String PAGE_NAME = "我的关注页面";
 
-	private final int PAGE_SIZE = 5;
+	private final int PAGE_SIZE = 20;
 
 	private String DIALOG_QUICK_TITLE;
 	private String DIALOG_QUICK_CONTENT;
@@ -64,7 +63,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_attention_data);
+		initViewManger(R.layout.fragment_refresh_lv_container);
 		View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty, null);
 		mViewManager.setEmptyView(emptyView);
 		btnToGet = getViewById(emptyView, R.id.btn_to_get);
@@ -113,7 +112,6 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 										OneTypeDataList<MyAttention> backObj = response.body().getData();
 										refreshLoadState(backObj.data, backObj.isEndPage);
 										updateData(backObj.data);
-										AccountManager.getInstance().obtainUnreadPushMessageCount();
 										return;
 									}
 									refreshFailEnd();
@@ -131,7 +129,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 								}
 							});
 				} else {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 				}
 			}
 		});
@@ -150,7 +148,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					moreLoadFailEnd();
 					return;
 				}
 				mReqPageObj.data.page = mLastPage + 1;

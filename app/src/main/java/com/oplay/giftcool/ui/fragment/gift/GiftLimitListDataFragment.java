@@ -301,7 +301,11 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				return;
 			}
 			if (!NetworkUtil.isConnected(getContext())) {
-				mViewManager.showErrorRetry();
+				if (mReqPageObj.data.page == 1) {
+					refreshFailEnd();
+				} else {
+					moreLoadFailEnd();
+				}
 				return;
 			}
 			if (mCallLoad != null) {

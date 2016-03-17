@@ -6,7 +6,7 @@
 		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		android:background = "@drawable/selector_white_module"
 		android:layout_width = "match_parent"
-		android:paddingRight = "@dimen/di_index_hoz_module_margin_left" >
+		android:paddingRight = "@dimen/di_index_list_item_margin_right" >
 
 	<RelativeLayout
 			android:id = "@+id/rl_tag"

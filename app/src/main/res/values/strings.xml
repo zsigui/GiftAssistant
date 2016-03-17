@@ -131,6 +131,7 @@
 	<string name = "st_game_install" >安装</string >
 	<string name = "st_game_open" >打开</string >
 	<string name = "st_game_update" >更新</string >
+	<string name = "st_game_title" >游戏专区</string >
 
 	<!-- 设置 - 我的礼包 -->
 	<string name = "st_my_gift_title" >我的礼包</string >
@@ -193,6 +194,7 @@
 	<string name = "st_welcome_unlogin_btn" >马上登录</string >
 	<string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
 	<string name = "st_welcome_update_title" >新版特性：</string >
+	<string name = "st_welcome_update_people_hint" >的玩家选择了更新</string >
 	<string name = "st_welcome_update_cancel" >狠狠拒绝</string >
 	<string name = "st_welcome_update_confirm" >马上更新</string >
 

@@ -22,6 +22,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnFinishListener;
+import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.ui.fragment.LoadingFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
@@ -38,7 +39,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * @date 2015/12/13
  */
 public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog implements View.OnClickListener,
-		FragmentManager.OnBackStackChangedListener, OnFinishListener, OnBackPressListener {
+		FragmentManager.OnBackStackChangedListener, OnFinishListener, OnBackPressListener, SetTitleListner {
 
 	protected AssistantApp mApp;
 	protected Toolbar mToolbar;

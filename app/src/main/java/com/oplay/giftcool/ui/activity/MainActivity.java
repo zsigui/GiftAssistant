@@ -285,6 +285,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 
+
 	/**
 	 * 侧边栏提示数组
 	 */
@@ -380,7 +381,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 * @return　是否有更新
 	 */
 	private boolean handleUpdateApp() {
-
 		final UpdateInfo updateInfo = mApp.getUpdateInfo();
 		if (!mHasShowUpdate && updateInfo != null && updateInfo.checkoutUpdateInfo(this)
 				&& mHandler != null) {
@@ -400,7 +400,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					BaseFragment_Dialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content);
+					BaseFragment_Dialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content,
+							updateInfo.updatePercent);
 					confirmDialog.show(getSupportFragmentManager(), "update");
 				}
 			}, 1000);
@@ -426,11 +427,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mDrawerFragment = null;
 	}
 
-	private WelcomeDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
+	private WelcomeDialog getUpdateDialog(final IndexGameNew appInfo, final String content, int updatePercent) {
 		final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
 		confirmDialog.setTitle(content);
 		confirmDialog.setPositiveBtnText(getResources().getString(R.string.st_welcome_update_confirm));
 		confirmDialog.setNegativeBtnText(getResources().getString(R.string.st_welcome_update_cancel));
+		confirmDialog.setPercent(updatePercent);
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {

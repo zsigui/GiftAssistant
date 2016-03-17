@@ -119,7 +119,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 								}
 							});
 				} else {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 				}
 			}
 		});
@@ -166,7 +166,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 									}
 								});
 					} else {
-						mViewManager.showErrorRetry();
+						moreLoadFailEnd();
 					}
 				}
 			});

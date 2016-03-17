@@ -77,6 +77,10 @@ public class GiftTypeUtil {
 						return TYPE_NORMAL_SEIZED;
 					}
 				case SEIZE_TYPE_SEARCHED:
+					if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT
+							|| gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+						return TYPE_LIMIT_SEIZED;
+					}
 					return TYPE_NORMAL_SEARCHED;
 			}
 		} else {

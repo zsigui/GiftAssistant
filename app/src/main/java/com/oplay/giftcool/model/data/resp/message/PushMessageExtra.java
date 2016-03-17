@@ -1,5 +1,7 @@
 package com.oplay.giftcool.model.data.resp.message;
 
+import android.support.v4.app.NotificationCompat;
+
 import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.manager.PushMessageManager;
 
@@ -59,5 +61,11 @@ public class PushMessageExtra implements Serializable {
 	 */
 	@SerializedName("chnid_list")
 	public String chnIdList;
+
+	/**
+	 * 通知等级，分为 -2:最低,特定情况提示 -1:低 0:正常 1:高 2:最高,非常重要紧急事件，客户端默认0，通常使用0/1两优先级即可
+	 */
+	@SerializedName("notify_priority")
+	public int notifyPriority = NotificationCompat.PRIORITY_DEFAULT;
 
 }

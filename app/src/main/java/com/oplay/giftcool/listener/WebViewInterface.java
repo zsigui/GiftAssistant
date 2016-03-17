@@ -8,7 +8,6 @@ import android.webkit.WebView;
 
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
-import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
@@ -17,8 +16,6 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
-import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.ui.fragment.ActivityFragment;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.IntentUtil;
@@ -223,23 +220,5 @@ public class WebViewInterface extends Observable {
 			}
 			return RET_INTERNAL_ERR;
 		}
-	}
-
-	/**
-	 * 跳转中奖记录页面
-	 *
-	 * @param title 标题
-	 * @param url   中奖记录地址
-	 */
-	@JavascriptInterface
-	public int jumpLotteryHistory(String title, String url) {
-		if (mHostActivity != null && !mHostActivity.isFinishing()
-				&& mHostActivity instanceof BaseAppCompatActivity) {
-			((BaseAppCompatActivity) mHostActivity)
-					.replaceFragWithTitle(R.id.fl_container, ActivityFragment.newInstance(url), "lottery_history",
-							title);
-			return RET_SUCCESS;
-		}
-		return RET_INTERNAL_ERR;
 	}
 }

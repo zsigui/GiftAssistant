@@ -138,7 +138,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					moreLoadFailEnd();
 					return;
 				}
 				mReqPageObj.data.page = mLastPage + 1;

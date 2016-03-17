@@ -115,7 +115,7 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 						}
 					});
 				} else {
-					mViewManager.showErrorRetry();
+					refreshFailEnd();
 				}
 			}
 		});
@@ -134,7 +134,7 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 			@Override
 			public void run() {
 				if (!NetworkUtil.isConnected(getContext())) {
-					mViewManager.showErrorRetry();
+					moreLoadFailEnd();
 					return;
 				}
 				mReqPageObj.data.page = mLastPage + 1;

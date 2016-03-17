@@ -21,7 +21,7 @@
 
 	<RelativeLayout
 			style = "@style/IndexListItemLayout"
-			android:paddingRight = "@dimen/di_index_module_gap"
+			android:paddingRight = "@dimen/di_index_list_item_margin_right"
 			android:background = "@color/co_transparent" >
 
 		<RelativeLayout

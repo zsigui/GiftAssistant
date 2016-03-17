@@ -62,7 +62,7 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 				replaceFragWithTitle(R.id.fl_container,
 						GameDetailFragment.newInstance(mDetailId, mStatus,
 								getResources().getString(mThemeColorStr[mStatusBarColorIndex])),
-						"游戏专区", true);
+						getResources().getString(R.string.st_game_continue), true);
 				if (mToolbar != null) {
 					mToolbar.setBackgroundResource(mThemeColor[mStatusBarColorIndex]);
 				}
