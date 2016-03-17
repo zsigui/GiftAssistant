@@ -68,6 +68,7 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 
 		ReqPageData pageData = new ReqPageData();
 		pageData.page = mLastPage;
+		pageData.pageSize = 20;
 		mReqPageObj = new JsonReqBase<>(pageData);
 	}
 
@@ -200,33 +201,6 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
 		mAdapter.updateData(mData);
 		mLastPage += 1;
 	}
-
-//	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
-//
-//	private void notifyHasRead() {
-//		ArrayList<Integer> ids = new ArrayList<>();
-//		for (PushMessage msg : mData) {
-//			ids.add(msg.id);
-//		}
-//		if (mReqChangeObj == null) {
-//			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
-//			msg.status = TypeStatusCode.PUSH_READED;
-//			mReqChangeObj = new JsonReqBase<>();
-//		}
-//		mReqChangeObj.data.pushMsgIds = ids;
-//		Global.getNetEngine().changePushMessageStatus(mReqChangeObj)
-//				.enqueue(new Callback<JsonRespBase<Void>>() {
-//					@Override
-//					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
-//
-//					}
-//
-//					@Override
-//					public void onFailure(Throwable t) {
-//
-//					}
-//				});
-//	}
 
 	@Override
 	public void release() {

@@ -35,6 +35,6 @@
 			android:id = "@+id/rv_like_content"
 			style = "@style/DefaultRecyclerView"
 			android:background="@color/co_white"
-			android:layout_height = "138dp" />
+			android:layout_height = "136dp" />
 
 </LinearLayout >

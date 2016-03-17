@@ -13,11 +13,24 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.StatisticsManager;
+import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * 推送消息的适配器
@@ -28,6 +41,8 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 
 	private final String TITLE_MODULE;
 	private final String CONTENT_MODULE;
+
+	private boolean mRequest = false;
 
 	public PushMessageAdapter(Context context) {
 		super(context);
@@ -60,19 +75,95 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 		if (v.getTag(TAG_POSITION) == null) {
 			return;
 		}
-		PushMessage data = getItem((Integer) v.getTag(TAG_POSITION));
+		Integer pos = (Integer) v.getTag(TAG_POSITION);
+		PushMessage data = getItem(pos);
 		switch (v.getId()) {
 			case R.id.rl_msg:
 			case R.id.ll_to_get:
 				IntentUtil.jumpGiftDetail(mContext, data.giftId);
+				notifyHasRead(new int[]{pos}, new int[]{data.id});
+				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_MESSAGE_CENTER_CLICK,
+						String.format("游戏名:%s, 礼包id:%d, 游戏id:%d", data.gameName, data.giftId, data.gameId));
 				break;
 		}
+	}
+
+	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
+	private Call<JsonRespBase<Void>> mCall;
+
+	/**
+	 * 通知修改已读消息
+	 *
+	 * @param pos
+	 * @param ids
+	 */
+	private void notifyHasRead(final int[] pos, int[] ids) {
+		if (mReqChangeObj == null) {
+			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
+			msg.status = TypeStatusCode.PUSH_READED;
+			mReqChangeObj = new JsonReqBase<>(msg);
+		}
+		// 构造用','分隔的字符串
+		StringBuilder sb = new StringBuilder();
+		if (ids != null && ids.length > 0) {
+			for (int id : ids) {
+				sb.append(id).append(",");
+			}
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		mReqChangeObj.data.msgIds = sb.toString();
+		if (mCall != null) {
+			mCall.cancel();
+		}
+		mRequest = true;
+		mCall = Global.getNetEngine().changePushMessageStatus(mReqChangeObj);
+		mCall.enqueue(new Callback<JsonRespBase<Void>>() {
+			@Override
+			public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+				if (!mRequest) {
+					return;
+				}
+				if (response != null && response.isSuccess()) {
+					if (response.body() != null && response.body().isSuccess()) {
+						// 修改消息为已读状态
+						if (pos != null && mData != null) {
+							for (int p : pos) {
+								// 更新为已阅读
+								if (p < mData.size()) {
+									mData.get(p).readState = TypeStatusCode.PUSH_READED;
+									notifyItemChanged(p);
+								}
+							}
+						}
+						AccountManager.getInstance().obtainUnreadPushMessageCount();
+						return;
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_ADAPTER, (response.body() == null ? "解析出错":response.body().error()));
+					}
+					return;
+				}
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_ADAPTER, (response == null ? "返回出错":response.code() + "," + response.message()));
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_ADAPTER, t);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void release() {
 		super.release();
-
+		if (mCall != null) {
+			mCall.cancel();
+		}
+		mRequest = false;
 	}
 
 	static class ItemHolder extends BaseRVHolder {

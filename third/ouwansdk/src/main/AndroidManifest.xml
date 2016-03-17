@@ -2,24 +2,24 @@
           package = "com.umipay.android.pro" >
 
 
-	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name = "android.permission.INTERNET" />
-	<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
-	<!--悬浮窗权限-->
-	<uses-permission android:name = "android.permission.SYSTEM_ALERT_WINDOW" />
-	<uses-permission android:name = "android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name = "com.android.launcher.permission.READ_SETTINGS" />
-	<uses-permission android:name = "com.android.launcher.permission.INSTALL_SHORTCUT" />
-	<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />
-	<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
-	<!--银联插件3.1.0新增权限-->
-	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
-	<!--易联支付需要权限 -->
-	<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
+	<!--<uses-permission android:name = "android.permission.READ_PHONE_STATE" />-->
+	<!--<uses-permission android:name = "android.permission.INTERNET" />-->
+	<!--<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />-->
+	<!--&lt;!&ndash;悬浮窗权限&ndash;&gt;-->
+	<!--<uses-permission android:name = "android.permission.SYSTEM_ALERT_WINDOW" />-->
+	<!--<uses-permission android:name = "android.permission.GET_ACCOUNTS" />-->
+	<!--<uses-permission android:name = "com.android.launcher.permission.READ_SETTINGS" />-->
+	<!--<uses-permission android:name = "com.android.launcher.permission.INSTALL_SHORTCUT" />-->
+	<!--<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />-->
+	<!--<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />-->
+	<!--&lt;!&ndash;银联插件3.1.0新增权限&ndash;&gt;-->
+	<!--<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />-->
+	<!--&lt;!&ndash;易联支付需要权限 &ndash;&gt;-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />-->
+	<!--<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />-->
 	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
 	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
 	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
@@ -30,9 +30,9 @@
 	<!--<uses-permission android:name = "android.permission.RECORD_VIDEO" />-->
 
 
-	<!-- 汇付宝-微信支付需要权限-->
-	<uses-permission android:name = "android.permission.VIBRATE" />
-	<uses-permission android:name = "android.permission.PLUGIN" />
+	<!--&lt;!&ndash; 汇付宝-微信支付需要权限&ndash;&gt;-->
+	<!--<uses-permission android:name = "android.permission.VIBRATE" />-->
+	<!--<uses-permission android:name = "android.permission.PLUGIN" />-->
 
 
 	<application >

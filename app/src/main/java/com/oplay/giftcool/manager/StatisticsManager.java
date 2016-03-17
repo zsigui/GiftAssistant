@@ -56,6 +56,8 @@ public class StatisticsManager {
 		String USER_OUWAN_LOGIN = "us000005";
 		// 登录状态保存方式登录
 		String USER_LOGIN_WITH_SESSION = "us000006";
+		// 消息中心消息被点击
+		String USER_MESSAGE_CENTER_CLICK = "us000007";
 		// 更新弹窗
 		String APP_UPDATE = "ap000001";
 		// 活动弹窗
