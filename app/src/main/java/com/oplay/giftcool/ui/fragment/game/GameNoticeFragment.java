@@ -24,9 +24,9 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-30.
@@ -36,6 +36,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	private final static String PAGE_NAME = "游戏排行";
 	private final static String KEY_DATA = "key_data";
 	private final static long MAINTAIN_DATA_TIME = 5 * 1000;
+    private final static int PAGE_SIZE = 20;
 	private JsonReqBase<ReqPageData> mReqPageObj;
 
 	private RecyclerView mDataView;
@@ -53,14 +54,14 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 			if (!mCanShowUI) {
 				return;
 			}
-			if (mInPage || mData == null || mData.size() < 10) {
+			if (mInPage || mData == null || mData.size() < PAGE_SIZE) {
 				if (mHandler != null) {
 					mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
 				}
 				return;
 			}
-			ArrayList<IndexGameNew> remainData = new ArrayList<>(10);
-			for (int i = 0; i < 10; i++) {
+			ArrayList<IndexGameNew> remainData = new ArrayList<>(PAGE_SIZE);
+			for (int i = 0; i < PAGE_SIZE; i++) {
 				remainData.add(mData.get(i));
 			}
 			if (!mInPage || mIsRunning) {
@@ -108,6 +109,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		ReqPageData data = new ReqPageData();
+        data.pageSize = PAGE_SIZE;
 		mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -124,6 +126,11 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		}
 	}
 
+	/**
+	 * 刷新游戏榜单列表数据的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
@@ -132,45 +139,55 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
+					if (mCallRefresh != null) {
+						mCallRefresh.cancel();
+					}
 					mReqPageObj.data.page = 1;
-					Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
-							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response,
-								                       Retrofit retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess()) {
-										if (response.body() != null &&
-												response.body().getCode() == NetStatusCode.SUCCESS) {
-											refreshSuccessEnd();
-											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-											refreshLoadState(backObj.data, backObj.isEndPage);
-											updateData(backObj.data);
-											return;
-										}
-									}
-									refreshFailEnd();
+					mCallRefresh = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
+					mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+						@Override
+						public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+						                       Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
+								                       response) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							if (response != null && response.isSuccessful()) {
+								if (response.body() != null &&
+										response.body().getCode() == NetStatusCode.SUCCESS) {
+									refreshSuccessEnd();
+									OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+									refreshLoadState(backObj.data, backObj.isEndPage);
+									updateData(backObj.data);
+									return;
 								}
+							}
+							refreshFailEnd();
+						}
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_FRAG, t);
-									}
-									refreshFailEnd();
-								}
-							});
+						@Override
+						public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+						                      Throwable t) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_FRAG, t);
+							}
+							refreshFailEnd();
+						}
+					});
 				} else {
 					refreshFailEnd();
 				}
 			}
 		});
 	}
+
+	/**
+	 * 加载更多游戏榜单内容的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> mCallLoad;
 
 	/**
 	 * 加载更多数据
@@ -184,35 +201,39 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 				@Override
 				public void run() {
 					if (NetworkUtil.isConnected(getContext())) {
-						Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj)
-								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-									@Override
-									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
-											                       response, Retrofit
-											retrofit) {
-										if (!mCanShowUI) {
-											return;
-										}
-										if (response != null && response.isSuccess()) {
-											if (response.body() != null && response.body().isSuccess()) {
-												moreLoadSuccessEnd();
-												OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-												setLoadState(backObj.data, backObj.isEndPage);
-												addMoreData(backObj.data);
-												return;
-											}
-										}
-										moreLoadFailEnd();
+						if (mCallLoad != null) {
+							mCallLoad.cancel();
+						}
+						mCallLoad = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
+						mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+							@Override
+							public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+							                       Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
+									                       response) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
+								if (response != null && response.isSuccessful()) {
+									if (response.body() != null && response.body().isSuccess()) {
+										moreLoadSuccessEnd();
+										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+										setLoadState(backObj.data, backObj.isEndPage);
+										addMoreData(backObj.data);
+										return;
 									}
+								}
+								moreLoadFailEnd();
+							}
 
-									@Override
-									public void onFailure(Throwable t) {
-										if (!mCanShowUI) {
-											return;
-										}
-										moreLoadFailEnd();
-									}
-								});
+							@Override
+							public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable
+									t) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
+								moreLoadFailEnd();
+							}
+						});
 					} else {
 						moreLoadFailEnd();
 					}
@@ -242,11 +263,13 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		mLastPage += 1;
 	}
 
-	/*@Override
+	@Override
 	public void onPause() {
 		super.onPause();
 		if (!mIsRunning) {
-			mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			if (mHandler != null) {
+				mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			}
 			mIsRunning = true;
 		}
 	}
@@ -255,10 +278,12 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	public void onResume() {
 		super.onResume();
 		if (mInPage && mIsRunning) {
-			mHandler.removeCallbacks(mClearDataTask);
+			if (mHandler != null) {
+				mHandler.removeCallbacks(mClearDataTask);
+			}
 			mIsRunning = false;
 		}
-	}*/
+	}
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -280,5 +305,22 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCallLoad != null) {
+			mCallLoad.cancel();
+			mCallLoad = null;
+		}
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+			mCallRefresh = null;
+		}
+		if (mHandler != null) {
+			mHandler.removeCallbacksAndMessages(null);
+			mHandler = null;
+		}
 	}
 }

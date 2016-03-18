@@ -31,9 +31,9 @@ import com.socks.library.KLog;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 支付相关操作管理器
@@ -177,69 +177,21 @@ public class PayManager {
 				Global.getNetEngine().payGiftCode(new JsonReqBase<ReqPayCode>(payCode))
 						.enqueue(new Callback<JsonRespBase<PayCode>>() {
 							@Override
-							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
+							public void onResponse(Call<JsonRespBase<PayCode>> call, Response<JsonRespBase<PayCode>>
+									response) {
 								hideLoading(context);
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == NetStatusCode
-											.SUCCESS) {
-										// 更新部分用户信息
-										AccountManager.getInstance().updatePartUserInfo();
-										// 构造支付弹窗
-										PayCode codeData = response.body().getData();
-										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
-										dialog.setTitle(context.getResources().getString(R.string
-												.st_dialog_seize_success));
-										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-												GetCodeDialog.class.getSimpleName());
-										// 统计
-										staticsPay(context, StatisticsManager.ID.GIFT_BEAN_SEIZE, gift, 1);
-
-										if (button != null) {
-											if (isSeize) {
-												// 抢号状态
-												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
-											} else {
-												// 淘号状态
-												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
-											}
-										}
-										if (codeData.gameInfo != null) {
-											doFocusOperation(codeData.gameInfo.id);
-										}
-										ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
-										ObserverManager.getInstance()
-												.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
-										return;
-									}
-									if (response.body() != null) {
-										if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-											AccountManager.getInstance().notifyUserAll(null);
-											ToastUtil.showShort(context.getResources().getString(R.string
-													.st_hint_un_login));
-											IntentUtil.jumpLogin(context);
-											return;
-										}
-										ConfirmDialog dialog = ConfirmDialog.newInstance();
-										dialog.setTitle(context.getResources().getString(R.string
-												.st_dialog_seize_failed));
-										dialog.setNegativeVisibility(View.GONE);
-										dialog.setPositiveVisibility(View.VISIBLE);
-										dialog.setPositiveBtnText(context.getResources().getString(R.string
-												.st_dialog_btn_ok));
-										dialog.setContent(response.body().getMsg());
-										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-												"seize failed");
-									} else {
-										ToastUtil.showShort("抢号失败 - 解析失败");
-									}
+								if (call.isCanceled()) {
 									return;
 								}
-								ToastUtil.showShort("抢号失败 - 返回出错");
+								beanPayBack(response, context, gift, button, isSeize);
 							}
 
 							@Override
-							public void onFailure(Throwable t) {
+							public void onFailure(Call<JsonRespBase<PayCode>> call, Throwable t) {
 								hideLoading(context);
+								if (call.isCanceled()) {
+									return;
+								}
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.d(AppDebugConfig.TAG_UTIL, t);
 								}
@@ -248,6 +200,75 @@ public class PayManager {
 						});
 			}
 		});
+	}
+
+	/**
+	 * 处理偶玩豆支付请求发送后的返回
+	 */
+	private void beanPayBack(Response<JsonRespBase<PayCode>> response, Context context,
+	                         IndexGiftNew gift, GiftButton button, boolean isSeize) {
+		if (response != null && response.isSuccessful()) {
+			if (response.body() != null && response.body().isSuccess()) {
+				beanPaySuccess(response.body().getData(), context, gift, button, isSeize);
+				return;
+			}
+			if (response.body() != null) {
+				if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
+					AccountManager.getInstance().notifyUserAll(null);
+					ToastUtil.showShort(context.getResources().getString(R.string
+							.st_hint_un_login));
+					IntentUtil.jumpLogin(context);
+					return;
+				}
+				ConfirmDialog dialog = ConfirmDialog.newInstance();
+				dialog.setTitle(context.getResources().getString(R.string
+						.st_dialog_seize_failed));
+				dialog.setNegativeVisibility(View.GONE);
+				dialog.setPositiveVisibility(View.VISIBLE);
+				dialog.setPositiveBtnText(context.getResources().getString(R.string
+						.st_dialog_btn_ok));
+				dialog.setContent(response.body().getMsg());
+				dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+						"seize failed");
+			} else {
+				ToastUtil.showShort("抢号失败 - 解析失败");
+			}
+			return;
+		}
+		ToastUtil.showShort("抢号失败 - 返回出错");
+	}
+
+	/**
+	 * 偶玩豆支付成功后的处理
+	 */
+	private void beanPaySuccess(PayCode codeData, Context context, IndexGiftNew gift,
+	                            GiftButton button, boolean isSeize) {
+		// 更新部分用户信息
+		AccountManager.getInstance().updatePartUserInfo();
+		// 构造支付弹窗
+		GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
+		dialog.setTitle(context.getResources().getString(R.string
+				.st_dialog_seize_success));
+		dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+				GetCodeDialog.class.getSimpleName());
+		// 统计
+		staticsPay(context, StatisticsManager.ID.GIFT_BEAN_SEIZE, gift, 1);
+
+		if (button != null) {
+			if (isSeize) {
+				// 抢号状态
+				button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+			} else {
+				// 淘号状态
+				button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+			}
+		}
+		if (codeData.gameInfo != null) {
+			doFocusOperation(codeData.gameInfo.id);
+		}
+		ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
+		ObserverManager.getInstance()
+				.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 	}
 
 
@@ -271,77 +292,21 @@ public class PayManager {
 				Global.getNetEngine().payGiftCode(new JsonReqBase<ReqPayCode>(payCode))
 						.enqueue(new Callback<JsonRespBase<PayCode>>() {
 							@Override
-							public void onResponse(Response<JsonRespBase<PayCode>> response, Retrofit retrofit) {
+							public void onResponse(Call<JsonRespBase<PayCode>> call, Response<JsonRespBase<PayCode>>
+									response) {
 								hideLoading(context);
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().getCode() == NetStatusCode
-											.SUCCESS) {
-										// 更新部分用户信息
-										AccountManager.getInstance().updatePartUserInfo();
-										// 弹窗
-										PayCode codeData = response.body().getData();
-										GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
-										if (codeData.gameInfo != null) {
-											doFocusOperation(codeData.gameInfo.id);
-										}
-										if (isSeize) {
-											dialog.setTitle(context.getResources().getString(R.string
-													.st_dialog_seize_success));
-										} else {
-											dialog.setTitle(context.getResources().getString(R.string
-													.st_dialog_search_success));
-										}
-										// 统计
-										staticsPay(context, StatisticsManager.ID.GIFT_SCORE_SEIZE, gift, 2);
-										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-												GetCodeDialog.class.getSimpleName());
-										if (button != null) {
-											if (isSeize) {
-												// 抢号状态
-												button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
-											} else {
-												// 淘号状态
-												button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
-											}
-										}
-										ObserverManager.getInstance()
-												.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
-										return;
-									}
-									if (response.body() != null) {
-										if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-											AccountManager.getInstance().notifyUserAll(null);
-											ToastUtil.showShort(context.getResources().getString(R.string
-													.st_hint_un_login));
-											IntentUtil.jumpLogin(context);
-											return;
-										}
-										ConfirmDialog dialog = ConfirmDialog.newInstance();
-										if (isSeize) {
-											dialog.setTitle(context.getResources().getString(R.string
-													.st_dialog_seize_failed));
-										} else {
-											dialog.setTitle(context.getResources().getString(R.string
-													.st_dialog_search_failed));
-										}
-										dialog.setNegativeVisibility(View.GONE);
-										dialog.setPositiveVisibility(View.VISIBLE);
-										dialog.setPositiveBtnText(context.getResources().getString(R.string
-												.st_dialog_btn_ok));
-										dialog.setContent(response.body().getMsg());
-										dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
-												"search failed");
-									} else {
-										ToastUtil.showShort("抢号失败 - 解析失败");
-									}
+								if (call.isCanceled()) {
 									return;
 								}
-								ToastUtil.showShort("抢号失败 - 返回出错");
+								scorePayBack(response, isSeize, context, gift, button);
 							}
 
 							@Override
-							public void onFailure(Throwable t) {
+							public void onFailure(Call<JsonRespBase<PayCode>> call, Throwable t) {
 								hideLoading(context);
+								if (call.isCanceled()) {
+									return;
+								}
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.d(AppDebugConfig.TAG_UTIL, t);
 								}
@@ -350,6 +315,83 @@ public class PayManager {
 						});
 			}
 		});
+	}
+
+	/**
+	 * 处理积分支付网络请求后的返回
+	 */
+	private void scorePayBack(Response<JsonRespBase<PayCode>> response, boolean isSeize, Context context, IndexGiftNew
+			gift, GiftButton button) {
+		if (response != null && response.isSuccessful()) {
+			if (response.body() != null && response.body().isSuccess()) {
+				scorePaySuccess(response.body().getData(), isSeize, context, gift, button);
+				return;
+			}
+			if (response.body() != null) {
+				if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
+					AccountManager.getInstance().notifyUserAll(null);
+					ToastUtil.showShort(context.getResources().getString(R.string
+							.st_hint_un_login));
+					IntentUtil.jumpLogin(context);
+					return;
+				}
+				ConfirmDialog dialog = ConfirmDialog.newInstance();
+				if (isSeize) {
+					dialog.setTitle(context.getResources().getString(R.string
+							.st_dialog_seize_failed));
+				} else {
+					dialog.setTitle(context.getResources().getString(R.string
+							.st_dialog_search_failed));
+				}
+				dialog.setNegativeVisibility(View.GONE);
+				dialog.setPositiveVisibility(View.VISIBLE);
+				dialog.setPositiveBtnText(context.getResources().getString(R.string
+						.st_dialog_btn_ok));
+				dialog.setContent(response.body().getMsg());
+				dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+						"search failed");
+			} else {
+				ToastUtil.showShort("抢号失败 - 解析失败");
+			}
+			return;
+		}
+		ToastUtil.showShort("抢号失败 - 返回出错");
+	}
+
+	/**
+	 * 积分支付成功后的处理
+	 */
+	private void scorePaySuccess(PayCode codeData, boolean isSeize,
+	                             Context context, IndexGiftNew gift, GiftButton button) {
+		// 更新部分用户信息
+		AccountManager.getInstance().updatePartUserInfo();
+		// 弹窗
+		GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
+		if (codeData.gameInfo != null) {
+			doFocusOperation(codeData.gameInfo.id);
+		}
+		if (isSeize) {
+			dialog.setTitle(context.getResources().getString(R.string
+					.st_dialog_seize_success));
+		} else {
+			dialog.setTitle(context.getResources().getString(R.string
+					.st_dialog_search_success));
+		}
+		// 统计
+		staticsPay(context, StatisticsManager.ID.GIFT_SCORE_SEIZE, gift, 2);
+		dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+				GetCodeDialog.class.getSimpleName());
+		if (button != null) {
+			if (isSeize) {
+				// 抢号状态
+				button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+			} else {
+				// 淘号状态
+				button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+			}
+		}
+		ObserverManager.getInstance()
+				.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 	}
 
 	/**
@@ -383,6 +425,9 @@ public class PayManager {
 	}
 
 
+	/**
+	 * 取消关注的请求实体
+	 */
 	private JsonReqBase<ReqChangeFocus> mQuickFocusReqBase;
 
 	/**
@@ -401,8 +446,11 @@ public class PayManager {
 		mQuickFocusReqBase.data.gameId = id;
 		Global.getNetEngine().changeGameFocus(mQuickFocusReqBase).enqueue(new Callback<JsonRespBase<Void>>() {
 			@Override
-			public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
-				if (response != null && response.isSuccess()
+			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+				if (call.isCanceled()) {
+					return;
+				}
+				if (response != null && response.isSuccessful()
 						&& response.body() != null && response.body().isSuccess()) {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_MANAGER, "关注成功");
@@ -411,7 +459,7 @@ public class PayManager {
 			}
 
 			@Override
-			public void onFailure(Throwable t) {
+			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_MANAGER, t);
 				}

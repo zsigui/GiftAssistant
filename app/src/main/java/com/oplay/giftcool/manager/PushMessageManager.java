@@ -169,7 +169,7 @@ public class PushMessageManager {
 	private void handleLongUnOpenAction(Context context, PushMessageExtra message, Intent intent) {
 
 		long lastOpenTime =
-				SPUtil.getLong(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, 0);
+				SPUtil.getLong(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_OPEN_APP_TIME, 0);
 		long curTime = System.currentTimeMillis();
 
 		Gson gson = AssistantApp.getInstance().getGson();

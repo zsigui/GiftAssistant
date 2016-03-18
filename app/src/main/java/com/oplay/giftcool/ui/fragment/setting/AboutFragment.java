@@ -25,168 +25,171 @@ import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-6.
  */
 public class AboutFragment extends BaseFragment {
 
-	private final static String PAGE_NAME = "关于";
-	private RelativeLayout rlUpdate;
-	private RelativeLayout rlQQ;
-	private TextView tvUpdate;
-	private TextView tvQQ;
-	private TextView tvVersion;
-	private Context mContext;
+    private final static String PAGE_NAME = "关于";
+    private RelativeLayout rlUpdate;
+    private RelativeLayout rlQQ;
+    private TextView tvUpdate;
+    private TextView tvQQ;
+    private TextView tvVersion;
+    private Context mContext;
 
-	private UpdateInfo mUpdateInfo;
+    private UpdateInfo mUpdateInfo;
 
-	public static AboutFragment newInstance() {
-		return new AboutFragment();
-	}
+    public static AboutFragment newInstance() {
+        return new AboutFragment();
+    }
 
-	@Override
-	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_about);
-		rlUpdate = getViewById(R.id.rl_update);
-		rlQQ = getViewById(R.id.rl_qq);
-		tvUpdate = getViewById(R.id.tv_update);
-		tvQQ = getViewById(R.id.tv_qq);
-		tvVersion = getViewById(R.id.tv_version);
-	}
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        setContentView(R.layout.fragment_about);
+        rlUpdate = getViewById(R.id.rl_update);
+        rlQQ = getViewById(R.id.rl_qq);
+        tvUpdate = getViewById(R.id.tv_update);
+        tvQQ = getViewById(R.id.tv_qq);
+        tvVersion = getViewById(R.id.tv_version);
+    }
 
-	@Override
-	protected void setListener() {
-		rlUpdate.setOnClickListener(this);
-		rlQQ.setOnClickListener(this);
-	}
+    @Override
+    protected void setListener() {
+        rlUpdate.setOnClickListener(this);
+        rlQQ.setOnClickListener(this);
+    }
 
-	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-		mContext = getContext();
-		tvUpdate.setText(mContext.getResources().getString(R.string.st_about_checking_update));
-		tvVersion.setText("礼包酷 " + AppConfig.SDK_VER_NAME);
-		tvQQ.setText(MixUtil.getQQInfo()[0]);
-	}
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        mContext = getContext();
+        tvUpdate.setText(mContext.getResources().getString(R.string.st_about_checking_update));
+        tvVersion.setText("礼包酷 " + AppConfig.SDK_VER_NAME);
+        tvQQ.setText(MixUtil.getQQInfo()[0]);
+    }
 
-	@Override
-	protected void lazyLoad() {
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (NetworkUtil.isConnected(getContext())) {
-					ReqInitApp data = new ReqInitApp();
-					data.curVersionCode = AppInfoUtil.getAppVerCode(getContext());
-					JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
-					Global.getNetEngine().checkUpdate(reqData)
-							.enqueue(new Callback<JsonRespBase<UpdateInfo>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<UpdateInfo>> response,
-								                       Retrofit retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == NetStatusCode.SUCCESS) {
-										mUpdateInfo = response.body().getData();
-										if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
-											setUpdate(String.format(mContext.getResources().getString(R.string
-													.st_about_wait_update_text), mUpdateInfo.versionName));
-											return;
-										}
-									}
-									setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
-								}
+    /**
+     * 获取最新更新信息的网络请求声明
+     */
+    private Call<JsonRespBase<UpdateInfo>> mCall;
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_FRAG, t);
-									}
-									setUpdate(mContext.getResources().getString(R.string
-											.st_about_check_update_failed));
-								}
-							});
-				} else {
-					setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
-				}
-			}
-		});
-	}
+    @Override
+    protected void lazyLoad() {
+        if (!NetworkUtil.isConnected(getContext())) {
+            setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
+            return;
+        }
+        if (mCall != null) {
+            mCall.cancel();
+        }
+        ReqInitApp data = new ReqInitApp();
+        data.curVersionCode = AppInfoUtil.getAppVerCode(getContext());
+        JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
+        mCall = Global.getNetEngine().checkUpdate(reqData);
+        mCall.enqueue(new Callback<JsonRespBase<UpdateInfo>>() {
+            @Override
+            public void onResponse(Call<JsonRespBase<UpdateInfo>> call, Response<JsonRespBase<UpdateInfo>> response) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                if (response != null && response.isSuccessful() && response.body() != null &&
+                        response.body().getCode() == NetStatusCode.SUCCESS) {
+                    mUpdateInfo = response.body().getData();
+                    if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
+                        setUpdate(String.format(mContext.getResources().getString(R.string
+                                .st_about_wait_update_text), mUpdateInfo.versionName));
+                        return;
+                    }
+                }
+                setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
+            }
 
-	private void setUpdate(final String str) {
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (tvUpdate != null) {
-					tvUpdate.setText(str);
-				}
-			}
-		});
-	}
+            @Override
+            public void onFailure(Call<JsonRespBase<UpdateInfo>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.e(AppDebugConfig.TAG_FRAG, t);
+                }
+                setUpdate(mContext.getResources().getString(R.string
+                        .st_about_check_update_failed));
+            }
+        });
 
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-		switch (v.getId()) {
-			case R.id.rl_update:
-				handleUpdate();
-				break;
-			case R.id.rl_qq:
-				IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
-				break;
-		}
-	}
+    }
 
-	private void handleUpdate() {
-		if (mUpdateInfo == null || !mUpdateInfo.checkoutUpdateInfo(getContext())) {
-			return;
-		}
-		final IndexGameNew appInfo = new IndexGameNew();
-		appInfo.id = Global.GIFTCOOL_GAME_ID;
-		appInfo.name = getString(R.string.app_name);
-		appInfo.apkFileSize = mUpdateInfo.apkFileSize;
-		//没icon地址，随便填个
-		appInfo.img = mUpdateInfo.downloadUrl;
-		appInfo.downloadUrl = mUpdateInfo.downloadUrl;
-		appInfo.destUrl = mUpdateInfo.downloadUrl;
-		appInfo.packageName = mUpdateInfo.packageName;
-		appInfo.versionName = mUpdateInfo.versionName;
-		appInfo.size = appInfo.getApkFileSizeStr();
-		appInfo.initAppInfoStatus(getContext());
-		ConfirmDialog confirmDialog = getUpdateDialog(appInfo, mUpdateInfo.content);
-		confirmDialog.show(getFragmentManager(), "update");
-	}
+    private void setUpdate(final String str) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (tvUpdate != null) {
+                    tvUpdate.setText(str);
+                }
+            }
+        });
+    }
 
-	private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
-		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-		confirmDialog.setTitle("更新提示");
-		confirmDialog.setContent(content);
-		confirmDialog.setPositiveBtnText("马上更新");
-		confirmDialog.setNegativeBtnText("暂不更新");
-		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-			@Override
-			public void onCancel() {
-				confirmDialog.dismiss();
-			}
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.rl_update:
+                handleUpdate();
+                break;
+            case R.id.rl_qq:
+                IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
+                break;
+        }
+    }
 
-			@Override
-			public void onConfirm() {
-				appInfo.startDownload();
-				confirmDialog.dismiss();
-			}
-		});
-		return confirmDialog;
-	}
+    private void handleUpdate() {
+        if (mUpdateInfo == null || !mUpdateInfo.checkoutUpdateInfo(getContext())) {
+            return;
+        }
+        final IndexGameNew appInfo = new IndexGameNew();
+        appInfo.id = Global.GIFTCOOL_GAME_ID;
+        appInfo.name = getString(R.string.app_name);
+        appInfo.apkFileSize = mUpdateInfo.apkFileSize;
+        //没icon地址，随便填个
+        appInfo.img = mUpdateInfo.downloadUrl;
+        appInfo.downloadUrl = mUpdateInfo.downloadUrl;
+        appInfo.destUrl = mUpdateInfo.downloadUrl;
+        appInfo.packageName = mUpdateInfo.packageName;
+        appInfo.versionName = mUpdateInfo.versionName;
+        appInfo.size = appInfo.getApkFileSizeStr();
+        appInfo.initAppInfoStatus(getContext());
+        ConfirmDialog confirmDialog = getUpdateDialog(appInfo, mUpdateInfo.content);
+        confirmDialog.show(getFragmentManager(), "update");
+    }
 
-	@Override
-	public String getPageName() {
-		return PAGE_NAME;
-	}
+    private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
+        final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+        confirmDialog.setTitle("更新提示");
+        confirmDialog.setContent(content);
+        confirmDialog.setPositiveBtnText("马上更新");
+        confirmDialog.setNegativeBtnText("暂不更新");
+        confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+            @Override
+            public void onCancel() {
+                confirmDialog.dismiss();
+            }
+
+            @Override
+            public void onConfirm() {
+                appInfo.startDownload();
+                confirmDialog.dismiss();
+            }
+        });
+        return confirmDialog;
+    }
+
+    @Override
+    public String getPageName() {
+        return PAGE_NAME;
+    }
 }

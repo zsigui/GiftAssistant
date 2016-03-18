@@ -17,9 +17,9 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-18.
@@ -41,12 +41,6 @@ public class ScoreManager {
 	// 表明当前是否任务列表状态
 	public boolean mInWorking = false;
 	public int mRewardType = RewardType.NOTHING;
-
-	private boolean mIsDownloadToday = true;
-	private boolean mIsShareNormalToday = true;
-	private boolean mIsShareLimitToday = true;
-	private boolean mIsSearchToday = true;
-	private boolean mIsBuyByBeanToday = true;
 
 	public boolean isInWorking() {
 		return mInWorking;
@@ -112,7 +106,7 @@ public class ScoreManager {
 				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login);
 			}
 			loginDialog.setScore(task.rewardPoints);
-			loginDialog.setPositiveBtnText( context.getResources().getString(R.string.st_welcome_login_btn));
+			loginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_login_btn));
 			loginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 				@Override
 				public void onCancel() {
@@ -141,9 +135,14 @@ public class ScoreManager {
 	}
 
 	/**
+	 * 通知任务完成的请求实体
+	 */
+	private JsonReqBase<ReqTaskReward> mRewardReqBase;
+
+	/**
 	 * 对需要本地通知任务进行通知获取奖励
 	 *
-	 * @param ptype 分享类型采用setRewardType并设置该值为RewardType.NOTHING
+	 * @param ptype      分享类型采用setRewardType并设置该值为RewardType.NOTHING
 	 * @param needNotify 是否需要通知
 	 */
 	public void reward(int ptype, final boolean needNotify) {
@@ -156,46 +155,40 @@ public class ScoreManager {
 		} else {
 			type = ptype;
 		}
-//		switch (type) {
-//			case RewardType.DOWNLOAD:
-//				if (!mIsDownloadToday) return;
-//				break;
-//			case RewardType.SEARCH:
-//				if (!mIsSearchToday) return;
-//				break;
-//			case RewardType.BUY_BY_BEAN:
-//				if (!mIsBuyByBeanToday) return;
-//				break;
-//			case RewardType.NOTHING:
-//				// 通知类型出错，返回
-//				return;
-//		}
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				final ReqTaskReward data = new ReqTaskReward();
-				data.type = type;
-				Global.getNetEngine().obtainTaskReward(new JsonReqBase<ReqTaskReward>(data))
+				if (mRewardReqBase == null) {
+					ReqTaskReward data = new ReqTaskReward();
+					data.type = type;
+					mRewardReqBase = new JsonReqBase<ReqTaskReward>(data);
+				} else {
+					mRewardReqBase.data.type = type;
+				}
+				Global.getNetEngine().obtainTaskReward(mRewardReqBase)
 						.enqueue(new Callback<JsonRespBase<TaskReward>>() {
 							@Override
-							public void onResponse(Response<JsonRespBase<TaskReward>> response, Retrofit retrofit) {
-								if (response != null && response.isSuccess()) {
+							public void onResponse(Call<JsonRespBase<TaskReward>> call, Response<JsonRespBase
+									<TaskReward>> response) {
+								if (call.isCanceled()) {
+									return;
+								}
+								if (response != null && response.isSuccessful()) {
 									if (response.body() != null && response.body().isSuccess()) {
 										if (!AccountManager.getInstance().isLogin()) {
 											return;
 										}
 										toastByCallback(response.body().getData(), needNotify);
-										writeLocalTaskState(data.type);
 									}
 									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_MANAGER,
-												"金币获取-" + (response.body() == null?"解析失败" : response.body().error()));
+										KLog.d(AppDebugConfig.TAG_MANAGER, "金币获取-" +
+												(response.body() == null ? "解析失败" : response.body().error()));
 									}
 								}
 							}
 
 							@Override
-							public void onFailure(Throwable t) {
+							public void onFailure(Call<JsonRespBase<TaskReward>> call, Throwable t) {
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
 								}
@@ -205,61 +198,7 @@ public class ScoreManager {
 		});
 	}
 
-	/**
-	 * 将指定任务的最后完成时间写入SP
-	 */
-	private void writeLocalTaskState(int type) {
-		/*Context context = AssistantApp.getInstance().getApplicationContext();
-		String spFile = Coder_Md5.md5(String.valueOf(AccountManager.getInstance().getUserSesion().uid));
-		long curTime = System.currentTimeMillis();
-		switch (type) {
-			case RewardType.DOWNLOAD:
-				mIsDownloadToday = false;
-				SPUtil.putLong(context, spFile, SPConfig.KEY_DOWNLOAD_LAST_TIME, curTime);
-				break;
-			case RewardType.SEARCH:
-				mIsSearchToday = false;
-				SPUtil.putLong(context, spFile, SPConfig.KEY_SEARCH_LAST_TIME, curTime);
-				break;
-			case RewardType.BUY_BY_BEAN:
-				mIsBuyByBeanToday = false;
-				SPUtil.putLong(context, spFile, SPConfig.KEY_BUY_BY_BEAN_LAST_TIME, curTime);
-				break;
-		}*/
-	}
-
-	/**
-	 * 重设需要本地通知服务器的任务的最后成功写入时间
-	 */
-	public void resetLocalTaskState() {
-		/*Context context = AssistantApp.getInstance().getApplicationContext();
-		if (AccountManager.getInstance().isLogin()) {
-			long lastTime;
-			String spFile = Coder_Md5.md5(String.valueOf(AccountManager.getInstance().getUserSesion().uid));
-			lastTime = SPUtil.getLong(context, spFile, SPConfig.KEY_DOWNLOAD_LAST_TIME, 0);
-			mIsDownloadToday = (lastTime == 0 || !DateUtil.isToday(lastTime));
-
-			lastTime = SPUtil.getLong(context, spFile, SPConfig.KEY_SHARE_NORMAL_LAST_TIME, 0);
-			mIsShareNormalToday = (lastTime == 0 || !DateUtil.isToday(lastTime));
-
-			lastTime = SPUtil.getLong(context, spFile, SPConfig.KEY_SHARE_LIMIT_LAST_TIME, 0);
-			mIsShareLimitToday = (lastTime == 0 || !DateUtil.isToday(lastTime));
-
-			lastTime = SPUtil.getLong(context, spFile, SPConfig.KEY_SEARCH_LAST_TIME, 0);
-			mIsSearchToday = (lastTime == 0 || !DateUtil.isToday(lastTime));
-
-			lastTime = SPUtil.getLong(context, spFile, SPConfig.KEY_BUY_BY_BEAN_LAST_TIME, 0);
-			mIsBuyByBeanToday = (lastTime == 0 || !DateUtil.isToday(lastTime));
-		} else {
-			mIsDownloadToday = false;
-			mIsShareNormalToday = false;
-			mIsShareLimitToday = false;
-			mIsSearchToday = false;
-			mIsBuyByBeanToday = false;
-		}*/
-	}
-
-	public static abstract interface RewardType {
+	public static abstract class RewardType {
 		public static final int NOTHING = 0;
 		public static final int BIND_OUWAN = 1;
 		public static final int BIND_PHONE = 2;

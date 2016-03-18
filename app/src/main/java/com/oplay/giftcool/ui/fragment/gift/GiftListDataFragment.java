@@ -31,9 +31,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 显示限量礼包数据的Fragment<br/>
@@ -41,7 +41,8 @@ import retrofit.Retrofit;
  * <br/>
  * Created by zsigui on 15-12-29.
  */
-public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> implements OnItemClickListener<IndexGiftNew> {
+public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> implements
+		OnItemClickListener<IndexGiftNew> {
 
 	private static final String KEY_DATA = "key_news_data";
 	private static final String KEY_URL = "key_url";
@@ -128,6 +129,11 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 		}
 	}
 
+	/**
+	 * 刷新列表数据的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
@@ -135,45 +141,52 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
+					if (mCallRefresh != null) {
+						mCallRefresh.cancel();
+					}
 					mReqPageObj.data.page = 1;
 					mReqPageObj.data.date = mDate;
-					Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj)
-							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
-								                       Retrofit
-										                       retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess() && response.body() != null &&
-											response.body().getCode() == NetStatusCode.SUCCESS) {
-										OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
-										refreshLoadState(backObj.data, backObj.isEndPage);
-										updateData(backObj.data);
-										refreshSuccessEnd();
-										return;
-									}
-									refreshFailEnd();
-								}
+					mCallRefresh = Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj);
+					mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+						@Override
+						public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
+						                       Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							if (response != null && response.isSuccessful() && response.body() != null &&
+									response.body().getCode() == NetStatusCode.SUCCESS) {
+								OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+								refreshLoadState(backObj.data, backObj.isEndPage);
+								updateData(backObj.data);
+								refreshSuccessEnd();
+								return;
+							}
+							refreshFailEnd();
+						}
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_FRAG, t);
-									}
-									refreshFailEnd();
-								}
-							});
+						@Override
+						public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_FRAG, t);
+							}
+							refreshFailEnd();
+						}
+					});
 				} else {
 					refreshFailEnd();
 				}
 			}
 		});
 	}
+
+	/**
+	 * 加载更多列表数据的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallLoad;
 
 	/**
 	 * 加载更多数据
@@ -184,8 +197,6 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			return;
 		}
 		mIsLoadMore = true;
-		mReqPageObj.data.date = mDate;
-		mReqPageObj.data.page = mLastPage + 1;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -193,33 +204,37 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 					moreLoadFailEnd();
 					return;
 				}
-				Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj)
-						.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
-							@Override
-							public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response,
-							                       Retrofit
-									                       retrofit) {
-								if (!mCanShowUI) {
-									return;
-								}
-								if (response != null && response.isSuccess()) {
-									moreLoadSuccessEnd();
-									OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
-									setLoadState(backObj.data, backObj.isEndPage);
-									addMoreData(backObj.data);
-									return;
-								}
-								moreLoadFailEnd();
-							}
+				if (mCallLoad != null) {
+					mCallLoad.cancel();
+				}
+				mReqPageObj.data.date = mDate;
+				mReqPageObj.data.page = mLastPage + 1;
+				mCallLoad = Global.getNetEngine().obtainGiftList(mUrl, mReqPageObj);
+				mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+					@Override
+					public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
+					                       Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
+						if (!mCanShowUI || call.isCanceled()) {
+							return;
+						}
+						if (response != null && response.isSuccessful()) {
+							moreLoadSuccessEnd();
+							OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+							setLoadState(backObj.data, backObj.isEndPage);
+							addMoreData(backObj.data);
+							return;
+						}
+						moreLoadFailEnd();
+					}
 
-							@Override
-							public void onFailure(Throwable t) {
-								if (!mCanShowUI) {
-									return;
-								}
-								moreLoadFailEnd();
-							}
-						});
+					@Override
+					public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
+						if (!mCanShowUI || call.isCanceled()) {
+							return;
+						}
+						moreLoadFailEnd();
+					}
+				});
 			}
 		});
 
@@ -248,6 +263,11 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 		mLastPage += 1;
 	}
 
+	/**
+	 * 刷新礼包状态的网络请求声明
+	 */
+	private Call<JsonRespBase<HashMap<String, IndexGiftNew>>> mCallRefreshCircle;
+
 	@Override
 	public void onGiftUpdate(int action) {
 		if (action != ObserverManager.STATUS.GIFT_UPDATE_PART
@@ -258,41 +278,46 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 			return;
 		}
 		mIsNotifyRefresh = true;
-		Global.THREAD_POOL.execute(new Runnable() {
+		if (!NetworkUtil.isConnected(getContext())) {
+			moreLoadFailEnd();
+			return;
+		}
+		if (mCallRefreshCircle != null) {
+			mCallRefreshCircle.cancel();
+		}
+		HashSet<Integer> ids = new HashSet<Integer>();
+		for (IndexGiftNew gift : mData) {
+			ids.add(gift.id);
+		}
+		ReqRefreshGift reqData = new ReqRefreshGift();
+		reqData.ids = ids;
+		mCallRefreshCircle = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
+		mCallRefreshCircle.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+
 			@Override
-			public void run() {
-				HashSet<Integer> ids = new HashSet<Integer>();
-				for (IndexGiftNew gift : mData) {
-					ids.add(gift.id);
+			public void onResponse(Call<JsonRespBase<HashMap<String, IndexGiftNew>>> call,
+			                       Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response) {
+				if (!mCanShowUI || call.isCanceled()) {
+					return;
 				}
-				ReqRefreshGift reqData = new ReqRefreshGift();
-				reqData.ids = ids;
-				Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData))
-						.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
+				if (response != null && response.isSuccessful()) {
+					if (response.body() != null && response.body().isSuccess()) {
+						// 数据刷新成功，进行更新
+						HashMap<String, IndexGiftNew> respData = response.body().getData();
+						ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+						updateCircle(respData, waitDelIndexs, mData);
+						delIndex(mData, waitDelIndexs);
+						int y = mDataView.getScrollY();
+						updateData(mData);
+						mDataView.smoothScrollBy(y, 0);
+					}
+				}
+				mIsNotifyRefresh = false;
+			}
 
-							@Override
-							public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
-							                       Retrofit retrofit) {
-								if (response != null && response.isSuccess()) {
-									if (response.body() != null && response.body().isSuccess()) {
-										// 数据刷新成功，进行更新
-										HashMap<String, IndexGiftNew> respData = response.body().getData();
-										ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-										updateCircle(respData, waitDelIndexs, mData);
-										delIndex(mData, waitDelIndexs);
-										int y = mDataView.getScrollY();
-										updateData(mData);
-										mDataView.smoothScrollBy(y, 0);
-									}
-								}
-								mIsNotifyRefresh = false;
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-								mIsNotifyRefresh = false;
-							}
-						});
+			@Override
+			public void onFailure(Call<JsonRespBase<HashMap<String, IndexGiftNew>>> call, Throwable t) {
+				mIsNotifyRefresh = false;
 			}
 		});
 	}

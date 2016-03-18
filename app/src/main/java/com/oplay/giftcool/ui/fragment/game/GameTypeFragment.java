@@ -20,9 +20,9 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-30.
@@ -73,18 +73,28 @@ public class GameTypeFragment extends BaseFragment {
 		mViewManager.showContent();
 	}
 
+	/**
+	 * 进行游戏分类页面数据刷新的网络请求声明
+	 */
+	private Call<JsonRespBase<ArrayList<GameTypeMain>>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
-		Global.getNetEngine().obtainIndexGameType(new JsonReqBase<Void>())
-				.enqueue(new Callback<JsonRespBase<ArrayList<GameTypeMain>>>() {
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+			mCallRefresh = mCallRefresh.clone();
+		} else {
+			mCallRefresh = Global.getNetEngine().obtainIndexGameType(new JsonReqBase<Void>());
+		}
+		mCallRefresh.enqueue(new Callback<JsonRespBase<ArrayList<GameTypeMain>>>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<ArrayList<GameTypeMain>>> response,
-					                       Retrofit retrofit) {
-						if (!mCanShowUI) {
+					public void onResponse(Call<JsonRespBase<ArrayList<GameTypeMain>>> call, Response<JsonRespBase
+							<ArrayList<GameTypeMain>>> response) {
+						if (!mCanShowUI || call.isCanceled()) {
 							return;
 						}
-						if (response != null && response.isSuccess()) {
+						if (response != null && response.isSuccessful()) {
 							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								refreshSuccessEnd();
 								updateData(response.body().getData());
@@ -99,8 +109,8 @@ public class GameTypeFragment extends BaseFragment {
 					}
 
 					@Override
-					public void onFailure(Throwable t) {
-						if (!mCanShowUI) {
+					public void onFailure(Call<JsonRespBase<ArrayList<GameTypeMain>>> call, Throwable t) {
+						if (!mCanShowUI || call.isCanceled()) {
 							return;
 						}
 						if (AppDebugConfig.IS_DEBUG) {
@@ -153,5 +163,30 @@ public class GameTypeFragment extends BaseFragment {
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+			mCallRefresh = null;
+		}
+		if (mTagAdapter != null) {
+			mTagAdapter.release();
+			mTagAdapter = null;
+		}
+		if (mTagView != null) {
+			mTagView.setAdapter(null);
+			mTagView = null;
+		}
+		if (mTypeMainView != null) {
+			mTypeMainView.setAdapter(null);
+			mTypeMainView = null;
+		}
+		if (mGameTypeMainAdapter != null) {
+			mGameTypeMainAdapter.release();
+			mGameTypeMainAdapter = null;
+		}
 	}
 }

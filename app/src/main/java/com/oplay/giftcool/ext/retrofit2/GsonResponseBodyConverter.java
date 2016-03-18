@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 import com.socks.library.KLog;
-import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-import retrofit.Converter;
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
 
 /**
  * 重写Retrofit2的响应Converter，在响应返回后进行数据解密操作，再进行类型转换

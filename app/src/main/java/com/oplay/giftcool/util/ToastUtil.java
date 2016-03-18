@@ -12,7 +12,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
-import retrofit.Response;
+import retrofit2.Response;
 
 /**
  * @author JackieZhuang
@@ -52,11 +52,11 @@ public class ToastUtil {
 
 	public static void show(@StringRes final int resId, final int duration) {
 		ThreadUtil.runInUIThread(new Runnable() {
-			@Override
-			public void run() {
-				makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
-			}
-		});
+            @Override
+            public void run() {
+                makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
+            }
+        });
 	}
 
 	public static void showLong(CharSequence msg) {

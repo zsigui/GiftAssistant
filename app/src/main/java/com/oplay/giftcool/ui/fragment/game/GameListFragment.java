@@ -21,9 +21,9 @@ import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-4.
@@ -94,6 +94,11 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 		mDataView.setAdapter(mAdapter);
 	}
 
+	/**
+	 * 刷新礼包的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
@@ -102,39 +107,48 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
+					if (mCallRefresh != null) {
+						mCallRefresh.cancel();
+					}
 					mReqPageObj.data.page = 1;
-					Global.getNetEngine().obtainGameList(mUrl, mReqPageObj)
-							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
-										retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess()) {
-										refreshSuccessEnd();
-										OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-										refreshLoadState(backObj.data, backObj.isEndPage);
-										updateData(backObj.data);
-										return;
-									}
-									refreshFailEnd();
-								}
+					mCallRefresh = Global.getNetEngine().obtainGameList(mUrl, mReqPageObj);
+					mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+						@Override
+						public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+						                       Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							if (response != null && response.isSuccessful()) {
+								refreshSuccessEnd();
+								OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+								refreshLoadState(backObj.data, backObj.isEndPage);
+								updateData(backObj.data);
+								return;
+							}
+							refreshFailEnd();
+						}
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
-										return;
-									}
-									refreshFailEnd();
-								}
-							});
+						@Override
+						public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable t) {
+							if (!mCanShowUI || call.isCanceled()) {
+								return;
+							}
+							refreshFailEnd();
+						}
+					});
 				} else {
 					refreshFailEnd();
 				}
 			}
 		});
 	}
+
+
+	/**
+	 * 加载更多礼包的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> mCallLoad;
 
 	/**
 	 * 加载更多数据
@@ -148,32 +162,36 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 				@Override
 				public void run() {
 					if (NetworkUtil.isConnected(getContext())) {
-						Global.getNetEngine().obtainGameList(mUrl, mReqPageObj)
-								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-									@Override
-									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit
-											retrofit) {
-										if (!mCanShowUI) {
-											return;
-										}
-										if (response != null && response.isSuccess()) {
-											moreLoadSuccessEnd();
-											OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-											setLoadState(backObj.data, backObj.isEndPage);
-											addMoreData(backObj.data);
-											return;
-										}
-										moreLoadFailEnd();
-									}
+						if (mCallLoad != null) {
+							mCallLoad.cancel();
+						}
+						mCallLoad = Global.getNetEngine().obtainGameList(mUrl, mReqPageObj);
+						mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+							@Override
+							public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+							                       Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
+								if (response != null && response.isSuccessful()) {
+									moreLoadSuccessEnd();
+									OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+									setLoadState(backObj.data, backObj.isEndPage);
+									addMoreData(backObj.data);
+									return;
+								}
+								moreLoadFailEnd();
+							}
 
-									@Override
-									public void onFailure(Throwable t) {
-										if (!mCanShowUI) {
-											return;
-										}
-										moreLoadFailEnd();
-									}
-								});
+							@Override
+							public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable
+									t) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
+								moreLoadFailEnd();
+							}
+						});
 					} else {
 						moreLoadFailEnd();
 					}
@@ -182,6 +200,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 		}
 	}
 
+	/**
+	 * 更新数据
+	 */
 	public void updateData(ArrayList<IndexGameNew> data) {
 		mViewManager.showContent();
 		mHasData = true;
@@ -190,6 +211,9 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 		mLastPage = 1;
 	}
 
+	/**
+	 * 添加更多数据
+	 */
 	private void addMoreData(ArrayList<IndexGameNew> moreData) {
 		if (moreData == null) {
 			return;
@@ -205,14 +229,14 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 			if (item != null && !AppStatus.DISABLE.equals(item.appStatus)) {
 				item.handleOnClick(getActivity().getSupportFragmentManager());
 			}
-		}else {
+		} else {
 			IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 		}
 	}
 
 	@Override
 	public String getPageName() {
-		return String.format(PAGE_NAME,mSearchKey,mTagId);
+		return String.format(PAGE_NAME, mSearchKey, mTagId);
 	}
 
 	@Override
@@ -228,6 +252,12 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 		if (mDataView != null) {
 			mDataView.setAdapter(null);
 			mDataView = null;
+		}
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+		}
+		if (mCallLoad != null) {
+			mCallLoad.cancel();
 		}
 	}
 }

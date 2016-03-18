@@ -29,9 +29,9 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-29.
@@ -98,19 +98,31 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		});
 	}
 
+
+	/**
+	 * 加载新鲜出炉礼包数据的网络请求声明
+	 */
+	private Call<JsonRespGiftList> mCallLoadNew;
+
 	private void loadNewGiftData() {
 		if (!NetworkUtil.isConnected(this)) {
 			displayNetworkErrUI();
 			return;
 		}
-		mEngine.obtainGiftNew(new JsonReqBase<String>()).enqueue(new Callback<JsonRespGiftList>() {
+		if (mCallLoadNew != null) {
+			mCallLoadNew.cancel();
+			mCallLoadNew = mCallLoadNew.clone();
+		} else {
+			mCallLoadNew = mEngine.obtainGiftNew(new JsonReqBase<String>());
+		}
+		mCallLoadNew.enqueue(new Callback<JsonRespGiftList>() {
 			@Override
-			public void onResponse(Response<JsonRespGiftList> response, Retrofit retrofit) {
-				if (!mNeedWorkCallback) {
+			public void onResponse(Call<JsonRespGiftList> call, Response<JsonRespGiftList> response) {
+				if (!mNeedWorkCallback || call.isCanceled()) {
 					return;
 				}
 				mIsLoading = false;
-				if (response != null && response.isSuccess()) {
+				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						displayGiftNewUI(response.body().getData());
 						return;
@@ -124,8 +136,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			}
 
 			@Override
-			public void onFailure(Throwable t) {
-				if (!mNeedWorkCallback) {
+			public void onFailure(Call<JsonRespGiftList> call, Throwable t) {
+				if (!mNeedWorkCallback || call.isCanceled()) {
 					return;
 				}
 				mIsLoading = false;
@@ -148,12 +160,12 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		mReqPageObj.data.pageSize = 30;
 		mEngine.obtainGiftLimitByPage(mReqPageObj).enqueue(new Callback<JsonRespLimitGiftList>() {
 			@Override
-			public void onResponse(Response<JsonRespLimitGiftList> response, Retrofit retrofit) {
-				if (!mNeedWorkCallback) {
+			public void onResponse(Call<JsonRespLimitGiftList> call, Response<JsonRespLimitGiftList> response) {
+				if (!mNeedWorkCallback || call.isCanceled()) {
 					return;
 				}
 				mIsLoading = false;
-				if (response != null && response.isSuccess()) {
+				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						displayGiftLimitUI(response.body().getData(), mReqPageObj.data.pageSize);
 						return;
@@ -167,8 +179,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 			}
 
 			@Override
-			public void onFailure(Throwable t) {
-				if (!mNeedWorkCallback) {
+			public void onFailure(Call<JsonRespLimitGiftList> call, Throwable t) {
+				if (!mNeedWorkCallback || call.isCanceled()) {
 					return;
 				}
 				mIsLoading = false;
@@ -177,6 +189,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 				displayNetworkErrUI();
 			}
+
 		});
 	}
 
@@ -185,7 +198,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				GiftLikeListFragment.class.getSimpleName(), false);
 	}
 
-	private void displayGiftLimitUI(LimitGiftListData<TimeData<IndexGiftNew>> data,int pagesize) {
+	private void displayGiftLimitUI(LimitGiftListData<TimeData<IndexGiftNew>> data, int pagesize) {
 		replaceFrag(R.id.fl_container, GiftLimitListDataFragment.newInstance(data, pagesize),
 				GiftLimitListDataFragment.class.getSimpleName(), false);
 	}
@@ -216,6 +229,15 @@ public class GiftListActivity extends BaseAppCompatActivity {
 		super.doBeforeFinish();
 		if (MainActivity.sGlobalHolder == null) {
 			IntentUtil.jumpHome(this, false);
+		}
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCallLoadNew != null) {
+			mCallLoadNew.cancel();
+			mCallLoadNew = null;
 		}
 	}
 }

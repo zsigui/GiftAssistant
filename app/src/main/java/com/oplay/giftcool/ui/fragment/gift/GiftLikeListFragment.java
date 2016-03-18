@@ -18,9 +18,9 @@ import com.oplay.giftcool.util.NetworkUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-30.
@@ -82,49 +82,55 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
 	}
 
+	/**
+	 * 刷新猜你喜欢数据的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
 
-		Global.THREAD_POOL.execute(new Runnable() {
+		if (!NetworkUtil.isConnected(getContext())) {
+			refreshFailEnd();
+			return;
+		}
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+		}
+		mReqPageObj.data.page = 1;
+		mCallRefresh = Global.getNetEngine().obtainGiftLike(mReqPageObj);
+		mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
 			@Override
-			public void run() {
-				if (NetworkUtil.isConnected(getContext())) {
-					mReqPageObj.data.page = 1;
-					Global.getNetEngine().obtainGiftLike(mReqPageObj)
-							.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
-										                       response, Retrofit
-										retrofit) {
-									if (!mCanShowUI) {
-										return;
-									}
-									if (response != null && response.isSuccess()) {
-										refreshSuccessEnd();
-										OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
-										refreshLoadState(backObj.data, backObj.isEndPage);
-										updateData(backObj.data);
-										return;
-									}
-									refreshFailEnd();
-								}
-
-								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
-										return;
-									}
-									refreshFailEnd();
-								}
-							});
-				} else {
-					refreshFailEnd();
+			public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
+			                       Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+				if (!mCanShowUI || call.isCanceled()) {
+					return;
 				}
+				if (response != null && response.isSuccessful()) {
+					refreshSuccessEnd();
+					OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+					refreshLoadState(backObj.data, backObj.isEndPage);
+					updateData(backObj.data);
+					return;
+				}
+				refreshFailEnd();
+			}
+
+			@Override
+			public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+				if (!mCanShowUI || call.isCanceled()) {
+					return;
+				}
+				refreshFailEnd();
 			}
 		});
-
 	}
+
+	/**
+	 * 加载更多猜你喜欢数据的网络请求声明
+	 */
+	private Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> mCallLoad;
 
 	/**
 	 * 加载更多数据
@@ -133,42 +139,40 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 	protected void loadMoreData() {
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
+			if (!NetworkUtil.isConnected(getContext())) {
+				moreLoadFailEnd();
+				return;
+			}
+			if (mCallLoad != null) {
+				mCallLoad.cancel();
+			}
 			mReqPageObj.data.page = mLastPage + 1;
-			Global.THREAD_POOL.execute(new Runnable() {
+			mCallLoad = Global.getNetEngine().obtainGiftLike(mReqPageObj);
+			mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
 				@Override
-				public void run() {
-					if (NetworkUtil.isConnected(getContext().getApplicationContext())) {
-						Global.getNetEngine().obtainGiftLike(mReqPageObj)
-								.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
-									@Override
-									public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>>
-											                       response, Retrofit
-											retrofit) {
-										if (!mCanShowUI) {
-											return;
-										}
-										if (response != null && response.isSuccess()) {
-											moreLoadSuccessEnd();
-											OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
-											setLoadState(backObj.data, backObj.isEndPage);
-											addMoreData(backObj.data);
-											return;
-										}
-										moreLoadFailEnd();
-									}
-
-									@Override
-									public void onFailure(Throwable t) {
-										if (!mCanShowUI) {
-											return;
-										}
-										moreLoadFailEnd();
-									}
-								});
-					} else {
-						moreLoadFailEnd();
+				public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
+				                       Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+					if (!mCanShowUI || call.isCanceled()) {
+						return;
 					}
+					if (response != null && response.isSuccessful()) {
+						moreLoadSuccessEnd();
+						OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+						setLoadState(backObj.data, backObj.isEndPage);
+						addMoreData(backObj.data);
+						return;
+					}
+					moreLoadFailEnd();
 				}
+
+				@Override
+				public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+					if (!mCanShowUI || call.isCanceled()) {
+						return;
+					}
+					moreLoadFailEnd();
+				}
+
 			});
 		}
 	}
@@ -197,5 +201,18 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCallLoad != null) {
+			mCallLoad.cancel();
+			mCallLoad = null;
+		}
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+			mCallRefresh = null;
+		}
 	}
 }

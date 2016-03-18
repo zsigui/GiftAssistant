@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.TaskTypeUtil;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.ScoreMission;
 import com.oplay.giftcool.ui.widget.ScoreText;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 16-1-7.
  */
-public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListener {
+public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener {
 
 	private static final int TAG_POS = 0xFF121233;
 	private ArrayList<ScoreMission> mData;
@@ -195,7 +196,14 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
 		}
 	}
 
-	static class ViewHolder {
+    @Override
+    public void release() {
+        mData = null;
+        mItemListener = null;
+        mContext = null;
+    }
+
+    static class ViewHolder {
 		ImageView ivIcon;
 		TextView tvName;
 		ScoreText stScore;

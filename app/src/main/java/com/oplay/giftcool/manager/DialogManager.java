@@ -22,9 +22,9 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 弹窗管理类
@@ -78,25 +78,36 @@ public class DialogManager {
 	}
 
 	/**
+	 * 求礼包的网络请求声明
+	 */
+	private Call<JsonRespBase<Void>> mCallHopeGift;
+
+	/**
 	 * 执行求礼包的请求
 	 */
 	private void handleHopeGiftRequest(final FragmentManager fm, final HopeGiftDialog dialog,
 	                                   int id, String name, String note) {
-		showLoadingDialog(fm);
 		if (!NetworkUtil.isConnected(mContext)) {
 			ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
 			return;
+		}
+		if (mCallHopeGift != null) {
+			mCallHopeGift.cancel();
 		}
 		ReqHopeGift reqHopeGift = new ReqHopeGift();
 		reqHopeGift.gameId = id;
 		reqHopeGift.gameName = name;
 		reqHopeGift.note = note;
-		Global.getNetEngine().commitHopeGift(new JsonReqBase<ReqHopeGift>(reqHopeGift))
-				.enqueue(new Callback<JsonRespBase<Void>>() {
+		mCallHopeGift = Global.getNetEngine().commitHopeGift(new JsonReqBase<ReqHopeGift>(reqHopeGift));
+		showLoadingDialog(fm);
+		mCallHopeGift.enqueue(new Callback<JsonRespBase<Void>>() {
 					@Override
-					public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
+					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
 						hideLoadingDialog();
-						if (response != null && response.isSuccess()) {
+						if (call.isCanceled()) {
+							return;
+						}
+						if (response != null && response.isSuccessful()) {
 							JsonRespBase<Void> resp = response.body();
 							if (resp != null) {
 
@@ -152,8 +163,11 @@ public class DialogManager {
 					}
 
 					@Override
-					public void onFailure(Throwable t) {
+					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
 						hideLoadingDialog();
+						if (call.isCanceled()) {
+							return;
+						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_MANAGER, t);
 						}

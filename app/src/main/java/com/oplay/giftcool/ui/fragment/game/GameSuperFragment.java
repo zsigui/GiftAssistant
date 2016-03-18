@@ -16,9 +16,9 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-30.
@@ -131,6 +131,11 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 		mIsVisible = false;
 	}
 
+	/**
+	 * 刷新精品游戏界面的网络请求声明
+	 */
+	private Call<JsonRespBase<IndexGameSuper>> mCallRefresh;
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
@@ -138,16 +143,21 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
-					Global.getNetEngine().obtainIndexGameSuper(new JsonReqBase<String>(null))
-							.enqueue(new Callback<JsonRespBase<IndexGameSuper>>() {
+					if (mCallRefresh != null) {
+						mCallRefresh.cancel();
+						mCallRefresh = mCallRefresh.clone();
+					} else {
+						mCallRefresh = Global.getNetEngine().obtainIndexGameSuper(new JsonReqBase<Void>());
+					}
+					mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGameSuper>>() {
 
 								@Override
-								public void onResponse(Response<JsonRespBase<IndexGameSuper>> response,
-								                       Retrofit retrofit) {
-									if (!mCanShowUI) {
+								public void onResponse(Call<JsonRespBase<IndexGameSuper>> call,
+								                       Response<JsonRespBase<IndexGameSuper>> response) {
+									if (!mCanShowUI || call.isCanceled()) {
 										return;
 									}
-									if (response != null && response.isSuccess()) {
+									if (response != null && response.isSuccessful()) {
 										if (response.body() != null && response.body().getCode() == NetStatusCode
 												.SUCCESS) {
 											updateData(response.body().getData());
@@ -160,8 +170,8 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 								}
 
 								@Override
-								public void onFailure(Throwable t) {
-									if (!mCanShowUI) {
+								public void onFailure(Call<JsonRespBase<IndexGameSuper>> call, Throwable t) {
+									if (!mCanShowUI || call.isCanceled()) {
 										return;
 									}
 									refreshFailEnd();
@@ -177,5 +187,14 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCallRefresh != null) {
+			mCallRefresh.cancel();
+			mCallRefresh = null;
+		}
 	}
 }

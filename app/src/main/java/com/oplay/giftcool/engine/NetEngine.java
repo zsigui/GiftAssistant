@@ -26,13 +26,11 @@ import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
-import com.oplay.giftcool.model.data.resp.message.MessageCount;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
-import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.data.resp.ScoreMissionList;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
@@ -41,6 +39,8 @@ import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
+import com.oplay.giftcool.model.data.resp.message.MessageCount;
+import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -49,10 +49,11 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit.Call;
-import retrofit.http.Body;
-import retrofit.http.POST;
-import retrofit.http.Url;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+import retrofit2.http.Url;
+
 
 /**
  * Created by zsigui on 15-12-16.
@@ -182,7 +183,7 @@ public interface NetEngine {
 	 * 获取 首页-游戏-精品 页面的数据
 	 */
 	@POST(NetUrl.GAME_GET_INDEX_SUPER)
-	Call<JsonRespBase<IndexGameSuper>> obtainIndexGameSuper(@Body JsonReqBase<String> reqData);
+	Call<JsonRespBase<IndexGameSuper>> obtainIndexGameSuper(@Body JsonReqBase<Void> reqData);
 
 	/**
 	 * 获取 游戏 单列表数据，用于显示游戏列表数据

@@ -70,7 +70,7 @@ public class CommonUtil {
 			} else {
 				model.setInit(true);
 			}
-			AssistantApp.getInstance().addInterceptorToRetrofit();
+			AssistantApp.getInstance().initRetrofit();
 		}
 	}
 }

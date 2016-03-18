@@ -12,7 +12,6 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
@@ -27,8 +26,8 @@ import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
-import retrofit.Call;
-import retrofit.Response;
+import retrofit2.Response;
+
 
 /**
  * AsyncTask_InitApplication
@@ -124,7 +123,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP
 //		judgeFirstOpenToday();
-		ScoreManager.getInstance().resetLocalTaskState();
 
 		try {
 			OuwanSDKManager.getInstance().init();
@@ -160,9 +158,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
 		try {
-			Call<JsonRespBase<InitAppResult>> d = Global.getNetEngine().initAPP(reqData);
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
-			if (response != null && response.isSuccess()) {
+			if (response != null && response.isSuccessful()) {
 				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 					InitAppResult initData = response.body().getData();
 					if (initData != null) {

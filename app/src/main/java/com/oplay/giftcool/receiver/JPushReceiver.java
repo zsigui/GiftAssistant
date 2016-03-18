@@ -77,7 +77,7 @@ public class JPushReceiver extends BroadcastReceiver {
 						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
 						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
 						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 0);
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 1);
 					}
 
 					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
@@ -102,7 +102,7 @@ public class JPushReceiver extends BroadcastReceiver {
 						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
 						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
 						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 0);
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 1);
 					}
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "

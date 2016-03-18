@@ -57,9 +57,9 @@ import com.socks.library.KLog;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-29.
@@ -377,63 +377,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		}
 	}
 
-	private static class DataRunnable implements Runnable {
-
-		private WeakReference<GiftDetailFragment> mWeakFragment;
-
-		public DataRunnable(GiftDetailFragment fragment) {
-			mWeakFragment = new WeakReference<GiftDetailFragment>(fragment);
-		}
-
-		@Override
-		public void run() {
-			if (mWeakFragment == null || mWeakFragment.get() == null) {
-				return;
-			}
-			final GiftDetailFragment f = mWeakFragment.get();
-			if (!NetworkUtil.isConnected(f.getContext())) {
-				f.refreshFailEnd();
-				return;
-			}
-			ReqGiftDetail data = new ReqGiftDetail();
-			data.id = f.mId;
-			Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data))
-					.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
-						@Override
-						public void onResponse(Response<JsonRespBase<GiftDetail>> response, Retrofit retrofit) {
-							if (!f.mCanShowUI) {
-								return;
-							}
-							if (response != null && response.code() == 200) {
-								Global.sServerTimeDiffLocal =
-										System.currentTimeMillis() - response.headers().getDate("Date").getTime();
-								if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-									f.refreshSuccessEnd();
-									f.updateData(response.body().getData());
-									return;
-								}
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
-								}
-							}
-							// 加载错误页面也行
-							f.refreshFailEnd();
-						}
-
-						@Override
-						public void onFailure(Throwable t) {
-							if (!f.mCanShowUI) {
-								return;
-							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.e(t);
-							}
-							f.refreshFailEnd();
-						}
-					});
-		}
-	}
-
+	/**
+	 * 异步请求获取网络数据线程执行体
+	 */
 	private DataRunnable mDataRunnable;
 
 	@Override
@@ -604,10 +550,80 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		tvOriginPrice = null;
 		mData = null;
 		mAppInfo = null;
+		if (mDataRunnable != null && mDataRunnable.mCall != null) {
+			mDataRunnable.mCall.cancel();
+			mDataRunnable.mWeakFragment.clear();
+		}
 	}
 
 	@Override
 	public String getPageName() {
 		return PAGE_NAME;
+	}
+
+	/**
+	 * 执行网络请求的异步请求任务
+	 */
+	private static class DataRunnable implements Runnable {
+
+		private WeakReference<GiftDetailFragment> mWeakFragment;
+
+		public DataRunnable(GiftDetailFragment fragment) {
+			mWeakFragment = new WeakReference<GiftDetailFragment>(fragment);
+		}
+
+		private Call<JsonRespBase<GiftDetail>> mCall;
+
+		@Override
+		public void run() {
+			if (mWeakFragment == null || mWeakFragment.get() == null) {
+				return;
+			}
+			final GiftDetailFragment f = mWeakFragment.get();
+			if (!NetworkUtil.isConnected(f.getContext())) {
+				f.refreshFailEnd();
+				return;
+			}
+			if (mCall != null) {
+				mCall.cancel();
+			}
+			ReqGiftDetail data = new ReqGiftDetail();
+			data.id = f.mId;
+			mCall = Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data));
+			mCall.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
+				@Override
+				public void onResponse(Call<JsonRespBase<GiftDetail>> call, Response<JsonRespBase<GiftDetail>>
+						response) {
+					if (call.isCanceled() || !f.mCanShowUI) {
+						return;
+					}
+					if (response != null && response.code() == 200) {
+						Global.sServerTimeDiffLocal =
+								System.currentTimeMillis() - response.headers().getDate("Date").getTime();
+						if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+							f.refreshSuccessEnd();
+							f.updateData(response.body().getData());
+							return;
+						}
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
+						}
+					}
+					// 加载错误页面也行
+					f.refreshFailEnd();
+				}
+
+				@Override
+				public void onFailure(Call<JsonRespBase<GiftDetail>> call, Throwable t) {
+					if (call.isCanceled() || !f.mCanShowUI) {
+						return;
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.e(t);
+					}
+					f.refreshFailEnd();
+				}
+			});
+		}
 	}
 }

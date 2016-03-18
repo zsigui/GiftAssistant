@@ -27,10 +27,9 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 推送消息的适配器
@@ -42,7 +41,6 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 	private final String TITLE_MODULE;
 	private final String CONTENT_MODULE;
 
-	private boolean mRequest = false;
 
 	public PushMessageAdapter(Context context) {
 		super(context);
@@ -81,7 +79,9 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 			case R.id.rl_msg:
 			case R.id.ll_to_get:
 				IntentUtil.jumpGiftDetail(mContext, data.giftId);
-				notifyHasRead(new int[]{pos}, new int[]{data.id});
+                if (data.readState != TypeStatusCode.PUSH_READED) {
+                    notifyHasRead(new int[]{pos}, new int[]{data.id});
+                }
 				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_MESSAGE_CENTER_CLICK,
 						String.format("游戏名:%s, 礼包id:%d, 游戏id:%d", data.gameName, data.giftId, data.gameId));
 				break;
@@ -102,7 +102,9 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
 			msg.status = TypeStatusCode.PUSH_READED;
 			mReqChangeObj = new JsonReqBase<>(msg);
-		}
+		} else {
+            mReqChangeObj.data.status = TypeStatusCode.PUSH_READED;
+        }
 		// 构造用','分隔的字符串
 		StringBuilder sb = new StringBuilder();
 		if (ids != null && ids.length > 0) {
@@ -115,15 +117,14 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 		if (mCall != null) {
 			mCall.cancel();
 		}
-		mRequest = true;
 		mCall = Global.getNetEngine().changePushMessageStatus(mReqChangeObj);
 		mCall.enqueue(new Callback<JsonRespBase<Void>>() {
 			@Override
-			public void onResponse(Response<JsonRespBase<Void>> response, Retrofit retrofit) {
-				if (!mRequest) {
+			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+				if (call.isCanceled()) {
 					return;
 				}
-				if (response != null && response.isSuccess()) {
+				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().isSuccess()) {
 						// 修改消息为已读状态
 						if (pos != null && mData != null) {
@@ -139,7 +140,8 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_ADAPTER, (response.body() == null ? "解析出错":response.body().error()));
+						KLog.d(AppDebugConfig.TAG_ADAPTER,
+								(response.body() == null ? "解析出错":response.body().error()));
 					}
 					return;
 				}
@@ -149,7 +151,7 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 			}
 
 			@Override
-			public void onFailure(Throwable t) {
+			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_ADAPTER, t);
 				}
@@ -163,7 +165,6 @@ public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements Vi
 		if (mCall != null) {
 			mCall.cancel();
 		}
-		mRequest = false;
 	}
 
 	static class ItemHolder extends BaseRVHolder {

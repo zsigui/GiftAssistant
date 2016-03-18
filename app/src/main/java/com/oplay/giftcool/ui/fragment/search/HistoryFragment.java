@@ -35,10 +35,9 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-22.
@@ -161,12 +160,13 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         mCall = Global.getNetEngine().obtainSearchHotData(mReqBase);
         mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
             @Override
-            public void onResponse(Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response, Retrofit retrofit) {
+            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+                                   Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response) {
                 mIsLoading = false;
-                if (!mCanShowUI) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                if (response != null && response.isSuccess()) {
+                if (response != null && response.isSuccessful()) {
                     if (response.body() != null && response.body().isSuccess()) {
                         OneTypeDataList<IndexGameNew> model = response.body().getData();
                         if (model.pageSize == 0 || model.isEndPage || model.data == null) {
@@ -187,9 +187,9 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable t) {
                 mIsLoading = false;
-                if (!mCanShowUI) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
                 if (AppDebugConfig.IS_FRAG_DEBUG) {
@@ -367,6 +367,10 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
     @Override
     public void release() {
         super.release();
+        if (mCall != null) {
+            mCall.cancel();
+            mCall = null;
+        }
     }
 
     @Override

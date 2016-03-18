@@ -32,10 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 显示限量礼包数据的Fragment<br/>
@@ -314,11 +313,11 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			mCallLoad = Global.getNetEngine().obtainGiftLimitByPage(mReqPageObj);
 			mCallLoad.enqueue(new Callback<JsonRespLimitGiftList>() {
 				@Override
-				public void onResponse(Response<JsonRespLimitGiftList> response, Retrofit retrofit) {
-					if (!mCanShowUI) {
+				public void onResponse(Call<JsonRespLimitGiftList> call, Response<JsonRespLimitGiftList> response) {
+					if (!mCanShowUI || call.isCanceled()) {
 						return;
 					}
-					if (response != null && response.isSuccess()) {
+					if (response != null && response.isSuccessful()) {
 						LimitGiftListData<TimeData<IndexGiftNew>> data = response.body().getData();
 						if (data.page == 1) {
 							//初始化成功
@@ -346,8 +345,8 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				}
 
 				@Override
-				public void onFailure(Throwable t) {
-					if (!mCanShowUI) {
+				public void onFailure(Call<JsonRespLimitGiftList> call, Throwable t) {
+					if (!mCanShowUI || call.isCanceled()) {
 						return;
 					}
 					if (mReqPageObj.data.page == 1) {
@@ -357,7 +356,6 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 						//加载更多失败
 						moreLoadFailEnd();
 					}
-
 				}
 			});
 		}
@@ -376,6 +374,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				return;
 			}
 			if (!NetworkUtil.isConnected(getContext())) {
+                mIsNotifyRefresh = false;
 				return;
 			}
 			HashSet<Integer> ids = new HashSet<Integer>();
@@ -392,12 +391,12 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			mCallUpdate.enqueue(new Callback<JsonRespBase<HashMap<String, IndexGiftNew>>>() {
 
 				@Override
-				public void onResponse(Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response,
-				                       Retrofit retrofit) {
-					if (!mCanShowUI) {
+				public void onResponse(Call<JsonRespBase<HashMap<String, IndexGiftNew>>> call, Response<JsonRespBase
+						<HashMap<String, IndexGiftNew>>> response) {
+					if (!mCanShowUI || call.isCanceled()) {
 						return;
 					}
-					if (response != null && response.isSuccess()) {
+					if (response != null && response.isSuccessful()) {
 						if (response.body() != null && response.body().isSuccess()) {
 							// 数据刷新成功，进行更新
 							HashMap<String, IndexGiftNew> respData = response.body().getData();
@@ -413,7 +412,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				}
 
 				@Override
-				public void onFailure(Throwable t) {
+				public void onFailure(Call<JsonRespBase<HashMap<String, IndexGiftNew>>> call, Throwable t) {
 					mIsNotifyRefresh = false;
 				}
 			});

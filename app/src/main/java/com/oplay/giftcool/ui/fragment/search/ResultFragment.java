@@ -123,7 +123,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		mGiftAdapter.setListener(giftItemClickListener);
 		mGuessGiftAdapter.setListener(giftItemClickListener);
 		ivHopeGift.setOnClickListener(this);
-		mContainer.setOnTouchListener(new ScrollListener(ivHopeGift));
+//		mContainer.setOnTouchListener(new ScrollListener(ivHopeGift));
 	}
 
 	@Override
@@ -237,6 +237,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		}
 	}
 
+    // 该类暂时可能导致部分4.4.4系统的机型爆StackOverflowError错误，故暂时停止使用
 	static class ScrollListener implements View.OnTouchListener {
 
 		private final TimeInterpolator DEFAULT_INTERPOLATOR = new AccelerateDecelerateInterpolator();
@@ -289,7 +290,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 		/**
 		 * 执行隐藏按钮动画
-		 */
+         */
 		private void animationHide(ImageView iv) {
 			ViewPropertyAnimator animator = iv.animate()
 					.translationX(iv.getWidth())
@@ -301,7 +302,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 		/**
 		 * 执行显示按钮动画
-		 */
+         */
 		private void animationShow(ImageView iv) {
 			ViewPropertyAnimator animator = iv.animate()
 					.translationX(0)
@@ -313,7 +314,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 		/**
 		 * 隐藏按钮动画监听器
-		 */
+         */
 		private Animator.AnimatorListener hideListener = new Animator.AnimatorListener() {
 			@Override
 			public void onAnimationStart(Animator animation) {
@@ -342,7 +343,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 		/**
 		 * 显示按钮动画监听器
-		 */
+         */
 		private Animator.AnimatorListener showListener = new Animator.AnimatorListener() {
 			@Override
 			public void onAnimationStart(Animator animation) {
@@ -369,6 +370,5 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 			}
 		};
 	}
-
 
 }

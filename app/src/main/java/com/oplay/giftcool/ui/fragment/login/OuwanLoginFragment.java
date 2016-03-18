@@ -18,8 +18,8 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -44,9 +44,9 @@ import net.ouwan.umipay.android.view.MaxRowListView;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-11.
@@ -161,11 +161,18 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 	}
 
+	private long mLastClickTime = 0;
+
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.btn_send:
+				long curTime = System.currentTimeMillis();
+				if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+					mLastClickTime = curTime;
+					return;
+				}
 				handleLogin();
 				break;
 //			case R.id.tv_law:
@@ -231,6 +238,11 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		sNeedEncrypt = true;
 	}
 
+	/**
+	 * 偶玩登录的网络请求声明
+	 */
+	private Call<JsonRespBase<UserModel>> mCall;
+
 	private void handleLogin() {
 		showLoading();
 		final ReqLogin login = new ReqLogin();
@@ -248,13 +260,16 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 					return;
 				}
 
-				final long start = System.currentTimeMillis();
-				Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login))
-						.enqueue(new Callback<JsonRespBase<UserModel>>() {
+				if (mCall != null) {
+					mCall.cancel();
+				}
+				mCall = Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login));
+				mCall.enqueue(new Callback<JsonRespBase<UserModel>>() {
 							@Override
-							public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
+							public void onResponse(Call<JsonRespBase<UserModel>> call,
+							                       Response<JsonRespBase<UserModel>> response) {
 								hideLoading();
-								if (response != null && response.isSuccess()) {
+								if (response != null && response.isSuccessful()) {
 									if (response.body() != null
 											&& response.body().getCode() == NetStatusCode.SUCCESS) {
 										doAfterSuccess(response, login);
@@ -268,7 +283,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 							}
 
 							@Override
-							public void onFailure(Throwable t) {
+							public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
 								hideLoading();
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
@@ -287,11 +302,10 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		UserModel userModel = response.body().getData();
 		userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
 		MainActivity.sIsTodayFirstOpen = true;
-		ScoreManager.getInstance().resetLocalTaskState();
 		ScoreManager.getInstance().toastByCallback(userModel, false);
 		if (AssistantApp.getInstance().isRememberPwd()) {
 			AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
-							+ login.getPassword(), mData, false);
+					+ login.getPassword(), mData, false);
 		} else {
 			AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
 					mData, false);
@@ -401,5 +415,14 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mCall != null) {
+			mCall.cancel();
+			mCall = null;
+		}
 	}
 }

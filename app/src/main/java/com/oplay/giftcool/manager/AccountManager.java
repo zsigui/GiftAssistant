@@ -37,9 +37,9 @@ import net.youmi.android.libs.common.global.Global_SharePreferences;
 import java.util.ArrayList;
 
 import cn.jpush.android.api.JPushInterface;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 管理用户账号信息的管理器 <br/>
@@ -162,6 +162,11 @@ public class AccountManager {
 	}
 
 	/**
+	 * 获取用户全部信息的网络请求声明
+	 */
+	private Call<JsonRespBase<UserModel>> mCallGetUserInfo;
+
+	/**
 	 * 重新请求服务器以更新用户全部信息
 	 */
 	public void updateUserInfo() {
@@ -173,35 +178,44 @@ public class AccountManager {
 					if (!NetworkUtil.isConnected(mContext)) {
 						return;
 					}
-					Global.getNetEngine().getUserInfo(new JsonReqBase<Void>())
-							.enqueue(new Callback<JsonRespBase<UserModel>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<UserModel>> response, Retrofit retrofit) {
-									if (response != null && response.isSuccess()) {
-										if (response.body() != null
-												&& response.body().getCode() == NetStatusCode.SUCCESS) {
-											UserModel user = getUser();
-											user.userInfo = response.body().getData().userInfo;
-											notifyUserAll(user);
-											updateJPushTagAndAlias();
-											return;
-										}
-										if (AppDebugConfig.IS_DEBUG) {
-											KLog.e(AppDebugConfig.TAG_MANAGER,
-													response.body() == null ? "解析失败" : response.body().error());
-										}
-										// 登录状态失效，原因包括: 已在其他地方登录，更新失败
-										sessionFailed(response.body());
-									}
+					if (mCallGetUserInfo != null) {
+						mCallGetUserInfo.cancel();
+						mCallGetUserInfo = mCallGetUserInfo.clone();
+					} else {
+						mCallGetUserInfo = Global.getNetEngine().getUserInfo(new JsonReqBase<Void>());
+					}
+					mCallGetUserInfo.enqueue(new Callback<JsonRespBase<UserModel>>() {
+						@Override
+						public void onResponse(Call<JsonRespBase<UserModel>> call,
+						                       Response<JsonRespBase<UserModel>> response) {
+							if (call.isCanceled()) {
+								return;
+							}
+							if (response != null && response.isSuccessful()) {
+								if (response.body() != null
+										&& response.body().getCode() == NetStatusCode.SUCCESS) {
+									UserModel user = getUser();
+									user.userInfo = response.body().getData().userInfo;
+									notifyUserAll(user);
+									updateJPushTagAndAlias();
+									return;
 								}
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.e(AppDebugConfig.TAG_MANAGER,
+											response.body() == null ? "解析失败" : response.body().error());
+								}
+								// 登录状态失效，原因包括: 已在其他地方登录，更新失败
+								sessionFailed(response.body());
+							}
+						}
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_MANAGER, t);
-									}
-								}
-							});
+						@Override
+						public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_MANAGER, t);
+							}
+						}
+					});
 				}
 			});
 		}
@@ -218,6 +232,11 @@ public class AccountManager {
 	}
 
 	/**
+	 * 更新用户部分信息的网络请求声明
+	 */
+	private Call<JsonRespBase<UserInfo>> mCallUpdatePartInfo;
+
+	/**
 	 * 更新用户部分信息: 偶玩豆，金币，礼包数
 	 */
 	public void updatePartUserInfo() {
@@ -229,36 +248,42 @@ public class AccountManager {
 						return;
 					}
 
-					Global.getNetEngine().getUserPartInfo(new JsonReqBase<Void>())
-							.enqueue(new Callback<JsonRespBase<UserInfo>>() {
-								@Override
-								public void onResponse(Response<JsonRespBase<UserInfo>> response, Retrofit retrofit) {
-									if (response != null && response.isSuccess()) {
-										if (response.body() != null
-												&& response.body().getCode() == NetStatusCode.SUCCESS) {
-											UserInfo info = response.body().getData();
-											UserModel user = getUser();
-											user.userInfo.score = info.score;
-											user.userInfo.bean = info.bean;
-											user.userInfo.giftCount = info.giftCount;
-											notifyUserPart(user);
-											return;
-										}
-										if (AppDebugConfig.IS_DEBUG) {
-											KLog.e(AppDebugConfig.TAG_MANAGER,
-													response.body() == null ? "解析失败" : response.body().error());
-										}
-										sessionFailed(response.body());
-									}
+					if (mCallUpdatePartInfo != null) {
+						mCallUpdatePartInfo.cancel();
+						mCallUpdatePartInfo = mCallUpdatePartInfo.clone();
+					} else {
+						mCallUpdatePartInfo = Global.getNetEngine().getUserPartInfo(new JsonReqBase<Void>());
+					}
+					mCallUpdatePartInfo.enqueue(new Callback<JsonRespBase<UserInfo>>() {
+						@Override
+						public void onResponse(Call<JsonRespBase<UserInfo>> call, Response<JsonRespBase
+								<UserInfo>> response) {
+							if (response != null && response.isSuccessful()) {
+								if (response.body() != null
+										&& response.body().getCode() == NetStatusCode.SUCCESS) {
+									UserInfo info = response.body().getData();
+									UserModel user = getUser();
+									user.userInfo.score = info.score;
+									user.userInfo.bean = info.bean;
+									user.userInfo.giftCount = info.giftCount;
+									notifyUserPart(user);
+									return;
 								}
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.e(AppDebugConfig.TAG_MANAGER,
+											response.body() == null ? "解析失败" : response.body().error());
+								}
+								sessionFailed(response.body());
+							}
+						}
 
-								@Override
-								public void onFailure(Throwable t) {
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.e(AppDebugConfig.TAG_MANAGER, t);
-									}
-								}
-							});
+						@Override
+						public void onFailure(Call<JsonRespBase<UserInfo>> call, Throwable t) {
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.e(AppDebugConfig.TAG_MANAGER, t);
+							}
+						}
+					});
 				}
 			});
 		}
@@ -335,51 +360,65 @@ public class AccountManager {
 	}
 
 	/**
+	 * 进行更新用户登录Session的网络请求声明
+	 */
+	private Call<JsonRespBase<UpdateSession>> mCallUpdateSession;
+
+	/**
 	 * 更新Session的实际网络请求方法
 	 */
 	private void updateSessionNetRequest() {
 		if (NetworkUtil.isConnected(mContext)) {
-			Global.getNetEngine().updateSession(new JsonReqBase<String>())
-					.enqueue(new Callback<JsonRespBase<UpdateSession>>() {
+			if (mCallUpdateSession != null) {
+				mCallUpdateSession.cancel();
+				mCallUpdateSession = mCallUpdateSession.clone();
+			} else {
+				mCallUpdateSession = Global.getNetEngine().updateSession(new JsonReqBase<String>());
+			}
+			mCallUpdateSession.enqueue(new Callback<JsonRespBase<UpdateSession>>() {
 
-						@Override
-						public void onResponse(Response<JsonRespBase<UpdateSession>> response,
-						                       Retrofit retrofit) {
-							if (response != null && response.isSuccess()) {
-								if (response.body() != null) {
-									if (response.body().isSuccess()) {
-										mUser.userSession.session = response.body().getData().session;
-										notifyUserPart(mUser);
-										// 请求更新数据
-										updateUserInfo();
-										StatisticsManager.getInstance().trace(mContext,
-												StatisticsManager.ID.USER_LOGIN_WITH_SESSION);
-										return;
-									}
-									if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-										// 更新session不同步
-										if (AppDebugConfig.IS_DEBUG) {
-											KLog.d("session is not sync, err msg = " + response.body().getMsg());
-										}
-										// 重置登录信息，表示未登录
-										notifyUserAll(null);
-										return;
-									}
+				@Override
+				public void onResponse(Call<JsonRespBase<UpdateSession>> call, Response<JsonRespBase
+						<UpdateSession>> response) {
+					if (call.isCanceled()) {
+						return;
+					}
+					if (response != null && response.isSuccessful()) {
+						if (response.body() != null) {
+							if (response.body().isSuccess()) {
+								mUser.userSession.session = response.body().getData().session;
+								notifyUserPart(mUser);
+								// 请求更新数据
+								updateUserInfo();
+                                ScoreManager.getInstance().toastByCallback(mUser, false);
+								StatisticsManager.getInstance().trace(mContext,
+										StatisticsManager.ID.USER_LOGIN_WITH_SESSION);
+								return;
+							}
+							if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
+								// 更新session不同步
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d("session is not sync, err msg = " + response.body().getMsg());
 								}
-							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
+								// 重置登录信息，表示未登录
+								notifyUserAll(null);
+								return;
 							}
 						}
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
+					}
+				}
 
-						@Override
-						public void onFailure(Throwable t) {
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.e(AppDebugConfig.TAG_MANAGER, t);
-								KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
-							}
-						}
-					});
+				@Override
+				public void onFailure(Call<JsonRespBase<UpdateSession>> call, Throwable t) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.e(AppDebugConfig.TAG_MANAGER, t);
+						KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
+					}
+				}
+			});
 		}
 	}
 
@@ -398,6 +437,11 @@ public class AccountManager {
 	}
 
 	/**
+	 * 通知退出登录的网络请求声明
+	 */
+	private Call<Void> mCallLogout;
+
+	/**
 	 * 登出当前账号，会通知服务器并刷新整个页面
 	 */
 	public void logout() {
@@ -407,16 +451,22 @@ public class AccountManager {
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				Global.getNetEngine().logout(new JsonReqBase<Object>()).enqueue(new Callback<Void>() {
+				if (mCallLogout != null) {
+					mCallLogout.cancel();
+					mCallLogout = mCallLogout.clone();
+				} else {
+					mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
+				}
+				mCallLogout.enqueue(new Callback<Void>() {
 					@Override
-					public void onResponse(Response<Void> response, Retrofit retrofit) {
+					public void onResponse(Call<Void> call, Response<Void> response) {
 						if (AppDebugConfig.IS_FRAG_DEBUG) {
 							KLog.e(response == null ? "login response null" : response.code());
 						}
 					}
 
 					@Override
-					public void onFailure(Throwable t) {
+					public void onFailure(Call<Void> call, Throwable t) {
 						if (AppDebugConfig.IS_FRAG_DEBUG) {
 							KLog.e(t);
 						}
@@ -440,6 +490,12 @@ public class AccountManager {
 		return mUnreadMessageCount;
 	}
 
+
+	/**
+	 * 获取未读推送消息的网络请求声明
+	 */
+	private Call<JsonRespBase<MessageCount>> mCallObtainUnread;
+
 	/**
 	 * 获取未读推送消息数量
 	 */
@@ -450,36 +506,43 @@ public class AccountManager {
 			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
 			return;
 		}
-		Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>())
-				.enqueue(new Callback<JsonRespBase<MessageCount>>() {
-					@Override
-					public void onResponse(Response<JsonRespBase<MessageCount>> response, Retrofit retrofit) {
-						if (response != null && response.isSuccess()) {
-							if (response.body() != null && response.body().isSuccess()) {
-								setUnreadMessageCount(response.body().getData().count);
-								ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
-										.USER_UPDATE_PUSH_MESSAGE);
-								return;
-							}
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-										+ (response.body() == null ? "解析出错" : response.body().error()));
-							}
-							return;
-						}
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-									+ (response == null ? "返回出错" : response.code()));
-						}
+		if (mCallObtainUnread != null) {
+			mCallObtainUnread.cancel();
+			mCallObtainUnread = mCallObtainUnread.clone();
+		} else {
+			mCallObtainUnread = Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>());
+		}
+		mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCount>>() {
+			@Override
+			public void onResponse(Call<JsonRespBase<MessageCount>> call, Response<JsonRespBase<MessageCount>>
+					response) {
+				if (call.isCanceled()) {
+					return;
+				}
+				if (response != null && response.isSuccessful()) {
+					if (response.body() != null && response.body().isSuccess()) {
+						setUnreadMessageCount(response.body().getData().count);
+						ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
+								.USER_UPDATE_PUSH_MESSAGE);
+						return;
 					}
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+								+ (response.body() == null ? "解析出错" : response.body().error()));
+					}
+					return;
+				}
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+							+ (response == null ? "返回出错" : response.code()));
+				}
+			}
 
-					@Override
-					public void onFailure(Throwable t) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-" + t.getMessage());
-						}
-					}
-				});
+			@Override
+			public void onFailure(Call<JsonRespBase<MessageCount>> call, Throwable t) {
+
+			}
+		});
 	}
 
 

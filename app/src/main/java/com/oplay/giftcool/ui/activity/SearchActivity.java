@@ -1,12 +1,13 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -31,10 +32,9 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 15-12-22.
@@ -52,6 +52,12 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 
 	private String mLastSearchKey = "";
 	private String mLastInputKey = "";
+    private final int PAGE_CONTENT = 0;
+    private final int PAGE_EMPTY = 1;
+    private final int PAGE_HISTORY = 2;
+    private final int PAGE_PROMPT = 3;
+    private final int PAGE_ERROR = 4;
+    private int mCurrentPage = PAGE_HISTORY;
 
 	@Override
 	protected void initView() {
@@ -66,11 +72,55 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		mSearchLayout.setIsAutoSendRequest(false);
 		mSearchLayout.setAutoPopupPrompt(true);
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
-		displayHistoryUI(mHistoryData);
-	}
 
+//        showView();
+        displayHistoryUI(mHistoryData);
+    }
 
-	/**
+//    private void showView() {
+//        switch (mCurrentPage) {
+//            case PAGE_EMPTY:
+//                displayEmptyUI();
+//                break;
+//            case PAGE_ERROR:
+//                displayNetworkErrUI();
+//                break;
+//            case PAGE_CONTENT:
+//            case PAGE_PROMPT:
+//            case PAGE_HISTORY:
+//                displayHistoryUI(mHistoryData);
+//                break;
+//        }
+//    }
+//
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        if (mEmptySearchFragment != null) {
+//            ft.remove(mEmptySearchFragment);
+//        }
+//        if (mHistoryFragment != null) {
+//            ft.remove(mHistoryFragment);
+//        }
+//        if (mPromptFragment != null) {
+//            ft.remove(mPromptFragment);
+//        }
+//        if (mResultFragment != null) {
+//            ft.remove(mResultFragment);
+//        }
+//        ft.commitAllowingStateLoss();
+//        outState.putInt(KeyConfig.KEY_DATA, mCurrentPage);
+//        super.onSaveInstanceState(outState);
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        mCurrentPage = savedInstanceState.getInt(KeyConfig.KEY_DATA, PAGE_HISTORY);
+//        showView();
+//    }
+
+    /**
 	 * 获取输入的历史数据
 	 */
 	private void obtainHistoryData() {
@@ -134,10 +184,16 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayHistoryUI(ArrayList<String> data) {
 		if (mHistoryFragment == null) {
-			mHistoryFragment = HistoryFragment.newInstance(data);
+            Fragment f = getSupportFragmentManager().findFragmentByTag(HistoryFragment.class.getSimpleName());
+            if (f != null) {
+                mHistoryFragment = (HistoryFragment) f;
+            } else {
+			    mHistoryFragment = HistoryFragment.newInstance(data);
+            }
 		}
 		mHistoryFragment.updateHistoryData(data);
 		reattachFrag(R.id.fl_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
+        mCurrentPage = PAGE_HISTORY;
 	}
 
 	/**
@@ -147,10 +203,16 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayPromptUI(ArrayList<PromptData> data) {
 		if (mPromptFragment == null) {
-			mPromptFragment = PromptFragment.newInstance(data);
+            Fragment f = getSupportFragmentManager().findFragmentByTag(PromptFragment.class.getSimpleName());
+            if (f != null) {
+                mPromptFragment = (PromptFragment) f;
+            } else {
+                mPromptFragment = PromptFragment.newInstance(data);
+            }
 		}
 		mPromptFragment.updateData(data);
 		reattachFrag(R.id.fl_container, mPromptFragment, mPromptFragment.getClass().getSimpleName());
+        mCurrentPage = PAGE_PROMPT;
 	}
 
 	/**
@@ -160,10 +222,16 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayDataUI(SearchDataResult data, String name, int id) {
 		if (mResultFragment == null) {
-			mResultFragment = ResultFragment.newInstance(data);
+            Fragment f = getSupportFragmentManager().findFragmentByTag(ResultFragment.class.getSimpleName());
+            if (f != null) {
+                mResultFragment = (ResultFragment) f;
+            } else {
+                mResultFragment = ResultFragment.newInstance(data);
+            }
 		}
 		mResultFragment.updateData(data, name, id);
 		reattachFrag(R.id.fl_container, mResultFragment, mResultFragment.getClass().getSimpleName());
+        mCurrentPage = PAGE_CONTENT;
 	}
 
 	/**
@@ -171,23 +239,35 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayEmptyUI() {
 		if (mEmptySearchFragment == null) {
-			mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
+            Fragment f = getSupportFragmentManager().findFragmentByTag(EmptySearchFragment.class.getSimpleName());
+            if (f != null) {
+                mEmptySearchFragment = (EmptySearchFragment) f;
+            } else {
+                mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
+            }
 		}
 		reattachFrag(R.id.fl_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
+        mCurrentPage = PAGE_EMPTY;
 	}
 
 	/**
 	 * 显示网络错误提示
 	 */
 	private void displayNetworkErrUI() {
-		if ("".equals(mLastSearchKey) ||
-				!mLastSearchKey.equals(mSearchLayout.getKeyword())) {
+		if ("".equals(mLastSearchKey)
+                || (mSearchLayout != null && !mLastSearchKey.equals(mSearchLayout.getKeyword()))) {
 			return;
 		}
 		if (mNetErrorFragment == null) {
-			mNetErrorFragment = NetErrorFragment.newInstance();
+            Fragment f = getSupportFragmentManager().findFragmentByTag(NetErrorFragment.class.getSimpleName());
+            if (f != null) {
+                mNetErrorFragment = (NetErrorFragment) f;
+            } else {
+                mNetErrorFragment = NetErrorFragment.newInstance();
+            }
 		}
 		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+        mCurrentPage = PAGE_ERROR;
 	}
 
 	public void sendSearchRequest(String keyword, int id) {
@@ -258,15 +338,16 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			mCallResult = Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data));
 			mCallResult.enqueue(new Callback<JsonRespBase<SearchDataResult>>() {
 				@Override
-				public void onResponse(Response<JsonRespBase<SearchDataResult>> response, Retrofit retrofit) {
-					if (!mNeedWorkCallback) {
+				public void onResponse(Call<JsonRespBase<SearchDataResult>> call, Response<JsonRespBase
+						<SearchDataResult>> response) {
+					if (!mNeedWorkCallback || call.isCanceled()) {
 						return;
 					}
 					if (response != null && response.code() == 200) {
 						if (response.body() != null && response.body().isSuccess()) {
 							SearchDataResult data = response.body().getData();
 							// 检验Key返回数据是否是当前需要的
-							if (!mSearchLayout.getKeyword().trim().equals(mLastSearchKey)) {
+							if (mSearchLayout != null && !mLastSearchKey.equals(mSearchLayout.getKeyword())) {
 								// 丢弃这次搜索结果
 								// 不更新
 								return;
@@ -288,8 +369,8 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 				}
 
 				@Override
-				public void onFailure(Throwable t) {
-					if (!mNeedWorkCallback) {
+				public void onFailure(Call<JsonRespBase<SearchDataResult>> call, Throwable t) {
+					if (!mNeedWorkCallback || call.isCanceled()) {
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {
@@ -335,8 +416,11 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			mCallPrompt = Global.getNetEngine().obtainSearchPrompt(new JsonReqBase<ReqSearchKey>(reqData));
 			mCallPrompt.enqueue(new Callback<JsonRespBase<SearchPromptResult>>() {
 				@Override
-				public void onResponse(Response<JsonRespBase<SearchPromptResult>> response, Retrofit
-						retrofit) {
+				public void onResponse(Call<JsonRespBase<SearchPromptResult>> call, Response<JsonRespBase
+						<SearchPromptResult>> response) {
+					if (!mNeedWorkCallback || call.isCanceled()) {
+						return;
+					}
 					String curKeyWord = mSearchLayout.getKeyword().trim();
 					if (response != null && response.code() == 200) {
 						if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
@@ -361,7 +445,10 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 				}
 
 				@Override
-				public void onFailure(Throwable t) {
+				public void onFailure(Call<JsonRespBase<SearchPromptResult>> call, Throwable t) {
+					if (!mNeedWorkCallback || call.isCanceled()) {
+						return;
+					}
 					if (AppDebugConfig.IS_FRAG_DEBUG) {
 						KLog.e(t);
 					}

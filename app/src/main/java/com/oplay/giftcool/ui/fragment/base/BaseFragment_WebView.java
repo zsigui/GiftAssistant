@@ -89,7 +89,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				Uri mUri = Uri.parse(url);
 				final String host = mUri.getHost();
 				//首先域名匹配
-				if (WebViewUrl.getBaseUrl().contains(host) || NetUrl.getBaseUrl().contains(host)) {
+                // 对于部分机型 getBaseUrl 可能为null
+				if ((WebViewUrl.getBaseUrl() != null && WebViewUrl.getBaseUrl().contains(host))
+                        || (NetUrl.getBaseUrl() != null && NetUrl.getBaseUrl().contains(host))) {
 					//其次路径匹配
 					hasFind = false;
 				} else {

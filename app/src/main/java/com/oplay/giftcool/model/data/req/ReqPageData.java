@@ -15,7 +15,7 @@ public class ReqPageData implements Serializable {
 
 	// 请求项数，默认为10
 	@SerializedName("page_size")
-	public int pageSize = 10;
+	public int pageSize = 20;
 
 	@SerializedName("type")
 	public int type;

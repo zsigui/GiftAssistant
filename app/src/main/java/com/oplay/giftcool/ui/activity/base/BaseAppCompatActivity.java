@@ -172,12 +172,29 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	}
 
 	public void replaceFrag(@IdRes int id, Fragment newFrag, String tag, boolean isAddToBackStack) {
+        if (isFinishing()) {
+            // Activity处于Finished中
+            return;
+        }
+        // 查找特定tag的Fragment
 		Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (f != null) {
+            // 查找的tag已经存在，直接显示
 			ft.show(f);
 		} else {
-			ft.replace(id, newFrag, tag);
+            // 查找的tag不存在
+            if (newFrag == null) {
+                // 需要新添加的Fragment为null，不处理
+                return;
+            }
+            if (newFrag.isAdded()) {
+                // 需要新添加的Fragment已经添加，直接显示
+                ft.show(newFrag);
+            } else {
+                // 没有添加，调用replace方法
+                ft.replace(id, newFrag, tag);
+            }
 		}
 		if (isAddToBackStack) {
 			ft.addToBackStack(tag);
@@ -195,19 +212,34 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	 * @param tag     当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
 	 */
 	public void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
-		Fragment f = getSupportFragmentManager().findFragmentById(id);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Fragment f = getSupportFragmentManager().findFragmentById(id);
 		if (f != null && f == newFrag) {
-			ft.attach(f);
+            // 已经存在
+            if (!f.isAdded()) {
+                // 不存在添加状态，先添加
+                ft.attach(f);
+            }
 		} else {
+            // 没有存在
 			if (f != null && !f.isDetached()) {
 				ft.detach(f);
 			}
 			Fragment self_f = getSupportFragmentManager().findFragmentByTag(tag);
-			if (self_f == null || !self_f.isAdded()) {
-				ft.add(id, newFrag, tag);
-			}
-			ft.attach(newFrag);
+			if (self_f == null) {
+                // tag 找不到时，添加
+                ft.add(id, newFrag, tag);
+            } else {
+                // tag 找到时，继续判断
+                if (self_f != newFrag) {
+                    // 并非是要添加的，移除，然后添加新的
+                    ft.detach(self_f);
+                    ft.add(id, newFrag, tag);
+                } else if (self_f.isDetached()) {
+                    // 是要添加的，但是不存在添加状态，附着
+                    ft.attach(self_f);
+                }
+            }
 		}
 		ft.show(newFrag);
 		ft.commitAllowingStateLoss();
@@ -233,8 +265,15 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			ft.show(f);
 			f.setUserVisibleHint(true);
 		} else {
-			ft.add(id, newFrag, newTag);
-			newFrag.setUserVisibleHint(true);
+            if (newFrag == null) {
+                return;
+            }
+            if (newFrag.isAdded()) {
+                ft.show(newFrag);
+            } else {
+                ft.add(id, newFrag, newTag);
+            }
+            newFrag.setUserVisibleHint(true);
 		}
 		ft.commitAllowingStateLoss();
 	}
