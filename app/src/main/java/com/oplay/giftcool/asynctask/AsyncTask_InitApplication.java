@@ -63,7 +63,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	 * 在此处进行对旧版的处理操作
 	 */
 	public void doClearWorkForOldVer() {
-		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, 0);
+		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
 		if (oldVer != AppConfig.SDK_VER) {
 			if (oldVer < 3) {
 				// 清除旧版的账号存储信息

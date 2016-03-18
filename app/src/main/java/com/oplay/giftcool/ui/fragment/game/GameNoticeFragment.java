@@ -11,8 +11,8 @@ import com.oplay.giftcool.adapter.GameNoticeAdapter;
 import com.oplay.giftcool.adapter.other.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -54,7 +54,9 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 				return;
 			}
 			if (mInPage || mData == null || mData.size() < 10) {
-				mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
+				if (mHandler != null) {
+					mHandler.postDelayed(this, MAINTAIN_DATA_TIME);
+				}
 				return;
 			}
 			ArrayList<IndexGameNew> remainData = new ArrayList<>(10);
@@ -116,6 +118,10 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		mAdapter = new GameNoticeAdapter(getActivity());
 		mDataView.setAdapter(mAdapter);
 		mViewManager.showContent();
+
+		if (mHandler == null) {
+			mHandler = new Handler();
+		}
 	}
 
 	@Override
@@ -259,10 +265,14 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		super.setUserVisibleHint(isVisibleToUser);
 		mInPage = isVisibleToUser;
 		if (isVisibleToUser) {
-			mHandler.removeCallbacks(mClearDataTask);
+			if (mHandler != null) {
+				mHandler.removeCallbacks(mClearDataTask);
+			}
 			mIsRunning = false;
 		} else {
-			mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			if (mHandler != null) {
+				mHandler.postDelayed(mClearDataTask, MAINTAIN_DATA_TIME);
+			}
 			mIsRunning = true;
 		}
 	}

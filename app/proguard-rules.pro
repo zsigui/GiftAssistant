@@ -74,6 +74,7 @@
 
 # entity
 -keep public enum com.oplay.giftcool.model.** {*;}
+-keep public enum com.oplay.gifthelper.model.** {*;}
 
 # js
 -keep public class android.webkit.WebViewClient
@@ -81,6 +82,7 @@
 -dontwarn android.webkit.WebViewClient
 
 -keep class com.oplay.giftcool.listener.WebViewInterface {*;}
+-keep class com.oplay.gifthelper.listener.WebViewInterface {*;}
 -keepclassmembers class * extends android.webkit.WebViewClient {
      *;
 }

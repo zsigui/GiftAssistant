@@ -69,13 +69,15 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	private String mGameKey;
 	private JsonReqBase<ReqIndexGift> mReqPageObj;
 	// 每隔5分钟刷新一次
-	private Handler mHandler;
+	private Handler mHandler = new Handler();
 	private Runnable mRefreshRunnable = new Runnable() {
 		@Override
 		public void run() {
 			mIsNotifyRefresh = true;
 			lazyLoad();
-			mHandler.postDelayed(this, 5 * 60 * 1000);
+			if (mHandler != null) {
+				mHandler.postDelayed(this, 5 * 60 * 1000);
+			}
 		}
 	};
 
@@ -138,7 +140,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		//mAdapter.setListener(this);
 		rvContainer.setAdapter(mAdapter);
 		mIsPrepared = true;
-		mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
+		if (mHandler != null) {
+			mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
+		}
 
 		ReqIndexGift data = new ReqIndexGift();
 		data.pageSize = 20;
@@ -382,21 +386,23 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						if (response != null && response.isSuccess() && mCanShowUI) {
 							if (response.body() != null && response.body().isSuccess()) {
 								// 数据刷新成功，进行更新
-								HashMap<String, IndexGiftNew> respData = response.body().getData();
-								ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-								updateCircle(respData, waitDelIndexs, mGiftData.zero);
-								delIndex(mGiftData.zero, waitDelIndexs);
-								waitDelIndexs.clear();
-								updateCircle(respData, waitDelIndexs, mGiftData.limit);
-								delIndex(mGiftData.limit, waitDelIndexs);
-								waitDelIndexs.clear();
-								updateCircle(respData, waitDelIndexs, mGiftData.news);
-								delIndex(mGiftData.news, waitDelIndexs);
-								Message msg = Message.obtain();
-								msg.what = ID_UPDATE;
-								msg.obj = mGiftData;
-								mHandler.sendMessage(msg);
-								response = null;
+								if (mHandler != null) {
+									HashMap<String, IndexGiftNew> respData = response.body().getData();
+									ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
+									updateCircle(respData, waitDelIndexs, mGiftData.zero);
+									delIndex(mGiftData.zero, waitDelIndexs);
+									waitDelIndexs.clear();
+									updateCircle(respData, waitDelIndexs, mGiftData.limit);
+									delIndex(mGiftData.limit, waitDelIndexs);
+									waitDelIndexs.clear();
+									updateCircle(respData, waitDelIndexs, mGiftData.news);
+									delIndex(mGiftData.news, waitDelIndexs);
+									Message msg = Message.obtain();
+									msg.what = ID_UPDATE;
+									msg.obj = mGiftData;
+									mHandler.sendMessage(msg);
+									response = null;
+								}
 							}
 						}
 					} catch (IOException e) {
