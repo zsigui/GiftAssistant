@@ -19,11 +19,11 @@ public class AppDebugConfig {
 //    public static final boolean IS_DEBUG = false;
 //	public static final boolean IS_FRAG_DEBUG = false;
 //	public static final boolean IS_PERM_DEBUG = false;
-//	public static final boolean IS_STATISTICS_SHOW = true;
+	public static final boolean IS_STATISTICS_SHOW = true;
 	public static final boolean IS_DEBUG = true;
 	public static final boolean IS_FRAG_DEBUG = true;
 	public static final boolean IS_PERM_DEBUG = true;
-	public static final boolean IS_STATISTICS_SHOW = false;
+//	public static final boolean IS_STATISTICS_SHOW = false;
 
 
 	public static final String TAG_APP = "gcool_debug_app";

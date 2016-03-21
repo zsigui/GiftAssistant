@@ -268,6 +268,9 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 							@Override
 							public void onResponse(Call<JsonRespBase<UserModel>> call,
 							                       Response<JsonRespBase<UserModel>> response) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
 								hideLoading();
 								if (response != null && response.isSuccessful()) {
 									if (response.body() != null
@@ -284,6 +287,9 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 
 							@Override
 							public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+								if (!mCanShowUI || call.isCanceled()) {
+									return;
+								}
 								hideLoading();
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
@@ -312,7 +318,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		}
 		AccountManager.getInstance().notifyUserAll(userModel);
 		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID
-				.USER_OUWAN_LOGIN);
+				.USER_OUWAN_LOGIN, "用户名=" + userModel.userInfo.username);
 		((BaseAppCompatActivity) getActivity()).onBack();
 	}
 

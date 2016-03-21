@@ -72,14 +72,6 @@ public class JPushReceiver extends BroadcastReceiver {
 					// 用户点击了通知，打开对应界面
 					// 不显示在状态栏的自定义消息，根据需要进行额外工作
 					Bundle bundle = intent.getExtras();
-					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Map<String, String> kv = new HashMap<>();
-						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
-						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 1);
-					}
-
 					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" + extra);
@@ -94,19 +86,36 @@ public class JPushReceiver extends BroadcastReceiver {
 							.class);
 					PushMessageManager.getInstance().handleNotifyMessage(context, msg, intent);
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
-				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-					// 用户接收到通知
-					Bundle bundle = intent.getExtras();
+
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
 						Map<String, String> kv = new HashMap<>();
 						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-						kv.put("消息标题", bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE));
-						kv.put("消息内容", bundle.getString(JPushInterface.EXTRA_ALERT));
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 1);
+						kv.put("消息标题", msg.title);
+						kv.put("消息内容", msg.content);
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 1);
 					}
+				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+					// 用户接收到通知
+					Bundle bundle = intent.getExtras();
+					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "
 								+ bundle.getString(JPushInterface.EXTRA_EXTRA));
+					}
+					if (extra == null) {
+						return;
+					}
+					if (AssistantApp.getInstance().getGson() == null) {
+						AssistantApp.getInstance().initGson();
+					}
+					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
+							.class);
+					if (AppDebugConfig.IS_STATISTICS_SHOW) {
+						Map<String, String> kv = new HashMap<>();
+						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						kv.put("消息标题", msg.title);
+						kv.put("消息内容", msg.content);
+						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 1);
 					}
 				}
 			} catch (Throwable t) {

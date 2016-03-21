@@ -25,7 +25,6 @@ import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
-import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -116,7 +115,6 @@ public class AssistantApp extends Application {
 //		mRefWatcher = LeakCanary.install(this);
         // enabled StrictMode only in TEST
         sInstance = this;
-
         // 启动闹钟通知广播进程来唤醒服务
         AlarmClockManager.getInstance().startWakeAlarm(this);
         appInit();
@@ -128,10 +126,6 @@ public class AssistantApp extends Application {
      */
     public void appInit() {
         KLog.init(AppDebugConfig.IS_DEBUG);
-        // 初始化统计工具
-        StatisticsManager.getInstance().init(this, getChannelId());
-        // 初始化推送SDK
-        PushMessageManager.getInstance().initPush(this);
         initImageLoader();
         // 初始配置加载列表
         initLoadingView();

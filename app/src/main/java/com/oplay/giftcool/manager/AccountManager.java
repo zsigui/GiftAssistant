@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
@@ -45,7 +46,7 @@ import retrofit2.Response;
  * 管理用户账号信息的管理器 <br/>
  * Created by zsigui on 15-12-25.
  */
-public class AccountManager {
+public class AccountManager implements OnFinishListener{
 
 	private static AccountManager manager;
 	private static Context mContext = AssistantApp.getInstance().getApplicationContext();
@@ -118,7 +119,7 @@ public class AccountManager {
 
 		// 同步cookie
 		syncCookie();
-		if (user != null) {
+		if (isLogin()) {
 			NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
 		} else {
 			NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
@@ -188,12 +189,11 @@ public class AccountManager {
 						@Override
 						public void onResponse(Call<JsonRespBase<UserModel>> call,
 						                       Response<JsonRespBase<UserModel>> response) {
-							if (call.isCanceled()) {
+							if (call.isCanceled() || !isLogin()) {
 								return;
 							}
 							if (response != null && response.isSuccessful()) {
-								if (response.body() != null
-										&& response.body().getCode() == NetStatusCode.SUCCESS) {
+								if (response.body() != null && response.body().isSuccess()) {
 									UserModel user = getUser();
 									user.userInfo = response.body().getData().userInfo;
 									notifyUserAll(user);
@@ -258,9 +258,11 @@ public class AccountManager {
 						@Override
 						public void onResponse(Call<JsonRespBase<UserInfo>> call, Response<JsonRespBase
 								<UserInfo>> response) {
+							if (call.isCanceled() || !isLogin()) {
+								return;
+							}
 							if (response != null && response.isSuccessful()) {
-								if (response.body() != null
-										&& response.body().getCode() == NetStatusCode.SUCCESS) {
+								if (response.body() != null && response.body().isSuccess()) {
 									UserInfo info = response.body().getData();
 									UserModel user = getUser();
 									user.userInfo.score = info.score;
@@ -288,6 +290,8 @@ public class AccountManager {
 			});
 		}
 	}
+
+
 
 	/**
 	 * 同步Cookie
@@ -380,13 +384,13 @@ public class AccountManager {
 				@Override
 				public void onResponse(Call<JsonRespBase<UpdateSession>> call, Response<JsonRespBase
 						<UpdateSession>> response) {
-					if (call.isCanceled()) {
+					if (call.isCanceled() || !isLogin()) {
 						return;
 					}
 					if (response != null && response.isSuccessful()) {
 						if (response.body() != null) {
 							if (response.body().isSuccess()) {
-								mUser.userSession.session = response.body().getData().session;
+								getUser().userSession.session = response.body().getData().session;
 								notifyUserPart(mUser);
 								// 请求更新数据
 								updateUserInfo();
@@ -543,6 +547,30 @@ public class AccountManager {
 
 			}
 		});
+	}
+
+	@Override
+	public void release() {
+		if (mCallGetUserInfo != null) {
+			mCallGetUserInfo.cancel();
+			mCallGetUserInfo = null;
+		}
+		if (mCallUpdatePartInfo != null) {
+			mCallUpdatePartInfo.cancel();
+			mCallUpdatePartInfo = null;
+		}
+		if (mCallUpdateSession != null) {
+			mCallUpdateSession.cancel();
+			mCallUpdateSession = null;
+		}
+		if (mCallLogout != null) {
+			mCallLogout.cancel();
+			mCallLogout = null;
+		}
+		if (mCallObtainUnread != null) {
+			mCallObtainUnread.cancel();
+			mCallObtainUnread = null;
+		}
 	}
 
 

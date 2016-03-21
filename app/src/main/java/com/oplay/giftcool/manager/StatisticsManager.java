@@ -104,12 +104,16 @@ public class StatisticsManager {
 			AnalyticsConfig.enableEncrypt(true);
 			MobclickAgent.setDebugMode(AppConfig.TEST_MODE);
 			MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
-			if (AppConfig.TEST_MODE) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_STATICS, getDeviceInfo(context));
+
+
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_STATICS, "umeng statistics is initialed");
+				if (AppConfig.TEST_MODE) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_STATICS, getDeviceInfo(context));
+					}
 				}
 			}
-
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().build());
 			}
@@ -156,7 +160,7 @@ public class StatisticsManager {
 	public void trace(Context context, String id) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id);
+				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
 			}
 			if (mIsInit) {
 //			TCAgent.onEvent(context, id);
@@ -168,7 +172,7 @@ public class StatisticsManager {
 	public void trace(Context context, String id, String subtitle) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle);
+				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " + mIsInit);
 			}
 //			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
 			if (mIsInit) {
@@ -181,7 +185,7 @@ public class StatisticsManager {
 	public void trace(Context context, String id, Map keyMap, int val) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val);
+				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", isInit = " + mIsInit);
 			}
 			if (mIsInit) {
 //			TCAgent.onEvent(context, title, subtitle, keyMap);
