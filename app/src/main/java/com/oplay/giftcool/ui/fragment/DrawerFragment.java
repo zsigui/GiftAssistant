@@ -18,6 +18,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.DrawerModel;
@@ -200,8 +201,9 @@ public class DrawerFragment extends BaseFragment {
 		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
 				.ic_drawer_my_attention, "我的关注", this));
 		if (AssistantApp.getInstance().isAllowDownload()) {
-			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD,
-					new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download, "下载管理", this));
+			DrawerModel dw = new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download, "下载管理", this);
+			dw.count = ApkDownloadManager.getInstance(getContext()).getEndOfPaused();
+			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD, dw);
 		}
 		modelArray.put(KeyConfig.TYPE_ID_SETTING,
 				new DrawerModel(KeyConfig.TYPE_ID_SETTING, R.drawable.ic_drawer_setting, "设置", this));

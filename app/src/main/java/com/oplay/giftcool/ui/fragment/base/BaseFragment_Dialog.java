@@ -66,7 +66,7 @@ public abstract class BaseFragment_Dialog extends DialogFragment implements View
 		setNegativeEnabled(mNegativeEnabled);
 
 		processLogic();
-		return new AlertDialog.Builder(getActivity(), R.style.DefaultCustomDialog)
+		return new AlertDialog.Builder(getContext(), R.style.DefaultCustomDialog)
 				.setView(mContentView)
 				.create();
 	}

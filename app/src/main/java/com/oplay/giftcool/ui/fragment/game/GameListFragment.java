@@ -227,7 +227,7 @@ public class GameListFragment extends BaseFragment_Refresh<IndexGameNew> impleme
 	public void onItemClick(IndexGameNew item, View view, int position) {
 		if (view.getId() == R.id.tv_download) {
 			if (item != null && !AppStatus.DISABLE.equals(item.appStatus)) {
-				item.handleOnClick(getActivity().getSupportFragmentManager());
+				item.handleOnClick(getChildFragmentManager());
 			}
 		} else {
 			IntentUtil.jumpGameDetail(getContext(), item.id, GameTypeUtil.JUMP_STATUS_DETAIL);

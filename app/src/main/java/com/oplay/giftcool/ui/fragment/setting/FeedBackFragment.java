@@ -58,7 +58,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         if (!AccountManager.getInstance().isLogin()) {
             ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
             IntentUtil.jumpLogin(getContext());
-            getActivity().finish();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
             return;
         }
         setContentView(R.layout.fragment_feedback);
@@ -186,7 +188,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                             if (response.body() != null && response.body().isSuccess()) {
                                 ToastUtil.showShort("反馈成功，谢谢你");
                                 ScoreManager.getInstance().toastByCallback(response.body().getData());
-                                ((BaseAppCompatActivity) getActivity()).onBack();
+                                if (getActivity() != null) {
+                                    getActivity().onBackPressed();
+                                }
                                 return;
                             }
                             ToastUtil.showShort("提交失败-" + (response.body() == null ?

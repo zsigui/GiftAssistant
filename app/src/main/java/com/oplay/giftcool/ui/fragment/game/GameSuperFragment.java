@@ -74,7 +74,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
                 LinearLayoutManager.VERTICAL);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(itemDecoration);
-		mAdapter = new GameSuperAdapter(getActivity());
+		mAdapter = new GameSuperAdapter(getContext());
 		mRecyclerView.setAdapter(mAdapter);
 		mRefreshLayout.setCanShowLoad(false);
 		mIsPrepared = mNoMoreLoad = true;

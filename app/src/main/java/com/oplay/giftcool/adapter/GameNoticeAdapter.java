@@ -36,7 +36,9 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download implements FooterL
 			@Override
 			public void onItemClick(IndexGameNew item, View view, int position) {
 				if (view.getId() == R.id.tv_download && !AppStatus.DISABLE.equals(item.appStatus)) {
-					item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
+					if (mContext != null && mContext instanceof FragmentActivity) {
+						item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
+					}
 				} else {
 					IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
 				}

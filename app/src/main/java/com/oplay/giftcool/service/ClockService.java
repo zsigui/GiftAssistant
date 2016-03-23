@@ -75,7 +75,7 @@ public class ClockService extends Service {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.v(AppDebugConfig.TAG_SERVICE, "Time Clock execute, Request Refresh UI");
 			}
-			ThreadUtil.runInUIThread(new Runnable() {
+			ThreadUtil.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);

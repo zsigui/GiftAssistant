@@ -13,15 +13,15 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.SettingActivity;
-import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
@@ -66,14 +66,16 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
         if (!AccountManager.getInstance().isLogin()) {
             ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
             IntentUtil.jumpLogin(getContext());
-            getActivity().finish();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
             return;
         }
         etNick.setText(AccountManager.getInstance().getUserInfo().nick);
-        if (getActivity() != null) {
-            ((SettingActivity) getActivity()).showRightBtn(View.VISIBLE,
+        if (getContext() != null && getContext() instanceof ToolbarListener) {
+            ((ToolbarListener) getContext()).showRightBtn(View.VISIBLE,
                     mApp.getResources().getString(R.string.st_user_set_nick_save));
-            ((SettingActivity) getActivity()).setRightBtnListener(new OnShareListener() {
+            ((ToolbarListener) getContext()).setRightBtnListener(new OnShareListener() {
                 @Override
                 public void share() {
                     handleSave();
@@ -90,22 +92,23 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
     public boolean onBack() {
         // 隐藏输入框
         InputMethodUtil.hideSoftInput(mActivity);
-        if (getActivity() != null) {
-            ((SettingActivity) getActivity()).showRightBtn(View.GONE,
+        if (getContext() != null && getContext() instanceof ToolbarListener) {
+            ((ToolbarListener) getContext()).showRightBtn(View.GONE,
                     mApp.getResources().getString(R.string.st_user_set_nick_save));
         }
         return false;
     }
 
     public void showLoading() {
-        if (getActivity() != null) {
-            ((BaseAppCompatActivity) getActivity()).showLoadingDialog("修改昵称中...");
+        if (getContext() != null && getChildFragmentManager() != null) {
+            DialogManager.getInstance().showLoadingDialog(getChildFragmentManager(),
+                    getContext().getString(R.string.st_user_set_nick_loading));
         }
     }
 
     public void hideLoading() {
-        if (getActivity() != null) {
-            ((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+        if (getContext() != null && getChildFragmentManager() != null) {
+            DialogManager.getInstance().hideLoadingDialog();
         }
     }
 
@@ -150,7 +153,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         AccountManager.getInstance().notifyUserAll(model);
                         ScoreManager.getInstance().toastByCallback(response.body().getData());
                         ToastUtil.showShort("修改成功");
-                        getActivity().onBackPressed();
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
                         return;
                     }
                     if (AppDebugConfig.IS_DEBUG) {
@@ -208,12 +213,12 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
         final String nick = s.toString().trim();
         if (TextUtils.isEmpty(nick) ||
                 nick.equals(AccountManager.getInstance().getUserInfo().nick)) {
-            if (getActivity() != null) {
-                ((SettingActivity) getActivity()).setRightBtnEnabled(false);
+            if (getContext() != null && getContext() instanceof ToolbarListener) {
+                ((ToolbarListener) getContext()).setRightBtnEnabled(false);
             }
         } else {
-            if (getActivity() != null) {
-                ((SettingActivity) getActivity()).setRightBtnEnabled(true);
+            if (getContext() != null && getContext() instanceof ToolbarListener) {
+                ((ToolbarListener) getContext()).setRightBtnEnabled(true);
             }
         }
     }

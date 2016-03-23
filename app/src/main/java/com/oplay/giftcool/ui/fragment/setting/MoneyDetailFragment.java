@@ -8,8 +8,8 @@ import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.fragment.dialog.WebViewDialog;
 
@@ -48,8 +48,8 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 		}
 		// do something
 		AccountManager.getInstance().syncCookie();
-		if (getActivity() instanceof SettingActivity) {
-			SettingActivity activity = ((SettingActivity) getActivity());
+		if (getContext() != null && getContext() instanceof ToolbarListener) {
+			ToolbarListener activity = ((ToolbarListener) getContext());
 			activity.showRightBtn(View.VISIBLE, mApp.getResources().getString(R.string.st_wallet_money_note));
 			activity.setRightBtnEnabled(true);
 			activity.setRightBtnListener(new OnShareListener() {
@@ -87,8 +87,8 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
 	@Override
 	public boolean onBack() {
 		// 隐藏输入框
-		if (getActivity() != null) {
-			((SettingActivity) getActivity()).showRightBtn(View.GONE, "");
+		if (getContext() != null && getContext() instanceof ToolbarListener) {
+			((ToolbarListener) getContext()).showRightBtn(View.GONE, "");
 		}
 		return super.onBack();
 	}

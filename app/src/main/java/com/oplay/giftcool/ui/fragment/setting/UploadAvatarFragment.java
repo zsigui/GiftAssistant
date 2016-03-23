@@ -23,13 +23,13 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.DateUtil;
@@ -87,7 +87,9 @@ public class UploadAvatarFragment extends BaseFragment {
         if (!AccountManager.getInstance().isLogin()) {
             ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
             IntentUtil.jumpLogin(getContext());
-            getActivity().finish();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
             return;
         }
         setContentView(R.layout.fragment_user_set_avator);
@@ -188,14 +190,15 @@ public class UploadAvatarFragment extends BaseFragment {
     }
 
     public void showLoading() {
-        if (getActivity() != null) {
-            ((BaseAppCompatActivity) getActivity()).showLoadingDialog("上传图片中...");
+        if (getContext() != null && getChildFragmentManager() != null) {
+            DialogManager.getInstance().showLoadingDialog(getChildFragmentManager(),
+                    getContext().getString(R.string.st_user_set_avatar_loading));
         }
     }
 
     public void hideLoading() {
-        if (getActivity() != null) {
-            ((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
+        if (getContext() != null) {
+            DialogManager.getInstance().hideLoadingDialog();
         }
     }
 
@@ -314,7 +317,7 @@ public class UploadAvatarFragment extends BaseFragment {
 //                    final Bitmap photo = data.getParcelableExtra("data");
                     if (data != null && data.getData() != null) {
                         final Uri result = data.getData();
-                        final String photoFilePath = getPath(getActivity(), result);
+                        final String photoFilePath = getPath(getContext(), result);
                         if (AppDebugConfig.IS_DEBUG) {
                             AppDebugConfig.logMethodWithParams(this, "PHOTO_PICKED:" + photoFilePath);
                         }

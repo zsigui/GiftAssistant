@@ -46,7 +46,7 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed, wait for 5s to run again! ");
 				}
-				ThreadUtil.runInUIThread(mRunnable, 5000);
+				ThreadUtil.runOnUiThread(mRunnable, 5000);
 		}
 	}
 }

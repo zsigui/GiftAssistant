@@ -23,6 +23,7 @@ import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import retrofit2.Call;
@@ -124,7 +125,7 @@ public class AboutFragment extends BaseFragment {
     }
 
     private void setUpdate(final String str) {
-        getActivity().runOnUiThread(new Runnable() {
+        ThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (tvUpdate != null) {

@@ -180,7 +180,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		@Override
 		public void onFinish() {
 			setText("刷新抢");
-			ThreadUtil.runInUIThread(new Runnable() {
+			ThreadUtil.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS

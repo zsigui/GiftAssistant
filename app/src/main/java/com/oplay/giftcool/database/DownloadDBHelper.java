@@ -227,7 +227,6 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 	}
 
 	private boolean updateDownloadProgress(String url, int percent) {
-		Cursor cursor = null;
 		try {
 			if (url == null) return false;
 			if (TextUtils.isEmpty(url)) {
@@ -246,9 +245,6 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 				KLog.e(e);
 			}
 		}finally {
-			if (cursor != null) {
-				cursor.close();
-			}
 		}
 		return false;
 	}

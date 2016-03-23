@@ -114,7 +114,8 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 //			}
 			switch (v.getId()) {
 				case R.id.tv_download:
-					if (!AppStatus.DISABLE.equals(appInfo.appStatus)) {
+					if (mContext != null && mContext instanceof FragmentActivity
+							&& !AppStatus.DISABLE.equals(appInfo.appStatus)) {
 						appInfo.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
 					}
 					break;
@@ -148,7 +149,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
 
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		ThreadUtil.runInUIThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				if (appInfo != null) {

@@ -24,6 +24,7 @@ import com.oplay.giftcool.config.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -203,9 +204,11 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 				}
 				break;
 			case R.id.tv_another_login:
-				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-						PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
-						false);
+				if (getActivity() != null) {
+					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+							PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
+							false);
+				}
 				break;
 			case R.id.tv_user_clear:
 				clearText(etUser);
@@ -323,14 +326,12 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 	}
 
 	public void hideLoading() {
-		if (getActivity() != null) {
-			((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
-		}
+		DialogManager.getInstance().hideLoadingDialog();
 	}
 
 	public void showLoading() {
-		if (getActivity() != null) {
-			((BaseAppCompatActivity) getActivity()).showLoadingDialog();
+		if (getChildFragmentManager() != null) {
+			DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
 		}
 	}
 

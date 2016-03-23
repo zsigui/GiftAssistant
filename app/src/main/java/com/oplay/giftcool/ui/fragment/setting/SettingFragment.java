@@ -8,8 +8,10 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -183,7 +185,9 @@ public class SettingFragment extends BaseFragment {
 
 					@Override
 					public void onConfirm() {
-						((BaseAppCompatActivity) getActivity()).showLoadingDialog();
+						if (getChildFragmentManager() != null) {
+							DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
+						}
 						Global.THREAD_POOL.execute(new Runnable() {
 							@Override
 							public void run() {
@@ -191,8 +195,12 @@ public class SettingFragment extends BaseFragment {
 										Global.EXTERNAL_CACHE));
 								DataClearUtil.cleanExternalCache(getContext());
 								DataClearUtil.cleanInternalCache(getContext());
-								((BaseAppCompatActivity) getActivity()).hideLoadingDialog();
-								((BaseAppCompatActivity) getActivity()).showSuccessHint("清除缓存成功");
+								if (getChildFragmentManager() != null) {
+									DialogManager.getInstance().hideLoadingDialog();
+								}
+								if (getContext() != null) {
+									ToastUtil.showShort(getContext().getString(R.string.st_setting_auto_clear_cache_hint));
+								}
 							}
 						});
 						dialog.dismiss();
@@ -202,16 +210,20 @@ public class SettingFragment extends BaseFragment {
 				break;
 			case R.id.rl_feedback:
 				if (!AccountManager.getInstance().isLogin()) {
-					ToastUtil.showShort("请先登录");
+					ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
 					IntentUtil.jumpLogin(getContext());
 				} else {
-					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
-							.newInstance(), getResources().getString(R.string.st_feedback_title));
+					if (getContext() != null && getContext() instanceof BaseAppCompatActivity) {
+						((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
+								.newInstance(), getResources().getString(R.string.st_feedback_title));
+					}
 				}
 				break;
 			case R.id.rl_about:
-				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container, AboutFragment
-						.newInstance(), getResources().getString(R.string.st_about_title));
+				if (getContext() != null && getContext() instanceof BaseAppCompatActivity) {
+					((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container, AboutFragment
+							.newInstance(), getResources().getString(R.string.st_about_title));
+				}
 				break;
 			case R.id.rl_logout:
 				// 调用登出接口，但不关心结果

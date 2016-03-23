@@ -29,7 +29,7 @@ public class ThreadUtil {
 	 *
 	 * @param task
 	 */
-	public static void runInUIThread(Runnable task) {
+	public static void runOnUiThread(Runnable task) {
 		if (sHandler == null) {
 			sHandler = new Handler(Looper.getMainLooper());
 		}
@@ -48,7 +48,7 @@ public class ThreadUtil {
 	 * @param task
 	 * @param delayMillis 延时时间，单位毫秒
 	 */
-	public static void runInUIThread(Runnable task, long delayMillis) {
+	public static void runOnUiThread(Runnable task, long delayMillis) {
 		if (sHandler == null) {
 			sHandler = new Handler(Looper.getMainLooper());
 		}

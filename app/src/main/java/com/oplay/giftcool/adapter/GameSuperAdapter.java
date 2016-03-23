@@ -128,7 +128,8 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
                     IntentUtil.jumpGameDetail(mContext, mData.recommend.id, GameTypeUtil.JUMP_STATUS_DETAIL);
                     break;
                 case R.id.tv_download:
-                    if (!AppStatus.DISABLE.equals(mData.recommend.appStatus)) {
+                    if (mContext != null && mContext instanceof FragmentActivity
+                            && !AppStatus.DISABLE.equals(mData.recommend.appStatus)) {
                         mData.recommend.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
                     }
                     break;
@@ -327,7 +328,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
             return;
         }
 
-        ThreadUtil.runInUIThread(new Runnable() {
+        ThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (appInfo.packageName.equals(mData.recommend.packageName)) {

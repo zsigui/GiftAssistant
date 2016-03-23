@@ -10,6 +10,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
+import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.PushMessageManager;
@@ -159,6 +160,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 
+
+		// 初始化下载通知
+		DownloadNotificationManager.showDownload(assistantApp);
 		assistantApp.setGlobalInit(true);
 	}
 

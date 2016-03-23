@@ -170,14 +170,16 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	}
 
 	public void setContext(Context context) {
-		mContext = context.getApplicationContext();
+		if (context != null) {
+			mContext = context.getApplicationContext();
+		}
 	}
 
 	public void startDownload() {
 		try {
 			ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
 			ToastUtil.showShort("已添加新的下载任务");
-			ThreadUtil.runInUIThread(new Runnable() {
+			ThreadUtil.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					// 点击下载30秒后，请求奖励金币
@@ -289,9 +291,14 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 		switch (appStatus) {
 			case DOWNLOADABLE:
 			case UPDATABLE:
-				if (NetworkUtil.isWifiAvailable(mContext)) {
+				if (NetworkUtil.isWifiConnected(mContext)) {
 					startDownload();
 				} else {
+					if (fragmentManager == null) {
+						ToastUtil.showShort("当前正在移动网络下下载");
+						startDownload();
+						return;
+					}
 					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 					confirmDialog.setTitle("提示");
 					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
@@ -322,9 +329,16 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 				break;
 			case RESUMABLE:
 			case RETRYABLE:
-				if (NetworkUtil.isWifiAvailable(mContext)) {
+				KLog.d(AppDebugConfig.TAG_WARN, "isWifiConnected = " + NetworkUtil.isConnected(mContext)
+				 + ", isWifiAvalid");
+				if (NetworkUtil.isWifiConnected(mContext)) {
 					restartDownload();
 				} else {
+					if (fragmentManager == null) {
+						ToastUtil.showShort("当前正在移动网络下下载");
+						startDownload();
+						return;
+					}
 					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 					confirmDialog.setTitle("提示");
 					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");

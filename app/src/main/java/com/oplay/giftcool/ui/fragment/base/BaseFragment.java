@@ -123,9 +123,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected void initViewManger(@LayoutRes int layoutResID) {
 		mViewManager = LoadAndRetryViewManager.generate(getContext(), layoutResID);
 		mContentView = mViewManager.getContainer();
-//		if (((BaseAppCompatActivity) getActivity()).getHandler() != null) {
-//			mViewManager.setHandler(((BaseAppCompatActivity) getActivity()).getHandler());
-//		}
 	}
 
 	protected void setContentView(@LayoutRes int layoutResID) {

@@ -1,27 +1,32 @@
 package com.oplay.giftcool.adapter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
-import com.oplay.giftcool.model.AppStatus;
+import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
+import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
+import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.fragment.setting.DownloadFragment;
 import com.oplay.giftcool.ui.widget.StickyListHeadersListViewExpandable;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.SystemUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -36,29 +41,33 @@ import java.util.List;
  *         description
  */
 public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implements View.OnClickListener,
-		StickyListHeadersAdapter {
+		StickyListHeadersAdapter, OnDownloadStatusChangeListener, OnProgressUpdateListener, OnFinishListener {
 
 	private BaseFragment mFragment;
-	private ImageLoader mImageLoader;
+	private Context mContext;
 	private ApkDownloadManager mDownloadManagerInstance;
 
 	private HashMap<String, ViewHolder> mMap_Url_ViewHolder;
 
 	private StickyListHeadersListViewExpandable mListView;
 
+	protected HashMap<String, GameDownloadInfo> mPackageNameMap;
 	private String mStrDownloadingAndPaused;
 	private String mStrDownloaded;
 	private int mEndIndexOfDownloading;
 	private int mEndIndexOfPaused;
 	private int mEndIndexOfDownloaded;
 
-	public AppDownloadAdapter(List<GameDownloadInfo> listData, BaseFragment fragment) {
-		super(fragment.getActivity(), listData);
+	public AppDownloadAdapter(List<GameDownloadInfo> listData, @NonNull BaseFragment fragment) {
+		super(fragment.getContext(), listData);
+		mContext = fragment.getContext();
 		mFragment = fragment;
-		mImageLoader = ImageLoader.getInstance();
 		mMap_Url_ViewHolder = new HashMap<>();
-		mDownloadManagerInstance = ApkDownloadManager.getInstance(fragment.getActivity());
+		mDownloadManagerInstance = ApkDownloadManager.getInstance(fragment.getContext());
+		mPackageNameMap = new HashMap<>();
 		initIndex();
+		ApkDownloadManager.getInstance(mContext).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(mContext).addProgressUpdateListener(this);
 	}
 
 	public void setExpandableListView(StickyListHeadersListViewExpandable listView) {
@@ -105,12 +114,12 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		bindImageViewWithUrl(holder.mIvIcon, appInfo.img, R.drawable.ic_img_default);
 		if (appInfo.id == Global.GIFTCOOL_GAME_ID) {
 			holder.mIvIcon.setImageResource(R.drawable.ic_launcher);
-		}else {
+		} else {
 			ViewUtil.showImage(holder.mIvIcon, appInfo.img);
 		}
 
 
-		initViewHolderByStatus(rawUrl, appInfo.downloadStatus);
+		initViewHolderByStatus(holder, appInfo);
 		holder.mTvAction.setTag(TAG_POSITION, position);
 		holder.mTvAction.setOnClickListener(this);
 		holder.mTvInfo.setTag(TAG_POSITION, position);
@@ -119,6 +128,8 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		holder.mTvDelete.setOnClickListener(this);
 		convertView.setTag(TAG_POSITION, position);
 		convertView.setOnClickListener(this);
+		ViewUtil.initDownloadBtnStatus(holder.mTvAction, appInfo.appStatus);
+		mPackageNameMap.put(appInfo.packageName, appInfo);
 		return convertView;
 	}
 
@@ -153,13 +164,6 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 	}
 
 	@Override
-	public void onDestroy() {
-		if (mMap_Url_ViewHolder != null) {
-			mMap_Url_ViewHolder.clear();
-		}
-	}
-
-	@Override
 	public void onClick(View v) {
 		try {
 			if (mListView != null) {
@@ -178,18 +182,8 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			switch (v.getId()) {
 				// 下载按钮响应
 				case R.id.tv_downloading_action:
-					String str = ((TextView) v).getText().toString();
-					if ("暂停".equals(str)) {
-						appInfo.stopDownload();
-					}
-					if ("继续".equals(str) || "重试".equals(str)) {
-						appInfo.restartDownload();
-					}
-					if ("安装".equals(str)) {
-						appInfo.startInstall();
-					}
-					if ("打开".equals(str)) {
-						appInfo.startApp();
+					if (appInfo != null) {
+						appInfo.handleOnClick(mFragment == null ? null : mFragment.getChildFragmentManager());
 					}
 					break;
 				// 详细按钮响应
@@ -214,23 +208,31 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		}
 	}
 
-	private void showDelDownloadingConfirmDialog(BaseFragment activity, final GameDownloadInfo appInfo) {
+	private void showDelDownloadingConfirmDialog(BaseFragment fragment, final GameDownloadInfo appInfo) {
+		if (appInfo == null) {
+			return;
+		}
+		if (fragment == null) {
+			// 此时直接删除
+			mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+			return;
+		}
 		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
 		confirmDialog.setTitle("提示");
 		confirmDialog.setContent("游戏还没下载完，确定删除吗？");
 		confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-				confirmDialog.dismiss();
+				confirmDialog.dismissAllowingStateLoss();
 			}
 
 			@Override
 			public void onConfirm() {
 				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
-				confirmDialog.dismiss();
+				confirmDialog.dismissAllowingStateLoss();
 			}
 		});
-		confirmDialog.show(activity.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
+		confirmDialog.show(fragment.getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 	}
 
 	private void showDelDownloadedConfirmDialog(BaseFragment activity, final GameDownloadInfo appInfo) {
@@ -267,49 +269,6 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		return holder;
 	}
 
-	private void initDownloadingStatus(ViewHolder holder, GameDownloadInfo appInfo) {
-		holder.mPBar.setVisibility(View.VISIBLE);
-		holder.mPBar.setEnabled(true);
-		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_grey);
-		holder.mTvAction.setText("暂停");
-		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
-		holder.mTvSpeed.setVisibility(View.VISIBLE);
-		updateDownloadRate(holder.mTvSpeed, 0);
-	}
-
-	private void initFailedStatus(ViewHolder holder, GameDownloadInfo appInfo) {
-		holder.mPBar.setVisibility(View.VISIBLE);
-		holder.mPBar.setEnabled(false);
-		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
-		holder.mTvAction.setText("重试");
-		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
-		holder.mTvSpeed.setVisibility(View.VISIBLE);
-		holder.mTvSpeed.setText("下载暂停中");
-	}
-
-	private void initPauseStatus(ViewHolder holder, GameDownloadInfo appInfo) {
-		holder.mPBar.setVisibility(View.VISIBLE);
-		holder.mPBar.setEnabled(false);
-		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_green);
-		holder.mTvAction.setText("继续");
-		updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
-		holder.mTvSpeed.setVisibility(View.VISIBLE);
-		holder.mTvSpeed.setText("下载暂停中");
-	}
-
-	private void initDownloadedStatus(ViewHolder holder, GameDownloadInfo appInfo) {
-		holder.mPBar.setVisibility(View.GONE);
-		holder.mTvPercent.setText(String.format("版本号：%s | %s", appInfo.versionName, appInfo.getApkFileSizeStr()));
-		holder.mTvSpeed.setVisibility(View.GONE);
-		AppStatus status = appInfo.getAppStatus(appInfo.downloadStatus);
-		holder.mTvAction.setBackgroundResource(R.drawable.selector_btn_blue);
-		if (status == AppStatus.INSTALLABLE || status == AppStatus.UPDATABLE) {
-			holder.mTvAction.setText("安装");
-		} else {
-			holder.mTvAction.setText("打开");
-		}
-	}
-
 	private void updateProgressText(TextView textView, String completeSizeStr, String apkFileSizeStr) {
 		textView.setText(String.format("%s/%s", completeSizeStr, apkFileSizeStr));
 	}
@@ -329,27 +288,15 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		return holder;
 	}
 
-	private void initViewHolderByStatus(String rawUrl, DownloadStatus status) {
-		final GameDownloadInfo appInfo = mDownloadManagerInstance.getAppInfoByUrl(rawUrl);
-		if (appInfo == null) return;
-		final ViewHolder holder = findVisibleViewHolderByUrl(rawUrl);
-		if (holder == null) {
+	private void initViewHolderByStatus(ViewHolder holder, GameDownloadInfo appInfo) {
+		if (appInfo == null || holder == null) {
 			return;
 		}
 
-		if (status == DownloadStatus.DOWNLOADING || status == DownloadStatus.PENDING) {
-			initDownloadingStatus(holder, appInfo);
-		} else if (status == DownloadStatus.FAILED) {
-			initFailedStatus(holder, appInfo);
-		} else if (status == DownloadStatus.PAUSED) {
-			initPauseStatus(holder, appInfo);
-		} else {
-			initDownloadedStatus(holder, appInfo);
-		}
-
+		appInfo.initAppInfoStatus(mContext);
 		if (appInfo.apkFileSize <= 0) {
 			holder.mPBar.setProgress(0);
-		}else {
+		} else {
 			holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
 		}
 		holder.mTvAppName.setText(appInfo.name);
@@ -375,7 +322,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			updateDownloadRate(holder.mTvSpeed, speedBytesPers);
 			if (appInfo.apkFileSize <= 0) {
 				holder.mPBar.setProgress(percent);
-			}else {
+			} else {
 				holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
 			}
 		} catch (Throwable e) {
@@ -383,6 +330,55 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 				KLog.e(e);
 			}
 		}
+	}
+
+	public void updateViewByPackageName(String packageName, DownloadStatus status) {
+		final GameDownloadInfo app = mPackageNameMap.get(packageName);
+		if (app != null) {
+			app.downloadStatus = status;
+			app.initAppInfoStatus(mContext);
+			notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
+		ThreadUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+ 				if (mFragment != null && mFragment instanceof DownloadFragment) {
+					if (getCount() > 0) {
+						((DownloadFragment) mFragment).showContent();
+					} else {
+						((DownloadFragment) mFragment).showEmpty();
+					}
+				}
+				if (appInfo != null) {
+					updateViewByPackageName(appInfo.packageName, appInfo.downloadStatus);
+					notifyStatusChanged();
+				}
+			}
+		});
+	}
+
+	@Override
+	public void onProgressUpdate(final String url, final int percent, final long speedBytesPers) {
+		ThreadUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				updateDownloadingView(url, percent, speedBytesPers);
+			}
+		});
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (mMap_Url_ViewHolder != null) {
+			mMap_Url_ViewHolder.clear();
+		}
+		ApkDownloadManager.getInstance(mFragment.getContext()).removeDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(mFragment.getContext()).removeProgressUpdateListener(this);
 	}
 
 	static class ViewHolder {

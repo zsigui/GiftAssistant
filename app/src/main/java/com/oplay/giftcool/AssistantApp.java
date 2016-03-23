@@ -20,7 +20,6 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
@@ -160,7 +159,7 @@ public class AssistantApp extends Application {
                 ImageLoader.getInstance().stop();
 //				ImageLoader.getInstance().destroy();
             }
-            DownloadNotificationManager.cancelDownload(getApplicationContext());
+//            DownloadNotificationManager.cancelDownload(getApplicationContext());
 //            StatisticsManager.getInstance().exit(this);
         } catch (Exception e) {
             if (AppDebugConfig.IS_DEBUG) {

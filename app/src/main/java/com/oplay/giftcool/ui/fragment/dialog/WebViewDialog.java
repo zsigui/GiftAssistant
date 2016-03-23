@@ -248,6 +248,6 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return LayoutInflater.from(getActivity()).inflate(R.layout.dialog_webview, container, false);
+        return LayoutInflater.from(getContext()).inflate(R.layout.dialog_webview, container, false);
     }
 }

@@ -117,7 +117,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		DividerItemDecoration decoration = new DividerItemDecoration(getContext(), llm.getOrientation());
 		mDataView.setLayoutManager(llm);
 		mDataView.addItemDecoration(decoration);
-		mAdapter = new GameNoticeAdapter(getActivity());
+		mAdapter = new GameNoticeAdapter(getContext());
 		mDataView.setAdapter(mAdapter);
 		mViewManager.showContent();
 

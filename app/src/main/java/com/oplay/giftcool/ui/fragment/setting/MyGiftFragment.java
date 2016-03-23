@@ -31,7 +31,9 @@ public class MyGiftFragment extends BaseFragment {
 		if (!AccountManager.getInstance().isLogin()) {
 			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(getContext());
-			getActivity().finish();
+			if (getActivity() != null) {
+				getActivity().finish();
+			}
 			return;
 		}
 		setContentView(R.layout.fragment_vp_container);

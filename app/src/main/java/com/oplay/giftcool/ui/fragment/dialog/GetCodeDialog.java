@@ -38,6 +38,9 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 	}
 
 	public void setGiftCode(PayCode payCode) {
+		if (payCode == null) {
+			return;
+		}
 		mPayCode = payCode;
 		mAppInfo = payCode.gameInfo;
 		if (tvGiftCode != null) {
@@ -74,7 +77,7 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 	@Override
 	public void onConfirm() {
 		if (mAppInfo != null  && AssistantApp.getInstance().isAllowDownload()) {
-			mAppInfo.handleOnClick(getFragmentManager());
+			mAppInfo.handleOnClick(getChildFragmentManager());
 		}
 		dismissAllowingStateLoss();
 	}

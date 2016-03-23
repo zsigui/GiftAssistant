@@ -40,7 +40,9 @@ public class ActivityFragment extends BaseFragment_WebView {
 		if (getArguments() == null) {
 			mViewManager.showEmpty();
 			ToastUtil.showShort("获取数据为空");
-			getActivity().finish();
+			if (getActivity() != null) {
+				getActivity().finish();
+			}
 			return;
 		}
 		String url = getArguments().getString(KeyConfig.KEY_URL);

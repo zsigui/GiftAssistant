@@ -188,7 +188,7 @@ public class DialogManager {
 	 * 显示加载弹窗，指定显示内容
 	 */
 	public void showLoadingDialog(final FragmentManager fm, final String loadText) {
-		ThreadUtil.runInUIThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				if (mLoadingDialog == null) {

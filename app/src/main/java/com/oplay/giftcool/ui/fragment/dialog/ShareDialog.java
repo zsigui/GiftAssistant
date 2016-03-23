@@ -43,7 +43,7 @@ public class ShareDialog extends BaseFragment_Dialog_NoButton {
 	protected void bindViewWithData(View contentView, @Nullable Bundle savedInstanceState) {
 		final RecyclerView recyclerView = (RecyclerView) contentView.findViewById(R.id.rv_dialog_list);
 		RecyclerView.LayoutManager gridLayoutManager = new FixHeightGridLayoutManager(
-				getActivity(), 2, LinearLayoutManager.VERTICAL, false);
+				getContext(), 2, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(gridLayoutManager);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -57,7 +57,7 @@ public class ShareDialog extends BaseFragment_Dialog_NoButton {
 
 	@Override
 	protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return LayoutInflater.from(getActivity()).inflate(R.layout.dialog_rv_share_content, container, false);
+		return LayoutInflater.from(getContext()).inflate(R.layout.dialog_rv_share_content, container, false);
 	}
 
 	public void setAdapter(BaseRVAdapter adapter) {

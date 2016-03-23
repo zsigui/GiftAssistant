@@ -10,8 +10,10 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -66,7 +68,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
         if (!AccountManager.getInstance().isLogin()) {
             ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
             IntentUtil.jumpLogin(getContext());
-            getActivity().finish();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
             return;
         }
         initViewManger(R.layout.fragment_score_task);
@@ -87,6 +91,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
         mDataView.setAdapter(mAdapter);
         ScoreManager.getInstance().setInWorking(true);
         AccountManager.getInstance().updatePartUserInfo();
+
+        // 打开任务界面，取消红点
+        if (MainActivity.sGlobalHolder != null) {
+            MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
+        }
     }
 
     @Override
@@ -300,25 +309,29 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
      */
     private void handleMission(ScoreMission scoreMission) {
         if (scoreMission == null) return;
+        if (getContext() == null || !(getContext() instanceof BaseAppCompatActivity)) {
+            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            return;
+        }
         String id = scoreMission.id;
         ScoreManager.getInstance().setInWorking(true);
         if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
             // 跳转到设置用户昵称信息界面
-            ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+            ((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
                     SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
         } else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
             // 跳转到设置用户头像信息界面
-            ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+            ((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
                     UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_avator));
         } else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
             // 跳转到绑定手机账号界面
-            OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
+            OuwanSDKManager.getInstance().showBindPhoneView(getContext());
         } else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
             // 跳转到绑定偶玩账号界面
-            OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
+            OuwanSDKManager.getInstance().showBindOuwanView(getContext());
         } else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
             // 跳转反馈界面
-            ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+            ((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
                     FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
         } else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
             // 跳转搜索礼包/游戏界面
@@ -336,7 +349,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 IntentUtil.jumpGameNewList(getContext());
             } else {
                 MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_SUPER);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             }
         } else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
             // 分享普通礼包
@@ -344,7 +359,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 IntentUtil.jumpGiftNewList(getContext());
             } else {
                 MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             }
         } else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
             // 分享限量礼包
@@ -367,7 +384,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             // 跳转登录界面
             IntentUtil.jumpLogin(getContext());
         } else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
-            // 暂无
+            // ignored
         } else if (TaskTypeUtil.ID_SHARE_GIFT_COOL.equals(id)) {
             // 进行礼包酷分享
             ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());

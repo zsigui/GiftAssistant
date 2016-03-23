@@ -23,7 +23,7 @@ public abstract class BaseFragment_Dialog_NoButton extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final Dialog dialog = new Dialog(getActivity(), R.style.DefaultCustomDialog);
+		final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.setCancelable(true);
 		return dialog;

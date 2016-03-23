@@ -41,7 +41,9 @@ public class WalletFragment extends BaseFragment {
 		if (!AccountManager.getInstance().isLogin()) {
 			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(getContext());
-			getActivity().finish();
+			if (getActivity() != null) {
+				getActivity().finish();
+			}
 			return;
 		}
 		setContentView(R.layout.fragment_wallet);
@@ -87,21 +89,27 @@ public class WalletFragment extends BaseFragment {
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.rl_bean_detail:
-				((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
-						MoneyDetailFragment.newInstance(KeyConfig.TYPE_ID_DETAIL_BEAN),
-						getResources().getString(R.string.st_bean_detail));
+				if (getActivity() != null) {
+					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+							MoneyDetailFragment.newInstance(KeyConfig.TYPE_ID_DETAIL_BEAN),
+							getResources().getString(R.string.st_bean_detail));
+				}
 				break;
 			case R.id.rl_score_detail:
-				((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
-						MoneyDetailFragment.newInstance(KeyConfig.TYPE_ID_DETAIL_SCORE),
-						getResources().getString(R.string.st_score_detail));
+				if (getActivity() != null) {
+					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+							MoneyDetailFragment.newInstance(KeyConfig.TYPE_ID_DETAIL_SCORE),
+							getResources().getString(R.string.st_score_detail));
+				}
 				break;
 			case R.id.btn_get_bean:
 				OuwanSDKManager.getInstance().recharge();
 				break;
 			case R.id.btn_get_score:
-				((BaseAppCompatActivity)getActivity()).replaceFragWithTitle(R.id.fl_container,
-						TaskFragment.newInstance(), getResources().getString(R.string.st_task_title));
+				if (getActivity() != null) {
+					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+							TaskFragment.newInstance(), getResources().getString(R.string.st_task_title));
+				}
 				break;
 		}
 	}

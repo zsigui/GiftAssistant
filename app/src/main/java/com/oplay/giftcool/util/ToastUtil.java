@@ -42,7 +42,7 @@ public class ToastUtil {
 	}
 
 	public static void show(final CharSequence msg, final int duration) {
-		ThreadUtil.runInUIThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				makeText(AssistantApp.getInstance().getApplicationContext(), msg, duration).show();
@@ -51,12 +51,12 @@ public class ToastUtil {
 	}
 
 	public static void show(@StringRes final int resId, final int duration) {
-		ThreadUtil.runInUIThread(new Runnable() {
-            @Override
-            public void run() {
-                makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
-            }
-        });
+		ThreadUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				makeText(AssistantApp.getInstance().getApplicationContext(), resId, duration).show();
+			}
+		});
 	}
 
 	public static void showLong(CharSequence msg) {

@@ -57,7 +57,9 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		if (!AccountManager.getInstance().isLogin()) {
 			ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
 			IntentUtil.jumpLogin(getContext());
-			getActivity().finish();
+			if (getActivity() != null) {
+				getActivity().finish();
+			}
 			return;
 		}
 		setContentView(R.layout.fragment_user_info);
@@ -158,19 +160,23 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 		UserInfo user = AccountManager.getInstance().getUserInfo();
 		switch (v.getId()) {
 			case R.id.rl_avatar:
-				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-						UploadAvatarFragment.newInstance(), getResources().getString(R.string
-								.st_user_set_avatar_title));
+				if (getContext() != null && getContext() instanceof BaseAppCompatActivity) {
+					((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
+							UploadAvatarFragment.newInstance(), getResources().getString(R.string
+									.st_user_set_avatar_title));
+				}
 				break;
 			case R.id.ll_nick:
-				((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-						SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
+				if (getContext() != null && getContext() instanceof BaseAppCompatActivity) {
+					((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
+							SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
+				}
 				break;
 			case R.id.rl_login:
 				if (user.loginType == UserTypeUtil.TYPE_POHNE) {
 					if (user.bindOuwanStatus == 1) {
 						// 更换手机账号
-						OuwanSDKManager.getInstance().showBindPhoneView(getActivity());
+						OuwanSDKManager.getInstance().showBindPhoneView(getContext());
 					} else {
 						ToastUtil.showLong("需要先绑定偶玩账号才能更换登录手机号码");
 					}
@@ -180,15 +186,15 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 				if (!TextUtils.isEmpty(user.thirdOpenId)) {
 					if (user.bindOuwanStatus == 0) {
 						// 绑定偶玩账号
-						OuwanSDKManager.getInstance().showBindOuwanView(getActivity());
+						OuwanSDKManager.getInstance().showBindOuwanView(getContext());
 					}
 				} else {
 					// 调用偶玩绑定手机号码
-					OuwanSDKManager.getInstance().showChangePhoneView(getActivity());
+					OuwanSDKManager.getInstance().showChangePhoneView(getContext());
 				}
 				break;
 			case R.id.rl_modify_pwd:
-				OuwanSDKManager.getInstance().showOuwanModifyPwdView(getActivity());
+				OuwanSDKManager.getInstance().showOuwanModifyPwdView(getContext());
 				break;
 		}
 	}

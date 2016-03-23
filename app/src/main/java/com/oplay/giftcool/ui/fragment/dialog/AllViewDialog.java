@@ -72,15 +72,15 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 			iv.setImageBitmap(bitmap);
 			iv.setOnClickListener(this);
 		}
-		return new AlertDialog.Builder(getActivity(), R.style.DefaultCustomDialog)
+		return new AlertDialog.Builder(getContext(), R.style.DefaultCustomDialog)
 				.setView(contentView)
 				.create();
 	}
 
 	@Override
 	public void onClick(View v) {
-		StatisticsManager.getInstance().trace(getActivity(), StatisticsManager.ID.APP_ACTIVITY, "参与活动");
-		BannerTypeUtil.handleBanner(getActivity(), mData);
+		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.APP_ACTIVITY, "参与活动");
+		BannerTypeUtil.handleBanner(getContext(), mData);
 		dismissAllowingStateLoss();
 	}
 

@@ -362,7 +362,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	}
 
 	public void initDownload(IndexGameNew game) {
-		if (game == null || btnDownload == null) {
+		if (getActivity() == null || game == null || btnDownload == null) {
 			return;
 		}
 		mAppInfo = game;
@@ -397,7 +397,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		switch (v.getId()) {
 			case R.id.btn_download:
 				if (mAppInfo != null) {
-					mAppInfo.handleOnClick(getFragmentManager());
+					mAppInfo.handleOnClick(getChildFragmentManager());
 				}
 				break;
 			case R.id.btn_copy:
@@ -414,7 +414,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						&& !isInstalledGame()) {
 					return;
 				}
-				PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend);
+				PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);
 				break;
             case R.id.tv_qq:
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
@@ -470,7 +470,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 						}
 						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
 					}
-					mAppInfo.handleOnClick(getFragmentManager());
+					mAppInfo.handleOnClick(getChildFragmentManager());
 				}
 				dialog.dismissAllowingStateLoss();
 			}
@@ -492,7 +492,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
 				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
 					mAppInfo.downloadStatus = appInfo.downloadStatus;
-					mAppInfo.initAppInfoStatus(getActivity());
+					mAppInfo.initAppInfoStatus(getContext());
 					btnDownload.setStatus(mAppInfo.appStatus, "");
 				}
 				mProgressRunnable = null;

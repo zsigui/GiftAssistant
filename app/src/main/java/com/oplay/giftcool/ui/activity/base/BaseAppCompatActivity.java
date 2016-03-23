@@ -140,7 +140,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.iv_bar_back) {
-			onBack();
+			onBackPressed();
 		}
 	}
 

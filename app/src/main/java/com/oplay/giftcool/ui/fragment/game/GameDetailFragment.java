@@ -16,6 +16,7 @@ import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
+import com.oplay.giftcool.util.ThreadUtil;
 
 /**
  * Created by zsigui on 16-1-15.
@@ -52,8 +53,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	@Override
 	protected void setListener() {
 		btnDownload.setOnClickListener(this);
-		ApkDownloadManager.getInstance(getContext().getApplicationContext()).addDownloadStatusListener(this);
-		ApkDownloadManager.getInstance(getContext().getApplicationContext()).addProgressUpdateListener(this);
+		ApkDownloadManager.getInstance(getContext()).addDownloadStatusListener(this);
+		ApkDownloadManager.getInstance(getContext()).addProgressUpdateListener(this);
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		switch (v.getId()) {
 			case R.id.btn_download:
 				if (mAppInfo != null) {
-					mAppInfo.handleOnClick(getFragmentManager());
+					mAppInfo.handleOnClick(getChildFragmentManager());
 				}
 				break;
 			default:
@@ -98,17 +99,17 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 	}
 
 	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {
-		hostActivity.runOnUiThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				int visiable = isShow ? View.VISIBLE : View.GONE;
+				int visible = isShow ? View.VISIBLE : View.GONE;
 				mAppInfo = appInfo;
 				if (downloadLayout != null) {
-					downloadLayout.setVisibility(visiable);
+					downloadLayout.setVisibility(visible);
 				}
 				if (isShow && btnDownload != null) {
-					mAppInfo.initAppInfoStatus(getActivity());
-					int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
+					mAppInfo.initAppInfoStatus(getContext());
+					int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
 							.downloadUrl);
 					btnDownload.setStatus(mAppInfo.appStatus, "");
 					btnDownload.setProgress(progress);
@@ -119,22 +120,22 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		getActivity().runOnUiThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-
 				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
 					mAppInfo.downloadStatus = appInfo.downloadStatus;
-					mAppInfo.initAppInfoStatus(getActivity());
+					mAppInfo.initAppInfoStatus(getContext());
 					btnDownload.setStatus(mAppInfo.appStatus, "");
 				}
 			}
 		});
+
 	}
 
 	@Override
 	public void onProgressUpdate(String url, final int percent, long speedBytesPers) {
-		getActivity().runOnUiThread(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {

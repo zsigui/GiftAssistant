@@ -71,6 +71,7 @@
 	<string name = "st_setting_auto_focus" >抢礼包后自动关注所属游戏</string >
 	<string name = "st_setting_auto_update" >自动检查版本更新</string >
 	<string name = "st_setting_auto_clear_cache" >清除缓存</string >
+	<string name = "st_setting_auto_clear_cache_hint" >清除缓存成功</string >
 	<string name = "st_setting_auto_feedback" >意见反馈</string >
 	<string name = "st_setting_cur_version" >当前版本号</string >
 
@@ -237,10 +238,12 @@
 	<string name = "st_user_set_avatar_title" >设置头像</string >
 	<string name = "st_user_set_avator_gallery" >从相册中选一张</string >
 	<string name = "st_user_set_avator_photo" >拍一张照</string >
+	<string name = "st_user_set_avatar_loading" >上传图片中…</string >
 
 	<!-- 设置昵称 -->
 	<string name = "st_user_set_nick_title" >设置昵称</string >
 	<string name = "st_user_set_nick_save" >保存</string >
+	<string name = "st_user_set_nick_loading" >修改昵称中…</string >
 
 	<!-- 分享 -->
 	<string name = "st_share_title" >礼包分享</string >

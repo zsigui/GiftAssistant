@@ -69,6 +69,13 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	protected ApkDownloadManager(Context context) throws NullPointerException, IOException {
 		super(context);
+		initConfig(context);
+	}
+
+	/**
+	 * 初始化配置
+	 */
+	private void initConfig(Context context) {
 		mManagerList = new ArrayList<>();
 		mDownloadingCnt = 0;
 		mPendingCnt = 0;
@@ -98,8 +105,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	public void initDownloadList() {
+		initConfig(mApplicationContext);
 		mDownloadDBHelper.getDownloadList();
-		DownloadNotificationManager.showDownload(mApplicationContext);
+//		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
 	//仅限于初始化的时候用
@@ -409,7 +417,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	private boolean checkDownloadTask(GameDownloadInfo appInfo) {
-		return !(appInfo == null || TextUtils.isEmpty(appInfo.packageName) || TextUtils.isEmpty(appInfo.downloadUrl));
+		return appInfo != null
+				&& !TextUtils.isEmpty(appInfo.packageName)
+				&& !TextUtils.isEmpty(appInfo.downloadUrl);
 	}
 
 	public DownloadStatus getAppDownloadStatus(String url) {
