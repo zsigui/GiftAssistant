@@ -9,10 +9,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.excelliance.kxqp.sdk.GameSdk;
+import com.excelliance.kxqp.sdk.IQueryUpdateCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -68,6 +71,14 @@ public class SplashActivity extends BaseAppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		GameSdk.queryUpdate(this, new IQueryUpdateCallback() {
+			@Override
+			public void onUpdateResult(int i) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_APP, "onUpdateResult = " + i);
+				}
+			}
+		});
 		if (AppConfig.TEST_MODE) {
 			final TestChoiceDialog dialog = TestChoiceDialog.newInstances();
 			dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {

@@ -36,7 +36,7 @@
 
 
 	<application >
-		<activity
+		<!--<activity
 				android:name = "net.ouwan.umipay.android.api.UmipayActivity"
 				android:configChanges = "keyboardHidden|orientation|screenSize"
 				android:screenOrientation = "landscape"
@@ -49,7 +49,7 @@
 				android:theme = "@style/UmipayTheme_NoFullscreen" >
 		</activity >
 
-		<!-- 新版支付宝需要添加的acticity -->
+		&lt;!&ndash; 新版支付宝需要添加的acticity &ndash;&gt;
 		<activity
 				android:name = "com.alipay.sdk.app.H5PayActivity"
 				android:configChanges = "orientation|keyboardHidden|navigation"
@@ -62,35 +62,35 @@
 				android:exported = "false"
 				android:screenOrientation = "behind" >
 		</activity >
-		<!-- 新版支付宝需要添加的acticity-->
-		<!--银联支付activity-->
+		&lt;!&ndash; 新版支付宝需要添加的acticity&ndash;&gt;
+		&lt;!&ndash;银联支付activity&ndash;&gt;
 		<activity
 				android:name = "com.unionpay.uppay.PayActivity"
 				android:configChanges = "orientation|keyboardHidden|screenSize"
 				android:excludeFromRecents = "true"
 				android:screenOrientation = "portrait" />
-		<!--银联支付activity-->
-		<!-- 插件入口界面 -->
+		&lt;!&ndash;银联支付activity&ndash;&gt;
+		&lt;!&ndash; 插件入口界面 &ndash;&gt;
 		<activity
 				android:name="com.payeco.android.plugin.PayecoPluginLoadingActivity"
 				android:launchMode="singleTask"
 				android:screenOrientation="portrait"
 				/>
 
-		<!-- 插件拍照界面 -->
+		&lt;!&ndash; 插件拍照界面 &ndash;&gt;
 		<activity
 				android:name="com.payeco.android.plugin.PayecoCameraActivity"
 				android:screenOrientation="portrait"
 				/>
 
-		<!-- 插件录像界面 -->
+		&lt;!&ndash; 插件录像界面 &ndash;&gt;
 		<activity
 				android:name="com.payeco.android.plugin.PayecoVedioActivity"
 				android:screenOrientation="landscape"
 				android:process="com.payeco.android.plugin.vedio"
 				/>
 
-		<!--百度插件部分  -->
+		&lt;!&ndash;百度插件部分  &ndash;&gt;
 		<service
 				android:name="com.baidu.location.f"
 				android:enabled="true"
@@ -100,12 +100,12 @@
 				</action>
 			</intent-filter>
 		</service>
-		<!-- meta-data需要写在application中 -->
+		&lt;!&ndash; meta-data需要写在application中 &ndash;&gt;
 		<meta-data
 				android:name="com.baidu.lbsapi.API_KEY"
 				android:value="DhNxS47YIr3CNdocGoAcy1ts" />
-		<!--易联需要添加的activity-->
-		<!--汇付宝-微信支付需要添加的activity-->
+		&lt;!&ndash;易联需要添加的activity&ndash;&gt;
+		&lt;!&ndash;汇付宝-微信支付需要添加的activity&ndash;&gt;
 		<activity
 				android:name = "com.junnet.heepay.ui.activity.WelcomeActivity"
 				android:configChanges = "keyboardHidden|orientation|screenSize"
@@ -137,14 +137,14 @@
 				android:name = "net.ouwan.umipay.android.api.UmipayService"
 				android:exported = "false" >
 		</service >
-		<!--&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;-->
-		<!--<receiver android:name = "net.umipay.android.poll.Push_Boot_Receiver" >-->
-		<!--<intent-filter >-->
-		<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
-		<!--</intent-filter >-->
-		<!--</receiver >-->
+		&lt;!&ndash;&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;&ndash;&gt;
+		&lt;!&ndash;<receiver android:name = "net.umipay.android.poll.Push_Boot_Receiver" >&ndash;&gt;
+		&lt;!&ndash;<intent-filter >&ndash;&gt;
+		&lt;!&ndash;<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />&ndash;&gt;
+		&lt;!&ndash;</intent-filter >&ndash;&gt;
+		&lt;!&ndash;</receiver >&ndash;&gt;
 
-		<!-- 接听闹钟广播 -->
+		&lt;!&ndash; 接听闹钟广播 &ndash;&gt;
 		<receiver
 				android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"
 				android:exported = "false" >
@@ -154,6 +154,6 @@
 			<intent-filter >
 				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
 			</intent-filter >
-		</receiver >
+		</receiver >-->
 	</application >
 </manifest >

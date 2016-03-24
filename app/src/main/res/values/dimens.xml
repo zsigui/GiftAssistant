@@ -6,10 +6,10 @@
 
 	<dimen name = "di_tabs_common_bg_height" >45dp</dimen >
 	<!-- 通用样式 -->
-	<dimen name = "common_btn_radius" >5sp</dimen >
-	<dimen name = "common_text" >14sp</dimen >
-	<dimen name = "common_text_padding_left_right" >18dp</dimen >
-	<dimen name = "common_text_padding_top_bottom" >5dp</dimen >
+	<dimen name = "di_common_btn_radius" >5sp</dimen >
+	<dimen name = "di_common_text" >14sp</dimen >
+	<dimen name = "di_common_text_padding_left_right" >18dp</dimen >
+	<dimen name = "di_common_text_padding_top_bottom" >5dp</dimen >
 
 	<dimen name = "di_divider_height" >1dp</dimen >
 

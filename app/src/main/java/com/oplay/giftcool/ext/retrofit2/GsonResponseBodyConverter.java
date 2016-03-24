@@ -29,7 +29,6 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 		try {
 			String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), 0);
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_ENCRYPT, "response = " + json);
 				if (json.length() > 3500) {
 					int k = json.length() / 3500;
 					int start = 0;

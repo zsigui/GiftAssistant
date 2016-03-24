@@ -17,7 +17,7 @@
 			android:layout_height = "match_parent"
 			android:gravity="center_vertical"
 			android:background = "@color/co_transparent"
-			android:textSize="@dimen/di_search_bar_text_size"
+			android:textSize="@dimen/di_common_text"
 			android:hint = "@string/st_search_hint"
 			android:textColorHint = "@color/co_search_bar_hint"/>
 

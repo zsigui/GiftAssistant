@@ -24,6 +24,7 @@ public class AppDebugConfig {
 	public static final boolean IS_FRAG_DEBUG = true;
 	public static final boolean IS_PERM_DEBUG = true;
 //	public static final boolean IS_STATISTICS_SHOW = false;
+	public static final int TEST_CHANNEL_ID = 10000;
 
 
 	public static final String TAG_APP = "gcool_debug_app";

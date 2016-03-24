@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.receiver.StartReceiver;
 import com.socks.library.KLog;
 
@@ -14,9 +15,10 @@ import com.socks.library.KLog;
  */
 public class AlarmClockManager {
 
-	// 30秒唤醒闹钟设置
+	// 10秒唤醒闹钟设置
 	public static final int ALARM_WAKE_ELAPSED_TIME = 10 * 1000;
 	private static final int ALARM_WAKE_REQUEST_CODE = 0xF01;
+	private static final int NOTIFY_GIFT_UPDATE_ELAPSED_COUNT = 3;
 
 	public static AlarmClockManager sInstance;
 
@@ -32,7 +34,12 @@ public class AlarmClockManager {
 
 	private AlarmManager mManager;
 	private PendingIntent alarmSender = null;
+	// 一次唤醒间隔时间
 	private int mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
+	// 唤醒的次数
+	private int mWakeCount = 0;
+	// 是否允许通知礼包更新
+	private boolean mAllowNotifyGiftUpdate;
 
 	public AlarmManager getAlarmManager(Context context) {
 		if (mManager == null) {
@@ -43,6 +50,20 @@ public class AlarmClockManager {
 
 	public void setElapsedTime(int elapsedTime) {
 		mElapsedTime = elapsedTime;
+	}
+
+	/**
+	 * 获取唤醒允许礼包更新状态
+	 */
+	public boolean isAllowNotifyGiftUpdate() {
+		return mAllowNotifyGiftUpdate;
+	}
+
+	/**
+	 * 设置是否允许通知礼包更新
+ 	 */
+	public void setAllowNotifyGiftUpdate(boolean allowNotifyGiftUpdate) {
+		mAllowNotifyGiftUpdate = allowNotifyGiftUpdate;
 	}
 
 	/**
@@ -60,6 +81,16 @@ public class AlarmClockManager {
 					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
 				}
 			}
+		}
+		mWakeCount++;
+		if (mAllowNotifyGiftUpdate && mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0) {
+			// 允许的情况下，每唤醒3次通知一次更新
+			Global.THREAD_POOL.execute(new Runnable() {
+				@Override
+				public void run() {
+					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
+				}
+			});
 		}
 		AlarmManager am = getAlarmManager(context);
 		am.cancel(alarmSender);

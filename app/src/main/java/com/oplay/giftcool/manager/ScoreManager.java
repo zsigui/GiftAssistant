@@ -79,24 +79,25 @@ public class ScoreManager {
 	 */
 	public void showWelComeDialog(final FragmentManager fm, final Context context, final TaskReward task) {
 		ScoreManager.getInstance().toastByCallback(task, false);
-		if (task == null) {
-			// 未登录 task == null
-			final WelcomeDialog unloginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_unlogin);
-			unloginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_unlogin_btn));
-			unloginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-				@Override
-				public void onCancel() {
-					unloginDialog.dismissAllowingStateLoss();
-				}
-
-				@Override
-				public void onConfirm() {
-					IntentUtil.jumpLoginNoToast(context);
-					unloginDialog.dismissAllowingStateLoss();
-				}
-			});
-			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
-		} else if (task.rewardPoints > 0) {
+//		if (task == null) {
+//			// 未登录 task == null
+//			final WelcomeDialog unloginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_unlogin);
+//			unloginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_unlogin_btn));
+//			unloginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//				@Override
+//				public void onCancel() {
+//					unloginDialog.dismissAllowingStateLoss();
+//				}
+//
+//				@Override
+//				public void onConfirm() {
+//					IntentUtil.jumpLoginNoToast(context);
+//					unloginDialog.dismissAllowingStateLoss();
+//				}
+//			});
+//			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
+//		}
+		if (task != null && task.rewardPoints > 0) {
 			final WelcomeDialog loginDialog;
 			if (task.rewardPoints >= 100) {
 				// 首次登录金币 >= 100

@@ -221,7 +221,7 @@ public class GiftListActivity extends BaseAppCompatActivity {
 				}
 			});
 		}
-		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
+		replaceFrag(R.id.fl_container, mNetErrorFragment, false);
 	}
 
 	@Override

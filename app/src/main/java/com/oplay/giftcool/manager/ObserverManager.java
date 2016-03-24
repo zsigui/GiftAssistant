@@ -88,10 +88,6 @@ public class ObserverManager {
 		}
 	}
 
-	public void notifyUserUpdate() {
-		notifyUserUpdate(STATUS.DEFAULT_FOR_ALL);
-	}
-
 	public void notifyUserUpdate(int action) {
 		for (Map.Entry<String, UserUpdateListener> entry : mUserObservers.entrySet()) {
 			UserUpdateListener observer = entry.getValue();
@@ -120,12 +116,11 @@ public class ObserverManager {
 	}
 
 	/**
-	 * @deprecated
+	 * 通知礼包已更新 <br />
+	 * PS: 该方法不保证运行在UI线程中
+	 *
+	 * @param action 执行动作
 	 */
-	public void notifyGiftUpdate() {
-		notifyGiftUpdate(STATUS.DEFAULT_FOR_ALL);
-	}
-
 	public void notifyGiftUpdate(int action) {
 		for (GiftUpdateListener observer : mGiftObservers.values()) {
 			if (observer != null) {

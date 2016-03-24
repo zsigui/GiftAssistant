@@ -16,6 +16,7 @@ import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnFinishListener;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
@@ -26,7 +27,6 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.socks.library.KLog;
 
@@ -306,7 +306,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 mAdapter.startBanner();
             }
         }
-        ClockService.startService(mApp);
+        AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
         mIsResume = true;
     }
 
@@ -317,14 +317,14 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             mAdapter.stopBanner();
         }
         mIsResume = false;
-        ClockService.stopService(mApp);
+        AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
     }
 
 
     @Override
     protected void onUserVisible() {
         super.onUserVisible();
-        ClockService.startService(mApp);
+        AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
         if (mIsResume) {
             if (mAdapter != null) {
                 mAdapter.startBanner();
@@ -336,7 +336,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     @Override
     protected void onUserInvisible() {
         super.onUserInvisible();
-        ClockService.stopService(mApp);
+        AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
         if (mAdapter != null) {
             mAdapter.stopBanner();
         }

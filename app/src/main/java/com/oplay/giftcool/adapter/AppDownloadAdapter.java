@@ -300,6 +300,35 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
 		}
 		holder.mTvAppName.setText(appInfo.name);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_WARN, "appinfo.status = " + appInfo.appStatus);
+		}
+		switch (appInfo.appStatus) {
+			case PAUSABLE:
+				holder.mPBar.setVisibility(View.VISIBLE);
+				holder.mPBar.setEnabled(true);
+				updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
+				holder.mTvSpeed.setVisibility(View.VISIBLE);
+				updateDownloadRate(holder.mTvSpeed, 0);
+				break;
+			case RETRYABLE:
+			case RESUMABLE:
+				holder.mPBar.setVisibility(View.VISIBLE);
+				holder.mPBar.setEnabled(false);
+				updateProgressText(holder.mTvPercent, appInfo.getCompleteSizeStr(), appInfo.getApkFileSizeStr());
+				holder.mTvSpeed.setVisibility(View.VISIBLE);
+				holder.mTvSpeed.setText("下载暂停中");
+				break;
+			case DOWNLOADABLE:
+			case OPENABLE:
+			case INSTALLABLE:
+			case UPDATABLE:
+			default:
+				holder.mPBar.setVisibility(View.GONE);
+				holder.mTvPercent.setText(String.format("版本号：%s | %s", appInfo.versionName, appInfo
+						.getApkFileSizeStr()));
+				holder.mTvSpeed.setVisibility(View.GONE);
+		}
 	}
 
 	public void notifyStatusChanged() {
@@ -346,7 +375,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
- 				if (mFragment != null && mFragment instanceof DownloadFragment) {
+				if (mFragment != null && mFragment instanceof DownloadFragment) {
 					if (getCount() > 0) {
 						((DownloadFragment) mFragment).showContent();
 					} else {

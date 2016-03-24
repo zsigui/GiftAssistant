@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.R;
@@ -49,15 +50,26 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	private HistoryFragment mHistoryFragment;
 	private PromptFragment mPromptFragment;
 	private NetErrorFragment mNetErrorFragment;
+	private LoadingFragment mLoadingFragment;
 
 	private String mLastSearchKey = "";
 	private String mLastInputKey = "";
-    private final int PAGE_CONTENT = 0;
-    private final int PAGE_EMPTY = 1;
-    private final int PAGE_HISTORY = 2;
-    private final int PAGE_PROMPT = 3;
-    private final int PAGE_ERROR = 4;
-    private int mCurrentPage = PAGE_HISTORY;
+
+	/* Fragment页面定位 */
+	private final int PAGE_CONTENT = 1;
+	private final int PAGE_EMPTY = 2;
+	private final int PAGE_HISTORY = 3;
+	private final int PAGE_PROMPT = 4;
+	private final int PAGE_ERROR = 5;
+	private final int PAGE_LOADING = 6;
+
+	/* Fragment页面标签 */
+	private final String TAG_CONTENT = ResultFragment.class.getSimpleName();
+	private final String TAG_EMPTY = EmptySearchFragment.class.getSimpleName();
+	private final String TAG_HISTORY = HistoryFragment.class.getSimpleName();
+	private final String TAG_PROMPT = PromptFragment.class.getSimpleName();
+	private final String TAG_ERROR = NetErrorFragment.class.getSimpleName();
+	private final String TAG_LOADING = LoadingFragment.class.getSimpleName();
 
 	@Override
 	protected void initView() {
@@ -73,54 +85,10 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		mSearchLayout.setAutoPopupPrompt(true);
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
 
-//        showView();
-        displayHistoryUI(mHistoryData);
-    }
+		displayHistoryUI(mHistoryData);
+	}
 
-//    private void showView() {
-//        switch (mCurrentPage) {
-//            case PAGE_EMPTY:
-//                displayEmptyUI();
-//                break;
-//            case PAGE_ERROR:
-//                displayNetworkErrUI();
-//                break;
-//            case PAGE_CONTENT:
-//            case PAGE_PROMPT:
-//            case PAGE_HISTORY:
-//                displayHistoryUI(mHistoryData);
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        if (mEmptySearchFragment != null) {
-//            ft.remove(mEmptySearchFragment);
-//        }
-//        if (mHistoryFragment != null) {
-//            ft.remove(mHistoryFragment);
-//        }
-//        if (mPromptFragment != null) {
-//            ft.remove(mPromptFragment);
-//        }
-//        if (mResultFragment != null) {
-//            ft.remove(mResultFragment);
-//        }
-//        ft.commitAllowingStateLoss();
-//        outState.putInt(KeyConfig.KEY_DATA, mCurrentPage);
-//        super.onSaveInstanceState(outState);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        mCurrentPage = savedInstanceState.getInt(KeyConfig.KEY_DATA, PAGE_HISTORY);
-//        showView();
-//    }
-
-    /**
+	/**
 	 * 获取输入的历史数据
 	 */
 	private void obtainHistoryData() {
@@ -180,21 +148,56 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	}
 
 	/**
+	 * 先判断隐藏所有可见的Fragment
+	 */
+	private void hideAllFragment(FragmentTransaction ft, int id) {
+		if (mResultFragment != null && mResultFragment.isVisible()
+				&& id != PAGE_CONTENT) {
+			ft.hide(mResultFragment);
+		}
+		if (mLoadingFragment != null && mLoadingFragment.isVisible()
+				&& id != PAGE_LOADING) {
+			ft.hide(mLoadingFragment);
+		}
+		if (mEmptySearchFragment != null && mEmptySearchFragment.isVisible()
+				&& id != PAGE_EMPTY) {
+			ft.hide(mEmptySearchFragment);
+		}
+		if (mHistoryFragment != null && mHistoryFragment.isVisible()
+				&& id != PAGE_HISTORY) {
+			ft.hide(mHistoryFragment);
+		}
+		if (mPromptFragment != null && mPromptFragment.isVisible()
+				&& id != PAGE_PROMPT) {
+			ft.hide(mPromptFragment);
+		}
+		if (mNetErrorFragment != null && mNetErrorFragment.isVisible()
+				&& id != PAGE_ERROR) {
+			ft.hide(mNetErrorFragment);
+		}
+	}
+
+	/**
 	 * 显示历史记录信息
 	 */
 	private void displayHistoryUI(ArrayList<String> data) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_HISTORY);
 		if (mHistoryFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(HistoryFragment.class.getSimpleName());
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
             if (f != null) {
-                mHistoryFragment = (HistoryFragment) f;
+	            ft.show(f);
             } else {
 			    mHistoryFragment = HistoryFragment.newInstance(data);
+	            ft.add(R.id.fl_container, mHistoryFragment, TAG_HISTORY);
             }
+		} else {
+			ft.show(mHistoryFragment);
 		}
 		mHistoryFragment.updateHistoryData(data);
-		reattachFrag(R.id.fl_container, mHistoryFragment, mHistoryFragment.getClass().getSimpleName());
-        mCurrentPage = PAGE_HISTORY;
+		ft.commitAllowingStateLoss();
 	}
+
 
 	/**
 	 * 显示提示信息
@@ -202,17 +205,21 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 * @param data
 	 */
 	private void displayPromptUI(ArrayList<PromptData> data) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_PROMPT);
 		if (mPromptFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(PromptFragment.class.getSimpleName());
-            if (f != null) {
-                mPromptFragment = (PromptFragment) f;
-            } else {
-                mPromptFragment = PromptFragment.newInstance(data);
-            }
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_PROMPT);
+			if (f != null) {
+				ft.show(f);
+			} else {
+				mPromptFragment = PromptFragment.newInstance(data);
+				ft.add(R.id.fl_container, mPromptFragment, TAG_PROMPT);
+			}
+		} else {
+			ft.show(mPromptFragment);
 		}
 		mPromptFragment.updateData(data);
-		reattachFrag(R.id.fl_container, mPromptFragment, mPromptFragment.getClass().getSimpleName());
-        mCurrentPage = PAGE_PROMPT;
+		ft.commitAllowingStateLoss();
 	}
 
 	/**
@@ -221,33 +228,41 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 * @param data
 	 */
 	private void displayDataUI(SearchDataResult data, String name, int id) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_CONTENT);
 		if (mResultFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(ResultFragment.class.getSimpleName());
-            if (f != null) {
-                mResultFragment = (ResultFragment) f;
-            } else {
-                mResultFragment = ResultFragment.newInstance(data);
-            }
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
+			if (f != null) {
+				ft.show(f);
+			} else {
+				mResultFragment = ResultFragment.newInstance(data);
+				ft.add(R.id.fl_container, mResultFragment, TAG_CONTENT);
+			}
+		} else {
+			ft.show(mResultFragment);
 		}
 		mResultFragment.updateData(data, name, id);
-		reattachFrag(R.id.fl_container, mResultFragment, mResultFragment.getClass().getSimpleName());
-        mCurrentPage = PAGE_CONTENT;
+		ft.commitAllowingStateLoss();
 	}
 
 	/**
 	 * 显示搜索结果为空界面
 	 */
 	private void displayEmptyUI() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_EMPTY);
 		if (mEmptySearchFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(EmptySearchFragment.class.getSimpleName());
-            if (f != null) {
-                mEmptySearchFragment = (EmptySearchFragment) f;
-            } else {
-                mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
-            }
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_EMPTY);
+			if (f != null) {
+				ft.show(f);
+			} else {
+				mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
+				ft.add(R.id.fl_container, mEmptySearchFragment, TAG_EMPTY);
+			}
+		} else {
+			ft.show(mEmptySearchFragment);
 		}
-		reattachFrag(R.id.fl_container, mEmptySearchFragment, mEmptySearchFragment.getClass().getSimpleName());
-        mCurrentPage = PAGE_EMPTY;
+		ft.commitAllowingStateLoss();
 	}
 
 	/**
@@ -255,19 +270,44 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 */
 	private void displayNetworkErrUI() {
 		if ("".equals(mLastSearchKey)
-                || (mSearchLayout != null && !mLastSearchKey.equals(mSearchLayout.getKeyword()))) {
+				|| (mSearchLayout != null && !mLastSearchKey.equals(mSearchLayout.getKeyword()))) {
 			return;
 		}
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_ERROR);
 		if (mNetErrorFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(NetErrorFragment.class.getSimpleName());
-            if (f != null) {
-                mNetErrorFragment = (NetErrorFragment) f;
-            } else {
-                mNetErrorFragment = NetErrorFragment.newInstance();
-            }
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_ERROR);
+			if (f != null) {
+				ft.show(f);
+			} else {
+				mNetErrorFragment = NetErrorFragment.newInstance();
+				ft.add(R.id.fl_container, mNetErrorFragment, TAG_ERROR);
+			}
+		} else {
+			ft.show(mNetErrorFragment);
 		}
-		reattachFrag(R.id.fl_container, mNetErrorFragment, mNetErrorFragment.getClass().getSimpleName());
-        mCurrentPage = PAGE_ERROR;
+		ft.commitAllowingStateLoss();
+	}
+
+
+	/**
+	 * 显示加载中页面
+	 */
+	private void displayLoadingUI() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft, PAGE_LOADING);
+		if (mLoadingFragment == null) {
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_LOADING);
+			if (f != null) {
+				ft.show(f);
+			} else {
+				mLoadingFragment = LoadingFragment.newInstance();
+				ft.add(R.id.fl_container, mLoadingFragment, TAG_LOADING);
+			}
+		} else {
+			ft.show(mLoadingFragment);
+		}
+		ft.commitAllowingStateLoss();
 	}
 
 	public void sendSearchRequest(String keyword, int id) {
@@ -293,17 +333,6 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mCallResult != null) {
 			mCallResult.cancel();
 		}
-	}
-
-
-	/**
-	 * 显示加载中页面
-	 */
-	private void displayLoadingUI() {
-		if (mLoadingFragment == null) {
-			mLoadingFragment = LoadingFragment.newInstance();
-		}
-		reattachFrag(R.id.fl_container, mLoadingFragment, LoadingFragment.class.getSimpleName());
 	}
 
 	private Call<JsonRespBase<SearchDataResult>> mCallResult;
@@ -397,9 +426,9 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 
 		@Override
 		public void onSearchPromptPerform(String keyword) {
-            if (mLastInputKey.equals("")) {
-                displayPromptUI(null);
-            }
+			if (mLastInputKey.equals("")) {
+				displayPromptUI(null);
+			}
 			if (!NetworkUtil.isConnected(SearchActivity.this)) {
 				if (!mLastInputKey.equals(keyword)) {
 					displayPromptUI(null);

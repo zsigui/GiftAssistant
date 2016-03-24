@@ -19,7 +19,6 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
@@ -71,13 +70,13 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 	@Override
 	public void onResume() {
 		super.onResume();
-		ClockService.startService(getContext());
+//		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		ClockService.stopService(getContext());
+//		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
 	}
 
 	@Override
@@ -274,10 +273,25 @@ public class GiftListDataFragment extends BaseFragment_Refresh<IndexGiftNew> imp
 				&& action != ObserverManager.STATUS.GIFT_UPDATE_ALL) {
 			return;
 		}
-		if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
-			return;
+		switch (action) {
+			case ObserverManager.STATUS.GIFT_UPDATE_ALL:
+				if (mIsSwipeRefresh) {
+					return;
+				}
+				mIsSwipeRefresh = true;
+				lazyLoad();
+				break;
+//			case ObserverManager.STATUS.GIFT_UPDATE_PART:
+//				if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
+//					return;
+//				}
+//				mIsNotifyRefresh = true;
+//				updatePartData();
+//				break;
 		}
-		mIsNotifyRefresh = true;
+	}
+
+	private void updatePartData() {
 		if (!NetworkUtil.isConnected(getContext())) {
 			moreLoadFailEnd();
 			return;

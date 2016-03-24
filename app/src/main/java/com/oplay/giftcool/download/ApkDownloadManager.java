@@ -112,7 +112,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
 	//仅限于初始化的时候用
 	public void addPausedTask(IndexGameNew info) {
-		if (!checkDownloadTask(info)) {
+		if (!checkDownloadTask(info) || mUrl_AppInfo.containsKey(info.downloadUrl)) {
 			return;
 		}
 		mManagerList.add(getEndOfPaused(), info);
@@ -122,7 +122,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	public void addFinishedTask(IndexGameNew info) {
-		if (!checkDownloadTask(info)) {
+		if (!checkDownloadTask(info) || mUrl_AppInfo.containsKey(info.downloadUrl)) {
 			return;
 		}
 		mManagerList.add(getEndOfFinished(), info);
@@ -211,32 +211,47 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
+	public void remove(String url) {
+		for (int i = mManagerList.size() - 1; i >= 0 ; i--) {
+			GameDownloadInfo info = mManagerList.get(i);
+			if (info.downloadUrl.equals(url)) {
+				mManagerList.remove(i);
+			}
+		}
+	}
+
 	public synchronized void removeDownloadTask(String url) {
 		GameDownloadInfo info = mUrl_AppInfo.get(url);
 		if (!checkDownloadTask(info)) {
 			return;
 		}
-		DownloadStatus ds = info.downloadStatus;
-		switch (ds) {
-			case DOWNLOADING:
-				stopDownloadingTask(info);
-				break;
-			case PENDING:
-				mManagerList.remove(info);
-				mPendingCnt = decrease(mPendingCnt);
-				break;
-			case PAUSED:
-			case FAILED:
-				mManagerList.remove(info);
-				mPausedCnt = decrease(mPausedCnt);
-				break;
-			case FINISHED:
-				mManagerList.remove(info);
-				mFinishedCnt = decrease(mFinishedCnt);
-				break;
+		for (int i = mManagerList.size() - 1; i >= 0 ; i--) {
+			GameDownloadInfo everyInfo = mManagerList.get(i);
+			if (everyInfo.downloadUrl.equals(info.downloadUrl)) {
+				DownloadStatus ds = everyInfo.downloadStatus;
+				switch (ds) {
+					case DOWNLOADING:
+						stopDownloadingTask(info);
+						break;
+					case PENDING:
+						mManagerList.remove(i);
+						mPendingCnt = decrease(mPendingCnt);
+						break;
+					case PAUSED:
+					case FAILED:
+						mManagerList.remove(i);
+						mPausedCnt = decrease(mPausedCnt);
+						break;
+					case FINISHED:
+						mManagerList.remove(i);
+						mFinishedCnt = decrease(mFinishedCnt);
+						break;
+				}
+			}
 		}
 		mUrl_AppInfo.remove(info.downloadUrl);
 		mPackageName_AppInfo.remove(info.packageName);
+		DownloadDBHelper.getInstance(mApplicationContext).deleteDownloadTask(info);
 		notifyDownloadStatusListeners(info);
 		DownloadNotificationManager.showDownload(mApplicationContext);
 	}

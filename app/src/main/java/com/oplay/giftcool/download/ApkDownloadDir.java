@@ -56,7 +56,7 @@ public class ApkDownloadDir extends AbsDownloadDir {
 
 	/**
 	 * 获取APK下载目录:
-	 * 1.检查SDK卡是否可用,可用返回/gift_assistant/download
+	 * 1.检查SDK卡是否可用,可用返回/gift_cool/download
 	 * 2.不可用则使用files/
 	 * 3.仍不可用返回null
 	 *
@@ -129,7 +129,7 @@ public class ApkDownloadDir extends AbsDownloadDir {
 		} else {
 			temp = Coder_Md5.md5(url);
 		}
-		return new File(getDir(), temp + ".v".trim() + "mt".trim() + "f");
+		return new File(getDir(), temp + ".vmtf");
 	}
 
 	/**
@@ -160,6 +160,6 @@ public class ApkDownloadDir extends AbsDownloadDir {
 		} else {
 			temp = Coder_Md5.md5(url);
 		}
-		return new File(getDir(), temp + ".a".trim() + "pk".trim());
+		return new File(getDir(), temp + ".apk");
 	}
 }

@@ -10,7 +10,8 @@ android {
         targetSdkVersion BUILD_TARGET_SDK_VERSION as int
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
-	    manifestPlaceholders = [ jpushAppKey:JPUSH_APPKEY, qqAppKey:QQ_APPKEY ]
+	    manifestPlaceholders = [ jpushAppKey:JPUSH_APPKEY, qqAppKey:QQ_APPKEY,
+	                             loveotaMainChId:LOVEOTA_MAIN_CHID, loveotaClientID:LOVEOTA_CLIENT_CHID ]
     }
 
 	signingConfigs {

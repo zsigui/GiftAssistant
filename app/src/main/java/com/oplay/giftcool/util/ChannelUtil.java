@@ -32,7 +32,7 @@ public class ChannelUtil {
 	public static int getChannelId(Context context) {
 
 		if (AppConfig.TEST_MODE) {
-			return 10000;
+			return AppDebugConfig.TEST_CHANNEL_ID;
 		}
 		ZipFile zipFile = null;
 		try {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
@@ -22,19 +23,21 @@ public class ClockService extends Service {
 
 
 	public static void stopService(Context context) {
-		if (context == null) {
-			return;
-		}
-		Intent intent = new Intent(context, ClockService.class);
-		context.stopService(intent);
+//		if (context == null) {
+//			return;
+//		}
+//		Intent intent = new Intent(context, ClockService.class);
+//		context.stopService(intent);
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
 	}
 
 	public static void startService(Context context) {
-		if (context == null) {
-			return;
-		}
-		Intent intent = new Intent(context, ClockService.class);
-		context.startService(intent);
+//		if (context == null) {
+//			return;
+//		}
+//		Intent intent = new Intent(context, ClockService.class);
+//		context.startService(intent);
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
 	}
 
 	@Override

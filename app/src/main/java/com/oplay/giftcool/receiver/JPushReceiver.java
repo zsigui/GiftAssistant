@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -26,6 +27,7 @@ public class JPushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		long startTime = System.currentTimeMillis();
 		if (intent != null && !TextUtils.isEmpty(intent.getAction())) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction());
@@ -71,7 +73,7 @@ public class JPushReceiver extends BroadcastReceiver {
 				} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 					// 用户点击了通知，打开对应界面
 					// 不显示在状态栏的自定义消息，根据需要进行额外工作
-					Bundle bundle = intent.getExtras();
+					final Bundle bundle = intent.getExtras();
 					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" + extra);
@@ -82,21 +84,29 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
 					}
-					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
+					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
 					PushMessageManager.getInstance().handleNotifyMessage(context, msg, intent);
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
 
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Map<String, String> kv = new HashMap<>();
-						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-						kv.put("消息标题", msg.title);
-						kv.put("消息内容", msg.content);
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_OPENED, kv, 1);
+						Global.THREAD_POOL.execute(new Runnable() {
+							@Override
+							public void run() {
+								Map<String, String> kv = new HashMap<>();
+								kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+								kv.put("消息标题", msg.title);
+								kv.put("消息内容", msg.content);
+								StatisticsManager.getInstance().trace(
+										AssistantApp.getInstance().getApplicationContext(),
+										StatisticsManager.ID.APP_PUSH_OPENED,
+										kv, 1);
+							}
+						});
 					}
 				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 					// 用户接收到通知
-					Bundle bundle = intent.getExtras();
+					final Bundle bundle = intent.getExtras();
 					String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "
@@ -108,19 +118,31 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AssistantApp.getInstance().getGson() == null) {
 						AssistantApp.getInstance().initGson();
 					}
-					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
+					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Map<String, String> kv = new HashMap<>();
-						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-						kv.put("消息标题", msg.title);
-						kv.put("消息内容", msg.content);
-						StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_PUSH_RECEIVED, kv, 1);
+						Global.THREAD_POOL.execute(new Runnable() {
+							@Override
+							public void run() {
+								Map<String, String> kv = new HashMap<>();
+								kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+								kv.put("消息标题", msg.title);
+								kv.put("消息内容", msg.content);
+								StatisticsManager.getInstance().trace(
+										AssistantApp.getInstance().getApplicationContext(),
+										StatisticsManager.ID.APP_PUSH_RECEIVED,
+										kv, 1);
+							}
+						});
 					}
 				}
 			} catch (Throwable t) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_JPUSH, t);
+				}
+			} finally {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_JPUSH, "deal time is " + (System.currentTimeMillis() - startTime) + " ms");
 				}
 			}
 		}

@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import com.oplay.giftcool.adapter.other.LimitGiftListAdapter;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -20,7 +20,6 @@ import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.service.ClockService;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersListView;
@@ -112,14 +111,31 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			mRefreshLayout.setCanShowLoad(mData.size() >= 6);
 			refreshData(mData);
 		}
-		startClockService();
 		mUpdateGiftRunnable = new UpdateGiftRunnable();
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		stopClockService();
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
 	}
 
 	@Override
@@ -134,12 +150,23 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				&& action != ObserverManager.STATUS.GIFT_UPDATE_ALL) {
 			return;
 		}
-		if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
-			return;
-		}
-		mIsNotifyRefresh = true;
-		if (mUpdateGiftRunnable != null) {
-			Global.THREAD_POOL.execute(mUpdateGiftRunnable);
+		switch (action) {
+			case ObserverManager.STATUS.GIFT_UPDATE_ALL:
+				if (mIsSwipeRefresh) {
+					return;
+				}
+				mIsSwipeRefresh = true;
+				lazyLoad();
+				break;
+			case ObserverManager.STATUS.GIFT_UPDATE_PART:
+				if (mIsSwipeRefresh || mIsNotifyRefresh || mData == null) {
+					return;
+				}
+				mIsNotifyRefresh = true;
+				if (mUpdateGiftRunnable != null) {
+					Global.THREAD_POOL.execute(mUpdateGiftRunnable);
+				}
+				break;
 		}
 	}
 
@@ -224,16 +251,6 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			}
 			i++;
 		}
-	}
-
-	private void startClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().startService(intent);
-	}
-
-	private void stopClockService() {
-		Intent intent = new Intent(getContext(), ClockService.class);
-		getContext().stopService(intent);
 	}
 
 	private void setGiftUpdateInfo(IndexGiftNew toBeSet, IndexGiftNew data) {

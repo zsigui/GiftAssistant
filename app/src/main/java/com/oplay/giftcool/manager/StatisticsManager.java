@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.text.TextUtils;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
@@ -68,6 +69,7 @@ public class StatisticsManager {
 		String APP_PUSH_OPENED = "ap000004";
 
 	}
+
 	private final String TC_APP_KEY = "0CC59F66C9823F0D3EF90AC61D9735FB";
 	private final String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 
@@ -87,7 +89,7 @@ public class StatisticsManager {
 	/**
 	 * 进行统计工具初始化
 	 *
-	 * @param context 上下文
+	 * @param context   上下文
 	 * @param channelId 渠道Id
 	 */
 	public void init(Context context, int channelId) {
@@ -102,7 +104,13 @@ public class StatisticsManager {
 			AnalyticsConfig.setAppkey(context, UMENG_APP_KEY);
 			AnalyticsConfig.setChannel("m" + channelId);   //友盟渠道号不能纯数字
 			AnalyticsConfig.enableEncrypt(true);
-			MobclickAgent.setDebugMode(AppConfig.TEST_MODE);
+			boolean debugMode = false;
+			if (AppConfig.TEST_MODE) {
+				debugMode = true;
+			} else if (AssistantApp.getInstance().getChannelId() == AppDebugConfig.TEST_CHANNEL_ID) {
+				debugMode = true;
+			}
+			MobclickAgent.setDebugMode(debugMode);
 			MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
 
 
@@ -172,7 +180,8 @@ public class StatisticsManager {
 	public void trace(Context context, String id, String subtitle) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " + mIsInit);
+				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " +
+						mIsInit);
 			}
 //			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
 			if (mIsInit) {
@@ -185,7 +194,8 @@ public class StatisticsManager {
 	public void trace(Context context, String id, Map keyMap, int val) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", isInit = " + mIsInit);
+				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", " +
+						"isInit = " + mIsInit);
 			}
 			if (mIsInit) {
 //			TCAgent.onEvent(context, title, subtitle, keyMap);
@@ -231,13 +241,15 @@ public class StatisticsManager {
 
 	/**
 	 * 友盟测试设备数据采集
+	 *
 	 * @param context
 	 * @return
 	 */
 	public static String getDeviceInfo(Context context) {
 		try {
 			org.json.JSONObject json = new org.json.JSONObject();
-			android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context.getSystemService
+					(Context.TELEPHONY_SERVICE);
 
 			String device_id = null;
 
@@ -245,7 +257,8 @@ public class StatisticsManager {
 				device_id = tm.getDeviceId();
 			}
 
-			android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context
+					.WIFI_SERVICE);
 
 			String mac = wifi.getConnectionInfo().getMacAddress();
 

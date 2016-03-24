@@ -125,7 +125,7 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 		return false;
 	}
 
-	private boolean deleteDownloadTask(GameDownloadInfo downloadTask) {
+	public boolean deleteDownloadTask(GameDownloadInfo downloadTask) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.i("DBHelper_Download", "DownloadTaskToDeleteInDB:" + downloadTask);
@@ -328,6 +328,8 @@ public class DownloadDBHelper extends SQLiteOpenHelper implements OnDownloadStat
 				switch (ds) {
 					case DOWNLOADING:
 					case PENDING:
+						ApkDownloadManager.getInstance(mAppContext).addDownloadTask(info);
+						break;
 					case PAUSED:
 					case FAILED:
 						info.downloadStatus = DownloadStatus.PAUSED;

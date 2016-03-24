@@ -19,11 +19,11 @@
 			android:background="@drawable/selector_btn_orange"
 			android:text="@string/err_setting"
 			android:layout_marginTop="10dp"
-			android:textSize="@dimen/common_text"
-			android:paddingLeft="@dimen/common_text_padding_left_right"
-			android:paddingRight="@dimen/common_text_padding_left_right"
-			android:paddingTop="@dimen/common_text_padding_top_bottom"
-			android:paddingBottom="@dimen/common_text_padding_top_bottom"
+			android:textSize="@dimen/di_common_text"
+			android:paddingLeft="@dimen/di_common_text_padding_left_right"
+			android:paddingRight="@dimen/di_common_text_padding_left_right"
+			android:paddingTop="@dimen/di_common_text_padding_top_bottom"
+			android:paddingBottom="@dimen/di_common_text_padding_top_bottom"
 			android:textColor="@color/co_white"
 			android:layout_below="@+id/v_err"/>
 

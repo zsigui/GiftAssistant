@@ -23,7 +23,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.SetTitleListner;
-import com.oplay.giftcool.ui.fragment.LoadingFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
@@ -47,7 +46,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
 	private LoadingDialog mLoadingDialog;
 	protected boolean mNeedWorkCallback = false;
-	protected LoadingFragment mLoadingFragment;
 	// 封装加载和等待等页面的管理器对象
 	protected LoadAndRetryViewManager mViewManager;
 	protected boolean mIsLoading;
@@ -216,7 +214,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		Fragment f = getSupportFragmentManager().findFragmentById(id);
 		if (f != null && f == newFrag) {
             // 已经存在
-            if (!f.isAdded()) {
+            if (f.isDetached()) {
                 // 不存在添加状态，先添加
                 ft.attach(f);
             }
@@ -246,37 +244,28 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 	}
 
 	/**
-	 * 隐藏当前栈顶Fragment，
-	 *
-	 * @param id
-	 * @param newFrag
-	 * @param newTag
-	 * @param oldTag
+	 * 隐藏当前栈顶Fragment
 	 */
-	public void reshowFrag(@IdRes int id, Fragment newFrag, String newTag, String oldTag) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment f = getSupportFragmentManager().findFragmentByTag(oldTag);
-		if (f != null && !f.isHidden()) {
-			ft.hide(f);
-			f.setUserVisibleHint(false);
-		}
-		f = getSupportFragmentManager().findFragmentByTag(newTag);
-		if (f != null) {
-			ft.show(f);
-			f.setUserVisibleHint(true);
-		} else {
-            if (newFrag == null) {
-                return;
-            }
-            if (newFrag.isAdded()) {
-                ft.show(newFrag);
-            } else {
-                ft.add(id, newFrag, newTag);
-            }
-            newFrag.setUserVisibleHint(true);
-		}
-		ft.commitAllowingStateLoss();
-	}
+//	public void reshowFrag(@IdRes int id, Fragment newFrag, String newTag, String... oldTags) {
+//		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//		Fragment f;
+//		for (String oldTag : oldTags) {
+//			f = getSupportFragmentManager().findFragmentByTag(oldTag);
+//			if (f != null && !f.isHidden()) {
+//				ft.hide(f);
+//				f.setUserVisibleHint(false);
+//			}
+//		}
+//		f = getSupportFragmentManager().findFragmentByTag(newTag);
+//		if (f != null) {
+//			ft.show(f);
+//			f.setUserVisibleHint(true);
+//		} else {
+//            ft.add(id, newFrag, newTag);
+//            newFrag.setUserVisibleHint(true);
+//		}
+//		ft.commit();
+//	}
 
 	/**
 	 * 执行Fragment出栈操作，栈中有Fragment时返回true，否则返回false
@@ -412,7 +401,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			mLoadingDialog.dismiss();
 			mLoadingDialog = null;
 		}
-		mLoadingFragment = null;
 		// 封装加载和等待等页面的管理器对象
 		mViewManager = null;
 		mCurTopFragment = null;
