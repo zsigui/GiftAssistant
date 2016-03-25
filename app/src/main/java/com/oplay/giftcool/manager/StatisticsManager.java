@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
@@ -165,19 +166,25 @@ public class StatisticsManager {
 		}
 	}
 
-	public void trace(Context context, String id) {
+	public void trace(final Context context, final String id) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
 			}
 			if (mIsInit) {
+				Global.THREAD_POOL.execute(new Runnable() {
+					@Override
+					public void run() {
+
 //			TCAgent.onEvent(context, id);
-				MobclickAgent.onEvent(context, id);
+						MobclickAgent.onEvent(context, id);
+					}
+				});
 			}
 		}
 	}
 
-	public void trace(Context context, String id, String subtitle) {
+	public void trace(final Context context, final String id, final String subtitle) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " +
@@ -185,26 +192,38 @@ public class StatisticsManager {
 			}
 //			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
 			if (mIsInit) {
+				Global.THREAD_POOL.execute(new Runnable() {
+					@Override
+					public void run() {
+
 //			TCAgent.onEvent(context, title, subtitle);
-				MobclickAgent.onEvent(context, id, subtitle);
+						MobclickAgent.onEvent(context, id, subtitle);
+					}
+				});
 			}
 		}
 	}
 
-	public void trace(Context context, String id, Map keyMap, int val) {
+	public void trace(final Context context, final String id, final Map keyMap, final int val) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", " +
 						"isInit = " + mIsInit);
 			}
 			if (mIsInit) {
+				Global.THREAD_POOL.execute(new Runnable() {
+					@Override
+					public void run() {
+
 //			TCAgent.onEvent(context, title, subtitle, keyMap);
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-					keyMap.put("__ct__", String.valueOf(val));
-					MobclickAgent.onEvent(context, id, keyMap);
-				} else {
-					MobclickAgent.onEventValue(context, id, keyMap, val);
-				}
+						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+							keyMap.put("__ct__", String.valueOf(val));
+							MobclickAgent.onEvent(context, id, keyMap);
+						} else {
+							MobclickAgent.onEventValue(context, id, keyMap, val);
+						}
+					}
+				});
 			}
 		}
 	}

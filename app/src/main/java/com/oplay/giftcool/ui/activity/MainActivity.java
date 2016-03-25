@@ -20,6 +20,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
@@ -88,6 +89,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		super.onCreate(savedInstanceState);
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
+		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
 	}
 
 	private void createDrawer() {
@@ -293,7 +295,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mApp.appExit();
 			// 发送退出指令
 			finish();
-			System.exit(0);
+//			System.exit(0);
 		} else {
 			mLastClickTime = System.currentTimeMillis();
 			ToastUtil.showShort("再次点击退出应用");
@@ -340,7 +342,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if (count < -1 || mDrawerFragment == null) {
+				if (count < -1) {
 					return;
 				}
 				int val = mHintCount.get(key, 0);
@@ -349,7 +351,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					if (count != 0) {
 						mHintCount.put(key, count);
 						ivHint.setVisibility(View.VISIBLE);
-						mDrawerFragment.updateCount(key, count);
+						if (mDrawerFragment != null) {
+							mDrawerFragment.updateCount(key, count);
+						}
 					}
 				} else {
 					// 原先已经存在该键值
@@ -365,7 +369,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 						mHintCount.put(key, count);
 						ivHint.setVisibility(View.VISIBLE);
 					}
-					mDrawerFragment.updateCount(key, count);
+					if (mDrawerFragment != null) {
+						mDrawerFragment.updateCount(key, count);
+					}
 				}
 			}
 		}, 300);

@@ -3,6 +3,7 @@ package com.oplay.giftcool.download;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -11,9 +12,9 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.text.TextUtils;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
@@ -35,6 +36,25 @@ public class DownloadNotificationManager {
 	public static final int REQUEST_CODE_USERMESSAGE = 1204;
 	public static final int REQUEST_ID_USERMESSAGE = 1024;
 
+	public static final String ACTION_OPEN_DOWNLOAD_FRAGMENT = "giftcool.action.download.SHOW_VIEW";
+	public static final String CATEGORY_DOWNLOAD = "com.oplay.giftcool";
+
+	public static class DownloadReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent != null) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + intent.getAction());
+				}
+				context = (context == null ? AssistantApp.getInstance().getApplicationContext() : context);
+				if (ACTION_OPEN_DOWNLOAD_FRAGMENT.equals(intent.getAction())) {
+					IntentUtil.jumpDownloadManager(context, true);
+				}
+			}
+		}
+	}
+
 	public static void showDownload(Context context) {
 		try {
 			if (AppDebugConfig.IS_DEBUG) {
@@ -45,9 +65,9 @@ public class DownloadNotificationManager {
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			if (count > 0) {
-				Intent downloadIntent = IntentUtil.getJumpDownloadManagerIntent(context);
-				downloadIntent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
-				PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_DOWNLOAD, downloadIntent,
+				Intent downloadIntent = getJumpDownloadManagerIntent(context);
+				// 由于使用getActivity在应用打开的时候，由于taskAffinity的问题
+				PendingIntent pi = PendingIntent.getBroadcast(context, REQUEST_CODE_DOWNLOAD, downloadIntent,
 						PendingIntent.FLAG_UPDATE_CURRENT);
 				String tickerText = String.format("您有%d个游戏正在下载中", count);
 				String title = "点击查看详情";
@@ -58,7 +78,6 @@ public class DownloadNotificationManager {
 			} else {
 				notificationManager.cancel(REQUEST_ID_DOWNLOAD);
 			}
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -74,7 +93,6 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager)
 					context.getSystemService(Service.NOTIFICATION_SERVICE);
 			notificationManager.cancel(REQUEST_ID_DOWNLOAD);
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -104,7 +122,6 @@ public class DownloadNotificationManager {
 			builder.setAutoCancel(true);
 			notificationManager.cancel(notificationId);
 			notificationManager.notify(notificationId, builder.build());
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -140,10 +157,10 @@ public class DownloadNotificationManager {
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.logMethodName(DownloadNotificationManager.class);
 			}
-			Intent download = IntentUtil.getJumpDownloadManagerIntent(context);
+			Intent download = getJumpDownloadManagerIntent(context);
 
 			int notificationId = destUrl.hashCode();
-			PendingIntent pi = PendingIntent.getActivity(context, notificationId, download,
+			PendingIntent pi = PendingIntent.getBroadcast(context, notificationId, download,
 					PendingIntent.FLAG_UPDATE_CURRENT);
 			final NotificationManager notificationManager = (NotificationManager)
 					context.getSystemService(Service.NOTIFICATION_SERVICE);
@@ -159,12 +176,21 @@ public class DownloadNotificationManager {
 			builder.setAutoCancel(true);
 			notificationManager.cancel(notificationId);
 			notificationManager.notify(notificationId, builder.build());
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
 		}
+	}
+
+	/**
+	 * 获取发送下载广播的意图
+	 */
+	private static Intent getJumpDownloadManagerIntent(Context context) {
+		Intent intent = new Intent(context, DownloadReceiver.class);
+		intent.setAction(ACTION_OPEN_DOWNLOAD_FRAGMENT);
+		intent.addCategory(CATEGORY_DOWNLOAD);
+		return intent;
 	}
 
 	public static void clearDownloadComplete(Context context, String destUrl) {
@@ -176,7 +202,6 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			notificationManager.cancel(notificationId);
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -192,7 +217,6 @@ public class DownloadNotificationManager {
 			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
 					.NOTIFICATION_SERVICE);
 			notificationManager.cancelAll();
-			ApkDownloadManager.getInstance(context).updateHintStatus();
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

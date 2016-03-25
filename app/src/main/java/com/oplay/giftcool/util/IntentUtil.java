@@ -225,14 +225,13 @@ public class IntentUtil {
 	/**
 	 * 跳转下载管理界面
 	 */
-	public static void jumpDownloadManager(Context context) {
-		context.startActivity(getJumpDownloadManagerIntent(context));
-	}
-
-	public static Intent getJumpDownloadManagerIntent(Context context) {
+	public static void jumpDownloadManager(Context context, boolean newTask) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
-		return intent;
+		if (newTask) {
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
+		context.startActivity(intent);
 	}
 
 //	private static ConfirmDialog mConfirmDialog;

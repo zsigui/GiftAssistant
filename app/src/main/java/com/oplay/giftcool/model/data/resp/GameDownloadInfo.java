@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
+import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
@@ -205,6 +206,9 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 
 	public void restartDownload() {
 		try {
+			if (appStatus == AppStatus.RETRYABLE) {
+				DownloadNotificationManager.clearDownloadComplete(mContext, destUrl);
+			}
 			ApkDownloadManager.getInstance(mContext).restartDownloadTask(this);
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {

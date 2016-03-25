@@ -55,9 +55,6 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "onCreate");
-		}
 	}
 
 	@Override

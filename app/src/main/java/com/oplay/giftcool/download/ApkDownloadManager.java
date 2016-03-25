@@ -107,7 +107,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	public void initDownloadList() {
 		initConfig(mApplicationContext);
 		mDownloadDBHelper.getDownloadList();
-//		DownloadNotificationManager.showDownload(mApplicationContext);
+		DownloadNotificationManager.showDownload(mApplicationContext);
 	}
 
 	//仅限于初始化的时候用
@@ -393,6 +393,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 					}
 				}
 			}
+			ApkDownloadManager.getInstance(mApplicationContext).updateHintStatus();
 		} catch (Exception e) {
 			KLog.e(e);
 		} finally {

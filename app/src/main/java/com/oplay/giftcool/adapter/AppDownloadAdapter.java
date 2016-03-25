@@ -300,9 +300,6 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 			holder.mPBar.setProgress((int) (appInfo.completeSize * 100 / appInfo.apkFileSize));
 		}
 		holder.mTvAppName.setText(appInfo.name);
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "appinfo.status = " + appInfo.appStatus);
-		}
 		switch (appInfo.appStatus) {
 			case PAUSABLE:
 				holder.mPBar.setVisibility(View.VISIBLE);

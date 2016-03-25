@@ -80,7 +80,6 @@
 			</intent-filter >-->
 		</activity >
 
-		<!--android:screenOrientation = "sensorPortrait"-->
 		<activity
 				android:name = ".ui.activity.MainActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
@@ -137,6 +136,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
+		<!-- taskAffinity 定义防止不同栈通知调起失败 -->
 		<activity
 				android:name = ".ui.activity.SettingActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
@@ -206,9 +206,18 @@
 			<intent-filter android:priority = "1000" >
 				<action android:name = "android.intent.action.PACKAGE_ADDED" />
 				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
+
 				<data android:scheme = "package" />
 			</intent-filter >
 		</receiver >
+
+		<receiver android:name = ".download.DownloadNotificationManager$DownloadReceiver" >
+			<intent-filter >
+				<action android:name = "giftcool.action.download.SHOW_VIEW" />
+				<category android:name = "com.oplay.giftcool" />
+			</intent-filter >
+		</receiver >
+
 		<activity
 				android:name = "com.tencent.tauth.AuthActivity"
 				android:launchMode = "singleTask"
@@ -234,6 +243,7 @@
 			<intent-filter android:priority = "1000" >
 				<action android:name = "android.intent.action.PACKAGE_ADDED" />
 				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
+
 				<data android:scheme = "package" />
 			</intent-filter >
 		</receiver >
@@ -440,10 +450,10 @@
 			</intent-filter >
 			<!-- Optional，这个接收会导致ANR异常，去掉 -->
 			<!--<intent-filter >-->
-				<!--<action android:name = "android.intent.action.PACKAGE_ADDED" />-->
-				<!--<action android:name = "android.intent.action.PACKAGE_REMOVED" />-->
+			<!--<action android:name = "android.intent.action.PACKAGE_ADDED" />-->
+			<!--<action android:name = "android.intent.action.PACKAGE_REMOVED" />-->
 
-				<!--<data android:scheme = "package" />-->
+			<!--<data android:scheme = "package" />-->
 			<!--</intent-filter >-->
 
 		</receiver >

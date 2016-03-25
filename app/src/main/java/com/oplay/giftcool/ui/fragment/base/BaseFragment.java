@@ -116,6 +116,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		mIsPrepared = true;
 		mCanShowUI = true;
 		if (!mHasData) {
+			mIsLoading = false;
 			lazyLoad();
 		}
 	}
@@ -203,13 +204,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	 * fragment可见的情况下，会调用该方法，默认进行初始化等判断和执行懒加载方法
 	 */
 	protected void onUserVisible() {
-		if (mViewManager != null) {
-			mViewManager.showLast();
-		}
 		if (!mIsPrepared || mIsLoading || mHasData) {
-			if (mViewManager != null) {
-				mViewManager.showLast();
-			}
 			return;
 		}
 		lazyLoad();

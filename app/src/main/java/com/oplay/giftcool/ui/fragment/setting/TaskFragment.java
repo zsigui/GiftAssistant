@@ -134,6 +134,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
+
                 if (response != null && response.isSuccessful()) {
                     if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
                         mData = response.body().getData().missions;
@@ -272,9 +273,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             }
             // 最后完成时间是今天，标志为已经完成
             if (mission.type == type) {
-                if (type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
-                    KLog.d(AppDebugConfig.TAG_WARN, "isToday = " + DateUtil.isToday(mission.lastCompleteTime));
-                }
                 if (!TextUtils.isEmpty(mission.lastCompleteTime)
                         && DateUtil.isToday(mission.lastCompleteTime)
                         && (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS

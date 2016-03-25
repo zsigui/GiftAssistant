@@ -8,7 +8,7 @@ public class GlobalSettings {
     public final static int F_SHOW_ALWAYS = (F_SHOW_OLD_VERSION|F_SHOW_NEW_VERSION);
 
     // this setting ONLY affects splash visibility during start
-    public static int SHOW_BACKGROUND_POLICY = F_SHOW_ALWAYS;
+    public static int SHOW_BACKGROUND_POLICY = F_SHOW_NEVER;
 
     public static boolean INSTALL_SHORTCUT = true;
     public static boolean USE_LEBIAN = true;

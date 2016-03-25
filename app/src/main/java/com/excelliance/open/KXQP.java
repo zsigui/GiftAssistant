@@ -640,9 +640,9 @@ public class KXQP extends Activity {
 	
 	public Drawable getBackGroundDrawable(){
 		Drawable background = null;
-		int resId = getResources().getIdentifier("pic_splash", "drawable", getPackageName());
+		int resId = getResources().getIdentifier("pic_splash_2016", "drawable", getPackageName());
 		if(resId == 0){
-			resId = getResources().getIdentifier("pic_splash_normal", "drawable", getPackageName());
+			resId = getResources().getIdentifier("pic_splash", "drawable", getPackageName());
 			if(resId == 0)
 				return null;
 		}	

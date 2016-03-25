@@ -98,7 +98,6 @@ public class DateUtil {
             TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 			String before = sdf.format(sdf.parse(date));
-            KLog.d(AppDebugConfig.TAG_WARN, before + ", " + sdf.format(new Date(System.currentTimeMillis())));
 			return before.equals(sdf.format(new Date(System.currentTimeMillis())));
 		} catch (ParseException e) {
 			if (AppDebugConfig.IS_DEBUG) {

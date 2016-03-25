@@ -8,7 +8,6 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -90,19 +89,15 @@ public class JPushReceiver extends BroadcastReceiver {
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
 
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Global.THREAD_POOL.execute(new Runnable() {
-							@Override
-							public void run() {
-								Map<String, String> kv = new HashMap<>();
-								kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-								kv.put("消息标题", msg.title);
-								kv.put("消息内容", msg.content);
-								StatisticsManager.getInstance().trace(
-										AssistantApp.getInstance().getApplicationContext(),
-										StatisticsManager.ID.APP_PUSH_OPENED,
-										kv, 1);
-							}
-						});
+
+						Map<String, String> kv = new HashMap<>();
+						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						kv.put("消息标题", msg.title);
+						kv.put("消息内容", msg.content);
+						StatisticsManager.getInstance().trace(
+								AssistantApp.getInstance().getApplicationContext(),
+								StatisticsManager.ID.APP_PUSH_OPENED,
+								kv, 1);
 					}
 				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 					// 用户接收到通知
@@ -121,19 +116,14 @@ public class JPushReceiver extends BroadcastReceiver {
 					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Global.THREAD_POOL.execute(new Runnable() {
-							@Override
-							public void run() {
-								Map<String, String> kv = new HashMap<>();
-								kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
-								kv.put("消息标题", msg.title);
-								kv.put("消息内容", msg.content);
-								StatisticsManager.getInstance().trace(
-										AssistantApp.getInstance().getApplicationContext(),
-										StatisticsManager.ID.APP_PUSH_RECEIVED,
-										kv, 1);
-							}
-						});
+						Map<String, String> kv = new HashMap<>();
+						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						kv.put("消息标题", msg.title);
+						kv.put("消息内容", msg.content);
+						StatisticsManager.getInstance().trace(
+								AssistantApp.getInstance().getApplicationContext(),
+								StatisticsManager.ID.APP_PUSH_RECEIVED,
+								kv, 1);
 					}
 				}
 			} catch (Throwable t) {
@@ -142,7 +132,8 @@ public class JPushReceiver extends BroadcastReceiver {
 				}
 			} finally {
 				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_JPUSH, "deal time is " + (System.currentTimeMillis() - startTime) + " ms");
+					KLog.d(AppDebugConfig.TAG_JPUSH, "deal time is " + (System.currentTimeMillis() - startTime) + " " +
+							"ms");
 				}
 			}
 		}

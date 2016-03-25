@@ -56,7 +56,6 @@
 					style = "@style/DefaultTextView.Header"
 					android:layout_width = "wrap_content"
 					android:layout_height = "wrap_content"
-					android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
 					android:textSize="16sp"
 					android:text = "兰陵王" />
 

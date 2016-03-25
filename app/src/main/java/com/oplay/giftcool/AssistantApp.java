@@ -225,7 +225,7 @@ public class AssistantApp extends Application {
                 CacheControl cacheControl;
                 if (NetworkUtil.isConnected(getApplicationContext())) {
                     cacheControl = new CacheControl.Builder()
-                            .maxAge(60, TimeUnit.SECONDS)
+                            .noCache()
                             .build();
                 } else {
                     cacheControl = new CacheControl.Builder()
@@ -238,18 +238,11 @@ public class AssistantApp extends Application {
                         .cacheControl(cacheControl)
                         .build();
                 String cacheControlStr = cacheControl.toString();
-                Response response = chain.proceed(newRequest)
+                return chain.proceed(newRequest)
                         .newBuilder()
                         .header("Cache-Control", cacheControlStr)
                         .removeHeader("Pragma")
                         .build();
-                KLog.d(AppDebugConfig.TAG_WARN, "cacheResponse = " +response);
-                KLog.d(AppDebugConfig.TAG_WARN, "cacheResponse = " +response.cacheResponse());
-                KLog.d(AppDebugConfig.TAG_WARN, "networkResponse = " + response.networkResponse());
-                if (response.cacheResponse() != null) {
-                    return response.cacheResponse();
-                }
-                return response;
             }
         };
 

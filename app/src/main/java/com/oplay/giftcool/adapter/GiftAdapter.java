@@ -362,14 +362,16 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		if (data == null) {
 			return false;
 		}
-		if (start < 0) {
-			start = -1;
-		}
+//		if (start < 0) {
+//			start = -1;
+//		}
+//		if (end < 0) {
+//			end = getItemCount();
+//		}
+		// 由于线程间会造成 RV 的 Inconsistency detected 问题，忽略
+//		notifyItemRangeChanged(start, end - start);
 		mData = data;
-		if (end < 0) {
-			end = getItemCount();
-		}
-		notifyItemRangeChanged(start, end - start);
+		notifyDataSetChanged();
 		return true;
 	}
 

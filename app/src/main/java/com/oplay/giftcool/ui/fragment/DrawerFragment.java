@@ -132,7 +132,7 @@ public class DrawerFragment extends BaseFragment {
 					IntentUtil.jumpSetting(context);
 					break;
 				case KeyConfig.TYPE_ID_DOWNLOAD:
-					IntentUtil.jumpDownloadManager(context);
+					IntentUtil.jumpDownloadManager(context, false);
 					break;
 				default:
 					IntentUtil.jumpLogin(context);
@@ -163,7 +163,7 @@ public class DrawerFragment extends BaseFragment {
 					IntentUtil.jumpSetting(context);
 					break;
 				case KeyConfig.TYPE_ID_DOWNLOAD:
-					IntentUtil.jumpDownloadManager(context);
+					IntentUtil.jumpDownloadManager(context, false);
 					break;
 			}
 		}

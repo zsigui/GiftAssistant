@@ -465,7 +465,7 @@ public class AccountManager implements OnFinishListener{
 					@Override
 					public void onResponse(Call<Void> call, Response<Void> response) {
 						if (AppDebugConfig.IS_FRAG_DEBUG) {
-							KLog.e(response == null ? "login response null" : response.code());
+							KLog.e(response == null ? "logout response null" : response.code());
 						}
 					}
 

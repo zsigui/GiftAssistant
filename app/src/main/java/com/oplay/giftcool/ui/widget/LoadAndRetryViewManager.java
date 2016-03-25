@@ -131,7 +131,6 @@ public class LoadAndRetryViewManager {
 	}
 
 
-
 	public void showEmpty() {
 		showThread(TYPE_EMPTY);
 	}
@@ -194,11 +193,9 @@ public class LoadAndRetryViewManager {
 	}
 
 	private void showThread(final int type) {
-		if (isMainThread())
-		{
+		if (isMainThread()) {
 			show(type);
-		} else
-		{
+		} else {
 			if (mRunnable == null) {
 				mRunnable = new ShowTypeRunnable();
 			}
@@ -207,29 +204,30 @@ public class LoadAndRetryViewManager {
 		}
 	}
 
-	private boolean isMainThread()
-	{
+	private boolean isMainThread() {
 		return Looper.myLooper() == Looper.getMainLooper();
 	}
 
+
 	private void show(int type) {
+		if (mLastType != TYPE_DEFAULT
+				&& mLastType == type) {
+			return;
+		}
+		// 防止重复请求过来
+		mLastType = type;
 		mContainer.removeAllViews();
 		switch (type) {
 			case TYPE_LOAD:
+			case TYPE_DEFAULT:
 				if (mLoadingView != null) {
 					mContainer.addView(mLoadingView);
 					mLastType = TYPE_LOAD;
 				}
 				break;
-			case TYPE_DEFAULT:
 			case TYPE_CONTENT:
 				if (mContentView != null) {
-					FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-							ViewGroup.LayoutParams.MATCH_PARENT,
-							ViewGroup.LayoutParams.MATCH_PARENT
-					);
-					mContainer.addView(mContentView, lp);
-					mContentView.bringToFront();
+					mContainer.addView(mContentView);
 					mLastType = TYPE_CONTENT;
 				}
 				break;
@@ -249,16 +247,17 @@ public class LoadAndRetryViewManager {
 				}
 				break;
 		}
+		mContainer.invalidate();
 	}
 
 	/**
-     * 进行重试回调接口
-     */
-    public interface OnRetryListener {
-        void onRetry(View retryView);
-    }
+	 * 进行重试回调接口
+	 */
+	public interface OnRetryListener {
+		void onRetry(View retryView);
+	}
 
-	private class ShowTypeRunnable implements Runnable{
+	private class ShowTypeRunnable implements Runnable {
 
 		private int type;
 
