@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,11 +88,17 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				boolean hasFind;
 				Uri mUri = Uri.parse(url);
+                if (mUri == null) {
+                    return false;
+                }
 				final String host = mUri.getHost();
+                if (TextUtils.isEmpty(host)) {
+                    return false;
+                }
 				//首先域名匹配
                 // 对于部分机型 getBaseUrl 可能为null
-				if ((WebViewUrl.getBaseUrl() != null && WebViewUrl.getBaseUrl().contains(host))
-                        || (NetUrl.getBaseUrl() != null && NetUrl.getBaseUrl().contains(host))) {
+				if (WebViewUrl.getBaseUrl().contains(host)
+                        || NetUrl.getBaseUrl().contains(host)) {
 					//其次路径匹配
 					hasFind = false;
 				} else {

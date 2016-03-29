@@ -1,7 +1,6 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -187,41 +186,22 @@ public class AssistantApp extends Application {
 
     public void initRetrofit() {
         initGson();
-        File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH);
+        File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH, true);
         Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
-//		Interceptor interceptor = new Interceptor() {
-//			@Override
-//			public Response intercept(Interceptor.Chain chain) throws IOException {
-//				Request request = chain.request();
-//				if (!NetworkUtil.isConnected(getApplicationContext())) {
-//					request = request.newBuilder()
-//							.cacheControl(CacheControl.FORCE_CACHE)
-//							.build();
-//				}
-//				Response response = chain.proceed(request);
-//				if (NetworkUtil.isConnected(getApplicationContext())) {
-//					String cacheControl = request.cacheControl().toString();
-//					response.newBuilder()
-//							.header("Cache-Control", cacheControl)
-//							.removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
-//							.build();
-//				} else {
-//					response.newBuilder()
-//							.header("Cache-Control", "public, only-if-cached, max-stale=" + (60 * 60 * 24 * 2))
-//							.removeHeader("Pragma")
-//							.build();
-//				}
-//				return response;
-//			}
-//		};
         Interceptor cacheInterceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
+                // 请求时携带版本信息
                 String headerValue = String.format(ConstString.TEXT_HEADER,
                         AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
                         AppConfig.SDK_VER_NAME, getChannelId());
                 String headerName = "X-Client-Info";
                 Request newRequest;
+                newRequest = chain.request().newBuilder()
+                        .addHeader(headerName, headerValue)
+                        .build();
+                Response response = chain.proceed(newRequest);
+
                 CacheControl cacheControl;
                 if (NetworkUtil.isConnected(getApplicationContext())) {
                     cacheControl = new CacheControl.Builder()
@@ -233,15 +213,10 @@ public class AssistantApp extends Application {
                             .maxStale(365, TimeUnit.DAYS)
                             .build();
                 }
-                newRequest = chain.request().newBuilder()
-                        .addHeader(headerName, headerValue)
-                        .cacheControl(cacheControl)
-                        .build();
                 String cacheControlStr = cacheControl.toString();
-                return chain.proceed(newRequest)
-                        .newBuilder()
-                        .header("Cache-Control", cacheControlStr)
+                return response.newBuilder()
                         .removeHeader("Pragma")
+                        .header("Cache-Control", cacheControlStr)
                         .build();
             }
         };
@@ -249,35 +224,15 @@ public class AssistantApp extends Application {
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-//                .addInterceptor(getRequestHeaderInterceptor())
                 .addInterceptor(cacheInterceptor)
                 .cache(cacheFile)
                 .retryOnConnectionFailure(true)
                 .build();
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(NetUrl.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create(mGson))
                 .client(httpClient)
+                .addConverterFactory(GsonConverterFactory.create(mGson))
                 .build();
-    }
-
-    /**
-     * 获取设置Http头的网络请求拦截器
-     */
-    @NonNull
-    private Interceptor getRequestHeaderInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                String header = String.format(ConstString.TEXT_HEADER,
-                        AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-                        AppConfig.SDK_VER_NAME, getChannelId());
-                Request newRequest = chain.request().newBuilder()
-                        .addHeader("X-Client-Info", header)
-                        .build();
-                return chain.proceed(newRequest);
-            }
-        };
     }
 
     /**

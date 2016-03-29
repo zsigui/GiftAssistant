@@ -66,11 +66,16 @@ public class LoadAndRetryViewManager {
 	private FrameLayout mContainer;
 	private Context mContext;
 
+	private int mIdContentView;
+	private int mIdLoadingView;
+	private int mIdErrorRetryView;
+	private int mIdEmptyView;
+
 	private View mContentView;
 	private View mLoadingView;
 	private View mErrorRetryView;
 	private View mEmptyView;
-	private OnRetryListener mOnRetryListener;
+	private OnRetryOrEmptyListener mOnRetryListener;
 
 
 	private int mLastType = TYPE_DEFAULT;
@@ -111,14 +116,17 @@ public class LoadAndRetryViewManager {
 	}
 
 	public View getContentView() {
+		if (mContentView == null && mIdContentView != DEFAULT_NO_VIEW_ID) {
+			mContentView = inflateView(mIdContentView);
+		}
 		return mContentView;
 	}
 
-	public OnRetryListener getOnRetryListener() {
+	public OnRetryOrEmptyListener getOnRetryListener() {
 		return mOnRetryListener;
 	}
 
-	public void setOnRetryListener(OnRetryListener onRetryListener) {
+	public void setOnRetryListener(OnRetryOrEmptyListener onRetryListener) {
 		mOnRetryListener = onRetryListener;
 	}
 
@@ -154,7 +162,7 @@ public class LoadAndRetryViewManager {
 
 	public void setContentView(@LayoutRes int id) {
 		if (id != DEFAULT_NO_VIEW_ID) {
-			mContentView = LayoutInflater.from(mContext).inflate(id, mContainer, false);
+			mIdContentView = id;
 		}
 	}
 
@@ -164,19 +172,19 @@ public class LoadAndRetryViewManager {
 
 	public void setEmptyView(@LayoutRes int id) {
 		if (id != DEFAULT_NO_VIEW_ID) {
-			mEmptyView = LayoutInflater.from(mContext).inflate(id, mContainer, false);
+			mIdEmptyView = id;
 		}
 	}
 
 	public void setLoadView(@LayoutRes int id) {
 		if (id != DEFAULT_NO_VIEW_ID) {
-			mLoadingView = LayoutInflater.from(mContext).inflate(id, mContainer, false);
+			mIdLoadingView = id;
 		}
 	}
 
 	public void setErrorRetryView(@LayoutRes int id) {
 		if (id != DEFAULT_NO_VIEW_ID) {
-			mErrorRetryView = LayoutInflater.from(mContext).inflate(id, mContainer, false);
+			mIdErrorRetryView = id;
 		}
 	}
 
@@ -220,24 +228,39 @@ public class LoadAndRetryViewManager {
 		switch (type) {
 			case TYPE_LOAD:
 			case TYPE_DEFAULT:
+				if (mLoadingView == null && mIdLoadingView != DEFAULT_NO_VIEW_ID) {
+					mLoadingView = inflateView(mIdLoadingView);
+				}
 				if (mLoadingView != null) {
 					mContainer.addView(mLoadingView);
 					mLastType = TYPE_LOAD;
 				}
 				break;
 			case TYPE_CONTENT:
+				if (mContentView == null && mIdContentView != DEFAULT_NO_VIEW_ID) {
+					mContentView = inflateView(mIdContentView);
+				}
 				if (mContentView != null) {
 					mContainer.addView(mContentView);
 					mLastType = TYPE_CONTENT;
 				}
 				break;
 			case TYPE_EMPTY:
+				if (mEmptyView == null && mIdEmptyView != DEFAULT_NO_VIEW_ID) {
+					mEmptyView = inflateView(mIdEmptyView);
+				}
 				if (mEmptyView != null) {
 					mContainer.addView(mEmptyView);
 					mLastType = TYPE_EMPTY;
+					if (mOnRetryListener != null) {
+						mOnRetryListener.onEmpty(mEmptyView);
+					}
 				}
 				break;
 			case TYPE_ERROR_RETRY:
+				if (mErrorRetryView == null && mIdErrorRetryView != DEFAULT_NO_VIEW_ID) {
+					mErrorRetryView = inflateView(mIdErrorRetryView);
+				}
 				if (mErrorRetryView != null) {
 					mContainer.addView(mErrorRetryView);
 					mLastType = TYPE_ERROR_RETRY;
@@ -250,11 +273,16 @@ public class LoadAndRetryViewManager {
 		mContainer.invalidate();
 	}
 
+	private View inflateView(@LayoutRes int id) {
+		return LayoutInflater.from(mContext).inflate(id, mContainer, false);
+	}
+
 	/**
 	 * 进行重试回调接口
 	 */
-	public interface OnRetryListener {
+	public interface OnRetryOrEmptyListener {
 		void onRetry(View retryView);
+		void onEmpty(View emptyView);
 	}
 
 	private class ShowTypeRunnable implements Runnable {

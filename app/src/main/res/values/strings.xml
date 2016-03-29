@@ -71,7 +71,7 @@
 	<string name = "st_setting_auto_focus" >抢礼包后自动关注所属游戏</string >
 	<string name = "st_setting_auto_update" >自动检查版本更新</string >
 	<string name = "st_setting_auto_clear_cache" >清除缓存</string >
-	<string name = "st_setting_auto_clear_cache_hint" >清除缓存成功</string >
+	<string name = "st_setting_auto_clear_cache_hint" >清除缓存成功，总共释放 %s 空间</string >
 	<string name = "st_setting_auto_feedback" >意见反馈</string >
 	<string name = "st_setting_cur_version" >当前版本号</string >
 

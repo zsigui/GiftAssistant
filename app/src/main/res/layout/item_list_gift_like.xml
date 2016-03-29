@@ -37,7 +37,7 @@
 	<TextView
 			android:id = "@+id/tv_content"
 			style = "@style/DefaultTextView.Text.Note"
-			android:layout_width = "70dp"
+			android:layout_width = "wrap_content"
 			android:layout_below = "@+id/tv_name"
 			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
 			android:layout_marginTop = "7dp"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
@@ -26,7 +27,6 @@ import java.net.URLDecoder;
  *         description
  */
 public class ApkDownloadDir extends AbsDownloadDir {
-	public static final String DIR_DOWNLOAD = "/gift_cool/download";
 	private static ApkDownloadDir mSdcardFileDirInstance;
 	private static ApkDownloadDir mDataFileDirInstance;
 
@@ -73,7 +73,8 @@ public class ApkDownloadDir extends AbsDownloadDir {
 	private static synchronized ApkDownloadDir getSdcardFileDirInstance() {
 		try {
 			if (mSdcardFileDirInstance == null) {
-				final File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DIR_DOWNLOAD);
+				final File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+						+ Global.EXTERNAL_DOWNLOAD);
 				mSdcardFileDirInstance = new ApkDownloadDir(dir, UN_LIMT_STORE_SIZE, UN_LIMT_STORE_TIME);
 			}
 			return mSdcardFileDirInstance;
@@ -129,7 +130,7 @@ public class ApkDownloadDir extends AbsDownloadDir {
 		} else {
 			temp = Coder_Md5.md5(url);
 		}
-		return new File(getDir(), temp + ".vmtf");
+		return new File(getDir(), temp + Global.TEMP_FILE_NAME_SUFFIX);
 	}
 
 	/**
@@ -160,6 +161,6 @@ public class ApkDownloadDir extends AbsDownloadDir {
 		} else {
 			temp = Coder_Md5.md5(url);
 		}
-		return new File(getDir(), temp + ".apk");
+		return new File(getDir(), temp + Global.APK_FILE_NAME_SUFFIX);
 	}
 }

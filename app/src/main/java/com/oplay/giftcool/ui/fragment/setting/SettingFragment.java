@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ import com.oplay.giftcool.util.DataClearUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
-import net.youmi.android.libs.common.util.Util_System_File;
+import java.io.File;
 
 /**
  * Created by zsigui on 16-1-5.
@@ -191,15 +192,29 @@ public class SettingFragment extends BaseFragment {
 						Global.THREAD_POOL.execute(new Runnable() {
 							@Override
 							public void run() {
-								Util_System_File.delete(StorageUtils.getOwnCacheDirectory(getContext(),
-										Global.EXTERNAL_CACHE));
-								DataClearUtil.cleanExternalCache(getContext());
-								DataClearUtil.cleanInternalCache(getContext());
+                                long cacheSize = 0;
+                                if (getContext() != null) {
+                                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                                        // 获取并删除外部Cache文件夹
+                                        cacheSize += DataClearUtil.getFolderSize(getContext().getExternalCacheDir());
+                                        DataClearUtil.cleanExternalCache(getContext());
+                                    }
+                                    // 获取并删除内部Cache文件夹
+                                    cacheSize += DataClearUtil.getFolderSize(getContext().getCacheDir());
+								    DataClearUtil.cleanInternalCache(getContext());
+                                }
+                                // 获取并删除自定义的Cache文件夹
+                                final File customCacheFile = StorageUtils.getOwnCacheDirectory(getContext(),
+                                        Global.EXTERNAL_CACHE);
+                                DataClearUtil.cleanCustomCache(customCacheFile, null);
+                                cacheSize += DataClearUtil.getFolderSize(customCacheFile);
 								if (getChildFragmentManager() != null) {
 									DialogManager.getInstance().hideLoadingDialog();
 								}
 								if (getContext() != null) {
-									ToastUtil.showShort(getContext().getString(R.string.st_setting_auto_clear_cache_hint));
+                                    final String size = DataClearUtil.getFormatSize(cacheSize);
+									ToastUtil.showShort(String.format(getContext().getString(R.string
+                                            .st_setting_auto_clear_cache_hint), size));
 								}
 							}
 						});
@@ -213,7 +228,7 @@ public class SettingFragment extends BaseFragment {
 					ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
 					IntentUtil.jumpLogin(getContext());
 				} else {
-					if (getContext() != null && getContext() instanceof BaseAppCompatActivity) {
+					if (getContext() != null && getActivity() instanceof BaseAppCompatActivity) {
 						((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container, FeedBackFragment
 								.newInstance(), getResources().getString(R.string.st_feedback_title));
 					}

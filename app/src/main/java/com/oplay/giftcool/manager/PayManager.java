@@ -399,21 +399,37 @@ public class PayManager {
 	 */
 	private void staticsPay(Context context, String tag, IndexGiftNew gift, int payType) {
 		Map<String, String> kv = new HashMap<String, String>();
-		kv.put("礼包名", gift.name);
 		kv.put("所属游戏名", gift.gameName);
-		kv.put("礼包类型", String.valueOf(gift.giftType));
+		kv.put("礼包名", gift.name);
 		String payTypeStr;
 		String payMoney;
+		String giftType;
+		kv.put("礼包类型", String.valueOf(gift.giftType));
+		switch (gift.giftType) {
+			case GiftTypeUtil.GIFT_TYPE_NORMAL:
+				giftType = "普通";
+				break;
+			case GiftTypeUtil.GIFT_TYPE_NORMAL_FREE:
+				giftType = "普通免费";
+				break;
+			case GiftTypeUtil.GIFT_TYPE_LIMIT:
+				giftType = "限量";
+				break;
+			case GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE:
+				giftType = "0元抢";
+				break;
+			default:
+				giftType = "未知:" + gift.giftType;
+				break;
+		}
 		switch (payType) {
 			case 1:
 				payTypeStr = "偶玩豆";
 				payMoney = String.valueOf(gift.bean);
-				kv.put("__ct__", payMoney);
 				break;
 			case 2:
 				payTypeStr = "金币";
 				payMoney = String.valueOf(gift.score);
-				kv.put("__ct__", payMoney);
 				break;
 			default:
 				payTypeStr = "未知";
@@ -421,6 +437,8 @@ public class PayManager {
 		}
 		kv.put("支付类型", payTypeStr);
 		kv.put("价格", payMoney);
+		kv.put("__ct__", payMoney);
+		kv.put("总计", String.format("%s-%s-%s-%s-%s", gift.gameName, gift.name, giftType, payTypeStr, payMoney));
 		StatisticsManager.getInstance().trace(context, tag, kv, gift.bean);
 	}
 

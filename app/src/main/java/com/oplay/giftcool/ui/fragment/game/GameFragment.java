@@ -49,7 +49,7 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 	    mPager.setAdapter(new IndexGamePagerAdapter(getChildFragmentManager()));
-	    mPager.setOffscreenPageLimit(2);
+	    mPager.setOffscreenPageLimit(1);
 	    mTabLayout.setViewPager(mPager);
 	    mPager.setCurrentItem(0);
 	    mPager.addOnPageChangeListener(this);

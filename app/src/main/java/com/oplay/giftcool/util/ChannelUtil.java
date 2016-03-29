@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.SPConfig;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.coder.Base64;
@@ -21,7 +22,6 @@ import java.util.zip.ZipFile;
  * Created by zsigui on 15-12-24.
  */
 public class ChannelUtil {
-	public static final String KEY_CHANNEL = "l3yn45";
 
 	/**
 	 * 获取通过Base64加密的channel id
@@ -34,6 +34,16 @@ public class ChannelUtil {
 		if (AppConfig.TEST_MODE) {
 			return AppDebugConfig.TEST_CHANNEL_ID;
 		}
+
+		// 从SP中获取
+		int chnInt = SPUtil.getInt(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_CHANNEL, 0);
+		if (chnInt != 0) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_CHANNEL, "GET CHANNEL FROM SP : " + chnInt);
+			}
+			return chnInt;
+		}
+
 		ZipFile zipFile = null;
 		try {
 			long time = System.currentTimeMillis();
@@ -46,7 +56,7 @@ public class ChannelUtil {
 				String entryName = entry.getName();
 				if (entryName.endsWith(Global.CHANNEL_FILE_NAME_SUFFIX)) {
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.e("CHANNEL", "CHANNEL_FILE_ENTRY:" + entryName);
+						KLog.e(AppDebugConfig.TAG_CHANNEL, "CHANNEL_FILE_ENTRY:" + entryName);
 					}
 					channelFileName = entryName;
 					break;
@@ -63,15 +73,16 @@ public class ChannelUtil {
 				String channel = new String(Base64.decode(channelMisc, Base64.NO_OPTIONS), "UTF-8");
 
 				if (AppDebugConfig.IS_DEBUG) {
-					KLog.e("CHANNEL", "NAME:" + channelFileName + " MISC:" + channelMisc + " DECODED:" + channel +
+					KLog.d(AppDebugConfig.TAG_CHANNEL, "NAME:" + channelFileName + " MISC:"
+							+ channelMisc + " DECODED:" + channel +
 							" time:" + (System.currentTimeMillis() - time));
 				}
 
 				// replaceall non-printable character
 				channel = channel.replaceAll("[\\p{C}\\p{Z}]", "");
 
-				final int chnInt = Integer.valueOf(channel);
-//				PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_CHANNEL, chnInt).commit();
+				chnInt = Integer.valueOf(channel);
+				SPUtil.putInt(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_CHANNEL, chnInt);
 				return chnInt;
 			}
 		} catch (Exception e) {

@@ -13,7 +13,7 @@ CWD=$(dirname $(readlink -f $0))
 
 # 打包配置参数
 NAME=giftcool
-VERSION=1.1.3
+VERSION=1.1.4
 # 150000 is for weixin hongbao
 CHNNAMES=0,10000
 TEMPOUTPUT=${CWD}/../apk/temp-unsigned

@@ -1,10 +1,12 @@
 package com.oplay.giftcool.download;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
@@ -18,6 +20,10 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.socks.library.KLog;
 
+import net.youmi.android.libs.common.basic.Basic_StringUtil;
+import net.youmi.android.libs.common.coder.Coder_Md5;
+import net.youmi.android.libs.common.util.Util_System_File;
+import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 import net.youmi.android.libs.common.v2.download.BaseApkCachedDownloadManager;
 import net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus;
 import net.youmi.android.libs.common.v2.download.core.AbsDownloader;
@@ -27,8 +33,12 @@ import net.youmi.android.libs.common.v2.download.model.FileDownloadTask;
 import net.youmi.android.libs.common.v2.download.notify.AbsDownloadNotifier;
 import net.youmi.android.libs.common.v2.download.storer.AbsDownloadDir;
 
+import org.apache.http.protocol.HTTP;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -211,17 +221,56 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 	}
 
-	public void remove(String url) {
-		for (int i = mManagerList.size() - 1; i >= 0 ; i--) {
-			GameDownloadInfo info = mManagerList.get(i);
-			if (info.downloadUrl.equals(url)) {
-				mManagerList.remove(i);
+	/**
+	 * 临时文件存放的文件夹
+	 */
+	private File tempDownloadDir;
+
+	/**
+	 * 根据下载连接和下载标识获取临时文件
+	 * @param url 下载连接
+	 * @param identify 下载标识
+	 * @return 临时文件
+	 */
+	public File getDownloadTempFile(String url, String identify) {
+		String temp;
+		if (!Basic_StringUtil.isNullOrEmpty(identify)) {
+			final String decodedUrl;
+			try {
+				decodedUrl = URLDecoder.decode(identify, HTTP.UTF_8);
+				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
+				final int end = decodedUrl.lastIndexOf('.');
+				temp = decodedUrl.substring(start, end);
+			} catch (UnsupportedEncodingException e) {
+				temp = Coder_Md5.md5(identify);
+			}
+		} else {
+			temp = Coder_Md5.md5(url);
+		}
+		if (tempDownloadDir == null) {
+			if (Util_System_SDCard_Util.IsSdCardCanWrite(mApplicationContext)) {
+				tempDownloadDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+						+ Global.EXTERNAL_DOWNLOAD);
+			} else {
+				tempDownloadDir = mApplicationContext.getFilesDir();
 			}
 		}
+		return new File(tempDownloadDir, temp + Global.TEMP_FILE_NAME_SUFFIX);
+	}
+
+	public void removeDownloadTask(final String url, boolean needDeleteTemp) {
+		if (needDeleteTemp) {
+			final GameDownloadInfo info = mUrl_AppInfo.get(url);
+			if (info != null) {
+				final File f = getDownloadTempFile(info.downloadUrl, info.destUrl);
+				Util_System_File.delete(f);
+			}
+		}
+		removeDownloadTask(url);
 	}
 
 	public synchronized void removeDownloadTask(String url) {
-		GameDownloadInfo info = mUrl_AppInfo.get(url);
+		final GameDownloadInfo info = mUrl_AppInfo.get(url);
 		if (!checkDownloadTask(info)) {
 			return;
 		}
@@ -538,12 +587,14 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 			stopDownloadingTask(appInfo);
 			appInfo.downloadStatus = DownloadStatus.FINISHED;
 			appInfo.completeSize = appInfo.apkFileSize;
-			mManagerList.add(mDownloadingCnt + mPendingCnt + mPausedCnt, appInfo);
+			mManagerList.add(getEndOfPaused(), appInfo);
 			mFinishedCnt++;
 			notifyDownloadStatusListeners(appInfo);
 			DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
 			DownloadNotificationManager.showDownload(mApplicationContext);
-			appInfo.startInstall();
+			if (AssistantApp.getInstance().isShouldAutoInstall()) {
+				appInfo.startInstall();
+			}
 		}
 		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 
@@ -558,10 +609,13 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 			mManagerList.add(getEndOfPaused(), appInfo);
 			appInfo.downloadStatus = DownloadStatus.FINISHED;
 			appInfo.completeSize = appInfo.apkFileSize;
-			notifyDownloadStatusListeners(appInfo);
 			mFinishedCnt++;
 			DownloadNotificationManager.showDownload(mApplicationContext);
-			appInfo.startApp();
+			DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
+			notifyDownloadStatusListeners(appInfo);
+			if (AssistantApp.getInstance().isShouldAutoInstall()) {
+				appInfo.startInstall();
+			}
 		}
 		return false;
 	}

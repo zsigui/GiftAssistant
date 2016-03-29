@@ -1,6 +1,8 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -54,6 +56,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private final String TAG_GIFT = GiftFragment.class.getSimpleName();
 	private final String TAG_GAME = GameFragment.class.getSimpleName();
 	private final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
+
+
 	public static final int INDEX_GIFT = 0;
 	public static final int INDEX_GAME = 1;
 	// 保持一个Activity的全局对象
@@ -80,6 +84,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private DrawerFragment mDrawerFragment;
 	private int mCurSelectedItem = INDEX_GIFT;
 
+	private void initHandler() {
+		if (mHandler == null) {
+			mHandler = new Handler(Looper.getMainLooper());
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +110,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mDrawerFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(DrawerFragment.class.getSimpleName());
 			if (f != null) {
-				ft.show(f);
+				mDrawerFragment = (DrawerFragment) f;
 			} else {
 				mDrawerFragment = DrawerFragment.newInstance(mDrawerLayout);
-				ft.add(R.id.drawer_container, mDrawerFragment, TAG_DRAWER);
 			}
-		} else {
-			ft.show(mDrawerFragment);
 		}
+		ft.replace(R.id.drawer_container, mDrawerFragment, TAG_DRAWER);
 		ft.commit();
 		updateToolBar();
 	}
@@ -147,6 +154,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void updateToolBar() {
+		initHandler();
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
@@ -193,7 +201,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 		// 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
 		setCurSelected(mCurSelectedItem);
-
 	}
 
 	public void setCurSelected(int position) {
@@ -211,14 +218,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void displayGameUI() {
+//		if (mGameFragment == null) {
+//			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+//			if (f != null) {
+//				mGameFragment = (GameFragment) f;
+//			} else {
+//				mGameFragment = GameFragment.newInstance();
+//			}
+//		}
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mGiftFragment != null) {
 			ft.hide(mGiftFragment);
 		}
 		if (mGameFragment == null) {
-			Fragment f = getSupportFragmentManager().findFragmentByTag(GameFragment.class.getSimpleName());
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
 			if (f != null) {
-				ft.show(f);
+				mGameFragment = (GameFragment) f;
+				ft.show(mGameFragment);
 			} else {
 				mGameFragment = GameFragment.newInstance();
 				ft.add(R.id.fl_container, mGameFragment, TAG_GAME);
@@ -226,18 +242,28 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		} else {
 			ft.show(mGameFragment);
 		}
+//		ft.replace(R.id.fl_container, mGameFragment, TAG_GAME);
 		ft.commit();
 	}
 
 	private void displayGiftUI() {
+//		if (mGiftFragment == null) {
+//			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+//			if (f != null) {
+//				mGiftFragment = (GiftFragment) f;
+//			} else {
+//				mGiftFragment = GiftFragment.newInstance();
+//			}
+//		}
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mGameFragment != null) {
 			ft.hide(mGameFragment);
 		}
 		if (mGiftFragment == null) {
-			Fragment f = getSupportFragmentManager().findFragmentByTag(GiftFragment.class.getSimpleName());
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
 			if (f != null) {
-				ft.show(f);
+				mGiftFragment = (GiftFragment) f;
+				ft.show(mGiftFragment);
 			} else {
 				mGiftFragment = GiftFragment.newInstance();
 				ft.add(R.id.fl_container, mGiftFragment, TAG_GIFT);
@@ -245,6 +271,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		} else {
 			ft.show(mGiftFragment);
 		}
+//		ft.replace(R.id.fl_container, mGiftFragment, TAG_GIFT);
 		ft.commit();
 	}
 
@@ -339,6 +366,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 * 更新侧边栏和顶部导航栏信息
 	 */
 	public void updateHintState(final int key, final int count) {
+		if (mHandler == null) {
+			return;
+		}
 		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {

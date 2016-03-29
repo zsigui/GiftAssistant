@@ -54,7 +54,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 		mTitleName = titleName;
 	}
 
-	protected LoadAndRetryViewManager.OnRetryListener mRetryListener = new LoadAndRetryViewManager.OnRetryListener() {
+	protected LoadAndRetryViewManager.OnRetryOrEmptyListener mRetryListener = new LoadAndRetryViewManager.OnRetryOrEmptyListener() {
 		@Override
 		public void onRetry(View retryView) {
 			View iv = getViewById(retryView, R.id.v_err);
@@ -62,6 +62,9 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 			View tv = getViewById(retryView, R.id.v_wifi);
 			tv.setOnClickListener(BaseFragment.this);
 		}
+
+		@Override
+		public void onEmpty(View emptyView) {}
 	};
 
 	@Override

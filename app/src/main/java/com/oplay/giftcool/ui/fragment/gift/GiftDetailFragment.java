@@ -314,9 +314,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 			mTimer.cancel();
 		}
 		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-		long seizeTime = DateUtil.getTime(mData.giftData.seizeTime);
-		mTimer = new CountTimer(seizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal,
-				Global.COUNTDOWN_INTERVAL) {
+		mTimer = new CountTimer(mData.giftData.remainStartTime * 1000, Global.COUNTDOWN_INTERVAL) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));

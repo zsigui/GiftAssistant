@@ -19,8 +19,14 @@ import java.util.concurrent.Executor;
  */
 public class Global {
 
+	/** 内部渠道文件存储位置 */
+	public final static String INTERNAL_INFO_FILE = "gift_cool_info";
 	/** 外部缓存存储位置 */
 	public final static String EXTERNAL_CACHE = "/gift_cool/cache";
+    /**
+     * 外部下载文件及对应下载文件缓存存放位置
+     */
+	public final static String EXTERNAL_DOWNLOAD = "/gift_cool/download";
 	/** 外部图片缓存存储位置 */
 	public final static String IMG_CACHE_PATH = EXTERNAL_CACHE + "/imgs";
 	/** 外部网络请求缓存存储位置 */
@@ -29,6 +35,10 @@ public class Global {
 	public final static String LOGGING_CACHE_PATH = EXTERNAL_CACHE + "/log";
 	/** 礼包酷渠道名文件后缀 */
 	public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";
+	/** 下载缓存文件的后缀 */
+	public final static String TEMP_FILE_NAME_SUFFIX = ".vmtf";
+	/** 下载的Apk文件的后缀 */
+	public final static String APK_FILE_NAME_SUFFIX = ".apk";
 	/** 礼包酷所属游戏ID，用于下载链接统计 */
 	public final static int GIFTCOOL_GAME_ID = 2000705;
     /** 倒计时时间间隔，单位:ms */

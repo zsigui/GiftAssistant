@@ -91,9 +91,11 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
 
 						Map<String, String> kv = new HashMap<>();
-						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
+						kv.put("消息ID", msgId);
 						kv.put("消息标题", msg.title);
 						kv.put("消息内容", msg.content);
+						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
 						StatisticsManager.getInstance().trace(
 								AssistantApp.getInstance().getApplicationContext(),
 								StatisticsManager.ID.APP_PUSH_OPENED,
@@ -117,9 +119,11 @@ public class JPushReceiver extends BroadcastReceiver {
 							.class);
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
 						Map<String, String> kv = new HashMap<>();
-						kv.put("消息ID", bundle.getString(JPushInterface.EXTRA_MSG_ID));
+						String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
+						kv.put("消息ID", msgId);
 						kv.put("消息标题", msg.title);
 						kv.put("消息内容", msg.content);
+						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
 						StatisticsManager.getInstance().trace(
 								AssistantApp.getInstance().getApplicationContext(),
 								StatisticsManager.ID.APP_PUSH_RECEIVED,

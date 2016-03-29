@@ -13,7 +13,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
-import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -96,7 +95,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 		holder.tvDownload.setOnClickListener(this);
 		holder.tvDownload.setTag(TAG_POSITION, position);
 		holder.tvDownload.setTag(TAG_URL, o.downloadUrl);
-		initDownloadBtnStatus(holder.tvDownload, o.appStatus);
+        ViewUtil.initDownloadBtnStatus(holder.tvDownload, o.appStatus);
 		mPackageNameMap.put(o.packageName, o);
 		mUrlDownloadBtn.put(o.downloadUrl, holder.tvDownload);
 		return convertView;
@@ -119,39 +118,6 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);
 			}
-		}
-	}
-
-	private void initDownloadBtnStatus(TextView view, AppStatus status) {
-		switch (status) {
-			case OPENABLE:
-				view.setText("打开");
-				view.setBackgroundResource(R.drawable.selector_btn_blue);
-				break;
-			case INSTALLABLE:
-				view.setText("安装");
-				view.setBackgroundResource(R.drawable.selector_btn_blue);
-				break;
-			case PAUSABLE:
-				view.setText("暂停");
-				view.setBackgroundResource(R.drawable.selector_btn_grey);
-				break;
-			case RESUMABLE:
-				view.setText("继续");
-				view.setBackgroundResource(R.drawable.selector_btn_green);
-				break;
-			case DOWNLOADABLE:
-				view.setText("下载");
-				view.setBackgroundResource(R.drawable.selector_btn_green);
-				break;
-			case RETRYABLE:
-				view.setText("重试");
-				view.setBackgroundResource(R.drawable.selector_btn_green);
-				break;
-			default:
-				view.setText("失效");
-				view.setBackgroundResource(R.drawable.selector_btn_grey);
-				break;
 		}
 	}
 

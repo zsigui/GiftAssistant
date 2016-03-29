@@ -3,7 +3,6 @@ package com.oplay.giftcool.adapter;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,9 @@ import com.socks.library.KLog;
 public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements View.OnClickListener {
 
 	private final String mDefaultTime = "00:00:00";
-	private long mSeizeTime = 0;
+//	private long mSeizeTime = 0;
 	private ZeroCountTimer mCountTimer;
+	private final int TAG_COUNTER = 0x1233aaaa;
 
 	public IndexGiftZeroAdapter(Context context) {
 		super(context.getApplicationContext());
@@ -59,19 +59,10 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		contentHolder.tvGameName.setText(data.gameName);
 		contentHolder.tvTagSeize.setEnabled(false);
 		contentHolder.tvTagSeize.setBackgroundResource(R.drawable.selector_btn_zero_seize);
-		if (data.status == GiftTypeUtil.STATUS_WAIT_SEIZE
-				&& (mSeizeTime < 0 || System.currentTimeMillis() > mSeizeTime)) {
-			mSeizeTime = DateUtil.getTime(data.seizeTime);
-			if (mCountTimer == null) {
-				mCountTimer = new ZeroCountTimer(mSeizeTime - System.currentTimeMillis() + Global.sServerTimeDiffLocal,
-						Global.COUNTDOWN_INTERVAL);
-				mCountTimer.start();
-			} else {
-				mCountTimer.restart(System.currentTimeMillis() - mSeizeTime + Global.sServerTimeDiffLocal);
-			}
-		}
-		if (mCountTimer != null) {
-			mCountTimer.removeTextView(position);
+		ZeroCountTimer countTimer = null;
+		if (contentHolder.itemView.getTag(TAG_COUNTER) != null) {
+			countTimer = (ZeroCountTimer) contentHolder.itemView.getTag(TAG_COUNTER);
+			countTimer.cancel();
 		}
 		if (data.seizeStatus != GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			contentHolder.tvTagSeize.setText("已抢号");
@@ -80,9 +71,16 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 				case GiftTypeUtil.STATUS_WAIT_SEIZE:
 					contentHolder.tvTagSeize.setText(mDefaultTime);
 					contentHolder.tvTagSeize.setBackgroundResource(R.drawable.ic_0_seize_btn_count);
-					if (mCountTimer != null) {
-						mCountTimer.addTextView(position, contentHolder.tvTagSeize);
+					final long remainTime = DateUtil.getTime(data.seizeTime)
+							- System.currentTimeMillis() + Global.sServerTimeDiffLocal;
+					if (countTimer == null) {
+						countTimer = new ZeroCountTimer(remainTime, Global.COUNTDOWN_INTERVAL);
+						countTimer.start();
+					} else {
+						countTimer.restart(remainTime);
 					}
+					countTimer.setTextView(contentHolder.tvTagSeize);
+					contentHolder.itemView.setTag(TAG_COUNTER, countTimer);
 					break;
 				case GiftTypeUtil.STATUS_SEIZE:
 					contentHolder.tvTagSeize.setEnabled(true);
@@ -136,43 +134,23 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 
 	static class ZeroCountTimer extends CountTimer {
 
-		private SparseArray<TextView> tvs;
-		private boolean mIsInAddOrRemove = false;
+		private TextView mTv;
 
 		public ZeroCountTimer(long millisInFuture, long countDownInterval) {
 			super(millisInFuture, countDownInterval);
-			tvs = new SparseArray<>(6);
 		}
 
-		public synchronized void addTextView(int key, TextView tv) {
-			mIsInAddOrRemove = true;
-			if (tvs.get(key) == null)
-				tvs.append(key, tv);
-			mIsInAddOrRemove = false;
-		}
-
-		public synchronized void removeTextView(int key) {
-			mIsInAddOrRemove = true;
-			tvs.remove(key);
-			mIsInAddOrRemove = false;
+		public void setTextView(TextView tv) {
+			mTv = tv;
 		}
 
 		public void setText(String s) {
-			for (int i = tvs.size() - 1; i >= 0; i--) {
-				TextView t = tvs.valueAt(i);
-				if (t == null) {
-					tvs.removeAt(i);
-					continue;
-				}
-				t.setText(s);
-			}
+			if (mTv != null)
+				mTv.setText(s);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			if (mIsInAddOrRemove) {
-				return;
-			}
 			String s = DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss");
 			setText(s);
 		}

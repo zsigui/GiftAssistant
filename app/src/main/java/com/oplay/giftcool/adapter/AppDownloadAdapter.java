@@ -214,7 +214,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 		}
 		if (fragment == null) {
 			// 此时直接删除
-			mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+			mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl, true);
 			return;
 		}
 		final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
@@ -228,7 +228,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 
 			@Override
 			public void onConfirm() {
-				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl, true);
 				confirmDialog.dismissAllowingStateLoss();
 			}
 		});
@@ -247,7 +247,7 @@ public class AppDownloadAdapter extends BaseListAdapter<GameDownloadInfo> implem
 
 			@Override
 			public void onConfirm() {
-				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl);
+				mDownloadManagerInstance.removeDownloadTask(appInfo.downloadUrl, true);
 				SystemUtil.deletePackage(appInfo.getDestFilePath());
 				confirmDialog.dismiss();
 			}

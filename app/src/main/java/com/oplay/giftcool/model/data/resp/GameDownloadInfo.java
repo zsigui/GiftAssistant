@@ -62,6 +62,10 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	@SerializedName("download_url")
 	public String downloadUrl;
 
+	// 是否静默下载，默认都为否，非静默下载
+	@SerializedName("is_silent_download")
+	public boolean isSilent = false;
+
 	//最终下载地址
 	@SerializedName("cdn_download_url")
 	public String destUrl;
@@ -179,14 +183,16 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	public void startDownload() {
 		try {
 			ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
-			ToastUtil.showShort("已添加新的下载任务");
-			ThreadUtil.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					// 点击下载30秒后，请求奖励金币
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
-				}
-			}, 30 * 1000);
+            if (!isSilent) {
+                ToastUtil.showShort("已添加新的下载任务");
+                ThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 点击下载30秒后，请求奖励金币
+                        ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
+                    }
+                }, 30 * 1000);
+            }
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -219,7 +225,14 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 
 	public void startInstall() {
 		try {
-			InstallAppUtil.install(mContext, this);
+			if (isFileExists()) {
+				InstallAppUtil.install(mContext, this);
+			} else {
+				ToastUtil.showShort("安装失败-安装文件已被移除");
+				DownloadNotificationManager.clearDownloadComplete(mContext, destUrl);
+				ApkDownloadManager.getInstance(mContext).removeDownloadTask(downloadUrl, true);
+				initAppInfoStatus(mContext);
+			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -292,55 +305,33 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 			}
 			return;
 		}
+		initFile();
 		switch (appStatus) {
 			case DOWNLOADABLE:
 			case UPDATABLE:
-				if (NetworkUtil.isWifiConnected(mContext)) {
-					startDownload();
-				} else {
-					if (fragmentManager == null) {
-						ToastUtil.showShort("当前正在移动网络下下载");
-						startDownload();
-						return;
-					}
-					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-					confirmDialog.setTitle("提示");
-					confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
-					confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
-						@Override
-						public void onCancel() {
-							confirmDialog.dismissAllowingStateLoss();
-						}
-
-						@Override
-						public void onConfirm() {
-							startDownload();
-							confirmDialog.dismissAllowingStateLoss();
-						}
-					});
-					confirmDialog.show(fragmentManager, "download");
-				}
+				showStartDialog(fragmentManager);
 				break;
 			case INSTALLABLE:
-				initFile();
 				startInstall();
 				break;
 			case OPENABLE:
 				startApp();
 				break;
 			case PAUSABLE:
-				stopDownload();
+				if (isSilent) {
+					showStartDialog(fragmentManager);
+				} else {
+					stopDownload();
+				}
 				break;
 			case RESUMABLE:
 			case RETRYABLE:
-				KLog.d(AppDebugConfig.TAG_WARN, "isWifiConnected = " + NetworkUtil.isConnected(mContext)
-				 + ", isWifiAvalid");
 				if (NetworkUtil.isWifiConnected(mContext)) {
 					restartDownload();
 				} else {
 					if (fragmentManager == null) {
 						ToastUtil.showShort("当前正在移动网络下下载");
-						startDownload();
+						restartDownload();
 						return;
 					}
 					final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
@@ -354,7 +345,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 
 						@Override
 						public void onConfirm() {
-							startDownload();
+							restartDownload();
 							confirmDialog.dismissAllowingStateLoss();
 						}
 					});
@@ -365,6 +356,36 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 			default:
 				break;
 
+		}
+	}
+
+	private void showStartDialog(FragmentManager fragmentManager) {
+		if (NetworkUtil.isWifiConnected(mContext)) {
+			startDownload();
+		} else {
+			if (!isSilent) {
+				if (fragmentManager == null) {
+					ToastUtil.showShort("当前正在移动网络下下载");
+					startDownload();
+					return;
+				}
+				final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+				confirmDialog.setTitle("提示");
+				confirmDialog.setContent("您当前是移动网络状态，下载游戏会消耗手机流量");
+				confirmDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+					@Override
+					public void onCancel() {
+						confirmDialog.dismissAllowingStateLoss();
+					}
+
+					@Override
+					public void onConfirm() {
+						startDownload();
+						confirmDialog.dismissAllowingStateLoss();
+					}
+				});
+				confirmDialog.show(fragmentManager, "download");
+			}
 		}
 	}
 

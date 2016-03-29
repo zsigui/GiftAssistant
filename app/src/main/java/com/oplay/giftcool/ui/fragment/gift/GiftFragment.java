@@ -69,7 +69,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	private String mGameKey;
 	private JsonReqBase<ReqIndexGift> mReqPageObj;
 	// 每隔5分钟刷新一次
-	private Handler mHandler = new Handler(Looper.myLooper());
+	private Handler mHandler = new Handler(Looper.getMainLooper());
 	private Runnable mRefreshRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -287,6 +287,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		if (data == null) {
 			if (!mHasData) {
 				mViewManager.showErrorRetry();
+			} else {
+				mAdapter.updateData(mGiftData, start, end);
+				mViewManager.showContent();
 			}
 			return;
 		}

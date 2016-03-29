@@ -49,7 +49,6 @@ public class SystemUtil {
 		boolean ret = false;
 		try {
 			final File file = new File(filaPath);
-			KLog.d(AppDebugConfig.TAG_WARN, "exists = " + filaPath + ", " + file.exists());
 			if (file.exists()) {
 				ret = file.delete();
 			}

@@ -8,25 +8,25 @@ SOURCEDIR=${CWD}/../apk/temp-unsigned
 OUTPUTDIR=${CWD}/../apk/output
 UNALIGNAPK=temp-unalign.apk
 
-while getopts "keystore:keypass:storepass:keyname:srcdir:outputdir:" OPTION
+while getopts "f:k:s:n:i:o:" OPTION
 do
     case ${OPTION} in
-        keystore)
+        f)
             KEYSTORE=${OPTARG}
             ;;
-        keypass)
+        k)
             KEYPASS=${OPTARG}
             ;;
-        storepass)
+        s)
             STOREPASS=${OPTARG}
             ;;
-        keyname)
+        n)
             KEYSTORENAME=${OPTARG}
             ;;
-        srcdir)
+        i)
             SOURCEDIR=${OPTARG}
             ;;
-        outputdir)
+        o)
             OUTPUTDIR=${OPTARG}
             ;;
         \?)
@@ -35,7 +35,7 @@ do
     esac
 done
 
-
+echo ${SOURCEDIR}
 [ ! -d ${SOURCEDIR} ] && { echo "path argument is not a available directory!" ; exit 1; }
 [ -z ${OUTPUTDIR} ] && OUTPUTDIR=${CWD}/../apk/output
 [ ! -d ${OUTPUTDIR} ] && mkdir -p ${OUTPUTDIR}
