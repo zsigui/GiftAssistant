@@ -5,7 +5,7 @@
               android:layout_height = "match_parent" >
 
 	<include layout="@layout/view_smart_tab" />
-	<android.support.v4.view.ViewPager
+	<com.oplay.giftcool.ui.widget.layout.GCViewPager
 			android:id="@+id/vp_container"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>

@@ -93,10 +93,4 @@ public class GCRecyclerView extends RecyclerView {
 	private float abs(float old, float cur) {
 		return Math.abs(cur - old);
 	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent e) {
-
-		return super.onTouchEvent(e);
-	}
 }
