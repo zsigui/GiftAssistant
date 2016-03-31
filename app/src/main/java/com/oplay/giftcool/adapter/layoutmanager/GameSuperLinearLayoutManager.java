@@ -1,4 +1,4 @@
-package com.oplay.giftcool.adapter.other;
+package com.oplay.giftcool.adapter.layoutmanager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

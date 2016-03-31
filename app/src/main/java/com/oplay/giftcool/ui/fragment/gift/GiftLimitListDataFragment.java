@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.other.LimitGiftListAdapter;
+import com.oplay.giftcool.adapter.LimitGiftListAdapter;
 import com.oplay.giftcool.config.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnItemClickListener;

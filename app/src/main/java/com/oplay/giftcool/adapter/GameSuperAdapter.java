@@ -18,7 +18,7 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.adapter.other.HeaderFooterDividerItemDecoration;
+import com.oplay.giftcool.adapter.itemdecoration.HeaderFooterDividerItemDecoration;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.GameTypeUtil;

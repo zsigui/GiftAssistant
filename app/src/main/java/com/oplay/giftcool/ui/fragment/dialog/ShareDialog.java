@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
-import com.oplay.giftcool.adapter.other.FixHeightGridLayoutManager;
+import com.oplay.giftcool.adapter.layoutmanager.FixHeightGridLayoutManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog_NoButton;
 
 /**

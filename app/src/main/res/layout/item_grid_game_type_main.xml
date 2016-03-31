@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               xmlns:app = "http://schemas.android.com/apk/res-auto"
-              android:id="@+id/ll_item"
+              android:id = "@+id/ll_item"
               android:orientation = "vertical"
               android:gravity = "center_horizontal"
-              android:layout_marginTop="7dp"
-              android:layout_marginBottom="5dp"
+              android:paddingTop = "5dp"
+              android:paddingBottom = "5dp"
+              android:background = "@drawable/selector_opacity_05"
               android:layout_width = "match_parent"
               android:layout_height = "wrap_content" >
 
@@ -13,13 +14,13 @@
 	<com.makeramen.roundedimageview.RoundedImageView
 			android:id = "@+id/iv_icon"
 			style = "@style/DefaultImageView"
-			android:layout_width="52dp"
-			android:layout_height="52dp"
+			android:layout_width = "52dp"
+			android:layout_height = "52dp"
 			app:riv_oval = "true" />
 
 	<TextView
 			android:id = "@+id/tv_name"
 			style = "@style/DefaultTextView.Header"
-			android:layout_marginTop = "5dp"/>
+			android:layout_marginTop = "5dp" />
 
 </LinearLayout >

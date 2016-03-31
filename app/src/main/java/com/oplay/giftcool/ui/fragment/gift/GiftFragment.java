@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftAdapter;
-import com.oplay.giftcool.adapter.other.DividerItemDecoration;
-import com.oplay.giftcool.adapter.other.SnapLinearLayoutManager;
+import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
+import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
@@ -31,6 +31,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.socks.library.KLog;
 
 import java.io.IOException;
@@ -103,21 +104,16 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 				switch (newState) {
 					case RecyclerView.SCROLL_STATE_IDLE:
-						if (mAdapter != null) {
-							mAdapter.startBanner();
-						}
-//						if (ImageLoader.getInstance().isInited()) {
-//							ImageLoader.getInstance().resume();
-//						}
+						startBanner();
+						ImageLoaderUtil.resume();
 						break;
 					case RecyclerView.SCROLL_STATE_DRAGGING:
+						stopBanner();
+						ImageLoaderUtil.resume();
+						break;
 					case RecyclerView.SCROLL_STATE_SETTLING:
-						if (mAdapter != null) {
-							mAdapter.stopBanner();
-						}
-//						if (ImageLoader.getInstance().isInited()) {
-//							ImageLoader.getInstance().stop();
-//						}
+						stopBanner();
+						ImageLoaderUtil.stop();
 						break;
 				}
 			}
@@ -128,6 +124,18 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 			}
 		});
 		ObserverManager.getInstance().addGiftUpdateListener(this);
+	}
+
+	private void stopBanner() {
+		if (mAdapter != null) {
+			mAdapter.stopBanner();
+		}
+	}
+
+	private void startBanner() {
+		if (mAdapter != null) {
+			mAdapter.startBanner();
+		}
 	}
 
 	@Override

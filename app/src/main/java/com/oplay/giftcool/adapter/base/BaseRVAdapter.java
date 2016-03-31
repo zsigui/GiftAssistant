@@ -63,6 +63,5 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements O
 
 	@Override
 	public void release() {
-
 	}
 }

@@ -96,6 +96,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			AssistantApp.getInstance().appInit();
 		}
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+		}
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());

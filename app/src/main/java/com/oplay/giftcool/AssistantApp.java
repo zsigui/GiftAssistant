@@ -173,7 +173,9 @@ public class AssistantApp extends Application {
         if (AppDebugConfig.IS_DEBUG) {
             AppDebugConfig.logMemoryInfo();
         }
-        ImageLoader.getInstance().clearMemoryCache();
+        if (ImageLoader.getInstance().isInited()) {
+            ImageLoader.getInstance().clearMemoryCache();
+        }
     }
 
     public void initGson() {
@@ -186,7 +188,7 @@ public class AssistantApp extends Application {
 
     public void initRetrofit() {
         initGson();
-        File httpCacheDir = StorageUtils.getOwnCacheDirectory(this, Global.NET_CACHE_PATH, true);
+        File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
         Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
         Interceptor cacheInterceptor = new Interceptor() {
             @Override
@@ -224,8 +226,8 @@ public class AssistantApp extends Application {
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                .addInterceptor(cacheInterceptor)
                 .cache(cacheFile)
+                .addInterceptor(cacheInterceptor)
                 .retryOnConnectionFailure(true)
                 .build();
         mRetrofit = new Retrofit.Builder()
@@ -397,13 +399,15 @@ public class AssistantApp extends Application {
 
     public void setIsSaveFlow(boolean isSaveFlow) {
         mIsSaveFlow = isSaveFlow;
-        if (mIsSaveFlow) {
-            ImageLoader.getInstance().clearMemoryCache();
-            ImageLoader.getInstance().pause();
-            ImageLoader.getInstance().denyNetworkDownloads(true);
-        } else {
-            ImageLoader.getInstance().denyNetworkDownloads(false);
-            ImageLoader.getInstance().resume();
+        if (ImageLoader.getInstance().isInited()) {
+            if (mIsSaveFlow) {
+                ImageLoader.getInstance().clearMemoryCache();
+                ImageLoader.getInstance().pause();
+                ImageLoader.getInstance().denyNetworkDownloads(true);
+            } else {
+                ImageLoader.getInstance().denyNetworkDownloads(false);
+                ImageLoader.getInstance().resume();
+            }
         }
         SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_DELETE_APK,
                 isSaveFlow);

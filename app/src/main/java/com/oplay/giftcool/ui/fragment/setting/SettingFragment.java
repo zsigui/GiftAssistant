@@ -189,35 +189,7 @@ public class SettingFragment extends BaseFragment {
 						if (getChildFragmentManager() != null) {
 							DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
 						}
-						Global.THREAD_POOL.execute(new Runnable() {
-							@Override
-							public void run() {
-                                long cacheSize = 0;
-                                if (getContext() != null) {
-                                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                                        // 获取并删除外部Cache文件夹
-                                        cacheSize += DataClearUtil.getFolderSize(getContext().getExternalCacheDir());
-                                        DataClearUtil.cleanExternalCache(getContext());
-                                    }
-                                    // 获取并删除内部Cache文件夹
-                                    cacheSize += DataClearUtil.getFolderSize(getContext().getCacheDir());
-								    DataClearUtil.cleanInternalCache(getContext());
-                                }
-                                // 获取并删除自定义的Cache文件夹
-                                final File customCacheFile = StorageUtils.getOwnCacheDirectory(getContext(),
-                                        Global.EXTERNAL_CACHE);
-                                DataClearUtil.cleanCustomCache(customCacheFile, null);
-                                cacheSize += DataClearUtil.getFolderSize(customCacheFile);
-								if (getChildFragmentManager() != null) {
-									DialogManager.getInstance().hideLoadingDialog();
-								}
-								if (getContext() != null) {
-                                    final String size = DataClearUtil.getFormatSize(cacheSize);
-									ToastUtil.showShort(String.format(getContext().getString(R.string
-                                            .st_setting_auto_clear_cache_hint), size));
-								}
-							}
-						});
+						doClear();
 						dialog.dismiss();
 					}
 				});
@@ -260,6 +232,42 @@ public class SettingFragment extends BaseFragment {
 				logoutDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 				break;
 		}
+	}
+
+	/**
+	 * 执行清除缓存操作，为异步执行
+	 */
+	private void doClear() {
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				long cacheSize = 0;
+				if (getContext() != null) {
+					if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+						// 获取并删除外部Cache文件夹
+						cacheSize += DataClearUtil.getFolderSize(getContext().getExternalCacheDir());
+						DataClearUtil.cleanExternalCache(getContext());
+					}
+					// 获取并删除内部Cache文件夹
+					cacheSize += DataClearUtil.getFolderSize(getContext().getCacheDir());
+					DataClearUtil.cleanInternalCache(getContext());
+				}
+				// 获取并删除自定义的Cache文件夹
+				final File customCacheFile = StorageUtils.getOwnCacheDirectory(getContext(),
+						Global.EXTERNAL_CACHE);
+				DataClearUtil.cleanCustomCache(customCacheFile, null);
+				cacheSize += DataClearUtil.getFolderSize(customCacheFile);
+
+				if (getChildFragmentManager() != null) {
+					DialogManager.getInstance().hideLoadingDialog();
+				}
+				if (getContext() != null) {
+					final String size = DataClearUtil.getFormatSize(cacheSize);
+					ToastUtil.showShort(String.format(getContext().getString(R.string
+							.st_setting_auto_clear_cache_hint), size));
+				}
+			}
+		});
 	}
 
 	@Override

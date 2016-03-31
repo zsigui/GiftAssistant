@@ -5,10 +5,9 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameNoticeAdapter;
-import com.oplay.giftcool.adapter.other.DividerItemDecoration;
+import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -19,6 +18,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -94,13 +94,15 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 		mDataView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				if (ImageLoader.getInstance().isInited()) {
-					if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-						ImageLoader.getInstance().resume();
-					} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
-							|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-						ImageLoader.getInstance().pause();
-					}
+				switch (newState) {
+					case RecyclerView.SCROLL_STATE_SETTLING:
+						ImageLoaderUtil.stop();
+						break;
+					case RecyclerView.SCROLL_STATE_IDLE:
+					case RecyclerView.SCROLL_STATE_DRAGGING:
+						ImageLoaderUtil.resume();
+						break;
+
 				}
 			}
 		});

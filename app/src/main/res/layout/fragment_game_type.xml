@@ -1,34 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<android.support.v7.widget.RecyclerView
 		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:orientation = "vertical"
+		android:id = "@+id/rv_content"
 		android:background = "@color/co_transparent"
 		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content" >
-
-	<LinearLayout
-			android:orientation = "vertical"
-			android:background = "@color/co_transparent"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content" >
-
-		<android.support.v7.widget.RecyclerView
-				android:id = "@+id/rv_type"
-				android:background = "@color/co_white"
-				android:paddingTop = "8dp"
-				android:paddingBottom = "8dp"
-				android:layout_width = "match_parent"
-				android:layout_height = "192dp" />
-
-		<View
-				android:layout_width = "match_parent"
-				android:layout_height = "@dimen/di_index_module_gap"
-				android:background = "@color/co_common_content_bg" />
-
-		<android.support.v7.widget.RecyclerView
-				android:id = "@+id/rv_tag"
-				android:background = "@color/co_white"
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content" />
-	</LinearLayout >
-</android.support.v4.widget.NestedScrollView >
+		android:layout_height = "match_parent" >
+</android.support.v7.widget.RecyclerView >

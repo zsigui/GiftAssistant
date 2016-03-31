@@ -21,6 +21,7 @@ public class IndexTypeUtil {
 	public static final int ITEM_FOOTER = 2;
 
 
+
 	/*
 	 * 游戏精品界面
 	 */
@@ -33,4 +34,7 @@ public class IndexTypeUtil {
 	public static final int ITEM_RECOMMEND = 2;
 	public static final int ITEM_TITLE = 3;
 	public static final int ITEM_NEW_NORMAL = 4;
+	// 游戏类型页面
+	public static final int ITEM_GAME_TYPE_HEADER_COUNT = 6;
+	public static final int ITEM_GAME_TYPE_GRID_COUNT = 3;
 }

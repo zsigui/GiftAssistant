@@ -7,13 +7,14 @@ import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameSuperAdapter;
-import com.oplay.giftcool.adapter.other.DividerItemDecoration;
+import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import retrofit2.Call;
@@ -45,24 +46,34 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
-				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//					if (ImageLoader.getInstance().isInited()) {
-//						ImageLoader.getInstance().resume();
-//					}
-					if (mAdapter != null) {
-						mAdapter.startBanner();
-					}
-				} else if (newState == RecyclerView.SCROLL_STATE_SETTLING
-						|| newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-//					if (ImageLoader.getInstance().isInited()) {
-//						ImageLoader.getInstance().pause();
-//					}
-					if (mAdapter != null) {
-						mAdapter.stopBanner();
-					}
+				switch (newState) {
+					case RecyclerView.SCROLL_STATE_IDLE:
+						startBanner();
+						ImageLoaderUtil.resume();
+						break;
+					case RecyclerView.SCROLL_STATE_DRAGGING:
+						stopBanner();
+						ImageLoaderUtil.resume();
+						break;
+					case RecyclerView.SCROLL_STATE_SETTLING:
+						stopBanner();
+						ImageLoaderUtil.stop();
+						break;
 				}
 			}
 		});
+	}
+
+	private void stopBanner() {
+		if (mAdapter != null) {
+			mAdapter.stopBanner();
+		}
+	}
+
+	private void startBanner() {
+		if (mAdapter != null) {
+			mAdapter.startBanner();
+		}
 	}
 
 	@Override

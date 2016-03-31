@@ -1,4 +1,4 @@
-package com.oplay.giftcool.adapter.other;
+package com.oplay.giftcool.adapter.layoutmanager;
 
 import android.content.Context;
 import android.graphics.PointF;
