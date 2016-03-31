@@ -31,7 +31,6 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.socks.library.KLog;
 
 import java.io.IOException;
@@ -105,15 +104,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 				switch (newState) {
 					case RecyclerView.SCROLL_STATE_IDLE:
 						startBanner();
-						ImageLoaderUtil.resume();
+//						ImageLoaderUtil.resume();
 						break;
 					case RecyclerView.SCROLL_STATE_DRAGGING:
-						stopBanner();
-						ImageLoaderUtil.resume();
-						break;
 					case RecyclerView.SCROLL_STATE_SETTLING:
 						stopBanner();
-						ImageLoaderUtil.stop();
+//						ImageLoaderUtil.stop();
 						break;
 				}
 			}

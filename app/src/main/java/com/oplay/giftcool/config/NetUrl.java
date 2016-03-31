@@ -56,7 +56,7 @@ public class NetUrl {
 	/**
 	 * 礼包首页
 	 */
-	public static final String GIFT_GET_INDEX = "gift_index_test";
+	public static final String GIFT_GET_INDEX = "gift_index";
 
 	/**
 	 * 猜你喜欢

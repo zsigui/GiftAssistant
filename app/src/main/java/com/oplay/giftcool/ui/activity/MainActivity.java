@@ -58,6 +58,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
 
 
+	public static final int INDEX_DEFAULT = -1;
 	public static final int INDEX_GIFT = 0;
 	public static final int INDEX_GAME = 1;
 	// 保持一个Activity的全局对象
@@ -82,7 +83,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 当前选项卡下标
 	private DrawerLayout mDrawerLayout;
 	private DrawerFragment mDrawerFragment;
-	private int mCurSelectedItem = INDEX_GIFT;
+	private int mCurSelectedItem = INDEX_DEFAULT;
 
 	private void initHandler() {
 		if (mHandler == null) {
@@ -97,8 +98,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			mGameFragment = (GameFragment) getSupportFragmentManager().getFragment(savedInstanceState, TAG_GAME);
+			mGiftFragment = (GiftFragment) getSupportFragmentManager().getFragment(savedInstanceState, TAG_GIFT);
 		}
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
@@ -208,6 +209,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	public void setCurSelected(int position) {
+		if (mCurSelectedItem == position
+				&& position != INDEX_DEFAULT) {
+			return;
+		}
+		if (position == INDEX_DEFAULT) {
+			position = INDEX_GIFT;
+		}
 		for (CheckedTextView ctv : mCtvs) {
 			ctv.setChecked(false);
 			ctv.setTextColor(getResources().getColor(R.color.co_tab_index_text_normal));
@@ -221,15 +229,18 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
+
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// 由于暂时存在崩溃重启内容不保存问题，先注释掉该方法的执行
+		super.onSaveInstanceState(outState);
+	}
+
+	/**
+	 * 显示游戏界面，采用 show/hide 进行显示
+	 */
 	private void displayGameUI() {
-//		if (mGameFragment == null) {
-//			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-//			if (f != null) {
-//				mGameFragment = (GameFragment) f;
-//			} else {
-//				mGameFragment = GameFragment.newInstance();
-//			}
-//		}
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mGiftFragment != null) {
 			ft.hide(mGiftFragment);
@@ -246,19 +257,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		} else {
 			ft.show(mGameFragment);
 		}
-//		ft.replace(R.id.fl_container, mGameFragment, TAG_GAME);
 		ft.commit();
+		mCurSelectedItem = INDEX_GAME;
 	}
 
+	/**
+	 * 显示礼包界面，采用 show/hide 进行显示
+	 */
 	private void displayGiftUI() {
-//		if (mGiftFragment == null) {
-//			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-//			if (f != null) {
-//				mGiftFragment = (GiftFragment) f;
-//			} else {
-//				mGiftFragment = GiftFragment.newInstance();
-//			}
-//		}
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mGameFragment != null) {
 			ft.hide(mGameFragment);
@@ -275,10 +281,31 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		} else {
 			ft.show(mGiftFragment);
 		}
-//		ft.replace(R.id.fl_container, mGiftFragment, TAG_GIFT);
 		ft.commit();
+		mCurSelectedItem = INDEX_GIFT;
 	}
 
+	/**
+	 * 该方法能保证在完成 Fragment 的唤醒之后再调用，防止在其他 Activity 调用本类 commit 之后出现 IllegalStateException
+	 */
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+		// 为了避免 commit state loss 错误，在此处执行对 Fragment 的操作
+		if (mJumpGiftPos != -1) {
+			setCurSelected(INDEX_GIFT);
+			if (mGiftFragment != null) {
+				mGiftFragment.scrollToPos(mJumpGiftPos);
+				mJumpGiftPos = -1;
+			}
+		} else if (mJumpGamePos != - 1) {
+			setCurSelected(INDEX_GAME);
+			if (mGameFragment != null) {
+				mGameFragment.setPagePosition(mJumpGamePos);
+			}
+			mJumpGamePos = -1;
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -333,18 +360,19 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
+
+	// 定义跳转定位的位置
+	private int mJumpGamePos = -1;
+	private int mJumpGiftPos = -1;
+
 	public void jumpToIndexGame(int gamePosition) {
-		setCurSelected(INDEX_GAME);
-		if (mGameFragment != null) {
-			mGameFragment.setPagePosition(gamePosition);
-		}
+		mJumpGamePos = gamePosition;
+		mJumpGiftPos = -1;
 	}
 
 	public void jumpToIndexGift(final int giftPosition) {
-		setCurSelected(INDEX_GIFT);
-		if (mGiftFragment != null) {
-			mGiftFragment.scrollToPos(giftPosition);
-		}
+		mJumpGiftPos = giftPosition;
+		mJumpGamePos = -1;
 	}
 
 	@Override

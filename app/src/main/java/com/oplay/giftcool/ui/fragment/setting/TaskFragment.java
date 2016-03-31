@@ -346,7 +346,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             if (MainActivity.sGlobalHolder == null) {
                 IntentUtil.jumpGameNewList(getContext());
             } else {
-                MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_SUPER);
+                MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_NOTICE);
                 if (getActivity() != null) {
                     getActivity().finish();
                 }

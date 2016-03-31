@@ -30,8 +30,6 @@
 			android:orientation = "vertical"
 			android:visibility = "gone" >
 
-		<View style = "@style/HDividerView" />
-
 		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
 				android:id = "@+id/btn_download"
 				android:layout_marginTop = "10dp"

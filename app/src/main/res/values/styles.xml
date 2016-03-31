@@ -334,7 +334,7 @@
 		<item name = "android:orientation" >horizontal</item >
 		<item name = "android:clickable" >true</item >
 		<item name = "android:background" >@drawable/selector_white_module</item >
-		<item name = "android:layout_marginTop" >1dp</item >
+		<!--<item name = "android:layout_marginTop" >1dp</item >-->
 	</style >
 
 	<style name = "DefaultImageView.Score" >

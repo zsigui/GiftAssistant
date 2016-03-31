@@ -43,7 +43,6 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 
     @Override
     protected void setListener() {
-
     }
 
     @Override
@@ -53,6 +52,7 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 	    mTabLayout.setViewPager(mPager);
 	    mPager.setCurrentItem(0);
 	    mPager.addOnPageChangeListener(this);
+	    mPager.setCurrentItem(mCurrentPosition, true);
     }
 
     @Override
@@ -82,8 +82,12 @@ public class GameFragment extends BaseFragment implements ViewPager.OnPageChange
 	public void setPagePosition(int gamePosition) {
 		if (mPager != null && mPager.getAdapter() != null) {
 			mPager.setCurrentItem(gamePosition);
+		} else {
+			mCurrentPosition = gamePosition;
 		}
 	}
+
+
 
 	public class IndexGamePagerAdapter extends FragmentPagerAdapter {
 

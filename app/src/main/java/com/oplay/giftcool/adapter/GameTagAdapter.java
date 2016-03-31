@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.ui.widget.button.TagButton;
 import com.oplay.giftcool.util.IntentUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -108,7 +106,6 @@ public class GameTagAdapter extends BaseRVAdapter<GameTypeMain> implements View.
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		KLog.d(AppDebugConfig.TAG_WARN, "position = " + position + ", holder = " + holder);
 		switch (getItemViewType(position)) {
 			case IndexTypeUtil.ITEM_HEADER:
 				final TypeHolder typeHolder = (TypeHolder) holder;
