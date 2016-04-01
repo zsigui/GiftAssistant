@@ -97,10 +97,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			AssistantApp.getInstance().appInit();
 		}
 		super.onCreate(savedInstanceState);
-		if (savedInstanceState != null) {
-			mGameFragment = (GameFragment) getSupportFragmentManager().getFragment(savedInstanceState, TAG_GAME);
-			mGiftFragment = (GiftFragment) getSupportFragmentManager().getFragment(savedInstanceState, TAG_GIFT);
-		}
+
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
@@ -229,14 +226,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 	}
 
-
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// 由于暂时存在崩溃重启内容不保存问题，先注释掉该方法的执行
-		super.onSaveInstanceState(outState);
-	}
-
 	/**
 	 * 显示游戏界面，采用 show/hide 进行显示
 	 */
@@ -246,11 +235,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			ft.hide(mGiftFragment);
 		}
 		if (mGameFragment == null) {
+			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
 			if (f != null) {
 				mGameFragment = (GameFragment) f;
 				ft.show(mGameFragment);
 			} else {
+				// 正常新建
 				mGameFragment = GameFragment.newInstance();
 				ft.add(R.id.fl_container, mGameFragment, TAG_GAME);
 			}
@@ -298,7 +289,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mGiftFragment.scrollToPos(mJumpGiftPos);
 				mJumpGiftPos = -1;
 			}
-		} else if (mJumpGamePos != - 1) {
+		} else if (mJumpGamePos != -1) {
 			setCurSelected(INDEX_GAME);
 			if (mGameFragment != null) {
 				mGameFragment.setPagePosition(mJumpGamePos);

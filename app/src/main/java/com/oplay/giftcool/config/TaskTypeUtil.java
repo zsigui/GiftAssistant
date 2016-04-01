@@ -7,10 +7,9 @@ public class TaskTypeUtil {
 
 
 	/* List两种类型 */
-	public static final int TYPE_COUNT = 3;
+	public static final int TYPE_COUNT = 2;
 	public static final int TYPE_HEADER = 0;
 	public static final int TYPE_CONTENT = 1;
-	public static final int TYPE_LOTTERY = 2;
 
 
 	public static int getItemViewType(int missionType) {

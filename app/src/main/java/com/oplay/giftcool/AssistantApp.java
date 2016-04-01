@@ -1,6 +1,7 @@
 package com.oplay.giftcool;
 
 import android.app.Application;
+import android.graphics.Color;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.oplay.giftcool.assist.UILImageLoader;
 import com.oplay.giftcool.asynctask.AsyncTask_InitApplication;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -42,6 +44,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import cn.finalteam.galleryfinal.CoreConfig;
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.ThemeConfig;
 import cn.jpush.android.api.JPushInterface;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -135,6 +141,30 @@ public class AssistantApp extends Application {
         LoadAndRetryViewManager.setDefaultLoadViewId(R.layout.fragment_data_loading);
         // 加载失败，错误或者重试
         LoadAndRetryViewManager.setDefaultErrorRetryViewId(R.layout.fragment_error_net);
+    }
+
+
+    public void initGalleryFinal() {
+        int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
+        int textColor = Color.WHITE;
+        ThemeConfig theme = new ThemeConfig.Builder()
+                .setTitleBarBgColor(bgColor)
+                .setTitleBarIconColor(textColor)
+                .setCheckNornalColor(bgColor)
+                .setCheckSelectedColor(textColor)
+                .setIconBack(R.drawable.ic_bar_back)
+                .build();
+        FunctionConfig config = new FunctionConfig.Builder()
+                .setEnableCamera(true)
+                .setEnablePreview(true)
+                .setEnableRotate(false)
+                .build();
+        UILImageLoader imageLoader = new UILImageLoader();
+        CoreConfig coreConfig = new CoreConfig.Builder(this, imageLoader, theme)
+                .setFunctionConfig(config)
+                .setTakePhotoFolder(StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH))
+                .build();
+        GalleryFinal.init(coreConfig);
     }
 
     /**

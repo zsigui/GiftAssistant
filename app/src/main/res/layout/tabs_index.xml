@@ -11,7 +11,7 @@
 	<LinearLayout
 			android:id = "@+id/ll_tabs_home"
 			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_tab_index_bg_height"
+			android:layout_height = "match_parent"
 			android:background = "@color/co_tab_index_bg"
 			android:orientation = "horizontal" >
 
@@ -19,13 +19,16 @@
 				android:id = "@+id/ctv_gift"
 				style = "@style/CheckedTextNormal.Index"
 				android:drawableTop = "@drawable/selector_tab_index_gift"
+				android:gravity="center_horizontal"
 				android:text = "@string/st_tabs_home_gift" />
 
 		<CheckedTextView
 				android:id = "@+id/ctv_game"
+				android:gravity="center_horizontal"
 				style = "@style/CheckedTextNormal.Index"
 				android:drawableTop = "@drawable/selector_tab_index_game"
-				android:text = "@string/st_tabs_index_game" />
+				android:text = "@string/st_tabs_index_game"
+				android:checked = "false" />
 
 	</LinearLayout >
 </LinearLayout >

@@ -1,16 +1,11 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,7 +37,10 @@ import net.youmi.android.libs.common.coder.Coder_Md5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.List;
 
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,23 +113,62 @@ public class UploadAvatarFragment extends BaseFragment {
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCurrentSelectFilePath != null) {
+            onRequestUploadPortrait(mCurrentSelectFilePath);
+            mCurrentSelectFilePath = null;
+        }
+
+    }
+
+    /**
+     * 处理返回的信息
+     */
+    private GalleryFinal.OnHanlderResultCallback mResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+        @Override
+        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+            switch (reqeustCode) {
+                case REQ_ID_PHOTO_ALBUM:
+                case REQ_ID_PHOTO_CAMERA:
+                    if (resultList == null || resultList.size() == 0) {
+                        mCurrentSelectFilePath = null;
+                        ToastUtil.showShort("获取图片信息失败");
+                        return;
+                    }
+                    mCurrentSelectFilePath = resultList.get(0).getPhotoPath();
+                    break;
+            }
+        }
+
+        @Override
+        public void onHanlderFailure(int requestCode, String errorMsg) {
+            ToastUtil.showShort(String.format("处理失败: %s", errorMsg));
+            mCurrentSelectFilePath = null;
+        }
+    };
+
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.rl_gallery:
                 // 从相册中去获取
-                doPickPhotoFromGallery();
+//                doPickPhotoFromGallery();
+                GalleryFinal.openGallerySingle(REQ_ID_PHOTO_ALBUM, mResultCallback);
                 break;
             case R.id.rl_take_photo:
-                String status = Environment.getExternalStorageState();
-                //判断是否有SD卡
-                if (status.equals(Environment.MEDIA_MOUNTED)) {
-                    // 用户点击了从照相机获取
-                    doTakePhoto();
-                } else {
-                    ToastUtil.showShort("没有SD卡");
-                }
+//                String status = Environment.getExternalStorageState();
+//                //判断是否有SD卡
+//                if (status.equals(Environment.MEDIA_MOUNTED)) {
+//                    // 用户点击了从照相机获取
+//                    doTakePhoto();
+//                } else {
+//                    ToastUtil.showShort("没有SD卡");
+//                }
+                GalleryFinal.openCamera(REQ_ID_PHOTO_CAMERA, mResultCallback);
                 break;
         }
     }
@@ -139,31 +176,31 @@ public class UploadAvatarFragment extends BaseFragment {
     /**
      * 拍照获取图片
      */
-    public void doTakePhoto() {
-        try {
-            // Launch camera to take photo for selected contact
-            if (!PHOTO_DIR.exists()) {
-                // 创建照片的存储目录
-                PHOTO_DIR.mkdirs();
-            }
-            mCurrentPhotoFile = new File(PHOTO_DIR, getPhotoFileName());// 给新照的照片文件命名
-            startActivityForResult(getTakePickIntent(mCurrentPhotoFile), REQ_ID_PHOTO_CAMERA);
-        } catch (ActivityNotFoundException e) {
-            ToastUtil.showShort("没有找到照相软件，请安装照相机软件");
-        }
-    }
+//    public void doTakePhoto() {
+//        try {
+//            // Launch camera to take photo for selected contact
+//            if (!PHOTO_DIR.exists()) {
+//                // 创建照片的存储目录
+//                PHOTO_DIR.mkdirs();
+//            }
+//            mCurrentPhotoFile = new File(PHOTO_DIR, getPhotoFileName());// 给新照的照片文件命名
+//            startActivityForResult(getTakePickIntent(mCurrentPhotoFile), REQ_ID_PHOTO_CAMERA);
+//        } catch (ActivityNotFoundException e) {
+//            ToastUtil.showShort("没有找到照相软件，请安装照相机软件");
+//        }
+//    }
 
     /**
      * 请求Gallery程序
      */
-    public void doPickPhotoFromGallery() {
-        try {
-            // Launch picker to choose photo for selected contact
-            startActivityForResult(getPhotoPickIntent(), REQ_ID_PHOTO_ALBUM);
-        } catch (ActivityNotFoundException e) {
-            ToastUtil.showShort("没有找到图片选择器");
-        }
-    }
+//    public void doPickPhotoFromGallery() {
+//        try {
+//            // Launch picker to choose photo for selected contact
+//            startActivityForResult(getPhotoPickIntent(), REQ_ID_PHOTO_ALBUM);
+//        } catch (ActivityNotFoundException e) {
+//            ToastUtil.showShort("没有找到图片选择器");
+//        }
+//    }
 
     /**
      * 用当前时间给取得的图片命名
@@ -172,22 +209,15 @@ public class UploadAvatarFragment extends BaseFragment {
         return String.format("IMG_%s.jpg", Coder_Md5.md5(DateUtil.getDate("yyyyMMddHHmmss", 0)));
     }
 
-    /**
-     * get file path from URI, throw IllegalArgumentException if not found
-     *
-     * @param context
-     * @param uri
-     * @return
-     */
-    public String getPath(Context context, Uri uri) {
-        final String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        final Cursor cursor = context.getContentResolver().query(uri, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        final int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        final String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        return picturePath;
-    }
+//    public String getPath(Context context, Uri uri) {
+//        final String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//        final Cursor cursor = context.getContentResolver().query(uri, filePathColumn, null, null, null);
+//        cursor.moveToFirst();
+//        final int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//        final String picturePath = cursor.getString(columnIndex);
+//        cursor.close();
+//        return picturePath;
+//    }
 
     public void showLoading() {
         if (getContext() != null && getChildFragmentManager() != null) {
@@ -297,62 +327,62 @@ public class UploadAvatarFragment extends BaseFragment {
         return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.logMethodWithParams(this, "onActivityResult_Modify_UserInfo, requestCode:" +
-                        requestCode + "  resultCode:" + resultCode + "  data:" + data);
-            }
-            if (resultCode != Activity.RESULT_OK) {
-                return;
-            }
-            /**
-             * 获取照片返回成功，开始对应处理
-             */
-            switch (requestCode) {
-                case REQ_ID_PHOTO_ALBUM:
-                    // 调用Gallery返回的
-//                    final Bitmap photo = data.getParcelableExtra("data");
-                    if (data != null && data.getData() != null) {
-                        final Uri result = data.getData();
-                        final String photoFilePath = getPath(getContext(), result);
-                        if (AppDebugConfig.IS_DEBUG) {
-                            AppDebugConfig.logMethodWithParams(this, "PHOTO_PICKED:" + photoFilePath);
-                        }
-                        if (!TextUtils.isEmpty(photoFilePath)) {
-                            onRequestUploadPortrait(photoFilePath);
-                            mCurrentSelectFilePath = photoFilePath;
-                        } else {
-                            ToastUtil.showShort("无法获取到选择的图像，请使用照相功能。");
-                        }
-                    }
-                    break;
-                case REQ_ID_PHOTO_CAMERA: {
-                    // 照相机程序返回的,再次调用图片剪辑程序去修剪图片
-//                    doCropPhoto(mCurrentPhotoFile, 80, 80);
-                    if (mCurrentPhotoFile != null) {
-                        // 有可能只是选择了存储地址，但是实际上并没有拍照，也就是说没有存储成功，所以地址是无效的
-                        if (mCurrentPhotoFile.exists()) {
-                            final String takePath = mCurrentPhotoFile.getAbsolutePath();
-                            if (AppDebugConfig.IS_DEBUG) {
-                                AppDebugConfig.logMethodWithParams(this, "PHOTO_TAKEN:" + takePath);
-                            }
-                            onRequestUploadPortrait(takePath);
-                            mCurrentSelectFilePath = takePath;
-                        }
-                    }
-                    break;
-                }
-            }
-
-        } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        try {
+//            if (AppDebugConfig.IS_DEBUG) {
+//                AppDebugConfig.logMethodWithParams(this, "onActivityResult_Modify_UserInfo, requestCode:" +
+//                        requestCode + "  resultCode:" + resultCode + "  data:" + data);
+//            }
+//            if (resultCode != Activity.RESULT_OK) {
+//                return;
+//            }
+//            /**
+//             * 获取照片返回成功，开始对应处理
+//             */
+//            switch (requestCode) {
+//                case REQ_ID_PHOTO_ALBUM:
+//                    // 调用Gallery返回的
+////                    final Bitmap photo = data.getParcelableExtra("data");
+//                    if (data != null && data.getData() != null) {
+//                        final Uri result = data.getData();
+//                        final String photoFilePath = getPath(getContext(), result);
+//                        if (AppDebugConfig.IS_DEBUG) {
+//                            AppDebugConfig.logMethodWithParams(this, "PHOTO_PICKED:" + photoFilePath);
+//                        }
+//                        if (!TextUtils.isEmpty(photoFilePath)) {
+//                            onRequestUploadPortrait(photoFilePath);
+//                            mCurrentSelectFilePath = photoFilePath;
+//                        } else {
+//                            ToastUtil.showShort("无法获取到选择的图像，请使用照相功能。");
+//                        }
+//                    }
+//                    break;
+//                case REQ_ID_PHOTO_CAMERA: {
+//                    // 照相机程序返回的,再次调用图片剪辑程序去修剪图片
+////                    doCropPhoto(mCurrentPhotoFile, 80, 80);
+//                    if (mCurrentPhotoFile != null) {
+//                        // 有可能只是选择了存储地址，但是实际上并没有拍照，也就是说没有存储成功，所以地址是无效的
+//                        if (mCurrentPhotoFile.exists()) {
+//                            final String takePath = mCurrentPhotoFile.getAbsolutePath();
+//                            if (AppDebugConfig.IS_DEBUG) {
+//                                AppDebugConfig.logMethodWithParams(this, "PHOTO_TAKEN:" + takePath);
+//                            }
+//                            onRequestUploadPortrait(takePath);
+//                            mCurrentSelectFilePath = takePath;
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            if (AppDebugConfig.IS_DEBUG) {
+//                KLog.e(e);
+//            }
+//        }
+//    }
 
     @Override
     public String getPageName() {

@@ -22,6 +22,12 @@ public class ScoreMission implements Serializable {
 	public String name;
 
 	/**
+	 * 任务内容
+	 */
+	@SerializedName("content")
+	public String content;
+
+	/**
 	 * 任务类型: 1.新手任务 2.每日任务 3.连续性任务 4. 期待任务
 	 */
 	@SerializedName("type")

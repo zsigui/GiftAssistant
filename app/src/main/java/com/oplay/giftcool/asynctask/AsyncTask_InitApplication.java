@@ -129,6 +129,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			}
 		}
 
+		// 初始化照片墙控件
+		assistantApp.initGalleryFinal();
+
 		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP
 //		judgeFirstOpenToday();

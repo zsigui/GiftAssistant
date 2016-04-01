@@ -62,7 +62,7 @@ public class IndexGiftNew implements Serializable{
 	public String useEndTime;
     // 特别说明
 //	@SerializedName("remarks")
-//    public String note;
+//    public String content;
 	// 礼包兑换方式
 	@SerializedName("usage")
 	public String usage;

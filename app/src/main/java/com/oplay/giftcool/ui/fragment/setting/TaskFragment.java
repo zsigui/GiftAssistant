@@ -16,7 +16,6 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
-import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -170,11 +169,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
     @Override
     public void onItemClick(ScoreMission item, View view, int position) {
-        if (mHasData && position == 0) {
-            IntentUtil.jumpActivityWeb(getContext(), WebViewUrl.getWebUrl(WebViewUrl.LOTTERY),
-                    getResources().getString(R.string.st_task_lottery));
-            return;
-        }
         if (mData == null || mData.size() == 0) {
             if (AppDebugConfig.IS_FRAG_DEBUG) {
                 KLog.e(AppDebugConfig.TAG_FRAG, "Empty or Null Data On Item Click! mData = " + mData);
@@ -210,7 +204,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             } else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
                 //mission.icon = R.drawable.ic_task_star_comment;
             } else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
-                mission.icon = R.drawable.ic_task_login;
+                mission.icon = R.drawable.ic_task_first_login;
             } else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
                 mission.icon = R.drawable.ic_task_download;
             } else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
@@ -218,7 +212,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             } else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
                 mission.icon = R.drawable.ic_task_share_limit_gift;
             } else if (id.equals(TaskTypeUtil.ID_SHARE_GIFT_COOL)) {
-                mission.icon = R.drawable.ic_task_share_gcool;
+                mission.icon = R.drawable.ic_task_share;
             } else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
                 mission.icon = R.drawable.ic_task_get_limit_with_bean;
             } else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
@@ -228,7 +222,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             } else if (id.equals(TaskTypeUtil.ID_FIRST_LOGIN)) {
                 mission.icon = R.drawable.ic_task_first_login;
             } else if (id.equals(TaskTypeUtil.ID_LOGIN_SPECIFIED)) {
-                mission.icon = R.drawable.ic_task_first_login;
+                mission.icon = R.drawable.ic_task_login_specified;
             }
         }
     }

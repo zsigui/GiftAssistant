@@ -20,6 +20,21 @@
 	<dimen name = "di_icon_border_size" >1dp</dimen >
 	<dimen name = "di_icon_bigger_radius">15dp</dimen>
 	<dimen name = "di_icon_bigger_diameter" >80dp</dimen >
+
+	<!-- 列表四周间隔 -->
+	<dimen name = "di_line_space_extra_normal">2dp</dimen>
+	<dimen name = "di_line_space_extra_big">4dp</dimen>
+	<dimen name = "di_list_item_gap_very_small">6dp</dimen>
+	<dimen name = "di_list_item_gap_small">8dp</dimen>
+	<dimen name = "di_list_item_gap_normal">12dp</dimen>
+	<dimen name = "di_list_item_gap_big">16dp</dimen>
+
+	<!-- 字体 -->
+	<dimen name = "di_text_size_very_small">10sp</dimen>
+	<dimen name = "di_text_size_small">12sp</dimen>
+	<dimen name = "di_text_size_normal">14sp</dimen>
+	<dimen name = "di_text_size_big">16sp</dimen>
+
 	<!-- 游戏icon大小, 有2dp -->
 	<dimen name = "di_game_icon_layout_diameter" >74dp</dimen >
 	<dimen name = "di_game_icon_margin" >2dp</dimen >

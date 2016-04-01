@@ -18,7 +18,7 @@
 				android:text = "我当前拥有的金币:  " />
 
 		<CheckedTextView
-				android:id="@+id/tv_score"
+				android:id = "@+id/tv_score"
 				style = "@style/DefaultTextView.Header"
 				android:drawableLeft = "@drawable/ic_score"
 				android:textColor = "@color/co_tabs_common_bg"
@@ -28,10 +28,11 @@
 	</LinearLayout >
 
 	<ListView
-			android:id="@+id/lv_container"
+			android:id = "@+id/lv_container"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
-			android:dividerHeight="1dp"
-			android:divider="@color/co_divider_bg"/>
+			android:dividerHeight = "@dimen/di_index_module_gap"
+			android:headerDividersEnabled = "true"
+			android:divider = "@color/co_divider_bg" />
 
 </LinearLayout >

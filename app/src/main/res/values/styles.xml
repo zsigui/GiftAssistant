@@ -45,7 +45,7 @@
 		<item name = "android:minWidth" >?actionBarSize</item >
 		<item name = "android:paddingLeft" >0dp</item >
 		<item name = "android:paddingRight" >0dp</item >
-		<item name = "android:textSize" >15dp</item >
+		<item name = "android:textSize" >@dimen/di_text_size_big</item >
 	</style >
 
 	<style name = "ToolbarStyle" >
@@ -335,6 +335,16 @@
 		<item name = "android:clickable" >true</item >
 		<item name = "android:background" >@drawable/selector_white_module</item >
 		<!--<item name = "android:layout_marginTop" >1dp</item >-->
+	</style >
+
+	<style name = "DefaultTextView.ScoreHeader" >
+		<item name = "android:layout_width" >match_parent</item >
+		<item name = "android:layout_height" >wrap_content</item >
+		<item name = "android:gravity" >left|center_vertical</item >
+		<item name = "android:paddingLeft" >@dimen/di_list_item_gap_normal</item >
+		<item name = "android:paddingTop" >@dimen/di_list_item_gap_small</item >
+		<item name = "android:paddingBottom" >@dimen/di_list_item_gap_small</item >
+		<item name = "android:textColor" >@color/co_common_text_second</item >
 	</style >
 
 	<style name = "DefaultImageView.Score" >

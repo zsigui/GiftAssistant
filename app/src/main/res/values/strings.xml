@@ -122,6 +122,7 @@
 	<string name = "st_task_btn_finished" >已完成</string >
 	<string name = "st_task_lottery" >每日抽奖</string >
 	<string name = "st_task_lottery_btn" >我要抽奖</string >
+	<string name = "st_task_reward" >任务奖励:</string >
 
 	<!-- 设置 - 下载状态 -->
 	<string name = "st_download_title" >下载管理</string >
