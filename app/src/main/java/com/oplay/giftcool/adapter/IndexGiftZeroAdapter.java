@@ -151,7 +151,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			String s = DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss");
+			String s = DateUtil.formatTime(millisUntilFinished, "HH:mm:ss");
 			setText(s);
 		}
 

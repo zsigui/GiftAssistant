@@ -317,7 +317,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		mTimer = new CountTimer(mData.giftData.remainStartTime * 1000, Global.COUNTDOWN_INTERVAL) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				btnSend.setText(DateUtil.formatRemain(millisUntilFinished, "HH:mm:ss"));
+				btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
 			}
 
 			@Override

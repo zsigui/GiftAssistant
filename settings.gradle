@@ -1,4 +1,5 @@
-include ':app'
+include ':app', ':galleryfinal'
 include ':third:youmilib'
 include ':third:ouwansdk'
 include ':third:convenientbanner'
+//include ':third:galleryfinal'

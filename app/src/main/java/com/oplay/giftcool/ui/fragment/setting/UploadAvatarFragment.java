@@ -1,11 +1,7 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,13 +23,10 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.BitmapUtil;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
-
-import net.youmi.android.libs.common.coder.Coder_Md5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,8 +48,8 @@ public class UploadAvatarFragment extends BaseFragment {
     private static final int REQ_ID_PHOTO_ALBUM = 33;
     private static final int REQ_ID_PHOTO_CAMERA = 34;
     /*拍照的照片存储位置*/
-    private static final File PHOTO_DIR = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
-    private File mCurrentPhotoFile;//照相机拍照得到的图片
+//    private static final File PHOTO_DIR = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
+//    private File mCurrentPhotoFile;//照相机拍照得到的图片
     private String mCurrentSelectFilePath;
 
     private ImageView ivAvatar;
@@ -64,17 +57,17 @@ public class UploadAvatarFragment extends BaseFragment {
     private RelativeLayout rlTakePhoto;
 
     // 封装请求Gallery的intent
-    public static Intent getPhotoPickIntent() {
-        final Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        return intent;
-    }
-
-    public static Intent getTakePickIntent(File f) {
-        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-        return intent;
-    }
+//    public static Intent getPhotoPickIntent() {
+//        final Intent intent = new Intent(Intent.ACTION_PICK,
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        return intent;
+//    }
+//
+//    public static Intent getTakePickIntent(File f) {
+//        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//        return intent;
+//    }
 
     public static UploadAvatarFragment newInstance() {
         return new UploadAvatarFragment();
@@ -157,7 +150,7 @@ public class UploadAvatarFragment extends BaseFragment {
             case R.id.rl_gallery:
                 // 从相册中去获取
 //                doPickPhotoFromGallery();
-                GalleryFinal.openGallerySingle(REQ_ID_PHOTO_ALBUM, mResultCallback);
+                GalleryFinal.openGalleryMuti(REQ_ID_PHOTO_ALBUM, 1, mResultCallback);
                 break;
             case R.id.rl_take_photo:
 //                String status = Environment.getExternalStorageState();
@@ -205,9 +198,9 @@ public class UploadAvatarFragment extends BaseFragment {
     /**
      * 用当前时间给取得的图片命名
      */
-    private String getPhotoFileName() {
-        return String.format("IMG_%s.jpg", Coder_Md5.md5(DateUtil.getDate("yyyyMMddHHmmss", 0)));
-    }
+//    private String getPhotoFileName() {
+//        return String.format("IMG_%s.jpg", Coder_Md5.md5(DateUtil.getDate("yyyyMMddHHmmss", 0)));
+//    }
 
 //    public String getPath(Context context, Uri uri) {
 //        final String[] filePathColumn = {MediaStore.Images.Media.DATA};

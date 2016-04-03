@@ -45,7 +45,7 @@ public class DateUtil {
 				: result);
 	}
 
-	public static String formatRemain(long time, String format) {
+	public static String formatTime(long time, String format) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 		SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
 		return sdf.format(new Date(time));
