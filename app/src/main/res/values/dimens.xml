@@ -5,6 +5,8 @@
 	<dimen name = "fab_margin" >16dp</dimen >
 
 	<dimen name = "di_tabs_common_bg_height" >45dp</dimen >
+	<dimen name = "di_tabs_indicator_length" >8dp</dimen >
+	<dimen name = "di_tabs_indicator_margin_left_right" >2dp</dimen >
 	<!-- 通用样式 -->
 	<dimen name = "di_common_btn_radius" >5sp</dimen >
 	<dimen name = "di_common_text" >14sp</dimen >

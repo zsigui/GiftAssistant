@@ -153,6 +153,9 @@ public class AssistantApp extends Application {
                 .setCheckNornalColor(textColor)
                 .setCheckSelectedColor(bgColor)
                 .setIconBack(R.drawable.ic_bar_back)
+                .setFabNornalColor(getResources().getColor(R.color.co_btn_red))
+                .setFabPressedColor(getResources().getColor(R.color.co_btn_red_pressed))
+                .setPreviewBg(getResources().getDrawable(R.color.co_black))
                 .build();
         FunctionConfig config = new FunctionConfig.Builder()
                 .setEnableCamera(false)

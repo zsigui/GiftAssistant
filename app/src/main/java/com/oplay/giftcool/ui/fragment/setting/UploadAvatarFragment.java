@@ -126,6 +126,9 @@ public class UploadAvatarFragment extends BaseFragment {
             switch (reqeustCode) {
                 case REQ_ID_PHOTO_ALBUM:
                 case REQ_ID_PHOTO_CAMERA:
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_FRAG, "Pick Photo = " + resultList);
+                    }
                     if (resultList == null || resultList.size() == 0) {
                         mCurrentSelectFilePath = null;
                         ToastUtil.showShort("获取图片信息失败");
@@ -138,7 +141,13 @@ public class UploadAvatarFragment extends BaseFragment {
 
         @Override
         public void onHanlderFailure(int requestCode, String errorMsg) {
-            ToastUtil.showShort(String.format("处理失败: %s", errorMsg));
+            switch (requestCode) {
+                case REQ_ID_PHOTO_ALBUM:
+                    ToastUtil.showShort(errorMsg);
+                    break;
+                case REQ_ID_PHOTO_CAMERA:
+                    break;
+            }
             mCurrentSelectFilePath = null;
         }
     };
@@ -150,7 +159,7 @@ public class UploadAvatarFragment extends BaseFragment {
             case R.id.rl_gallery:
                 // 从相册中去获取
 //                doPickPhotoFromGallery();
-                GalleryFinal.openGalleryMuti(REQ_ID_PHOTO_ALBUM, 1, mResultCallback);
+                GalleryFinal.openGalleryMuti(REQ_ID_PHOTO_ALBUM, 5, mResultCallback);
                 break;
             case R.id.rl_take_photo:
 //                String status = Environment.getExternalStorageState();

@@ -22,9 +22,8 @@ public class GFViewPager extends ViewPager{
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         try {
-            return super .dispatchTouchEvent(ev);
-        } catch (IllegalArgumentException ignored) {
-        } catch (ArrayIndexOutOfBoundsException e) {
+            return super.dispatchTouchEvent(ev);
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ignored) {
         }
 
         return false ;

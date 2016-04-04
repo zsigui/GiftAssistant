@@ -1,79 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources >
+<resources>
 
-	<color name = "co_transparent" >#00000000</color >
-	<color name = "co_white" >#FFFFFF</color >
-	<color name = "co_white_pressed" >#F6F6F6</color >
-	<color name = "co_black" >#000000</color >
+    <color name="co_transparent">#00000000</color>
+    <color name="co_white">#FFFFFF</color>
+    <color name="co_white_pressed">#F6F6F6</color>
+    <color name="co_black">#000000</color>
 
-	<color name = "co_opacity_05" >#0D000000</color >
-	<color name = "co_opacity_20" >#33000000</color >
-	<color name = "co_opacity_30" >#4D000000</color >
-	<color name = "co_opacity_50" >#80000000</color >
-	<color name = "co_opacity_70" >#B3000000</color >
-	<color name = "co_opacity_80" >#CC000000</color >
+    <color name="co_opacity_05">#0D000000</color>
+    <color name="co_opacity_20">#33000000</color>
+    <color name="co_opacity_30">#4D000000</color>
+    <color name="co_opacity_50">#80000000</color>
+    <color name="co_opacity_70">#B3000000</color>
+    <color name="co_opacity_80">#CC000000</color>
 
-	<!-- 主题通用颜色 -->
-	<color name = "co_status_bar_bg" >#df4b4b</color >
-	<color name = "co_tool_bar_item_bg" >#d54848</color >
-	<color name = "co_search_bar_hint" >#ff9b9b</color >
+    <!-- 主题通用颜色 -->
+    <color name="co_status_bar_bg">#df4b4b</color>
+    <color name="co_tool_bar_item_bg">#d54848</color>
+    <color name="co_search_bar_hint">#ff9b9b</color>
 
-	<color name = "co_common_app_main_bg" >#f85454</color >
-	<color name = "co_common_app_second_bg_orange" >#ffaa17</color >
-	<color name = "co_common_app_second_bg_green" >#20C585</color >
-	<color name = "co_common_content_bg" >#e7e7e7</color >
-	<color name = "co_common_text_main" >#333333</color >
-	<color name = "co_common_text_second" >#888888</color >
-	<color name = "co_common_hint_bg" >#fffbe9</color >
+    <color name="co_common_app_main_bg">#f85454</color>
+    <color name="co_common_app_second_bg_orange">#ffaa17</color>
+    <color name="co_common_app_second_bg_green">#20C585</color>
+    <color name="co_common_content_bg">#e7e7e7</color>
+    <color name="co_common_text_main">#333333</color>
+    <color name="co_common_text_second">#888888</color>
+    <color name="co_common_hint_bg">#fffbe9</color>
 
-	<!-- 游戏详情主题颜色表 -->
-	<color name = "co_rainbow_color_1">#343754</color>
-	<color name = "co_rainbow_color_2">#1d404b</color>
-	<color name = "co_rainbow_color_3">#422f25</color>
-	<color name = "co_rainbow_color_4">#533341</color>
-	<color name = "co_rainbow_color_5">#f85454</color>
+    <!-- 游戏详情主题颜色表 -->
+    <color name="co_rainbow_color_1">#343754</color>
+    <color name="co_rainbow_color_2">#1d404b</color>
+    <color name="co_rainbow_color_3">#422f25</color>
+    <color name="co_rainbow_color_4">#533341</color>
+    <color name="co_rainbow_color_5">#f85454</color>
 
-	<color name = "co_index_module_add_text" >#ff8543</color >
-	<color name = "co_divider_bg" >#f4f4f4</color >
-	<color name = "co_stroke_bg" >#e4e4e4</color >
-	<color name = "co_reward_bg" >#ffb554</color>
+    <color name="co_index_module_add_text">#ff8543</color>
+    <color name="co_divider_bg">#f4f4f4</color>
+    <color name="co_stroke_bg">#e4e4e4</color>
+    <color name="co_reward_bg">#ffb554</color>
 
-	<color name = "co_btn_red" >#f85454</color >
-	<color name = "co_btn_red_pressed" >#E34D4E</color >
-	<color name = "co_btn_green" >#20c585</color >
-	<color name = "co_btn_green_pressed" >#15B074</color >
-	<color name = "co_btn_light_green" >#34d0c3</color >
-	<color name = "co_btn_orange" >#ffaa17</color >
-	<color name = "co_btn_orange_pressed" >#FF942A</color >
-	<color name = "co_btn_blue" >#40BDDC</color >
-	<color name = "co_btn_blue_pressed" >#1FA7C9</color >
-	<color name = "co_btn_purple" >#b679d2</color >
-	<color name = "co_btn_grey" >#c9c9c9</color >
-	<color name = "co_btn_grey_pressed" >#B9B9B9</color >
+    <color name="co_btn_red">#f85454</color>
+    <color name="co_btn_red_pressed">#E34D4E</color>
+    <color name="co_btn_green">#20c585</color>
+    <color name="co_btn_green_pressed">#15B074</color>
+    <color name="co_btn_light_green">#34d0c3</color>
+    <color name="co_btn_orange">#ffaa17</color>
+    <color name="co_btn_orange_pressed">#FF942A</color>
+    <color name="co_btn_blue">#40BDDC</color>
+    <color name="co_btn_blue_pressed">#1FA7C9</color>
+    <color name="co_btn_purple">#b679d2</color>
+    <color name="co_btn_grey">#c9c9c9</color>
+    <color name="co_btn_grey_pressed">#B9B9B9</color>
 
 
-	<color name = "co_tabs_indicator_common_bg" >#ffaa17</color >
-	<color name = "co_tabs_common_bg" >#F85454</color >
-	<color name = "co_tabs_common_text_unchecked" >#FFD2D2</color >
+    <color name="co_tabs_indicator_common_bg">#ffaa17</color>
+    <color name="co_tabs_common_bg">#F85454</color>
+    <color name="co_tabs_common_text_unchecked">#FFD2D2</color>
+    <color name="co_tabs_circle_stroke_bg">#FF63727B</color>
 
-	<!-- 主页面 -->
-	<color name = "co_title_bar_bg" >#74684957</color >
-	<color name = "co_title_bar_tv_bg" >#FFFFFF</color >
+    <!-- 主页面 -->
+    <color name="co_title_bar_bg">#74684957</color>
+    <color name="co_title_bar_tv_bg">#FFFFFF</color>
 
-	<!-- 设置 - 我的礼包 -->
-	<color name = "co_gift_code_bg" >#F0F0F0</color >
+    <!-- 设置 - 我的礼包 -->
+    <color name="co_gift_code_bg">#F0F0F0</color>
 
-	<color name = "co_tab_index_text_normal" >#BBBBBB</color >
-	<color name = "co_tab_index_text_selected" >#F85454</color >
-	<color name = "co_tab_index_bg" >#f7f7f7</color >
+    <color name="co_tab_index_text_normal">#BBBBBB</color>
+    <color name="co_tab_index_text_selected">#F85454</color>
+    <color name="co_tab_index_bg">#f7f7f7</color>
 
-	<!-- 设置 - 金币任务 -->
-	<color name = "co_get_green" >#26C687</color >
-	<color name = "co_lost_red" >#F85454</color >
+    <!-- 设置 - 金币任务 -->
+    <color name="co_get_green">#26C687</color>
+    <color name="co_lost_red">#F85454</color>
 
-	<!-- 设置 - 我的钱包 -->
-	<color name = "co_wallet_header_text">#FDBDBD</color>
+    <!-- 设置 - 我的钱包 -->
+    <color name="co_wallet_header_text">#FDBDBD</color>
 
-	<!--下载进度背景-->
-	<color name = "co_btn_download_background">#9ee3c8</color>
-</resources >
+    <!--下载进度背景-->
+    <color name="co_btn_download_background">#9ee3c8</color>
+</resources>

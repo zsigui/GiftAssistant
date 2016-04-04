@@ -253,4 +253,5 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     @Override
     public void onPermissionsDenied(List<String> list) {
     }
+
 }

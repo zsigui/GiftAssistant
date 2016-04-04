@@ -150,6 +150,11 @@
   public static final android.os.Parcelable$Creator *;
 }
 
+#GalleryFinal begin
+-keep class cn.finalteam.galleryfinal.widget.*{*;}
+-keep class cn.finalteam.galleryfinal.widget.crop.*{*;}
+-keep class cn.finalteam.galleryfinal.widget.zoonview.*{*;}
+#GalleryFinal end
 
 
 #lebian sdk begin

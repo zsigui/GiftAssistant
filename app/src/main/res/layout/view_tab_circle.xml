@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/di_tabs_indicator_length"
+    android:layout_height="@dimen/di_tabs_indicator_length"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="@dimen/di_tabs_indicator_margin_left_right"
+    android:layout_marginRight="@dimen/di_tabs_indicator_margin_left_right"
+    android:background="@drawable/shape_tab_circle"/>
+
