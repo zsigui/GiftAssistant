@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android = "http://schemas.android.com/apk/res/android"
+       android:shape = "rectangle" >
+
+	<corners
+			android:radius = "@dimen/di_index_post_item_radius" />
+	<stroke
+			android:width = "@dimen/di_divider_height"
+			android:color = "@color/co_common_content_bg" />
+	<solid android:color = "@color/co_transparent" />
+</shape >

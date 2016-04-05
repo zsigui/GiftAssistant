@@ -35,7 +35,7 @@ import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
-import com.oplay.giftcool.ui.fragment.essay.EssayFragment;
+import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
@@ -52,11 +52,9 @@ import java.io.File;
  */
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
-	private static final String TAG_EXIT = "com.oplay.giftcool.MainActivity.exit";
-
 	final String TAG_GIFT = GiftFragment.class.getSimpleName();
 	final String TAG_GAME = GameFragment.class.getSimpleName();
-	final String TAG_ESSAY = EssayFragment.class.getSimpleName();
+	final String TAG_POST = PostFragment.class.getSimpleName();
 	final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
 
 	final int INDEX_COUNT = 3;
@@ -87,7 +85,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
-	private EssayFragment mEssayFragment;
+	private PostFragment mPostFragment;
 	// 当前选项卡下标
 	private DrawerLayout mDrawerLayout;
 	private DrawerFragment mDrawerFragment;
@@ -141,7 +139,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		llTab = getViewById(R.id.ll_tabs);
 		CheckedTextView ctvGame = getViewById(R.id.ctv_game);
 		CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
-		CheckedTextView ctvEssay = getViewById(R.id.ctv_essay);
+		CheckedTextView ctvEssay = getViewById(R.id.ctv_post);
 		mCtvs = new CheckedTextView[INDEX_COUNT];
 		mCtvs[INDEX_GIFT] = ctvGift;
 		mCtvs[INDEX_GAME] = ctvGame;
@@ -252,8 +250,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mGameFragment != null) {
 			ft.hide(mGameFragment);
 		}
-		if (mEssayFragment != null) {
-			ft.hide(mEssayFragment);
+		if (mPostFragment != null) {
+			ft.hide(mPostFragment);
 		}
 	}
 
@@ -309,19 +307,19 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private void displayEssayUI() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		hideAllFragment(ft);
-		if (mEssayFragment == null) {
+		if (mPostFragment == null) {
 			// Activity被回收重建后查找
-			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_ESSAY);
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_POST);
 			if (f != null) {
-				mEssayFragment = (EssayFragment) f;
-				ft.show(mEssayFragment);
+				mPostFragment = (PostFragment) f;
+				ft.show(mPostFragment);
 			} else {
 				// 正常新建
-				mEssayFragment = EssayFragment.newInstance();
-				ft.add(R.id.fl_container, mEssayFragment, TAG_ESSAY);
+				mPostFragment = PostFragment.newInstance();
+				ft.add(R.id.fl_container, mPostFragment, TAG_POST);
 			}
 		} else {
-			ft.show(mEssayFragment);
+			ft.show(mPostFragment);
 		}
 		ft.commit();
 		mCurSelectedItem = INDEX_ESSAY;

@@ -35,6 +35,11 @@
 	<string name = "st_search_history_empty" >暂无搜索记录</string >
 	<string name = "st_search_history_hot_sub" >换一批</string >
 	<string name = "st_search_empty_hope" >求礼包</string >
+
+	<!-- 活动 -->
+	<string name = "st_index_post_text_working">进行中</string>
+	<string name = "st_index_post_text_finished">已结束</string>
+
 	<!-- 礼包状态 -->
 	<string name = "st_gift_or" >或</string >
 
@@ -58,7 +63,7 @@
 	<!-- 游戏状态 -->
 	<string name = "st_tabs_home_gift" >礼包</string >
 	<string name = "st_tabs_index_game" >游戏</string >
-	<string name = "st_tabs_index_essay" >活动</string >
+	<string name = "st_tabs_index_post" >活动</string >
 
 	<string name = "st_index_gift_all" >全部</string >
 	<string name = "st_index_gift_like" >猜你喜欢</string >

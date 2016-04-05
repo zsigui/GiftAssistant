@@ -31,11 +31,11 @@
 				android:checked = "false" />
 
 		<CheckedTextView
-				android:id = "@+id/ctv_essay"
+				android:id = "@+id/ctv_post"
 				android:gravity="center_horizontal"
 				style = "@style/CheckedTextNormal.Index"
 				android:drawableTop = "@drawable/selector_tab_index_game"
-				android:text = "@string/st_tabs_index_essay"
+				android:text = "@string/st_tabs_index_post"
 				android:checked = "false" />
 
 	</LinearLayout >

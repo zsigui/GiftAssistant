@@ -1,4 +1,4 @@
-package com.oplay.giftcool.ui.fragment.essay;
+package com.oplay.giftcool.ui.fragment.postbar;
 
 import android.os.Bundle;
 
@@ -9,10 +9,10 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
  *
  * Created by zsigui on 16-4-5.
  */
-public class EssayFragment extends BaseFragment {
+public class PostFragment extends BaseFragment {
 
-	public static EssayFragment newInstance() {
-		return new EssayFragment();
+	public static PostFragment newInstance() {
+		return new PostFragment();
 	}
 
 	@Override

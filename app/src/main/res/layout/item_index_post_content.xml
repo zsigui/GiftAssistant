@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "10dp"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:background = "@drawable/shape_rect_post_content_border" >
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			android:layout_width = "match_parent"
+			android:layout_height = "120dp"
+			android:layout_marginLeft = "@dimen/di_divider_height"
+			android:layout_marginRight = "@dimen/di_divider_height"
+			android:layout_marginTop = "@dimen/di_divider_height"
+			android:scaleType = "fitXY"
+			app:riv_border_width = "0dp"
+			android:src = "@drawable/pic_splash_2016"
+			app:riv_corner_radius_top_left = "@dimen/di_index_post_item_radius"
+			app:riv_corner_radius_top_right = "@dimen/di_index_post_item_radius"
+			app:riv_corner_radius_bottom_left = "0dp"
+			app:riv_corner_radius_bottom_right = "0dp"
+			app:riv_oval = "false" />
+
+	<TextView
+			android:id = "@+id/iv_post_state"
+			style = "@style/DefaultTextView.PostState"
+			android:background = "@drawable/ic_post_enabled"
+			android:text = "@string/st_index_post_text_working" />
+
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_footer"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_module_bigger_height"
+			android:layout_below = "@+id/iv_icon"
+			app:riv_border_width = "0dp"
+			android:src = "@color/co_white"
+			app:riv_corner_radius_top_left = "0dp"
+			app:riv_corner_radius_top_right = "0dp"
+			app:riv_corner_radius_bottom_left = "@dimen/di_index_post_item_radius"
+			app:riv_corner_radius_bottom_right = "@dimen/di_index_post_item_radius"
+			app:riv_oval = "false" />
+</RelativeLayout >

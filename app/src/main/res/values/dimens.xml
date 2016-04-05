@@ -123,6 +123,10 @@
 	<dimen name = "di_game_tag_padding_left_right" >0dp</dimen >
 	<dimen name = "di_game_tag_header_height" >180dp</dimen >
 
+	<!-- 主页-活动 -->
+	<dimen name = "di_index_post_gap_vertical">15dp</dimen>
+	<dimen name = "di_index_post_item_radius">8dp</dimen>
+
 	<!-- 礼包详情 页面 -->
 	<dimen name = "di_detail_header_margin_left" >14dp</dimen >
 	<!-- 个人设置 页面 -->

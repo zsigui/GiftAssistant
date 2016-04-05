@@ -214,6 +214,15 @@
 		<item name = "android:layout_centerVertical" >true</item >
 	</style >
 
+	<style name = "DefaultTextView.PostState" >
+		<item name = "android:textSize" >@dimen/di_text_size_small</item >
+		<item name = "android:textColor" >@color/co_white</item >
+		<item name = "android:gravity" >center_horizontal</item >
+		<item name = "android:paddingTop" >5dp</item >
+		<item name = "android:layout_alignParentRight" >true</item >
+		<item name = "android:layout_marginRight" >@dimen/di_list_item_gap_big</item >
+	</style >
+
 	<style name = "ButtonText" >
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >@dimen/di_btn_height</item >
