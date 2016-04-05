@@ -20,33 +20,33 @@
 	<dimen name = "di_icon_radius" >15dp</dimen >
 	<dimen name = "di_icon_radius_smaller" >10dp</dimen >
 	<dimen name = "di_icon_border_size" >1dp</dimen >
-	<dimen name = "di_icon_bigger_radius">15dp</dimen>
+	<dimen name = "di_icon_bigger_radius" >15dp</dimen >
 	<dimen name = "di_icon_bigger_diameter" >80dp</dimen >
 
 	<!-- 列表四周间隔 -->
-	<dimen name = "di_line_space_extra_normal">2dp</dimen>
-	<dimen name = "di_line_space_extra_big">4dp</dimen>
-	<dimen name = "di_list_item_gap_very_small">6dp</dimen>
-	<dimen name = "di_list_item_gap_small">8dp</dimen>
-	<dimen name = "di_list_item_gap_normal">12dp</dimen>
-	<dimen name = "di_list_item_gap_big">16dp</dimen>
+	<dimen name = "di_line_space_extra_normal" >2dp</dimen >
+	<dimen name = "di_line_space_extra_big" >4dp</dimen >
+	<dimen name = "di_list_item_gap_very_small" >6dp</dimen >
+	<dimen name = "di_list_item_gap_small" >8dp</dimen >
+	<dimen name = "di_list_item_gap_normal" >12dp</dimen >
+	<dimen name = "di_list_item_gap_big" >16dp</dimen >
 
 	<!-- 字体 -->
-	<dimen name = "di_text_size_very_small">10sp</dimen>
-	<dimen name = "di_text_size_small">12sp</dimen>
-	<dimen name = "di_text_size_normal">14sp</dimen>
-	<dimen name = "di_text_size_big">16sp</dimen>
+	<dimen name = "di_text_size_very_small" >10sp</dimen >
+	<dimen name = "di_text_size_small" >12sp</dimen >
+	<dimen name = "di_text_size_normal" >14sp</dimen >
+	<dimen name = "di_text_size_big" >16sp</dimen >
 
 	<!-- 游戏icon大小, 有2dp -->
 	<dimen name = "di_game_icon_layout_diameter" >74dp</dimen >
 	<dimen name = "di_game_icon_margin" >2dp</dimen >
 
 	<!-- 侧边栏 -->
-	<dimen name = "di_drawer_width">270dp</dimen>
-	<dimen name = "di_drawer_header_height">150dp</dimen>
-	<dimen name = "di_drawer_header_icon_diameter">55dp</dimen>
-	<dimen name = "di_drawer_header_icon_border_size">3dp</dimen>
-	<dimen name = "di_drawer_item_height">45dp</dimen>
+	<dimen name = "di_drawer_width" >270dp</dimen >
+	<dimen name = "di_drawer_header_height" >150dp</dimen >
+	<dimen name = "di_drawer_header_icon_diameter" >65dp</dimen >
+	<dimen name = "di_drawer_header_icon_border_size" >3dp</dimen >
+	<dimen name = "di_drawer_item_height" >45dp</dimen >
 
 	<!-- 主页 -->
 	<dimen name = "di_tab_index_bg_height" >55dp</dimen >
@@ -68,6 +68,10 @@
 
 	<dimen name = "di_index_module_gap" >7dp</dimen >
 
+	<dimen name = "di_btn_small_radius" >10dp</dimen >
+	<dimen name = "di_btn_small_padding_top_bottom" >0dp</dimen >
+	<dimen name = "di_btn_small_padding_left_right" >10dp</dimen >
+	<dimen name = "di_btn_small_height" >20dp</dimen >
 
 	<dimen name = "di_btn_radius" >14dp</dimen >
 	<dimen name = "di_btn_padding_top_bottom" >0dp</dimen >
@@ -106,8 +110,8 @@
 	<dimen name = "di_limit_item_height" >94dp</dimen >
 	<dimen name = "di_limit_margin_left" >4dp</dimen >
 	<dimen name = "di_timeline_point_diameter" >8dp</dimen >
-	<dimen name = "di_timeline_thickness">0.5dp</dimen>
-	<dimen name = "di_gift_limit_padding">4dp</dimen>
+	<dimen name = "di_timeline_thickness" >0.5dp</dimen >
+	<dimen name = "di_gift_limit_padding" >4dp</dimen >
 
 	<!-- 主页-游戏-精品 -->
 	<dimen name = "di_index_game_recommend_iv_height" >176dp</dimen >
@@ -134,14 +138,14 @@
 	<dimen name = "di_login_padding_left_right" >15dp</dimen >
 
 	<!-- 弹窗 -->
-	<dimen name = "di_dialog_title_padding_left">20dp</dimen>
-	<dimen name = "di_dialog_title_padding_top_bottom">10dp</dimen>
-	<dimen name = "di_dialog_content_padding">16dp</dimen>
-	<dimen name = "di_dialog_margin_left_right">16dp</dimen>
-	<dimen name = "di_dialog_content_item_padding_right">10dp</dimen>
-	<dimen name = "di_dialog_content_item_drawable_gap">4dp</dimen>
+	<dimen name = "di_dialog_title_padding_left" >20dp</dimen >
+	<dimen name = "di_dialog_title_padding_top_bottom" >10dp</dimen >
+	<dimen name = "di_dialog_content_padding" >16dp</dimen >
+	<dimen name = "di_dialog_margin_left_right" >16dp</dimen >
+	<dimen name = "di_dialog_content_item_padding_right" >10dp</dimen >
+	<dimen name = "di_dialog_content_item_drawable_gap" >4dp</dimen >
 
-	<dimen name = "di_dialog_welcome_content_width">220dp</dimen>
+	<dimen name = "di_dialog_welcome_content_width" >220dp</dimen >
 
 	<dimen name = "di_toast_bg_radius" >6dp</dimen >
 	<dimen name = "di_toast_bg_width" >280dp</dimen >

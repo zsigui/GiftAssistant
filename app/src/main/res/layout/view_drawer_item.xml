@@ -12,6 +12,8 @@
 			android:id = "@+id/nav_item_text"
 			style = "@style/NavDrawerItemText"
 			android:layout_toRightOf = "@+id/nav_item_icon"
+			android:textSize = "@dimen/di_text_size_normal"
+			android:textColor = "@color/co_common_text_main"
 			android:layout_centerVertical = "true" />
 
 	<TextView
@@ -28,13 +30,16 @@
 			android:visibility = "gone"
 			android:background = "@drawable/shape_hint_count_red" />
 
-	<ImageView
-			android:id = "@+id/nav_item_hint"
-			android:layout_width = "10dp"
-			android:layout_height = "10dp"
-			android:visibility = "gone"
+	<TextView
+			android:id = "@+id/nav_item_attend"
+			style = "@style/NavDrawerItemText"
+			android:layout_height = "@dimen/di_btn_small_height"
+			android:gravity = "center"
 			android:layout_centerVertical = "true"
 			android:layout_alignParentRight = "true"
 			android:layout_marginRight = "15dp"
-			android:src = "@drawable/shape_hint_count_red" />
+			android:textColor="@color/co_btn_red"
+			android:text="@string/st_drawer_tag_sign_in"
+			android:visibility="gone"
+			android:background="@drawable/shape_rect_btn_red_border"/>
 </RelativeLayout >

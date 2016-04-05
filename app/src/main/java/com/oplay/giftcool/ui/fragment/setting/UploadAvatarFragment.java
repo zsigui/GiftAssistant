@@ -98,7 +98,7 @@ public class UploadAvatarFragment extends BaseFragment {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         ImageLoader.getInstance().displayImage(AccountManager.getInstance().getUserInfo().avatar, ivAvatar,
-                Global.AVATAR_IMAGE_LOADER);
+                Global.getAvatarImgOptions());
     }
 
     @Override
@@ -120,7 +120,7 @@ public class UploadAvatarFragment extends BaseFragment {
     /**
      * 处理返回的信息
      */
-    private GalleryFinal.OnHanlderResultCallback mResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+    private GalleryFinal.OnHandlerResultCallback mResultCallback = new GalleryFinal.OnHandlerResultCallback() {
         @Override
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
             switch (reqeustCode) {
@@ -152,14 +152,22 @@ public class UploadAvatarFragment extends BaseFragment {
         }
     };
 
+    private long mLastClickTime;
+
     @Override
     public void onClick(View v) {
+        final long curTime = System.currentTimeMillis();
+        if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+            // 对于连续点击不做处理
+            return;
+        }
+        mLastClickTime = curTime;
         super.onClick(v);
         switch (v.getId()) {
             case R.id.rl_gallery:
                 // 从相册中去获取
 //                doPickPhotoFromGallery();
-                GalleryFinal.openGalleryMuti(REQ_ID_PHOTO_ALBUM, 5, mResultCallback);
+                GalleryFinal.openGalleryMulti(REQ_ID_PHOTO_ALBUM, 1, mResultCallback);
                 break;
             case R.id.rl_take_photo:
 //                String status = Environment.getExternalStorageState();
@@ -262,6 +270,8 @@ public class UploadAvatarFragment extends BaseFragment {
                     return;
                 }
                 reqData.avatar = generateImageStringParam(filePath);
+                // 图片解析出来后，将裁剪的冗余图片清空
+                GalleryFinal.cleanCacheFile();
                 mCall = Global.getNetEngine().modifyUserAvatar(new JsonReqBase<ReqModifyAvatar>(reqData));
                 mCall.enqueue(new Callback<JsonRespBase<ModifyAvatar>>() {
                     @Override
@@ -273,7 +283,7 @@ public class UploadAvatarFragment extends BaseFragment {
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 ImageLoader.getInstance().displayImage(
-                                        response.body().getData().avatar, ivAvatar, Global.AVATAR_IMAGE_LOADER);
+                                        response.body().getData().avatar, ivAvatar, Global.getAvatarImgOptions());
                                 UserModel model = AccountManager.getInstance().getUser();
                                 try {
                                     ImageLoader.getInstance().getDiskCache().remove(model.userInfo.avatar);

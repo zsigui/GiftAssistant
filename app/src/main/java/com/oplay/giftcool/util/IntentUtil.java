@@ -165,7 +165,7 @@ public class IntentUtil {
 	 */
 	public static void jumpEarnScore(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
-		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SCORE_TASK);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY);
 		context.startActivity(intent);
 	}
 

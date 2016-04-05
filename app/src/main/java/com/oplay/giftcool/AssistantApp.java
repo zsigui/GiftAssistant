@@ -155,7 +155,7 @@ public class AssistantApp extends Application {
                 .setIconBack(R.drawable.ic_bar_back)
                 .setFabNornalColor(getResources().getColor(R.color.co_btn_red))
                 .setFabPressedColor(getResources().getColor(R.color.co_btn_red_pressed))
-                .setPreviewBg(getResources().getDrawable(R.color.co_black))
+                .setPreviewBg(getResources().getDrawable(R.color.co_opacity_80))
                 .build();
         FunctionConfig config = new FunctionConfig.Builder()
                 .setEnableCamera(false)
@@ -295,7 +295,7 @@ public class AssistantApp extends Application {
             return;
         }
         try {
-            final DisplayImageOptions options = Global.IMAGE_OPTIONS;
+            final DisplayImageOptions options = Global.getDefaultImgOptions();
             final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
             final long maxAgeTimeInSeconds = 7 * 24 * 60 * 60;   // 7 days cache
             final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)

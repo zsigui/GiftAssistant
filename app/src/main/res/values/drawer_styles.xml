@@ -5,16 +5,16 @@
 		<item name = "android:layout_width" >match_parent</item >
 		<item name = "android:layout_height" >wrap_content</item >
 		<item name = "android:background" >@color/co_common_app_main_bg</item >
-		<item name = "android:orientation" >horizontal</item >
-		<item name = "android:paddingTop" >18dp</item >
-		<item name = "android:paddingBottom" >15dp</item >
-		<item name = "android:paddingLeft" >15dp</item >
+		<item name = "android:paddingTop" >30dp</item >
+		<item name = "android:paddingBottom" >30dp</item >
+		<item name = "android:paddingLeft" >20dp</item >
 		<item name = "android:paddingRight" >15dp</item >
 	</style >
 
 	<style name = "NavDrawerHeaderAvatar" >
-		<item name = "android:layout_width" >@dimen/di_drawer_header_icon_diameter</item >
-		<item name = "android:layout_height" >@dimen/di_drawer_header_icon_diameter</item >
+		<item name = "android:layout_width">@dimen/di_drawer_header_icon_diameter</item>
+		<item name = "android:layout_height">@dimen/di_drawer_header_icon_diameter</item>
+		<item name = "android:layout_marginRight">@dimen/di_list_item_gap_normal</item>
 		<item name = "android:scaleType" >centerCrop</item >
 	</style >
 
@@ -36,7 +36,7 @@
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >wrap_content</item >
 		<item name = "android:background" >@color/co_transparent</item >
-		<item name = "android:textSize" >14sp</item >
-		<item name = "android:textColor" >@color/co_common_text_main</item >
+		<item name = "android:textSize" >12sp</item >
+		<item name = "android:textColor" >@color/co_search_bar_hint</item >
 	</style >
 </resources >

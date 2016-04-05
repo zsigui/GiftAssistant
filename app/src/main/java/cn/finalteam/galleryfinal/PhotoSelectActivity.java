@@ -50,7 +50,6 @@ import cn.finalteam.galleryfinal.model.PhotoFolderInfo;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.permission.AfterPermissionGranted;
 import cn.finalteam.galleryfinal.permission.EasyPermissions;
-import cn.finalteam.galleryfinal.utils.ILogger;
 import cn.finalteam.galleryfinal.utils.PhotoTools;
 import cn.finalteam.galleryfinal.widget.FloatingActionButton;
 
@@ -147,7 +146,6 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
             mPhotoListAdapter = new PhotoListAdapter(this, mCurPhotoList, mSelectPhotoList, mScreenWidth);
             mGvPhotoList.setAdapter(mPhotoListAdapter);
 
-            ILogger.d("isMutiSelect = " + GalleryFinal.getFunctionConfig().isMutiSelect());
             if (GalleryFinal.getFunctionConfig().isMutiSelect()) {
                 mTvChooseCount.setVisibility(View.VISIBLE);
                 mFabOk.setVisibility(View.VISIBLE);
@@ -246,7 +244,7 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
                     break;
                 }
             }
-        } catch (Exception e){}
+        } catch (Exception ignored){}
 
         refreshAdapter();
     }

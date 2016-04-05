@@ -26,6 +26,7 @@ import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class GalleryFinal {
     private static ThemeConfig mThemeConfig;
     private static CoreConfig mCoreConfig;
 
-    private static OnHanlderResultCallback mCallback;
+    private static OnHandlerResultCallback mCallback;
     private static int mRequestCode;
 
     public static void init(CoreConfig coreConfig) {
@@ -86,7 +87,7 @@ public class GalleryFinal {
      * @param requestCode
      * @param callback
      */
-    public static void openGallerySingle(int requestCode, OnHanlderResultCallback callback) {
+    public static void openGallerySingle(int requestCode, OnHandlerResultCallback callback) {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             openGallerySingle(requestCode, config, callback);
@@ -105,7 +106,7 @@ public class GalleryFinal {
      * @param config
      * @param callback
      */
-    public static void openGallerySingle(int requestCode, FunctionConfig config, OnHanlderResultCallback callback) {
+    public static void openGallerySingle(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -142,11 +143,11 @@ public class GalleryFinal {
      * @param maxSize
      * @param callback
      */
-    public static void openGalleryMuti(int requestCode, int maxSize, OnHanlderResultCallback callback) {
+    public static void openGalleryMulti(int requestCode, int maxSize, OnHandlerResultCallback callback) {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             config.maxSize = maxSize;
-            openGalleryMuti(requestCode, config, callback);
+            openGalleryMulti(requestCode, config, callback);
         } else {
             if (callback != null) {
                 callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
@@ -162,7 +163,7 @@ public class GalleryFinal {
      * @param config
      * @param callback
      */
-    public static void openGalleryMuti(int requestCode, FunctionConfig config, OnHanlderResultCallback callback) {
+    public static void openGalleryMulti(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -215,7 +216,7 @@ public class GalleryFinal {
      * @param requestCode
      * @param callback
      */
-    public static void openCamera(int requestCode, OnHanlderResultCallback callback) {
+    public static void openCamera(int requestCode, OnHandlerResultCallback callback) {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             openCamera(requestCode, config, callback);
@@ -233,7 +234,7 @@ public class GalleryFinal {
      * @param config
      * @param callback
      */
-    public static void openCamera(int requestCode, FunctionConfig config, OnHanlderResultCallback callback) {
+    public static void openCamera(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -273,7 +274,7 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openCrop(int requestCode, String photoPath, OnHanlderResultCallback callback) {
+    public static void openCrop(int requestCode, String photoPath, OnHandlerResultCallback callback) {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             openCrop(requestCode, config, photoPath, callback);
@@ -293,7 +294,7 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openCrop(int requestCode, FunctionConfig config, String photoPath, OnHanlderResultCallback callback) {
+    public static void openCrop(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -346,7 +347,7 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openEdit(int requestCode, String photoPath, OnHanlderResultCallback callback) {
+    public static void openEdit(int requestCode, String photoPath, OnHandlerResultCallback callback) {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             openEdit(requestCode, config, photoPath, callback);
@@ -366,7 +367,7 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openEdit(int requestCode, FunctionConfig config, String photoPath, OnHanlderResultCallback callback) {
+    public static void openEdit(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -410,7 +411,72 @@ public class GalleryFinal {
     }
 
     /**
-     * 清楚缓存文件
+     * 打开图片预览界面
+     *
+     * @param selectedIndex 选择首次显示图片的下标，从0开始
+     * @param picsPath 待预览的图片地址字符串数组
+     * @return 同步处理操作的结果
+     */
+    public static int openMultiPhoto(int selectedIndex, String... picsPath) {
+        return openMultiPhoto(0x101, selectedIndex, null, null, picsPath);
+    }
+
+    /**
+     * 打开图片预览界面
+     *
+     * @param requestCode 请求码
+     * @param selectedIndex 选择首次显示图片的下标，从0开始
+     * @param config 预览的配置设置，如果已经设置了全局，可默认为null
+     * @param callback 异步执行返回
+     * @param picsPath 待预览的图片地址字符串数组
+     * @return 同步处理操作的结果
+     */
+    public static int openMultiPhoto(int requestCode, int selectedIndex, FunctionConfig config,
+                                      OnHandlerResultCallback callback, String... picsPath) {
+        if (mCoreConfig.getImageLoader() == null) {
+            ILogger.e("Please init GalleryFinal.");
+            if (callback != null) {
+                callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
+            }
+            return Error.RET_INIT_FAIL;
+        }
+
+        if (config == null && mGlobalFunctionConfig == null) {
+            if (callback != null) {
+                callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
+            }
+            return Error.RET_INIT_FAIL;
+        }
+
+        if (picsPath == null || picsPath.length == 0) {
+            if (callback != null) {
+                callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.photo_at_least));
+            }
+            return Error.RET_NO_SELECTED_PHOTO;
+        }
+
+        List<PhotoInfo> photoInfos = new ArrayList<>(picsPath.length);
+        for (String s : picsPath) {
+            PhotoInfo p = new PhotoInfo();
+            p.setPhotoId(s.hashCode());
+            p.setPhotoPath(s);
+            photoInfos.add(p);
+        }
+
+        mRequestCode = requestCode;
+        mCallback = callback;
+        mCurrentFunctionConfig = config;
+        Intent intent = new Intent(mCoreConfig.getContext(), PhotoPreviewActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(PhotoPreviewActivity.PHOTO_INDEX, selectedIndex);
+        intent.putExtra(PhotoPreviewActivity.PHOTO_LIST, (Serializable) photoInfos);
+        mCoreConfig.getContext().startActivity(intent);
+        return Error.SUCCESS;
+    }
+
+    /**
+     * 清除缓存文件
      */
     public static void cleanCacheFile() {
         if (mCurrentFunctionConfig != null && mCoreConfig.getEditPhotoCacheFolder() != null) {
@@ -429,21 +495,27 @@ public class GalleryFinal {
         return mRequestCode;
     }
 
-    public static OnHanlderResultCallback getCallback() {
+    public static OnHandlerResultCallback getCallback() {
         return mCallback;
+    }
+
+    public static abstract class Error {
+        public static final int SUCCESS = 0;
+        public static final int RET_INIT_FAIL = 0x101;
+        public static final int RET_NO_SELECTED_PHOTO = 0x102;
     }
 
     /**
      * 处理结果
      */
-    public static interface OnHanlderResultCallback {
+    public interface OnHandlerResultCallback {
         /**
          * 处理成功
          *
          * @param reqeustCode
          * @param resultList
          */
-        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList);
+        void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList);
 
         /**
          * 处理失败或异常
@@ -451,6 +523,6 @@ public class GalleryFinal {
          * @param requestCode
          * @param errorMsg
          */
-        public void onHanlderFailure(int requestCode, String errorMsg);
+        void onHanlderFailure(int requestCode, String errorMsg);
     }
 }

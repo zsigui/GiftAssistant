@@ -8,33 +8,51 @@
 			android:id = "@+id/iv_icon"
 			style = "@style/NavDrawerHeaderAvatar"
 			android:src = "@drawable/ic_avatar_default"
+			android:layout_centerVertical = "true"
 			app:riv_border_color = "@color/co_white"
 			app:riv_border_width = "@dimen/di_drawer_header_icon_border_size"
 			app:riv_oval = "true" />
 
 	<TextView
+			android:id = "@+id/tv_un_login"
+			style = "@style/NavDrawerItemText"
+			android:textColor = "@color/co_white"
+			android:textSize = "@dimen/di_text_size_big"
+			android:layout_centerVertical = "true"
+			android:visibility = "gone"
+			android:text = "@string/st_drawer_header_un_login"
+			android:layout_toRightOf = "@+id/iv_icon" />
+
+	<TextView
 			android:id = "@+id/tv_nick"
 			style = "@style/NavDrawerItemText"
 			android:textColor = "@color/co_white"
-			android:layout_marginTop = "8dp"
-			android:textSize = "16sp"
-			android:layout_below = "@+id/iv_icon" />
+			android:textSize = "@dimen/di_text_size_big"
+			android:layout_marginTop = "@dimen/di_line_space_extra_normal"
+			android:layout_toRightOf = "@+id/iv_icon" />
 
 	<TextView
 			android:id = "@+id/tv_name"
 			style = "@style/NavDrawerItemText"
-			android:textColor = "@color/co_search_bar_hint"
-			android:textSize = "12sp"
-			android:layout_marginTop = "4dp"
+			android:layout_toRightOf = "@+id/iv_icon"
+			android:layout_marginTop = "@dimen/di_line_space_extra_big"
 			android:layout_below = "@+id/tv_nick" />
 
-	<ImageView
-			android:id = "@+id/iv_edit"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:contentDescription = "@null"
-			android:layout_alignParentRight = "true"
-			android:layout_alignBottom = "@+id/tv_name"
-			android:scaleType = "centerInside"
-			android:src = "@drawable/ic_edit" />
+	<TextView
+			android:id = "@+id/tv_score"
+			style = "@style/NavDrawerItemText"
+			android:drawableLeft = "@drawable/ic_drawer_score"
+			android:layout_below = "@+id/tv_name"
+			android:layout_toRightOf = "@+id/iv_icon"
+			android:drawablePadding = "@dimen/di_line_space_extra_normal"
+			android:layout_marginTop = "@dimen/di_list_item_gap_small" />
+
+	<TextView
+			android:id = "@+id/tv_bean"
+			style = "@style/NavDrawerItemText"
+			android:drawableLeft = "@drawable/ic_drawer_bean"
+			android:layout_alignTop = "@+id/tv_score"
+			android:layout_toRightOf = "@+id/tv_score"
+			android:drawablePadding = "@dimen/di_line_space_extra_normal"
+			android:layout_marginLeft = "@dimen/di_list_item_gap_big" />
 </RelativeLayout >

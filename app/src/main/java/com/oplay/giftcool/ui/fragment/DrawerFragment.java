@@ -40,12 +40,15 @@ public class DrawerFragment extends BaseFragment {
 	private RelativeLayout rlHeader;
 	private TextView tvNick;
 	private TextView tvName;
+	private TextView tvUnLogin;
 	private ImageView ivIcon;
 	private RecyclerView rvContent;
 	private DrawerLayout drawerLayout;
 	private SparseArray<DrawerModel> mData;
 	private DrawerAdapter mAdapter;
-	private ImageView ivEdit;
+	private TextView tvScore;
+	private TextView tvBean;
+	private RelativeLayout rlFooter;
 
 	public static DrawerFragment newInstance(DrawerLayout drawerLayout) {
 		DrawerFragment fragment = new DrawerFragment();
@@ -57,16 +60,20 @@ public class DrawerFragment extends BaseFragment {
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.fragment_drawer);
 		rlHeader = getViewById(R.id.drawer_header);
+		rlFooter = getViewById(R.id.drawer_footer);
+		tvUnLogin = getViewById(R.id.tv_un_login);
 		tvNick = getViewById(R.id.tv_nick);
 		tvName = getViewById(R.id.tv_name);
 		ivIcon = getViewById(R.id.iv_icon);
 		rvContent = getViewById(R.id.drawer_content);
-		ivEdit = getViewById(R.id.iv_edit);
+		tvScore = getViewById(R.id.tv_score);
+		tvBean = getViewById(R.id.tv_bean);
 	}
 
 	@Override
 	protected void setListener() {
 		rlHeader.setOnClickListener(this);
+		rlFooter.setOnClickListener(this);
 		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
@@ -94,9 +101,11 @@ public class DrawerFragment extends BaseFragment {
 		if (!AccountManager.getInstance().isLogin()) {
 			ivIcon.setImageResource(R.drawable.ic_avator_unlogin);
 			ivIcon.setTag("");
-			tvNick.setText("点击注册/登录");
+			tvNick.setText("");
 			tvName.setText("");
-			ivEdit.setVisibility(View.GONE);
+			tvUnLogin.setVisibility(View.VISIBLE);
+			tvScore.setVisibility(View.GONE);
+			tvBean.setVisibility(View.GONE);
 
 		} else {
 			String nick;
@@ -112,7 +121,11 @@ public class DrawerFragment extends BaseFragment {
 			}
 			tvNick.setText(nick);
 			tvName.setText(name);
-			ivEdit.setVisibility(View.VISIBLE);
+			tvScore.setVisibility(View.VISIBLE);
+			tvBean.setVisibility(View.VISIBLE);
+			tvUnLogin.setVisibility(View.GONE);
+			tvScore.setText(String.valueOf(user.score));
+			tvBean.setText(String.valueOf(user.bean));
 			ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());
 		}
 	}
@@ -128,9 +141,12 @@ public class DrawerFragment extends BaseFragment {
 				case R.id.drawer_header:
 					IntentUtil.jumpLoginNoToast(context);
 					break;
-				case KeyConfig.TYPE_ID_SETTING:
+				case R.id.drawer_footer:
 					IntentUtil.jumpSetting(context);
 					break;
+//				case KeyConfig.TYPE_ID_SETTING:
+//					IntentUtil.jumpSetting(context);
+//					break;
 				case KeyConfig.TYPE_ID_DOWNLOAD:
 					IntentUtil.jumpDownloadManager(context, false);
 					break;
@@ -143,13 +159,16 @@ public class DrawerFragment extends BaseFragment {
 				case R.id.drawer_header:
 					IntentUtil.jumpUserInfo(context);
 					break;
+				case R.id.drawer_footer:
+					IntentUtil.jumpSetting(context);
+					break;
 				case KeyConfig.TYPE_ID_MY_GIFT_CODE:
 					IntentUtil.jumpMyGift(context);
 					break;
 				case KeyConfig.TYPE_ID_WALLET:
 					IntentUtil.jumpMyWallet(context);
 					break;
-				case KeyConfig.TYPE_ID_SCORE_TASK:
+				case KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY:
 					IntentUtil.jumpEarnScore(context);
 					break;
 				case KeyConfig.TYPE_ID_MSG:
@@ -159,9 +178,9 @@ public class DrawerFragment extends BaseFragment {
 					IntentUtil.jumpMyAttention(context);
 					break;
 				// 与登录无关
-				case KeyConfig.TYPE_ID_SETTING:
-					IntentUtil.jumpSetting(context);
-					break;
+//				case KeyConfig.TYPE_ID_SETTING:
+//					IntentUtil.jumpSetting(context);
+//					break;
 				case KeyConfig.TYPE_ID_DOWNLOAD:
 					IntentUtil.jumpDownloadManager(context, false);
 					break;
@@ -191,22 +210,27 @@ public class DrawerFragment extends BaseFragment {
 	private ArrayList<DrawerModel> initDrawerItem() {
 		SparseArray<DrawerModel> modelArray = new SparseArray<>();
 		modelArray.put(KeyConfig.TYPE_ID_MY_GIFT_CODE,
-				new DrawerModel(KeyConfig.TYPE_ID_MY_GIFT_CODE, R.drawable.ic_drawer_gift, "我的礼包", this));
+				new DrawerModel(KeyConfig.TYPE_ID_MY_GIFT_CODE, R.drawable.ic_drawer_gift,
+						getResources().getString(R.string.st_drawer_my_gift), this));
 		modelArray.put(KeyConfig.TYPE_ID_WALLET,
-				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet, "我的钱包", this));
-		modelArray.put(KeyConfig.TYPE_ID_SCORE_TASK,
-				new DrawerModel(KeyConfig.TYPE_ID_SCORE_TASK, R.drawable.ic_drawer_score_task, "赚金币", this));
+				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet,
+						getResources().getString(R.string.st_drawer_my_wallet), this));
+		modelArray.put(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY,
+				new DrawerModel(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, R.drawable.ic_drawer_sign_id_everyday,
+						getResources().getString(R.string.st_drawer_sign_in_everyday), this));
 		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
-				"消息中心", this));
+				getResources().getString(R.string.st_drawer_msg), this));
 		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
-				.ic_drawer_my_attention, "我的关注", this));
+				.ic_drawer_my_attention, getResources().getString(R.string.st_drawer_my_attention), this));
 		if (AssistantApp.getInstance().isAllowDownload()) {
-			DrawerModel dw = new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download, "下载管理", this);
+			DrawerModel dw = new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download,
+					getResources().getString(R.string.st_drawer_download), this);
 			dw.count = ApkDownloadManager.getInstance(getContext()).getEndOfPaused();
 			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD, dw);
 		}
-		modelArray.put(KeyConfig.TYPE_ID_SETTING,
-				new DrawerModel(KeyConfig.TYPE_ID_SETTING, R.drawable.ic_drawer_setting, "设置", this));
+//		modelArray.put(KeyConfig.TYPE_ID_SETTING,
+//				new DrawerModel(KeyConfig.TYPE_ID_SETTING, R.drawable.ic_drawer_setting,
+//						getResources().getString(R.string.st_drawer_setting), this));
 		mData = modelArray;
 		ArrayList<DrawerModel> result = new ArrayList<>();
 		for (int i = 0; i < mData.size(); i++) {
@@ -219,8 +243,11 @@ public class DrawerFragment extends BaseFragment {
 	 * 更新侧边栏提示状态
 	 */
 	public void updateCount(int key, int count) {
-		if (mData == null || count < -1)
+		if (mData == null)
 			return;
+		if (count < 0) {
+			count = 0;
+		}
 		DrawerModel m = mData.get(key);
 		if (m != null) {
 			m.count = count;

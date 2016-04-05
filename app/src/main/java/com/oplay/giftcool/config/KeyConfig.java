@@ -23,7 +23,7 @@ public class KeyConfig {
 	public static final int TYPE_ID_MY_GIFT_CODE = 0x101;
 	public static final int TYPE_ID_MY_ATTENTION = 0x102;
 	public static final int TYPE_ID_WALLET = 0x103;
-	public static final int TYPE_ID_SCORE_TASK = 0x104;
+	public static final int TYPE_ID_SIGN_IN_EVERYDAY = 0x104;
 	public static final int TYPE_ID_MSG = 0x105;
 	public static final int TYPE_ID_DOWNLOAD = 0x106;
 	public static final int TYPE_ID_SETTING = 0x107;

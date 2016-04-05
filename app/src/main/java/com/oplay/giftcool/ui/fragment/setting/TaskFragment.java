@@ -13,7 +13,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -91,10 +90,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
         ScoreManager.getInstance().setInWorking(true);
         AccountManager.getInstance().updatePartUserInfo();
 
-        // 打开任务界面，取消红点
-        if (MainActivity.sGlobalHolder != null) {
-            MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
-        }
     }
 
     @Override

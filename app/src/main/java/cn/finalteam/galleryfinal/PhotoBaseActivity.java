@@ -193,7 +193,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     }
 
     protected void resultData(ArrayList<PhotoInfo> photoList) {
-        GalleryFinal.OnHanlderResultCallback callback = GalleryFinal.getCallback();
+        GalleryFinal.OnHandlerResultCallback callback = GalleryFinal.getCallback();
         int requestCode = GalleryFinal.getRequestCode();
         if (callback != null) {
             if ( photoList != null && photoList.size() > 0 ) {
@@ -206,7 +206,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     }
 
     protected void resultFailureDelayed(String errormsg, boolean delayFinish) {
-        GalleryFinal.OnHanlderResultCallback callback = GalleryFinal.getCallback();
+        GalleryFinal.OnHandlerResultCallback callback = GalleryFinal.getCallback();
         int requestCode = GalleryFinal.getRequestCode();
         if ( callback != null ) {
             callback.onHanlderFailure(requestCode, errormsg);
@@ -219,7 +219,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     }
 
     protected void resultFailure(String errormsg, boolean delayFinish) {
-        GalleryFinal.OnHanlderResultCallback callback = GalleryFinal.getCallback();
+        GalleryFinal.OnHandlerResultCallback callback = GalleryFinal.getCallback();
         int requestCode = GalleryFinal.getRequestCode();
         if ( callback != null ) {
             callback.onHanlderFailure(requestCode, errormsg);

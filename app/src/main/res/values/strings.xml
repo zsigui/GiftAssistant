@@ -12,8 +12,21 @@
 
 	<string name = "st_title_stress" >▌</string >
 	<!-- 侧边栏 -->
-	<string name = "st_drawer_open" >打开</string >
-	<string name = "st_drawer_close" >关闭</string >
+	<string name = "st_drawer_text_open" >打开</string >
+	<string name = "st_drawer_text_close" >关闭</string >
+	<string name = "st_drawer_tag_sign_in" >签到</string>
+	<string name = "st_drawer_tag_has_signed" >已签</string>
+
+	<string name = "st_drawer_header_un_login" >点击注册/登录</string>
+
+	<string name = "st_drawer_my_gift" >我的礼包</string>
+	<string name = "st_drawer_my_wallet" >我的钱包</string>
+	<string name = "st_drawer_my_attention" >我的关注</string>
+	<string name = "st_drawer_sign_in_everyday" >每日签到</string>
+	<string name = "st_drawer_msg" >消息中心</string>
+	<string name = "st_drawer_download" >下载管理</string>
+	<string name = "st_drawer_setting" >设置</string>
+
 	<!--礼包 -->
 	<string name = "st_search_hint" >搜索游戏和礼包</string >
 	<string name = "st_search_history_clear_title" >搜索记录</string >
@@ -45,6 +58,7 @@
 	<!-- 游戏状态 -->
 	<string name = "st_tabs_home_gift" >礼包</string >
 	<string name = "st_tabs_index_game" >游戏</string >
+	<string name = "st_tabs_index_essay" >活动</string >
 
 	<string name = "st_index_gift_all" >全部</string >
 	<string name = "st_index_gift_like" >猜你喜欢</string >

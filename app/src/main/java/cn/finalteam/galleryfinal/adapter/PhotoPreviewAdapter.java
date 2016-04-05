@@ -1,7 +1,6 @@
 package cn.finalteam.galleryfinal.adapter;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +42,10 @@ public class PhotoPreviewAdapter extends ViewHolderRecyclingPagerAdapter<PhotoPr
         if (photoInfo != null) {
             path = photoInfo.getPhotoPath();
         }
-        holder.mImageView.setImageResource(R.drawable.ic_gf_default_photo);
-        Drawable defaultDrawable = mActivity.getResources().getDrawable(R.drawable.ic_gf_default_photo);
-        GalleryFinal.getCoreConfig().getImageLoader().displayImage(mActivity, path, holder.mImageView, defaultDrawable, mDisplayMetrics.widthPixels/2, mDisplayMetrics.heightPixels/2);
+//        holder.mImageView.setImageResource(R.drawable.ic_gf_default_photo);
+//        Drawable defaultDrawable = mActivity.getResources().getDrawable(R.drawable.ic_gf_default_photo);
+        GalleryFinal.getCoreConfig().getImageLoader().displayImage(mActivity, path, holder.mImageView, null,
+                mDisplayMetrics.widthPixels/2, mDisplayMetrics.heightPixels/2);
     }
 
     static class PreviewViewHolder extends ViewHolderRecyclingPagerAdapter.ViewHolder{

@@ -5,8 +5,7 @@
 
 	<ImageView
 			android:id = "@+id/iv_icon"
-			style = "@style/DefaultImageView.Score"
-			android:src = "@drawable/ic_task_lottery" />
+			style = "@style/DefaultImageView.Score" />
 
 	<TextView
 			android:id = "@+id/tv_name"
@@ -16,8 +15,7 @@
 			android:layout_toLeftOf = "@+id/btn_todo"
 			android:layout_toRightOf = "@+id/iv_icon"
 			android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
-			android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
-			android:text = "新版本升级" />
+			android:paddingRight = "@dimen/di_index_list_item_progress_padding_right" />
 
 	<TextView
 			style = "@style/DefaultTextView.ItemSubTitle"
@@ -29,8 +27,7 @@
 			android:layout_toLeftOf = "@+id/btn_todo"
 			android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
 			android:singleLine = "false"
-			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
-			android:text = "分享礼包/活动，每次前2次分享可获得10金币" />
+			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal" />
 
 	<TextView
 			android:id = "@+id/btn_todo"
@@ -63,7 +60,6 @@
 			android:id = "@+id/st_score"
 			style = "@style/DefaultTextView.Score"
 			android:layout_toRightOf = "@+id/tv_reward_title"
-			android:layout_below = "@+id/divider"
-			android:text = "+10" />
+			android:layout_below = "@+id/divider"/>
 
 </RelativeLayout >

@@ -24,6 +24,7 @@ import cn.finalteam.galleryfinal.widget.GFViewPager;
 public class PhotoPreviewActivity extends PhotoBaseActivity {
 
     static final String PHOTO_LIST = "photo_list";
+    static final String PHOTO_INDEX = "photo_index";
 
 //    private RelativeLayout mTitleBar;
 //    private ImageView mIvBack;
@@ -52,10 +53,15 @@ public class PhotoPreviewActivity extends PhotoBaseActivity {
             setTheme();
 
             mPhotoList = (List<PhotoInfo>) getIntent().getSerializableExtra(PHOTO_LIST);
+            final int index = getIntent().getIntExtra(PHOTO_INDEX, 0);
             mPhotoPreviewAdapter = new PhotoPreviewAdapter(this, mPhotoList);
             mVpPager.setAdapter(mPhotoPreviewAdapter);
             mTab.setViewPager(mVpPager);
-            mVpPager.setCurrentItem(0);
+            if (index < mPhotoList.size()) {
+                mVpPager.setCurrentItem(index);
+            } else {
+                mVpPager.setCurrentItem(mPhotoList.size() - 1);
+            }
         }
     }
 

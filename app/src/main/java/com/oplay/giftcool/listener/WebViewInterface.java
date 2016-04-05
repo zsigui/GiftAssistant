@@ -23,6 +23,8 @@ import com.socks.library.KLog;
 
 import java.util.Observable;
 
+import cn.finalteam.galleryfinal.GalleryFinal;
+
 /**
  * Created by zsigui on 16-1-14.
  */
@@ -221,4 +223,25 @@ public class WebViewInterface extends Observable {
 			return RET_INTERNAL_ERR;
 		}
 	}
+
+	/**
+	 * 显示多张预览图片
+	 * @param selectedIndex 选择最初显示图片的下标，从0开始
+	 * @param picsPath 传入图片地址的字符串数组
+	 */
+	@JavascriptInterface
+	public int showMultiPic(int selectedIndex, String... picsPath) {
+		int ret = GalleryFinal.openMultiPhoto(selectedIndex, picsPath);
+		switch (ret) {
+			case GalleryFinal.Error.RET_INIT_FAIL:
+				return RET_INTERNAL_ERR;
+			case GalleryFinal.Error.RET_NO_SELECTED_PHOTO:
+				return RET_PARAM_ERR;
+			case GalleryFinal.Error.SUCCESS:
+				return RET_SUCCESS;
+			default:
+				return RET_OTHER_ERR;
+		}
+	}
+
 }

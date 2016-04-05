@@ -35,6 +35,7 @@ import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
+import com.oplay.giftcool.ui.fragment.essay.EssayFragment;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
@@ -53,20 +54,26 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private static final String TAG_EXIT = "com.oplay.giftcool.MainActivity.exit";
 
-	private final String TAG_GIFT = GiftFragment.class.getSimpleName();
-	private final String TAG_GAME = GameFragment.class.getSimpleName();
-	private final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
+	final String TAG_GIFT = GiftFragment.class.getSimpleName();
+	final String TAG_GAME = GameFragment.class.getSimpleName();
+	final String TAG_ESSAY = EssayFragment.class.getSimpleName();
+	final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
 
+	final int INDEX_COUNT = 3;
+	final int INDEX_DEFAULT = -1;
+	// 需要按顺序 0...n
+	final int INDEX_GIFT = 0;
+	final int INDEX_GAME = 1;
+	final int INDEX_ESSAY = 2;
 
-	public static final int INDEX_DEFAULT = -1;
-	public static final int INDEX_GIFT = 0;
-	public static final int INDEX_GAME = 1;
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
 	// 判断是否今日首次打开APP
 	public static boolean sIsTodayFirstOpen = false;
 	public static boolean sIsTodayFirstOpenForBroadcast = false;
+
 	private long mLastClickTime = 0;
+	private int mCurSelectedItem = INDEX_DEFAULT;
 
 	//是否已经显示过更新提示
 	private boolean mHasShowUpdate = false;
@@ -80,10 +87,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
+	private EssayFragment mEssayFragment;
 	// 当前选项卡下标
 	private DrawerLayout mDrawerLayout;
 	private DrawerFragment mDrawerFragment;
-	private int mCurSelectedItem = INDEX_DEFAULT;
 
 	private void initHandler() {
 		if (mHandler == null) {
@@ -106,7 +113,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private void createDrawer() {
 		mDrawerLayout = getViewById(R.id.drawer_layout);
 		mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.string.st_drawer_open, R.string.st_drawer_close));
+				R.string.st_drawer_text_open, R.string.st_drawer_text_close));
 		// 考虑onSaveInstanceState造成的叠加问题
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mDrawerFragment == null) {
@@ -134,9 +141,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		llTab = getViewById(R.id.ll_tabs);
 		CheckedTextView ctvGame = getViewById(R.id.ctv_game);
 		CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
-		mCtvs = new CheckedTextView[2];
-		mCtvs[0] = ctvGift;
-		mCtvs[1] = ctvGame;
+		CheckedTextView ctvEssay = getViewById(R.id.ctv_essay);
+		mCtvs = new CheckedTextView[INDEX_COUNT];
+		mCtvs[INDEX_GIFT] = ctvGift;
+		mCtvs[INDEX_GAME] = ctvGame;
+		mCtvs[INDEX_ESSAY] = ctvEssay;
 		if (!AssistantApp.getInstance().isAllowDownload()) {
 			llTab.setVisibility(View.GONE);
 		}
@@ -162,15 +171,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			public void run() {
 				if (AccountManager.getInstance().isLogin()) {
 					if (AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
-						updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
+						updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 1);
 					} else {
-						updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, -1);
+						updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 0);
 					}
 					UserInfo user = AccountManager.getInstance().getUserInfo();
 					tvGiftCount.setText(String.valueOf(user.giftCount));
 					ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 				} else {
-					updateHintState(KeyConfig.TYPE_ID_SCORE_TASK, 0);
+					updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 0);
 					ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 					ivProfile.setTag("");
 					tvGiftCount.setText("0");
@@ -219,10 +228,32 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		mCtvs[position].setChecked(true);
 		mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
-		if (position == INDEX_GAME) {
-			displayGameUI();
-		} else {
-			displayGiftUI();
+		switch (position) {
+			case INDEX_ESSAY:
+				displayEssayUI();
+				break;
+			case INDEX_GAME:
+				displayGameUI();
+				break;
+			case INDEX_GIFT:
+			default:
+				displayGiftUI();
+				break;
+		}
+	}
+
+	/**
+	 * 隐藏所有的Fragment
+	 */
+	private void hideAllFragment(FragmentTransaction ft) {
+		if (mGiftFragment != null) {
+			ft.hide(mGiftFragment);
+		}
+		if (mGameFragment != null) {
+			ft.hide(mGameFragment);
+		}
+		if (mEssayFragment != null) {
+			ft.hide(mEssayFragment);
 		}
 	}
 
@@ -231,9 +262,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 */
 	private void displayGameUI() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		if (mGiftFragment != null) {
-			ft.hide(mGiftFragment);
-		}
+		hideAllFragment(ft);
 		if (mGameFragment == null) {
 			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
@@ -257,9 +286,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 */
 	private void displayGiftUI() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		if (mGameFragment != null) {
-			ft.hide(mGameFragment);
-		}
+		hideAllFragment(ft);
 		if (mGiftFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
 			if (f != null) {
@@ -274,6 +301,30 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		ft.commit();
 		mCurSelectedItem = INDEX_GIFT;
+	}
+
+	/**
+	 * 显示活动模块
+	 */
+	private void displayEssayUI() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft);
+		if (mEssayFragment == null) {
+			// Activity被回收重建后查找
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_ESSAY);
+			if (f != null) {
+				mEssayFragment = (EssayFragment) f;
+				ft.show(mEssayFragment);
+			} else {
+				// 正常新建
+				mEssayFragment = EssayFragment.newInstance();
+				ft.add(R.id.fl_container, mEssayFragment, TAG_ESSAY);
+			}
+		} else {
+			ft.show(mEssayFragment);
+		}
+		ft.commit();
+		mCurSelectedItem = INDEX_ESSAY;
 	}
 
 	/**
@@ -395,9 +446,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if (count < -1) {
-					return;
-				}
 				int val = mHintCount.get(key, 0);
 				if (val == 0) {
 					// 原先不存在该键值

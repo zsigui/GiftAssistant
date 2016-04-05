@@ -11,15 +11,25 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.DrawerModel;
 
 /**
  * Created by zsigui on 16-1-21.
  */
-public class DrawerAdapter extends BaseRVAdapter<DrawerModel>{
+public class DrawerAdapter extends BaseRVAdapter<DrawerModel> {
+
+	final String TEXT_ATTEND;
+	final String TEXT_HAS_ATTENDED;
+	final int COLOR_ATTEND;
+	final int COLOR_HAS_ATTENDED;
 
 	public DrawerAdapter(Context context) {
 		super(context);
+		TEXT_ATTEND = context.getResources().getString(R.string.st_drawer_tag_sign_in);
+		TEXT_HAS_ATTENDED = context.getResources().getString(R.string.st_drawer_tag_has_signed);
+		COLOR_ATTEND = context.getResources().getColor(R.color.co_btn_red);
+		COLOR_HAS_ATTENDED = context.getResources().getColor(R.color.co_btn_grey);
 	}
 
 	@Override
@@ -33,35 +43,49 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel>{
 		DrawerItemHolder drawerItemHolder = (DrawerItemHolder) holder;
 		drawerItemHolder.tvName.setText(item.name);
 		drawerItemHolder.ivIcon.setImageResource(item.icon);
-		if (item.count == 0) {
-			drawerItemHolder.tvCount.setVisibility(View.GONE);
-			drawerItemHolder.ivHint.setVisibility(View.GONE);
-		} else if (item.count == -1) {
-			drawerItemHolder.tvCount.setVisibility(View.GONE);
-			drawerItemHolder.ivHint.setVisibility(View.VISIBLE);
-		} else {
-			drawerItemHolder.tvCount.setVisibility(View.VISIBLE);
-			drawerItemHolder.ivHint.setVisibility(View.GONE);
-			drawerItemHolder.tvCount.setText(String.valueOf(item.count));
+		switch (item.count) {
+			case 0:
+				drawerItemHolder.tvCount.setVisibility(View.GONE);
+				if(item.id == KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY) {
+					drawerItemHolder.tvAttend.setText(TEXT_ATTEND);
+					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_red_border);
+					drawerItemHolder.tvAttend.setTextColor(COLOR_ATTEND);
+					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
+				} else {
+					drawerItemHolder.tvAttend.setVisibility(View.GONE);
+				}
+				break;
+			default:
+				if (item.id == KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY) {
+					drawerItemHolder.tvAttend.setText(TEXT_HAS_ATTENDED);
+					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_grey_border);
+					drawerItemHolder.tvAttend.setTextColor(COLOR_HAS_ATTENDED);
+					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
+					drawerItemHolder.tvCount.setVisibility(View.GONE);
+				} else {
+					drawerItemHolder.tvAttend.setVisibility(View.GONE);
+					drawerItemHolder.tvCount.setVisibility(View.VISIBLE);
+					drawerItemHolder.tvCount.setText(String.valueOf(item.count));
+				}
+				break;
 		}
 		drawerItemHolder.itemView.setId(item.id);
 		drawerItemHolder.itemView.setOnClickListener(item.listener);
 	}
-
 
 	public class DrawerItemHolder extends BaseRVHolder {
 
 		private TextView tvName;
 		private ImageView ivIcon;
 		private TextView tvCount;
-		private ImageView ivHint;
+		private TextView tvAttend;
 
 		public DrawerItemHolder(View itemView) {
 			super(itemView);
 			tvName = getViewById(R.id.nav_item_text);
 			ivIcon = getViewById(R.id.nav_item_icon);
 			tvCount = getViewById(R.id.nav_item_count);
-			ivHint = getViewById(R.id.nav_item_hint);
+			tvAttend = getViewById(R.id.nav_item_attend);
 		}
 	}
 }
