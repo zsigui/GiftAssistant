@@ -63,5 +63,14 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements O
 
 	@Override
 	public void release() {
+		if (mData != null) {
+			mData = null;
+		}
+		if (mListener != null) {
+			mListener = null;
+		}
+		if (mContext != null) {
+			mContext = null;
+		}
 	}
 }

@@ -79,9 +79,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private LinearLayout llTab;
 	private CheckedTextView[] mCtvs;
 
+	// 顶部导航栏
+	private SearchLayout mSearchLayout;
+	private LinearLayout llGiftCount;
 	private ImageView ivProfile;
 	private ImageView ivHint;
 	private TextView tvGiftCount;
+	private TextView tvTitle;
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
 	private GameFragment mGameFragment;
@@ -152,14 +156,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
-		SearchLayout searchLayout = getViewById(toolbar, R.id.sl_search);
-		searchLayout.setCanGetFocus(false);
-		searchLayout.setOnClickListener(this);
+		mSearchLayout = getViewById(toolbar, R.id.sl_search);
+		mSearchLayout.setCanGetFocus(false);
+		mSearchLayout.setOnClickListener(this);
 		ivProfile = getViewById(toolbar, R.id.iv_profile);
 		ivProfile.setOnClickListener(this);
 		tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
 		ivHint = getViewById(R.id.iv_hint);
-		getViewById(R.id.ll_gift_count).setOnClickListener(this);
+		tvTitle = getViewById(R.id.tv_title);
+		llGiftCount = getViewById(R.id.ll_gift_count);
+		llGiftCount.setOnClickListener(this);
 	}
 
 	private void updateToolBar() {
@@ -228,16 +234,25 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
 		switch (position) {
 			case INDEX_ESSAY:
+				showToolbarSearch(false);
 				displayEssayUI();
 				break;
 			case INDEX_GAME:
+				showToolbarSearch(true);
 				displayGameUI();
 				break;
 			case INDEX_GIFT:
 			default:
+				showToolbarSearch(true);
 				displayGiftUI();
 				break;
 		}
+	}
+
+	private void showToolbarSearch(boolean showSearch) {
+		tvTitle.setVisibility(showSearch ? View.GONE : View.VISIBLE);
+		mSearchLayout.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+		llGiftCount.setVisibility(showSearch ? View.VISIBLE : View.GONE);
 	}
 
 	/**

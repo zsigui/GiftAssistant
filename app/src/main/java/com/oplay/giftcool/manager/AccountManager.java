@@ -470,7 +470,7 @@ public class AccountManager implements OnFinishListener {
     /**
      * 通知退出登录的网络请求声明
      */
-    private Call<Void> mCallLogout;
+    private Call<JsonRespBase<Void>> mCallLogout;
 
     /**
      * 登出当前账号，会通知服务器并刷新整个页面
@@ -488,18 +488,22 @@ public class AccountManager implements OnFinishListener {
                 } else {
                     mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
                 }
-                mCallLogout.enqueue(new Callback<Void>() {
+                mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
                         if (AppDebugConfig.IS_FRAG_DEBUG) {
-                            KLog.e(response == null ? "logout response null" : response.code());
+                            KLog.d(AppDebugConfig.TAG_MANAGER, response == null ?
+                                    "logout response null" : "logout " + response.code());
+                        }
+                        if (response != null && response.isSuccessful()) {
+                            KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "logout resp null" : response.errorBody());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         if (AppDebugConfig.IS_FRAG_DEBUG) {
-                            KLog.e(t);
+                            KLog.d(AppDebugConfig.TAG_MANAGER, t);
                         }
                     }
                 });

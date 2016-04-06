@@ -126,6 +126,7 @@
 	<!-- 主页-活动 -->
 	<dimen name = "di_index_post_gap_vertical">15dp</dimen>
 	<dimen name = "di_index_post_item_radius">8dp</dimen>
+	<dimen name = "di_index_post_toolbar_margin">68dp</dimen>
 
 	<!-- 礼包详情 页面 -->
 	<dimen name = "di_detail_header_margin_left" >14dp</dimen >

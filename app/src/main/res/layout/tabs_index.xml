@@ -34,7 +34,7 @@
 				android:id = "@+id/ctv_post"
 				android:gravity="center_horizontal"
 				style = "@style/CheckedTextNormal.Index"
-				android:drawableTop = "@drawable/selector_tab_index_game"
+				android:drawableTop = "@drawable/selector_tab_index_post"
 				android:text = "@string/st_tabs_index_post"
 				android:checked = "false" />
 

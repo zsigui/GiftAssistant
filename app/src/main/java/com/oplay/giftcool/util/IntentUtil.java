@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
@@ -23,6 +25,7 @@ import com.oplay.giftcool.ui.activity.WebActivity;
  * @date 2016/1/3
  */
 public class IntentUtil {
+
 
 	/**
 	 * 跳转wifi设置界面
@@ -151,8 +154,6 @@ public class IntentUtil {
 
 	/**
 	 * 跳转热门游戏列表界面
-	 *
-	 * @param context
 	 */
 	public static void jumpGameHotList(Context context) {
 		Intent intent = new Intent(context, GameListActivity.class);
@@ -164,6 +165,9 @@ public class IntentUtil {
 	 * 跳转金币任务界面
 	 */
 	public static void jumpEarnScore(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY);
 		context.startActivity(intent);
@@ -181,6 +185,9 @@ public class IntentUtil {
 	 * 跳转我的礼包界面
 	 */
 	public static void jumpMyGift(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
 		context.startActivity(intent);
@@ -199,6 +206,9 @@ public class IntentUtil {
 	 * 跳转我的钱包界面
 	 */
 	public static void jumpMyWallet(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
 		context.startActivity(intent);
@@ -208,6 +218,9 @@ public class IntentUtil {
 	 * 跳转我的关注界面
 	 */
 	public static void jumpMyAttention(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_ATTENTION);
 		context.startActivity(intent);
@@ -217,6 +230,9 @@ public class IntentUtil {
 	 * 跳转消息中心
 	 */
 	public static void jumpMessageCentral(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
 		context.startActivity(intent);
@@ -300,6 +316,9 @@ public class IntentUtil {
 	 * 跳转反馈界面
 	 */
 	public static void jumpFeedBack(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_FEEDBACK);
 		context.startActivity(intent);
@@ -309,6 +328,9 @@ public class IntentUtil {
 	 * 跳转用户信息界面
 	 */
 	public static void jumpUserInfo(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USERINFO);
 		context.startActivity(intent);
@@ -318,6 +340,9 @@ public class IntentUtil {
 	 * 跳转设置用户昵称界面
 	 */
 	public static void jumpUserSetNick(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_NICK);
 		context.startActivity(intent);
@@ -327,6 +352,9 @@ public class IntentUtil {
 	 * 跳转设置用户头像界面
 	 */
 	public static void jumpUserSetAvatar(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_AVATAR);
 		context.startActivity(intent);
@@ -345,6 +373,22 @@ public class IntentUtil {
 		}
 		context.startActivity(intent);
 //		Util_System_Intent.startActivityByPackageName(context, AppConfig.PACKAGE_NAME);
+	}
+
+	/**
+	 * 跳转抽奖活动页面
+	 */
+	public static void jumpLottery(Context context) {
+		IntentUtil.jumpActivityWeb(context, WebViewUrl.getWebUrl(WebViewUrl.LOTTERY),
+				context.getString(R.string.st_post_lottery));
+	}
+
+	/**
+	 * 跳转每日签到页面
+	 */
+	public static void jumpSignIn(Context context) {
+		IntentUtil.jumpActivityWeb(context, WebViewUrl.getWebUrl(WebViewUrl.SIGNIN),
+				context.getString(R.string.st_post_sign_in));
 	}
 
 	/**

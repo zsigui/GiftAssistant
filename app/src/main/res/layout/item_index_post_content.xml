@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
                 android:orientation = "vertical"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:layout_margin = "10dp"
-                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:id = "@+id/rl_item"
                 android:background = "@drawable/shape_rect_post_content_border" >
 
 	<com.makeramen.roundedimageview.RoundedImageView
@@ -24,13 +24,13 @@
 			app:riv_oval = "false" />
 
 	<TextView
-			android:id = "@+id/iv_post_state"
+			android:id = "@+id/tv_post_state"
 			style = "@style/DefaultTextView.PostState"
 			android:background = "@drawable/ic_post_enabled"
 			android:text = "@string/st_index_post_text_working" />
 
 
-	<com.makeramen.roundedimageview.RoundedImageView
+	<!--<com.makeramen.roundedimageview.RoundedImageView
 			android:id = "@+id/iv_footer"
 			android:layout_width = "match_parent"
 			android:layout_height = "@dimen/di_module_bigger_height"
@@ -41,5 +41,33 @@
 			app:riv_corner_radius_top_right = "0dp"
 			app:riv_corner_radius_bottom_left = "@dimen/di_index_post_item_radius"
 			app:riv_corner_radius_bottom_right = "@dimen/di_index_post_item_radius"
-			app:riv_oval = "false" />
+			app:riv_oval = "false" />-->
+
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_module_bigger_height"
+			android:layout_below = "@+id/iv_icon"
+			android:gravity = "center_vertical"
+			android:paddingLeft = "@dimen/di_list_item_gap_small"
+			android:paddingRight = "@dimen/di_list_item_gap_small"
+			android:background = "@drawable/shape_rect_post_bottom_radius"
+			android:orientation = "horizontal" >
+
+		<TextView
+				android:layout_width = "0dp"
+				android:layout_height = "wrap_content"
+				android:layout_weight = "1"
+				android:textSize = "@dimen/di_text_size_big"
+				android:textColor = "@color/co_common_text_main"
+				android:drawableLeft = "@drawable/ic_task_new"
+				android:drawablePadding = "@dimen/di_line_space_extra_big"
+				android:paddingRight = "@dimen/di_list_item_gap_small"
+				android:text = "皇室战争】盖楼回复拿首充卷" />
+
+		<ImageView
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				android:contentDescription = "@null"
+				android:src = "@drawable/ic_more" />
+	</LinearLayout >
 </RelativeLayout >

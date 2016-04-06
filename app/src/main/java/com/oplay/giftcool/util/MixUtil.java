@@ -61,13 +61,28 @@ public class MixUtil {
             }
             return false;
         }
-        int index = url.indexOf("need_validate");
-        if ((index != -1 && "1".equals(url.substring(index + 14, index + 15)))
-                && !AccountManager.getInstance().isLogin()) {
+        final String key = "need_validate=";
+        int index = url.indexOf(key);
+        if (index != -1 && index + key.length() < url.length()) {
+            index += key.length();
+            int last_index = url.indexOf('&', index);
+            if (last_index == -1) {
+                last_index = url.length();
+            }
+            final String val = url.substring(index, last_index);
+            if(("true".equalsIgnoreCase(val) || "1".equals(val))) {
+                return MixUtil.needLoginFirst(context);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 对于由登录要求的执行登录判断
+     */
+    public static boolean needLoginFirst(Context context) {
+        if (!AccountManager.getInstance().isLogin()) {
             IntentUtil.jumpLogin(context);
-//			if (context instanceof OnBackPressListener) {
-//				((OnBackPressListener) context).onBack();
-//			}
             return true;
         }
         return false;

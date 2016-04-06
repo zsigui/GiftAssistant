@@ -44,6 +44,19 @@
 					android:contentDescription = "@null" />
 		</RelativeLayout >
 
+		<TextView
+				android:id = "@+id/tv_title"
+				style = "@style/DefaultTextView.Header"
+				android:layout_width = "0dp"
+				android:layout_height = "wrap_content"
+				android:layout_weight = "1"
+				android:layout_marginRight = "@dimen/di_index_post_toolbar_margin"
+				android:gravity = "center"
+				android:visibility = "gone"
+				android:textSize = "@dimen/di_tool_bar_title_size"
+				android:textColor = "@color/co_white"
+				android:text = "@string/st_index_post_toolbar_title" />
+
 		<include
 				layout = "@layout/view_search"
 				android:layout_width = "0dp"

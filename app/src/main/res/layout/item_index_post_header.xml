@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
                 android:orientation = "vertical"
-                android:layout_width = "match_parent"
+                android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
-                android:background = "@color/co_common_content_bg"
-                android:paddingTop = "@dimen/di_index_post_gap_vertical" >
+                android:layout_gravity = "center_horizontal"
+                android:background = "@color/co_common_content_bg" >
 
 	<ImageView
 			android:id = "@+id/iv_sign_in_everyday"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
+			android:clickable = "true"
 			android:src = "@drawable/pic_sign_in_everyday"
 			android:contentDescription = "@null" />
 
@@ -18,7 +19,7 @@
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			android:src = "@drawable/pic_lottery_everyday"
-			android:layout_marginLeft = "20dp"
+			android:clickable = "true"
 			android:layout_toRightOf = "@+id/iv_sign_in_everyday"
 			android:layout_alignTop = "@+id/iv_sign_in_everyday"
 			android:contentDescription = "@null" />
@@ -28,7 +29,7 @@
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			android:src = "@drawable/pic_task_everyday"
-			android:layout_marginTop = "10dp"
+			android:clickable = "true"
 			android:layout_alignLeft = "@+id/iv_lottery_everyday"
 			android:layout_below = "@+id/iv_lottery_everyday"
 			android:contentDescription = "@null" />

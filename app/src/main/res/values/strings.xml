@@ -39,6 +39,11 @@
 	<!-- 活动 -->
 	<string name = "st_index_post_text_working">进行中</string>
 	<string name = "st_index_post_text_finished">已结束</string>
+	<string name = "st_index_post_toolbar_title">活动</string>
+
+	<string name = "st_post_lottery" >每日抽奖</string >
+	<string name = "st_post_task" >每日任务</string >
+	<string name = "st_post_sign_in" >每日签到</string >
 
 	<!-- 礼包状态 -->
 	<string name = "st_gift_or" >或</string >
@@ -139,7 +144,6 @@
 	<string name = "st_task_title" >赚金币</string >
 	<string name = "st_task_btn_to_do" >去完成</string >
 	<string name = "st_task_btn_finished" >已完成</string >
-	<string name = "st_task_lottery" >每日抽奖</string >
 	<string name = "st_task_lottery_btn" >我要抽奖</string >
 	<string name = "st_task_reward" >任务奖励:</string >
 

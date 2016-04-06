@@ -135,56 +135,36 @@ public class DrawerFragment extends BaseFragment {
 		super.onClick(v);
 		Context context = getContext();
 
-		if (!AccountManager.getInstance().isLogin()) {
-			switch (v.getId()) {
-				// 未登录下的
-				case R.id.drawer_header:
-					IntentUtil.jumpLoginNoToast(context);
-					break;
-				case R.id.drawer_footer:
-					IntentUtil.jumpSetting(context);
-					break;
-//				case KeyConfig.TYPE_ID_SETTING:
-//					IntentUtil.jumpSetting(context);
-//					break;
-				case KeyConfig.TYPE_ID_DOWNLOAD:
-					IntentUtil.jumpDownloadManager(context, false);
-					break;
-				default:
-					IntentUtil.jumpLogin(context);
-			}
-		} else {
-			switch (v.getId()) {
-				// 需要登录
-				case R.id.drawer_header:
-					IntentUtil.jumpUserInfo(context);
-					break;
-				case R.id.drawer_footer:
-					IntentUtil.jumpSetting(context);
-					break;
-				case KeyConfig.TYPE_ID_MY_GIFT_CODE:
-					IntentUtil.jumpMyGift(context);
-					break;
-				case KeyConfig.TYPE_ID_WALLET:
-					IntentUtil.jumpMyWallet(context);
-					break;
-				case KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY:
-					IntentUtil.jumpEarnScore(context);
-					break;
-				case KeyConfig.TYPE_ID_MSG:
-					IntentUtil.jumpMessageCentral(context);
-					break;
-				case KeyConfig.TYPE_ID_MY_ATTENTION:
-					IntentUtil.jumpMyAttention(context);
-					break;
-				// 与登录无关
-//				case KeyConfig.TYPE_ID_SETTING:
-//					IntentUtil.jumpSetting(context);
-//					break;
-				case KeyConfig.TYPE_ID_DOWNLOAD:
-					IntentUtil.jumpDownloadManager(context, false);
-					break;
-			}
+		if (!AccountManager.getInstance().isLogin() && v.getId() == R.id.drawer_header) {
+			IntentUtil.jumpLoginNoToast(context);
+			return;
+		}
+		switch (v.getId()) {
+			// 需要登录
+			case R.id.drawer_header:
+				IntentUtil.jumpUserInfo(context);
+				break;
+			case R.id.drawer_footer:
+				IntentUtil.jumpSetting(context);
+				break;
+			case KeyConfig.TYPE_ID_MY_GIFT_CODE:
+				IntentUtil.jumpMyGift(context);
+				break;
+			case KeyConfig.TYPE_ID_WALLET:
+				IntentUtil.jumpMyWallet(context);
+				break;
+			case KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY:
+				IntentUtil.jumpEarnScore(context);
+				break;
+			case KeyConfig.TYPE_ID_MSG:
+				IntentUtil.jumpMessageCentral(context);
+				break;
+			case KeyConfig.TYPE_ID_MY_ATTENTION:
+				IntentUtil.jumpMyAttention(context);
+				break;
+			case KeyConfig.TYPE_ID_DOWNLOAD:
+				IntentUtil.jumpDownloadManager(context, false);
+				break;
 		}
 		closeDrawer();
 	}

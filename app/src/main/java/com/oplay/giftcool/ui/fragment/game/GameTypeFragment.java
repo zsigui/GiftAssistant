@@ -240,8 +240,8 @@ public class GameTypeFragment extends BaseFragment {
 		 * 绘制表格项的下分割线
 		 */
 		private void drawBottom(Canvas c, View child, RecyclerView.LayoutParams lp) {
-			final int left = child.getLeft() - lp.leftMargin;
-			final int right = child.getRight() + lp.leftMargin;
+			final int left = child.getLeft() - lp.leftMargin - mDividerSize;
+			final int right = child.getRight() + lp.rightMargin;
 			final int top = child.getBottom() + lp.bottomMargin;
 			final int bottom = top + mDividerSize;
 			c.drawRect(left, top, right, bottom, mPaint);
@@ -254,7 +254,7 @@ public class GameTypeFragment extends BaseFragment {
 			final int right = child.getLeft() - lp.leftMargin;
 			final int left = right - mDividerSize;
 			final int top = child.getTop() + lp.topMargin;
-			final int bottom = child.getBottom() + lp.bottomMargin;
+			final int bottom = child.getBottom() - lp.bottomMargin;
 			c.drawRect(left, top, right, bottom, mPaint);
 		}
 

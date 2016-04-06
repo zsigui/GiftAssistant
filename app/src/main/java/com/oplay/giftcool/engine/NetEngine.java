@@ -205,7 +205,7 @@ public interface NetEngine {
 	 * 注销登录
 	 */
 	@POST(NetUrl.USER_LOGOUT)
-	Call<Void> logout(@Body JsonReqBase<Object> reqData);
+	Call<JsonRespBase<Void>> logout(@Body JsonReqBase<Object> reqData);
 
 	/**
 	 * 更新session，保持登录态情况下，每次启动APP进行验证
