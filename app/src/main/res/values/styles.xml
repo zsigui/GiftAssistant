@@ -138,6 +138,7 @@
 		<item name = "android:textSize" >14sp</item >
 		<item name = "android:gravity" >center</item >
 		<item name = "android:singleLine" >true</item >
+		<item name = "android:ellipsize" >end</item >
 		<item name = "android:textCursorDrawable" >@null</item >
 	</style >
 
@@ -212,15 +213,6 @@
 		<item name = "android:textSize" >10sp</item >
 		<item name = "android:textColor" >@color/co_common_text_second</item >
 		<item name = "android:layout_centerVertical" >true</item >
-	</style >
-
-	<style name = "DefaultTextView.PostState" >
-		<item name = "android:textSize" >@dimen/di_text_size_small</item >
-		<item name = "android:textColor" >@color/co_white</item >
-		<item name = "android:gravity" >center_horizontal</item >
-		<item name = "android:paddingTop" >5dp</item >
-		<item name = "android:layout_alignParentRight" >true</item >
-		<item name = "android:layout_marginRight" >@dimen/di_list_item_gap_big</item >
 	</style >
 
 	<style name = "ButtonText" >
@@ -428,7 +420,13 @@
 		<item name = "android:fadeScrollbars" >true</item >
 	</style >
 
-	<style name = "DefaultEditText" parent = "android:Widget.EditText" >
-
+	<!-- 活动 -->
+	<style name = "DefaultTextView.PostState" >
+		<item name = "android:textSize" >@dimen/di_text_size_small</item >
+		<item name = "android:textColor" >@color/co_white</item >
+		<item name = "android:gravity" >center_horizontal</item >
+		<item name = "android:paddingTop" >@dimen/di_line_space_extra_big</item >
+		<item name = "android:textStyle" >bold</item >
+		<item name = "android:layout_marginLeft" >11dp</item >
 	</style >
 </resources >

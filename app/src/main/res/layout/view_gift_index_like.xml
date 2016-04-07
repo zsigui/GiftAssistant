@@ -9,19 +9,19 @@
 			android:layout_height = "@dimen/di_index_module_gap" />
 
 	<RelativeLayout
-			android:id = "@+id/rl_hot_all"
+			android:id = "@+id/rl_like_all"
 			style = "@style/IndexModuleTitleLayout"
 			android:background = "@drawable/selector_white_module"
 			android:clickable = "true" >
 
 		<TextView
-				android:id = "@+id/hot_light"
+				android:id = "@+id/like_light"
 				style = "@style/DefaultTextView.Header"
 				android:text = "▌"
 				android:textColor = "@color/co_common_app_main_bg" />
 
 		<TextView
-				android:layout_toRightOf = "@id/hot_light"
+				android:layout_toRightOf = "@id/like_light"
 				style = "@style/DefaultTextView.Header"
 				android:text = "@string/st_index_gift_like" />
 

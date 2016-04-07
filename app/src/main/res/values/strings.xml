@@ -40,10 +40,14 @@
 	<string name = "st_index_post_text_working">进行中</string>
 	<string name = "st_index_post_text_finished">已结束</string>
 	<string name = "st_index_post_toolbar_title">活动</string>
+	<string name = "st_index_post_official">最新官方活动</string>
+	<string name = "st_index_post_notify">游戏活动快讯</string>
+	<string name = "st_index_post_read_attention">只看我关注的</string>
 
 	<string name = "st_post_lottery" >每日抽奖</string >
 	<string name = "st_post_task" >每日任务</string >
 	<string name = "st_post_sign_in" >每日签到</string >
+
 
 	<!-- 礼包状态 -->
 	<string name = "st_gift_or" >或</string >

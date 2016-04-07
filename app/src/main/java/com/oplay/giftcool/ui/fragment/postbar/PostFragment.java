@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.PostAdapter;
-import com.oplay.giftcool.adapter.itemdecoration.RoundDividerItemDecoration;
+import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 
@@ -42,10 +42,10 @@ public class PostFragment extends BaseFragment_Refresh {
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
 		LinearLayoutManager llp = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-		RoundDividerItemDecoration itemDecoration = new RoundDividerItemDecoration(getContext(),
+		DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
 				llp.getOrientation(),
 				getResources().getColor(R.color.co_divider_bg),
-				getResources().getDimensionPixelSize(R.dimen.di_index_post_gap_vertical));
+				getResources().getDimensionPixelSize(R.dimen.di_index_module_gap));
 		rvData.setLayoutManager(llp);
 		rvData.addItemDecoration(itemDecoration);
 		mAdapter = new PostAdapter(getContext());

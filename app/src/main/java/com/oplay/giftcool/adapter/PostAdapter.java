@@ -6,16 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.IndexTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 /**
  * 首页活动页面的适配器
@@ -24,35 +26,35 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnClickListener {
 
-	private final float HEADER_RIGHT_WH_RATE = 2.2f;
+	private final float HEADER_RIGHT_WH_RATE = 0.65f;
 	/**
 	 * 左右间隔的大小
 	 */
 	private final int GAP_SIZE;
 	private final int SCREEN_WIDTH;
 
-	private final String TEXT_STATE_DOING;
-	private final String TEXT_STATE_FINISHED;
+
 
 	public PostAdapter(Context context) {
 		super(context);
 		GAP_SIZE = context.getResources().getDimensionPixelSize(R.dimen.di_index_post_gap_vertical);
 		SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;
-		TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
-		TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
+
 	}
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		switch (viewType) {
-			case IndexTypeUtil.ITEM_HEADER:
+			case IndexTypeUtil.ITEM_POST_HEADER:
 				HeaderHolder headerHolder = new HeaderHolder(LayoutInflater.from(mContext)
 						.inflate(R.layout.item_index_post_header, parent, false));
 				initHeaderLayoutParams(headerHolder);
 				return headerHolder;
-			case IndexTypeUtil.ITEM_NORMAL:
+			case IndexTypeUtil.ITEM_POST_OFFICIAL:
 				return new ContentHolder(LayoutInflater.from(mContext)
-						.inflate(R.layout.item_index_post_content, parent, false));
+						.inflate(R.layout.view_gift_index_like, parent, false));
+			case IndexTypeUtil.ITEM_POST_NOTIFY:
+				break;
 		}
 		return null;
 	}
@@ -61,66 +63,44 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 	 * 初始化标题头的配置
 	 */
 	private void initHeaderLayoutParams(HeaderHolder headerHolder) {
-		final int width = (SCREEN_WIDTH - 3 * GAP_SIZE) / 2;
-		final int height = width;
-		final int rightHeight = (int) (width / HEADER_RIGHT_WH_RATE);
-		final int topGap = width - 2 * rightHeight;
-		RelativeLayout.LayoutParams lpSignIn = (RelativeLayout.LayoutParams) headerHolder.ivSignIn.getLayoutParams();
+		KLog.d(AppDebugConfig.TAG_WARN, "screen = " + SCREEN_WIDTH + ", gap = " + GAP_SIZE + ", padding = " + headerHolder.itemView.getPaddingLeft());
+		final int width = (SCREEN_WIDTH - 2 * GAP_SIZE - 2 * headerHolder.itemView.getPaddingLeft()) / 3;
+		final int height = (int) (width * HEADER_RIGHT_WH_RATE);
+		LinearLayout.LayoutParams lpSignIn = (LinearLayout.LayoutParams) headerHolder.ivSignIn.getLayoutParams();
 		lpSignIn.width = width;
 		lpSignIn.height = height;
-//				lpSignIn.bottomMargin = lpSignIn.topMargin = lpSignIn.leftMargin = 0;
 		lpSignIn.rightMargin = GAP_SIZE;
 		headerHolder.ivSignIn.setLayoutParams(lpSignIn);
-		RelativeLayout.LayoutParams lpLottery = (RelativeLayout.LayoutParams) headerHolder.ivLottery.getLayoutParams();
+		LinearLayout.LayoutParams lpLottery = (LinearLayout.LayoutParams) headerHolder.ivLottery.getLayoutParams();
 		lpLottery.width = width;
-		lpLottery.height = rightHeight;
-//				lpLottery.leftMargin = lpLottery.rightMargin = lpLottery.topMargin = lpLottery.bottomMargin = 0;
+		lpLottery.height = height;
+		lpLottery.rightMargin = GAP_SIZE;
 		headerHolder.ivLottery.setLayoutParams(lpLottery);
-		RelativeLayout.LayoutParams lpTask = (RelativeLayout.LayoutParams) headerHolder.ivTask.getLayoutParams();
+		LinearLayout.LayoutParams lpTask = (LinearLayout.LayoutParams) headerHolder.ivTask.getLayoutParams();
 		lpTask.width = width;
-		lpTask.height = rightHeight;
-		lpTask.topMargin = topGap;
+		lpTask.height = height;
 		headerHolder.ivTask.setLayoutParams(lpTask);
 	}
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		switch (getItemViewType(position)) {
-			case IndexTypeUtil.ITEM_HEADER:
+			case IndexTypeUtil.ITEM_POST_HEADER:
 				HeaderHolder headerHolder = (HeaderHolder) holder;
 				headerHolder.ivSignIn.setOnClickListener(this);
 				headerHolder.ivLottery.setOnClickListener(this);
 				headerHolder.ivTask.setOnClickListener(this);
 				break;
-			case IndexTypeUtil.ITEM_NORMAL:
+			case IndexTypeUtil.ITEM_POST_OFFICIAL:
+				break;
+			case IndexTypeUtil.ITEM_POST_NOTIFY:
 			default:
-				IndexPostNew item = getItem(position);
-				ContentHolder contentHolder = (ContentHolder) holder;
-				contentHolder.tvTitle.setText(item.title);
-				ViewUtil.showImage(contentHolder.ivBanner, item.img);
-				if (item.isNew) {
-					contentHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_task_new, 0, 0, 0);
-				} else {
-					contentHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-				}
-				switch (item.state) {
-					case 0:
-						contentHolder.tvState.setText(TEXT_STATE_FINISHED);
-						contentHolder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
-						break;
-					case 1:
-						contentHolder.tvState.setText(TEXT_STATE_DOING);
-						contentHolder.tvState.setBackgroundResource(R.drawable.ic_post_enabled);
-						break;
-				}
-				contentHolder.itemView.setOnClickListener(this);
-				contentHolder.itemView.setTag(TAG_POSITION, position);
 				break;
 		}
 	}
 
 	private int getHeaderCount() {
-		return 1;
+		return IndexTypeUtil.ITEM_POST_HEADER_COUNT;
 	}
 
 	@Override
@@ -167,20 +147,6 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 		super.release();
 	}
 
-	private static class ContentHolder extends BaseRVHolder {
-
-		ImageView ivBanner;
-		TextView tvState;
-		TextView tvTitle;
-
-		public ContentHolder(View itemView) {
-			super(itemView);
-			ivBanner = getViewById(R.id.iv_icon);
-			tvState = getViewById(R.id.tv_post_state);
-			tvTitle = getViewById(R.id.tv_title);
-		}
-	}
-
 	private static class HeaderHolder extends BaseRVHolder {
 
 		ImageView ivSignIn;
@@ -192,6 +158,39 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 			ivSignIn = getViewById(R.id.iv_sign_in_everyday);
 			ivLottery = getViewById(R.id.iv_lottery_everyday);
 			ivTask = getViewById(R.id.iv_task_everyday);
+		}
+	}
+
+	private static class OfficialHolder extends BaseRVHolder {
+		RelativeLayout rlTitle;
+		RecyclerView rvContainer;
+		PostOfficialAdapter rvAdapter;
+
+		public OfficialHolder(View itemView) {
+			super(itemView);
+			rlTitle = getViewById(R.id.rl_like_all);
+			rvContainer = getViewById(R.id.rv_like_content);
+		}
+	}
+
+	private static class ItemTitleVH extends BaseRVHolder {
+
+		public ItemTitleVH(View itemView) {
+			super(itemView);
+		}
+	}
+
+	private static class ContentHolder extends BaseRVHolder {
+
+		ImageView ivBanner;
+		TextView tvContent;
+		TextView tvTitle;
+
+		public ContentHolder(View itemView) {
+			super(itemView);
+			ivBanner = getViewById(R.id.iv_icon);
+			tvTitle = getViewById(R.id.tv_title);
+			tvContent = getViewById(R.id.tv_content);
 		}
 	}
 }

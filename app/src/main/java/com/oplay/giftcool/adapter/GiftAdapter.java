@@ -439,7 +439,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			gift = mData.news.get(pos - COUNT_HEADER);
 		}
 		switch (v.getId()) {
-			case R.id.rl_hot_all:
+			case R.id.rl_like_all:
 				IntentUtil.jumpGiftHotList(mContext, null);
 				break;
 			case R.id.rl_limit_all:
@@ -504,7 +504,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 		public LikeVH(View itemView) {
 			super(itemView);
-			rlTitle = getViewById(R.id.rl_hot_all);
+			rlTitle = getViewById(R.id.rl_like_all);
 			rvContainer = getViewById(R.id.rv_like_content);
 		}
 	}

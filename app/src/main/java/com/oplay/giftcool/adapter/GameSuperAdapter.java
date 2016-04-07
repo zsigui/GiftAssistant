@@ -171,7 +171,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case IndexTypeUtil.ITEM_BANNER:
+            case IndexTypeUtil.ITEM_GAME_BANNER:
                 if (mBannerWR == null || mBannerWR.get() == null) {
                     mBannerWR = new WeakReference<BannerVH>(new BannerVH(mInflater.inflate(R.layout.view_banner,
                             parent, false)));
@@ -185,7 +185,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
                         Global.getBannerHeight(mContext));
                 banner.setLayoutParams(lp);
                 return bannerVH;
-            case IndexTypeUtil.ITEM_HOT:
+            case IndexTypeUtil.ITEM_GAME_HOT:
                 GameHotVH gameHotVH = new GameHotVH(mInflater.inflate(R.layout.view_game_hot, parent, false));
                 gameHotVH.rvContainer.setLayoutManager(new GridLayoutManager(mContext, 4));
                 gameHotVH.rvContainer.addItemDecoration(new HeaderFooterDividerItemDecoration(mContext,
@@ -194,14 +194,14 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
                 gameHotVH.adapter = new IndexGameHotWithTitleAdapter(mContext);
                 gameHotVH.rvContainer.setAdapter(gameHotVH.adapter);
                 return gameHotVH;
-            case IndexTypeUtil.ITEM_RECOMMEND:
+            case IndexTypeUtil.ITEM_GAME_RECOMMEND:
                 if (mRecommendVH == null) {
                     mRecommendVH = new RecommendVH(mInflater.inflate(R.layout.view_game_recommend, parent, false));
                 }
                 return mRecommendVH;
-            case IndexTypeUtil.ITEM_TITLE:
+            case IndexTypeUtil.ITEM_GAME_TITLE:
                 return new HeaderVH(mInflater.inflate(R.layout.item_header_index, parent, false));
-            case IndexTypeUtil.ITEM_NEW_NORMAL:
+            case IndexTypeUtil.ITEM_GAME_NEW_NORMAL:
                 NormalVH normalVH = new NormalVH(mInflater.inflate(R.layout.item_index_game_new, parent, false));
                 normalVH.itemView.setBackgroundResource(R.drawable.selector_white_module);
                 return normalVH;
@@ -227,22 +227,22 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         if (getItemCount() == 0 || holder == null)
             return;
         switch (getItemViewType(position)) {
-            case IndexTypeUtil.ITEM_BANNER:
+            case IndexTypeUtil.ITEM_GAME_BANNER:
                 updateBanners((BannerVH) holder);
                 break;
-            case IndexTypeUtil.ITEM_HOT:
+            case IndexTypeUtil.ITEM_GAME_HOT:
                 updateHotData((GameHotVH) holder, mData.hot);
                 break;
-            case IndexTypeUtil.ITEM_RECOMMEND:
+            case IndexTypeUtil.ITEM_GAME_RECOMMEND:
                 updateRecommendData(mRecommendVH, mData.recommend);
                 break;
-            case IndexTypeUtil.ITEM_TITLE:
+            case IndexTypeUtil.ITEM_GAME_TITLE:
                 HeaderVH headerVH = (HeaderVH) holder;
                 headerVH.tvTitle.setText("新游推荐");
                 headerVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
                 headerVH.itemView.setOnClickListener(this);
                 break;
-            case IndexTypeUtil.ITEM_NEW_NORMAL:
+            case IndexTypeUtil.ITEM_GAME_NEW_NORMAL:
                 setItemValue(position, (NormalVH) holder);
                 break;
         }
@@ -286,40 +286,40 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
 
     @Override
     protected int getItemHeaderCount() {
-        return IndexTypeUtil.ITEM_HEADER_COUNT;
+        return IndexTypeUtil.ITEM_GAME_SUPER_HEADER_COUNT;
     }
 
     @Override
     public int getItemCount() {
-        return mData == null ? 0 : IndexTypeUtil.ITEM_HEADER_COUNT + mData.news.size();
+        return mData == null ? 0 : IndexTypeUtil.ITEM_GAME_SUPER_HEADER_COUNT + mData.news.size();
     }
 
 
     @Override
     protected int getItemTypeCount() {
-        return IndexTypeUtil.ITEM_INDEX_COUNT;
+        return IndexTypeUtil.ITEM_GAME_SUPER_TOTAL_COUNT;
     }
 
     @Override
     public int getItemViewType(int position) {
         switch (position) {
             case 0:
-                return IndexTypeUtil.ITEM_BANNER;
+                return IndexTypeUtil.ITEM_GAME_BANNER;
             case 1:
-                return IndexTypeUtil.ITEM_HOT;
+                return IndexTypeUtil.ITEM_GAME_HOT;
             case 2:
-                return IndexTypeUtil.ITEM_RECOMMEND;
+                return IndexTypeUtil.ITEM_GAME_RECOMMEND;
             case 3:
-                return IndexTypeUtil.ITEM_TITLE;
+                return IndexTypeUtil.ITEM_GAME_TITLE;
             default:
-                return IndexTypeUtil.ITEM_NEW_NORMAL;
+                return IndexTypeUtil.ITEM_GAME_NEW_NORMAL;
         }
     }
 
     @Override
     public IndexGameNew getItem(int position) {
-        return getItemCount() > IndexTypeUtil.ITEM_HEADER_COUNT ?
-                mData.news.get(position - IndexTypeUtil.ITEM_HEADER_COUNT) : null;
+        return getItemCount() > IndexTypeUtil.ITEM_GAME_SUPER_HEADER_COUNT ?
+                mData.news.get(position - IndexTypeUtil.ITEM_GAME_SUPER_HEADER_COUNT) : null;
     }
 
     @Override
@@ -364,7 +364,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         }
         Integer pos = (Integer) v.getTag(IndexTypeUtil.TAG_POSITION);
         switch (v.getId()) {
-            case R.id.rl_hot_all:
+            case R.id.rl_like_all:
                 IntentUtil.jumpGameNewList(mContext);
                 break;
             case R.id.rl_recommend:

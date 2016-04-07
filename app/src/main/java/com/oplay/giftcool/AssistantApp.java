@@ -131,8 +131,6 @@ public class AssistantApp extends Application {
     public void appInit() {
         KLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
-        // 初始配置加载列表
-        initLoadingView();
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
     }
 
@@ -216,11 +214,13 @@ public class AssistantApp extends Application {
     }
 
     public void initGson() {
-        mGson = new GsonBuilder()
-                .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
-                .serializeNulls()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                .create();
+        if (mGson == null) {
+            mGson = new GsonBuilder()
+                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                    .serializeNulls()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .create();
+        }
     }
 
     public void initRetrofit() {
@@ -239,6 +239,9 @@ public class AssistantApp extends Application {
                 newRequest = chain.request().newBuilder()
                         .addHeader(headerName, headerValue)
                         .build();
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
+                }
                 Response response = chain.proceed(newRequest);
 
                 CacheControl cacheControl;
@@ -280,9 +283,7 @@ public class AssistantApp extends Application {
     public void resetInitForTest() {
         if (AppConfig.TEST_MODE) {
             setGlobalInit(false);
-            initRetrofit();
-            Global.resetNetEngine();
-            Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+            appInit();
         }
     }
 

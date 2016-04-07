@@ -109,7 +109,9 @@ public class Global {
 	 * 重置网络请求引擎，测试的使用重新初始化会调用
 	 */
 	public static void resetNetEngine() {
-		sNetEngine = AssistantApp.getInstance().getRetrofit().create(NetEngine.class);
+		if (sNetEngine == null || AppConfig.TEST_MODE) {
+			sNetEngine = AssistantApp.getInstance().getRetrofit().create(NetEngine.class);
+		}
 	}
 
 	/**

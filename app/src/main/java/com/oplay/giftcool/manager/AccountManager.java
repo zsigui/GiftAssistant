@@ -387,7 +387,7 @@ public class AccountManager implements OnFinishListener {
     /**
      * 更新Session的实际网络请求方法
      */
-    private void updateSessionNetRequest() {
+    public void updateSessionNetRequest() {
         if (NetworkUtil.isConnected(mContext)) {
             if (mCallUpdateSession != null) {
                 mCallUpdateSession.cancel();

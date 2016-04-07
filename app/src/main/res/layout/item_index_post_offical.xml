@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:background = "@drawable/selector_white_module"
+                android:id = "@+id/rl_item" >
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			android:layout_width = "@dimen/di_index_post_item_official_width"
+			android:layout_height = "@dimen/di_index_post_item_official_height"
+			android:layout_marginBottom = "@dimen/di_list_item_gap_normal"
+			android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+			android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
+			android:layout_marginRight = "@dimen/di_list_item_gap_small"
+			android:scaleType = "fitXY"
+			app:riv_border_color = "@color/co_stroke_bg"
+			app:riv_border_width = "@dimen/di_icon_border_size"
+			app:riv_corner_radius = "@dimen/di_index_post_item_radius"
+			app:riv_oval = "false" />
+
+	<TextView
+			android:id = "@+id/tv_post_state"
+			style = "@style/DefaultTextView.PostState"
+			android:background = "@drawable/ic_post_enabled"
+			android:text = "@string/st_index_post_text_working" />
+
+	<TextView
+			android:id = "@+id/tv_title"
+			style = "@style/DefaultTextView.Header"
+			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			android:layout_marginRight = "@dimen/di_list_item_gap_big"
+			android:layout_alignTop = "@+id/iv_icon"
+			android:layout_toRightOf = "@+id/iv_icon" />
+
+	<TextView
+			android:id = "@+id/tv_content"
+			style = "@style/DefaultTextView.Text"
+			android:layout_marginRight = "@dimen/di_list_item_gap_big"
+			android:layout_below = "@+id/tv_title"
+			android:layout_alignLeft = "@+id/tv_title"
+			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+			android:singleLine = "false"
+			android:maxLines = "2"
+			android:gravity = "left" />
+</RelativeLayout >

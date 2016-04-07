@@ -21,20 +21,29 @@ public class IndexTypeUtil {
 	public static final int ITEM_FOOTER = 2;
 
 
+	/*
+	 * 活动首页
+	 */
+	public static final int ITEM_POST_HEADER_COUNT = 3;
+	public static final int ITEM_POST_HEADER = 0;
+	public static final int ITEM_POST_OFFICIAL = 1;
+	public static final int ITEM_POST_NOTIFY = 2;
 
 	/*
 	 * 游戏精品界面
 	 */
 	// 首页固定4项
-	public static final int ITEM_HEADER_COUNT = 4;
-	public static  final int ITEM_INDEX_COUNT = 5;
+	public static final int ITEM_GAME_SUPER_HEADER_COUNT = 4;
+	public static  final int ITEM_GAME_SUPER_TOTAL_COUNT = 5;
 
-	public static  final int ITEM_BANNER = 0;
-	public static final int ITEM_HOT = 1;
-	public static final int ITEM_RECOMMEND = 2;
-	public static final int ITEM_TITLE = 3;
-	public static final int ITEM_NEW_NORMAL = 4;
+	public static  final int ITEM_GAME_BANNER = 0;
+	public static final int ITEM_GAME_HOT = 1;
+	public static final int ITEM_GAME_RECOMMEND = 2;
+	public static final int ITEM_GAME_TITLE = 3;
+	public static final int ITEM_GAME_NEW_NORMAL = 4;
+
 	// 游戏类型页面
+
 	public static final int ITEM_GAME_TYPE_HEADER_COUNT = 6;
 	public static final int ITEM_GAME_TYPE_GRID_COUNT = 3;
 }

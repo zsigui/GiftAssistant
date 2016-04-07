@@ -124,7 +124,9 @@
 	<dimen name = "di_game_tag_header_height" >180dp</dimen >
 
 	<!-- 主页-活动 -->
-	<dimen name = "di_index_post_gap_vertical">15dp</dimen>
+	<dimen name = "di_index_post_gap_vertical">6dp</dimen>
+	<dimen name = "di_index_post_item_official_width">120dp</dimen>
+	<dimen name = "di_index_post_item_official_height">70dp</dimen>
 	<dimen name = "di_index_post_item_radius">8dp</dimen>
 	<dimen name = "di_index_post_toolbar_margin">68dp</dimen>
 

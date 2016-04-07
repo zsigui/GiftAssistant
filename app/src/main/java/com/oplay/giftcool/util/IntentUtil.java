@@ -427,4 +427,10 @@ public class IntentUtil {
 		}
 	}
 
+	/**
+	 * 跳转活动详情页面
+	 */
+	public static void jumpPostDetail(Context context, int id) {
+
+	}
 }

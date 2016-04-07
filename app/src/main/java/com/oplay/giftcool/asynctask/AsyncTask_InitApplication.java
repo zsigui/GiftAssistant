@@ -101,6 +101,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		if (assistantApp.isGlobalInit()) {
 			return;
 		}
+		// 初始配置加载列表
+		assistantApp.initLoadingView();
 
 		// 存储打开APP时间
 		SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
@@ -119,9 +121,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			CommonUtil.initMobileInfoModel(mContext);
 		}
 
-
 		// 初始化网络下载模块, 需要在initMobileInfoModel后设置
 		assistantApp.initRetrofit();
+		Global.resetNetEngine();
 		// 初始化配置，获取更新信息
 		if (!initAndCheckUpdate()) {
 			if (AppDebugConfig.IS_DEBUG) {
