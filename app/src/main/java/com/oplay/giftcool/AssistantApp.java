@@ -146,20 +146,23 @@ public class AssistantApp extends Application {
 
     public void initGalleryFinal() {
         int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
+        int transparent = getResources().getColor(R.color.co_transparent);
         int textColor = Color.WHITE;
         ThemeConfig theme = new ThemeConfig.Builder()
                 .setTitleBarBgColor(bgColor)
                 .setTitleBarIconColor(textColor)
-                .setCheckNornalColor(textColor)
-                .setCheckSelectedColor(bgColor)
+                .setCheckNornalColor(transparent)
+                .setCheckSelectedColor(transparent)
+                .setIconCheck(R.drawable.selector_check_box)
                 .setIconBack(R.drawable.ic_bar_back)
+                .setIconDelete(R.drawable.ic_photo_delete)
                 .setFabNornalColor(getResources().getColor(R.color.co_btn_red))
                 .setFabPressedColor(getResources().getColor(R.color.co_btn_red_pressed))
                 .setPreviewBg(getResources().getDrawable(R.color.co_opacity_80))
                 .build();
         FunctionConfig config = new FunctionConfig.Builder()
                 .setEnableCamera(false)
-                .setEnablePreview(true)
+                .setEnablePreview(false)
                 .setEnableRotate(true)
                 .setEnableCrop(true)
                 .setEnableEdit(true)

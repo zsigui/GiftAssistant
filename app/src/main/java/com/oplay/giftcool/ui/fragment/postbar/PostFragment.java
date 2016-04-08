@@ -96,7 +96,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 				if (mReqPageObj == null) {
 					ReqIndexPost data = new ReqIndexPost();
 					data.pageSize = 20;
-					data.isAttention = isRead;
+					data.isAttention = (isRead ? 1 : 0);
 					mReqPageObj = new JsonReqBase<ReqIndexPost>(data);
 				}
 				if (isRead) {
@@ -279,7 +279,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 				} else {
 					mReqPageObj.data.appNames = null;
 				}
-				mReqPageObj.data.isAttention = isRead;
+				mReqPageObj.data.isAttention = (isRead ? 1 : 0);
 				mReqPageObj.data.page = mLastPage;
 				mIsSwipeRefresh = true;
 				mCallChange = Global.getNetEngine().obtainPostList(NetUrl.POST_GET_LIST, mReqPageObj);

@@ -53,12 +53,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:text="@string/gallery"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 />
-
             <TextView
+                    android:id="@+id/tv_sub_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/all_photo"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    />
+            <!--<TextView
                 android:id="@+id/tv_sub_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,7 +75,7 @@
                 android:text="@string/all_photo"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-                />
+                />-->
         </LinearLayout>
 
         <ImageView
@@ -144,9 +153,9 @@
             android:cacheColorHint="@android:color/transparent"
             android:clipToPadding="false"
             android:fadingEdge="none"
-            android:horizontalSpacing="2dp"
+            android:horizontalSpacing="6dp"
             android:numColumns="3"
-            android:verticalSpacing="2dp"
+            android:verticalSpacing="6dp"
             />
         <TextView
             android:id="@+id/tv_empty_view"

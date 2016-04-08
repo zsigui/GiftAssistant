@@ -150,7 +150,7 @@ public class NetUrl {
 	/**
 	 * 获取首页活动数据
 	 */
-	public static final String POST_GET_INDEX = "default";
+	public static final String POST_GET_INDEX = "activity/index";
 
 	/**
 	 * 获取活动列表数据
