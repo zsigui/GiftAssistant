@@ -1,4 +1,4 @@
-package com.oplay.giftcool.config;
+package com.oplay.giftcool.config.util;
 
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 

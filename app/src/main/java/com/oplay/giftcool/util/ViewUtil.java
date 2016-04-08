@@ -10,7 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 
 /**

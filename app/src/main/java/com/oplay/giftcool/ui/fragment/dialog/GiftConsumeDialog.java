@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:background = "@color/co_transparent"
+              style = "@style/IndexModuleLayout" >
+
+	<View
+			android:background = "@color/co_common_content_bg"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_index_module_gap" />
+
+	<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	              android:id = "@+id/ll_header_item"
+	              style = "@style/IndexModuleTitleLayout"
+	              android:background = "@color/co_white"
+	              android:orientation = "horizontal"
+	              android:gravity = "center_vertical"
+	              android:clickable = "true" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:text = "▌"
+				android:textColor = "@color/co_common_app_main_bg" />
+
+		<TextView
+				android:id = "@+id/tv_title"
+				style = "@style/DefaultTextView.Header" />
+
+		<TextView
+				android:id="@+id/tv_note"
+				style = "@style/DefaultTextView.Text"
+				android:layout_width = "0dp"
+				android:layout_weight = "1"
+				android:paddingRight = "@dimen/di_list_item_gap_very_small"
+				android:gravity = "right" />
+
+		<include
+				android:id = "@+id/tb_read_attention"
+				layout = "@layout/view_toggle"
+				android:layout_height = "@dimen/di_index_post_toggle_height"
+				android:layout_width = "@dimen/di_index_post_toggle_width" />
+
+	</LinearLayout >
+</LinearLayout >

@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ShareAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ScoreManager;

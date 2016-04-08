@@ -1,4 +1,4 @@
-package com.oplay.giftcool.config;
+package com.oplay.giftcool.config.util;
 
 /**
  * Created by zsigui on 16-1-16.
@@ -26,8 +26,10 @@ public class IndexTypeUtil {
 	 */
 	public static final int ITEM_POST_HEADER_COUNT = 3;
 	public static final int ITEM_POST_HEADER = 0;
-	public static final int ITEM_POST_OFFICIAL = 1;
-	public static final int ITEM_POST_NOTIFY = 2;
+	public static final int ITEM_POST_TITLE_ONE = 1;
+	public static final int ITEM_POST_CONTENT_ONE = 2;
+	public static final int ITEM_POST_TITLE_TWO = 3;
+	public static final int ITEM_POST_CONTENT_TWO = 4;
 
 	/*
 	 * 游戏精品界面

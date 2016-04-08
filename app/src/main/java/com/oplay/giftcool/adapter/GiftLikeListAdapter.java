@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
-import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;

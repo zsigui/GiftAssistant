@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;

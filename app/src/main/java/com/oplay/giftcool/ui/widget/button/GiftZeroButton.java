@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 
 /**
  * 0元抢礼包按钮

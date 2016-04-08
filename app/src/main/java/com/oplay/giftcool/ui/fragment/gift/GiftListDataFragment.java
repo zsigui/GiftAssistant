@@ -7,7 +7,7 @@ import android.widget.ListView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnItemClickListener;

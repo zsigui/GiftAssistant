@@ -8,6 +8,7 @@ import com.oplay.giftcool.model.data.req.ReqGetCode;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
 import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
+import com.oplay.giftcool.model.data.req.ReqIndexPost;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
@@ -25,6 +26,8 @@ import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.IndexPost;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
@@ -198,8 +201,22 @@ public interface NetEngine {
 	@POST(NetUrl.GAME_GET_INDEX_TYPE)
 	Call<JsonRespBase<ArrayList<GameTypeMain>>> obtainIndexGameType(@Body JsonReqBase<Void> reqData);
 
+	/* ---------------- 活动接口 ----------------- */
 
-	/* ---------------- 用户接口  ---------------- */
+	/**
+	 * 获取 首页-活动 页面数据
+	 */
+	@POST(NetUrl.POST_GET_INDEX)
+	Call<JsonRespBase<IndexPost>> obtainIndexPost(@Body JsonReqBase<ReqIndexPost> reqData);
+
+	/**
+	 * 获取 活动列表 页面数据
+	 */
+	@POST
+	Call<JsonRespBase<OneTypeDataList<IndexPostNew>>> obtainPostList(@Url String url, @Body JsonReqBase<ReqIndexPost> reqData);
+
+
+	/* ---------------- 用户接口 ----------------- */
 
 	/**
 	 * 注销登录

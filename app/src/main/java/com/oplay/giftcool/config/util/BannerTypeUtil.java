@@ -1,10 +1,11 @@
-package com.oplay.giftcool.config;
+package com.oplay.giftcool.config.util;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;

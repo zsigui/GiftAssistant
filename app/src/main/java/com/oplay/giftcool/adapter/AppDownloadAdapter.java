@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;

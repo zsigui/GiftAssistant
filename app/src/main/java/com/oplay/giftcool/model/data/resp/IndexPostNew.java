@@ -40,11 +40,6 @@ public class IndexPostNew implements Serializable {
 	public String content;
 
 	/**
-	 * 活动类型，暂时分官方活动和游戏快讯
-	 */
-	public int type;
-
-	/**
 	 * 活动开始时间
 	 */
 	public String startTime;
@@ -53,4 +48,10 @@ public class IndexPostNew implements Serializable {
 	 * 活动结束时间
 	 */
 	public String endTime;
+
+	/**
+	 * 显示类型，0~100 预留服务端内容配置(暂时 0 小图类型 1 中图类型) 101 签到等固定头 102 官方活动标题 103 活动快讯标题
+	 */
+	public int showType;
+
 }

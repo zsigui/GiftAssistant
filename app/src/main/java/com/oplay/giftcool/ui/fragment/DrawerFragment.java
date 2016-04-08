@@ -17,7 +17,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;

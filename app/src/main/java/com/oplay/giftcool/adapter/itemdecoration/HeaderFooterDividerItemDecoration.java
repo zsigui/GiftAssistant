@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
 
 /**
  * 绘制头部底端和底部顶端分割线

@@ -88,6 +88,8 @@ public class AssistantApp extends Application {
     private boolean mIsAllowDownload = true;
     // 是否记住密码
     private boolean mIsRememberPwd = true;
+    // 活动页面的游戏资讯是否只查看已关注的
+    private boolean mIsReadAttention = false;
 
     // 以下暂无
     // 是否下载完成自动安装
@@ -347,6 +349,8 @@ public class AssistantApp extends Application {
         mIsRememberPwd = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_REMEMBER_PWD, true);
         setIsPlayDownloadComplete(mIsPlayDownloadComplete);
+        mIsReadAttention = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+                SPConfig.KEY_IS_READ_ATTENTION, false);
     }
 
     /**
@@ -568,13 +572,12 @@ public class AssistantApp extends Application {
         SPUtil.putLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, System.currentTimeMillis());
     }
 
-    public boolean isHasLottery() {
-        return mHasLottery;
+    public void setIsReadAttention(boolean isReadAttention) {
+        mIsReadAttention = isReadAttention;
+        SPUtil.putBoolean(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_READ_ATTENTION, mIsReadAttention);
     }
 
-    public void setHasLottery(boolean hasLottery) {
-        mHasLottery = hasLottery;
+    public boolean isReadAttention() {
+        return mIsReadAttention;
     }
-
-
 }

@@ -6,7 +6,7 @@ import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGameListAdapter;
-import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;

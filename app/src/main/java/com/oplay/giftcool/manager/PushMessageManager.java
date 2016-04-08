@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.model.data.resp.message.PushMessageApp;
 import com.oplay.giftcool.model.data.resp.message.PushMessageDetail;

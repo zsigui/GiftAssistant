@@ -51,4 +51,5 @@ public class SPConfig {
 	public static final String KEY_IS_SAVE_FLOW = "save_flow";
 	public static final String KEY_IS_PLAY_DOWNLOAD_COMPLETE = "play_sound_on_download_complete";
 	public static final String KEY_STORE_VER = "store_version";
+	public static final String KEY_IS_READ_ATTENTION = "read_attention";
 }

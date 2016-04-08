@@ -187,7 +187,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 									.startImgUrl);
 							AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
 									.broadcastBanner);
-							AssistantApp.getInstance().setHasLottery(initData.initAppConfig.isShowLotteryInTask);
 						}
 						if (initData.updateInfo != null) {
 							AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);

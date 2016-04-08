@@ -65,7 +65,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	protected void refreshSuccessEnd() {
 		super.refreshSuccessEnd();
-		mLastPage = 1;
+		mLastPage = PAGE_FIRST;
 		mRefreshLayout.setRefreshing(false);
 		mRefreshLayout.setEnabled(true);
 		mRefreshLayout.setCanShowLoad(true);

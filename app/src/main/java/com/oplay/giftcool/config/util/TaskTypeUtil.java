@@ -1,4 +1,4 @@
-package com.oplay.giftcool.config;
+package com.oplay.giftcool.config.util;
 
 /**
  * Created by zsigui on 16-1-7.

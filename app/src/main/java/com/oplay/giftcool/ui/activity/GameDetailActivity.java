@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.GameTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;

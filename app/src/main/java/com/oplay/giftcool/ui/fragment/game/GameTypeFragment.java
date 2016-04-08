@@ -12,7 +12,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameTagAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.json.base.JsonReqBase;

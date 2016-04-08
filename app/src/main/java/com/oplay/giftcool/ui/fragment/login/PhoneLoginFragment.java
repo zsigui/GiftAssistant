@@ -22,7 +22,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
@@ -454,7 +454,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 	@Override
 	public void onItemClick(String item, View view, int position) {
 		switch (view.getId()) {
-			case R.id.ll_item:
+			case R.id.ll_header_item:
 				etPhone.setText(item);
 				etCode.requestFocus();
 				break;

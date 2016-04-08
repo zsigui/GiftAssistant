@@ -147,6 +147,16 @@ public class NetUrl {
 	 */
 	public static final String GAME_GET_TYPE = "label_apps";
 
+	/**
+	 * 获取首页活动数据
+	 */
+	public static final String POST_GET_INDEX = "default";
+
+	/**
+	 * 获取活动列表数据
+	 */
+	public static final String POST_GET_LIST = "deafult";
+
 	/* 用户接口 */
 
 	/**

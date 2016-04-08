@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.config.IndexTypeUtil;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.ui.widget.button.TagButton;
 import com.oplay.giftcool.util.IntentUtil;

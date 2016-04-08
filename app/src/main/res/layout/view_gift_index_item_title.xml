@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-              android:id = "@+id/ll_new"
+              android:id = "@+id/ll_header_item"
               style = "@style/IndexModuleTitleLayout"
               android:background = "@color/co_white"
               android:orientation = "horizontal"

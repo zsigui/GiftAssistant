@@ -61,6 +61,23 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements O
 		notifyDataSetChanged();
 	}
 
+	/**
+	 * 通知更新更多数据，出发{}
+	 */
+	public void addMoreData(ArrayList<T> moreData) {
+		if (moreData == null ||  moreData.isEmpty()) {
+			return;
+		}
+		int start = 0;
+		if (mData != null) {
+			start = mData.size();
+			mData.addAll(moreData);
+		} else {
+			mData = moreData;
+		}
+		notifyItemRangeInserted(start, moreData.size());
+	}
+
 	@Override
 	public void release() {
 		if (mData != null) {

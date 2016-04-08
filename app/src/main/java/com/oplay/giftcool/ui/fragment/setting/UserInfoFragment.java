@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;

@@ -15,7 +15,7 @@ import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.BannerTypeUtil;
+import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnFinishListener;
@@ -153,7 +153,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		ReqIndexGift data = new ReqIndexGift();
 		data.pageSize = 20;
 		mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
-		mLastPage = 1;
+		mLastPage = PAGE_FIRST;
 	}
 
 	/**
@@ -309,6 +309,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mViewManager.showContent();
 		mHasData = true;
 		mGiftData = data;
+		mLastPage = PAGE_FIRST;
 		mAdapter.updateData(mGiftData, start, end);
 	}
 

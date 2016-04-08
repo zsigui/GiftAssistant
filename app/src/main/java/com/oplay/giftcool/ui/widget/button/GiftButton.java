@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 
 /**
  * 礼包按钮

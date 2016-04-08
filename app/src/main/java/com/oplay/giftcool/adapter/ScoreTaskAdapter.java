@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.TaskTypeUtil;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.ScoreMission;

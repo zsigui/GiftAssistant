@@ -433,4 +433,11 @@ public class IntentUtil {
 	public static void jumpPostDetail(Context context, int id) {
 
 	}
+
+	/**
+	 * 跳转官方活动列表页面
+	 */
+	public static void jumpPostOfficialList(Context context) {
+
+	}
 }

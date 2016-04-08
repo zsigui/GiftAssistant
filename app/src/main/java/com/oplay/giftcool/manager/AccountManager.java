@@ -13,7 +13,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.UserTypeUtil;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;

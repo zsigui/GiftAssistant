@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
