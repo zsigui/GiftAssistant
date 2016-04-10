@@ -40,6 +40,11 @@ import cn.finalteam.galleryfinal.utils.Utils;
  * Date:15/12/2 上午11:05
  */
 public class GalleryFinal {
+    static final String PHOTO_LIST = "photo_list";
+    static final String PHOTO_INDEX = "photo_index";
+    static final String PHOTO_SHOW_TITLE = "photo_show_title";
+    static final String PHOTO_SHOW_TAB = "photo_show_tab";
+
     static final int TAKE_REQUEST_CODE = 1001;
 
     static final int PERMISSIONS_CODE_GALLERY = 2001;
@@ -147,7 +152,28 @@ public class GalleryFinal {
         FunctionConfig config = copyGlobalFuncationConfig();
         if (config != null) {
             config.maxSize = maxSize;
-            openGalleryMulti(requestCode, config, callback);
+            openGalleryMulti(requestCode, null, config, callback);
+        } else {
+            if (callback != null) {
+                callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
+            }
+            ILogger.e("Please init GalleryFinal.");
+        }
+    }
+
+    /**
+     * 打开Gallery-
+     *
+     * @param requestCode
+     * @param maxSize
+     * @param callback
+     */
+    public static void openGalleryMulti(int requestCode, ArrayList<PhotoInfo> hasSelected,
+                                        int maxSize, OnHandlerResultCallback callback) {
+        FunctionConfig config = copyGlobalFuncationConfig();
+        if (config != null) {
+            config.maxSize = maxSize;
+            openGalleryMulti(requestCode, hasSelected, config, callback);
         } else {
             if (callback != null) {
                 callback.onHanlderFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
@@ -163,7 +189,9 @@ public class GalleryFinal {
      * @param config
      * @param callback
      */
-    public static void openGalleryMulti(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
+    public static void openGalleryMulti(int requestCode, ArrayList<PhotoInfo> hasSelected,
+                                        FunctionConfig config, OnHandlerResultCallback
+            callback) {
         if (mCoreConfig.getImageLoader() == null) {
             ILogger.e("Please init GalleryFinal.");
             if (callback != null) {
@@ -205,6 +233,7 @@ public class GalleryFinal {
         config.mutiSelect = true;
 
         Intent intent = new Intent(mCoreConfig.getContext(), PhotoSelectActivity.class);
+        intent.putExtra(GalleryFinal.PHOTO_LIST, (Serializable) hasSelected);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mCoreConfig.getContext().startActivity(intent);
     }
@@ -469,8 +498,8 @@ public class GalleryFinal {
         Intent intent = new Intent(mCoreConfig.getContext(), PhotoPreviewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(PhotoPreviewActivity.PHOTO_INDEX, selectedIndex);
-        intent.putExtra(PhotoPreviewActivity.PHOTO_LIST, (Serializable) photoInfos);
+        intent.putExtra(GalleryFinal.PHOTO_INDEX, selectedIndex);
+        intent.putExtra(GalleryFinal.PHOTO_LIST, (Serializable) photoInfos);
         mCoreConfig.getContext().startActivity(intent);
         return Error.SUCCESS;
     }

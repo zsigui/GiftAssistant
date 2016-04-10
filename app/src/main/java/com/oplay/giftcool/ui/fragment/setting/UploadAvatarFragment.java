@@ -126,13 +126,13 @@ public class UploadAvatarFragment extends BaseFragment {
             switch (reqeustCode) {
                 case REQ_ID_PHOTO_ALBUM:
                 case REQ_ID_PHOTO_CAMERA:
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_FRAG, "Pick Photo = " + resultList);
-                    }
                     if (resultList == null || resultList.size() == 0) {
                         mCurrentSelectFilePath = null;
                         ToastUtil.showShort("获取图片信息失败");
                         return;
+                    }
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_WARN, "path = " + resultList.get(0).getPhotoPath());
                     }
                     mCurrentSelectFilePath = resultList.get(0).getPhotoPath();
                     break;

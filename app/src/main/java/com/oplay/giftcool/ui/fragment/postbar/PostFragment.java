@@ -349,7 +349,6 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 	@Override
 	public void doCallBack(Object data) {
-		KLog.d(AppDebugConfig.TAG_WARN, "doCallBack is call");
 		if (data != null && data instanceof Boolean) {
 			if (!mIsSwipeRefresh) {
 				if (mCallRefresh != null) {

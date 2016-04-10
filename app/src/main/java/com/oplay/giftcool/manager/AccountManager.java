@@ -495,9 +495,6 @@ public class AccountManager implements OnFinishListener {
                             KLog.d(AppDebugConfig.TAG_MANAGER, response == null ?
                                     "logout response null" : "logout " + response.code());
                         }
-                        if (response != null && response.isSuccessful()) {
-                            KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "logout resp null" : response.errorBody());
-                        }
                     }
 
                     @Override

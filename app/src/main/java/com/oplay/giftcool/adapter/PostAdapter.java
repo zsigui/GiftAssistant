@@ -14,7 +14,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.FooterListener;
@@ -23,7 +22,6 @@ import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * 首页活动页面的适配器
@@ -220,7 +218,6 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 			ToastUtil.showShort("页面失效，请重新打开应用");
 			return;
 		}
-		KLog.d(AppDebugConfig.TAG_WARN, "v.id = " + v.getId());
 		switch (v.getId()) {
 			case R.id.iv_sign_in_everyday:
 				// 跳转签到页面

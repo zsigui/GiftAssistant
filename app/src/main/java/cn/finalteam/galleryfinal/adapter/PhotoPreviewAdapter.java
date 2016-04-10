@@ -31,7 +31,7 @@ public class PhotoPreviewAdapter extends ViewHolderRecyclingPagerAdapter<PhotoPr
 
     @Override
     public PreviewViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-        View view = getLayoutInflater().inflate(R.layout.gf_adapter_preview_viewpgaer_item, null);
+        View view = getLayoutInflater().inflate(R.layout.gf_adapter_preview_viewpgaer_item, parent, false);
         return new PreviewViewHolder(view);
     }
 

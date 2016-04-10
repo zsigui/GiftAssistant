@@ -37,7 +37,6 @@ public class ThemeConfig implements Serializable{
             .setTitleBarBgColor(Color.rgb(0x38, 0x42, 0x48))
             .setFabNornalColor(Color.rgb(0x38, 0x42, 0x48))
             .setFabPressedColor(Color.rgb(0x20, 0x25, 0x28))
-            .setCheckSelectedColor(Color.rgb(0x38, 0x42, 0x48))
             .setCropControlColor(Color.rgb(0x38, 0x42, 0x48))
             .build();
     //蓝绿主题
@@ -45,7 +44,6 @@ public class ThemeConfig implements Serializable{
             .setTitleBarBgColor(Color.rgb(0x01, 0x83, 0x93))
             .setFabNornalColor(Color.rgb(0x00, 0xac, 0xc1))
             .setFabPressedColor(Color.rgb(0x01, 0x83, 0x93))
-            .setCheckSelectedColor(Color.rgb(0x00, 0xac, 0xc1))
             .setCropControlColor(Color.rgb(0x00, 0xac, 0xc1))
             .build();
     //橙色主题
@@ -53,7 +51,6 @@ public class ThemeConfig implements Serializable{
             .setTitleBarBgColor(Color.rgb(0xFF, 0x57, 0x22))
             .setFabNornalColor(Color.rgb(0xFF, 0x57, 0x22))
             .setFabPressedColor(Color.rgb(0xE6, 0x4A, 0x19))
-            .setCheckSelectedColor(Color.rgb(0xFF, 0x57, 0x22))
             .setCropControlColor(Color.rgb(0xFF, 0x57, 0x22))
             .build();
     //绿色主题
@@ -61,7 +58,6 @@ public class ThemeConfig implements Serializable{
             .setTitleBarBgColor(Color.rgb(0x4C, 0xAF, 0x50))
             .setFabNornalColor(Color.rgb(0x4C, 0xAF, 0x50))
             .setFabPressedColor(Color.rgb(0x38, 0x8E, 0x3C))
-            .setCheckSelectedColor(Color.rgb(0x4C, 0xAF, 0x50))
             .setCropControlColor(Color.rgb(0x4C, 0xAF, 0x50))
             .build();
     //青绿色主题
@@ -69,15 +65,12 @@ public class ThemeConfig implements Serializable{
             .setTitleBarBgColor(Color.rgb(0x00, 0x96, 0x88))
             .setFabNornalColor(Color.rgb(0x00, 0x96, 0x88))
             .setFabPressedColor(Color.rgb(0x00, 0x79, 0x6B))
-            .setCheckSelectedColor(Color.rgb(0x00, 0x96, 0x88))
             .setCropControlColor(Color.rgb(0x00, 0x96, 0x88))
             .build();
 
     private int titleBarTextColor;
     private int titleBarBgColor;
     private int titleBarIconColor;
-    private int checkNornalColor;
-    private int checkSelectedColor;
     private int fabNornalColor;
     private int fabPressedColor;
     private int cropControlColor;
@@ -100,8 +93,6 @@ public class ThemeConfig implements Serializable{
         this.titleBarTextColor = builder.titleBarTextColor;
         this.titleBarBgColor = builder.titleBarBgColor;
         this.titleBarIconColor = builder.titleBarIconColor;
-        this.checkNornalColor = builder.checkNornalColor;
-        this.checkSelectedColor = builder.checkSelectedColor;
         this.fabNornalColor = builder.fabNornalColor;
         this.fabPressedColor = builder.fabPressedColor;
         this.cropControlColor = builder.cropControlColor;
@@ -123,8 +114,6 @@ public class ThemeConfig implements Serializable{
         private int titleBarTextColor = Color.WHITE;
         private int titleBarBgColor = Color.rgb(0x3F, 0x51, 0xB5);
         private int titleBarIconColor = Color.WHITE;
-        private int checkNornalColor = Color.rgb(0xd2, 0xd2, 0xd7);
-        private int checkSelectedColor = Color.rgb(0x3F, 0x51, 0xB5);
         private int fabNornalColor = Color.rgb(0x3F, 0x51, 0xB5);
         private int fabPressedColor = Color.rgb(0x30, 0x3f, 0x9f);
         private int cropControlColor = Color.rgb(0x3F, 0x51, 0xB5);
@@ -155,16 +144,6 @@ public class ThemeConfig implements Serializable{
 
         public Builder setTitleBarIconColor(int iconColor) {
             this.titleBarIconColor = iconColor;
-            return this;
-        }
-
-        public Builder setCheckNornalColor(int checkNornalColor) {
-            this.checkNornalColor = checkNornalColor;
-            return this;
-        }
-
-        public Builder setCheckSelectedColor(int checkSelectedColor) {
-            this.checkSelectedColor = checkSelectedColor;
             return this;
         }
 
@@ -254,14 +233,6 @@ public class ThemeConfig implements Serializable{
 
     public int getTitleBarBgColor() {
         return titleBarBgColor;
-    }
-
-    public int getCheckNornalColor() {
-        return checkNornalColor;
-    }
-
-    public int getCheckSelectedColor() {
-        return checkSelectedColor;
     }
 
     public int getTitleBarIconColor() {

@@ -15,26 +15,35 @@
   ~  limitations under the License.
   -->
 
-<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-             android:layout_width = "match_parent"
-             android:layout_height = "match_parent"
-             android:orientation = "vertical" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
-	<cn.finalteam.galleryfinal.widget.GFImageView
-			android:id = "@+id/iv_thumb"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent"
-			android:src = "@drawable/ic_gf_default_photo"
-			android:scaleType = "centerCrop"
-			/>
+    <cn.finalteam.galleryfinal.widget.GFImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_photo_take"
+        />
 
-	<ImageView
-			android:id = "@+id/iv_check"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:layout_gravity = "top|right"
-			android:layout_marginTop = "4dp"
-			android:layout_marginRight = "4dp"
-			android:background = "@drawable/selector_check_box" />
+    <LinearLayout
+        android:id="@+id/ll_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="6dp"
+        android:paddingTop="6dp">
 
-</FrameLayout >
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_check_box"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
+
+</FrameLayout>

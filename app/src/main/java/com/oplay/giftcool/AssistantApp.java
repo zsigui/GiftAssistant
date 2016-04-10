@@ -151,8 +151,6 @@ public class AssistantApp extends Application {
         ThemeConfig theme = new ThemeConfig.Builder()
                 .setTitleBarBgColor(bgColor)
                 .setTitleBarIconColor(textColor)
-                .setCheckNornalColor(transparent)
-                .setCheckSelectedColor(transparent)
                 .setIconCheck(R.drawable.selector_check_box)
                 .setIconBack(R.drawable.ic_bar_back)
                 .setIconDelete(R.drawable.ic_photo_delete)
@@ -163,9 +161,9 @@ public class AssistantApp extends Application {
         FunctionConfig config = new FunctionConfig.Builder()
                 .setEnableCamera(false)
                 .setEnablePreview(false)
-                .setEnableRotate(true)
-                .setEnableCrop(true)
-                .setEnableEdit(true)
+                .setEnableRotate(false)
+                .setEnableCrop(false)
+                .setEnableEdit(false)
                 .build();
         UILImageLoader imageLoader = new UILImageLoader();
         File folder = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);

@@ -19,15 +19,16 @@ package cn.finalteam.galleryfinal.adapter;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.oplay.giftcool.R;
 
 import java.util.List;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.listener.OnListItemClickListener;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.widget.GFImageView;
 
@@ -36,8 +37,10 @@ import cn.finalteam.galleryfinal.widget.GFImageView;
  * Author:pengjianbo
  * Date:15/10/10 下午4:59
  */
-public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoViewHolder, PhotoInfo> {
+public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoViewHolder, PhotoInfo> implements View.OnClickListener {
+    private final int TAG_POSITION = 0x234fff3f;
 
+    private OnListItemClickListener mListItemClickListener;
     private List<PhotoInfo> mSelectList;
     private int mScreenWidth;
     private int mRowWidth;
@@ -48,8 +51,13 @@ public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoVi
         super(activity, list);
         this.mSelectList = selectList;
         this.mScreenWidth = screenWidth;
-        this.mRowWidth = mScreenWidth/3;
+        this.mRowWidth = mScreenWidth / 3;
         this.mActivity = activity;
+    }
+
+    @Override
+    public int getCount() {
+        return super.getCount() + 1;
     }
 
     @Override
@@ -61,31 +69,48 @@ public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoVi
 
     @Override
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
-        PhotoInfo photoInfo = getDatas().get(position);
 
-        String path = "";
-        if (photoInfo != null) {
-            path = photoInfo.getPhotoPath();
-        }
-
-//        holder.mIvThumb.setImageResource(R.drawable.ic_gf_default_photo);
-//        Drawable defaultDrawable = mActivity.getResources().getDrawable(R.drawable.ic_gf_default_photo);
-        GalleryFinal.getCoreConfig().getImageLoader().displayImage(mActivity, path, holder.mIvThumb, null, mRowWidth, mRowWidth);
-        holder.mView.setAnimation(null);
-        if (GalleryFinal.getCoreConfig().getAnimation() > 0) {
-            holder.mView.setAnimation(AnimationUtils.loadAnimation(mActivity, GalleryFinal.getCoreConfig().getAnimation()));
-        }
-        holder.mIvCheck.setImageResource(GalleryFinal.getGalleryTheme().getIconCheck());
-        if ( GalleryFinal.getFunctionConfig().isMutiSelect() ) {
-            holder.mIvCheck.setVisibility(View.VISIBLE);
-            if (mSelectList.contains(photoInfo)) {
-                holder.mIvCheck.setSelected(true);
-            } else {
-                holder.mIvCheck.setSelected(false);
-            }
+        if (position == 0) {
+            holder.mLlCheck.setVisibility(View.GONE);
+            holder.mIvThumb.setImageResource(R.drawable.ic_photo_take);
+            holder.mView.setBackgroundResource(R.color.co_opacity_70);
+            holder.mIvThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         } else {
-            holder.mIvCheck.setVisibility(View.GONE);
+
+            PhotoInfo photoInfo = getDatas().get(position - 1);
+
+            String path = "";
+            if (photoInfo != null) {
+                path = photoInfo.getPhotoPath();
+            }
+
+            GalleryFinal.getCoreConfig().getImageLoader().displayImage(mActivity, path, holder.mIvThumb, null, mRowWidth, mRowWidth);
+//        holder.mView.setAnimation(null);
+//        if (GalleryFinal.getCoreConfig().getAnimation() > 0) {
+//            holder.mView.setAnimation(AnimationUtils.loadAnimation(mActivity, GalleryFinal.getCoreConfig().getAnimation()));
+//        }
+            holder.mIvThumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.mIvCheck.setImageResource(GalleryFinal.getGalleryTheme().getIconCheck());
+            if (GalleryFinal.getFunctionConfig().isMutiSelect()) {
+                holder.mLlCheck.setVisibility(View.VISIBLE);
+                holder.mLlCheck.setTag(holder.mIvCheck);
+                holder.mLlCheck.setTag(TAG_POSITION, position);
+                holder.mLlCheck.setOnClickListener(this);
+                if (mSelectList.contains(photoInfo)) {
+                    holder.mIvCheck.setSelected(true);
+                } else {
+                    holder.mIvCheck.setSelected(false);
+                }
+            } else {
+                holder.mLlCheck.setVisibility(View.GONE);
+            }
         }
+        holder.mIvThumb.setTag(TAG_POSITION, position);
+        holder.mIvThumb.setOnClickListener(this);
+    }
+
+    public void setListItemClickListener(OnListItemClickListener listItemClickListener) {
+        mListItemClickListener = listItemClickListener;
     }
 
     private void setHeight(final View convertView) {
@@ -93,16 +118,30 @@ public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoVi
         convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        final int pos = (int) v.getTag(TAG_POSITION);
+        if (mListItemClickListener != null) {
+            mListItemClickListener.onItemClick(v, pos, getItemId(pos));
+        }
+    }
+
     public static class PhotoViewHolder extends ViewHolderAdapter.ViewHolder {
 
         public GFImageView mIvThumb;
         public ImageView mIvCheck;
+        public LinearLayout mLlCheck;
         View mView;
+
         public PhotoViewHolder(View view) {
             super(view);
             mView = view;
             mIvThumb = (GFImageView) view.findViewById(R.id.iv_thumb);
             mIvCheck = (ImageView) view.findViewById(R.id.iv_check);
+            mLlCheck = (LinearLayout) view.findViewById(R.id.ll_check);
         }
     }
 }

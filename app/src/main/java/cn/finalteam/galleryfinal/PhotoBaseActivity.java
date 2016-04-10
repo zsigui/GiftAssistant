@@ -142,7 +142,6 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
         File toFile = new File(takePhotoFolder, "IMG" + DateUtil.formatTime(System.currentTimeMillis(),
                 "yyyyMMddHHmmss") + ".jpg");
 
-        ILogger.d("create folder=" + toFile.getAbsolutePath());
         if (suc) {
             mTakePhotoUri = Uri.fromFile(toFile);
             Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

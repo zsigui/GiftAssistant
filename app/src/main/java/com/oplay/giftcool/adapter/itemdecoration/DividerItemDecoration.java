@@ -8,7 +8,6 @@ import android.support.annotation.ColorInt;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 
 import com.oplay.giftcool.R;
@@ -66,7 +65,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 	}
 
 	public void setDividerSize(int dividerSize) {
-		mDividerSize = (int) TypedValue.applyDimension(dividerSize, TypedValue.COMPLEX_UNIT_DIP, mMetrics);
+		mDividerSize = dividerSize;
 	}
 
 	@Override

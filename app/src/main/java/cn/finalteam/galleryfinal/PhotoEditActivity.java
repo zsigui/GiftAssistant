@@ -516,7 +516,7 @@ public class PhotoEditActivity extends CropImageActivity implements AdapterView.
             finish();
         } else if (id == R.id.iv_preview) {
             Intent intent = new Intent(this, PhotoPreviewActivity.class);
-            intent.putExtra(PhotoPreviewActivity.PHOTO_LIST, mSelectPhotoList);
+            intent.putExtra(GalleryFinal.PHOTO_LIST, mSelectPhotoList);
             startActivity(intent);
         }
     }

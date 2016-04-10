@@ -35,15 +35,20 @@ import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
-import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
+import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 
 /**
  * @author micle
@@ -392,14 +397,28 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 				break;
 			case R.id.ll_gift_count:
-				if (AccountManager.getInstance().isLogin()) {
-					IntentUtil.jumpMyGift(MainActivity.this);
-				} else {
-					IntentUtil.jumpLogin(MainActivity.this);
-				}
+//				if (AccountManager.getInstance().isLogin()) {
+//					IntentUtil.jumpMyGift(MainActivity.this);
+//				} else {
+//					IntentUtil.jumpLogin(MainActivity.this);
+//				}
+                GalleryFinal.openGalleryMulti(1, mInfos, 3, new GalleryFinal.OnHandlerResultCallback() {
+                    @Override
+                    public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+                        ToastUtil.showShort("success");
+                        mInfos = new ArrayList<PhotoInfo>(resultList.size());
+                        mInfos.addAll(resultList);
+                    }
+
+                    @Override
+                    public void onHanlderFailure(int requestCode, String errorMsg) {
+                        ToastUtil.showShort(errorMsg);
+                    }
+                });
 				break;
 		}
 	}
+    private ArrayList<PhotoInfo> mInfos;
 
 	@Override
 	public void onBackPressed() {

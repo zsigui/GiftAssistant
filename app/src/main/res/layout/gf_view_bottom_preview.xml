@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_bottom"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/co_white"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingLeft="6dp"
+    android:paddingRight="10dp"
+    android:paddingTop="8dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_bottom_preview"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/gf_img_height"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/tv_ok"
+        style="@style/DefaultTextView.BiggerBtn"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/selector_btn_download_blue"
+        android:clickable="true"/>
+</LinearLayout>

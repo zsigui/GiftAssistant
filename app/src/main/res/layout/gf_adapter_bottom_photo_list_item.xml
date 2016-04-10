@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2014 pengjianbo(pengjianbosoft@gmail.com), Inc.
   ~
@@ -13,16 +14,15 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-<resources>
-    <dimen name="gf_title_bar_height">56dp</dimen>
-
-    <dimen name="fab_size_normal">56dp</dimen>
-    <dimen name="fab_icon_size">24dp</dimen>
-    <dimen name="fab_shadow_offset">3dp</dimen>
-    <dimen name="fab_shadow_radius">9dp</dimen>
-    <dimen name="fab_stroke_width">0.0dp</dimen>
-
-    <dimen name="gf_img_padding">4dp</dimen>
-    <dimen name="gf_img_height">60dp</dimen>
-</resources>
+    <cn.finalteam.galleryfinal.widget.GFImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_dash_border"
+        android:scaleType="centerCrop"/>
+</FrameLayout>

@@ -66,13 +66,11 @@ public class FolderListAdapter extends ViewHolderAdapter<FolderListAdapter.Folde
         if (photoInfo != null) {
             path = photoInfo.getPhotoPath();
         }
-//        holder.mIvCover.setImageResource(R.drawable.ic_gf_default_photo);
-//        Drawable defaultDrawable = mActivity.getResources().getDrawable(R.drawable.ic_gf_default_photo);
         GalleryFinal.getCoreConfig().getImageLoader().displayImage(mActivity, path, holder.mIvCover, null, 200, 200);
 
         holder.mTvFolderName.setText(photoFolderInfo.getFolderName());
         int size = 0;
-        if ( photoFolderInfo.getPhotoList() != null ) {
+        if (photoFolderInfo.getPhotoList() != null) {
             size = photoFolderInfo.getPhotoList().size();
         }
         holder.mTvPhotoCount.setText(mActivity.getString(R.string.folder_photo_size, size));
@@ -81,10 +79,9 @@ public class FolderListAdapter extends ViewHolderAdapter<FolderListAdapter.Folde
         }
         holder.mIvFolderCheck.setImageResource(GalleryFinal.getGalleryTheme().getIconCheck());
         if (mSelectFolder == photoFolderInfo || (mSelectFolder == null && position == 0)) {
-            holder.mIvFolderCheck.setVisibility(View.VISIBLE);
-            holder.mIvFolderCheck.setColorFilter(GalleryFinal.getGalleryTheme().getCheckSelectedColor());
+            holder.mIvFolderCheck.setSelected(true);
         } else {
-            holder.mIvFolderCheck.setVisibility(View.GONE);
+            holder.mIvFolderCheck.setSelected(false);
         }
     }
 
@@ -102,6 +99,7 @@ public class FolderListAdapter extends ViewHolderAdapter<FolderListAdapter.Folde
         TextView mTvFolderName;
         TextView mTvPhotoCount;
         View mView;
+
         public FolderViewHolder(View view) {
             super(view);
             this.mView = view;
