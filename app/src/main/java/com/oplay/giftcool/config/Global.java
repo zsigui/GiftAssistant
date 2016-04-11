@@ -67,11 +67,16 @@ public class Global {
 	 * 重复点击的时间间隔，单位:ms
 	 */
 	public final static int CLICK_TIME_INTERVAL = 500;
+	/**
+	 * 回复最大图片数
+	 */
+	public final static int REPLY_IMG_COUNT = 6;
 
 	/**
 	 * 全局服务器与本地手机时间差，单位:ms
 	 */
 	public static long sServerTimeDiffLocal;
+
 	/**
 	 * Retrofit网络请求接口引擎
 	 */

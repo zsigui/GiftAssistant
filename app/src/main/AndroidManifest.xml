@@ -157,6 +157,11 @@
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
+        <activity android:name = ".ui.activity.PostDetailActivity"
+                  android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+                  android:screenOrientation="sensorPortrait"
+                  android:windowSoftInputMode="adjustResize|stateHidden"/>
+
         <service
             android:name=".service.ClockService"
             android:exported="false"/>

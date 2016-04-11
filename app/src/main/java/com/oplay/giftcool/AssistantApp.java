@@ -1,5 +1,6 @@
 package com.oplay.giftcool;
 
+import android.app.Activity;
 import android.app.Application;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
@@ -73,6 +75,8 @@ public class AssistantApp extends Application {
     private String mStartImg;
     private IndexBanner mBroadcastBanner;
     private int mChannelId = -1;
+
+    private int mSoftInputHeight = 0;
 
     // 是否安装完成自动删除
     private boolean mShouldAutoDeleteApk = false;
@@ -352,6 +356,7 @@ public class AssistantApp extends Application {
         setIsPlayDownloadComplete(mIsPlayDownloadComplete);
         mIsReadAttention = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_IS_READ_ATTENTION, false);
+        getSoftInputHeight(null);
     }
 
     /**
@@ -580,5 +585,21 @@ public class AssistantApp extends Application {
 
     public boolean isReadAttention() {
         return mIsReadAttention;
+    }
+
+    public int getSoftInputHeight(Activity activity) {
+        if (mSoftInputHeight == 0) {
+//            mSoftInputHeight = SPUtil.getInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, 200);
+            if (activity != null && mSoftInputHeight == 0) {
+                mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
+                setSoftInputHeight(mSoftInputHeight);
+            }
+        }
+        return mSoftInputHeight;
+    }
+
+    public void setSoftInputHeight(int softInputHeight) {
+        mSoftInputHeight = softInputHeight;
+        SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
     }
 }

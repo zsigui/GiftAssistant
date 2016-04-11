@@ -8,10 +8,10 @@ package com.oplay.giftcool.config.util;
 public class PostTypeUtil {
 
 	public static final int TYPE_HEADER = 101;
-	public static final int TYPE_TITLE_ONE = 102;
-	public static final int TYPE_TITLE_TWO = 103;
+	public static final int TYPE_TITLE_OFFICIAL = 102;
+	public static final int TYPE_TITLE_GAME = 103;
 	public static final int TYPE_FOOTER = 104;
-	public static final int TYPE_CONTENT_ONE = 0;
-	public static final int TYPE_CONTENT_TWO = 1;
+	public static final int TYPE_CONTENT_OFFICIAL = 1;
+	public static final int TYPE_CONTENT_GAME = 0;
 
 }

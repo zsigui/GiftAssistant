@@ -196,9 +196,9 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
         int requestCode = GalleryFinal.getRequestCode();
         if (callback != null) {
             if ( photoList != null && photoList.size() > 0 ) {
-                callback.onHanlderSuccess(requestCode, photoList);
+                callback.onHandlerSuccess(requestCode, photoList);
             } else {
-                callback.onHanlderFailure(requestCode, getString(R.string.photo_list_empty));
+                callback.onHandlerFailure(requestCode, getString(R.string.photo_list_empty));
             }
         }
         finishGalleryFinalPage();
@@ -208,7 +208,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
         GalleryFinal.OnHandlerResultCallback callback = GalleryFinal.getCallback();
         int requestCode = GalleryFinal.getRequestCode();
         if ( callback != null ) {
-            callback.onHanlderFailure(requestCode, errormsg);
+            callback.onHandlerFailure(requestCode, errormsg);
         }
         if(delayFinish) {
             mFinishHanlder.sendEmptyMessageDelayed(0, 500);
@@ -221,7 +221,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
         GalleryFinal.OnHandlerResultCallback callback = GalleryFinal.getCallback();
         int requestCode = GalleryFinal.getRequestCode();
         if ( callback != null ) {
-            callback.onHanlderFailure(requestCode, errormsg);
+            callback.onHandlerFailure(requestCode, errormsg);
         }
         if(delayFinish) {
             finishGalleryFinalPage();

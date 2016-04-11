@@ -92,7 +92,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 				}
 
 				// 设置请求对象的值
-				final boolean isRead = AssistantApp.getInstance().isReadAttention();
+				final boolean isRead = false;
 				if (mReqPageObj == null) {
 					ReqIndexPost data = new ReqIndexPost();
 					data.pageSize = 20;
@@ -169,14 +169,14 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		// 添加官方活动部分
 		if (data.officialData != null && !data.officialData.isEmpty()) {
 			IndexPostNew titleOne = new IndexPostNew();
-			titleOne.showType = PostTypeUtil.TYPE_TITLE_ONE;
+			titleOne.showType = PostTypeUtil.TYPE_TITLE_OFFICIAL;
 			mData.add(titleOne);
 			mData.addAll(data.officialData);
 		}
 		// 添加游戏快讯部分
 		if (data.notifyData != null && !data.notifyData.isEmpty()) {
 			IndexPostNew titleTwo = new IndexPostNew();
-			titleTwo.showType = PostTypeUtil.TYPE_TITLE_TWO;
+			titleTwo.showType = PostTypeUtil.TYPE_TITLE_GAME;
 			mData.add(titleTwo);
 			mData.addAll(data.notifyData);
 		}
@@ -291,10 +291,11 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 							return;
 						}
 						// 解除刷新和加载的状态锁定
-						mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = false;
+						mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = mIsLoadMore = false;
 						if (mRefreshLayout != null) {
 							mRefreshLayout.setRefreshing(false);
 							mRefreshLayout.setEnabled(true);
+							mRefreshLayout.setLoading(false);
 						}
 						if (response != null && response.isSuccessful()) {
 							if (response.body() != null && response.body().isSuccess()) {
@@ -336,10 +337,11 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 							KLog.d(AppDebugConfig.TAG_FRAG, t);
 						}
 						ToastUtil.blurThrow(PREFIX_POST);
-						mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = false;
+						mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = mIsLoadMore = false;
 						if (mRefreshLayout != null) {
 							mRefreshLayout.setRefreshing(false);
 							mRefreshLayout.setEnabled(true);
+							mRefreshLayout.setLoading(false);
 						}
 					}
 				});
@@ -380,7 +382,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 			data.content = "洗刷刷西三环阿迪开房间阿里开始的加法考虑到将很快垃圾sdk了好久阿喀琉斯大家伙可垃圾sdk你就爱看市领导和金卡的就好了";
 			data.state = (int) (Math.random() * 2);
 			data.img = "http://owan-img.ymapp.com/app/76/d4/7705/icon/icon_1440398275.png_128_128_70.png";
-			data.showType = PostTypeUtil.TYPE_CONTENT_ONE;
+			data.showType = PostTypeUtil.TYPE_CONTENT_OFFICIAL;
 			post.officialData.add(data);
 		}
 		post.notifyData = new ArrayList<>();
@@ -392,7 +394,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 			data.state = (int) (Math.random() * 2);
 			data.img = "http://owan-img.ymapp.com/app/76/d4/7705/icon/icon_1440398275.png_128_128_70.png";
 			data.startTime = "4月31日";
-			data.showType = PostTypeUtil.TYPE_CONTENT_TWO;
+			data.showType = PostTypeUtil.TYPE_CONTENT_GAME;
 			post.notifyData.add(data);
 		}
 		return post;
@@ -416,7 +418,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 			data.state = (int) (Math.random() * 2);
 			data.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_128_128_70.png";
 			data.startTime = "3月12日";
-			data.showType = PostTypeUtil.TYPE_CONTENT_TWO;
+			data.showType = PostTypeUtil.TYPE_CONTENT_GAME;
 			datas.add(data);
 		}
 		return datas;

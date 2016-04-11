@@ -39,7 +39,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void initView() {
-		setContentView(R.layout.activity_gift_detail);
+		setContentView(R.layout.activity_toolbar_with_share);
 	}
 
 	@Override

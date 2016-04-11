@@ -369,11 +369,12 @@ public class AccountManager implements OnFinishListener {
                 return;
             }
             // session只能保持7天，一旦超时，需要重新登录
-            if (getUserSesion().lastUpdateTime + 7 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
-                ToastUtil.showShort("登录超时，需要重新登录");
-                notifyUserAll(null);
-                return;
-            }
+            // 不对超时做处理
+//            if (getUserSesion().lastUpdateTime + 7 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
+//                ToastUtil.showShort("登录超时，需要重新登录");
+//                notifyUserAll(null);
+//                return;
+//            }
             NetDataEncrypt.getInstance().initDecryptDataModel(getUserSesion().uid, getUserSesion().session);
             updateSessionNetRequest();
         }
@@ -384,11 +385,17 @@ public class AccountManager implements OnFinishListener {
      */
     private Call<JsonRespBase<UpdateSession>> mCallUpdateSession;
 
+    private long mLastRequestTime = 0;
     /**
      * 更新Session的实际网络请求方法
      */
     public void updateSessionNetRequest() {
         if (NetworkUtil.isConnected(mContext)) {
+            long curTime = System.currentTimeMillis();
+            if (curTime - mLastRequestTime < Global.CLICK_TIME_INTERVAL) {
+                mLastRequestTime = curTime;
+                return;
+            }
             if (mCallUpdateSession != null) {
                 mCallUpdateSession.cancel();
                 mCallUpdateSession = mCallUpdateSession.clone();

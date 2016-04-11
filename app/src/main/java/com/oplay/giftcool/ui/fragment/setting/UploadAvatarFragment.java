@@ -122,8 +122,8 @@ public class UploadAvatarFragment extends BaseFragment {
      */
     private GalleryFinal.OnHandlerResultCallback mResultCallback = new GalleryFinal.OnHandlerResultCallback() {
         @Override
-        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-            switch (reqeustCode) {
+        public void onHandlerSuccess(int requestCode, List<PhotoInfo> resultList) {
+            switch (requestCode) {
                 case REQ_ID_PHOTO_ALBUM:
                 case REQ_ID_PHOTO_CAMERA:
                     if (resultList == null || resultList.size() == 0) {
@@ -140,7 +140,7 @@ public class UploadAvatarFragment extends BaseFragment {
         }
 
         @Override
-        public void onHanlderFailure(int requestCode, String errorMsg) {
+        public void onHandlerFailure(int requestCode, String errorMsg) {
             switch (requestCode) {
                 case REQ_ID_PHOTO_ALBUM:
                     ToastUtil.showShort(errorMsg);

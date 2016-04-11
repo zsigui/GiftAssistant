@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
@@ -86,6 +87,12 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		mSearchLayout.setSearchActionListener(new SearchActionListener());
 
 		displayHistoryUI(mHistoryData);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		AssistantApp.getInstance().getSoftInputHeight(this);
 	}
 
 	/**

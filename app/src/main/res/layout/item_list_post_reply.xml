@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                android:layout_width = "@dimen/di_icon_bigger_diameter"
+                android:layout_height = "@dimen/di_icon_bigger_diameter" >
+
+	<ImageView
+			android:id = "@+id/iv_thumb"
+			android:contentDescription = "@null"
+			style = "@style/DefaultImageView.Icon"
+			android:layout_alignParentBottom = "true"
+			android:src = "@drawable/ic_photo_add"
+			android:scaleType = "centerInside"
+			android:background = "@drawable/shape_dash_border" />
+
+	<ImageView
+			android:id = "@+id/iv_delete"
+			style = "@style/DefaultImageView"
+			android:layout_alignParentRight = "true"
+			android:src = "@drawable/ic_photo_delete"
+			android:paddingRight = "@dimen/di_line_space_extra_big"
+			android:paddingTop = "@dimen/di_line_space_extra_normal" />
+</RelativeLayout >

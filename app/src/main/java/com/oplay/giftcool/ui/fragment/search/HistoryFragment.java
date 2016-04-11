@@ -130,6 +130,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         rvHotView.addItemDecoration(vDivider);
         mHotAdapter = new SearchHistoryHotAdapter(getContext());
         rvHotView.setAdapter(mHotAdapter);
+
     }
 
     private long mLastClickTime = 0;

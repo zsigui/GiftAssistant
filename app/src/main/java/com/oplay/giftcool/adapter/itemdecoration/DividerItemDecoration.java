@@ -40,7 +40,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 	protected Paint mPaint;
 
 	public DividerItemDecoration(Context context, int orientation) {
-		this(context, orientation, context.getResources().getColor(R.color.co_divider_bg), 1);
+		this(context, orientation, context.getResources().getColor(R.color.co_divider_bg),
+				context.getResources().getDimensionPixelSize(R.dimen.di_divider_height));
 	}
 
 	public DividerItemDecoration(Context context, int orientation, int dividerColor, int dividerSize) {

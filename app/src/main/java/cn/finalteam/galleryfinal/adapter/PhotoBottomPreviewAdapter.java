@@ -55,7 +55,8 @@ public class PhotoBottomPreviewAdapter extends BaseRVAdapter<PhotoInfo> implemen
             GalleryFinal.getCoreConfig().getImageLoader().displayImage((Activity) mContext, path, viewHolder.mIvThumb,
                     null, imgLength, imgLength);
             viewHolder.mIvThumb.setOnClickListener(this);
-            viewHolder.mIvThumb.setTag(TAG_POSITION, position);
+            // 由于使用notifyItemRemoved()，如果保存position，由于数据不会重新绑定，会导致删除时出错
+            viewHolder.mIvThumb.setTag(TAG_POSITION, viewHolder);
         }
     }
 
@@ -70,7 +71,7 @@ public class PhotoBottomPreviewAdapter extends BaseRVAdapter<PhotoInfo> implemen
             return;
         }
         if (mListener != null) {
-            final int pos = (int) v.getTag(TAG_POSITION);
+            final int pos = ((PreviewViewHolder)v.getTag(TAG_POSITION)).getAdapterPosition();
             mListener.onItemClick(getItem(pos), v, pos);
         }
     }

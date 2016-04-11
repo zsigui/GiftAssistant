@@ -80,13 +80,13 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				return headerHolder;
 			case PostTypeUtil.TYPE_FOOTER:
 				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent, false));
-			case PostTypeUtil.TYPE_TITLE_ONE:
+			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
 				final ItemTitleVH titleOneVH = new ItemTitleVH(
 						mInflater.inflate(R.layout.view_index_item_title_1, parent, false));
 				titleOneVH.tvTitle.setText(TEXT_OFFICIAL);
 				titleOneVH.itemView.setOnClickListener(this);
 				return titleOneVH;
-			case PostTypeUtil.TYPE_TITLE_TWO:
+			case PostTypeUtil.TYPE_TITLE_GAME:
 				final ItemTitleVH titleTwoVH = new ItemTitleVH(
 						mInflater.inflate(R.layout.view_index_item_title_2, parent, false));
 				titleTwoVH.tvTitle.setText(TEXT_NOTIFY);
@@ -95,10 +95,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				titleTwoVH.tbAttention.setOnClickListener(this);
 				tbReadAttention = titleTwoVH.tbAttention;
 				return titleTwoVH;
-			case PostTypeUtil.TYPE_CONTENT_ONE:
+			case PostTypeUtil.TYPE_CONTENT_OFFICIAL:
 				return new ContentOneHolder(LayoutInflater.from(mContext)
 						.inflate(R.layout.item_index_post_content_one, parent, false));
-			case PostTypeUtil.TYPE_CONTENT_TWO:
+			case PostTypeUtil.TYPE_CONTENT_GAME:
 				return new ContentTwoHolder(LayoutInflater.from(mContext)
 						.inflate(R.layout.item_index_post_content_two, parent, false));
 		}
@@ -138,10 +138,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				headerHolder.ivTask.setOnClickListener(this);
 				break;
 			case PostTypeUtil.TYPE_FOOTER:
-			case PostTypeUtil.TYPE_TITLE_ONE:
+			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
 				// 无处理
 				break;
-			case PostTypeUtil.TYPE_TITLE_TWO:
+			case PostTypeUtil.TYPE_TITLE_GAME:
 				ItemTitleVH titleTwoVH = (ItemTitleVH) holder;
 				if (AssistantApp.getInstance().isReadAttention()) {
 					titleTwoVH.tbAttention.setToggleOn();
@@ -149,10 +149,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 					titleTwoVH.tbAttention.setToggleOff();
 				}
 				break;
-			case PostTypeUtil.TYPE_CONTENT_ONE:
+			case PostTypeUtil.TYPE_CONTENT_OFFICIAL:
 				setContentOneData((ContentOneHolder) holder, position, item);
 				break;
-			case PostTypeUtil.TYPE_CONTENT_TWO:
+			case PostTypeUtil.TYPE_CONTENT_GAME:
 			default:
 				setContentTwoData((ContentTwoHolder) holder, position, item);
 				break;

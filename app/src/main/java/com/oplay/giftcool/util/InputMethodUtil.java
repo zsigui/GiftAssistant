@@ -9,6 +9,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.oplay.giftcool.AssistantApp;
+
 /**
  * @author micle
  * @email zsigui@foxmail.com
@@ -31,7 +33,10 @@ public class InputMethodUtil {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
-            return imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+            final boolean result = imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+            AssistantApp.getInstance().getSoftInputHeight(activity);
+            return result;
+
         }
         return false;
     }

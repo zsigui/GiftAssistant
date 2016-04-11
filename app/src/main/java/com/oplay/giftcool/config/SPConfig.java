@@ -52,4 +52,8 @@ public class SPConfig {
 	public static final String KEY_IS_PLAY_DOWNLOAD_COMPLETE = "play_sound_on_download_complete";
 	public static final String KEY_STORE_VER = "store_version";
 	public static final String KEY_IS_READ_ATTENTION = "read_attention";
+
+	/* 应用设置 */
+	public static final String SP_APP_DEVICE_FILE = "deviceadf";
+	public static final String KEY_SOFT_INPUT_HEIGHT = "soft_input_height";
 }

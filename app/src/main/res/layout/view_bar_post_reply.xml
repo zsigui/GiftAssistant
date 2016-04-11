@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:id = "@+id/ll_bottom"
+              android:layout_alignParentBottom = "true"
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content" >
+
+	<View
+			style = "@style/HDividerView" />
+
+	<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	              android:orientation = "horizontal"
+	              android:layout_width = "match_parent"
+	              android:layout_height = "wrap_content"
+	              android:background = "@color/co_white"
+	              android:gravity = "center_vertical"
+	              android:id = "@+id/ll_input_bar"
+	              android:padding = "@dimen/di_list_item_gap_normal" >
+
+		<ImageView
+				android:id = "@+id/iv_img_add"
+				style = "@style/DefaultImageView"
+				android:src = "@drawable/selector_img_upload"
+				android:scaleType = "centerInside" />
+
+		<EditText
+				android:id = "@+id/et_content"
+				style = "@style/DefaultTextView.Login"
+				android:maxLines = "4"
+				android:singleLine = "false"
+				android:background = "@drawable/shape_post_reply_edit_bg"
+				android:paddingLeft = "@dimen/di_list_item_gap_big"
+				android:paddingRight = "@dimen/di_list_item_gap_big"
+				android:paddingTop = "@dimen/di_list_item_gap_normal"
+				android:paddingBottom = "@dimen/di_list_item_gap_normal"
+				android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
+				android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+				android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+				android:hint = "@string/st_post_replay_text_hint" />
+
+		<TextView
+				android:id = "@+id/tv_send"
+				android:textSize = "@dimen/di_text_size_big"
+				style = "@style/DefaultTextView.BiggerBtn"
+				android:background = "@drawable/selector_btn_download_blue"
+				android:text = "@string/st_post_replay_btn_send" />
+	</LinearLayout >
+
+	<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	              android:orientation = "vertical"
+	              android:layout_width = "match_parent"
+	              android:layout_height = "wrap_content"
+	              android:id = "@+id/ll_img_preview"
+	              android:padding = "@dimen/di_list_item_gap_big"
+	              android:visibility = "gone"
+	              android:background = "@color/co_common_content_bg" >
+
+		<android.support.v7.widget.RecyclerView
+				android:id = "@+id/rl_container"
+				android:layout_width = "match_parent"
+				android:layout_height = "160dp" />
+
+		<TextView
+				android:id = "@+id/tv_pick_hint"
+				style = "@style/DefaultTextView.Text"
+				android:layout_width = "match_parent"
+				android:gravity = "center"
+				android:paddingTop = "@dimen/di_list_item_gap_normal"/>
+
+	</LinearLayout >
+</LinearLayout >

@@ -48,6 +48,9 @@
 	<string name = "st_post_task" >每日任务</string >
 	<string name = "st_post_sign_in" >每日签到</string >
 
+	<!-- 活动-详情 -->
+	<string name = "st_post_replay_text_hint">我也说一句</string>
+	<string name = "st_post_replay_btn_send">发表</string>
 
 	<!-- 礼包状态 -->
 	<string name = "st_gift_or" >或</string >
