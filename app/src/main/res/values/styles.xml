@@ -178,12 +178,16 @@
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >@dimen/di_btn_height</item >
 		<item name = "android:textColor" >@color/co_white</item >
+		<item name = "android:paddingLeft" >@dimen/di_btn_padding_left_right</item >
+		<item name = "android:paddingRight" >@dimen/di_btn_padding_left_right</item >
 		<item name = "android:clickable" >true</item >
 	</style >
 
 	<style name = "DefaultTextView.BiggerBtn" >
 		<item name = "android:layout_width" >wrap_content</item >
 		<item name = "android:layout_height" >@dimen/di_btn_bigger_height</item >
+		<item name = "android:paddingLeft" >@dimen/di_btn_bigger_padding_left_right</item >
+		<item name = "android:paddingRight" >@dimen/di_btn_bigger_padding_left_right</item >
 		<item name = "android:textColor" >@color/co_white</item >
 	</style >
 

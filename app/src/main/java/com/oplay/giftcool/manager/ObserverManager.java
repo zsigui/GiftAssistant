@@ -182,7 +182,8 @@ public class ObserverManager {
 		int GIFT_UPDATE_PART = 0x11;
 		int USER_UPDATE_ALL = 0x020;
 		int USER_UPDATE_PART = 0x021;
-		int USER_UPDATE_PUSH_MESSAGE = 0x022;
+		int USER_UPDATE_TASK = 0x022;
+		int USER_UPDATE_PUSH_MESSAGE = 0x023;
 	}
 
 	public interface UserActionListener {

@@ -13,6 +13,7 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -31,9 +32,10 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 		GalleryFinal.OnHandlerResultCallback {
 
 	private String TEXT_PICK_HINT = "已选%d张，还可以选择%d张";
-	private final int REQ_ID_IMG_ADD = 0x12343;
+	public final int REQ_ID_IMG_ADD = 0x12343;
 
 	private TextView tvPickHint;
+	private PostDetailFragment mFragment;
 
 	public PostReplyAdapter(Context context) {
 		this(context, null);
@@ -50,6 +52,11 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 
 	public void setTvPickHint(TextView tvPickHint) {
 		this.tvPickHint = tvPickHint;
+		setPicTextVal();
+	}
+
+	public void setFragment(PostDetailFragment fragment) {
+		mFragment = fragment;
 	}
 
 	@Override
@@ -106,7 +113,18 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 			case R.id.iv_delete:
 				mData.remove(pos);
 				notifyItemRemoved(pos);
+				setPicTextVal();
+				if (mData.size() == 0 && mFragment != null) {
+					mFragment.pickFailed();
+				}
 				break;
+		}
+	}
+
+	private void setPicTextVal() {
+		if (tvPickHint != null) {
+			tvPickHint.setText(String.format(TEXT_PICK_HINT, mData.size(),
+					Global.REPLY_IMG_COUNT - mData.size()));
 		}
 	}
 
@@ -116,9 +134,9 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 			mData.clear();
 			mData.addAll(resultList);
 			notifyItemRangeChanged(0, getItemCount());
-			if (tvPickHint != null) {
-				tvPickHint.setText(String.format(TEXT_PICK_HINT, mData.size(),
-						Global.REPLY_IMG_COUNT - mData.size()));
+			setPicTextVal();
+			if (mFragment != null) {
+				mFragment.pickSuccess();
 			}
 		}
 	}

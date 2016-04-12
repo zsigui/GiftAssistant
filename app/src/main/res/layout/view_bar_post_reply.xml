@@ -16,7 +16,10 @@
 	              android:background = "@color/co_white"
 	              android:gravity = "center_vertical"
 	              android:id = "@+id/ll_input_bar"
-	              android:padding = "@dimen/di_list_item_gap_normal" >
+	              android:paddingTop = "@dimen/di_list_item_gap_very_small"
+	              android:paddingBottom = "@dimen/di_list_item_gap_very_small"
+	              android:paddingLeft = "@dimen/di_list_item_gap_normal"
+	              android:paddingRight = "@dimen/di_list_item_gap_normal" >
 
 		<ImageView
 				android:id = "@+id/iv_img_add"
@@ -32,8 +35,8 @@
 				android:background = "@drawable/shape_post_reply_edit_bg"
 				android:paddingLeft = "@dimen/di_list_item_gap_big"
 				android:paddingRight = "@dimen/di_list_item_gap_big"
-				android:paddingTop = "@dimen/di_list_item_gap_normal"
-				android:paddingBottom = "@dimen/di_list_item_gap_normal"
+				android:paddingTop = "@dimen/di_list_item_gap_small"
+				android:paddingBottom = "@dimen/di_list_item_gap_small"
 				android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
 				android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
 				android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
@@ -41,8 +44,9 @@
 
 		<TextView
 				android:id = "@+id/tv_send"
-				android:textSize = "@dimen/di_text_size_big"
-				style = "@style/DefaultTextView.BiggerBtn"
+				style = "@style/DefaultTextView.NormalBtn"
+				android:layout_height = "30dp"
+				android:enabled = "false"
 				android:background = "@drawable/selector_btn_download_blue"
 				android:text = "@string/st_post_replay_btn_send" />
 	</LinearLayout >
@@ -66,7 +70,8 @@
 				style = "@style/DefaultTextView.Text"
 				android:layout_width = "match_parent"
 				android:gravity = "center"
-				android:paddingTop = "@dimen/di_list_item_gap_normal"/>
+				android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+				android:paddingTop = "@dimen/di_list_item_gap_big" />
 
 	</LinearLayout >
 </LinearLayout >

@@ -52,7 +52,7 @@ echo $(pwd)
 #${CWD}/../gradlew clean assembleRelease -x lint --parallel
 #ant -f ${CWD}/../build.xml clean && ant -f ${CWD}/../build.xml
 ${CWD}/packchn.sh -s ${SOURCEAPK} -o ${TEMPOUTPUT} -v ${VERSION} -c ${CHNNAMES} -n ${NAME} -e ${EXTENSION}
-${CWD}/sign.sh -srcdir ${TEMPOUTPUT} -outputdir ${OUTPUT} -keystore ${KEYSTORE} -keypass ${KEYPASS} -storepass ${STOREPASS} -keyname ${KEYSTORENAME}
+${CWD}/sign.sh -i ${TEMPOUTPUT} -o ${OUTPUT} -f ${KEYSTORE} -k ${KEYPASS} -s ${STOREPASS} -n ${KEYSTORENAME}
 
 [ -d ${TEMPOUTPUT} ] && rm -r ${TEMPOUTPUT}
 

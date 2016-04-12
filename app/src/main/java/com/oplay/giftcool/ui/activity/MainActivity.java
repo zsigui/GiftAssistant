@@ -20,13 +20,12 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -43,21 +42,8 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.finalteam.galleryfinal.GalleryFinal;
-import cn.finalteam.galleryfinal.model.PhotoInfo;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 /**
  * @author micle
@@ -124,7 +110,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
-		connectWebSocket(URI_WS);
+		SocketIOManager.getInstance().connectOrReConnect();
 	}
 
 	private void createDrawer() {
@@ -146,12 +132,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		updateToolBar();
 	}
 
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		ObserverManager.getInstance().removeUserUpdateListener(this);
-		closeWebSocket();
+		SocketIOManager.getInstance().close();
 	}
 
 	protected void initView() {
@@ -214,6 +199,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		//没更新才显示欢迎
 		if (!handleUpdateApp()) {
 			handleFirstOpen();
+		}
+		if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
+			SocketIOManager.getInstance().connectOrReConnect();
 		}
 	}
 
@@ -413,24 +401,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 //				} else {
 //					IntentUtil.jumpLogin(MainActivity.this);
 //				}
-				GalleryFinal.openGalleryMulti(1, mInfos, 3, new GalleryFinal.OnHandlerResultCallback() {
-					@Override
-					public void onHandlerSuccess(int requestCode, List<PhotoInfo> resultList) {
-						ToastUtil.showShort("success");
-						mInfos = new ArrayList<PhotoInfo>(resultList.size());
-						mInfos.addAll(resultList);
-					}
-
-					@Override
-					public void onHandlerFailure(int requestCode, String errorMsg) {
-						ToastUtil.showShort(errorMsg);
-					}
-				});
+				IntentUtil.jumpPostDetail(this, 1);
 				break;
 		}
 	}
 
-	private ArrayList<PhotoInfo> mInfos;
 
 	@Override
 	public void onBackPressed() {
@@ -439,7 +414,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mApp.appExit();
 			// 发送退出指令
 			finish();
-//			System.exit(0);
+			System.exit(0);
 		} else {
 			mLastClickTime = System.currentTimeMillis();
 			ToastUtil.showShort("再次点击退出应用");
@@ -535,19 +510,20 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 			}, 1000);
 
-		} else if (sIsTodayFirstOpen && mHandler != null) {
-			sIsTodayFirstOpen = false;
-			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (AccountManager.getInstance().isLogin()) {
-						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
-								AccountManager.getInstance().getUser());
-					}
-				}
-			}, 1000);
 		}
+//		else if (sIsTodayFirstOpen && mHandler != null) {
+//			sIsTodayFirstOpen = false;
+//			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
+//			mHandler.postDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					if (AccountManager.getInstance().isLogin()) {
+//						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
+//								AccountManager.getInstance().getUser());
+//					}
+//				}
+//			}, 1000);
+//		}
 	}
 
 	private boolean hasLoadPic() {
@@ -640,79 +616,4 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		return confirmDialog;
 	}
 
-	/*--------------------------- WebSocket实现 -----------------------------*/
-
-//	private WebSocketClient mWebSocketClient = null;
-	private final String URI_WS = "http://172.16.5.76:5000/ws";
-
-	private Socket mSocket;
-
-	private void connectWebSocket(String wsUri) {
-		try {
-			IO.Options opts = new IO.Options();
-			opts.forceNew = true;
-			opts.reconnection = true;
-			opts.reconnectionAttempts = 3;
-			// 断开后，间隔10秒再次重试
-			opts.reconnectionDelay = 10 * 1000;
-			mSocket = IO.socket(wsUri, opts);
-			mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-				@Override
-				public void call(Object... args) {
-					ToastUtil.showShort("连接成功");
-					KLog.d(AppDebugConfig.TAG_WARN, "connected");
-				}
-			}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-				@Override
-				public void call(Object... args) {
-					ToastUtil.showShort("断开连接");
-					KLog.d(AppDebugConfig.TAG_WARN, "disconnect");
-				}
-			}).on("sever_event", new Emitter.Listener() {
-				@Override
-				public void call(Object... args) {
-//					ToastUtil.showShort((JSONObject)args[0]).toString());
-					KLog.d(AppDebugConfig.TAG_WARN, "server event : " + args[0]);
-				}
-			}).on("my response", new Emitter.Listener() {
-				@Override
-				public void call(Object... args) {
-//					ToastUtil.showShort(((JSONObject)args[0]).toString());
-					KLog.d(AppDebugConfig.TAG_WARN, "my response : " + args[0]);
-				}
-			}).on(Socket.EVENT_ERROR, new Emitter.Listener() {
-				@Override
-				public void call(Object... args) {
-					KLog.d(AppDebugConfig.TAG_WARN, "error : " + args[0]);
-				}
-			});
-			mSocket.connect();
-			KLog.d(AppDebugConfig.TAG_WARN, "connect");
-		} catch (URISyntaxException e) {
-			KLog.d(AppDebugConfig.TAG_WARN, e);
-		}
-	}
-
-	private void sendMessage() {
-		if (mSocket != null && mSocket.connected()) {
-			JSONObject object = new JSONObject();
-			try {
-				object.put("data", "this is a test from android client");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			mSocket.emit("my event", object);
-		} else {
-			KLog.d(AppDebugConfig.TAG_WARN, "send failed");
-		}
-	}
-
-	private void closeWebSocket() {
-		if (mSocket != null && mSocket.connected()) {
-			mSocket.disconnect();
-			mSocket = null;
-		}
-	}
-
-	/*--------------------------- WebSocket实现 -----------------------------*/
 }

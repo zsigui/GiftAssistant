@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.postbar;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,19 +27,19 @@ import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
 
+import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 
 /**
  * Created by zsigui on 16-4-6.
  */
 public class PostDetailFragment extends BaseFragment_WebView implements TextWatcher,
-		ViewTreeObserver.OnGlobalLayoutListener {
+		ViewTreeObserver.OnGlobalLayoutListener{
 
 	private final String PAGE_NAME = "活动详情";
-	private final int REQ_ID_IMG_ADD = 0x12343;
 
 
-	private int mSoftInputHeight = 0;
+	private int mLastSoftInputHeight = 400;
 
 	private EditText etContent;
 	private ImageView ivImgAdd;
@@ -63,7 +64,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_post_detail);
+		setContentView(R.layout.fragment_post_detail);
 		etContent = getViewById(R.id.et_content);
 		ivImgAdd = getViewById(R.id.iv_img_add);
 		tvSend = getViewById(R.id.tv_send);
@@ -80,6 +81,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		etContent.addTextChangedListener(this);
 		etContent.setOnClickListener(this);
 		etContent.getViewTreeObserver().addOnGlobalLayoutListener(this);
+		mWebView.setOnClickListener(this);
 	}
 
 	@Override
@@ -97,6 +99,10 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		rlContainer.setLayoutManager(gld);
 		rlContainer.setAdapter(mAdapter);
 		mAdapter.setTvPickHint(tvPickHint);
+		mAdapter.setFragment(this);
+		etContent.requestFocus();
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH)
+			etContent.setShowSoftInputOnFocus(false);
 	}
 
 	@Override
@@ -110,29 +116,33 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	}
 
 	private long mLastClickTime;
-
+	private boolean mIsInputShow = false;
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.iv_img_add:
-				if (ivImgAdd.isSelected()) {
+				if (mPostImg.size() == 0) {
+					GalleryFinal.openGalleryMulti(mAdapter.REQ_ID_IMG_ADD, Global.REPLY_IMG_COUNT, mAdapter);
 					ivImgAdd.setSelected(false);
+					llImgPreview.setVisibility(View.GONE);
+					InputMethodUtil.hideSoftInput(getActivity());
+					return;
+				}
+				ivImgAdd.setSelected(true);
+				if (llImgPreview.getVisibility() == View.VISIBLE) {
 					etContent.requestFocus();
-					etContent.setSelection(etContent.getText().length());
-					InputMethodUtil.showSoftInput(getActivity());
 					llImgPreview.setVisibility(View.GONE);
 				} else {
-					ivImgAdd.setSelected(true);
 					llImgPreview.setVisibility(View.VISIBLE);
-					InputMethodUtil.hideSoftInput(getActivity());
 				}
 				break;
 			case R.id.et_content:
+				// EditText点击打开软键盘之前，需要先显示llImgPreview才行，否则页面会被推上去
 				etContent.requestFocus();
 				InputMethodUtil.showSoftInput(getActivity());
-				ivImgAdd.setSelected(false);
-				llImgPreview.setVisibility(View.GONE);
+				llImgPreview.setVisibility(View.VISIBLE);
+				mIsInputShow = true;
 				break;
 			case R.id.tv_send:
 				long curTime = System.currentTimeMillis();
@@ -142,10 +152,38 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 				}
 				handleSend();
 				break;
+			case R.id.wv_container:
+				ivImgAdd.setSelected(false);
+				llImgPreview.setVisibility(View.GONE);
+				InputMethodUtil.hideSoftInput(getActivity());
+				break;
 		}
 	}
 
+	public void pickSuccess() {
+		ivImgAdd.setSelected(true);
+		llImgPreview.setVisibility(View.VISIBLE);
+		InputMethodUtil.hideSoftInput(getActivity());
+	}
+
+	public void pickFailed() {
+		ivImgAdd.setSelected(false);
+		llImgPreview.setVisibility(View.GONE);
+		etContent.requestFocus();
+	}
+
 	private void handleSend() {
+		etContent.setText("");
+	}
+
+	@Override
+	public void release() {
+		super.release();
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+			etContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+		} else {
+			etContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+		}
 	}
 
 	@Override
@@ -155,7 +193,11 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+		if (s.length() > 0) {
+			tvSend.setEnabled(true);
+		} else {
+			tvSend.setEnabled(false);
+		}
 	}
 
 	@Override
@@ -163,19 +205,27 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	}
 
+	int lastHeight = 0;
+
 	@Override
 	public void onGlobalLayout() {
 		int softInputHeight = AssistantApp.getInstance().getSoftInputHeight(getActivity());
-		if (softInputHeight != mSoftInputHeight) {
-			mSoftInputHeight = softInputHeight;
+		if (softInputHeight != mLastSoftInputHeight && softInputHeight != 0) {
+			mLastSoftInputHeight = softInputHeight;
 			resetLayoutParams();
+		}
+
+		final int curHeight = InputMethodUtil.getSoftInputHeight(getActivity());
+		if (mIsInputShow && llImgPreview.getVisibility() == View.VISIBLE) {
+			llImgPreview.setVisibility(View.GONE);
+			mIsInputShow = false;
 		}
 	}
 
 	private void resetLayoutParams() {
 		if (llImgPreview != null) {
 			ViewGroup.LayoutParams lp = llImgPreview.getLayoutParams();
-			lp.height = mSoftInputHeight;
+			lp.height = mLastSoftInputHeight;
 			llImgPreview.setLayoutParams(lp);
 		}
 	}

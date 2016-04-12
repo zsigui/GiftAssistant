@@ -7,6 +7,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
+import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.model.data.resp.TaskReward;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -58,14 +59,28 @@ public class ScoreManager {
 		mRewardType = rewardType;
 	}
 
+	@Deprecated
 	public void toastByCallback(TaskReward task) {
 		toastByCallback(task, true);
 	}
 
+	@Deprecated
 	public void toastByCallback(TaskReward task, boolean needNotify) {
 		if (task != null && task.rewardPoints != 0 && AccountManager.getInstance().isLogin()) {
 			// 评论任务完成，奖励金币
 			ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
+			if (needNotify) {
+				// 通知刷新金币
+				AccountManager.getInstance().updatePartUserInfo();
+			}
+			setInWorking(false);
+		}
+	}
+
+	public void toastByCallback(MissionReward reward, boolean needNotify) {
+		if (reward != null && reward.code == 0) {
+			ToastUtil.showScoreReward(reward.data.displayName, reward.data.rewardPoint);
+			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
 			if (needNotify) {
 				// 通知刷新金币
 				AccountManager.getInstance().updatePartUserInfo();
