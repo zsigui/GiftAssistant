@@ -17,6 +17,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Base64;
 
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
 import java.io.ByteArrayInputStream;
@@ -251,11 +252,11 @@ public class BitmapUtil {
 	}
 
 	/**
-	 * 根据图片路径进行压缩图片
+	 * 根据图片路径获取指定最大长宽比例下的缩放图片
 	 * @param srcPath
 	 * @return
 	 */
-	public static Bitmap getBitmap(String srcPath, int size, int width, int height) {
+	public static Bitmap getBitmap(String srcPath, int width, int height) {
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		//开始读入图片，此时把options.inJustDecodeBounds 设回true了,表示只返回宽高
 		newOpts.inJustDecodeBounds = true;
@@ -270,19 +271,21 @@ public class BitmapUtil {
 		//缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
 		int be = 1;//be=1表示不缩放
 		if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
-			KLog.d("fileupload","------原始缩放比例 --------" + (newOpts.outWidth / ww));
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, "------原始缩放比例 --------" + (newOpts.outWidth / ww));
+			}
 			be = (int)(newOpts.outWidth / ww);
 			//有时会出现be=3.2或5.2现象，如果不做处理压缩还会失败
 			if ((newOpts.outWidth / ww) > be) {
-
 				be += 1;
 			}
-			//be = Math.round((float) newOpts.outWidth / (float) ww);
+			be = Math.round((float) newOpts.outWidth / ww);
 		} else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
-			KLog.d("fileupload","------原始缩放比例 --------" + (newOpts.outHeight / hh));
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_UTIL, "------原始缩放比例 --------" + (newOpts.outHeight / hh));
+			}
 			be = (int)(newOpts.outHeight / hh);
 			if ((newOpts.outHeight / hh) > be) {
-
 				be += 1;
 			}
 			//be = Math.round((float) newOpts.outHeight / (float) hh);
@@ -292,10 +295,16 @@ public class BitmapUtil {
 			be = 1;
 		}
 		newOpts.inSampleSize = be;//设置缩放比例
-		KLog.d("fileupload","------设置缩放比例 --------" + newOpts.inSampleSize);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_UTIL, "------设置缩放比例 --------" + newOpts.inSampleSize);
+		}
 		//重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-		bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
-		return compressImage(bitmap,size);//压缩好比例大小后再进行质量压缩
+		return BitmapFactory.decodeFile(srcPath, newOpts);
+	}
+
+	public static ByteArrayOutputStream getBitmapForBaos(String srcPath, int size, int width, int height) {
+		final Bitmap bitmap = getBitmap(srcPath, width, height);
+		return compressImageForBaos(bitmap, size);
 	}
 
 	/**
@@ -304,20 +313,42 @@ public class BitmapUtil {
 	 * @param size
 	 * @return
 	 */
-	private static Bitmap compressImage(Bitmap image,int size) {
+	public static Bitmap compressImage(Bitmap image,int size) {
+
+		ByteArrayOutputStream baos = compressImageForBaos(image, size);
+		//把压缩后的数据baos存放到ByteArrayInputStream中
+		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+		//把ByteArrayInputStream数据生成图片
+		return BitmapFactory.decodeStream(isBm, null, null);
+	}
+
+	/**
+	 * 压缩图片
+	 * @param image
+	 * @param size
+	 * @return
+	 */
+	public static ByteArrayOutputStream compressImageForBaos(Bitmap image, int size) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 		int options = 100;
-
-		while ((baos.toByteArray().length / 1024) >= size) {  //循环判断如果压缩后图片是否大于等于size,大于等于继续压缩
-			baos.reset();//重置baos即清空baos
-			options -= 5;//每次都减少5
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+		image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+		int startSize = baos.toByteArray().length / 1024;
+		//循环判断如果压缩后图片是否大于等于size,大于等于继续压缩
+		while (baos.toByteArray().length >= size) {
+			//重置baos即清空baos
+			baos.reset();
+			//每次都减少5
+			options -= 5;
+			//这里压缩options%，把压缩后的数据存放到baos中
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 		}
-		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-		return bitmap;
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_UTIL, String.format("Bitmap compress from %d KB to %d KB, current options = %d",
+					startSize, baos.toByteArray().length/ 1024, options));
+		}
+		return baos;
 	}
 
 	/**

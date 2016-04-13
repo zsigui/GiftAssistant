@@ -121,7 +121,7 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 		}
 	}
 
-	private void setPicTextVal() {
+	public void setPicTextVal() {
 		if (tvPickHint != null) {
 			tvPickHint.setText(String.format(TEXT_PICK_HINT, mData.size(),
 					Global.REPLY_IMG_COUNT - mData.size()));

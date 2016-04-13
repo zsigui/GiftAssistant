@@ -25,7 +25,7 @@ import io.socket.emitter.Emitter;
  */
 public class SocketIOManager {
 
-	private final String URI_WS = "http://172.16.5.76:5001/ws";
+	private final String URI_WS = "http://172.16.5.76:80/ws";
 	private static SocketIOManager manager;
 	private Context mAppContext;
 
@@ -52,7 +52,7 @@ public class SocketIOManager {
 					mSocket.connect();
 					return;
 				}
-				mTryCount = 2;
+				mTryCount = 3;
 				IO.Options opts = new IO.Options();
 				opts.forceNew = true;
 				opts.reconnection = false;
@@ -90,12 +90,7 @@ public class SocketIOManager {
 					public void call(Object... args) {
 						KLog.d(AppDebugConfig.TAG_WARN, "disconnect = " + (args != null && args.length > 0 ? args[0] :
 								null));
-						if (mTryCount == 2) {
-							mSocket.connect();
-							mTryCount--;
-						} else if (mTryCount == -1) {
-							mSocket.connect();
-						}
+						retryConnect();
 					}
 				}).on(CustomSocket.EVENT_AUTH_ERROR, new Emitter.Listener() {
 
@@ -103,7 +98,7 @@ public class SocketIOManager {
 					public void call(Object... args) {
 						// 连接失败，如果是已经登录，重试连接，如果不是，不连接
 						if (AccountManager.getInstance().isLogin()) {
-							mSocket.connect();
+							retryConnect();
 						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_MANAGER, "msg = " + (args != null && args.length > 0 ? args[0] :
@@ -147,6 +142,13 @@ public class SocketIOManager {
 					KLog.d(AppDebugConfig.TAG_MANAGER, e);
 				}
 			}
+		}
+	}
+
+	private void retryConnect() {
+		if (mTryCount > 0) {
+			mSocket.connect();
+			mTryCount--;
 		}
 	}
 

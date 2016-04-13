@@ -137,6 +137,10 @@ public class AssistantApp extends Application {
     public void appInit() {
         KLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
+        // 初始配置加载列表
+        initLoadingView();
+        // 初始化照片墙控件
+        initGalleryFinal();
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
     }
 
@@ -150,7 +154,6 @@ public class AssistantApp extends Application {
 
     public void initGalleryFinal() {
         int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
-        int transparent = getResources().getColor(R.color.co_transparent);
         int textColor = Color.WHITE;
         ThemeConfig theme = new ThemeConfig.Builder()
                 .setTitleBarBgColor(bgColor)
@@ -170,8 +173,8 @@ public class AssistantApp extends Application {
                 .setEnableEdit(false)
                 .build();
         UILImageLoader imageLoader = new UILImageLoader();
-        File folder = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
-        CoreConfig coreConfig = new CoreConfig.Builder(this, imageLoader, theme)
+        File folder = StorageUtils.getOwnCacheDirectory(getApplicationContext(), Global.IMG_CACHE_PATH);
+        CoreConfig coreConfig = new CoreConfig.Builder(getApplicationContext(), imageLoader, theme)
                 .setFunctionConfig(config)
                 .setTakePhotoFolder(folder)
                 .setEditPhotoCacheFolder(folder)

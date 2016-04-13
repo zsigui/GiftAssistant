@@ -15,6 +15,8 @@ import retrofit2.Retrofit;
  * Created by zsigui on 15-12-21.
  */
 public final class GsonConverterFactory extends Converter.Factory {
+
+
 	/**
 	 * Create an instance using a default {@link com.google.gson.Gson} instance for conversion. Encoding to JSON and
 	 * decoding from JSON (when no charset is specified by a header) will use UTF-8.

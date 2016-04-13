@@ -1,16 +1,16 @@
 package com.oplay.giftcool.ui.fragment.game;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
+import com.oplay.giftcool.listener.ShowBottomBarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -22,7 +22,7 @@ import com.oplay.giftcool.util.ThreadUtil;
  * Created by zsigui on 16-1-15.
  */
 public class GameDetailFragment extends BaseFragment_WebView implements OnDownloadStatusChangeListener,
-		OnProgressUpdateListener {
+		OnProgressUpdateListener, ShowBottomBarListener {
 
 	private static final String PAGE_NAME = "游戏详情页";
 	private static final String KEY_ID = "key_data_id";
@@ -98,12 +98,13 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		ApkDownloadManager.getInstance(getContext().getApplicationContext()).removeProgressUpdateListener(this);
 	}
 
-	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {
+	@Override
+	public void showBar(final boolean isShow, final Object param) {
 		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				int visible = isShow ? View.VISIBLE : View.GONE;
-				mAppInfo = appInfo;
+				mAppInfo = (IndexGameNew) param;
 				if (downloadLayout != null) {
 					downloadLayout.setVisibility(visible);
 				}
@@ -117,6 +118,26 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 			}
 		});
 	}
+
+//	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {
+//		ThreadUtil.runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				int visible = isShow ? View.VISIBLE : View.GONE;
+//				mAppInfo = appInfo;
+//				if (downloadLayout != null) {
+//					downloadLayout.setVisibility(visible);
+//				}
+//				if (isShow && btnDownload != null) {
+//					mAppInfo.initAppInfoStatus(getContext());
+//					int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
+//							.downloadUrl);
+//					btnDownload.setStatus(mAppInfo.appStatus, "");
+//					btnDownload.setProgress(progress);
+//				}
+//			}
+//		});
+//	}
 
 	@Override
 	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {

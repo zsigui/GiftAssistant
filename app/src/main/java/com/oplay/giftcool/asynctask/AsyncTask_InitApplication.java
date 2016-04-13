@@ -101,8 +101,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		if (assistantApp.isGlobalInit()) {
 			return;
 		}
-		// 初始配置加载列表
-		assistantApp.initLoadingView();
 
 		// 存储打开APP时间
 		SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
@@ -130,9 +128,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.e("initAndCheckUpdate failed!");
 			}
 		}
-
-		// 初始化照片墙控件
-		assistantApp.initGalleryFinal();
 
 		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP

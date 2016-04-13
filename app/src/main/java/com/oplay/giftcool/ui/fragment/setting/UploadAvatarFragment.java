@@ -1,6 +1,5 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -324,18 +323,8 @@ public class UploadAvatarFragment extends BaseFragment {
      * 根据文件获取图片字节数组的Base64编码字符串
      */
     private String generateImageStringParam(String filePath) {
-        Bitmap bitmap = BitmapUtil.getBitmap(filePath, 10 * 1024 * 8,
+        ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(filePath, AppConfig.UPLOAD_PIC_SIZE,
                 AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
-        ByteArrayOutputStream baos;
-        int width = AppConfig.UPLOAD_PIC_WIDTH;
-        int height = AppConfig.UPLOAD_PIC_HEIGHT;
-        do {
-            width = width * 2 / 3;
-            height = height * 2 / 3;
-            bitmap = BitmapUtil.createBitmapThumbnail(bitmap, true, width, height);
-            baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, AppConfig.UPLOAD_PIC_QUALITY, baos);
-        } while (baos.toByteArray().length > 100 * 1024);
         return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 

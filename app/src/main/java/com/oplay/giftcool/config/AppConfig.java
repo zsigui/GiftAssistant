@@ -11,9 +11,15 @@ public class AppConfig {
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 
 	/* 上传头像的大小 */
-	public static final int UPLOAD_PIC_WIDTH = 640;
-	public static final int UPLOAD_PIC_HEIGHT = 640;
-	public static final int UPLOAD_PIC_QUALITY = 80;
+	public static final int UPLOAD_PIC_WIDTH = 400;
+	public static final int UPLOAD_PIC_HEIGHT = 400;
+	// 头像大小为 50KB以下，现有加密传输模式下，稍大会出现长度溢出，导致服务器接收出错
+	public static final int UPLOAD_PIC_SIZE = 50 * 1024;
+	/* 评论回复图片大小 */
+	public static final int REPLY_PIC_WIDTH = 1536;
+	public static final int REPLY_PIC_HEIGHT = 1536;
+	// 上传图片大小 500KB以下
+	public static final int REPLY_PIC_SIZE = 500 * 1024;
 	/* 轮播图播放时间 */
 	public static final int BANNER_LOOP_TIME = 5000;
 

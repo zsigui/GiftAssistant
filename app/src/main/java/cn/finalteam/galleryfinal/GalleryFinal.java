@@ -508,6 +508,8 @@ public class GalleryFinal {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(GalleryFinal.PHOTO_INDEX, selectedIndex);
         intent.putExtra(GalleryFinal.PHOTO_LIST, (Serializable) photoInfos);
+        intent.putExtra(GalleryFinal.PHOTO_SHOW_TAB, true);
+        intent.putExtra(GalleryFinal.PHOTO_SHOW_TITLE, false);
         mCoreConfig.getContext().startActivity(intent);
         return Error.SUCCESS;
     }

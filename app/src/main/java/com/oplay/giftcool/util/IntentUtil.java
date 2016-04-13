@@ -16,6 +16,7 @@ import com.oplay.giftcool.ui.activity.GiftListActivity;
 import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.PostDetailActivity;
+import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.activity.WebActivity;
@@ -441,6 +442,8 @@ public class IntentUtil {
 	 * 跳转官方活动列表页面
 	 */
 	public static void jumpPostOfficialList(Context context) {
-
+		Intent intent = new Intent(context, PostListActivity.class);
+		intent.putExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_POST_OFFICIAL);
+		context.startActivity(intent);
 	}
 }

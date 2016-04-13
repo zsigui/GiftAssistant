@@ -47,7 +47,7 @@ public class KeyConfig {
 	public static final int TYPE_ID_GIFT_LIKE = 0x172;
 
 	/* web activity */
-	public static final int TYPE_ID_LOTTERY = 0x172;
+	public static final int TYPE_ID_LOTTERY = 0x173;
 
 	/* game list activity */
 	// 新游推荐
@@ -62,6 +62,9 @@ public class KeyConfig {
 	/* detail activity */
 	public static final int TYPE_ID_GIFT_DETAIL = 0x301;
 	public static final int TYPE_ID_GAME_DETAIL = 0x302;
+
+	/* post list activity */
+	public static final int TYPE_ID_POST_OFFICIAL = 0x401;
 
 	/* task fragment */
 	public static final int REQUEST_UPDATE_AVATAR = 0xA00;

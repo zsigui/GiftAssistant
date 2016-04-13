@@ -157,6 +157,16 @@ public class NetUrl {
 	 */
 	public static final String POST_GET_LIST = "deafult";
 
+	/**
+	 * 进行活动回复
+	 */
+	public static final String POST_REPLY = "default";
+
+	/**
+	 * 进行回复
+	 */
+	public static final String POST_REPLY_COMMENT = "default";
+
 	/* 用户接口 */
 
 	/**

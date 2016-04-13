@@ -96,8 +96,12 @@ public class WebViewInterface extends Observable {
 					return RET_PARAM_ERR;
 				}
 			}
-			((GameDetailFragment) mHostFragment).setDownloadBtn(isShow, mHostActivity, appInfo);
-			return RET_SUCCESS;
+			if (mHostFragment instanceof ShowBottomBarListener) {
+				((ShowBottomBarListener) mHostFragment).showBar(isShow, appInfo);
+				return RET_SUCCESS;
+			} else {
+				return RET_OTHER_ERR;
+			}
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
@@ -241,6 +245,22 @@ public class WebViewInterface extends Observable {
 				return RET_SUCCESS;
 			default:
 				return RET_OTHER_ERR;
+		}
+	}
+
+	/**
+	 * 显示底部的回复栏
+	 */
+	@JavascriptInterface
+	public int showReply(boolean isShow) {
+		if (mHostFragment == null) {
+			return RET_INTERNAL_ERR;
+		}
+		if (mHostFragment instanceof ShowBottomBarListener) {
+			((ShowBottomBarListener) mHostFragment).showBar(isShow, null);
+			return RET_SUCCESS;
+		} else {
+			return RET_OTHER_ERR;
 		}
 	}
 
