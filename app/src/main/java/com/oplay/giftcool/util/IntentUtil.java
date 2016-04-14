@@ -1,14 +1,17 @@
 package com.oplay.giftcool.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.model.data.resp.TaskInfoOne;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
@@ -20,6 +23,7 @@ import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.activity.WebActivity;
+import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -99,6 +103,7 @@ public class IntentUtil {
 		context.startActivity(intent);
 	}
 
+
 	/**
 	 * 跳转游戏详情页面(游戏暂时用“游戏专区”固定)
 	 *
@@ -107,22 +112,9 @@ public class IntentUtil {
 	 * @param status  跳转详情位置：1详情 2礼包
 	 */
 	public static void jumpGameDetail(Context context, int id, int status) {
-		jumpGameDetail(context, id, status, false);
-	}
-
-	/**
-	 * 跳转游戏详情页面(游戏暂时用“游戏专区”固定)
-	 *
-	 * @param context 上下文
-	 * @param id      游戏id
-	 * @param status  跳转详情位置：1详情 2礼包
-	 * @param newTask 新任务
-	 */
-	public static void jumpGameDetail(Context context, int id, int status, boolean newTask) {
 		Intent intent = new Intent(context, GameDetailActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_STATUS, status);
 		context.startActivity(intent);
@@ -171,7 +163,7 @@ public class IntentUtil {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
-		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_TASK);
 		context.startActivity(intent);
 	}
 
@@ -401,8 +393,8 @@ public class IntentUtil {
 			return;
 		}
 		Intent intent = new Intent(context, WebActivity.class);
-		intent.putExtra(KeyConfig.KEY_URL, url);
-		intent.putExtra(KeyConfig.KEY_DATA, title);
+		intent.putExtra(KeyConfig.KEY_DATA, url);
+		intent.putExtra(KeyConfig.KEY_TITLE, title);
 		context.startActivity(intent);
 	}
 
@@ -445,5 +437,36 @@ public class IntentUtil {
 		Intent intent = new Intent(context, PostListActivity.class);
 		intent.putExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_POST_OFFICIAL);
 		context.startActivity(intent);
+	}
+
+	/**
+	 * 隐式跳转到指定action处
+	 */
+	public static void jumpImplicit(Context context, String action, int type, String data) {
+		Intent intent = new Intent();
+		KLog.d(AppDebugConfig.TAG_WARN, "action = " + action);
+		intent.setAction(action);
+		intent.addCategory(Intent.CATEGORY_DEFAULT);
+		intent.putExtra(KeyConfig.KEY_DATA, data);
+		intent.putExtra(KeyConfig.KEY_TYPE, type);
+		context.startActivity(intent);
+	}
+
+	public static void jumpByTaskInfoOne(Context context, TaskInfoOne taskInfo) {
+		final String ACTION_PREFIX = "com.oplay.giftcool.action.";
+		if ("GameDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGameDetail(context,  taskInfo.type, Integer.parseInt(taskInfo.data));
+		} else if ("GiftDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGiftDetail(context, taskInfo.type);
+		} else if ("PostDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpPostDetail(context, taskInfo.type);
+		} else {
+			IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.type, taskInfo.data);
+			if ("Main".equals(taskInfo.action)) {
+				if (context != null && context instanceof Activity) {
+					((Activity) context).finish();
+				}
+			}
+		}
 	}
 }

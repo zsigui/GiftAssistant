@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -42,6 +44,7 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.io.File;
 
@@ -62,7 +65,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 需要按顺序 0...n
 	final int INDEX_GIFT = 0;
 	final int INDEX_GAME = 1;
-	final int INDEX_ESSAY = 2;
+	final int INDEX_POST = 2;
 
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
@@ -148,7 +151,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mCtvs = new CheckedTextView[INDEX_COUNT];
 		mCtvs[INDEX_GIFT] = ctvGift;
 		mCtvs[INDEX_GAME] = ctvGame;
-		mCtvs[INDEX_ESSAY] = ctvEssay;
+		mCtvs[INDEX_POST] = ctvEssay;
 		if (!AssistantApp.getInstance().isAllowDownload()) {
 			llTab.setVisibility(View.GONE);
 		}
@@ -176,15 +179,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			public void run() {
 				if (AccountManager.getInstance().isLogin()) {
 					if (AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
-						updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 1);
+						updateHintState(KeyConfig.TYPE_ID_TASK, 1);
 					} else {
-						updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 0);
+						updateHintState(KeyConfig.TYPE_ID_TASK, 0);
 					}
 					UserInfo user = AccountManager.getInstance().getUserInfo();
 					tvGiftCount.setText(String.valueOf(user.giftCount));
 					ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 				} else {
-					updateHintState(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, 0);
+					updateHintState(KeyConfig.TYPE_ID_TASK, 0);
 					ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 					ivProfile.setTag("");
 					tvGiftCount.setText("0");
@@ -208,6 +211,32 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onPause() {
 		super.onPause();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		try {
+			if (intent != null && intent.getAction() != null
+					&& intent.getAction().equals("com.oplay.giftcool.action.Main")) {
+				int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
+				int data = Integer.parseInt(intent.getStringExtra(KeyConfig.KEY_DATA));
+				switch (type) {
+					case KeyConfig.TYPE_ID_INDEX_GIFT:
+						jumpToIndexGift(data);
+						break;
+					case KeyConfig.TYPE_ID_INDEX_GAME:
+						jumpToIndexGame(data);
+						break;
+					case KeyConfig.TYPE_ID_INDEX_POST:
+						break;
+				}
+			}
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, e);
+			}
+		}
 	}
 
 	@Override
@@ -237,7 +266,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mCtvs[position].setChecked(true);
 		mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
 		switch (position) {
-			case INDEX_ESSAY:
+			case INDEX_POST:
 				showToolbarSearch(false);
 				displayEssayUI();
 				break;
@@ -341,7 +370,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			ft.show(mPostFragment);
 		}
 		ft.commit();
-		mCurSelectedItem = INDEX_ESSAY;
+		mCurSelectedItem = INDEX_POST;
 	}
 
 	/**
@@ -363,6 +392,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mGameFragment.setPagePosition(mJumpGamePos);
 			}
 			mJumpGamePos = -1;
+		} else if (mJumpPostPos != -1) {
+			setCurSelected(INDEX_POST);
+			if (mPostFragment != null) {
+				mPostFragment.setPagePosition(mJumpPostPos);
+			}
 		}
 	}
 
@@ -425,15 +459,21 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 定义跳转定位的位置
 	private int mJumpGamePos = -1;
 	private int mJumpGiftPos = -1;
+	private int mJumpPostPos = -1;
 
 	public void jumpToIndexGame(int gamePosition) {
 		mJumpGamePos = gamePosition;
-		mJumpGiftPos = -1;
+		mJumpGamePos = mJumpGiftPos = -1;
 	}
 
 	public void jumpToIndexGift(final int giftPosition) {
 		mJumpGiftPos = giftPosition;
-		mJumpGamePos = -1;
+		mJumpPostPos =mJumpGamePos = -1;
+	}
+
+	public void jumpToIndexPost(final int postPosition) {
+		mJumpPostPos = postPosition;
+		mJumpGiftPos = mJumpGamePos = -1;
 	}
 
 	@Override

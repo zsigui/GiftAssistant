@@ -5,84 +5,80 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
+ * 任务模型类
+ *
  * Created by zsigui on 16-1-7.
  */
 public class ScoreMission implements Serializable {
 
 	/**
-	 * 标识名
+	 * 活动代号
 	 */
-	@SerializedName("name")
-	public String id;
+	@SerializedName("code")
+	public String code;
+
+	/**
+	 * 每日每用户可以完成次数
+	 */
+	@SerializedName("daily_limit")
+	public int dailyLimit;
+
+	/**
+	 * 图片URL，为空采用预留
+	 */
+	@SerializedName("icon")
+	public String icon;
+
+	/**
+	 * 当icon为空时，采用此备选
+	 */
+	public int iconAlternate;
+
+	/**
+	 * 任务是否完成，0未完成 1完成
+	 */
+	@SerializedName("is_completed")
+	public int isCompleted;
 
 	/**
 	 * 任务名称
 	 */
-	@SerializedName("show_name")
+	@SerializedName("name")
 	public String name;
 
 	/**
-	 * 任务内容
+	 * 任务描述
 	 */
-	@SerializedName("content")
-	public String content;
+	@SerializedName("description")
+	public String description;
 
 	/**
-	 * 任务类型: 1.新手任务 2.每日任务 3.连续性任务 4. 期待任务
+	 * 任务完成奖励
 	 */
-	@SerializedName("type")
-	public int type;
+	@SerializedName("reward")
+	public int reward;
 
 	/**
-	 * Icon图标
+	 * 用户今天完成了多少次，每次可完成多次任务有效
 	 */
-	public int icon;
+	@SerializedName("today_complete_count")
+	public int todayCompleteCount = 0;
 
 	/**
-	 * 奖励金币
+	 * 行为类型：1 打开应用特定位置 2 执行特定代码 3 下载并打开其他应用
 	 */
-	@SerializedName("reward_points")
-	public int rewardScore;
+	@SerializedName("action_type")
+	public int actionType;
+
 
 	/**
-	 * 连续天数(针对连续性任务)
+	 * 行为额外信息
 	 */
-	@SerializedName("continue_day")
-	public int continuousDay;
+	@SerializedName("action_info")
+	public String actionInfo;
 
 	/**
-	 * 完成了几次(针对连续性任务)
+	 * 显示用于判断头
 	 */
-	@SerializedName("complete_times")
-	public int completeTime;
-
-	/**
-	 * 任务最后一次完成时间
-	 */
-	@SerializedName("last_complete_time")
-	public String lastCompleteTime;
-
-	/**
-	 * 额外指明数据
-	 */
-	@SerializedName("extra_data")
-	public String data;
-
-	/**
-	 * 表示今天能完成几次
-	 */
-	@SerializedName("day_count")
-	public int dayCount;
-
-	/**
-	 * 表示今日已完成次数
-	 */
-	@SerializedName("day_complete_times")
-	public int dayCompleteCount;
-
-	/**
-	 * 此标志仅用于SDK，表示当前任务已完成
-	 */
-	public boolean isFinished;
-
+	public boolean isHeader = false;
 }

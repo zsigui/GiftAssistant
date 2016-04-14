@@ -14,11 +14,11 @@ import com.socks.library.KLog;
  *
  * Created by zsigui on 16-1-29.
  */
-public class ActivityFragment extends BaseFragment_WebView {
+public class WebFragment extends BaseFragment_WebView {
 	private static final String PAGE_NAME = "活动页面";
 
-	public static ActivityFragment newInstance(String url) {
-		ActivityFragment fragment = new ActivityFragment();
+	public static WebFragment newInstance(String url) {
+		WebFragment fragment = new WebFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString(KeyConfig.KEY_URL, url);
 		fragment.setArguments(bundle);

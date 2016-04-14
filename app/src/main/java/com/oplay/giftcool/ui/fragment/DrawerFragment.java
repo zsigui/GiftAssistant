@@ -153,7 +153,7 @@ public class DrawerFragment extends BaseFragment {
 			case KeyConfig.TYPE_ID_WALLET:
 				IntentUtil.jumpMyWallet(context);
 				break;
-			case KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY:
+			case KeyConfig.TYPE_ID_TASK:
 				IntentUtil.jumpEarnScore(context);
 				break;
 			case KeyConfig.TYPE_ID_MSG:
@@ -195,8 +195,8 @@ public class DrawerFragment extends BaseFragment {
 		modelArray.put(KeyConfig.TYPE_ID_WALLET,
 				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet,
 						getResources().getString(R.string.st_drawer_my_wallet), this));
-		modelArray.put(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY,
-				new DrawerModel(KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY, R.drawable.ic_drawer_sign_id_everyday,
+		modelArray.put(KeyConfig.TYPE_ID_TASK,
+				new DrawerModel(KeyConfig.TYPE_ID_TASK, R.drawable.ic_drawer_sign_id_everyday,
 						getResources().getString(R.string.st_drawer_sign_in_everyday), this));
 		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
 				getResources().getString(R.string.st_drawer_msg), this));

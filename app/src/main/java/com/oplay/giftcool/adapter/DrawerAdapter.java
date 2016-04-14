@@ -46,7 +46,7 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel> {
 		switch (item.count) {
 			case 0:
 				drawerItemHolder.tvCount.setVisibility(View.GONE);
-				if(item.id == KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY) {
+				if(item.id == KeyConfig.TYPE_ID_TASK) {
 					drawerItemHolder.tvAttend.setText(TEXT_ATTEND);
 					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_red_border);
 					drawerItemHolder.tvAttend.setTextColor(COLOR_ATTEND);
@@ -56,7 +56,7 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel> {
 				}
 				break;
 			default:
-				if (item.id == KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY) {
+				if (item.id == KeyConfig.TYPE_ID_TASK) {
 					drawerItemHolder.tvAttend.setText(TEXT_HAS_ATTENDED);
 					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_grey_border);
 					drawerItemHolder.tvAttend.setTextColor(COLOR_HAS_ATTENDED);

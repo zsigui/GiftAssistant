@@ -11,26 +11,20 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ScoreTaskAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
-import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.ScoreMission;
-import com.oplay.giftcool.model.data.resp.ScoreMissionList;
+import com.oplay.giftcool.model.data.resp.ScoreMissionGroup;
+import com.oplay.giftcool.model.data.resp.TaskInfoOne;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.sharesdk.ShareSDKManager;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.fragment.game.GameFragment;
-import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -102,7 +96,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	/**
 	 * 获取任务列表信息的网络请求声明
 	 */
-	private Call<JsonRespBase<ScoreMissionList>> mCall;
+	private Call<JsonRespBase<ArrayList<ScoreMissionGroup>>> mCall;
 
 	@Override
 	protected void lazyLoad() {
@@ -121,20 +115,19 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		} else {
 			mCall = Global.getNetEngine().obtainScoreTask(new JsonReqBase<String>());
 		}
-		mCall.enqueue(new Callback<JsonRespBase<ScoreMissionList>>() {
+		mCall.enqueue(new Callback<JsonRespBase<ArrayList<ScoreMissionGroup>>>() {
 			@Override
-			public void onResponse(Call<JsonRespBase<ScoreMissionList>> call,
-			                       Response<JsonRespBase<ScoreMissionList>> response) {
+			public void onResponse(Call<JsonRespBase<ArrayList<ScoreMissionGroup>>> call,
+			                       Response<JsonRespBase<ArrayList<ScoreMissionGroup>>> response) {
 				if (!mCanShowUI || call.isCanceled()) {
 					return;
 				}
 
 				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-						mData = response.body().getData().missions;
+						ArrayList<ScoreMissionGroup> missionGroups = response.body().getData();
 						setTaskIcon(mData);
-						mData = resort(mData);
-						mAdapter.updateData(mData);
+						mAdapter.updateData(transferToMissionList(missionGroups));
 						refreshSuccessEnd();
 						return;
 					}
@@ -149,7 +142,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			}
 
 			@Override
-			public void onFailure(Call<JsonRespBase<ScoreMissionList>> call, Throwable t) {
+			public void onFailure(Call<JsonRespBase<ArrayList<ScoreMissionGroup>>> call, Throwable t) {
 				if (!mCanShowUI || call.isCanceled()) {
 					return;
 				}
@@ -159,6 +152,21 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				refreshFailEnd();
 			}
 		});
+	}
+
+	/**
+	 * 将各任务分组列表提取出来合并成一个列表
+	 */
+	private ArrayList<ScoreMission> transferToMissionList(ArrayList<ScoreMissionGroup> missionGroups) {
+		ArrayList<ScoreMission> missions = new ArrayList<>();
+		for (ScoreMissionGroup missionGroup : missionGroups) {
+			final ScoreMission groupHeader = new ScoreMission();
+			groupHeader.name = String.format("%s(%d/%d)",
+					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
+			missions.add(groupHeader);
+			missions.addAll(missionGroup.missions);
+		}
+		return missions;
 	}
 
 
@@ -181,206 +189,182 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			return;
 		}
 		for (ScoreMission mission : data) {
-			String id = mission.id;
-			if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
-				// 跳转到设置用户昵称界面
-				mission.icon = R.drawable.ic_task_set_nick;
-			} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
-				mission.icon = R.drawable.ic_task_upload_avator;
-			} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE) ||
-					id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
-				mission.icon = R.drawable.ic_task_bind;
-			} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
-				mission.icon = R.drawable.ic_task_feedback;
-			} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
-				mission.icon = R.drawable.ic_task_search;
-			} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
-				//mission.icon = R.drawable.ic_task_judge_game;
-			} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
-				//mission.icon = R.drawable.ic_task_star_comment;
-			} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
-				mission.icon = R.drawable.ic_task_first_login;
-			} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
-				mission.icon = R.drawable.ic_task_download;
-			} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
-				mission.icon = R.drawable.ic_task_share_normal_gift;
-			} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
-				mission.icon = R.drawable.ic_task_share_limit_gift;
-			} else if (id.equals(TaskTypeUtil.ID_SHARE_GIFT_COOL)) {
-				mission.icon = R.drawable.ic_task_share;
-			} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
-				mission.icon = R.drawable.ic_task_get_limit_with_bean;
-			} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
-				//mission.icon = R.drawable.ic_task_download_specified;
-			} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
-				mission.icon = R.drawable.ic_task_continuous_login;
-			} else if (id.equals(TaskTypeUtil.ID_FIRST_LOGIN)) {
-				mission.icon = R.drawable.ic_task_first_login;
-			} else if (id.equals(TaskTypeUtil.ID_LOGIN_SPECIFIED)) {
-				mission.icon = R.drawable.ic_task_login_specified;
-			}
-		}
-	}
-
-	/**
-	 * 对任务进行重新排序 <br />
-	 * 添加任务头，已完成任务置于后面，待完成任务置于前面
-	 */
-	private ArrayList<ScoreMission> resort(ArrayList<ScoreMission> data) {
-		if (data == null) {
-			return null;
-		}
-		mCurFinishedTask = 0;
-		ArrayList<ScoreMission> result = new ArrayList<>();
-		addNewTaskType("期待任务", TaskTypeUtil.MISSION_TYPE_FUTURE, result, data);
-		addNewTaskType("新手任务", TaskTypeUtil.MISSION_TYPE_TIRO, result, data);
-		addNewTaskType("日常任务", TaskTypeUtil.MISSION_TYPE_DAILY, result, data);
-		addNewTaskType("连续任务", TaskTypeUtil.MISSION_TYPE_CONTINUOUS, result, data);
-		if (mCurFinishedTask == result.size()) {
-			mCurFinishedTask = -1;
-			AccountManager.getInstance().getUserInfo().isCompleteTodayMission = true;
-			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
-		}
-		return result;
-	}
-
-	/**
-	 * 处理标记特定任务类型
-	 */
-	private void addNewTaskType(String taskTypeName, int type, ArrayList<ScoreMission> result, ArrayList<ScoreMission>
-			data) {
-		int rawFinished = 0;
-		int rawTotal;
-		int rawFinishedIndex = -1;
-		ArrayList<ScoreMission> rawTasks = new ArrayList<>();
-		for (ScoreMission mission : data) {
-			if ((TaskTypeUtil.ID_DOWNLOAD.equals(mission.id)
-					|| TaskTypeUtil.ID_DOWNLOAD_SPECIFIED.equals(mission.id))
-					&& !AssistantApp.getInstance().isAllowDownload()) {
-				// 不允许下载，不添加
-				mCurFinishedTask++;
+			if (!TextUtils.isEmpty(mission.icon)) {
 				continue;
 			}
-			// 最后完成时间是今天，标志为已经完成
-			if (mission.type == type) {
-				if (!TextUtils.isEmpty(mission.lastCompleteTime)
-						&& DateUtil.isToday(mission.lastCompleteTime)
-						&& (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS
-						|| mission.dayCount == mission.dayCompleteCount)) {
-					rawFinished++;
-					mission.isFinished = true;
-					rawTasks.add(mission);
-					rawFinishedIndex = (rawFinishedIndex == -1 ? rawTasks.size() - 1 : rawFinishedIndex);
-					mCurFinishedTask++;
-				} else {
-					mission.isFinished = false;
-					if (rawFinishedIndex == -1) {
-						rawTasks.add(mission);
-					} else {
-						rawTasks.add(rawFinishedIndex, mission);
-					}
-				}
+			String id = mission.code;
+			switch (id) {
+				case TaskTypeUtil.ID_SET_NICK:
+					mission.iconAlternate = R.drawable.ic_task_set_nick;
+					break;
+				case TaskTypeUtil.ID_SET_AVATAR:
+					mission.iconAlternate = R.drawable.ic_task_upload_avator;
+					break;
+				case TaskTypeUtil.ID_FIRST_LOGIN:
+					mission.iconAlternate = R.drawable.ic_task_first_login;
+					break;
+				case TaskTypeUtil.ID_FOCUS_GAME:
+					mission.iconAlternate = R.drawable.ic_task_attention;
+					break;
+				case TaskTypeUtil.ID_REQUEST_GIFT:
+					mission.iconAlternate = R.drawable.ic_task_default;
+					break;
+				case TaskTypeUtil.ID_FEEDBACK:
+					mission.iconAlternate = R.drawable.ic_task_new_feedback;
+					break;
+				case TaskTypeUtil.ID_UPGRADE:
+					mission.iconAlternate = R.drawable.ic_task_new_update;
+					break;
+				case TaskTypeUtil.ID_SIGN_IN:
+					mission.iconAlternate = R.drawable.ic_task_sign_in;
+					break;
+				case TaskTypeUtil.ID_GCOOL_SHARE:
+					mission.iconAlternate = R.drawable.ic_task_share_gcool;
+					break;
+				case TaskTypeUtil.ID_GIFT_SHARE:
+					mission.iconAlternate = R.drawable.ic_task_share_gift;
+					break;
+				case TaskTypeUtil.ID_PLAY_GAME:
+					mission.iconAlternate = R.drawable.ic_task_play_game;
+					break;
+				case TaskTypeUtil.ID_BUG_GIFT_USE_OUWAN:
+					mission.iconAlternate = R.drawable.ic_task_get_limit_with_bean;
+					break;
+				default:
+					mission.iconAlternate = R.drawable.ic_task_default;
+					break;
 			}
-		}
-		rawTotal = rawTasks.size();
-		if (rawTotal > 0) {
-			ScoreMission rawTitle = new ScoreMission();
-			rawTitle.name = String.format(taskTypeName + "(%d/%d)", rawFinished, rawTotal);
-			result.add(rawTitle);
-			result.addAll(rawTasks);
-			mCurFinishedTask++;
 		}
 	}
 
 	/**
 	 * 处理特定任务事件
 	 */
-	private void handleMission(ScoreMission scoreMission) {
-		if (scoreMission == null) return;
+	private void handleMission(ScoreMission mission) {
+		if (mission == null) return;
 		if (getContext() == null || !(getContext() instanceof BaseAppCompatActivity)) {
 			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
 			return;
 		}
-		String id = scoreMission.id;
-		ScoreManager.getInstance().setInWorking(true);
-		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
-			// 跳转到设置用户昵称信息界面
-			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-					SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
-		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
-			// 跳转到设置用户头像信息界面
-			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_avator));
-		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
-			// 跳转到绑定手机账号界面
-			OuwanSDKManager.getInstance().showBindPhoneView(getContext());
-		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
-			// 跳转到绑定偶玩账号界面
-			OuwanSDKManager.getInstance().showBindOuwanView(getContext());
-		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
-			// 跳转反馈界面
-			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-					FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
-		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
-			// 跳转搜索礼包/游戏界面
-			IntentUtil.jumpSearch(getContext());
-		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
-			// 评论
-		} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
-			// 为某条评论点赞，暂无
-		} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
-			// 跳转登录界面
-			IntentUtil.jumpLogin(getContext());
-		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
-			// 跳转游戏榜单界面
-			if (MainActivity.sGlobalHolder == null) {
-				IntentUtil.jumpGameNewList(getContext());
-			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_NOTICE);
-				if (getActivity() != null) {
-					getActivity().finish();
-				}
+		try {
+			switch (mission.actionType) {
+				case TaskTypeUtil.MISSION_TYPE_JUMP_PAGE:
+					final TaskInfoOne taskInfo = AssistantApp.getInstance().getGson().fromJson(
+							mission.actionInfo, TaskInfoOne.class);
+					IntentUtil.jumpByTaskInfoOne(getContext(), taskInfo);
+					break;
+				case TaskTypeUtil.MISSION_TYPE_EXECUTE_LOGIC:
+					break;
+				case TaskTypeUtil.MISSION_TYPE_DOWNLOAD:
+					break;
 			}
-		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
-			// 分享普通礼包
-			if (MainActivity.sGlobalHolder == null) {
-				IntentUtil.jumpGiftNewList(getContext());
-			} else {
-				MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
-				if (getActivity() != null) {
-					getActivity().finish();
-				}
-			}
-		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
-			// 分享限量礼包
-			IntentUtil.jumpGiftLimitList(getContext(), false);
-		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
-			// 使用偶玩豆购买限量礼包，跳转今日限量界面
-			IntentUtil.jumpGiftLimitList(getContext(), false);
-		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
-			// 跳转指定游戏界面，暂无
-			try {
-				IntentUtil.jumpGameDetail(getContext(), Integer.parseInt(scoreMission.data),
-						GameTypeUtil.JUMP_STATUS_DETAIL);
-			} catch (Exception e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.e(e);
-				}
-				ToastUtil.showShort("数据获取出错，跳转失败");
-			}
-		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
-			// 跳转登录界面
-			IntentUtil.jumpLogin(getContext());
-		} else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
-			// ignored
-		} else if (TaskTypeUtil.ID_SHARE_GIFT_COOL.equals(id)) {
-			// 进行礼包酷分享
-			ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
-		} else {
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.e("error id " + id);
+		} catch (Throwable t) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_FRAG, t);
 			}
 		}
+//		String id = mission.id;
+//		ScoreManager.getInstance().setInWorking(true);
+//		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
+//			// 跳转到设置用户昵称信息界面
+////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
+////					SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "Setting";
+//			infoOne.type = KeyConfig.TYPE_ID_USER_SET_NICK;
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
+//			// 跳转到设置用户头像信息界面
+////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
+////					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_avator));
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "Setting";
+//			infoOne.type = KeyConfig.TYPE_ID_USER_SET_AVATAR;
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
+//			// 跳转到绑定手机账号界面
+//			OuwanSDKManager.getInstance().showBindPhoneView(getContext());
+//		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
+//			// 跳转到绑定偶玩账号界面
+//			OuwanSDKManager.getInstance().showBindOuwanView(getContext());
+//		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
+//			// 跳转反馈界面
+////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
+////					FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "Setting";
+//			infoOne.type = KeyConfig.TYPE_ID_FEEDBACK;
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
+//			// 跳转搜索礼包/游戏界面
+//			IntentUtil.jumpSearch(getContext());
+//		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
+//			// 评论
+//		} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
+//			// 为某条评论点赞，暂无
+//		} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
+//		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
+//			// 跳转游戏榜单界面
+////			if (MainActivity.sGlobalHolder == null) {
+////				IntentUtil.jumpGameNewList(getContext());
+////			} else {
+////				MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_NOTICE);
+////				if (getActivity() != null) {
+////					getActivity().finish();
+////				}
+////			}
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "Main";
+//			infoOne.type = KeyConfig.TYPE_ID_INDEX_GAME;
+//			infoOne.data = String.valueOf(GameFragment.INDEX_NOTICE);
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
+//			// 分享普通礼包
+////			if (MainActivity.sGlobalHolder == null) {
+////				IntentUtil.jumpGiftNewList(getContext());
+////			} else {
+////				MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
+////				if (getActivity() != null) {
+////					getActivity().finish();
+////				}
+////			}
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "Main";
+//			infoOne.type = KeyConfig.TYPE_ID_INDEX_GIFT;
+//			infoOne.data = String.valueOf(GiftFragment.POS_NEW);
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
+//			// 分享限量礼包
+////			IntentUtil.jumpGiftLimitList(getContext(), false);
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "GiftList";
+//			infoOne.type = KeyConfig.TYPE_ID_GIFT_LIMIT;
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
+//			// 使用偶玩豆购买限量礼包，跳转今日限量界面
+////			IntentUtil.jumpGiftLimitList(getContext(), false);
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "GiftList";
+//			infoOne.type = KeyConfig.TYPE_ID_GIFT_LIMIT;
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
+//			// 跳转指定游戏界面，暂无
+//			TaskInfoOne infoOne = new TaskInfoOne();
+//			infoOne.action = "GameDetail";
+//			infoOne.type = 10998;
+//			infoOne.data = "1";
+//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
+//		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
+//		} else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
+//			// ignored
+//		} else if (TaskTypeUtil.ID_SHARE_GIFT_COOL.equals(id)) {
+//			// 进行礼包酷分享
+//			ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
+//		} else {
+//			if (AppDebugConfig.IS_FRAG_DEBUG) {
+//				KLog.e("error id " + id);
+//			}
+//		}
 	}
 
 	@Override

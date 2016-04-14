@@ -143,7 +143,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 				replaceFragWithTitle(R.id.fl_container, DownloadFragment.newInstance(),
 						getResources().getString(R.string.st_download_title));
 				break;
-			case KeyConfig.TYPE_ID_SIGN_IN_EVERYDAY:
+			case KeyConfig.TYPE_ID_TASK:
 				replaceFragWithTitle(R.id.fl_container, TaskFragment.newInstance(), getResources().getString(R.string
 						.st_task_title));
 				break;

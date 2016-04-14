@@ -1,5 +1,7 @@
 package com.oplay.giftcool.config.util;
 
+import com.oplay.giftcool.model.data.resp.ScoreMission;
+
 /**
  * Created by zsigui on 16-1-7.
  */
@@ -12,105 +14,74 @@ public class TaskTypeUtil {
 	public static final int TYPE_CONTENT = 1;
 
 
-	public static int getItemViewType(int missionType) {
-		switch (missionType) {
-			case MISSION_TYPE_TIRO:
-			case MISSION_TYPE_DAILY:
-			case MISSION_TYPE_CONTINUOUS:
-			case MISSION_TYPE_FUTURE:
-				return TYPE_CONTENT;
-			default:
-				return TYPE_HEADER;
+	public static int getItemViewType(ScoreMission mission) {
+		if (mission.isHeader) {
+			return TYPE_HEADER;
+		} else {
+			return TYPE_CONTENT;
 		}
 	}
 
 	/**
-	 * 新手任务类型
+	 * 打开应用特定页面
 	 */
-	public static final int MISSION_TYPE_TIRO = 1;
+	public static final int MISSION_TYPE_JUMP_PAGE = 1;
 	/**
-	 * 每日任务类型
+	 * 执行特定代码
 	 */
-	public static final int MISSION_TYPE_DAILY = 2;
+	public static final int MISSION_TYPE_EXECUTE_LOGIC = 2;
 	/**
-	 * 持续任务类型
+	 * 下载并打开应用
 	 */
-	public static final int MISSION_TYPE_CONTINUOUS = 3;
-	/**
-	 * 期望任务类型
-	 */
-	public static final int MISSION_TYPE_FUTURE = 4;
+	public static final int MISSION_TYPE_DOWNLOAD = 3;
+
 
 	/**
-	 * 上传头像
+	 * 首次登录
 	 */
-	public static final String ID_UPLOAD_AVATOR = "first_set_avatar";
+	public static final String ID_FIRST_LOGIN = "FIRST_LOGIN";
 	/**
-	 * 设置昵称
+	 * 首次设置头像
 	 */
-	public static final String ID_SET_NICK = "first_set_nick";
+	public static final String ID_SET_AVATAR = "FIRST_SET_AVATAR";
 	/**
-	 * 绑定手机账号
+	 * 首次设置昵称
 	 */
-	public static final String ID_BIND_PHONE = "account_band_mobile";
+	public static final String ID_SET_NICK = "FIRST_SET_NIC";
 	/**
-	 * 绑定偶玩账号
+	 * 关注游戏
 	 */
-	public static final String ID_BIND_OUWAN = "account_band_ouwan";
+	public static final String ID_FOCUS_GAME = "FOCUS_GAME";
 	/**
-	 * 新版本意见反馈
+	 * 求礼包
 	 */
-	public static final String ID_FEEDBACK = "version_v0.1_feedback";
+	public static final String ID_REQUEST_GIFT = "REQUEST_GIFT";
 	/**
-	 * 搜索礼包/游戏
+	 * 版本反馈
 	 */
-	public static final String ID_SEARCH = "search_gift_or_game";
+	public static final String ID_FEEDBACK = "CLIENT_FEEDBACK";
 	/**
-	 * 评论一款游戏
+	 * 版本升级
 	 */
-	public static final String ID_JUDGE_GAME = "";
+	public static final String ID_UPGRADE = "CLIENT_UPGRADE";
 	/**
-	 * 为一条评论点赞
+	 * 签到
 	 */
-	public static final String ID_STAR_COMMENT = "";
-	/**
-	 * 第一次登录
-	 */
-	public static final String ID_FIRST_LOGIN = "first_login_reward";
-	/**
-	 * 登录
-	 */
-	public static final String ID_LOGIN = "every_day_login";
-	/**
-	 * 下载游戏
-	 */
-	public static final String ID_DOWNLOAD = "download_game_apk";
-	/**
-	 * 分享普通礼包
-	 */
-	public static final String ID_SHARE_NORMAL_GIFT = "share_common_gift";
-	/**
-	 * 分享限量礼包
-	 */
-	public static final String ID_SHARE_LIMIT_GIFT = "share_every_day_precious_gift";
+	public static final String ID_SIGN_IN = "DAILY_SIGNIN";
 	/**
 	 * 分享礼包酷
 	 */
-	public static final String ID_SHARE_GIFT_COOL = "share_gift_cool";
+	public static final String ID_GCOOL_SHARE = "SHARE_GIFTCOOL_CONTENT";
 	/**
-	 * 使用偶玩豆领取一款每日限量礼包
+	 * 分享礼包
 	 */
-	public static final String ID_GET_LIMIT_WITH_BEAN = "get_every_day_precious_gift_by_ouwan_mili";
+	public static final String ID_GIFT_SHARE = "SHARE_GIFT";
 	/**
-	 * 下载指定款游戏
+	 * 试玩游戏
 	 */
-	public static final String ID_DOWNLOAD_SPECIFIED = "";
+	public static final String ID_PLAY_GAME = "PLAY_SPECIFIED_GAME";
 	/**
-	 * 连续登录7天
+	 * 使用偶玩豆购买礼包
 	 */
-	public static final String ID_CONTINUOUS_LOGIN = "seven_every_day_login";
-	/**
-	 * 特定时间登录任务
-	 */
-	public static final String ID_LOGIN_SPECIFIED = "login_2016_02_16_reward";
+	public static final String ID_BUG_GIFT_USE_OUWAN = "BUG_GIFT_USE_OUWAN_DOU";
 }

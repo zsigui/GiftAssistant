@@ -25,7 +25,7 @@ public class GameListActivity extends BaseAppCompatActivity {
 		setContentView(R.layout.activity_common_with_back);
 
 		if (getIntent() != null) {
-			type = getIntent().getIntExtra(KeyConfig.KEY_TYPE,KeyConfig. TYPE_ID_GAME_NEW);
+			type = getIntent().getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_NEW);
 			if (type == KeyConfig.TYPE_ID_GAME_SEARCH) {
 				mSearchKey = getIntent().getStringExtra(KeyConfig.KEY_SEARCH);
 			} else if (type == KeyConfig.TYPE_ID_GAME_TYPE) {

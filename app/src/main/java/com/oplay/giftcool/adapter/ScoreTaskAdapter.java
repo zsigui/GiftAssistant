@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,7 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
 
 	@Override
 	public int getItemViewType(int position) {
-		// 理论上0已经异常
-		return TaskTypeUtil.getItemViewType(getItem(position).type);
+		return TaskTypeUtil.getItemViewType(getItem(position));
 	}
 
 	@Override
@@ -120,45 +120,28 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
 		final ScoreMission mission = mData.get(position);
 		switch (type) {
 			case TaskTypeUtil.TYPE_CONTENT:
-				ViewUtil.showImage(holder.ivIcon, mission.icon);
-				if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS) {
-					holder.tvName.setText(String.format("%s(%d/%d)", mission.name,
-							mission.completeTime, mission.continuousDay));
+				if (TextUtils.isEmpty(mission.icon)) {
+					ViewUtil.showImage(holder.ivIcon, mission.iconAlternate);
 				} else {
-					if (mission.dayCount > 1) {
-						holder.tvName.setText(String.format("%s(%d/%d)", mission.name,
-								mission.dayCompleteCount, mission.dayCount));
-					} else {
-						holder.tvName.setText(mission.name);
-					}
+					ViewUtil.showImage(holder.ivIcon, mission.icon);
 				}
-				holder.stScore.setText(String.format("+%d", mission.rewardScore));
-				holder.tvContent.setText(mission.content);
+				holder.tvName.setText(mission.name);
+				holder.tvContent.setText(mission.description);
+				holder.stScore.setText(String.valueOf(mission.reward));
+
 				// 根据任务类型以及完成状态设置
 				// 先清除原有的点击监听事件
-				itemView.setOnClickListener(null);
-				holder.btnToDo.setOnClickListener(null);
-				if (mission.isFinished) {
-					if (mission.type == TaskTypeUtil.MISSION_TYPE_CONTINUOUS
-							&& mission.completeTime != mission.continuousDay) {
-						holder.stScore.setStateEnable(true);
-					} else {
-						holder.stScore.setStateEnable(false);
-					}
-					holder.btnToDo.setText("已完成");
-					holder.btnToDo.setEnabled(false);
-				} else if (mission.type == TaskTypeUtil.MISSION_TYPE_FUTURE) {
-					holder.stScore.setStateEnable(true);
-					holder.btnToDo.setText("待完成");
-					holder.btnToDo.setEnabled(false);
-
-				} else {
+				if (mission.isCompleted == 0) {
 					// 设置监听点击事件
-					itemView.setOnClickListener(this);
-					holder.btnToDo.setOnClickListener(this);
-					holder.stScore.setStateEnable(true);
 					holder.btnToDo.setText("去完成");
 					holder.btnToDo.setEnabled(true);
+					itemView.setOnClickListener(this);
+					holder.btnToDo.setOnClickListener(this);
+				} else {
+					holder.btnToDo.setText("已完成");
+					holder.btnToDo.setEnabled(false);
+					itemView.setOnClickListener(null);
+					holder.btnToDo.setOnClickListener(null);
 				}
 				itemView.setTag(TAG_POS, position);
 				holder.btnToDo.setTag(TAG_POS, position);

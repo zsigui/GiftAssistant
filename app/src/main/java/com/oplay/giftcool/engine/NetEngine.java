@@ -34,7 +34,7 @@ import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
-import com.oplay.giftcool.model.data.resp.ScoreMissionList;
+import com.oplay.giftcool.model.data.resp.ScoreMissionGroup;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
 import com.oplay.giftcool.model.data.resp.TaskReward;
@@ -267,7 +267,7 @@ public interface NetEngine {
 	 * 获取金币任务
 	 */
 	@POST(NetUrl.SCORE_GET_TASK)
-	Call<JsonRespBase<ScoreMissionList>> obtainScoreTask(@Body JsonReqBase<String> reqData);
+	Call<JsonRespBase<ArrayList<ScoreMissionGroup>>> obtainScoreTask(@Body JsonReqBase<String> reqData);
 
 	/**
 	 * 获取金币任务奖励

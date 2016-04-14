@@ -6,7 +6,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.ui.fragment.ActivityFragment;
+import com.oplay.giftcool.ui.fragment.WebFragment;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -31,12 +31,12 @@ public class WebActivity extends BaseAppCompatActivity {
 	}
 
 	private void handleRedirect(Intent intent) {
-		String url = intent.getStringExtra(KeyConfig.KEY_URL);
-		String title = intent.getStringExtra(KeyConfig.KEY_DATA);
+		String url = intent.getStringExtra(KeyConfig.KEY_DATA);
+		String title = intent.getStringExtra(KeyConfig.KEY_TITLE);
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.e(AppDebugConfig.TAG_APP, "handle intent = " + intent + ", url = " + url);
 		}
-		replaceFragWithTitle(R.id.fl_container, ActivityFragment.newInstance(url), title);
+		replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), title);
 	}
 
 	@Override

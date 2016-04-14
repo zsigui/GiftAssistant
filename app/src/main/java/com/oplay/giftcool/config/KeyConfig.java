@@ -9,6 +9,7 @@ public class KeyConfig {
 
 	public static final String KEY_TYPE = "key_type";
 	public static final String KEY_DATA = "key_data";
+	public static final String KEY_TITLE = "key_title";
 	public static final String KEY_URL = "key_url";
 	public static final String KEY_SEARCH = "key_search";
 	public static final String KEY_NAME = "key_name";
@@ -17,13 +18,18 @@ public class KeyConfig {
 	/* result code */
 	public static final int SUCCESS = 0;
 	public static final int FAIL = -1;
+	public static final int TYPE_ID_DEFAULT = 0x0;
 
-	public static final int TYPE_ID_DEFAULT = 0x100;
+	/* main activity */
+	public static final int TYPE_ID_INDEX_GIFT = 0x1;
+	public static final int TYPE_ID_INDEX_GAME = 0x2;
+	public static final int TYPE_ID_INDEX_POST = 0x3;
+
 	/* setting activity  */
 	public static final int TYPE_ID_MY_GIFT_CODE = 0x101;
 	public static final int TYPE_ID_MY_ATTENTION = 0x102;
 	public static final int TYPE_ID_WALLET = 0x103;
-	public static final int TYPE_ID_SIGN_IN_EVERYDAY = 0x104;
+	public static final int TYPE_ID_TASK = 0x104;
 	public static final int TYPE_ID_MSG = 0x105;
 	public static final int TYPE_ID_DOWNLOAD = 0x106;
 	public static final int TYPE_ID_SETTING = 0x107;
@@ -48,6 +54,7 @@ public class KeyConfig {
 
 	/* web activity */
 	public static final int TYPE_ID_LOTTERY = 0x173;
+	public static final int TYPE_SIGN_IN_EVERY_DAY = 0x174;
 
 	/* game list activity */
 	// 新游推荐

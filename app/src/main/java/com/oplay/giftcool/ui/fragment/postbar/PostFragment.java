@@ -8,6 +8,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.PostAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
+import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -21,6 +22,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -39,6 +41,14 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 	private final String TAG_NAME = "首页活动";
 	private final String PREFIX_POST = "获取数据";
+
+	public static final int INDEX_HEADER = 0;
+	public static final int INDEX_OFFICIAL = 1;
+	public static final int INDEX_NOTIFY = 2;
+
+	private int mIndexOfficialHeader = 1;
+	private int mIndexNotifyHeader = 2;
+
 	// 页面控件
 	private RecyclerView rvData;
 	private PostAdapter mAdapter;
@@ -62,7 +72,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 	@Override
 	protected void processLogic(Bundle savedInstanceState) {
-		LinearLayoutManager llp = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+		LinearLayoutManager llp = new SnapLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 		DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), llp.getOrientation());
 		rvData.setLayoutManager(llp);
 		rvData.addItemDecoration(itemDecoration);
@@ -166,18 +176,22 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		IndexPostNew header = new IndexPostNew();
 		header.showType = PostTypeUtil.TYPE_HEADER;
 		mData.add(header);
+
+		mIndexOfficialHeader = mData.size();
 		// 添加官方活动部分
+		IndexPostNew titleOne = new IndexPostNew();
+		titleOne.showType = PostTypeUtil.TYPE_TITLE_OFFICIAL;
+		mData.add(titleOne);
 		if (data.officialData != null && !data.officialData.isEmpty()) {
-			IndexPostNew titleOne = new IndexPostNew();
-			titleOne.showType = PostTypeUtil.TYPE_TITLE_OFFICIAL;
-			mData.add(titleOne);
 			mData.addAll(data.officialData);
 		}
+
+		mIndexNotifyHeader = mData.size();
+		IndexPostNew titleTwo = new IndexPostNew();
+		titleTwo.showType = PostTypeUtil.TYPE_TITLE_GAME;
+		mData.add(titleTwo);
 		// 添加游戏快讯部分
 		if (data.notifyData != null && !data.notifyData.isEmpty()) {
-			IndexPostNew titleTwo = new IndexPostNew();
-			titleTwo.showType = PostTypeUtil.TYPE_TITLE_GAME;
-			mData.add(titleTwo);
 			mData.addAll(data.notifyData);
 		}
 	}
@@ -372,6 +386,37 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		}
 	}
 
+	public void setPagePosition(final int type) {
+		ThreadUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (rvData != null) {
+					switch (type) {
+						case INDEX_HEADER:
+							rvData.smoothScrollToPosition(0);
+							break;
+						case INDEX_OFFICIAL:
+							rvData.smoothScrollToPosition(mIndexOfficialHeader < mAdapter.getItemCount() ?
+									mIndexOfficialHeader : mAdapter.getItemCount() - 1);
+							break;
+						case INDEX_NOTIFY:
+							rvData.smoothScrollToPosition(mIndexNotifyHeader < mAdapter.getItemCount() ?
+									mIndexNotifyHeader : mAdapter.getItemCount() - 1);
+							break;
+					}
+
+				}
+			}
+		});
+	}
+
+	@Override
+	public String getPageName() {
+		return TAG_NAME;
+	}
+
+	/* 测试数据 */
+
 	private IndexPost initTestData() {
 		IndexPost post = new IndexPost();
 		post.officialData = new ArrayList<>();
@@ -422,10 +467,5 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 			datas.add(data);
 		}
 		return datas;
-	}
-
-	@Override
-	public String getPageName() {
-		return TAG_NAME;
 	}
 }

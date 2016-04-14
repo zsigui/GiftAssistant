@@ -213,7 +213,7 @@ public class PushMessageManager {
 		if (isGift) {
 			IntentUtil.jumpGiftDetail(context, data.id, true);
 		} else {
-			IntentUtil.jumpGameDetail(context, data.id, data.status, true);
+			IntentUtil.jumpGameDetail(context, data.id, data.status);
 		}
 	}
 
