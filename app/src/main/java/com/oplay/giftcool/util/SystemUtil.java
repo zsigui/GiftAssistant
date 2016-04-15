@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.jaredrummler.android.processes.ProcessManager;
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.socks.library.KLog;
 
@@ -18,6 +20,9 @@ import java.util.List;
  */
 public class SystemUtil {
 
+	/**
+	 * 获取已经安装的应用的应用名称
+	 */
 	public static HashSet<String> getInstalledAppName(Context context) {
 		HashSet<String> data = new HashSet<>();
 		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
@@ -25,6 +30,25 @@ public class SystemUtil {
 			try {
 				PackageInfo packageInfo = packages.get(i);
 				data.add(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_UTIL, e);
+				}
+			}
+		}
+		return data;
+	}
+
+	/**
+	 * 获取已经安装应用的包名
+	 */
+	public static HashSet<String> getInstalledPackName(Context context) {
+		HashSet<String> data = new HashSet<>();
+		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+		for (int i = 0; i < packages.size(); i++) {
+			try {
+				PackageInfo packageInfo = packages.get(i);
+				data.add(packageInfo.packageName);
 			} catch (Exception e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_UTIL, e);
@@ -112,4 +136,41 @@ public class SystemUtil {
 		}
 		return false;
 	}
+
+	/**
+	 * 判断本地应用是否处于前台
+	 */
+	public static boolean isMyAppInForeground(Context context) {
+		return ProcessManager.isMyProcessInTheForeground();
+	}
+
+	/**
+	 * 判断APP是否处于前台，采用proc文件获取方式，由于受/proc文件多少影响，属于耗时操作<br />
+	 * 5.0前后都支持
+	 * @return
+	 */
+	public static boolean isForeground(Context context, String packName) {
+		List<AndroidAppProcess> processes = ProcessManager.getRunningForegroundApps(context);
+		for (AndroidAppProcess process : processes) {
+			if (process.getPackageName().equalsIgnoreCase(packName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+//	/**
+//	 * 使用RunningTask方式判断应用是否在前台，5.0以上废弃
+//	 */
+//	private static boolean isForegroundBelowM(Context context, String packName) {
+//
+//	}
+//
+//	/**
+//	 * 读取/proc目录下信息判断应用是否在前台，5.0以上可用，受文件影响，属于耗时操作
+//	 */
+//	private static boolean isForegroundAboveM(Context context, String packName) {
+//
+//	}
+
 }

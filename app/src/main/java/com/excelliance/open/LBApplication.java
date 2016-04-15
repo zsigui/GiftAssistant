@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
  * 如果在使用我们SDK之前没有自己的Application，强烈建议增加自己的Application类。
  * 特别注意：该文件除了替换这一个地方，别的地方不要改动。如需修改，请修改你们自己的Application类。
  *
- * Please replace YourApplicationClassName with your Application Class name.
+ * Please replace YourApplicationClassName with your Application Class code.
  * It's strongly recommended to add your own Application Class if you don't have one yet.
  * NOTE:
  * Please remain this file untouched except replacing YourApplicationClassName.

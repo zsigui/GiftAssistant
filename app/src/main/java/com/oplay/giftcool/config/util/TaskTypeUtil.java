@@ -1,6 +1,6 @@
 package com.oplay.giftcool.config.util;
 
-import com.oplay.giftcool.model.data.resp.ScoreMission;
+import com.oplay.giftcool.model.data.resp.task.ScoreMission;
 
 /**
  * Created by zsigui on 16-1-7.
@@ -22,6 +22,7 @@ public class TaskTypeUtil {
 		}
 	}
 
+	/*----------- 处理类型 ----------*/
 	/**
 	 * 打开应用特定页面
 	 */
@@ -36,6 +37,17 @@ public class TaskTypeUtil {
 	public static final int MISSION_TYPE_DOWNLOAD = 3;
 
 
+	/*----------- 任务类型的子类型处理代号 -----------*/
+	/*------- 类型一 --------*/
+	public static final int INFO_ONE_SDK_RECHARGE = 0;
+	public static final int INFO_ONE_SDK_BIND_OUWAN = 1;
+	public static final int INFO_ONE_SDK_BIND_PHONE = 2;
+	/*------- 类型二 --------*/
+	public static final int INFO_TWO_SHARE_GCOOL = 101;
+	public static final int INFO_TWO_REQUEST_GIFT = 102;
+	public static final int INFO_TWO_SHOW_UPGRADE = 103;
+
+	/*----------- 任务代号 -----------*/
 	/**
 	 * 首次登录
 	 */

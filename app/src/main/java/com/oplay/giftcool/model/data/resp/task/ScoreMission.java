@@ -1,4 +1,4 @@
-package com.oplay.giftcool.model.data.resp;
+package com.oplay.giftcool.model.data.resp.task;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -22,26 +22,22 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.SocketIOManager;
-import com.oplay.giftcool.manager.StatisticsManager;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
-import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
-import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
-import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -199,10 +195,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//没更新才显示欢迎
-		if (!handleUpdateApp()) {
-			handleFirstOpen();
-		}
 		if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
 			SocketIOManager.getInstance().connectOrReConnect();
 		}
@@ -280,6 +272,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				displayGiftUI();
 				break;
 		}
+
+		// 延后通知任务执行
+		ThreadUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				SocketIOManager.getInstance().runCandidateReward();
+			}
+		});
 	}
 
 	private void showToolbarSearch(boolean showSearch) {
@@ -398,6 +398,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mPostFragment.setPagePosition(mJumpPostPos);
 			}
 		}
+
+		//没更新才显示欢迎
+		if (!handleUpdateApp()) {
+			handleFirstOpen();
+		}
 	}
 
 	@Override
@@ -430,12 +435,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 				break;
 			case R.id.ll_gift_count:
-//				if (AccountManager.getInstance().isLogin()) {
-//					IntentUtil.jumpMyGift(MainActivity.this);
-//				} else {
-//					IntentUtil.jumpLogin(MainActivity.this);
-//				}
-				IntentUtil.jumpPostDetail(this, 1);
+				if (AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpMyGift(MainActivity.this);
+				} else {
+					IntentUtil.jumpLogin(MainActivity.this);
+				}
 				break;
 		}
 	}
@@ -468,7 +472,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	public void jumpToIndexGift(final int giftPosition) {
 		mJumpGiftPos = giftPosition;
-		mJumpPostPos =mJumpGamePos = -1;
+		mJumpPostPos = mJumpGamePos = -1;
 	}
 
 	public void jumpToIndexPost(final int postPosition) {
@@ -586,30 +590,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 * @return　是否有更新
 	 */
 	private boolean handleUpdateApp() {
-		final UpdateInfo updateInfo = mApp.getUpdateInfo();
-		if (!mHasShowUpdate && updateInfo != null && updateInfo.checkoutUpdateInfo(this)
-				&& mHandler != null) {
+		if (!mHasShowUpdate
+				&& DialogManager.getInstance().showUpdateDialog(this, getSupportFragmentManager())) {
 			mHasShowUpdate = true;
-			final IndexGameNew appInfo = new IndexGameNew();
-			appInfo.id = Global.GIFTCOOL_GAME_ID;
-			appInfo.name = getString(R.string.app_name);
-			appInfo.apkFileSize = updateInfo.apkFileSize;
-			//没icon地址，随便填个
-			appInfo.img = updateInfo.downloadUrl;
-			appInfo.downloadUrl = updateInfo.downloadUrl;
-			appInfo.destUrl = updateInfo.downloadUrl;
-			appInfo.packageName = updateInfo.packageName;
-			appInfo.versionName = updateInfo.versionName;
-			appInfo.size = appInfo.getApkFileSizeStr();
-			appInfo.initAppInfoStatus(this);
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					BaseFragment_Dialog confirmDialog = getUpdateDialog(appInfo, updateInfo.content,
-							updateInfo.updatePercent);
-					confirmDialog.show(getSupportFragmentManager(), "update");
-				}
-			}, 1000);
 			return true;
 		}
 		return false;
@@ -630,30 +613,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mGameFragment = null;
 		mDrawerLayout = null;
 		mDrawerFragment = null;
-	}
-
-	private WelcomeDialog getUpdateDialog(final IndexGameNew appInfo, final String content, int updatePercent) {
-		final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
-		confirmDialog.setTitle(content);
-		confirmDialog.setPositiveBtnText(getResources().getString(R.string.st_welcome_update_confirm));
-		confirmDialog.setNegativeBtnText(getResources().getString(R.string.st_welcome_update_cancel));
-		confirmDialog.setPercent(updatePercent);
-		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-			@Override
-			public void onCancel() {
-				confirmDialog.dismiss();
-				handleFirstOpen();
-			}
-
-			@Override
-			public void onConfirm() {
-				StatisticsManager.getInstance().trace(mApp, StatisticsManager.ID.APP_UPDATE, "点击更新");
-				appInfo.startDownload();
-				confirmDialog.dismiss();
-				handleFirstOpen();
-			}
-		});
-		return confirmDialog;
 	}
 
 }

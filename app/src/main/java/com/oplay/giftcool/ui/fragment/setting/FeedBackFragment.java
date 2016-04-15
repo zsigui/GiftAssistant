@@ -16,12 +16,10 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
-import com.oplay.giftcool.model.data.resp.TaskReward;
+import com.oplay.giftcool.model.data.resp.task.TaskReward;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
@@ -170,7 +168,6 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                 }
                 if (mCall != null) {
                     mCall.cancel();
-                    return;
                 }
                 ReqFeedBack feedBack = new ReqFeedBack();
                 feedBack.contact = etPhone.getText().toString();
@@ -180,14 +177,13 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                 mCall.enqueue(new Callback<JsonRespBase<TaskReward>>() {
                     @Override
                     public void onResponse(Call<JsonRespBase<TaskReward>> call, Response<JsonRespBase<TaskReward>> response) {
+                        mIsLoading = false;
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        mIsLoading = false;
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
                                 ToastUtil.showShort("反馈成功，谢谢你");
-                                ScoreManager.getInstance().toastByCallback(response.body().getData());
                                 if (getActivity() != null) {
                                     getActivity().onBackPressed();
                                 }
@@ -202,6 +198,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 
                     @Override
                     public void onFailure(Call<JsonRespBase<TaskReward>> call, Throwable t) {
+                        mIsLoading = false;
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
@@ -209,7 +206,6 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                             KLog.e(t);
                         }
                         ToastUtil.showShort("提交失败-网络异常");
-                        mIsLoading = false;
                     }
                 });
             }

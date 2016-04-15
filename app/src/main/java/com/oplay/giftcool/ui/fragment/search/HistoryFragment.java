@@ -207,7 +207,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 //            IndexGameNew item = new IndexGameNew();
 //            item.totalCount = i;
 //            item.img = "http://owan-img.ymapp.com/app/11124/icon/icon_1455787586.png_128_128_70.png";
-//            item.name = "\u6df7\u6c8c\u8d5e\u6b4c";
+//            item.code = "\u6df7\u6c8c\u8d5e\u6b4c";
 //            item.id = 11124 + i;
 //            stashData.add(item);
 //        }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by zsigui on 16-1-11.
  */
-public class UpdateSession extends TaskReward implements Serializable {
+public class UpdateSession implements Serializable {
 	@SerializedName("session_id")
 	public String session;
 }

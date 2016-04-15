@@ -11,12 +11,15 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqHopeGift;
+import com.oplay.giftcool.model.data.resp.IndexGameNew;
+import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HopeGiftDialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
+import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -202,12 +205,64 @@ public class DialogManager {
 	}
 
 	/**
-	 * 隐藏加载弹窗
+	 * 隐藏加载弹窗，避免出错
 	 */
 	public void hideLoadingDialog() {
 		if (mLoadingDialog != null) {
 			mLoadingDialog.dismissAllowingStateLoss();
+			mLoadingDialog = null;
 		}
 	}
 
+	/**
+	 * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
+	 */
+	public boolean showUpdateDialog(final Context context, final FragmentManager fm) {
+		final UpdateInfo updateInfo = AssistantApp.getInstance().getUpdateInfo();
+		if (updateInfo != null && updateInfo.checkoutUpdateInfo(context)) {
+			final IndexGameNew appInfo = new IndexGameNew();
+			appInfo.id = Global.GIFTCOOL_GAME_ID;
+			appInfo.name = context.getString(R.string.app_name);
+			appInfo.apkFileSize = updateInfo.apkFileSize;
+			//没icon地址，随便填个
+			appInfo.img = updateInfo.downloadUrl;
+			appInfo.downloadUrl = updateInfo.downloadUrl;
+			appInfo.destUrl = updateInfo.downloadUrl;
+			appInfo.packageName = updateInfo.packageName;
+			appInfo.versionName = updateInfo.versionName;
+			appInfo.size = appInfo.getApkFileSizeStr();
+			appInfo.initAppInfoStatus(context);
+			BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
+					updateInfo.updatePercent);
+			confirmDialog.show(fm, "update");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 根据传入内容获取更新弹窗
+	 */
+	private WelcomeDialog getUpdateDialog(final Context context, final IndexGameNew appInfo,
+	                                      final String content, int updatePercent) {
+		final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
+		confirmDialog.setTitle(content);
+		confirmDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_update_confirm));
+		confirmDialog.setNegativeBtnText(context.getResources().getString(R.string.st_welcome_update_cancel));
+		confirmDialog.setPercent(updatePercent);
+		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+			@Override
+			public void onCancel() {
+				confirmDialog.dismiss();
+			}
+
+			@Override
+			public void onConfirm() {
+				StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_UPDATE, "点击更新");
+				appInfo.startDownload();
+				confirmDialog.dismiss();
+			}
+		});
+		return confirmDialog;
+	}
 }

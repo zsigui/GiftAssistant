@@ -19,12 +19,6 @@ import cn.jpush.android.service.PushService;
  */
 public class StartReceiver extends BroadcastReceiver {
 
-
-	public static abstract class Action {
-		public final static String ALARM_WAKE = "com.oplay.gitcool.action.ALARM_WAKE";
-	}
-
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent == null || TextUtils.isEmpty(intent.getAction())) {

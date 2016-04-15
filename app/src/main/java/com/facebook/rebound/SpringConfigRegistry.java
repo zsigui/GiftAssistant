@@ -41,8 +41,8 @@ public class SpringConfigRegistry {
    * add a SpringConfig to the registry
    *
    * @param springConfig SpringConfig to add to the registry
-   * @param configName name to give the SpringConfig in the registry
-   * @return true if the SpringConfig was added, false if a config with that name is already
+   * @param configName code to give the SpringConfig in the registry
+   * @return true if the SpringConfig was added, false if a config with that code is already
    *    present.
    */
   public boolean addSpringConfig(SpringConfig springConfig, String configName) {

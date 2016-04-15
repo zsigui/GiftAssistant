@@ -16,7 +16,6 @@ import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -229,11 +228,11 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 	public void onUserActionFinish(int action, int code) {
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
+//				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
 				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
+//				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
 				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:

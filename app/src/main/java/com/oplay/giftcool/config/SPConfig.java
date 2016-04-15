@@ -56,4 +56,5 @@ public class SPConfig {
 	/* 应用设置 */
 	public static final String SP_APP_DEVICE_FILE = "deviceadf";
 	public static final String KEY_SOFT_INPUT_HEIGHT = "soft_input_height";
+	public static final String KEY_TODAY_DOWNLOAD_TASK = "current_download_task";
 }

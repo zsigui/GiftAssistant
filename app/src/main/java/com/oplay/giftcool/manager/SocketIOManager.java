@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.util.SystemUtil;
@@ -15,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -25,9 +27,10 @@ import io.socket.emitter.Emitter;
  */
 public class SocketIOManager {
 
-	private final String URI_WS = "http://172.16.5.76:80/ws";
+	private final String URI_WS = "ws";
 	private static SocketIOManager manager;
 	private Context mAppContext;
+
 
 	private SocketIOManager() {
 		mAppContext = AssistantApp.getInstance().getApplicationContext();
@@ -42,6 +45,11 @@ public class SocketIOManager {
 
 	private Socket mSocket;
 	private int mTryCount = 0;
+	private ArrayList<MissionReward> mCandidateList = new ArrayList<>();
+
+	private String getRealUrl() {
+		return NetUrl.getBaseUrl() + URI_WS;
+	}
 
 	public void connectOrReConnect() {
 		if (AccountManager.getInstance().isLogin()) {
@@ -59,7 +67,7 @@ public class SocketIOManager {
 //				opts.reconnectionAttempts = 3;
 //				// 断开后，间隔10秒再次重试
 //				opts.reconnectionDelay = 10 * 1000;
-				mSocket = IO.socket(URI_WS, opts);
+				mSocket = IO.socket(getRealUrl(), opts);
 				mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 					@Override
 					public void call(Object... args) {
@@ -120,17 +128,22 @@ public class SocketIOManager {
 							KLog.d(AppDebugConfig.TAG_WARN, "args[0] = " + (args != null && args.length > 0 ? args[0]
 									: null));
 						}
-						if (!SystemUtil.isBackground(mAppContext) && args != null && args.length > 0) {
+						if (args != null && args.length > 0) {
 							// 处于前台中，直接发送通知
 							try {
 								Gson gson = AssistantApp.getInstance().getGson();
 								final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
-								ThreadUtil.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										ScoreManager.getInstance().toastByCallback(reward, true);
-									}
-								});
+								if (SystemUtil.isMyAppInForeground(mAppContext)) {
+									ThreadUtil.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											ScoreManager.getInstance().toastByCallback(reward, true);
+										}
+									});
+								} else {
+									// 加入候选队列等待后面通知
+									mCandidateList.add(reward);
+								}
 							} catch (Exception ignored) {
 							}
 						}
@@ -142,6 +155,12 @@ public class SocketIOManager {
 					KLog.d(AppDebugConfig.TAG_MANAGER, e);
 				}
 			}
+		}
+	}
+
+	public void runCandidateReward() {
+		for (final MissionReward reward : mCandidateList) {
+			ScoreManager.getInstance().toastByCallback(reward, true);
 		}
 	}
 

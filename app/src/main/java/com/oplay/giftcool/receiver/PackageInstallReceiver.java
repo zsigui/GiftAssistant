@@ -11,6 +11,8 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.InstallNotifier;
+import com.oplay.giftcool.manager.AlarmClockManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -46,32 +48,9 @@ public class PackageInstallReceiver extends BroadcastReceiver {
                 if (AppDebugConfig.IS_DEBUG) {
                     KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + action + ", packName = " + packName);
                 }
-				final GameDownloadInfo appInfo = ApkDownloadManager.getInstance(context)
-						.getAppInfoByPackageName(packName);
 				try {
-					if (appInfo != null) {
-						Global.getInstalledAppNames().add(SystemUtil.getAppNameByPackName(context, packName));
-						// remove notification
-						DownloadNotificationManager.clearDownloadComplete(context, appInfo.destUrl);
-						// remove apk if necessary
-						if (AssistantApp.getInstance().isShouldAutoDeleteApk()) {
-							appInfo.initAppInfoStatus(context);
-							final File file = appInfo.getDestFile();
-							if (file != null && file.exists()) {
-								final String delToast = String.format("已删除%s安装包，节省%s空间", appInfo.packageName, appInfo
-										.size);
-								final boolean delete = file.delete();
-								if (delete) {
-									ToastUtil.showShort(delToast);
-									appInfo.initAppInfoStatus(context);
-								}
-								if (AppDebugConfig.IS_DEBUG) {
-									AppDebugConfig.logMethodWithParams(this,
-											String.format("File deleted [%b]: %s", delete, file));
-								}
-							}
-						}
-					}
+					handleAppState(context, packName);
+					handlePlayDownloadTask(context, packName);
 				} catch (Throwable e) {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.e(e);
@@ -93,6 +72,47 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
+			}
+		}
+	}
+
+	/**
+	 * 判断是否指定试玩游戏，并开启服务监听游戏的启动状态
+	 */
+	private void handlePlayDownloadTask(Context context, String packName) {
+		final boolean contain = ScoreManager.getInstance().containDownloadTask(context, packName);
+		if (contain) {
+			AlarmClockManager.getInstance().startGameObserverAlarm(context);
+		}
+	}
+
+	/**
+	 * 处理游戏下载安装后的APP状态变化
+	 */
+	private void handleAppState(Context context, String packName) {
+		final GameDownloadInfo appInfo = ApkDownloadManager.getInstance(context)
+				.getAppInfoByPackageName(packName);
+		if (appInfo != null) {
+			Global.getInstalledAppNames().add(SystemUtil.getAppNameByPackName(context, packName));
+			// remove notification
+			DownloadNotificationManager.clearDownloadComplete(context, appInfo.destUrl);
+			// remove apk if necessary
+			if (AssistantApp.getInstance().isShouldAutoDeleteApk()) {
+				appInfo.initAppInfoStatus(context);
+				final File file = appInfo.getDestFile();
+				if (file != null && file.exists()) {
+					final String delToast = String.format("已删除%s安装包，节省%s空间", appInfo.packageName, appInfo
+							.size);
+					final boolean delete = file.delete();
+					if (delete) {
+						ToastUtil.showShort(delToast);
+						appInfo.initAppInfoStatus(context);
+					}
+					if (AppDebugConfig.IS_DEBUG) {
+						AppDebugConfig.logMethodWithParams(this,
+								String.format("File deleted [%b]: %s", delete, file));
+					}
+				}
 			}
 		}
 	}

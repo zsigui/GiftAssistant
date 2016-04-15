@@ -151,7 +151,7 @@ public class StatisticsManager {
 	public void onPageStart(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onPageStart(context, name);
+//			TCAgent.onPageStart(context, code);
 				MobclickAgent.onPageStart(name);
 			}
 		}
@@ -160,7 +160,7 @@ public class StatisticsManager {
 	public void onPageEnd(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onPageEnd(context, name);
+//			TCAgent.onPageEnd(context, code);
 				MobclickAgent.onPageEnd(name);
 			}
 		}

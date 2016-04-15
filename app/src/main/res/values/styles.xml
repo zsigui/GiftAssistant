@@ -36,8 +36,8 @@
 		<!-- Toolbar -->
 		<item name = "toolbarStyle" >@style/ToolbarStyle</item >
 		<item name = "toolbarNavigationButtonStyle" >@style/ToolbarNavigationButtonStyle</item >
-		<!--<item name = "android:windowTranslucentStatus" >true</item >-->
-		<!--<item name = "android:fitsSystemWindows" >true</item >-->
+		<!--<item code = "android:windowTranslucentStatus" >true</item >-->
+		<!--<item code = "android:fitsSystemWindows" >true</item >-->
 
 	</style >
 
@@ -55,8 +55,8 @@
 	<style name = "ToolbarNavigationButtonStyle" parent = "Widget.AppCompat.Toolbar.Button.Navigation" >
 		<item name = "android:minWidth" >?actionBarSize</item >
 		<item name = "android:minHeight" >?actionBarSize</item >
-		<!--<item name = "android:paddingLeft" >6dp</item >-->
-		<!--<item name = "android:paddingRight" >6dp</item >-->
+		<!--<item code = "android:paddingLeft" >6dp</item >-->
+		<!--<item code = "android:paddingRight" >6dp</item >-->
 		<item name = "android:scaleType" >centerInside</item >
 	</style >
 
@@ -390,7 +390,7 @@
 		<item name = "android:textSize" >16dp</item >
 		<item name = "android:singleLine" >true</item >
 		<item name = "android:gravity" >bottom</item >_
-		<!--<item name = "android:paddingLeft" >@dimen/spacing_block</item >-->
+		<!--<item code = "android:paddingLeft" >@dimen/spacing_block</item >-->
 		<item name = "android:paddingRight" >4dp</item >
 		<item name = "android:textCursorDrawable" >@null</item >
 		<item name = "android:cursorVisible" >true</item >

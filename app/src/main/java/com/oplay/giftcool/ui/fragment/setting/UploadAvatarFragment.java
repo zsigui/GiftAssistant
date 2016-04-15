@@ -290,7 +290,6 @@ public class UploadAvatarFragment extends BaseFragment {
                                 }
                                 model.userInfo.avatar = response.body().getData().avatar;
                                 AccountManager.getInstance().notifyUserAll(model);
-                                ScoreManager.getInstance().toastByCallback(response.body().getData());
                                 return;
                             }
                             if (AppDebugConfig.IS_DEBUG) {

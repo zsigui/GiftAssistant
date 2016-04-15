@@ -35,8 +35,8 @@
         <!-- Toolbar -->
         <item name = "toolbarStyle" >@style/ToolbarStyle</item >
         <item name = "toolbarNavigationButtonStyle" >@style/ToolbarNavigationButtonStyle</item >
-        <!--<item name = "android:windowTranslucentStatus" >true</item >-->
-        <!--<item name = "android:fitsSystemWindows" >true</item >-->
+        <!--<item code = "android:windowTranslucentStatus" >true</item >-->
+        <!--<item code = "android:fitsSystemWindows" >true</item >-->
     </style >
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

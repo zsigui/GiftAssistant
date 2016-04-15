@@ -55,7 +55,7 @@ public class BaseSpringSystem {
   }
 
   /**
-   * create a spring with a random uuid for its name.
+   * create a spring with a random uuid for its code.
    * @return the spring
    */
   public Spring createSpring() {
@@ -65,7 +65,7 @@ public class BaseSpringSystem {
   }
 
   /**
-   * get a spring by name
+   * get a spring by code
    * @param id id of the spring to retrieve
    * @return Spring with the specified key
    */

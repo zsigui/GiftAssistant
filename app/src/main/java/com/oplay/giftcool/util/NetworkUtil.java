@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 /**
  * assist us in sensing state of the networks.<br />
- * need  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/><br/>
+ * need  <uses-permission android:code="android.permission.ACCESS_NETWORK_STATE"/><br/>
  * Created by zsigui on 15-12-22.
  */
 public class NetworkUtil {

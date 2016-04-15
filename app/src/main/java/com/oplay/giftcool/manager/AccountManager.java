@@ -428,7 +428,6 @@ public class AccountManager implements OnFinishListener {
                                 notifyUserPart(mUser);
                                 // 请求更新数据
                                 updateUserInfo();
-                                ScoreManager.getInstance().toastByCallback(mUser, false);
                                 StatisticsManager.getInstance().trace(mContext,
                                         StatisticsManager.ID.USER_LOGIN_WITH_SESSION);
                                 return;

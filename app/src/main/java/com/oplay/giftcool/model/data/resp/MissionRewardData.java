@@ -9,10 +9,10 @@ import java.io.Serializable;
  */
 public class MissionRewardData implements Serializable {
 
-	@SerializedName("name")
-	public String name;
+	@SerializedName("code")
+	public String code;
 
-	@SerializedName("display_name")
+	@SerializedName("name")
 	public String displayName;
 
 	@SerializedName("finish_time")
@@ -20,7 +20,4 @@ public class MissionRewardData implements Serializable {
 
 	@SerializedName("reward_points")
 	public int rewardPoint;
-
-	@SerializedName("display_msg")
-	public String dispayMsg;
 }

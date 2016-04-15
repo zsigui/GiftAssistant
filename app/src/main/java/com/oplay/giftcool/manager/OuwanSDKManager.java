@@ -14,11 +14,9 @@ import net.ouwan.umipay.android.api.ActionCallbackListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
-import net.ouwan.umipay.android.api.PayCallbackListener;
 import net.ouwan.umipay.android.api.UmipayBrowser;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
-import net.ouwan.umipay.android.api.UmipaymentInfo;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
 import net.ouwan.umipay.android.entry.UmipayAccount;
 import net.ouwan.umipay.android.global.Global_Url_Params;
@@ -134,16 +132,16 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 	 * @param userId   用户id
 	 * @param listener 支付回调
 	 */
-	public void pay(String tradeNo, int pay, String desc, int userId, PayCallbackListener listener) {
-		UmipaymentInfo payInfo = new UmipaymentInfo();
-		payInfo.setAmount(pay * 10);
-		payInfo.setTradeno(tradeNo);
-		payInfo.setDesc(desc);
-		payInfo.setRoleId(String.valueOf(userId));
-		payInfo.setRoleName("");
-		payInfo.setServiceType(UmipaymentInfo.SERVICE_TYPE_QUOTA);
-		UmipaySDKManager.showPayView(mContext, payInfo, listener);
-	}
+//	public void pay(String tradeNo, int pay, String desc, int userId, PayCallbackListener listener) {
+//		UmipaymentInfo payInfo = new UmipaymentInfo();
+//		payInfo.setAmount(pay * 10);
+//		payInfo.setTradeno(tradeNo);
+//		payInfo.setDesc(desc);
+//		payInfo.setRoleId(String.valueOf(userId));
+//		payInfo.setRoleName("");
+//		payInfo.setServiceType(UmipaymentInfo.SERVICE_TYPE_QUOTA);
+//		UmipaySDKManager.showPayView(mContext, payInfo, listener);
+//	}
 
 
 	/**

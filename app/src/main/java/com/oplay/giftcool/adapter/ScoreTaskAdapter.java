@@ -13,7 +13,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
-import com.oplay.giftcool.model.data.resp.ScoreMission;
+import com.oplay.giftcool.model.data.resp.task.ScoreMission;
 import com.oplay.giftcool.ui.widget.ScoreText;
 import com.oplay.giftcool.util.ViewUtil;
 

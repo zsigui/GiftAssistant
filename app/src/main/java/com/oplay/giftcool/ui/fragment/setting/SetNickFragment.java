@@ -16,7 +16,6 @@ import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -151,7 +150,6 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         UserModel model = AccountManager.getInstance().getUser();
                         model.userInfo.nick = response.body().getData().nick;
                         AccountManager.getInstance().notifyUserAll(model);
-                        ScoreManager.getInstance().toastByCallback(response.body().getData());
                         ToastUtil.showShort("修改成功");
                         if (getActivity() != null) {
                             getActivity().onBackPressed();

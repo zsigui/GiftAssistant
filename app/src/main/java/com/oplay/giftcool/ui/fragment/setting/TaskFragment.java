@@ -1,5 +1,7 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,21 +18,28 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
-import com.oplay.giftcool.model.data.resp.ScoreMission;
-import com.oplay.giftcool.model.data.resp.ScoreMissionGroup;
-import com.oplay.giftcool.model.data.resp.TaskInfoOne;
+import com.oplay.giftcool.model.data.resp.task.ScoreMission;
+import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoThree;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +59,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private ScoreTaskAdapter mAdapter;
 	private int mCurFinishedTask = 0;
 
+	// 包名列表
+	private HashSet<String> mPackName;
 
 	public static TaskFragment newInstance() {
 		return new TaskFragment();
@@ -81,7 +92,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
-		ScoreManager.getInstance().setInWorking(true);
 		AccountManager.getInstance().updatePartUserInfo();
 
 	}
@@ -155,16 +165,48 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	}
 
 	/**
+	 * 获取包名列表
+	 */
+	public HashSet<String> getPackName() {
+		synchronized (this) {
+			if (mPackName == null || mPackName.isEmpty()) {
+				mPackName = SystemUtil.getInstalledPackName(getContext());
+			}
+		}
+		return mPackName;
+	}
+
+	/**
 	 * 将各任务分组列表提取出来合并成一个列表
 	 */
 	private ArrayList<ScoreMission> transferToMissionList(ArrayList<ScoreMissionGroup> missionGroups) {
 		ArrayList<ScoreMission> missions = new ArrayList<>();
+		final boolean allowDownload = AssistantApp.getInstance().isAllowDownload();
 		for (ScoreMissionGroup missionGroup : missionGroups) {
 			final ScoreMission groupHeader = new ScoreMission();
 			groupHeader.name = String.format("%s(%d/%d)",
 					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
 			missions.add(groupHeader);
-			missions.addAll(missionGroup.missions);
+			for (ScoreMission m : missionGroup.missions) {
+				if (m.actionType == TaskTypeUtil.MISSION_TYPE_DOWNLOAD) {
+					// 对于下载类型，需要预先判断
+					if (allowDownload) {
+						try {
+							TaskInfoThree info = AssistantApp.getInstance().getGson()
+									.fromJson(m.actionInfo, TaskInfoThree.class);
+							if (ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)
+									|| !getPackName().contains(info.packName)) {
+								// 执行中的任务，或者还没有安装的游戏
+								// 设置试玩游戏信息
+								ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
+								missions.add(m);
+							}
+						} catch (Throwable ignored) {}
+					}
+				} else {
+					missions.add(m);
+				}
+			}
 		}
 		return missions;
 	}
@@ -249,13 +291,19 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		try {
 			switch (mission.actionType) {
 				case TaskTypeUtil.MISSION_TYPE_JUMP_PAGE:
-					final TaskInfoOne taskInfo = AssistantApp.getInstance().getGson().fromJson(
+					final TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
 							mission.actionInfo, TaskInfoOne.class);
-					IntentUtil.jumpByTaskInfoOne(getContext(), taskInfo);
+					handleInfoOne(getContext(), infoOne);
 					break;
 				case TaskTypeUtil.MISSION_TYPE_EXECUTE_LOGIC:
+					final TaskInfoTwo infoTwo = AssistantApp.getInstance().getGson().fromJson(
+							mission.actionInfo, TaskInfoTwo.class);
+					handleInfoTwo(infoTwo);
 					break;
 				case TaskTypeUtil.MISSION_TYPE_DOWNLOAD:
+					final TaskInfoThree infoThree = AssistantApp.getInstance().getGson().fromJson(
+							mission.actionInfo, TaskInfoThree.class);
+					handleInfoThree(mission.code, infoThree);
 					break;
 			}
 		} catch (Throwable t) {
@@ -263,108 +311,69 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				KLog.d(AppDebugConfig.TAG_FRAG, t);
 			}
 		}
-//		String id = mission.id;
-//		ScoreManager.getInstance().setInWorking(true);
-//		if (id.equals(TaskTypeUtil.ID_SET_NICK)) {
-//			// 跳转到设置用户昵称信息界面
-////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-////					SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "Setting";
-//			infoOne.type = KeyConfig.TYPE_ID_USER_SET_NICK;
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_UPLOAD_AVATOR)) {
-//			// 跳转到设置用户头像信息界面
-////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-////					UploadAvatarFragment.newInstance(), getResources().getString(R.string.st_user_avator));
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "Setting";
-//			infoOne.type = KeyConfig.TYPE_ID_USER_SET_AVATAR;
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_BIND_PHONE)) {
-//			// 跳转到绑定手机账号界面
-//			OuwanSDKManager.getInstance().showBindPhoneView(getContext());
-//		} else if (id.equals(TaskTypeUtil.ID_BIND_OUWAN)) {
-//			// 跳转到绑定偶玩账号界面
-//			OuwanSDKManager.getInstance().showBindOuwanView(getContext());
-//		} else if (id.equals(TaskTypeUtil.ID_FEEDBACK)) {
-//			// 跳转反馈界面
-////			((BaseAppCompatActivity) getContext()).replaceFragWithTitle(R.id.fl_container,
-////					FeedBackFragment.newInstance(), getResources().getString(R.string.st_feedback_title));
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "Setting";
-//			infoOne.type = KeyConfig.TYPE_ID_FEEDBACK;
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_SEARCH)) {
-//			// 跳转搜索礼包/游戏界面
-//			IntentUtil.jumpSearch(getContext());
-//		} else if (id.equals(TaskTypeUtil.ID_JUDGE_GAME)) {
-//			// 评论
-//		} else if (id.equals(TaskTypeUtil.ID_STAR_COMMENT)) {
-//			// 为某条评论点赞，暂无
-//		} else if (id.equals(TaskTypeUtil.ID_LOGIN)) {
-//		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD)) {
-//			// 跳转游戏榜单界面
-////			if (MainActivity.sGlobalHolder == null) {
-////				IntentUtil.jumpGameNewList(getContext());
-////			} else {
-////				MainActivity.sGlobalHolder.jumpToIndexGame(GameFragment.INDEX_NOTICE);
-////				if (getActivity() != null) {
-////					getActivity().finish();
-////				}
-////			}
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "Main";
-//			infoOne.type = KeyConfig.TYPE_ID_INDEX_GAME;
-//			infoOne.data = String.valueOf(GameFragment.INDEX_NOTICE);
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_SHARE_NORMAL_GIFT)) {
-//			// 分享普通礼包
-////			if (MainActivity.sGlobalHolder == null) {
-////				IntentUtil.jumpGiftNewList(getContext());
-////			} else {
-////				MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_NEW);
-////				if (getActivity() != null) {
-////					getActivity().finish();
-////				}
-////			}
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "Main";
-//			infoOne.type = KeyConfig.TYPE_ID_INDEX_GIFT;
-//			infoOne.data = String.valueOf(GiftFragment.POS_NEW);
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_SHARE_LIMIT_GIFT)) {
-//			// 分享限量礼包
-////			IntentUtil.jumpGiftLimitList(getContext(), false);
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "GiftList";
-//			infoOne.type = KeyConfig.TYPE_ID_GIFT_LIMIT;
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_GET_LIMIT_WITH_BEAN)) {
-//			// 使用偶玩豆购买限量礼包，跳转今日限量界面
-////			IntentUtil.jumpGiftLimitList(getContext(), false);
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "GiftList";
-//			infoOne.type = KeyConfig.TYPE_ID_GIFT_LIMIT;
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_DOWNLOAD_SPECIFIED)) {
-//			// 跳转指定游戏界面，暂无
-//			TaskInfoOne infoOne = new TaskInfoOne();
-//			infoOne.action = "GameDetail";
-//			infoOne.type = 10998;
-//			infoOne.data = "1";
-//			IntentUtil.jumpByTaskInfoOne(getActivity(), infoOne);
-//		} else if (id.equals(TaskTypeUtil.ID_CONTINUOUS_LOGIN)) {
-//		} else if (TaskTypeUtil.ID_LOGIN_SPECIFIED.equals(id)) {
-//			// ignored
-//		} else if (TaskTypeUtil.ID_SHARE_GIFT_COOL.equals(id)) {
-//			// 进行礼包酷分享
-//			ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
-//		} else {
-//			if (AppDebugConfig.IS_FRAG_DEBUG) {
-//				KLog.e("error id " + id);
-//			}
-//		}
+	}
+
+	/**
+	 * 处理额外信息类型为一(进行页面跳转)的数据
+	 */
+	public static void handleInfoOne(Context context, TaskInfoOne taskInfo) {
+		final String ACTION_PREFIX = "com.oplay.giftcool.action.";
+		if ("GameDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
+		} else if ("GiftDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGiftDetail(context, taskInfo.id);
+		} else if ("PostDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpPostDetail(context, taskInfo.id);
+		} else if ("Sdk".equals(taskInfo.action)) {
+			switch (taskInfo.id) {
+				case TaskTypeUtil.INFO_ONE_SDK_RECHARGE:
+					OuwanSDKManager.getInstance().recharge();
+					break;
+				case TaskTypeUtil.INFO_ONE_SDK_BIND_OUWAN:
+					OuwanSDKManager.getInstance().showBindOuwanView(context);
+					break;
+				case TaskTypeUtil.INFO_ONE_SDK_BIND_PHONE:
+					OuwanSDKManager.getInstance().showBindPhoneView(context);
+					break;
+			}
+		} else {
+			IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.id, taskInfo.data);
+			if ("Main".equals(taskInfo.action)) {
+				if (context != null && context instanceof Activity) {
+					((Activity) context).finish();
+				}
+			}
+		}
+	}
+
+	/**
+	 * 处理额外信息类型为二(执行特定代码段)的数据
+	 */
+	private void handleInfoTwo(TaskInfoTwo infoTwo) {
+		switch (infoTwo.type) {
+			case TaskTypeUtil.INFO_TWO_SHARE_GCOOL:
+				ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
+				break;
+			case TaskTypeUtil.INFO_TWO_REQUEST_GIFT:
+				DialogManager.getInstance().showHopeGift(getChildFragmentManager(), 0, "", true);
+				break;
+			case TaskTypeUtil.INFO_TWO_SHOW_UPGRADE:
+				final boolean isUpdate =
+						DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager());
+				if (!isUpdate) {
+					ToastUtil.showShort("已更新至最新版本");
+				}
+				break;
+		}
+	}
+
+	/**
+	 * 处理额外信息类型为三(下载打开应用)的数据
+	 */
+	private void handleInfoThree(String code, TaskInfoThree infoThree) {
+		// 设置试玩游戏信息
+//		ScoreManager.getInstance().addDownloadWork(getContext(), code, infoThree);
+		IntentUtil.jumpGameDetail(getContext(), infoThree.appId);
 	}
 
 	@Override
@@ -395,11 +404,11 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	public void onUserActionFinish(int action, int code) {
 		switch (action) {
 			case ObserverManager.UserActionListener.ACTION_BIND_OUWAN:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
+//				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_OUWAN, false);
 				AccountManager.getInstance().updateUserInfo();
 				break;
 			case ObserverManager.UserActionListener.ACTION_BIND_PHONE:
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
+//				ScoreManager.getInstance().reward(ScoreManager.RewardType.BIND_PHONE, false);
 				AccountManager.getInstance().updateUserInfo();
 				break;
 		}

@@ -33,6 +33,8 @@ public class AlarmClockManager {
 
 
 	private AlarmManager mManager;
+
+	// 唤醒闹钟的意图
 	private PendingIntent alarmSender = null;
 	// 一次唤醒间隔时间
 	private int mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
@@ -72,7 +74,7 @@ public class AlarmClockManager {
 	public void startWakeAlarm(Context context) {
 		if (alarmSender == null) {
 			Intent startIntent = new Intent(context, StartReceiver.class);
-			startIntent.setAction(StartReceiver.Action.ALARM_WAKE);
+			startIntent.setAction(AlarmClockManager.Action.ALARM_WAKE);
 			try {
 				alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
 						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -103,5 +105,46 @@ public class AlarmClockManager {
 	 */
 	public void stopWakeAlarm(Context context) {
 		getAlarmManager(context).cancel(alarmSender);
+	}
+
+	// 试玩游戏的意图
+	private PendingIntent mPlayGameSender;
+
+	/**
+	 * 开启试玩游戏的闹钟监听服务
+	 */
+	public void startGameObserverAlarm(Context context) {
+		if (mPlayGameSender == null) {
+			Intent startIntent = new Intent(context, StartReceiver.class);
+			startIntent.setAction(Action.ALARM_PLAY_GAME);
+			startIntent.addCategory(Category.GCOOL_DEFAULT);
+			try {
+				mPlayGameSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
+						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+				}
+			}
+		}
+		AlarmManager am = getAlarmManager(context);
+		am.cancel(mPlayGameSender);
+		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, mPlayGameSender);
+	}
+
+	/**
+	 * 停止试玩游戏的闹钟监听服务
+	 */
+	public void stopGameObserverAlarm(Context context) {
+		getAlarmManager(context).cancel(mPlayGameSender);
+	}
+
+	public interface Action {
+		String ALARM_WAKE = "com.oplay.gitcool.clock_action.ALARM_WAKE";
+		String ALARM_PLAY_GAME = "com.oplay.giftcool.clock_action.PLAY_GAME";
+	}
+
+	public interface Category {
+		String GCOOL_DEFAULT = "com.oplay.giftcool";
 	}
 }

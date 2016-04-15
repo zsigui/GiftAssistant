@@ -1,4 +1,4 @@
-package com.oplay.giftcool.model.data.resp;
+package com.oplay.giftcool.model.data.resp.task;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,8 +8,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class TaskInfoOne {
 
-	@SerializedName("type")
-	public int type;
+	@SerializedName("id")
+	public int id;
 
 	@SerializedName("data")
 	public String data;

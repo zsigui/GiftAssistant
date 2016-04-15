@@ -1,6 +1,5 @@
 package com.oplay.giftcool.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,8 +9,8 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.model.data.resp.TaskInfoOne;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
@@ -103,6 +102,16 @@ public class IntentUtil {
 		context.startActivity(intent);
 	}
 
+
+	/**
+	 * 默认跳转游戏详情页面的详情部分
+	 *
+	 * @param context 上下文
+	 * @param id      游戏id
+	 */
+	public static void jumpGameDetail(Context context, int id) {
+		jumpGameDetail(context, id, GameTypeUtil.JUMP_STATUS_DETAIL);
+	}
 
 	/**
 	 * 跳转游戏详情页面(游戏暂时用“游戏专区”固定)
@@ -450,23 +459,5 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_DATA, data);
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
 		context.startActivity(intent);
-	}
-
-	public static void jumpByTaskInfoOne(Context context, TaskInfoOne taskInfo) {
-		final String ACTION_PREFIX = "com.oplay.giftcool.action.";
-		if ("GameDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpGameDetail(context,  taskInfo.type, Integer.parseInt(taskInfo.data));
-		} else if ("GiftDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpGiftDetail(context, taskInfo.type);
-		} else if ("PostDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpPostDetail(context, taskInfo.type);
-		} else {
-			IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.type, taskInfo.data);
-			if ("Main".equals(taskInfo.action)) {
-				if (context != null && context instanceof Activity) {
-					((Activity) context).finish();
-				}
-			}
-		}
 	}
 }
