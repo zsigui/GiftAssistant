@@ -2,15 +2,21 @@ package com.oplay.giftcool.config;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.engine.NetEngine;
+import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
+import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SystemUtil;
+import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_Executor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.Executor;
 
@@ -217,5 +223,95 @@ public class Global {
 					.build();
 		}
 		return sGalleryImgOptions;
+	}
+
+	/**
+	 * 消息中心的消息列表数据
+	 */
+	private static ArrayList<CentralHintMessage> mMsgCentralData;
+	public static boolean mMsgCentralTobeRefresh = false;
+
+	/**
+	 * 更新消息中心的消息列表项中指定代号项的数据
+	 */
+	public static void updateMsgCentralData(Context context, String code, int count, String msg) {
+		final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
+		for (CentralHintMessage item : data) {
+			if (item.code.equalsIgnoreCase(code)) {
+				if (count != 0) {
+					item.count = count;
+				}
+				if (!TextUtils.isEmpty(msg)) {
+					item.content = msg;
+				}
+				mMsgCentralTobeRefresh = true;
+			}
+		}
+		String s = AssistantApp.getInstance().getGson().toJson(data);
+		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_MSG_CENTRAL_LIST, s);
+	}
+
+	/**
+	 * 获取消息中心消息列表数据
+	 */
+	public static ArrayList<CentralHintMessage> getMsgCentralData(Context context) {
+		if (mMsgCentralData == null) {
+			String data = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_MSG_CENTRAL_LIST, null);
+			KLog.d(AppDebugConfig.TAG_WARN, data);
+			if (!TextUtils.isEmpty(data)) {
+				mMsgCentralData = AssistantApp.getInstance().getGson().fromJson(data,
+						new TypeToken<ArrayList<CentralHintMessage>>() {
+						}.getType());
+			}
+//			mMsgCentralData = new HashMap<>();
+//			mMsgCentralData.put(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
+//					new CentralHintMessage(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
+//							R.drawable.ic_task_first_login,
+//							context.getResources().getString(R.string.st_msg_central_new_gift_notify),
+//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+//							0));
+//			mMsgCentralData.put(KeyConfig.CODE_MSG_ADMIRE,
+//					new CentralHintMessage(KeyConfig.CODE_MSG_ADMIRE,
+//							R.drawable.ic_task_share_gcool,
+//							context.getResources().getString(R.string.st_msg_central_admire),
+//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+//							0));
+//			mMsgCentralData.put(KeyConfig.CODE_MSG_COMMENT,
+//					new CentralHintMessage(KeyConfig.CODE_MSG_COMMENT,
+//							R.drawable.ic_task_share_gcool,
+//							context.getResources().getString(R.string.st_msg_central_comment),
+//							context.getResources().getString(R.string.st_msg_central_hint_no_reply),
+//							0));
+//			mMsgCentralData.put(KeyConfig.CODE_MSG_SYSTEM,
+//					new CentralHintMessage(KeyConfig.CODE_MSG_SYSTEM,
+//							R.drawable.ic_task_share_gcool,
+//							context.getResources().getString(R.string.st_msg_central_system),
+//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+//							0));
+			if (mMsgCentralData == null) {
+				mMsgCentralData = new ArrayList<>();
+				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
+						R.drawable.ic_task_first_login,
+						context.getResources().getString(R.string.st_msg_central_new_gift_notify),
+						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+						0));
+				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_ADMIRE,
+						R.drawable.ic_task_attention,
+						context.getResources().getString(R.string.st_msg_central_admire),
+						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+						0));
+				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_COMMENT,
+						R.drawable.ic_task_new_feedback,
+						context.getResources().getString(R.string.st_msg_central_comment),
+						context.getResources().getString(R.string.st_msg_central_hint_no_reply),
+						0));
+				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_SYSTEM,
+						R.drawable.ic_task_upload_avator,
+						context.getResources().getString(R.string.st_msg_central_system),
+						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+						0));
+			}
+		}
+		return mMsgCentralData;
 	}
 }

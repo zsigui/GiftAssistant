@@ -27,7 +27,7 @@ import io.socket.emitter.Emitter;
  */
 public class SocketIOManager {
 
-	private final String URI_WS = "ws";
+	private final String URI_WS = "/ws";
 	private static SocketIOManager manager;
 	private Context mAppContext;
 
@@ -44,29 +44,27 @@ public class SocketIOManager {
 	}
 
 	private Socket mSocket;
-	private int mTryCount = 0;
 	private ArrayList<MissionReward> mCandidateList = new ArrayList<>();
 
 	private String getRealUrl() {
-		return NetUrl.getBaseUrl() + URI_WS;
+		return NetUrl.getBaseUrl().substring(0, NetUrl.getBaseUrl().indexOf("/", 8)) + URI_WS;
 	}
 
 	public void connectOrReConnect() {
 		if (AccountManager.getInstance().isLogin()) {
 			try {
 				if (isConnected()) {
-					KLog.d(AppDebugConfig.TAG_WARN, "need to reconnect");
+					KLog.d(AppDebugConfig.TAG_WARN, "need to reconnect, ip = " + getRealUrl());
 					mSocket.disconnect();
 					mSocket.connect();
 					return;
 				}
-				mTryCount = 3;
 				IO.Options opts = new IO.Options();
 				opts.forceNew = true;
-				opts.reconnection = false;
-//				opts.reconnectionAttempts = 3;
+				opts.reconnection = true;
+				opts.reconnectionAttempts = 3;
 //				// 断开后，间隔10秒再次重试
-//				opts.reconnectionDelay = 10 * 1000;
+				opts.reconnectionDelay = 10 * 1000;
 				mSocket = IO.socket(getRealUrl(), opts);
 				mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 					@Override
@@ -98,7 +96,6 @@ public class SocketIOManager {
 					public void call(Object... args) {
 						KLog.d(AppDebugConfig.TAG_WARN, "disconnect = " + (args != null && args.length > 0 ? args[0] :
 								null));
-						retryConnect();
 					}
 				}).on(CustomSocket.EVENT_AUTH_ERROR, new Emitter.Listener() {
 
@@ -106,7 +103,9 @@ public class SocketIOManager {
 					public void call(Object... args) {
 						// 连接失败，如果是已经登录，重试连接，如果不是，不连接
 						if (AccountManager.getInstance().isLogin()) {
-							retryConnect();
+							mSocket.connect();
+						} else {
+							mSocket.disconnect();
 						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_MANAGER, "msg = " + (args != null && args.length > 0 ? args[0] :
@@ -149,6 +148,7 @@ public class SocketIOManager {
 						}
 					}
 				});
+				KLog.d(AppDebugConfig.TAG_WARN, "connect, ip = " + getRealUrl());
 				mSocket.connect();
 			} catch (URISyntaxException e) {
 				if (AppDebugConfig.IS_DEBUG) {
@@ -163,14 +163,6 @@ public class SocketIOManager {
 			ScoreManager.getInstance().toastByCallback(reward, true);
 		}
 	}
-
-	private void retryConnect() {
-		if (mTryCount > 0) {
-			mSocket.connect();
-			mTryCount--;
-		}
-	}
-
 	public void close() {
 		if (isConnected()) {
 			mSocket.disconnect();

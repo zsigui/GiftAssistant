@@ -18,7 +18,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.fragment.message.PushMessageFragment;
+import com.oplay.giftcool.ui.fragment.message.NewNotifyMessageFragment;
 import com.oplay.giftcool.ui.fragment.setting.DownloadFragment;
 import com.oplay.giftcool.ui.fragment.setting.FeedBackFragment;
 import com.oplay.giftcool.ui.fragment.setting.MyAttentionFragment;
@@ -172,7 +172,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 						getResources().getString(R.string.st_my_attention_title));
 				break;
 			case KeyConfig.TYPE_ID_MSG:
-				replaceFragWithTitle(R.id.fl_container, PushMessageFragment.newInstance(),
+				replaceFragWithTitle(R.id.fl_container, NewNotifyMessageFragment.newInstance(),
 						getResources().getString(R.string.st_msg_central_title));
 				break;
 			default:
@@ -248,7 +248,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		}
 		if (!AccountManager.getInstance().isLogin()) {
 			ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
-			IntentUtil.jumpLogin(this);
+			IntentUtil.jumpLoginNoToast(this);
 			finish();
 		}
 	}

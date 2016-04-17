@@ -48,6 +48,8 @@
 	<dimen name = "di_drawer_header_icon_border_size" >3dp</dimen >
 	<dimen name = "di_drawer_item_height" >45dp</dimen >
 
+	<dimen name = "di_hint_red_padding_left_right">4dp</dimen>
+
 	<!-- 主页 -->
 	<dimen name = "di_tab_index_bg_height" >55dp</dimen >
 	<dimen name = "di_title_light_width" >6dp</dimen >

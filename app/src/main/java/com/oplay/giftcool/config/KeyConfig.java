@@ -73,6 +73,17 @@ public class KeyConfig {
 	/* post list activity */
 	public static final int TYPE_ID_POST_OFFICIAL = 0x401;
 
+	/* message central activity */
+	public static final int TYPE_ID_MSG_NEW_GIFT_NOTIFY = 0x501;
+	public static final int TYPE_ID_MSG_ADMIRE = 0x502;
+	public static final int TYPE_ID_MSG_SYSTEM = 0x503;
+	public static final int TYPE_ID_MSG_COMMENT = 0x504;
+
+	public static final String CODE_MSG_NEW_GIFT_NOTIFY = "msg_notify";
+	public static final String CODE_MSG_ADMIRE = "msg_admire";
+	public static final String CODE_MSG_SYSTEM = "msg_system";
+	public static final String CODE_MSG_COMMENT = "msg_comment";
+
 	/* task fragment */
 	public static final int REQUEST_UPDATE_AVATAR = 0xA00;
 	public static final int REQUEST_SET_NICK = 0xA01;

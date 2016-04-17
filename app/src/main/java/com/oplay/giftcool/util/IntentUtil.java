@@ -17,6 +17,7 @@ import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.GiftListActivity;
 import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.activity.MessageActivity;
 import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
@@ -230,18 +231,6 @@ public class IntentUtil {
 	}
 
 	/**
-	 * 跳转消息中心
-	 */
-	public static void jumpMessageCentral(Context context) {
-		if (MixUtil.needLoginFirst(context)){
-			return;
-		}
-		Intent intent = new Intent(context, SettingActivity.class);
-		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
-		context.startActivity(intent);
-	}
-
-	/**
 	 * 跳转下载管理界面
 	 */
 	public static void jumpDownloadManager(Context context, boolean newTask) {
@@ -286,6 +275,67 @@ public class IntentUtil {
 //		mConfirmDialog.setContent(appContext.getResources().getString(R.string.st_hint_dialog_login_content));
 //		mConfirmDialog.show(fm, appContext.getResources().getString(R.string.st_hint_dialog_login_tag));
 //	}
+
+
+	/**
+	 * 跳转消息中心
+	 */
+	public static void jumpMessageCentral(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
+		Intent intent = new Intent(context, MessageActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转新礼包通知消息列表
+	 */
+	public static void jumpNewGiftNotify(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
+		Intent intent = new Intent(context, MessageActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_NEW_GIFT_NOTIFY);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转收到的赞消息列表
+	 */
+	public static void jumpAdmireMessage(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
+		Intent intent = new Intent(context, MessageActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_ADMIRE);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转系统消息列表
+	 */
+	public static void jumpSystemMessage(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
+		Intent intent = new Intent(context, MessageActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_SYSTEM);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转收到的回复消息列表
+	 */
+	public static void jumpCommentMessage(Context context) {
+		if (MixUtil.needLoginFirst(context)){
+			return;
+		}
+		Intent intent = new Intent(context, MessageActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_COMMENT);
+		context.startActivity(intent);
+	}
 
 	/**
 	 * 跳转登录界面（根据最后一次登录判断）

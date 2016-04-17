@@ -32,6 +32,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 	 */
 	protected int mDividerSize = 1;
 	protected DisplayMetrics mMetrics;
+	private boolean writeBottom = false;
 
 	/**
 	 * 绘制item分割线的画笔，和设置其属性
@@ -78,6 +79,10 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 		}
 	}
 
+	public void setWriteBottom(boolean writeBottom) {
+		this.writeBottom = writeBottom;
+	}
+
 	/**
 	 * 绘制纵向 item 分割线
 	 *
@@ -87,8 +92,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 	private void drawVertical(Canvas canvas, RecyclerView parent) {
 		final int left = parent.getPaddingLeft();
 		final int right = parent.getMeasuredWidth() - parent.getPaddingRight();
-		final int childSize = parent.getChildCount();
-		for (int i = 0; i < childSize - 1; i++) {
+		final int childSize = writeBottom ? parent.getChildCount() : parent.getChildCount() - 1;
+		for (int i = 0; i < childSize; i++) {
 			final View child = parent.getChildAt(i);
 			RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
 			final int top = child.getBottom() + layoutParams.bottomMargin;

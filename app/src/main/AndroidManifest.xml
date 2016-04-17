@@ -212,6 +212,17 @@
 			</intent-filter >
 		</activity >
 
+		<activity
+				android:name = ".ui.activity.MessageActivity"
+				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+				android:screenOrientation = "sensorPortrait"
+				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+			<intent-filter >
+				<action android:name = "com.oplay.giftcool.action.MessageList" />
+				<category android:name = "android.intent.category.DEFAULT" />
+			</intent-filter >
+		</activity >
+
 		<service
 				android:name = ".service.ClockService"
 				android:exported = "false" />

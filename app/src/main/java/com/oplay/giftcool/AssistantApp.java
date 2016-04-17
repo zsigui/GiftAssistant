@@ -127,7 +127,7 @@ public class AssistantApp extends Application {
         sInstance = this;
         // 启动闹钟通知广播进程来唤醒服务
         AlarmClockManager.getInstance().startWakeAlarm(this);
-        appInit();
+//        appInit();
     }
 
 
@@ -605,4 +605,6 @@ public class AssistantApp extends Application {
         mSoftInputHeight = softInputHeight;
         SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
     }
+
+
 }

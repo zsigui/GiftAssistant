@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -108,6 +110,11 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				}
 				return hasFind || super.shouldOverrideUrlLoading(view, url);
 			}
+
+			@Override
+			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+				return interceptRequest(view, request);
+			}
 		});
 		mWebView.setWebChromeClient(new WebChromeClient() {
 			@Override
@@ -201,6 +208,17 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		final int vc = SystemUtil.getVerCode(getContext());
 		final String ua = mSettings.getUserAgentString() + " GIFT_COOL_APP/" + vc;
 		mSettings.setUserAgentString(ua);
+	}
+
+	/**
+	 * 重写该方法执行异步网络请求
+	 * @param view
+	 * @param request
+	 * @return
+	 */
+	protected WebResourceResponse interceptRequest(WebView view, WebResourceRequest request) {
+
+		return null;
 	}
 
 	protected void onWebPageStarted() {

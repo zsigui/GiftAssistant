@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -115,6 +116,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
 			return;
 		}
+		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		mId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
 		final String detailUrl = WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL) + mId;
 		loadUrl(detailUrl);

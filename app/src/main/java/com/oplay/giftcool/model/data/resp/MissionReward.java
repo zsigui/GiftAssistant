@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class MissionReward implements Serializable {
 
 	@SerializedName("c")
-	public int code;
+	public int code = -1;
 
 	@SerializedName("e")
 	public String etio;

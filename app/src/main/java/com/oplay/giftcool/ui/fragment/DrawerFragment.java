@@ -260,6 +260,13 @@ public class DrawerFragment extends BaseFragment {
 	public void onUserUpdate(int action) {
 		super.onUserUpdate(action);
 		switch (action) {
+			case ObserverManager.STATUS.USER_UPDATE_PART:
+				if (AccountManager.getInstance().isLogin()) {
+					final UserInfo info = AccountManager.getInstance().getUserInfo();
+					tvScore.setText(String.valueOf(info.score));
+					tvBean.setText(String.valueOf(info.bean));
+				}
+				break;
 			case ObserverManager.STATUS.USER_UPDATE_ALL:
 				updateData();
 				break;

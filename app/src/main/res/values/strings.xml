@@ -109,8 +109,16 @@
 	<string name = "st_setting_about" >关于礼包酷</string >
 	<string name = "st_setting_logout" >退出当前账号</string >
 
-	<!-- 设置 - 消息中心 - 推送列表 -->
+	<!-- 设置 - 消息中心 -->
 	<string name = "st_msg_central_title">消息中心</string>
+	<string name = "st_msg_central_new_gift_notify">新礼包上线通知</string>
+	<string name = "st_msg_central_admire">收到的点赞</string>
+	<string name = "st_msg_central_system">系统消息</string>
+	<string name = "st_msg_central_comment">收到的回复</string>
+	<string name = "st_msg_central_hint_no_notify">暂时还没有收到通知哦</string>
+	<string name = "st_msg_central_hint_no_reply">暂时还没有收到回复哦</string>
+
+	<!-- 消息中心 - 推送列表 -->
 	<string name = "st_msg_push_list_get" >马上领取</string >
 	<string name = "st_msg_push_list_title" >[%s]上线了一个新礼包</string >
 	<string name = "st_msg_push_list_content" >礼包内容：%s</string >

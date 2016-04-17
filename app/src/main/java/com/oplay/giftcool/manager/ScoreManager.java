@@ -74,7 +74,7 @@ public class ScoreManager {
 	}
 
 	public void toastByCallback(MissionReward reward, boolean needNotify) {
-		if (reward != null && reward.code == 0) {
+		if (reward != null && reward.code == 0 && reward.data != null) {
 			ToastUtil.showScoreReward(reward.data.displayName, reward.data.rewardPoint);
 			ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
 			if (needNotify) {
@@ -204,7 +204,7 @@ public class ScoreManager {
 
 	private void setCurDownloadTaskSet(Context context) {
 		final String val = AssistantApp.getInstance().getGson().toJson(mCurDownloadTaskSet);
-		SPUtil.putString(context, SPConfig.SP_APP_DEVICE_FILE,
+		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE,
 				SPConfig.KEY_TODAY_DOWNLOAD_TASK, val);
 	}
 
@@ -214,7 +214,7 @@ public class ScoreManager {
 	private HashMap<String, TaskInfoDownload> getCurDownloadTaskSet(Context context) {
 		synchronized (this) {
 			if (mCurDownloadTaskSet == null) {
-				String data = SPUtil.getString(context, SPConfig.SP_APP_DEVICE_FILE,
+				String data = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE,
 						SPConfig.KEY_TODAY_DOWNLOAD_TASK, null);
 				mCurDownloadTaskSet = AssistantApp.getInstance().getGson()
 						.fromJson(data, new TypeToken<HashMap<String, TaskInfoDownload>>(){}.getType());

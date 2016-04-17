@@ -11,6 +11,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.util.UserTypeUtil;
@@ -559,7 +560,9 @@ public class AccountManager implements OnFinishListener {
                 }
                 if (response != null && response.isSuccessful()) {
                     if (response.body() != null && response.body().isSuccess()) {
-                        setUnreadMessageCount(response.body().getData().count);
+                        final int count =response.body().getData().count;
+                        setUnreadMessageCount(count);
+                        Global.updateMsgCentralData(mContext, KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, count, null);
                         ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
                                 .USER_UPDATE_PUSH_MESSAGE);
                         return;

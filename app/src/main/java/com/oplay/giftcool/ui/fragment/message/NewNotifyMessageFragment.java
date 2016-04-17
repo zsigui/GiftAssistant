@@ -8,6 +8,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.PushMessageAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -30,7 +31,7 @@ import retrofit2.Response;
  * <p/>
  * Created by zsigui on 16-3-7.
  */
-public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
+public class NewNotifyMessageFragment extends BaseFragment_Refresh<PushMessage> {
 
     private static final String TAG_PAGE = "推送消息列表界面";
 
@@ -41,8 +42,8 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
     private Call<JsonRespBase<OneTypeDataList<PushMessage>>> mCallRefresh;
     private Call<JsonRespBase<OneTypeDataList<PushMessage>>> mCallLoad;
 
-    public static PushMessageFragment newInstance() {
-        return new PushMessageFragment();
+    public static NewNotifyMessageFragment newInstance() {
+        return new NewNotifyMessageFragment();
     }
 
     @Override
@@ -182,6 +183,8 @@ public class PushMessageFragment extends BaseFragment_Refresh<PushMessage> {
             mViewManager.showEmpty();
             return;
         }
+        Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, 0,
+                String.format(getContext().getString(R.string.st_msg_push_list_title), data.get(0).gameName));
         mViewManager.showContent();
         mHasData = true;
         mData = data;

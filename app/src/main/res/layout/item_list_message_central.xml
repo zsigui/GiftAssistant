@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                style = "@style/IndexModuleLayout.Score"
+                android:background = "@drawable/selector_opacity_05" >
+
+	<com.makeramen.roundedimageview.RoundedImageView
+			android:id = "@+id/iv_icon"
+			style = "@style/DefaultImageView.Score"
+			android:src = "@drawable/ic_task_attention"
+			app:riv_oval = "true" />
+
+	<TextView
+			android:id = "@+id/tv_title"
+			style = "@style/DefaultTextView.Header"
+			android:layout_toRightOf = "@id/iv_icon"
+			android:layout_alignTop = "@+id/iv_icon"
+			android:layout_toLeftOf = "@+id/tv_item_count"
+			android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+			android:text = "@string/st_drawer_setting" />
+
+	<TextView
+			android:id = "@+id/tv_content"
+			style = "@style/DefaultTextView.Text"
+			android:layout_alignLeft = "@+id/tv_title"
+			android:layout_below = "@+id/tv_title"
+			android:layout_marginTop = "@dimen/di_line_space_extra_big"
+			android:text = "暂时还没有收到通知哦" />
+
+	<TextView
+			android:id = "@+id/tv_item_count"
+			style = "@style/NavDrawerItemText"
+			android:textColor = "@color/co_white"
+			android:textSize = "@dimen/di_text_size_small"
+			android:layout_alignParentRight = "true"
+			android:layout_alignTop = "@+id/tv_title"
+			android:layout_marginRight = "@dimen/di_list_item_gap_big"
+			android:gravity = "center"
+			android:paddingLeft = "@dimen/di_hint_red_padding_left_right"
+			android:paddingRight = "@dimen/di_hint_red_padding_left_right"
+			android:background = "@drawable/shape_hint_count_red" />
+
+</RelativeLayout >
