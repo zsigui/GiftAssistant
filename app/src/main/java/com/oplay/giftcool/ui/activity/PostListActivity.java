@@ -29,7 +29,8 @@ public class PostListActivity extends BaseAppCompatActivity {
 		switch (mType) {
 			case KeyConfig.TYPE_ID_POST_OFFICIAL:
 				final String officialUrl = NetUrl.POST_GET_LIST;
-				replaceFragWithTitle(R.id.fl_container, PostListFragment.newInstance(officialUrl), "官方活动");
+				replaceFragWithTitle(R.id.fl_container,
+						PostListFragment.newInstance(0, officialUrl), "官方活动");
 				break;
 		}
 	}

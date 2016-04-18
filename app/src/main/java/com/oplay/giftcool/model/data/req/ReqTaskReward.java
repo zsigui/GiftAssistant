@@ -7,6 +7,22 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ReqTaskReward {
 
-	@SerializedName("type")
-	public int type;
+	/**
+	 * 任务代号
+	 */
+	@SerializedName("code")
+	public String code;
+
+	/**
+	 * 是否直接HTTP返回通知不走SocketIO
+	 */
+	@SerializedName("reply_notify")
+	public int replyNotify;
+
+	/**
+	 * 当任务为签到时写入，空则取今日
+	 */
+	@SerializedName("date")
+	public String date;
+
 }

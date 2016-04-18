@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.PushMessageAdapter;
+import com.oplay.giftcool.adapter.MessageNewGiftAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -36,7 +36,7 @@ public class NewNotifyMessageFragment extends BaseFragment_Refresh<PushMessage> 
     private static final String TAG_PAGE = "推送消息列表界面";
 
     private RecyclerView rvContent;
-    private PushMessageAdapter mAdapter;
+    private MessageNewGiftAdapter mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
 
     private Call<JsonRespBase<OneTypeDataList<PushMessage>>> mCallRefresh;
@@ -61,7 +61,7 @@ public class NewNotifyMessageFragment extends BaseFragment_Refresh<PushMessage> 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 
-        mAdapter = new PushMessageAdapter(getContext());
+        mAdapter = new MessageNewGiftAdapter(getContext());
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvContent.setLayoutManager(llm);
         rvContent.setAdapter(mAdapter);

@@ -88,7 +88,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		mGuessGiftView = getViewById(R.id.lv_like);
 		llGame = getViewById(R.id.ll_game);
 		llGift = getViewById(R.id.ll_gift);
-		llGuessGift = getViewById(R.id.ll_like);
+		llGuessGift = getViewById(R.id.ll_item);
 		ivHopeGift = getViewById(R.id.iv_hope_gift);
 
 		((TextView) getViewById(R.id.tv_game_title)).setText(TEXT_SEARCH_GAME);

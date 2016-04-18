@@ -8,6 +8,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnInstallListener;
@@ -596,7 +597,6 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 				appInfo.startInstall();
 			}
 		}
-		ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
 
 		return false;
 	}

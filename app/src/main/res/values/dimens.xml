@@ -30,6 +30,7 @@
 	<dimen name = "di_list_item_gap_small" >8dp</dimen >
 	<dimen name = "di_list_item_gap_normal" >12dp</dimen >
 	<dimen name = "di_list_item_gap_big" >16dp</dimen >
+	<dimen name = "di_list_item_gap_aw" >24dp</dimen >
 
 	<!-- 字体 -->
 	<dimen name = "di_text_size_very_small" >10sp</dimen >

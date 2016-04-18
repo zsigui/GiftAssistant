@@ -36,13 +36,13 @@ import retrofit2.Response;
  * <p/>
  * Created by zsigui on 16-3-7.
  */
-public class PushMessageAdapter extends BaseRVAdapter<PushMessage> implements View.OnClickListener {
+public class MessageNewGiftAdapter extends BaseRVAdapter<PushMessage> implements View.OnClickListener {
 
 	private final String TITLE_MODULE;
 	private final String CONTENT_MODULE;
 
 
-	public PushMessageAdapter(Context context) {
+	public MessageNewGiftAdapter(Context context) {
 		super(context);
 		TITLE_MODULE = context.getResources().getString(R.string.st_msg_push_list_title);
 		CONTENT_MODULE = context.getResources().getString(R.string.st_msg_push_list_content);

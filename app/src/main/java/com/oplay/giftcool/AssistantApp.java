@@ -602,8 +602,10 @@ public class AssistantApp extends Application {
     }
 
     public void setSoftInputHeight(int softInputHeight) {
-        mSoftInputHeight = softInputHeight;
-        SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
+        if (softInputHeight != 0) {
+            mSoftInputHeight = softInputHeight;
+            SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
+        }
     }
 
 

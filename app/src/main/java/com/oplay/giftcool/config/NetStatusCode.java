@@ -33,6 +33,7 @@ public abstract class NetStatusCode {
 	 */
 	public static final int ERR_NETWORK = 15;
 
+
 	/**
 	 * 包错误
 	 */
@@ -42,6 +43,16 @@ public abstract class NetStatusCode {
 	 * 命令字错误
 	 */
 	public static final int ERR_CMD = 17;
+
+	/**
+	 * 执行请求错误，格式之类导致的捕获异常
+	 */
+	public static final int ERR_EXEC_FAIL = 18;
+
+	/**
+	 * 请求返回实体为空
+	 */
+	public static final int ERR_EMPTY_RESPONSE = 19;
 
 	/**
 	 * APPKEY不合法

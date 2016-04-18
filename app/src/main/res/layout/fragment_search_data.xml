@@ -73,7 +73,7 @@
 
 			<!-- 猜你喜欢 -->
 			<LinearLayout
-					android:id = "@+id/ll_like"
+					android:id = "@+id/ll_item"
 					android:layout_below = "@id/ll_gift"
 					style = "@style/IndexModuleLayout"
 					android:layout_marginTop = "7dp" >

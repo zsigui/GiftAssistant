@@ -13,6 +13,7 @@ import com.oplay.giftcool.adapter.ShareAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -95,17 +96,26 @@ public class ShareSDKManager {
 		// 设置分享成功后奖励类型
 		String title;
 		String b_desc;
+		ScoreManager.getInstance().setRewardCode(ScoreManager.RewardType.SHARE_GIFT);
 		if (gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
 				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
-			ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_LIMIT);
-			title = String.format("[%s]%s(限今天)", gift.gameName, gift.name);
-			b_desc = String.format("[%s]%s，价值珍贵，限量领取",
-					gift.gameName, gift.name);
+			title = String.format(
+					mContext.getResources().getString(R.string.st_share_gift_title_limit),
+					gift.gameName,
+					gift.name);
+			b_desc = String.format(
+					mContext.getResources().getString(R.string.st_share_gift_desc_limit),
+					gift.gameName,
+					gift.name);
 		} else {
-			ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_NORMAL);
-			title = String.format("[%s]%s", gift.gameName, gift.name);
-			b_desc = String.format("[%s]%s，快抢呀",
-					gift.gameName, gift.name);
+			title = String.format(
+					mContext.getResources().getString(R.string.st_share_gift_title_normal),
+					gift.gameName,
+					gift.name);
+			b_desc = String.format(
+					mContext.getResources().getString(R.string.st_share_gift_desc_normal),
+					gift.gameName,
+					gift.name);
 		}
 
 		String src = null;
@@ -127,7 +137,7 @@ public class ShareSDKManager {
 	}
 
 	public void shareGCool(final Context context, final FragmentManager fm) {
-		ScoreManager.getInstance().setRewardType(ScoreManager.RewardType.SHARE_GCOOL);
+		ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_GCOOL_SHARE);
 		final String title = context.getString(R.string.st_dialog_invite_title);
 		final String desc = context.getString(R.string.st_share_gcool_description_1);
 		final String b_desc = context.getString(R.string.st_share_gcool_description_1);

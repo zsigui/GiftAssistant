@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:paddingTop = "@dimen/di_list_item_gap_aw"
+                android:paddingLeft = "@dimen/di_list_item_gap_big"
+                android:paddingBottom = "@dimen/di_list_item_gap_big"
+                android:paddingRight = "@dimen/di_list_item_gap_small"
+                android:background = "@drawable/selector_white_module" >
+
+
+	<ImageView
+			android:id = "@+id/iv_new_notify"
+			android:layout_width = "@dimen/di_list_item_gap_very_small"
+			android:layout_height = "@dimen/di_list_item_gap_very_small"
+			android:layout_alignParentRight = "true"
+			android:contentDescription = "@null"
+			android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+			android:background = "@drawable/shape_rect_btn_red" />
+
+	<TextView
+			android:id = "@+id/tv_title"
+			style = "@style/DefaultTextView.Header"
+			android:layout_toLeftOf = "@+id/iv_new_notify"
+			android:textColor = "@color/co_common_app_second_bg_orange"
+			android:layout_width = "match_parent"
+			android:layout_centerVertical = "false" />
+
+
+	<TextView
+			android:id = "@+id/tv_content"
+			android:layout_below = "@+id/tv_title"
+			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			style = "@style/DefaultTextView.Text"
+			android:singleLine = "false"
+			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+			android:gravity = "left"
+			android:textColor = "@color/co_common_text_main" />
+
+	<TextView
+			android:id = "@+id/tv_time"
+			android:layout_below = "@+id/tv_content"
+			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			style = "@style/DefaultTextView.Text" />
+
+</RelativeLayout >

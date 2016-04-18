@@ -37,7 +37,7 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 		public void onComplete(Object o) {
 			ToastUtil.showShort(getString(R.string.st_share_result_success));
 			// 通知发放金币
-			ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
+			ScoreManager.getInstance().reward(null, true);
 			finish();
 		}
 
@@ -90,7 +90,7 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 				if (result.equals(SUCCESS)) {
 					ToastUtil.showShort(getString(R.string.st_share_result_success));
 //					新手任务过来的分享需要上报服务器
-					ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
+					ScoreManager.getInstance().reward(null, true);
 				}
 				finish();
 			}

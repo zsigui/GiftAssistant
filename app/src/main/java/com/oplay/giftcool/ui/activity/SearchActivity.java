@@ -11,7 +11,6 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.listener.OnSearchListener;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.resp.PromptData;
@@ -362,7 +361,6 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 				return;
 			}
 			saveHistoryData(keyword);
-			ScoreManager.getInstance().reward(ScoreManager.RewardType.SEARCH);
 			displayLoadingUI();
 			if (mCallResult != null) {
 				mCallResult.cancel();

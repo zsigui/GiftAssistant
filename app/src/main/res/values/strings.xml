@@ -219,6 +219,10 @@
 	<string name = "st_dialog_btn_ok" >我知道了</string >
 
 	<string name = "st_dialog_gift_share_title" >礼包分享</string >
+	<string name = "st_share_gift_title_limit" >[%1$s]%2$s(限今天)</string >
+	<string name = "st_share_gift_desc_limit" >[%1$s]%2$s，价值珍贵，限量领取</string >
+	<string name = "st_share_gift_title_normal" >[%1$s]%2$s</string >
+	<string name = "st_share_gift_desc_normal" >[%1$s]%2$s，快抢呀</string >
 	<string name = "st_dialog_gcool_share_title" >礼包酷分享</string >
 	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
 	<string name = "st_share_gcool_description_1" >太开心了，价值888元的礼包，这里距离可以「0元抢」</string >

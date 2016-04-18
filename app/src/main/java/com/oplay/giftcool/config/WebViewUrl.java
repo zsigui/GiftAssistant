@@ -26,6 +26,7 @@ public class WebViewUrl {
 	public static final String LOTTERY = "campaigns/2016/lottery/?need_validate=1";
 	public static final String SIGNIN = "campaigns/2016/signin/?need_validate=1";
 	public static final String ACTIVITY_DETAIL = "m/activity-detail/?id=";
+	public static final String ACTIVITY_COMMENT_LIST = "m/activity-list/";
 
 	public static String getWebUrl(String url) {
 		if (AppConfig.TEST_MODE) {

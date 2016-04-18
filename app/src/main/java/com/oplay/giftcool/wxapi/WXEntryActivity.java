@@ -68,7 +68,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler{
 			case BaseResp.ErrCode.ERR_OK:
 				// 分享成功
 				ToastUtil.showShort(getString(R.string.st_share_result_success));
-				ScoreManager.getInstance().reward(ScoreManager.RewardType.NOTHING);
+				ScoreManager.getInstance().reward(null, true);
 				break;
 			case BaseResp.ErrCode.ERR_USER_CANCEL:
 				// 分享取消

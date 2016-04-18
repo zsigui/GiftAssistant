@@ -11,11 +11,10 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
@@ -539,51 +538,51 @@ public class AccountManager implements OnFinishListener {
      * 获取未读推送消息数量
      */
     public void obtainUnreadPushMessageCount() {
-        if (!isLogin()) {
-            // 未登录，推送消息默认为0
-            setUnreadMessageCount(0);
-            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
-            return;
-        }
-        if (mCallObtainUnread != null) {
-            mCallObtainUnread.cancel();
-            mCallObtainUnread = mCallObtainUnread.clone();
-        } else {
-            mCallObtainUnread = Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>());
-        }
-        mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCount>>() {
-            @Override
-            public void onResponse(Call<JsonRespBase<MessageCount>> call, Response<JsonRespBase<MessageCount>>
-                    response) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                if (response != null && response.isSuccessful()) {
-                    if (response.body() != null && response.body().isSuccess()) {
-                        final int count =response.body().getData().count;
-                        setUnreadMessageCount(count);
-                        Global.updateMsgCentralData(mContext, KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, count, null);
-                        ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
-                                .USER_UPDATE_PUSH_MESSAGE);
-                        return;
-                    }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-                                + (response.body() == null ? "解析出错" : response.body().error()));
-                    }
-                    return;
-                }
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-                            + (response == null ? "返回出错" : response.code()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonRespBase<MessageCount>> call, Throwable t) {
-
-            }
-        });
+//        if (!isLogin()) {
+//            // 未登录，推送消息默认为0
+//            setUnreadMessageCount(0);
+//            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
+//            return;
+//        }
+//        if (mCallObtainUnread != null) {
+//            mCallObtainUnread.cancel();
+//            mCallObtainUnread = mCallObtainUnread.clone();
+//        } else {
+//            mCallObtainUnread = Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>());
+//        }
+//        mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCount>>() {
+//            @Override
+//            public void onResponse(Call<JsonRespBase<MessageCount>> call, Response<JsonRespBase<MessageCount>>
+//                    response) {
+//                if (call.isCanceled()) {
+//                    return;
+//                }
+//                if (response != null && response.isSuccessful()) {
+//                    if (response.body() != null && response.body().isSuccess()) {
+//                        final int count =response.body().getData().count;
+//                        setUnreadMessageCount(count);
+//                        Global.updateMsgCentralData(mContext, KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, count, null);
+//                        ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
+//                                .USER_UPDATE_PUSH_MESSAGE);
+//                        return;
+//                    }
+//                    if (AppDebugConfig.IS_DEBUG) {
+//                        KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+//                                + (response.body() == null ? "解析出错" : response.body().error()));
+//                    }
+//                    return;
+//                }
+//                if (AppDebugConfig.IS_DEBUG) {
+//                    KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+//                            + (response == null ? "返回出错" : response.code()));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JsonRespBase<MessageCount>> call, Throwable t) {
+//
+//            }
+//        });
     }
 
     @Override

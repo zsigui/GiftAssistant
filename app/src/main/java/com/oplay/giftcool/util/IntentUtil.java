@@ -510,4 +510,15 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
 		context.startActivity(intent);
 	}
+
+	/**
+	 * 跳转评论详情页面
+	 *
+	 * @param context 上下文
+	 * @param postId 活动ID
+	 * @param replyId 评论ID
+	 */
+	public static void jumpReplyDetail(Context context, int postId, int replyId) {
+
+	}
 }

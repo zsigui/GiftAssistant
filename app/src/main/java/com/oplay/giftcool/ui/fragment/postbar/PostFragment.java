@@ -325,6 +325,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 									mInitData.notifyData = data;
 									transferIndexPostToArray(mInitData);
 									updateDate(mData);
+									return;
 								}
 								ToastUtil.showShort("获取出错-返回为空");
 								return;

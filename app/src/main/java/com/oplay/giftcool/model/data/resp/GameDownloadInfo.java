@@ -10,13 +10,11 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.InstallAppUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -185,13 +183,6 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 			ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
             if (!isSilent) {
                 ToastUtil.showShort("已添加新的下载任务");
-                ThreadUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 点击下载30秒后，请求奖励金币
-                        ScoreManager.getInstance().reward(ScoreManager.RewardType.DOWNLOAD);
-                    }
-                }, 30 * 1000);
             }
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {

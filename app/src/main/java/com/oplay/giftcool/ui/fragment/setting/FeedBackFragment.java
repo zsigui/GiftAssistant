@@ -17,7 +17,6 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
-import com.oplay.giftcool.model.data.resp.task.TaskReward;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -140,7 +139,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     /**
      * 发送反馈消息的网络请求声明
      */
-    private Call<JsonRespBase<TaskReward>> mCall;
+    private Call<JsonRespBase<Void>> mCall;
 
     private void handleCommit() {
         if (TextUtils.isEmpty(etContent.getText().toString().trim())
@@ -174,9 +173,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                 feedBack.content = etContent.getText().toString();
                 feedBack.type = 1;
                 mCall = Global.getNetEngine().postFeedBack(new JsonReqBase<ReqFeedBack>(feedBack));
-                mCall.enqueue(new Callback<JsonRespBase<TaskReward>>() {
+                mCall.enqueue(new Callback<JsonRespBase<Void>>() {
                     @Override
-                    public void onResponse(Call<JsonRespBase<TaskReward>> call, Response<JsonRespBase<TaskReward>> response) {
+                    public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
                         mIsLoading = false;
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
@@ -197,7 +196,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                     }
 
                     @Override
-                    public void onFailure(Call<JsonRespBase<TaskReward>> call, Throwable t) {
+                    public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         mIsLoading = false;
                         if (!mCanShowUI || call.isCanceled()) {
                             return;

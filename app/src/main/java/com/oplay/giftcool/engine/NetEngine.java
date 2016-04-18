@@ -15,6 +15,8 @@ import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
+import com.oplay.giftcool.model.data.req.ReqPostToken;
+import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
@@ -29,21 +31,23 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
+import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
-import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
-import com.oplay.giftcool.model.data.resp.task.TaskReward;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.message.MessageCount;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
+import com.oplay.giftcool.model.data.resp.message.ReplyMessage;
+import com.oplay.giftcool.model.data.resp.message.SystemMessage;
+import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -54,6 +58,7 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
@@ -215,6 +220,12 @@ public interface NetEngine {
 	@POST
 	Call<JsonRespBase<OneTypeDataList<IndexPostNew>>> obtainPostList(@Url String url, @Body JsonReqBase<ReqIndexPost> reqData);
 
+	/**
+	 * 获取 活动回复评论的提交TOKEN
+	 */
+	@POST(NetUrl.POST_REPLY_GET_TOKEN)
+	Call<JsonRespBase<PostToken>> obtainReplyToken(@Body JsonReqBase<ReqPostToken> reqData);
+
 
 	/* ---------------- 用户接口 ----------------- */
 
@@ -273,11 +284,11 @@ public interface NetEngine {
 	 * 获取金币任务奖励
 	 */
 	@POST(NetUrl.SCORE_REWARD)
-	Call<JsonRespBase<TaskReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
+	Call<JsonRespBase<MissionReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
 
 	/* ---------------- 应用接口  ---------------- */
 	@POST(NetUrl.APP_POST_FEEDBACK)
-	Call<JsonRespBase<TaskReward>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
+	Call<JsonRespBase<Void>> postFeedBack(@Body JsonReqBase<ReqFeedBack> reqData);
 
 
 	/* ------------- 消息中心 --------------- */
@@ -310,5 +321,31 @@ public interface NetEngine {
 	 * 获取当前未读推送消息数量
 	 */
 	@POST(NetUrl.MESSAGE_UNREAD_COUNT)
-	Call<JsonRespBase<MessageCount>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
+	Call<JsonRespBase<OneTypeDataList<MessageCount>>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
+
+	/**
+	 * 获取回复消息列表，根据url决定是回复的还是点赞
+	 */
+	@POST
+	Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> obtainReplyMessage(@Url String url, @Body JsonReqBase<ReqPageData> reqData);
+
+	/**
+	 * 获取系统消息列表
+	 */
+	@POST("")
+	Call<JsonRespBase<OneTypeDataList<SystemMessage>>> obtainSystemMessage(@Body JsonReqBase<ReqPageData> reqData);
+
+	/*---------------- JS调用的异步方法，传参返回都用JSON字符串 -----------------*/
+
+	/**
+	 * POST网络请求
+	 */
+	@POST
+	Call<String> asyncPostForJsCall(@Url String url, @Body JsonReqBase<String> reqData);
+
+	/**
+	 * GET网络请求
+	 */
+	@GET
+	Call<String> asyncGetForJsCall(@Url String url, @Body JsonReqBase<String> reqData);
 }

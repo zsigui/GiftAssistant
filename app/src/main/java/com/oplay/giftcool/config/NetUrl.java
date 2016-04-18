@@ -155,17 +155,18 @@ public class NetUrl {
 	/**
 	 * 获取活动列表数据
 	 */
-	public static final String POST_GET_LIST = "deafult";
+	public static final String POST_GET_LIST = "activity/list";
+
+	/**
+	 * 获取活动回复提交的token
+	 */
+	public static final String POST_REPLY_GET_TOKEN = "activity/comment_token";
 
 	/**
 	 * 进行活动回复
 	 */
-	public static final String POST_REPLY = "default";
+	public static final String POST_REPLY = "activity/add_comment";
 
-	/**
-	 * 进行回复
-	 */
-	public static final String POST_REPLY_COMMENT = "default";
 
 	/* 用户接口 */
 
@@ -246,11 +247,11 @@ public class NetUrl {
 	/**
 	 * 获取金币任务
 	 */
-	public static final String SCORE_GET_TASK = "mission/get_points_mission_list";
+	public static final String SCORE_GET_TASK = "api/v1/user_mission";
 	/**
 	 * 请求金币奖励
 	 */
-	public static final String SCORE_REWARD = "mission/reward_points_by_mission_name";
+	public static final String SCORE_REWARD = "v1/mission/finish_mission";
 
 	/* 应用接口 */
 

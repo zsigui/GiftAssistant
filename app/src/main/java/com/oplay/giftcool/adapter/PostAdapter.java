@@ -2,6 +2,7 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,8 +139,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				headerHolder.ivTask.setOnClickListener(this);
 				break;
 			case PostTypeUtil.TYPE_FOOTER:
-			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
 				// 无处理
+				break;
+			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
+				((ItemTitleVH) holder).itemView.setOnClickListener(this);
 				break;
 			case PostTypeUtil.TYPE_TITLE_GAME:
 				ItemTitleVH titleTwoVH = (ItemTitleVH) holder;
@@ -194,7 +197,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 		}
 		holder.itemView.setOnClickListener(this);
 		holder.itemView.setTag(TAG_POSITION, position);
-		holder.tvContent.setText(item.content);
+		holder.tvContent.setText(Html.fromHtml(item.content));
 	}
 
 	@Override
@@ -246,7 +249,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 					mCallbackListener.doCallBack(isRead);
 				}
 				break;
-			case R.id.rl_header_item:
+			case R.id.ll_item:
 				// 跳转官方活动列表页面
 				IntentUtil.jumpPostOfficialList(mContext);
 				break;

@@ -83,7 +83,7 @@ public class TaskTypeUtil {
 	/**
 	 * 分享礼包酷
 	 */
-	public static final String ID_GCOOL_SHARE = "SHARE_GIFTCOOL_CONTENT";
+	public static final String ID_GCOOL_SHARE = "SHARE_CLIENT";
 	/**
 	 * 分享礼包
 	 */

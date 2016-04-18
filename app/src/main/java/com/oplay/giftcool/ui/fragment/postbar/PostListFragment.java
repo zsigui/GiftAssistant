@@ -34,11 +34,16 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 
 	private RecyclerView rvData;
 	private PostOfficialListAdapter mAdapter;
-	private String mUrl;
 
-	public static PostListFragment newInstance(String url) {
+	// 请求地址
+	private String mUrl;
+	// 请求列表类型
+	private int mType;
+
+	public static PostListFragment newInstance(int type, String url) {
 		PostListFragment fragment = new PostListFragment();
 		Bundle bundle = new Bundle();
+		bundle.putInt(KeyConfig.KEY_TYPE, type);
 		bundle.putString(KeyConfig.KEY_URL, url);
 		fragment.setArguments(bundle);
 		return fragment;
@@ -62,6 +67,7 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 			return;
 		}
 		mUrl = getArguments().getString(KeyConfig.KEY_URL);
+		mType = getArguments().getInt(KeyConfig.KEY_TYPE, 0);
 
 		mData = new ArrayList<>();
 		mAdapter = new PostOfficialListAdapter(getContext(), mData);
@@ -98,6 +104,7 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 				if (mReqPageObj == null) {
 					ReqIndexPost data = new ReqIndexPost();
 					data.pageSize = 20;
+					data.type = mType;
 					mReqPageObj = new JsonReqBase<ReqIndexPost>(data);
 				}
 				mReqPageObj.data.page = PAGE_FIRST;

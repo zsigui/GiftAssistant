@@ -26,10 +26,10 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
-import com.oplay.giftcool.engine.NoEncryptEngine;
 import com.oplay.giftcool.listener.ShowBottomBarListener;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.InputMethodUtil;
@@ -57,7 +57,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		ViewTreeObserver.OnGlobalLayoutListener, ShowBottomBarListener, View.OnTouchListener {
 
 	private final String PAGE_NAME = "活动详情";
-	private final NoEncryptEngine mEngine;
 	private final String TAG_PREFIX = "提交回复";
 
 
@@ -85,7 +84,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	}
 
 	public PostDetailFragment() {
-		mEngine = AssistantApp.getInstance().getRetrofit().create(NoEncryptEngine.class);
+//		mEngine = AssistantApp.getInstance().getRetrofit().create(NoEncryptEngine.class);
 	}
 
 	@Override
@@ -240,11 +239,11 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 						().toString()));
 				int i = 0;
 				for (PhotoInfo p : mPostImg) {
-					reqData.put("pic" + i, MultipartBody.create(MediaType.parse("image/*"),
+					reqData.put("pic", MultipartBody.create(MediaType.parse("image/*"),
 							generateImageStringParam(p.getPhotoPath())));
 					i++;
 				}
-				mCallPost = mEngine.postReply(reqData);
+				mCallPost = ((PostDetailActivity) getActivity()).getEngine().postReply(reqData);
 				mCallPost.enqueue(new Callback<JsonRespBase<Void>>() {
 					@Override
 					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {

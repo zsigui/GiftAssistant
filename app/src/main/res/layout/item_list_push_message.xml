@@ -11,8 +11,8 @@
 			style = "@style/IndexModuleTitleLayout"
 			android:background = "@drawable/selector_white_module"
 			android:id = "@+id/rl_msg"
-			android:paddingTop = "25dp"
-			android:paddingBottom = "10dp"
+			android:paddingTop = "@dimen/di_list_item_gap_aw"
+			android:paddingBottom = "@dimen/di_list_item_gap_normal"
 			android:layout_height = "wrap_content" >
 
 		<com.makeramen.roundedimageview.RoundedImageView

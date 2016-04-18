@@ -266,7 +266,6 @@ public class PayManager {
 		if (codeData.gameInfo != null) {
 			doFocusOperation(codeData.gameInfo.id);
 		}
-		ScoreManager.getInstance().reward(ScoreManager.RewardType.BUY_BY_BEAN);
 		ObserverManager.getInstance()
 				.notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
 	}

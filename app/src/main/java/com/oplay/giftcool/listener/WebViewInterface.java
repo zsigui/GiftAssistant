@@ -1,5 +1,6 @@
 package com.oplay.giftcool.listener;
 
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -9,21 +10,30 @@ import android.webkit.WebView;
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.util.GiftTypeUtil;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
+import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
 import java.util.Observable;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-14.
@@ -230,8 +240,9 @@ public class WebViewInterface extends Observable {
 
 	/**
 	 * 显示多张预览图片
+	 *
 	 * @param selectedIndex 选择最初显示图片的下标，从0开始
-	 * @param picsPath 传入图片地址的字符串数组
+	 * @param picsPath      传入图片地址的字符串数组
 	 */
 	@JavascriptInterface
 	public int showMultiPic(int selectedIndex, String... picsPath) {
@@ -252,7 +263,7 @@ public class WebViewInterface extends Observable {
 	 * 显示底部的回复栏
 	 */
 	@JavascriptInterface
-	public int showReply(boolean isShow) {
+	public int showBottomBar(boolean isShow) {
 		if (mHostFragment == null) {
 			return RET_INTERNAL_ERR;
 		}
@@ -264,4 +275,91 @@ public class WebViewInterface extends Observable {
 		}
 	}
 
+	/**
+	 * 进行异步网络请求
+	 */
+	@JavascriptInterface
+	public int asnyNativeRequest(final String reqUrl, final String reqParam,
+	                             final String reqMethod, final String callbackJsName) {
+		if (TextUtils.isEmpty(reqUrl) || TextUtils.isEmpty(reqParam)) {
+			return RET_PARAM_ERR;
+		}
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+
+
+				if (!NetworkUtil.isConnected(mHostActivity)) {
+					execJs(callbackJsName, initJsonError(NetStatusCode.ERR_NETWORK, "网络异常"));
+				}
+				Call<String> mCall;
+				if (TextUtils.isEmpty(reqMethod) || reqMethod.equalsIgnoreCase("POST")) {
+					mCall = Global.getNetEngine().asyncPostForJsCall(reqUrl, new JsonReqBase<String>(reqParam));
+				} else {
+					mCall = Global.getNetEngine().asyncGetForJsCall(reqUrl, new JsonReqBase<String>(reqParam));
+				}
+				mCall.enqueue(new Callback<String>() {
+					@Override
+					public void onResponse(Call<String> call, Response<String> response) {
+						if (response == null) {
+							execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EMPTY_RESPONSE, "response为空"));
+							return;
+						}
+						if (!response.isSuccessful()) {
+							execJs(callbackJsName, initJsonError(response.code(), response.message()));
+							return;
+						}
+						execJs(callbackJsName, response.body());
+					}
+
+					@Override
+					public void onFailure(Call<String> call, Throwable t) {
+						String returnData = initJsonError(NetStatusCode.ERR_EXEC_FAIL, t.getMessage());
+						execJs(callbackJsName, returnData);
+					}
+				});
+			}
+		});
+		return RET_SUCCESS;
+	}
+
+	/**
+	 * 设置回复谁
+	 *
+	 * @param commentId 回复对象ID
+	 * @param name 回复对象名称
+	 * @return
+	 */
+	@JavascriptInterface
+	public int setReplyTo(int commentId, String name) {
+		if (mHostFragment != null && mHostFragment instanceof PostCommentFragment) {
+			PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
+			fragment.setReplyTo(commentId, name);
+		}
+		return RET_OTHER_ERR;
+	}
+
+	/**
+	 * 执行Js操作
+	 */
+	private void execJs(String callbackJsName, String returnData) {
+		if (callbackJsName != null) {
+			String js = String.format("%s('%s')", callbackJsName, returnData);
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+				mWebView.loadUrl("javascript:" + js);
+			} else {
+				mWebView.evaluateJavascript(js, null);
+			}
+		}
+	}
+
+	/**
+	 * 构造空数据的错误返回Json字符串
+	 */
+	private String initJsonError(int code, String msg) {
+		JsonRespBase<Void> result = new JsonRespBase<Void>();
+		result.setCode(NetStatusCode.ERR_NETWORK);
+		result.setMsg(msg);
+		return AssistantApp.getInstance().getGson().toJson(result);
+	}
 }

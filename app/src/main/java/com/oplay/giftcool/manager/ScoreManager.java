@@ -9,6 +9,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -50,15 +51,15 @@ public class ScoreManager {
 		return manager;
 	}
 
-	public int mRewardType = RewardType.NOTHING;
+	public String mRewardCode = null;
 
 
-	public int getRewardType() {
-		return mRewardType;
+	public String getRewardCode() {
+		return mRewardCode;
 	}
 
-	public void setRewardType(int rewardType) {
-		mRewardType = rewardType;
+	public void setRewardCode(String rewardCode) {
+		mRewardCode = rewardCode;
 	}
 
 	@Deprecated
@@ -146,38 +147,39 @@ public class ScoreManager {
 	 * 对需要本地通知任务进行通知获取奖励
 	 *
 	 * @param ptype      分享类型采用setRewardType并设置该值为RewardType.NOTHING
+	 * @param replayImdiate 是否立即返回结果
 	 */
-	public void reward(int ptype) {
+	public void reward(String ptype, final boolean replayImdiate) {
 		if (!AccountManager.getInstance().isLogin()) {
 			return;
 		}
-		final int type;
-		if (ptype == RewardType.NOTHING) {
-			type = getRewardType();
+		final String code;
+		if (ptype == null) {
+			code = getRewardCode();
 		} else {
-			type = ptype;
+			code = ptype;
 		}
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
 				if (mRewardReqBase == null) {
 					ReqTaskReward data = new ReqTaskReward();
-					data.type = type;
 					mRewardReqBase = new JsonReqBase<ReqTaskReward>(data);
-				} else {
-					mRewardReqBase.data.type = type;
 				}
+				mRewardReqBase.data.code = code;
+				mRewardReqBase.data.replyNotify = (replayImdiate? 1 : 0);
 				Global.getNetEngine().obtainTaskReward(mRewardReqBase)
-						.enqueue(new Callback<JsonRespBase<TaskReward>>() {
+						.enqueue(new Callback<JsonRespBase<MissionReward>>() {
 							@Override
-							public void onResponse(Call<JsonRespBase<TaskReward>> call, Response<JsonRespBase
-									<TaskReward>> response) {
+							public void onResponse(Call<JsonRespBase<MissionReward>> call, Response<JsonRespBase
+									<MissionReward>> response) {
 								if (call.isCanceled()) {
 									return;
 								}
 								if (response != null && response.isSuccessful()) {
 									if (response.body() != null && response.body().isSuccess()) {
-										if (!AccountManager.getInstance().isLogin()) {
+										if (AccountManager.getInstance().isLogin()) {
+											toastByCallback(response.body().getData(), true);
 											return;
 										}
 									}
@@ -189,7 +191,7 @@ public class ScoreManager {
 							}
 
 							@Override
-							public void onFailure(Call<JsonRespBase<TaskReward>> call, Throwable t) {
+							public void onFailure(Call<JsonRespBase<MissionReward>> call, Throwable t) {
 								if (AppDebugConfig.IS_DEBUG) {
 									KLog.e(t);
 								}
@@ -270,6 +272,7 @@ public class ScoreManager {
 			} else {
 				if (info.isFinished()) {
 					it.remove();
+					ScoreManager.getInstance().reward(TaskTypeUtil.ID_PLAY_GAME, false);
 				}
 			}
 		}
@@ -278,14 +281,8 @@ public class ScoreManager {
 	}
 
 	public static abstract class RewardType {
-		public static final int NOTHING = 0;
-		public static final int BIND_OUWAN = 1;
-		public static final int BIND_PHONE = 2;
-		public static final int DOWNLOAD = 3;
-		public static final int SHARE_NORMAL = 4;
-		public static final int SHARE_LIMIT = 5;
-		public static final int SEARCH = 6;
-		public static final int BUY_BY_BEAN = 7;
-		public static final int SHARE_GCOOL = 8;
+		public static final String PLAY_GAME = "PLAY_SPECIFIED_GAME";
+		public static final String SHARE_GIFT = "SHARE_GIFT";
+		public static final String SHARE_GCOOL = "SHARE_CLIENT";
 	}
 }
