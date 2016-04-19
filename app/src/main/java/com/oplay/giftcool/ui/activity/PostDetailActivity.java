@@ -9,7 +9,9 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.engine.NoEncryptEngine;
+import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -22,6 +24,8 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Retrofit;
 
 /**
  * Created by zsigui on 16-4-11.
@@ -45,7 +49,12 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 		mTypeHierarchy = new ArrayList<>(5);
-		mEngine = AssistantApp.getInstance().getRetrofit().create(NoEncryptEngine.class);
+		mEngine = new Retrofit.Builder()
+				.baseUrl(NetUrl.getBaseUrl())
+				.client(AssistantApp.getInstance().getHttpClient())
+				.addConverterFactory(DefaultGsonConverterFactory.create(AssistantApp.getInstance().getGson()))
+				.build()
+				.create(NoEncryptEngine.class);
 		handleRedirect(getIntent());
 	}
 
@@ -79,10 +88,10 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 		mTypeHierarchy.add(type);
 		final int postId = getIntent().getIntExtra(KeyConfig.KEY_DATA, 0);
 		switch (type) {
-			case KeyConfig.TYPE_ID_MSG:
+			case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
 				replaceFrag(R.id.fl_container, PostDetailFragment.newInstance(postId));
 				break;
-			case KeyConfig.TYPE_ID_MSG_ADMIRE:
+			case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
 				final int commentId = getIntent().getIntExtra(KeyConfig.KEY_DATA_O, 0);
 				replaceFrag(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId));
 				break;

@@ -45,7 +45,7 @@
 				android:paddingRight = "10dp"
 				android:singleLine = "false"
 				android:layout_gravity = "left|top"
-				android:text = "http://test.lbapi.ouwan.com/api/\nhttp://test.giftcool.ouwan.com/" />
+				android:text = "http://172.16.5.36:8290/api/\nhttp://test.giftcool.ouwan.com/" />
 
 		<TextView
 				android:id = "@+id/tv_normal"

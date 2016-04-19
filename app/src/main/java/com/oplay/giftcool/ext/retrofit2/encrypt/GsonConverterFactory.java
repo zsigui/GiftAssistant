@@ -1,4 +1,4 @@
-package com.oplay.giftcool.ext.retrofit2;
+package com.oplay.giftcool.ext.retrofit2.encrypt;
 
 import com.google.gson.Gson;
 

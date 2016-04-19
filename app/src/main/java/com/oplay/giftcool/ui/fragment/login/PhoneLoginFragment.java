@@ -27,7 +27,7 @@ import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -415,6 +415,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		MainActivity.sIsTodayFirstOpen = true;
 		AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
 		AccountManager.getInstance().notifyUserAll(userModel);
+		SocketIOManager.getInstance().connectOrReConnect(true);
 		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.USER_PHONE_LOGIN,
 				"手机号=" + userModel.userInfo.phone);
 		((BaseAppCompatActivity) getActivity()).onBack();

@@ -28,6 +28,8 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
+import org.json.JSONObject;
+
 import java.util.Observable;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
@@ -279,8 +281,8 @@ public class WebViewInterface extends Observable {
 	 * 进行异步网络请求
 	 */
 	@JavascriptInterface
-	public int asnyNativeRequest(final String reqUrl, final String reqParam,
-	                             final String reqMethod, final String callbackJsName) {
+	public int asyncNativeRequest(final String reqUrl, final String reqParam,
+	                              final String reqMethod, final String callbackJsName) {
 		if (TextUtils.isEmpty(reqUrl) || TextUtils.isEmpty(reqParam)) {
 			return RET_PARAM_ERR;
 		}
@@ -291,33 +293,43 @@ public class WebViewInterface extends Observable {
 
 				if (!NetworkUtil.isConnected(mHostActivity)) {
 					execJs(callbackJsName, initJsonError(NetStatusCode.ERR_NETWORK, "网络异常"));
+					return;
 				}
-				Call<String> mCall;
-				if (TextUtils.isEmpty(reqMethod) || reqMethod.equalsIgnoreCase("POST")) {
-					mCall = Global.getNetEngine().asyncPostForJsCall(reqUrl, new JsonReqBase<String>(reqParam));
-				} else {
-					mCall = Global.getNetEngine().asyncGetForJsCall(reqUrl, new JsonReqBase<String>(reqParam));
-				}
-				mCall.enqueue(new Callback<String>() {
-					@Override
-					public void onResponse(Call<String> call, Response<String> response) {
-						if (response == null) {
-							execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EMPTY_RESPONSE, "response为空"));
-							return;
-						}
-						if (!response.isSuccessful()) {
-							execJs(callbackJsName, initJsonError(response.code(), response.message()));
-							return;
-						}
-						execJs(callbackJsName, response.body());
+				try {
+					Call<Object> mCall;
+					JSONObject realReqParam = new JSONObject(reqParam);
+					Object a = AssistantApp.getInstance().getGson().fromJson(realReqParam.toString(), Object.class);
+					if (TextUtils.isEmpty(reqMethod) || reqMethod.equalsIgnoreCase("POST")) {
+						mCall = Global.getNetEngine().asyncPostForJsCall(reqUrl, new JsonReqBase<Object>(a));
+					} else {
+						mCall = Global.getNetEngine().asyncGetForJsCall(reqUrl, new JsonReqBase<Object>(a));
 					}
+					mCall.enqueue(new Callback<Object>() {
+						@Override
+						public void onResponse(Call<Object> call, Response<Object> response) {
+							KLog.d(AppDebugConfig.TAG_WARN, "response is called");
+							if (response == null) {
+								execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EMPTY_RESPONSE, "response为空"));
+								return;
+							}
+							KLog.d(AppDebugConfig.TAG_WARN, "response.httpcode = " + response.code());
+							if (!response.isSuccessful()) {
+								execJs(callbackJsName, initJsonError(response.code(), response.message()));
+								return;
+							}
+							String s = AssistantApp.getInstance().getGson().toJson(response.body());
+							execJs(callbackJsName, s);
+						}
 
-					@Override
-					public void onFailure(Call<String> call, Throwable t) {
-						String returnData = initJsonError(NetStatusCode.ERR_EXEC_FAIL, t.getMessage());
-						execJs(callbackJsName, returnData);
-					}
-				});
+						@Override
+						public void onFailure(Call<Object> call, Throwable t) {
+							String returnData = initJsonError(NetStatusCode.ERR_EXEC_FAIL, t.getMessage());
+							execJs(callbackJsName, returnData);
+						}
+					});
+				} catch (Exception e) {
+					KLog.d(AppDebugConfig.TAG_WARN, e);
+				}
 			}
 		});
 		return RET_SUCCESS;
@@ -327,7 +339,7 @@ public class WebViewInterface extends Observable {
 	 * 设置回复谁
 	 *
 	 * @param commentId 回复对象ID
-	 * @param name 回复对象名称
+	 * @param name      回复对象名称
 	 * @return
 	 */
 	@JavascriptInterface
@@ -343,6 +355,8 @@ public class WebViewInterface extends Observable {
 	 * 执行Js操作
 	 */
 	private void execJs(String callbackJsName, String returnData) {
+		KLog.d(AppDebugConfig.TAG_WARN, "returnData = " + returnData);
+
 		if (callbackJsName != null) {
 			String js = String.format("%s('%s')", callbackJsName, returnData);
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -358,7 +372,7 @@ public class WebViewInterface extends Observable {
 	 */
 	private String initJsonError(int code, String msg) {
 		JsonRespBase<Void> result = new JsonRespBase<Void>();
-		result.setCode(NetStatusCode.ERR_NETWORK);
+		result.setCode(code);
 		result.setMsg(msg);
 		return AssistantApp.getInstance().getGson().toJson(result);
 	}

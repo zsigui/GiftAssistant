@@ -136,8 +136,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						ArrayList<ScoreMissionGroup> missionGroups = response.body().getData();
+						mData = transferToMissionList(missionGroups);
 						setTaskIcon(mData);
-						mAdapter.updateData(transferToMissionList(missionGroups));
+						mAdapter.updateData(mData);
 						refreshSuccessEnd();
 						return;
 					}
@@ -184,10 +185,12 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		final boolean allowDownload = AssistantApp.getInstance().isAllowDownload();
 		for (ScoreMissionGroup missionGroup : missionGroups) {
 			final ScoreMission groupHeader = new ScoreMission();
-			groupHeader.name = String.format("%s(%d/%d)",
-					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
+			groupHeader.isHeader = true;
 			missions.add(groupHeader);
 			for (ScoreMission m : missionGroup.missions) {
+				if (m.dailyLimit > 1) {
+					m.name = String.format("%s(%d/%d)", m.name, m.todayCompleteCount, m.dailyLimit);
+				}
 				if (m.actionType == TaskTypeUtil.MISSION_TYPE_DOWNLOAD) {
 					// 对于下载类型，需要预先判断
 					if (allowDownload) {
@@ -199,14 +202,23 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 								// 执行中的任务，或者还没有安装的游戏
 								// 设置试玩游戏信息
 								ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
-								missions.add(m);
 							}
-						} catch (Throwable ignored) {}
+						} catch (Throwable ignored) {
+						}
+						missions.add(m);
+					} else {
+						// 去掉被屏蔽的下载任务
+						if (m.isCompleted == 1) {
+							missionGroup.completedCount--;
+						}
+						missionGroup.totalCount--;
 					}
 				} else {
 					missions.add(m);
 				}
 			}
+			groupHeader.name = String.format("%s(%d/%d)",
+					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
 		}
 		return missions;
 	}
@@ -225,9 +237,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 	private void setTaskIcon(ArrayList<ScoreMission> data) {
 		if (data == null) {
-			if (AppDebugConfig.IS_FRAG_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_FRAG, "任务失败");
-			}
 			return;
 		}
 		for (ScoreMission mission : data) {
@@ -235,46 +244,32 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				continue;
 			}
 			String id = mission.code;
-			switch (id) {
-				case TaskTypeUtil.ID_SET_NICK:
-					mission.iconAlternate = R.drawable.ic_task_set_nick;
-					break;
-				case TaskTypeUtil.ID_SET_AVATAR:
-					mission.iconAlternate = R.drawable.ic_task_upload_avator;
-					break;
-				case TaskTypeUtil.ID_FIRST_LOGIN:
-					mission.iconAlternate = R.drawable.ic_task_first_login;
-					break;
-				case TaskTypeUtil.ID_FOCUS_GAME:
-					mission.iconAlternate = R.drawable.ic_task_attention;
-					break;
-				case TaskTypeUtil.ID_REQUEST_GIFT:
-					mission.iconAlternate = R.drawable.ic_task_default;
-					break;
-				case TaskTypeUtil.ID_FEEDBACK:
-					mission.iconAlternate = R.drawable.ic_task_new_feedback;
-					break;
-				case TaskTypeUtil.ID_UPGRADE:
-					mission.iconAlternate = R.drawable.ic_task_new_update;
-					break;
-				case TaskTypeUtil.ID_SIGN_IN:
-					mission.iconAlternate = R.drawable.ic_task_sign_in;
-					break;
-				case TaskTypeUtil.ID_GCOOL_SHARE:
-					mission.iconAlternate = R.drawable.ic_task_share_gcool;
-					break;
-				case TaskTypeUtil.ID_GIFT_SHARE:
-					mission.iconAlternate = R.drawable.ic_task_share_gift;
-					break;
-				case TaskTypeUtil.ID_PLAY_GAME:
-					mission.iconAlternate = R.drawable.ic_task_play_game;
-					break;
-				case TaskTypeUtil.ID_BUG_GIFT_USE_OUWAN:
-					mission.iconAlternate = R.drawable.ic_task_get_limit_with_bean;
-					break;
-				default:
-					mission.iconAlternate = R.drawable.ic_task_default;
-					break;
+			if (TaskTypeUtil.ID_SET_NICK.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_set_nick;
+			} else if (TaskTypeUtil.ID_SET_AVATAR.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_upload_avator;
+			} else if (TaskTypeUtil.ID_FIRST_LOGIN.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_first_login;
+			} else if (TaskTypeUtil.ID_FOCUS_GAME.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_attention;
+			} else if (TaskTypeUtil.ID_REQUEST_GIFT.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_default;
+			} else if (TaskTypeUtil.ID_FEEDBACK.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_new_feedback;
+			} else if (TaskTypeUtil.ID_UPGRADE.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_new_update;
+			} else if (TaskTypeUtil.ID_SIGN_IN.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_sign_in;
+			} else if (TaskTypeUtil.ID_GCOOL_SHARE.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_share_gcool;
+			} else if (TaskTypeUtil.ID_GIFT_SHARE.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_share_gift;
+			} else if (TaskTypeUtil.ID_PLAY_GAME.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_play_game;
+			} else if (TaskTypeUtil.ID_BUG_GIFT_USE_OUWAN.equalsIgnoreCase(id)) {
+				mission.iconAlternate = R.drawable.ic_task_get_limit_with_bean;
+			} else {
+				mission.iconAlternate = R.drawable.ic_task_default;
 			}
 		}
 	}

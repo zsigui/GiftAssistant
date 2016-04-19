@@ -18,8 +18,8 @@ public class AppConfig {
 	/* 评论回复图片大小 */
 	public static final int REPLY_PIC_WIDTH = 1536;
 	public static final int REPLY_PIC_HEIGHT = 1536;
-	// 上传图片大小 500KB以下
-	public static final int REPLY_PIC_SIZE = 500 * 1024;
+	// 上传图片大小 4MB 以下
+	public static final int REPLY_PIC_SIZE = 4 * 1024 * 1024;
 	/* 轮播图播放时间 */
 	public static final int BANNER_LOOP_TIME = 5000;
 

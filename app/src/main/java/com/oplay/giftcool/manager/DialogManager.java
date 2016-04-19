@@ -19,7 +19,9 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HopeGiftDialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
+import com.oplay.giftcool.ui.fragment.dialog.PicDialog;
 import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -264,5 +266,27 @@ public class DialogManager {
 			}
 		});
 		return confirmDialog;
+	}
+
+	/**
+	 * 显示签到弹窗
+	 */
+	public void showSignInDialog(final boolean canShow, final Context context, final FragmentManager fm) {
+		if (canShow) {
+			final PicDialog dialog = PicDialog.newInstance("drawable://" + R.drawable.pic_lottery_everyday);
+			dialog.setDialogClickListener(new BaseFragment_Dialog.OnDialogClickListener() {
+				@Override
+				public void onCancel() {
+					dialog.dismissAllowingStateLoss();
+				}
+
+				@Override
+				public void onConfirm() {
+					IntentUtil.jumpSignIn(context);
+					dialog.dismissAllowingStateLoss();
+				}
+			});
+			dialog.show(fm, "signin");
+		}
 	}
 }

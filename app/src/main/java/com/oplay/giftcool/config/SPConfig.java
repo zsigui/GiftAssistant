@@ -55,6 +55,7 @@ public class SPConfig {
 
 	/* 应用设置 */
 	public static final String SP_APP_DEVICE_FILE = "deviceadf";
+	public static final String KEY_TEST_REQUEST_URI = "test_request_uri";
 	public static final String KEY_SOFT_INPUT_HEIGHT = "soft_input_height";
 
 	/* 应用信息 */

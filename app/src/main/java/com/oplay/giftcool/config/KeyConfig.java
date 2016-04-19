@@ -19,75 +19,76 @@ public class KeyConfig {
 	/* result code */
 	public static final int SUCCESS = 0;
 	public static final int FAIL = -1;
-	public static final int TYPE_ID_DEFAULT = 0x0;
+	public static final int TYPE_ID_DEFAULT = 0;
 
 	/* main activity */
-	public static final int TYPE_ID_INDEX_GIFT = 0x1;
-	public static final int TYPE_ID_INDEX_GAME = 0x2;
-	public static final int TYPE_ID_INDEX_POST = 0x3;
+	public static final int TYPE_ID_INDEX_GIFT = 1;
+	public static final int TYPE_ID_INDEX_GAME = 2;
+	public static final int TYPE_ID_INDEX_POST = 3;
 
 	/* setting activity  */
-	public static final int TYPE_ID_MY_GIFT_CODE = 0x101;
-	public static final int TYPE_ID_MY_ATTENTION = 0x102;
-	public static final int TYPE_ID_WALLET = 0x103;
-	public static final int TYPE_ID_TASK = 0x104;
-	public static final int TYPE_ID_MSG = 0x105;
-	public static final int TYPE_ID_DOWNLOAD = 0x106;
-	public static final int TYPE_ID_SETTING = 0x107;
+	public static final int TYPE_ID_MY_GIFT_CODE = 101;
+	public static final int TYPE_ID_MY_ATTENTION = 102;
+	public static final int TYPE_ID_WALLET = 103;
+	public static final int TYPE_ID_TASK = 104;
+	public static final int TYPE_ID_MSG = 105;
+	public static final int TYPE_ID_DOWNLOAD = 106;
+	public static final int TYPE_ID_SETTING = 107;
 
-	public static final int TYPE_ID_DETAIL_BEAN = 0x113;
-	public static final int TYPE_ID_DETAIL_SCORE = 0x114;
-	public static final int TYPE_ID_PROFILE = 0x115;
-	public static final int TYPE_ID_FEEDBACK = 0x116;
-	public static final int TYPE_ID_USERINFO = 0x117;
-	public static final int TYPE_ID_USER_SET_NICK = 0x118;
-	public static final int TYPE_ID_USER_SET_AVATAR = 0x119;
+	public static final int TYPE_ID_DETAIL_BEAN = 113;
+	public static final int TYPE_ID_DETAIL_SCORE = 114;
+	public static final int TYPE_ID_PROFILE = 115;
+	public static final int TYPE_ID_FEEDBACK = 116;
+	public static final int TYPE_ID_USERINFO = 117;
+	public static final int TYPE_ID_USER_SET_NICK = 118;
+	public static final int TYPE_ID_USER_SET_AVATAR = 119;
 
 	/* login activity */
-	public static final int TYPE_ID_LOGIN_MAIN = 0x151;
+	public static final int TYPE_ID_LOGIN_MAIN = 151;
 	public static final int TYPE_ID_OUWAN_LOGIN = 0;
 	public static final int TYPE_ID_PHONE_LOGIN = 1;
 
 	/* gift list activity */
-	public static final int TYPE_ID_GIFT_LIMIT = 0x170;
-	public static final int TYPE_ID_GIFT_NEW = 0x171;
-	public static final int TYPE_ID_GIFT_LIKE = 0x172;
+	public static final int TYPE_ID_GIFT_LIMIT = 170;
+	public static final int TYPE_ID_GIFT_NEW = 171;
+	public static final int TYPE_ID_GIFT_LIKE = 172;
 
 	/* web activity */
-	public static final int TYPE_ID_LOTTERY = 0x173;
-	public static final int TYPE_SIGN_IN_EVERY_DAY = 0x174;
+	public static final int TYPE_ID_LOTTERY = 173;
+	public static final int TYPE_SIGN_IN_EVERY_DAY = 174;
 
 	/* game list activity */
 	// 新游推荐
-	public static final int TYPE_ID_GAME_NEW = 0x201;
+	public static final int TYPE_ID_GAME_NEW = 201;
 	// 特定类型游戏
-	public static final int TYPE_ID_GAME_TYPE = 0x202;
+	public static final int TYPE_ID_GAME_TYPE = 202;
 	// 热门游戏
-	public static final int TYPE_ID_GAME_HOT = 0x203;
+	public static final int TYPE_ID_GAME_HOT = 203;
 	// 游戏搜索
-	public static final int TYPE_ID_GAME_SEARCH = 0x204;
+	public static final int TYPE_ID_GAME_SEARCH = 204;
 
 	/* detail activity */
-	public static final int TYPE_ID_GIFT_DETAIL = 0x301;
-	public static final int TYPE_ID_GAME_DETAIL = 0x302;
+	public static final int TYPE_ID_GIFT_DETAIL = 301;
+	public static final int TYPE_ID_GAME_DETAIL = 302;
 
 	/* post list activity */
-	public static final int TYPE_ID_POST_OFFICIAL = 0x401;
+	public static final int TYPE_ID_POST_OFFICIAL = 401;
+
+	/* post detail activity */
+	public static final int TYPE_ID_POST_REPLY_DETAIL =  403;
+	public static final int TYPE_ID_POST_COMMENT_DETAIL =  404;
 
 	/* message central activity */
-	public static final int TYPE_ID_MSG_NEW_GIFT_NOTIFY = 0x501;
-	public static final int TYPE_ID_MSG_ADMIRE = 0x502;
-	public static final int TYPE_ID_MSG_SYSTEM = 0x503;
-	public static final int TYPE_ID_MSG_COMMENT = 0x504;
+	public static final int TYPE_ID_MSG_NEW_GIFT_NOTIFY = 501;
+	public static final int TYPE_ID_MSG_ADMIRE = 502;
+	public static final int TYPE_ID_MSG_SYSTEM = 503;
+	public static final int TYPE_ID_MSG_COMMENT = 504;
 
 	public static final String CODE_MSG_NEW_GIFT_NOTIFY = "msg_notify";
 	public static final String CODE_MSG_ADMIRE = "msg_admire";
 	public static final String CODE_MSG_SYSTEM = "msg_system";
 	public static final String CODE_MSG_COMMENT = "msg_comment";
 
-	/* task fragment */
-	public static final int REQUEST_UPDATE_AVATAR = 0xA00;
-	public static final int REQUEST_SET_NICK = 0xA01;
 
 	/* my gift list fragment */
 	// 已抢

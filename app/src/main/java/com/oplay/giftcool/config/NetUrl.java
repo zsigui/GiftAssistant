@@ -188,12 +188,12 @@ public class NetUrl {
 	/**
 	 * 手机登录-第二步
 	 */
-	public static final String USER_PHONE_LOGIN_SECOND = "account/login_account_by_phone_verification_code";
+	public static final String USER_PHONE_LOGIN_SECOND = "v2/account/login_account_by_phone_verification_code";
 
 	/**
 	 * 偶玩账号登录
 	 */
-	public static final String USER_OUWAN_LOGIN = "account/login_account_by_ouwan";
+	public static final String USER_OUWAN_LOGIN = "v2/account/login_account_by_ouwan";
 
 	/**
 	 * 获取用户个人信息
@@ -247,7 +247,7 @@ public class NetUrl {
 	/**
 	 * 获取金币任务
 	 */
-	public static final String SCORE_GET_TASK = "api/v1/user_mission";
+	public static final String SCORE_GET_TASK = "v1/mission/user_mission";
 	/**
 	 * 请求金币奖励
 	 */
@@ -269,6 +269,11 @@ public class NetUrl {
 	 * 应用版本更新
 	 */
 	public static final String APP_VERSION_UPDATE = "update_version";
+
+	/**
+	 * 上报手机应用信息
+	 */
+	public static final String APP_INFO_REPORTED = "v1/uil";
 
 	/* 消息接口 */
 

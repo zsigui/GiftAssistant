@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,25 +28,31 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.ShowBottomBarListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.model.data.req.ReqCommitReply;
+import com.oplay.giftcool.model.data.req.ReqPostToken;
+import com.oplay.giftcool.model.data.resp.PostToken;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +78,8 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	private TextView tvPickHint;
 
 	private PostReplyAdapter mAdapter;
+	// 请求实体
+	private JsonReqBase<ReqCommitReply> mReqData;
 
 	private ArrayList<PhotoInfo> mPostImg = new ArrayList<>(Global.REPLY_IMG_COUNT);
 	private int mId;
@@ -117,8 +126,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		}
 		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		mId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
-		final String detailUrl = WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL) + mId;
-		loadUrl(detailUrl);
 
 		mAdapter = new PostReplyAdapter(getContext(), mPostImg);
 		GridLayoutManager gld = new GridLayoutManager(getContext(), 4);
@@ -131,6 +138,11 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			etContent.setShowSoftInputOnFocus(false);
 
 		showBar(true, null);
+		ReqCommitReply data = new ReqCommitReply();
+		data.postId = mId;
+		mReqData = new JsonReqBase<>(data);
+		loadUrl(String.format("%s?activity_id=%d",
+				WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), mId));
 	}
 
 	@Override
@@ -144,16 +156,21 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	}
 
 	private long mLastClickTime;
-	private boolean mIsInputShow = false;
-	private boolean mIsInImg;
+
+	// 以下状态结合判断下端回复栏的显示
+	// 实现略丑陋，逻辑已经不会理了
+	private int imgShowStep = 0;
+	private int imgFailStep = 0;
+	private int imgHideStep = 0;
+	private int wvTouchStep = 0;
+	private int contentTouchStep = 0;
+	private int walkStep = 2;
 
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.iv_img_add:
-				mIsInImg = false;
-				mIsInputShow = false;
 				if (mPostImg.size() == 0) {
 					GalleryFinal.openGalleryMulti(mAdapter.REQ_ID_IMG_ADD, Global.REPLY_IMG_COUNT, mAdapter);
 					pickFailed();
@@ -162,10 +179,12 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 				ivImgAdd.setSelected(true);
 				if (llImgPreview.getVisibility() == View.VISIBLE
 						&& InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
+					imgHideStep = walkStep++;
 					etContent.requestFocus();
-					llImgPreview.setVisibility(View.GONE);
 					InputMethodUtil.hideSoftInput(getActivity());
+					llImgPreview.setVisibility(View.GONE);
 				} else {
+					imgShowStep = walkStep++;
 					llImgPreview.setVisibility(View.VISIBLE);
 					InputMethodUtil.hideSoftInput(getActivity());
 				}
@@ -185,8 +204,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 * 选择图片成功返回的处理函数
 	 */
 	public void pickSuccess() {
-		mIsInImg = false;
-		mIsInPost = false;
+		imgShowStep = walkStep++;
 		ivImgAdd.setSelected(true);
 		llImgPreview.setVisibility(View.VISIBLE);
 		InputMethodUtil.hideSoftInput(getActivity());
@@ -197,10 +215,9 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 */
 	public void pickFailed() {
 		mAdapter.setPicTextVal();
-		mIsInImg = false;
-		mIsInputShow = false;
-		InputMethodUtil.hideSoftInput(getActivity());
+		imgFailStep = walkStep++;
 		llImgPreview.setVisibility(View.GONE);
+		InputMethodUtil.hideSoftInput(getActivity());
 		ivImgAdd.setSelected(false);
 		etContent.requestFocus();
 	}
@@ -209,45 +226,209 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 * 执行发表回复的网络请求
 	 */
 	private Call<JsonRespBase<Void>> mCallPost;
+
+	private Call<JsonRespBase<PostToken>> mCallGetToken;
+
 	/**
-	 * 防止重复提交回复的网络请求
+	 * 执行发送消息服务
 	 */
-	private boolean mIsInPost = false;
+	private void handleSend() {
+		if (!AccountManager.getInstance().isLogin()) {
+			IntentUtil.jumpLogin(getContext());
+			return;
+		}
+		showLoading();
+		mReqData.data.cuid = AccountManager.getInstance().getUserInfo().uid;
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (!NetworkUtil.isConnected(getContext())) {
+					hideLoading();
+					ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+					return;
+				}
+				if (mCallGetToken == null) {
+					ReqPostToken reqToken = new ReqPostToken();
+					reqToken.postId = mReqData.data.postId;
+					mCallGetToken = Global.getNetEngine().obtainReplyToken(new JsonReqBase<>(reqToken));
+				} else {
+					mCallGetToken.cancel();
+					mCallGetToken = mCallGetToken.clone();
+				}
+				mCallGetToken.enqueue(new Callback<JsonRespBase<PostToken>>() {
+					@Override
+					public void onResponse(Call<JsonRespBase<PostToken>> call, Response<JsonRespBase<PostToken>>
+							response) {
+						if (!mCanShowUI || call.isCanceled()) {
+							return;
+						}
+						if (response != null && response.isSuccessful()
+								&& response.body() != null && response.body().isSuccess()) {
+							handleCommit(response.body().getData().token);
+							return;
+						}
+						hideLoading();
+						ToastUtil.showShort("获取Token失败");
+					}
+
+					@Override
+					public void onFailure(Call<JsonRespBase<PostToken>> call, Throwable t) {
+						if (!mCanShowUI || call.isCanceled()) {
+							return;
+						}
+						hideLoading();
+					}
+				});
+			}
+		});
+	}
+
+	private Call<JsonRespBase<Void>> mCallCommit;
+
+	/**
+	 * 执行token获取后的提交操作
+	 */
+//	private void handleCommit(String token) {
+//		final ReqCommitReply data = mReqData.data;
+//		KLog.d(AppDebugConfig.TAG_WARN, "token = " + token);
+//		data.token = token;
+//		data.content = etContent.getText().toString();
+//		if (!mPostImg.isEmpty()) {
+//			data.imgs = new ArrayList<>(mPostImg.size());
+//			for (PhotoInfo photo : mPostImg) {
+//				ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(photo.getPhotoPath(), AppConfig
+// .UPLOAD_PIC_SIZE,
+//						AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
+//				data.imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
+//			}
+//		}
+//		if (mCallCommit != null) {
+//			mCallCommit.cancel();
+//		}
+//		mCallCommit = ((PostDetailActivity) getActivity()).getEngine().commitReply(mReqData);
+//		mCallCommit.enqueue(new Callback<JsonRespBase<Void>>() {
+//			@Override
+//			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+//				if (call.isCanceled() || !mCanShowUI) {
+//					return;
+//				}
+//				DialogManager.getInstance().hideLoadingDialog();
+//				if (response != null && response.isSuccessful()) {
+//					if (response.body() != null && response.body().isSuccess()) {
+//						mWebView.reload();
+//						return;
+//					}
+//					KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析失败": response.body().error());
+//					return;
+//				}
+//				KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败": response.code() + ":" + response.message());
+//			}
+//
+//			@Override
+//			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+//				if (call.isCanceled() || !mCanShowUI) {
+//					return;
+//				}
+//				DialogManager.getInstance().hideLoadingDialog();
+//				KLog.d(AppDebugConfig.TAG_WARN, t);
+//			}
+//		});
+//	}
+//	/**
+//	 * 处理回复提交请求
+//	 */
+//	private void handleCommit(String token) {
+//
+//
+//		if (mCallPost != null) {
+//			mCallPost.cancel();
+//		}
+//		HashMap<String, RequestBody> reqData = new HashMap<>();
+//		reqData.put("msg", RequestBody.create(MediaType.parse("text/plain; charset=UTF-8"), etContent.getText
+//				().toString()));
+//		int i = 0;
+//		for (PhotoInfo p : mPostImg) {
+//			reqData.put("imgs", MultipartBody.create(MediaType.parse("image/*"),
+//					generateImageStringParam(p.getPhotoPath())));
+//			i++;
+//		}
+//		mCallPost = ((PostDetailActivity) getActivity()).getEngine().postReply(reqData);
+//		mCallPost.enqueue(new Callback<JsonRespBase<Void>>() {
+//			@Override
+//			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+//				if (!mCanShowUI && call.isCanceled()) {
+//					hideLoading();
+//					return;
+//				}
+//				if (response != null && response.isSuccessful()) {
+//					if (response.body() != null && response.body().isSuccess()) {
+//						refreshAfterPost();
+//						return;
+//					}
+//					hideLoading();
+//					ToastUtil.blurErrorMsg(TAG_PREFIX, response.body());
+//					return;
+//				}
+//				hideLoading();
+//				ToastUtil.blurErrorResp(TAG_PREFIX, response);
+//			}
+//
+//			@Override
+//			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+//				hideLoading();
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_FRAG, t);
+//				}
+//				ToastUtil.blurThrow(TAG_PREFIX);
+//			}
+//		});
+//
+//	}
 
 	/**
 	 * 处理回复提交请求
 	 */
-	private void handleSend() {
-
+	private void handleCommit(final String token) {
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (mIsInPost) {
-					return;
-				}
-				mIsInPost = true;
-				if (!NetworkUtil.isConnected(getContext())) {
-					ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
-					return;
-				}
-				showLoading();
+
+
 				if (mCallPost != null) {
 					mCallPost.cancel();
 				}
-				HashMap<String, RequestBody> reqData = new HashMap<>();
-				reqData.put("msg", RequestBody.create(MediaType.parse("text/plain; charset=UTF-8"), etContent.getText
-						().toString()));
-				int i = 0;
-				for (PhotoInfo p : mPostImg) {
-					reqData.put("pic", MultipartBody.create(MediaType.parse("image/*"),
-							generateImageStringParam(p.getPhotoPath())));
-					i++;
+				HashMap<String, Object> reqData = new HashMap<>();
+				reqData.put("activity_id", 1);
+				reqData.put("token", token);
+				reqData.put("content", etContent.getText().toString());
+				reqData.put("cuid", AccountManager.getInstance().getUserInfo().uid);
+				if (!mPostImg.isEmpty()) {
+					StringBuilder imgBuilder = new StringBuilder("[");
+					for (PhotoInfo p : mPostImg) {
+						imgBuilder.append("\"")
+								.append(generateImageStringParam(p.getPhotoPath()).replaceAll("\\n", "")).append
+								("\",");
+					}
+					imgBuilder.deleteCharAt(imgBuilder.length() - 1);
+					imgBuilder.append("]");
+					reqData.put("imgs", imgBuilder.toString());
 				}
-				mCallPost = ((PostDetailActivity) getActivity()).getEngine().postReply(reqData);
+				StringBuilder b = new StringBuilder();
+				for (Map.Entry<String, Object> entry : reqData.entrySet()) {
+					try {
+						b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
+								, "UTF-8")).append("&");
+					} catch (UnsupportedEncodingException e) {
+						KLog.d(AppDebugConfig.TAG_WARN, e);
+					}
+				}
+				if (b.length() > 0) {
+					b.deleteCharAt(b.length() - 1);
+				}
+				mCallPost = ((PostDetailActivity) getActivity()).getEngine().commitReply(b.toString());
 				mCallPost.enqueue(new Callback<JsonRespBase<Void>>() {
 					@Override
 					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-						mIsInPost = false;
 						if (!mCanShowUI && call.isCanceled()) {
 							hideLoading();
 							return;
@@ -268,7 +449,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 					@Override
 					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
 						hideLoading();
-						mIsInPost = false;
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, t);
 						}
@@ -297,10 +477,10 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	/**
 	 * 根据文件获取图片字节数组的Base64编码字符串
 	 */
-	private byte[] generateImageStringParam(String filePath) {
+	private String generateImageStringParam(String filePath) {
 		ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(filePath, AppConfig.REPLY_PIC_SIZE,
 				AppConfig.REPLY_PIC_WIDTH, AppConfig.REPLY_PIC_HEIGHT);
-		return baos.toByteArray();
+		return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 	}
 
 	private void showLoading() {
@@ -340,36 +520,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	}
 
-	@Override
-	public void onGlobalLayout() {
-		int softInputHeight = AssistantApp.getInstance().getSoftInputHeight(getActivity());
-		if (softInputHeight != mLastSoftInputHeight && softInputHeight != 0) {
-			mLastSoftInputHeight = softInputHeight;
-			resetLayoutParams();
-		}
-		final int curHeight = InputMethodUtil.getSoftInputHeight(getActivity());
-
-		KLog.d(AppDebugConfig.TAG_WARN, "mIsInputShow = " + mIsInputShow + ", mIsInImg = " + mIsInImg
-				+ ", llImgPreView.getVisibility() = " + llImgPreview.getVisibility() + ", curHeight = " + curHeight);
-		if (curHeight == 0) {
-			if (mIsInputShow && mIsInImg && llImgPreview.getVisibility() == View.VISIBLE) {
-				llImgPreview.setVisibility(View.GONE);
-				KLog.d(AppDebugConfig.TAG_WARN, "mIsInput = " + mIsInputShow + ", set show");
-			} else if (!mIsInputShow && mIsInImg && llImgPreview.getVisibility() == View.VISIBLE) {
-				llImgPreview.setVisibility(View.GONE);
-				mIsInImg = false;
-				KLog.d(AppDebugConfig.TAG_WARN, "mIsInImg = " + mIsInImg + ", set gone");
-			}
-		}
-	}
-
-	private void resetLayoutParams() {
-		if (llImgPreview != null) {
-			ViewGroup.LayoutParams lp = llImgPreview.getLayoutParams();
-			lp.height = mLastSoftInputHeight;
-			llImgPreview.setLayoutParams(lp);
-		}
-	}
 
 	@Override
 	public void showBar(boolean isShow, Object param) {
@@ -382,21 +532,84 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		}
 	}
 
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (v.getId()) {
-			case R.id.wv_container:
-				pickFailed();
-				break;
 			case R.id.et_content:
 				// EditText点击打开软键盘之前，需要先显示llImgPreview才行，否则页面会被推上去
-				etContent.requestFocus();
-				InputMethodUtil.showSoftInput(getActivity());
+				KLog.d(AppDebugConfig.TAG_WARN, "etContent is touch");
+				contentTouchStep = walkStep++;
 				llImgPreview.setVisibility(View.VISIBLE);
-				mIsInputShow = true;
-				mIsInImg = true;
+				InputMethodUtil.showSoftInput(getActivity());
+				break;
+			case R.id.wv_container:
+				KLog.d(AppDebugConfig.TAG_WARN, "WebView is touch");
+				wvTouchStep = walkStep;
+				walkStep += 2;
+//				llImgPreview.setVisibility(View.GONE);
+				InputMethodUtil.hideSoftInput(getActivity());
+				llImgPreview.requestLayout();
 				break;
 		}
 		return false;
+	}
+
+	@Override
+	public void onGlobalLayout() {
+		final int curHeight = InputMethodUtil.getSoftInputHeight(getActivity());
+		int softInputHeight = AssistantApp.getInstance().getSoftInputHeight(getActivity());
+		KLog.d(AppDebugConfig.TAG_WARN, "softInputHeight = " + softInputHeight + ", mLastInputHeight = " +
+				mLastSoftInputHeight);
+		if (curHeight > 0 && curHeight != softInputHeight) {
+			softInputHeight = curHeight;
+			AssistantApp.getInstance().setSoftInputHeight(curHeight);
+		}
+		if (softInputHeight != mLastSoftInputHeight && softInputHeight > 0) {
+			mLastSoftInputHeight = softInputHeight;
+			resetLayoutParams();
+		}
+		KLog.d(AppDebugConfig.TAG_WARN, "curHeight = " + curHeight
+				+ " , walkStep = " + walkStep
+				+ " , contentTouchStep = " + contentTouchStep
+				+ " , imgHideStep = " + imgHideStep
+				+ " , imgShowStep = " + imgShowStep
+				+ ", imgFailStep = " + imgFailStep
+				+ ", wvTouchStep = " + wvTouchStep);
+
+		if (curHeight == 0) {
+
+			if (contentTouchStep == walkStep - 1) {
+//				llImgPreview.setVisibility(View.VISIBLE);
+			} else if (contentTouchStep == walkStep - 2) {
+				llImgPreview.setVisibility(View.GONE);
+			} else if (imgHideStep == walkStep - 1) {
+				llImgPreview.setVisibility(View.GONE);
+			} else if (imgShowStep == walkStep - 1) {
+				llImgPreview.setVisibility(View.VISIBLE);
+			} else if (imgFailStep == walkStep - 1 && contentTouchStep == walkStep - 2) {
+				// 未选取图，保留前一次状态
+				llImgPreview.setVisibility(View.VISIBLE);
+				InputMethodUtil.showSoftInput(getActivity());
+			} else if (wvTouchStep == walkStep - 2) {
+				llImgPreview.setVisibility(View.GONE);
+			}
+			walkStep++;
+		} else {
+			if (contentTouchStep == walkStep - 1) {
+//				llImgPreview.setVisibility(View.VISIBLE);
+				walkStep++;
+			}
+		}
+	}
+
+	private void resetLayoutParams() {
+		KLog.d(AppDebugConfig.TAG_WARN, "resetLayoutParams = mLastSoftInputHeight =" + mLastSoftInputHeight
+				+ ", llImgPreview = " + llImgPreview);
+		if (llImgPreview != null) {
+			ViewGroup.LayoutParams lp = llImgPreview.getLayoutParams();
+			lp.height = mLastSoftInputHeight;
+			llImgPreview.setLayoutParams(lp);
+		}
 	}
 }

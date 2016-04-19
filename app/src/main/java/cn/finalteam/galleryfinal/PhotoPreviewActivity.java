@@ -42,7 +42,7 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
     protected void onCreate(Bundle savedInstanceState) {
         final boolean showTitle = getIntent().getBooleanExtra(GalleryFinal.PHOTO_SHOW_TITLE, false);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (!showTitle) {
+        if (showTitle) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         super.onCreate(savedInstanceState);

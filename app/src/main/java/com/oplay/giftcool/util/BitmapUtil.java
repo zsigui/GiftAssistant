@@ -304,18 +304,26 @@ public class BitmapUtil {
 
 	public static ByteArrayOutputStream getBitmapForBaos(String srcPath, int size, int width, int height) {
 		final Bitmap bitmap = getBitmap(srcPath, width, height);
-		return compressImageForBaos(bitmap, size);
+		final String ext = srcPath.substring(srcPath.lastIndexOf(".") + 1, srcPath.length());
+		Bitmap.CompressFormat compressFormat;
+		if ("png".equalsIgnoreCase(ext)) {
+			compressFormat = Bitmap.CompressFormat.PNG;
+		} else {
+			compressFormat = Bitmap.CompressFormat.JPEG;
+		}
+		return compressImageForBaos(bitmap, size, compressFormat);
 	}
 
 	/**
 	 * 压缩图片
 	 * @param image
 	 * @param size
+	 * @param compressFormat
 	 * @return
 	 */
-	public static Bitmap compressImage(Bitmap image,int size) {
+	public static Bitmap compressImage(Bitmap image,int size, Bitmap.CompressFormat compressFormat) {
 
-		ByteArrayOutputStream baos = compressImageForBaos(image, size);
+		ByteArrayOutputStream baos = compressImageForBaos(image, size, compressFormat);
 		//把压缩后的数据baos存放到ByteArrayInputStream中
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
 		//把ByteArrayInputStream数据生成图片
@@ -326,13 +334,16 @@ public class BitmapUtil {
 	 * 压缩图片
 	 * @param image
 	 * @param size
+	 * @param compressFormat
 	 * @return
 	 */
-	public static ByteArrayOutputStream compressImageForBaos(Bitmap image, int size) {
+	public static ByteArrayOutputStream compressImageForBaos(Bitmap image, int size, Bitmap.CompressFormat
+			compressFormat) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 		int options = 100;
+//		image.compress(compressFormat, options, baos);
 		image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 		int startSize = baos.toByteArray().length / 1024;
 		//循环判断如果压缩后图片是否大于等于size,大于等于继续压缩
@@ -342,6 +353,10 @@ public class BitmapUtil {
 			//每次都减少5
 			options -= 5;
 			//这里压缩options%，把压缩后的数据存放到baos中
+			if (options < 50) {
+				break;
+			}
+//			image.compress(compressFormat, options, baos);
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 		}
 		if (AppDebugConfig.IS_DEBUG) {

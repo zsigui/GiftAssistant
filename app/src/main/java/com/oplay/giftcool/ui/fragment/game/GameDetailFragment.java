@@ -100,6 +100,9 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 
 	@Override
 	public void showBar(final boolean isShow, final Object param) {
+		if (param == null) {
+			return;
+		}
 		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

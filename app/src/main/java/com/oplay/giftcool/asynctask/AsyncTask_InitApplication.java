@@ -1,7 +1,9 @@
 package com.oplay.giftcool.asynctask;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
@@ -15,7 +17,9 @@ import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.MobileInfoModel;
+import com.oplay.giftcool.model.data.req.AppBaseInfo;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
+import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -24,10 +28,16 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -159,8 +169,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 
+		// 进行应用信息上报
+		reportedAppInfo();
 
-		// 初始化下载通知
 		assistantApp.setGlobalInit(true);
 	}
 
@@ -196,5 +207,81 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * 上报应用信息
+	 */
+	private void reportedAppInfo() {
+		Global.THREAD_POOL.execute(new Runnable() {
+			@Override
+			public void run() {
+				ReqReportedInfo info = new ReqReportedInfo();
+				info.brand = Build.MODEL;
+				info.osVersion = Build.VERSION.RELEASE;
+				info.sdkVersion = String.valueOf(Build.VERSION.SDK_INT);
+				info.appInfos = getAppInfos(AssistantApp.getInstance().getApplicationContext());
+				final JsonReqBase<ReqReportedInfo> reqData = new JsonReqBase<ReqReportedInfo>(info);
+				Global.getNetEngine().reportedAppInfo(reqData)
+						.enqueue(new Callback<JsonRespBase<Void>>() {
+							@Override
+							public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
+									response) {
+								if (response != null && response.isSuccessful()
+										&& response.body() != null && response.body().isSuccess()) {
+									// 执行上报成功
+									if (AppDebugConfig.IS_DEBUG) {
+										KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
+									}
+									return;
+								}
+								ThreadUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										reportedAppInfo();
+									}
+								}, 30 * 1000);
+							}
+
+							@Override
+							public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+								if (AppDebugConfig.IS_DEBUG) {
+									KLog.d(AppDebugConfig.TAG_APP, t);
+								}
+								// 上报失败，等待30秒后继续执行
+								ThreadUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										reportedAppInfo();
+									}
+								}, 30 * 1000);
+							}
+						});
+			}
+		});
+	}
+
+	/**
+	 * 获取已安装应用信息
+	 */
+	private ArrayList<AppBaseInfo> getAppInfos(Context context) {
+		ArrayList<AppBaseInfo> result = new ArrayList<>();
+		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+		for (int i = 0; i < packages.size(); i++) {
+			try {
+				final PackageInfo packageInfo = packages.get(i);
+				final AppBaseInfo info = new AppBaseInfo();
+				info.name = packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
+				info.pkg = packageInfo.packageName;
+				info.vc = String.valueOf(packageInfo.versionCode);
+				info.vn = packageInfo.versionName;
+				result.add(info);
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_UTIL, e);
+				}
+			}
+		}
+		return result;
 	}
 }

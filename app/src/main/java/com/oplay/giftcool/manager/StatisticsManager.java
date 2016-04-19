@@ -68,6 +68,8 @@ public class StatisticsManager {
 		String APP_PUSH_RECEIVED = "ap000003";
 		// 推送消息已打开
 		String APP_PUSH_OPENED = "ap000004";
+		// 签到弹窗
+		String APP_SIGN_IN = "ap000005";
 
 	}
 

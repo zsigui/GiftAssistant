@@ -30,4 +30,7 @@ public interface NoEncryptEngine {
 
 	@POST(NetUrl.POST_REPLY)
 	Call<JsonRespBase<Void>> commitReply(@Body JsonReqBase<ReqCommitReply> reqData);
+
+	@POST(NetUrl.POST_REPLY)
+	Call<JsonRespBase<Void>> commitReply(@Body String reqData);
 }

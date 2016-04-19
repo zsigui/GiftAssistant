@@ -160,11 +160,11 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 						getResources().getString(R.string.st_user_info_title));
 				break;
 			case KeyConfig.TYPE_ID_USER_SET_NICK:
-				replaceFragWithTitle(R.id.fl_container, UploadAvatarFragment.newInstance(),
+				replaceFragWithTitle(R.id.fl_container, SetNickFragment.newInstance(),
 						getResources().getString(R.string.st_user_set_nick_title));
 				break;
 			case KeyConfig.TYPE_ID_USER_SET_AVATAR:
-				replaceFragWithTitle(R.id.fl_container, SetNickFragment.newInstance(),
+				replaceFragWithTitle(R.id.fl_container, UploadAvatarFragment.newInstance(),
 						getResources().getString(R.string.st_user_set_avatar_title));
 				break;
 			case KeyConfig.TYPE_ID_MY_ATTENTION:

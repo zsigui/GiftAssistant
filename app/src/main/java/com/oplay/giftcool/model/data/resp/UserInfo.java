@@ -75,4 +75,10 @@ public class UserInfo implements Serializable {
 	 */
 	@SerializedName("is_complete_today_mission")
 	public boolean isCompleteTodayMission;
+
+	/**
+	 * 是否首次登录
+	 */
+	@SerializedName("first_login")
+	public boolean isFirstLogin;
 }

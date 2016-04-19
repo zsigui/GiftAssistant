@@ -23,7 +23,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
-import com.oplay.giftcool.ext.retrofit2.GsonConverterFactory;
+import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
@@ -107,6 +107,8 @@ public class AssistantApp extends Application {
     private boolean mIsPushedToday = false;
     // 是否在任务栏显示每日抽奖入口
     private boolean mHasLottery = true;
+
+    private OkHttpClient mHttpClient;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -233,56 +235,62 @@ public class AssistantApp extends Application {
         }
     }
 
+    public OkHttpClient getHttpClient() {
+        if (mHttpClient == null) {
+            File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
+            Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
+            Interceptor cacheInterceptor = new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    // 请求时携带版本信息
+                    String headerValue = String.format(ConstString.TEXT_HEADER,
+                            AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+                            AppConfig.SDK_VER_NAME, getChannelId());
+                    String headerName = "X-Client-Info";
+                    Request newRequest;
+                    newRequest = chain.request().newBuilder()
+                            .addHeader(headerName, headerValue)
+                            .build();
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
+                    }
+                    Response response = chain.proceed(newRequest);
+
+                    CacheControl cacheControl;
+                    if (NetworkUtil.isConnected(getApplicationContext())) {
+                        cacheControl = new CacheControl.Builder()
+                                .noCache()
+                                .build();
+                    } else {
+                        cacheControl = new CacheControl.Builder()
+                                .onlyIfCached()
+                                .maxStale(365, TimeUnit.DAYS)
+                                .build();
+                    }
+                    String cacheControlStr = cacheControl.toString();
+                    return response.newBuilder()
+                            .removeHeader("Pragma")
+                            .header("Cache-Control", cacheControlStr)
+                            .build();
+                }
+            };
+
+            mHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .cache(cacheFile)
+                    .addInterceptor(cacheInterceptor)
+                    .retryOnConnectionFailure(true)
+                    .build();
+        }
+        return mHttpClient;
+    }
+
     public void initRetrofit() {
         initGson();
-        File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
-        Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
-        Interceptor cacheInterceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                // 请求时携带版本信息
-                String headerValue = String.format(ConstString.TEXT_HEADER,
-                        AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-                        AppConfig.SDK_VER_NAME, getChannelId());
-                String headerName = "X-Client-Info";
-                Request newRequest;
-                newRequest = chain.request().newBuilder()
-                        .addHeader(headerName, headerValue)
-                        .build();
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
-                }
-                Response response = chain.proceed(newRequest);
-
-                CacheControl cacheControl;
-                if (NetworkUtil.isConnected(getApplicationContext())) {
-                    cacheControl = new CacheControl.Builder()
-                            .noCache()
-                            .build();
-                } else {
-                    cacheControl = new CacheControl.Builder()
-                            .onlyIfCached()
-                            .maxStale(365, TimeUnit.DAYS)
-                            .build();
-                }
-                String cacheControlStr = cacheControl.toString();
-                return response.newBuilder()
-                        .removeHeader("Pragma")
-                        .header("Cache-Control", cacheControlStr)
-                        .build();
-            }
-        };
-
-        OkHttpClient httpClient = new OkHttpClient.Builder()
-                .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                .cache(cacheFile)
-                .addInterceptor(cacheInterceptor)
-                .retryOnConnectionFailure(true)
-                .build();
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(NetUrl.getBaseUrl())
-                .client(httpClient)
+                .client(getHttpClient())
                 .addConverterFactory(GsonConverterFactory.create(mGson))
                 .build();
     }

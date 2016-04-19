@@ -109,7 +109,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
-		SocketIOManager.getInstance().connectOrReConnect();
+		SocketIOManager.getInstance().connectOrReConnect(false);
 	}
 
 	private void createDrawer() {
@@ -196,7 +196,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onResume() {
 		super.onResume();
 		if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
-			SocketIOManager.getInstance().connectOrReConnect();
+			SocketIOManager.getInstance().connectOrReConnect(false);
 		}
 	}
 
@@ -555,6 +555,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 			}, 1000);
 
+		}
+		if (AccountManager.getInstance().isLogin()) {
+			DialogManager.getInstance().showSignInDialog(
+					AccountManager.getInstance().getUserInfo().isFirstLogin,
+					this,
+					getSupportFragmentManager());
 		}
 //		else if (sIsTodayFirstOpen && mHandler != null) {
 //			sIsTodayFirstOpen = false;

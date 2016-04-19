@@ -50,111 +50,126 @@ public class SocketIOManager {
 		return NetUrl.getBaseUrl().substring(0, NetUrl.getBaseUrl().indexOf("/", 8)) + URI_WS;
 	}
 
-	public void connectOrReConnect() {
-		if (AccountManager.getInstance().isLogin()) {
-			try {
-				if (isConnected()) {
-					KLog.d(AppDebugConfig.TAG_WARN, "need to reconnect, ip = " + getRealUrl());
-					mSocket.disconnect();
-					mSocket.connect();
+	public void connectOrReConnect(boolean forceNew) {
+		try {
+			if (isConnected()) {
+				if (!forceNew) {
 					return;
 				}
-				IO.Options opts = new IO.Options();
-				opts.forceNew = true;
-				opts.reconnection = true;
-				opts.reconnectionAttempts = 3;
+				KLog.d(AppDebugConfig.TAG_WARN, "need to reconnect, ip = " + getRealUrl());
+				close();
+			}
+			IO.Options opts = new IO.Options();
+			opts.forceNew = true;
+			opts.reconnection = true;
+			opts.reconnectionAttempts = 0;
 //				// 断开后，间隔10秒再次重试
-				opts.reconnectionDelay = 10 * 1000;
-				mSocket = IO.socket(getRealUrl(), opts);
-				mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-					@Override
-					public void call(Object... args) {
-						KLog.d(AppDebugConfig.TAG_WARN, "connect.id = " + mSocket.id());
-						if (AccountManager.getInstance().isLogin()) {
-							// 发送验证消息
-							try {
-								JSONObject obj = new JSONObject();
-								JSONObject data = new JSONObject();
-								data.put("cuid", AccountManager.getInstance().getUserSesion().uid);
-								data.put("sessionId", AccountManager.getInstance().getUserSesion().session);
-								data.put("cid", MobileInfoModel.getInstance().getCid());
-								data.put("imei", MobileInfoModel.getInstance().getImei());
-								obj.put("d", data);
-								mSocket.emit(CustomSocket.EVENT_LOGIN, obj);
-							} catch (JSONException e) {
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_MANAGER, e);
-								}
-							}
-						} else {
-							// 已经退出登录，则主动断开连接
-							mSocket.disconnect();
-						}
+			opts.reconnectionDelay = 10 * 1000;
+			mSocket = IO.socket(getRealUrl(), opts);
+			mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					KLog.d(AppDebugConfig.TAG_WARN, "connect.id = " + mSocket.id());
+//					loginValidate();
+				}
+			}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					KLog.d(AppDebugConfig.TAG_WARN, "disconnect = " + (args != null && args.length > 0 ? args[0] :
+							null));
+				}
+			}).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter
+					.Listener() {
+
+				@Override
+				public void call(Object... args) {
+					// 服务端请求重新验证登录
+					loginValidate();
+				}
+			}).on(CustomSocket.EVENT_AUTH_ERROR, new Emitter
+					.Listener() {
+
+				@Override
+				public void call(Object... args) {
+					// 连接失败，如果是已经登录，重试连接，如果不是，不连接
+					if (AccountManager.getInstance().isLogin()) {
+						mSocket.connect();
+					} else {
+						close();
 					}
-				}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-					@Override
-					public void call(Object... args) {
-						KLog.d(AppDebugConfig.TAG_WARN, "disconnect = " + (args != null && args.length > 0 ? args[0] :
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_MANAGER, "msg = " + (args != null && args.length > 0 ? args[0] :
 								null));
 					}
-				}).on(CustomSocket.EVENT_AUTH_ERROR, new Emitter.Listener() {
-
-					@Override
-					public void call(Object... args) {
-						// 连接失败，如果是已经登录，重试连接，如果不是，不连接
-						if (AccountManager.getInstance().isLogin()) {
-							mSocket.connect();
-						} else {
-							mSocket.disconnect();
-						}
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, "msg = " + (args != null && args.length > 0 ? args[0] :
-									null));
-						}
+				}
+			}).on(CustomSocket.EVENT_AUTH_SUCCESS, new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					// 验证成功
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_MANAGER, "SocketIO验证通过");
 					}
-				}).on(CustomSocket.EVENT_AUTH_SUCCESS, new Emitter.Listener() {
-					@Override
-					public void call(Object... args) {
-						// 验证成功
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, "SocketIO验证通过");
-						}
+				}
+			}).on(CustomSocket.EVENT_MISSION_COMPLETE, new Emitter.Listener() {
+				@Override
+				public void call(Object... args) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_WARN, "args[0] = " + (args != null && args.length > 0 ? args[0]
+								: null));
 					}
-				}).on(CustomSocket.EVENT_MISSION_COMPLETE, new Emitter.Listener() {
-					@Override
-					public void call(Object... args) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_WARN, "args[0] = " + (args != null && args.length > 0 ? args[0]
-									: null));
-						}
-						if (args != null && args.length > 0) {
-							// 处于前台中，直接发送通知
-							try {
-								Gson gson = AssistantApp.getInstance().getGson();
-								final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
-								if (SystemUtil.isMyAppInForeground(mAppContext)) {
-									ThreadUtil.runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											ScoreManager.getInstance().toastByCallback(reward, true);
-										}
-									});
-								} else {
-									// 加入候选队列等待后面通知
-									mCandidateList.add(reward);
-								}
-							} catch (Exception ignored) {
+					if (args != null && args.length > 0) {
+						// 处于前台中，直接发送通知
+						try {
+							Gson gson = AssistantApp.getInstance().getGson();
+							final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
+							if (SystemUtil.isMyAppInForeground(mAppContext)) {
+								ThreadUtil.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										ScoreManager.getInstance().toastByCallback(reward, true);
+									}
+								});
+							} else {
+								// 加入候选队列等待后面通知
+								mCandidateList.add(reward);
 							}
+						} catch (Exception ignored) {
 						}
 					}
-				});
-				KLog.d(AppDebugConfig.TAG_WARN, "connect, ip = " + getRealUrl());
-				mSocket.connect();
-			} catch (URISyntaxException e) {
+				}
+			});
+			KLog.d(AppDebugConfig.TAG_WARN, "connect, ip = " + getRealUrl());
+			mSocket.connect();
+		} catch (URISyntaxException e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_MANAGER, e);
+			}
+		}
+	}
+
+	private void loginValidate() {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_WARN, "loginValidate is called!");
+		}
+		if (AccountManager.getInstance().isLogin()) {
+			// 发送验证消息
+			try {
+				JSONObject obj = new JSONObject();
+				JSONObject data = new JSONObject();
+				data.put("cuid", AccountManager.getInstance().getUserSesion().uid);
+				data.put("sessionId", AccountManager.getInstance().getUserSesion().session);
+				data.put("cid", MobileInfoModel.getInstance().getCid());
+				data.put("imei", MobileInfoModel.getInstance().getImei());
+				obj.put("d", data);
+				mSocket.emit(CustomSocket.EVENT_LOGIN, obj);
+			} catch (JSONException e) {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_MANAGER, e);
 				}
 			}
+		} else {
+			// 已经退出登录，则主动断开连接
+			mSocket.disconnect();
 		}
 	}
 
@@ -163,9 +178,11 @@ public class SocketIOManager {
 			ScoreManager.getInstance().toastByCallback(reward, true);
 		}
 	}
+
 	public void close() {
 		if (isConnected()) {
 			mSocket.disconnect();
+			mSocket.close();
 			mSocket = null;
 		}
 	}
@@ -179,5 +196,6 @@ public class SocketIOManager {
 		public static final String EVENT_MISSION_COMPLETE = "mission_complete";
 		public static final String EVENT_AUTH_SUCCESS = "auth_success";
 		public static final String EVENT_AUTH_ERROR = "auth_error";
+		public static final String EVENT_REQUIRE_LOGIN = "require_login";
 	}
 }

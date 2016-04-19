@@ -111,10 +111,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				return hasFind || super.shouldOverrideUrlLoading(view, url);
 			}
 
-			@Override
-			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-				return interceptRequest(view, request);
-			}
+
 		});
 		mWebView.setWebChromeClient(new WebChromeClient() {
 			@Override
@@ -135,6 +132,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					mTitles.add(title);
 					((SetTitleListner) getContext()).setBarTitle(title);
 				}
+			}
+
+			@Override
+			public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+				KLog.d(AppDebugConfig.TAG_WARN, "alert message = " + message);
+				return super.onJsAlert(view, url, message, result);
 			}
 		});
 		// 开启硬件加速，否则部分手机（如vivo）WebView会很卡

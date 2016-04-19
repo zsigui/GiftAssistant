@@ -485,7 +485,19 @@ public class IntentUtil {
 	 */
 	public static void jumpPostDetail(Context context, int id) {
 		Intent intent = new Intent(context, PostDetailActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
+		context.startActivity(intent);
+	}
+
+	/**
+	 * 跳转活动评论详情页面
+	 */
+	public static void jumpPostDetail(Context context, int postId, int commentId) {
+		Intent intent = new Intent(context, PostDetailActivity.class);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_COMMENT_DETAIL);
+		intent.putExtra(KeyConfig.KEY_DATA, postId);
+		intent.putExtra(KeyConfig.KEY_DATA_O, commentId);
 		context.startActivity(intent);
 	}
 

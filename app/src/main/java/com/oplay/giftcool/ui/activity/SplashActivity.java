@@ -97,6 +97,10 @@ public class SplashActivity extends BaseAppCompatActivity {
 					if (s.length > 1) {
 						WebViewUrl.REAL_URL = s[1].trim();
 					}
+					SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
+							SPConfig.SP_APP_DEVICE_FILE,
+							SPConfig.KEY_TEST_REQUEST_URI,
+							dialog.getContent());
 					AssistantApp.getInstance().resetInitForTest();
 					initAction();
 					dialog.dismissAllowingStateLoss();

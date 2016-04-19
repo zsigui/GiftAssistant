@@ -27,6 +27,7 @@
 			android:layout_toLeftOf = "@+id/btn_todo"
 			android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
 			android:singleLine = "false"
+			android:maxLines = "2"
 			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal" />
 
 	<TextView
@@ -43,7 +44,7 @@
 			style = "@style/HDividerView"
 			android:id = "@+id/divider"
 			android:layout_below = "@+id/iv_icon"
-			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			android:layout_marginTop = "@dimen/di_list_item_gap_big"
 			android:layout_marginBottom = "@dimen/di_list_item_gap_small" />
 
 	<TextView
@@ -60,6 +61,6 @@
 			android:id = "@+id/st_score"
 			style = "@style/DefaultTextView.Score"
 			android:layout_toRightOf = "@+id/tv_reward_title"
-			android:layout_below = "@+id/divider"/>
+			android:layout_below = "@+id/divider" />
 
 </RelativeLayout >

@@ -149,7 +149,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	 * 执行发送消息服务
 	 */
 	private void handleSend() {
-		if (AccountManager.getInstance().isLogin()) {
+		if (!AccountManager.getInstance().isLogin()) {
 			IntentUtil.jumpLogin(getContext());
 			return;
 		}

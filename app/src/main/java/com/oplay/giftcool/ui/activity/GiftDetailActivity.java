@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.oplay.giftcool.R;
@@ -39,6 +40,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void initView() {
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		setContentView(R.layout.activity_toolbar_with_share);
 	}
 

@@ -16,8 +16,8 @@ import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.req.ReqPostToken;
-import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
+import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
@@ -37,6 +37,7 @@ import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
+import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -79,6 +80,12 @@ public interface NetEngine {
 	 */
 	@POST(NetUrl.APP_VERSION_UPDATE)
 	Call<JsonRespBase<UpdateInfo>> checkUpdate(@Body JsonReqBase<ReqInitApp> reqData);
+
+	/**
+	 * 上报手机应用信息
+	 */
+	@POST(NetUrl.APP_INFO_REPORTED)
+	Call<JsonRespBase<Void>> reportedAppInfo(@Body JsonReqBase<ReqReportedInfo> reqData);
 
 	/* -------------- 搜索 ---------------- */
 	/**
@@ -341,11 +348,11 @@ public interface NetEngine {
 	 * POST网络请求
 	 */
 	@POST
-	Call<String> asyncPostForJsCall(@Url String url, @Body JsonReqBase<String> reqData);
+	Call<Object> asyncPostForJsCall(@Url String url, @Body JsonReqBase<Object> reqData);
 
 	/**
 	 * GET网络请求
 	 */
 	@GET
-	Call<String> asyncGetForJsCall(@Url String url, @Body JsonReqBase<String> reqData);
+	Call<Object> asyncGetForJsCall(@Url String url, @Body JsonReqBase<Object> reqData);
 }
