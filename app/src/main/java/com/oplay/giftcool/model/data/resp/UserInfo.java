@@ -71,14 +71,9 @@ public class UserInfo implements Serializable {
 	public int giftCount;
 
 	/**
-	 * 是否已经完成今日任务
-	 */
-	@SerializedName("is_complete_today_mission")
-	public boolean isCompleteTodayMission;
-
-	/**
 	 * 是否首次登录
 	 */
 	@SerializedName("first_login")
 	public boolean isFirstLogin;
+
 }

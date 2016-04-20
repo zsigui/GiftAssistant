@@ -242,23 +242,29 @@ public class NetUrl {
 
 
 
-	/* 金币接口 */
+	/* 任务接口 */
 
 	/**
 	 * 获取金币任务
 	 */
 	public static final String SCORE_GET_TASK = "v1/mission/user_mission";
+
 	/**
 	 * 请求金币奖励
 	 */
 	public static final String SCORE_REWARD = "v1/mission/finish_mission";
+
+	/**
+	 * 签到初始化接口，获取签到状态
+	 */
+	public static final String SCORE_SIGNIN_INIT = "v1/mission/daily_signin_info";
 
 	/* 应用接口 */
 
 	/**
 	 * 意见反馈
 	 */
-	public static final String APP_POST_FEEDBACK = "feedback/add_feedback";
+	public static final String APP_POST_FEEDBACK = "v2/feedback/add_feedback";
 
 	/**
 	 * 应用初始化
@@ -301,5 +307,10 @@ public class NetUrl {
 	 * 获取消息中心未读消息数量
 	 */
 	public static final String MESSAGE_UNREAD_COUNT = "message_unread_count/";
+
+	/**
+	 * 用户收到的赞/评论
+	 */
+	public static final String MESSAGE_REPLY_LIST = "activity/user_notice";
 
 }

@@ -289,6 +289,7 @@ public class UploadAvatarFragment extends BaseFragment {
                                 } catch (Throwable ignored) {
                                 }
                                 model.userInfo.avatar = response.body().getData().avatar;
+                                ScoreManager.getInstance().setTaskFinished(true);
                                 AccountManager.getInstance().notifyUserAll(model);
                                 return;
                             }

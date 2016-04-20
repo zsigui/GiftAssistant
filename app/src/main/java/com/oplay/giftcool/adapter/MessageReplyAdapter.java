@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +57,8 @@ public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements 
 		ReplyMessage item = getItem(position);
 		holder.tvName.setText(item.name);
 		ViewUtil.showImage(holder.ivIcon, item.icon);
-		if (TextUtils.isEmpty(item.hintPic)) {
-			ViewUtil.showImage(holder.ivHint, item.hintPic);
+		if (item.hintPics != null && !item.hintPics.isEmpty()) {
+			ViewUtil.showImage(holder.ivHint, item.hintPics.get(0));
 		} else {
 			holder.tvHint.setText(item.hintText);
 		}
@@ -84,7 +83,7 @@ public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements 
 			return;
 		}
 		ReplyMessage item = getItem((Integer) v.getTag(TAG_POSITION));
-		IntentUtil.jumpReplyDetail(mContext, item.postId, item.replyId);
+		IntentUtil.jumpReplyDetail(mContext, item.postId, item.commentId);
 	}
 
 	@Override

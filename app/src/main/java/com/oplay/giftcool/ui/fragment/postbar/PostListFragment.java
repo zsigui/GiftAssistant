@@ -11,7 +11,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.model.data.req.ReqIndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -64,10 +64,11 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 	protected void processLogic(Bundle savedInstanceState) {
 		if (getArguments() == null) {
 			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+			getActivity().onBackPressed();
 			return;
 		}
 		mUrl = getArguments().getString(KeyConfig.KEY_URL);
-		mType = getArguments().getInt(KeyConfig.KEY_TYPE, 0);
+		mType = getArguments().getInt(KeyConfig.KEY_TYPE, PostTypeUtil.TYPE_CONTENT_OFFICIAL);
 
 		mData = new ArrayList<>();
 		mAdapter = new PostOfficialListAdapter(getContext(), mData);
@@ -87,6 +88,9 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 
 	@Override
 	protected void lazyLoad() {
+		if (mIsLoading) {
+			return;
+		}
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -118,12 +122,10 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 							return;
 						}
 						if (response != null && response.isSuccessful()) {
-							Global.sServerTimeDiffLocal = System.currentTimeMillis() - response.headers().getDate
-									("Date").getTime();
-							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+							if (response.body() != null && response.body().isSuccess()) {
 								// 获取数据成功
 								refreshSuccessEnd();
-								updateDate(mData);
+								updateDate(response.body().getData().data);
 								return;
 							}
 						}
@@ -160,6 +162,10 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
 		mAdapter.updateData(data);
 		mLastPage = PAGE_FIRST;
 		mViewManager.showContent();
+		if (mAdapter.getItemCount() < 5) {
+			mNoMoreLoad = true;
+			mRefreshLayout.setCanShowLoad(false);
+		}
 	}
 
 	/**

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -31,7 +32,7 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnClickListener, FooterListener {
 
-	private final float HEADER_RIGHT_WH_RATE = 0.65f;
+	private final float HEADER_RIGHT_WH_RATE = 0.62f;
 	/**
 	 * 左右间隔的大小
 	 */
@@ -85,15 +86,12 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				final ItemTitleVH titleOneVH = new ItemTitleVH(
 						mInflater.inflate(R.layout.view_index_item_title_1, parent, false));
 				titleOneVH.tvTitle.setText(TEXT_OFFICIAL);
-				titleOneVH.itemView.setOnClickListener(this);
 				return titleOneVH;
 			case PostTypeUtil.TYPE_TITLE_GAME:
 				final ItemTitleVH titleTwoVH = new ItemTitleVH(
 						mInflater.inflate(R.layout.view_index_item_title_2, parent, false));
 				titleTwoVH.tvTitle.setText(TEXT_NOTIFY);
 				titleTwoVH.tvNote.setText(TEXT_READ_ATTENTION);
-				titleTwoVH.itemView.setOnClickListener(this);
-				titleTwoVH.tbAttention.setOnClickListener(this);
 				tbReadAttention = titleTwoVH.tbAttention;
 				return titleTwoVH;
 			case PostTypeUtil.TYPE_CONTENT_OFFICIAL:
@@ -139,13 +137,15 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				headerHolder.ivTask.setOnClickListener(this);
 				break;
 			case PostTypeUtil.TYPE_FOOTER:
-				// 无处理
 				break;
 			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
-				((ItemTitleVH) holder).itemView.setOnClickListener(this);
+				ItemTitleVH titleOneVH = (ItemTitleVH) holder;
+				titleOneVH.rlItem.setOnClickListener(this);
+				// 无处理
 				break;
 			case PostTypeUtil.TYPE_TITLE_GAME:
 				ItemTitleVH titleTwoVH = (ItemTitleVH) holder;
+				titleTwoVH.tbAttention.setOnClickListener(this);
 				if (AssistantApp.getInstance().isReadAttention()) {
 					titleTwoVH.tbAttention.setToggleOn();
 				} else {
@@ -236,20 +236,9 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				break;
 			case R.id.tb_read_attention:
 				// 只看我关注的游戏资讯
-				final boolean isRead = !AssistantApp.getInstance().isReadAttention();
-				if (tbReadAttention != null) {
-					if (isRead) {
-						tbReadAttention.toggleOn();
-					} else {
-						tbReadAttention.toggleOff();
-					}
-				}
-				AssistantApp.getInstance().setIsReadAttention(isRead);
-				if (mCallbackListener != null) {
-					mCallbackListener.doCallBack(isRead);
-				}
+				toggleButton(true, true);
 				break;
-			case R.id.ll_item:
+			case R.id.rl_header_item:
 				// 跳转官方活动列表页面
 				IntentUtil.jumpPostOfficialList(mContext);
 				break;
@@ -280,6 +269,21 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 		}
 	}
 
+	public void toggleButton(boolean toggleState, boolean needCallBack) {
+		final boolean isRead = (toggleState && !AssistantApp.getInstance().isReadAttention());
+		if (tbReadAttention != null) {
+			if (isRead) {
+				tbReadAttention.toggleOn();
+			} else {
+				tbReadAttention.toggleOff();
+			}
+		}
+		AssistantApp.getInstance().setIsReadAttention(isRead);
+		if (needCallBack && mCallbackListener != null) {
+			mCallbackListener.doCallBack(isRead);
+		}
+	}
+
 	private static class HeaderHolder extends BaseRVHolder {
 
 		ImageView ivSignIn;
@@ -298,6 +302,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 
 		private TextView tvTitle;
 		private TextView tvNote;
+		private RelativeLayout rlItem;
 		private ToggleButton tbAttention;
 
 		public ItemTitleVH(View itemView) {
@@ -305,6 +310,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 			tvTitle = getViewById(R.id.tv_title);
 			tbAttention = getViewById(R.id.tb_read_attention);
 			tvNote = getViewById(R.id.tv_note);
+			rlItem = getViewById(R.id.rl_header_item);
 		}
 	}
 

@@ -7,7 +7,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,8 +43,9 @@ public class DrawerFragment extends BaseFragment {
 	private ImageView ivIcon;
 	private RecyclerView rvContent;
 	private DrawerLayout drawerLayout;
-	private SparseArray<DrawerModel> mData;
+//	private SparseArray<DrawerModel> mData;
 	private DrawerAdapter mAdapter;
+	private ArrayList<DrawerModel> mData;
 	private TextView tvScore;
 	private TextView tvBean;
 	private RelativeLayout rlFooter;
@@ -137,6 +137,7 @@ public class DrawerFragment extends BaseFragment {
 
 		if (!AccountManager.getInstance().isLogin() && v.getId() == R.id.drawer_header) {
 			IntentUtil.jumpLoginNoToast(context);
+			closeDrawer();
 			return;
 		}
 		switch (v.getId()) {
@@ -153,8 +154,8 @@ public class DrawerFragment extends BaseFragment {
 			case KeyConfig.TYPE_ID_WALLET:
 				IntentUtil.jumpMyWallet(context);
 				break;
-			case KeyConfig.TYPE_ID_TASK:
-				IntentUtil.jumpEarnScore(context);
+			case KeyConfig.TYPE_SIGN_IN_EVERY_DAY:
+				IntentUtil.jumpSignIn(context);
 				break;
 			case KeyConfig.TYPE_ID_MSG:
 				IntentUtil.jumpMessageCentral(context);
@@ -188,34 +189,41 @@ public class DrawerFragment extends BaseFragment {
 	 * 初始化侧边栏列表信息
 	 */
 	private ArrayList<DrawerModel> initDrawerItem() {
-		SparseArray<DrawerModel> modelArray = new SparseArray<>();
-		modelArray.put(KeyConfig.TYPE_ID_MY_GIFT_CODE,
-				new DrawerModel(KeyConfig.TYPE_ID_MY_GIFT_CODE, R.drawable.ic_drawer_gift,
-						getResources().getString(R.string.st_drawer_my_gift), this));
-		modelArray.put(KeyConfig.TYPE_ID_WALLET,
-				new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet,
-						getResources().getString(R.string.st_drawer_my_wallet), this));
-		modelArray.put(KeyConfig.TYPE_ID_TASK,
-				new DrawerModel(KeyConfig.TYPE_ID_TASK, R.drawable.ic_drawer_sign_id_everyday,
-						getResources().getString(R.string.st_drawer_sign_in_everyday), this));
-		modelArray.put(KeyConfig.TYPE_ID_MSG, new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
-				getResources().getString(R.string.st_drawer_msg), this));
-		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
-				.ic_drawer_my_attention, getResources().getString(R.string.st_drawer_my_attention), this));
-		if (AssistantApp.getInstance().isAllowDownload()) {
-			DrawerModel dw = new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download,
-					getResources().getString(R.string.st_drawer_download), this);
-			dw.count = ApkDownloadManager.getInstance(getContext()).getEndOfPaused();
-			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD, dw);
-		}
-//		modelArray.put(KeyConfig.TYPE_ID_SETTING,
-//				new DrawerModel(KeyConfig.TYPE_ID_SETTING, R.drawable.ic_drawer_setting,
-//						getResources().getString(R.string.st_drawer_setting), this));
-		mData = modelArray;
+//		SparseArray<DrawerModel> modelArray = new SparseArray<>();
 		ArrayList<DrawerModel> result = new ArrayList<>();
-		for (int i = 0; i < mData.size(); i++) {
-			result.add(mData.valueAt(i));
+		DrawerModel temp = new DrawerModel(KeyConfig.TYPE_ID_MY_GIFT_CODE, R.drawable.ic_drawer_gift,
+				getResources().getString(R.string.st_drawer_my_gift), this);
+//		modelArray.put(KeyConfig.TYPE_ID_MY_GIFT_CODE, temp);
+		result.add(temp);
+
+		temp = new DrawerModel(KeyConfig.TYPE_ID_MY_ATTENTION, R.drawable
+				.ic_drawer_my_attention, getResources().getString(R.string.st_drawer_my_attention), this);
+//		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, temp);
+		result.add(temp);
+
+		temp = new DrawerModel(KeyConfig.TYPE_ID_WALLET, R.drawable.ic_drawer_wallet,
+						getResources().getString(R.string.st_drawer_my_wallet), this);
+//		modelArray.put(KeyConfig.TYPE_ID_WALLET, temp);
+		result.add(temp);
+
+		temp = new DrawerModel(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, R.drawable.ic_drawer_sign_id_everyday,
+				getResources().getString(R.string.st_drawer_sign_in_everyday), this, 1);
+//		modelArray.put(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, temp);
+		result.add(temp);
+
+		temp = new DrawerModel(KeyConfig.TYPE_ID_MSG, R.drawable.ic_drawer_message,
+				getResources().getString(R.string.st_drawer_msg), this);
+//		modelArray.put(KeyConfig.TYPE_ID_MSG, temp);
+		result.add(temp);
+
+		if (AssistantApp.getInstance().isAllowDownload()) {
+			temp = new DrawerModel(KeyConfig.TYPE_ID_DOWNLOAD, R.drawable.ic_drawer_download,
+					getResources().getString(R.string.st_drawer_download), this);
+			temp.count = ApkDownloadManager.getInstance(getContext()).getEndOfPaused();
+//			modelArray.put(KeyConfig.TYPE_ID_DOWNLOAD, temp);
+			result.add(temp);
 		}
+		mData = result;
 		return result;
 	}
 
@@ -228,11 +236,26 @@ public class DrawerFragment extends BaseFragment {
 		if (count < 0) {
 			count = 0;
 		}
-		DrawerModel m = mData.get(key);
-		if (m != null) {
-			m.count = count;
-			mAdapter.notifyItemChanged(mData.indexOfKey(key));
+//		DrawerModel m = mData.get(key);
+		final int pos = indexOfKey(key);
+		if (pos != -1) {
+			mData.get(pos).count = count;
+			mAdapter.notifyItemChanged(pos);
 		}
+	}
+
+	/**
+	 * 返回键值所在的下标
+	 */
+	private int indexOfKey(int key) {
+		int pos = -1;
+		for (DrawerModel d : mData) {
+			pos++;
+			if (d.id == key) {
+				return pos;
+			}
+		}
+		return pos;
 	}
 
 
@@ -268,6 +291,7 @@ public class DrawerFragment extends BaseFragment {
 				}
 				break;
 			case ObserverManager.STATUS.USER_UPDATE_ALL:
+			case ObserverManager.STATUS.USER_UPDATE_TASK:
 				updateData();
 				break;
 			case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:

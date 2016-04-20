@@ -133,7 +133,7 @@
 	<string name = "st_feedback_content_hint" >您反馈的内容对我们很重要噢！（500字以内）</string >
 	<string name = "st_feedback_phone_title" >联系方式</string >
 	<string name = "st_feedback_phone_hint" >您的QQ号/手机号</string >
-	<string name = "st_feedback_btn" >提交反馈</string >
+	<string name = "st_feedback_btn" >提交</string >
 
 	<!-- 设置 - 关于 -->
 	<string name = "st_about_title" >关于礼包酷</string >
@@ -224,8 +224,8 @@
 	<string name = "st_share_gift_title_normal" >[%1$s]%2$s</string >
 	<string name = "st_share_gift_desc_normal" >[%1$s]%2$s，快抢呀</string >
 	<string name = "st_dialog_gcool_share_title" >礼包酷分享</string >
-	<string name = "st_dialog_invite_title" >邀您加入礼包酷</string >
-	<string name = "st_share_gcool_description_1" >太开心了，价值888元的礼包，这里距离可以「0元抢」</string >
+	<string name = "st_dialog_invite_title" >没时间解释了，快来抢礼包</string >
+	<string name = "st_share_gcool_description_1" >价值888元的礼包，居然可以「0元抢」，手快有，手慢无</string >
 
 	<string name = "st_dialog_btn_download" >马上下载</string >
 	<string name = "st_dialog_btn_install" >安装</string >

@@ -20,7 +20,6 @@ import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.ShowBottomBarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.model.data.req.ReqCommitReply;
 import com.oplay.giftcool.model.data.req.ReqPostToken;
 import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -33,6 +32,11 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,8 +47,17 @@ import retrofit2.Response;
 public class PostCommentFragment extends BaseFragment_WebView implements ShowBottomBarListener, View.OnTouchListener,
 		ViewTreeObserver.OnGlobalLayoutListener, TextWatcher {
 
-	static final String KEY_POST_ID = "key_id_post";
-	static final String KEY_COMMENT_ID = "key_id_comment";
+	static final String KEY_POST = "key_id_post";
+	static final String KEY_COMMENT = "key_id_comment";
+	private final String TAG_PREFIX = "提交评论失败";
+
+	private final String KEY_POST_ID = "activity_id";
+	private final String KEY_COMMENT_ID = "comment_id";
+	private final String KEY_CUID = "cuid";
+	private final String KEY_TOKEN = "token";
+	private final String KEY_CONTENT = "content";
+	private final String KEY_COMMMENT_TO_DEFAULT = "楼主";
+
 
 	private LinearLayout llBottom;
 	private EditText etContent;
@@ -53,15 +66,17 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	private int mLastSoftInputHeight;
 	private boolean mShowSoftInput = false;
 
-	// 请求实体
-	private JsonReqBase<ReqCommitReply> mReqData;
-
+	/**
+	 * 请求参数字典
+	 */
+	private HashMap<String, Object> reqData = new HashMap<>();
+	private ReqPostToken reqToken = new ReqPostToken();
 
 	public static PostCommentFragment newInstance(int postId, int commentId) {
 		PostCommentFragment fragment = new PostCommentFragment();
 		Bundle bundle = new Bundle();
-		bundle.putInt(KEY_POST_ID, postId);
-		bundle.putInt(KEY_COMMENT_ID, commentId);
+		bundle.putInt(KEY_POST, postId);
+		bundle.putInt(KEY_COMMENT, commentId);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -91,16 +106,16 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			getActivity().onBackPressed();
 			return;
 		}
-		final int postId = getArguments().getInt(KEY_POST_ID);
-		final int commentId = getArguments().getInt(KEY_COMMENT_ID);
+		final int postId = getArguments().getInt(KEY_POST);
+		final int commentId = getArguments().getInt(KEY_COMMENT);
 		showBar(true, null);
-		ReqCommitReply data = new ReqCommitReply();
-		data.postId = postId;
-		data.commentId = commentId;
-		mReqData = new JsonReqBase<>(data);
-		setReplyTo(commentId, "楼主");
-		mWebView.loadUrl(String.format("%s?post_id=%d&comment_id=%d",
-				WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
+
+		reqToken.postId = postId;
+		reqData.put(KEY_POST_ID, postId);
+		reqData.put(KEY_COMMENT_ID, commentId);
+		setReplyTo(commentId, KEY_COMMMENT_TO_DEFAULT);
+		showBar(true, null);
+		mWebView.loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
 	}
 
 	@Override
@@ -118,8 +133,8 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	}
 
 	public void setReplyTo(int commentId, String name) {
-		if (mReqData != null) {
-			mReqData.data.commentId = commentId;
+		if (reqData != null) {
+			reqData.put(KEY_COMMENT_ID, commentId);
 		}
 		if (etContent != null) {
 			etContent.setText(String.format("回复%s", name));
@@ -143,7 +158,10 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		}
 	}
 
-
+	/**
+	 * 执行发表回复的网络请求
+	 */
+	private Call<JsonRespBase<Void>> mCallPost;
 	private Call<JsonRespBase<PostToken>> mCallGetToken;
 	/**
 	 * 执行发送消息服务
@@ -153,7 +171,6 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			IntentUtil.jumpLogin(getContext());
 			return;
 		}
-		mReqData.data.cuid = AccountManager.getInstance().getUserInfo().uid;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -161,10 +178,8 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 					ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
 					return;
 				}
-				DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
+				showLoading();
 				if (mCallGetToken == null) {
-					ReqPostToken reqToken = new ReqPostToken();
-					reqToken.postId = mReqData.data.postId;
 					mCallGetToken = Global.getNetEngine().obtainReplyToken(new JsonReqBase<>(reqToken));
 				} else {
 					mCallGetToken.cancel();
@@ -182,7 +197,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 							handleCommit(response.body().getData().token);
 							return;
 						}
-						DialogManager.getInstance().hideLoadingDialog();
+						hideLoading();
 						ToastUtil.showShort("获取Token失败");
 					}
 
@@ -191,53 +206,95 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 						if (!mCanShowUI || call.isCanceled()) {
 							return;
 						}
-						DialogManager.getInstance().hideLoadingDialog();
+						hideLoading();
 					}
 				});
 			}
 		});
 	}
 
-	private Call<JsonRespBase<Void>> mCallCommit;
-
 	/**
 	 * 执行token获取后的提交操作
 	 */
-	private void handleCommit(String token) {
-		final  ReqCommitReply data = mReqData.data;
-		data.token = token;
-		data.content = etContent.getText().toString();
-		if (mCallCommit != null) {
-			mCallCommit.cancel();
-		}
-		mCallCommit = ((PostDetailActivity) getActivity()).getEngine().commitReply(mReqData);
-		mCallCommit.enqueue(new Callback<JsonRespBase<Void>>() {
+	private void handleCommit(final String token) {
+		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
-			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-				if (call.isCanceled() || !mCanShowUI) {
-					return;
+			public void run() {
+				if (mCallPost != null) {
+					mCallPost.cancel();
 				}
-				DialogManager.getInstance().hideLoadingDialog();
-				if (response != null && response.isSuccessful()) {
-					if (response.body() != null && response.body().isSuccess()) {
-						mWebView.reload();
-						return;
+				reqData.put(KEY_TOKEN, token);
+				reqData.put(KEY_CONTENT, etContent.getText().toString());
+				reqData.put(KEY_CUID, AccountManager.getInstance().getUserInfo().uid);
+				mCallPost = ((PostDetailActivity) getActivity()).getEngine().commitReply(evaluateBody(reqData));
+				mCallPost.enqueue(new Callback<JsonRespBase<Void>>() {
+					@Override
+					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+						if (!mCanShowUI && call.isCanceled()) {
+							hideLoading();
+							return;
+						}
+						if (response != null && response.isSuccessful()) {
+							if (response.body() != null && response.body().isSuccess()) {
+								refreshAfterPost();
+								return;
+							}
+							hideLoading();
+							ToastUtil.blurErrorMsg(TAG_PREFIX, response.body());
+							return;
+						}
+						hideLoading();
+						ToastUtil.blurErrorResp(TAG_PREFIX, response);
 					}
-					KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析失败": response.body().error());
-					return;
-				}
-				KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败": response.code() + ":" + response.message());
-			}
 
-			@Override
-			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-				if (call.isCanceled() || !mCanShowUI) {
-					return;
-				}
-				DialogManager.getInstance().hideLoadingDialog();
-				KLog.d(AppDebugConfig.TAG_WARN, t);
+					@Override
+					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+						hideLoading();
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_FRAG, t);
+						}
+						ToastUtil.blurThrow(TAG_PREFIX);
+					}
+				});
 			}
 		});
+	}
+
+	/**
+	 * 在提交回复后执行刷新UI操作
+	 */
+	private void refreshAfterPost() {
+		ToastUtil.showShort("评论成功");
+		hideLoading();
+		reloadPage();
+	}
+
+	/**
+	 * 根据HashMap的键值对构建Http请求实体
+	 */
+	private String evaluateBody(HashMap<String, Object> reqData) {
+		StringBuilder b = new StringBuilder();
+		for (Map.Entry<String, Object> entry : reqData.entrySet()) {
+			try {
+				b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
+						, "UTF-8")).append("&");
+			} catch (UnsupportedEncodingException e) {
+				KLog.d(AppDebugConfig.TAG_WARN, e);
+			}
+		}
+		if (b.length() > 0) {
+			b.deleteCharAt(b.length() - 1);
+		}
+		return b.toString();
+	}
+
+
+	private void showLoading() {
+		DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
+	}
+
+	private void hideLoading() {
+		DialogManager.getInstance().hideLoadingDialog();
 	}
 
 	@Override

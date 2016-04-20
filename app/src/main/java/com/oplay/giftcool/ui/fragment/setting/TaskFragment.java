@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
@@ -57,7 +58,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private ListView mDataView;
 	private ArrayList<ScoreMission> mData;
 	private ScoreTaskAdapter mAdapter;
-	private int mCurFinishedTask = 0;
 
 	// 包名列表
 	private HashSet<String> mPackName;
@@ -93,7 +93,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		mAdapter = new ScoreTaskAdapter(getContext(), this);
 		mDataView.setAdapter(mAdapter);
 		AccountManager.getInstance().updatePartUserInfo();
-
+		ScoreManager.getInstance().setTaskFinished(false);
 	}
 
 	@Override
@@ -165,6 +165,14 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		});
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (ScoreManager.getInstance().isTaskFinished()) {
+			notifyRefresh();
+		}
+	}
+
 	/**
 	 * 获取包名列表
 	 */
@@ -197,23 +205,30 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 						try {
 							TaskInfoThree info = AssistantApp.getInstance().getGson()
 									.fromJson(m.actionInfo, TaskInfoThree.class);
-							if (ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)
-									|| !getPackName().contains(info.packName)) {
+							if (!getPackName().contains(info.packName)
+									|| ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)) {
 								// 执行中的任务，或者还没有安装的游戏
 								// 设置试玩游戏信息
 								ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
+								missions.add(m);
+							} else {
+								missionCountSub(missionGroup, m);
 							}
-						} catch (Throwable ignored) {
+						} catch (Throwable t) {
+							missionCountSub(missionGroup, m);
+							t.printStackTrace();
 						}
+					} else {
+						missionCountSub(missionGroup, m);
+					}
+				} else if (m.code.equalsIgnoreCase(TaskTypeUtil.ID_FOCUS_GAME)){
+					// 对于代号为关注游戏的
+					if (allowDownload) {
 						missions.add(m);
 					} else {
-						// 去掉被屏蔽的下载任务
-						if (m.isCompleted == 1) {
-							missionGroup.completedCount--;
-						}
-						missionGroup.totalCount--;
+						missionCountSub(missionGroup, m);
 					}
-				} else {
+				}else {
 					missions.add(m);
 				}
 			}
@@ -221,6 +236,16 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
 		}
 		return missions;
+	}
+
+	/**
+	 * 去掉被屏蔽的下载任务的计数
+ 	 */
+	private void missionCountSub(ScoreMissionGroup missionGroup, ScoreMission m) {
+		if (m.isCompleted == 1) {
+			missionGroup.completedCount--;
+		}
+		missionGroup.totalCount--;
 	}
 
 
@@ -253,7 +278,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			} else if (TaskTypeUtil.ID_FOCUS_GAME.equalsIgnoreCase(id)) {
 				mission.iconAlternate = R.drawable.ic_task_attention;
 			} else if (TaskTypeUtil.ID_REQUEST_GIFT.equalsIgnoreCase(id)) {
-				mission.iconAlternate = R.drawable.ic_task_default;
+				mission.iconAlternate = R.drawable.ic_task_hope_gift;
 			} else if (TaskTypeUtil.ID_FEEDBACK.equalsIgnoreCase(id)) {
 				mission.iconAlternate = R.drawable.ic_task_new_feedback;
 			} else if (TaskTypeUtil.ID_UPGRADE.equalsIgnoreCase(id)) {
@@ -368,6 +393,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private void handleInfoThree(String code, TaskInfoThree infoThree) {
 		// 设置试玩游戏信息
 //		ScoreManager.getInstance().addDownloadWork(getContext(), code, infoThree);
+		AlarmClockManager.getInstance().startGameObserverAlarm(getContext());
 		IntentUtil.jumpGameDetail(getContext(), infoThree.appId);
 	}
 
@@ -381,13 +407,20 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				break;
 			case ObserverManager.STATUS.USER_UPDATE_ALL:
 			case ObserverManager.STATUS.USER_UPDATE_TASK:
-				if (mIsNotifyRefresh) {
-					return;
-				}
-				mIsNotifyRefresh = true;
-				lazyLoad();
+				notifyRefresh();
 				break;
 		}
+	}
+
+	/**
+	 * 通知对界面数据进行刷新
+	 */
+	private void notifyRefresh() {
+		if (mIsNotifyRefresh) {
+			return;
+		}
+		mIsNotifyRefresh = true;
+		lazyLoad();
 	}
 
 	@Override

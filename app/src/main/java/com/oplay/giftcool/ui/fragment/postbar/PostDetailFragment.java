@@ -2,6 +2,7 @@ package com.oplay.giftcool.ui.fragment.postbar;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -30,7 +31,6 @@ import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.ShowBottomBarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.model.data.req.ReqCommitReply;
 import com.oplay.giftcool.model.data.req.ReqPostToken;
 import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -64,8 +64,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		ViewTreeObserver.OnGlobalLayoutListener, ShowBottomBarListener, View.OnTouchListener {
 
 	private final String PAGE_NAME = "活动详情";
-	private final String TAG_PREFIX = "提交回复";
+	private final String TAG_PREFIX = "提交回复失败";
 
+	private final String KEY_CUID = "cuid";
+	private final String KEY_TOKEN = "token";
+	private final String KEY_POST_ID = "activity_id";
+	private final String KEY_CONTENT = "content";
+	private final String KEY_IMGS = "imgs";
 
 	private int mLastSoftInputHeight = 400;
 
@@ -78,11 +83,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	private TextView tvPickHint;
 
 	private PostReplyAdapter mAdapter;
-	// 请求实体
-	private JsonReqBase<ReqCommitReply> mReqData;
 
 	private ArrayList<PhotoInfo> mPostImg = new ArrayList<>(Global.REPLY_IMG_COUNT);
-	private int mId;
+	/**
+	 * 请求参数字典
+	 */
+	private HashMap<String, Object> reqData = new HashMap<>();
+	private ReqPostToken reqToken = new ReqPostToken();
 
 	public static PostDetailFragment newInstance(int postId) {
 		PostDetailFragment fragment = new PostDetailFragment();
@@ -125,7 +132,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			return;
 		}
 		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-		mId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
+		int postId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
 
 		mAdapter = new PostReplyAdapter(getContext(), mPostImg);
 		GridLayoutManager gld = new GridLayoutManager(getContext(), 4);
@@ -137,12 +144,10 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH)
 			etContent.setShowSoftInputOnFocus(false);
 
+		reqToken.postId = postId;
+		reqData.put(KEY_POST_ID, postId);
 		showBar(true, null);
-		ReqCommitReply data = new ReqCommitReply();
-		data.postId = mId;
-		mReqData = new JsonReqBase<>(data);
-		loadUrl(String.format("%s?activity_id=%d",
-				WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), mId));
+		loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), postId));
 	}
 
 	@Override
@@ -238,7 +243,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			return;
 		}
 		showLoading();
-		mReqData.data.cuid = AccountManager.getInstance().getUserInfo().uid;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -248,8 +252,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 					return;
 				}
 				if (mCallGetToken == null) {
-					ReqPostToken reqToken = new ReqPostToken();
-					reqToken.postId = mReqData.data.postId;
 					mCallGetToken = Global.getNetEngine().obtainReplyToken(new JsonReqBase<>(reqToken));
 				} else {
 					mCallGetToken.cancel();
@@ -283,57 +285,8 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		});
 	}
 
-	private Call<JsonRespBase<Void>> mCallCommit;
-
-	/**
-	 * 执行token获取后的提交操作
-	 */
-//	private void handleCommit(String token) {
-//		final ReqCommitReply data = mReqData.data;
-//		KLog.d(AppDebugConfig.TAG_WARN, "token = " + token);
-//		data.token = token;
-//		data.content = etContent.getText().toString();
-//		if (!mPostImg.isEmpty()) {
-//			data.imgs = new ArrayList<>(mPostImg.size());
-//			for (PhotoInfo photo : mPostImg) {
-//				ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(photo.getPhotoPath(), AppConfig
-// .UPLOAD_PIC_SIZE,
-//						AppConfig.UPLOAD_PIC_WIDTH, AppConfig.UPLOAD_PIC_HEIGHT);
-//				data.imgs.add(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
-//			}
-//		}
-//		if (mCallCommit != null) {
-//			mCallCommit.cancel();
-//		}
-//		mCallCommit = ((PostDetailActivity) getActivity()).getEngine().commitReply(mReqData);
-//		mCallCommit.enqueue(new Callback<JsonRespBase<Void>>() {
-//			@Override
-//			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-//				if (call.isCanceled() || !mCanShowUI) {
-//					return;
-//				}
-//				DialogManager.getInstance().hideLoadingDialog();
-//				if (response != null && response.isSuccessful()) {
-//					if (response.body() != null && response.body().isSuccess()) {
-//						mWebView.reload();
-//						return;
-//					}
-//					KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析失败": response.body().error());
-//					return;
-//				}
-//				KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败": response.code() + ":" + response.message());
-//			}
+//	private Call<JsonRespBase<Void>> mCallCommit;
 //
-//			@Override
-//			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-//				if (call.isCanceled() || !mCanShowUI) {
-//					return;
-//				}
-//				DialogManager.getInstance().hideLoadingDialog();
-//				KLog.d(AppDebugConfig.TAG_WARN, t);
-//			}
-//		});
-//	}
 //	/**
 //	 * 处理回复提交请求
 //	 */
@@ -385,6 +338,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 //
 //	}
 
+
 	/**
 	 * 处理回复提交请求
 	 */
@@ -392,40 +346,16 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
-
-
 				if (mCallPost != null) {
 					mCallPost.cancel();
 				}
-				HashMap<String, Object> reqData = new HashMap<>();
-				reqData.put("activity_id", 1);
-				reqData.put("token", token);
-				reqData.put("content", etContent.getText().toString());
-				reqData.put("cuid", AccountManager.getInstance().getUserInfo().uid);
+				reqData.put(KEY_TOKEN, token);
+				reqData.put(KEY_CONTENT, etContent.getText().toString());
+				reqData.put(KEY_CUID, AccountManager.getInstance().getUserInfo().uid);
 				if (!mPostImg.isEmpty()) {
-					StringBuilder imgBuilder = new StringBuilder("[");
-					for (PhotoInfo p : mPostImg) {
-						imgBuilder.append("\"")
-								.append(generateImageStringParam(p.getPhotoPath()).replaceAll("\\n", "")).append
-								("\",");
-					}
-					imgBuilder.deleteCharAt(imgBuilder.length() - 1);
-					imgBuilder.append("]");
-					reqData.put("imgs", imgBuilder.toString());
+					reqData.put(KEY_IMGS, evaluateImgParam());
 				}
-				StringBuilder b = new StringBuilder();
-				for (Map.Entry<String, Object> entry : reqData.entrySet()) {
-					try {
-						b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
-								, "UTF-8")).append("&");
-					} catch (UnsupportedEncodingException e) {
-						KLog.d(AppDebugConfig.TAG_WARN, e);
-					}
-				}
-				if (b.length() > 0) {
-					b.deleteCharAt(b.length() - 1);
-				}
-				mCallPost = ((PostDetailActivity) getActivity()).getEngine().commitReply(b.toString());
+				mCallPost = ((PostDetailActivity) getActivity()).getEngine().commitReply(evaluateBody(reqData));
 				mCallPost.enqueue(new Callback<JsonRespBase<Void>>() {
 					@Override
 					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
@@ -461,6 +391,41 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	}
 
 	/**
+	 * 构造图片字节的字符串数组
+	 */
+	@NonNull
+	private String evaluateImgParam() {
+		StringBuilder imgBuilder = new StringBuilder("[");
+		for (PhotoInfo p : mPostImg) {
+			imgBuilder.append("\"")
+					.append(generateImageStringParam(p.getPhotoPath()).replaceAll("\\n", "")).append
+					("\",");
+		}
+		imgBuilder.deleteCharAt(imgBuilder.length() - 1);
+		imgBuilder.append("]");
+		return imgBuilder.toString();
+	}
+
+	/**
+	 * 根据HashMap的键值对构建Http请求实体
+	 */
+	private String evaluateBody(HashMap<String, Object> reqData) {
+		StringBuilder b = new StringBuilder();
+		for (Map.Entry<String, Object> entry : reqData.entrySet()) {
+			try {
+				b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
+						, "UTF-8")).append("&");
+			} catch (UnsupportedEncodingException e) {
+				KLog.d(AppDebugConfig.TAG_WARN, e);
+			}
+		}
+		if (b.length() > 0) {
+			b.deleteCharAt(b.length() - 1);
+		}
+		return b.toString();
+	}
+
+	/**
 	 * 在提交回复后执行刷新UI操作
 	 */
 	private void refreshAfterPost() {
@@ -471,6 +436,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		mAdapter.notifyItemRangeRemoved(0, count);
 		pickFailed();
 		hideLoading();
+		ToastUtil.showShort("回复成功");
 		reloadPage();
 	}
 

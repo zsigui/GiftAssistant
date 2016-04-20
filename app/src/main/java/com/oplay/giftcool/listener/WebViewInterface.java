@@ -241,6 +241,18 @@ public class WebViewInterface extends Observable {
 	}
 
 	/**
+	 * 跳转活动评论页面
+	 */
+	@JavascriptInterface
+	public int jumpCommentDetail(int postId, int commentId) {
+		if (postId == 0 || commentId == 0) {
+			return RET_PARAM_ERR;
+		}
+		IntentUtil.jumpPostReplyDetail(mHostActivity, postId, commentId);
+		return RET_SUCCESS;
+	}
+
+	/**
 	 * 显示多张预览图片
 	 *
 	 * @param selectedIndex 选择最初显示图片的下标，从0开始
@@ -307,12 +319,10 @@ public class WebViewInterface extends Observable {
 					mCall.enqueue(new Callback<Object>() {
 						@Override
 						public void onResponse(Call<Object> call, Response<Object> response) {
-							KLog.d(AppDebugConfig.TAG_WARN, "response is called");
 							if (response == null) {
 								execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EMPTY_RESPONSE, "response为空"));
 								return;
 							}
-							KLog.d(AppDebugConfig.TAG_WARN, "response.httpcode = " + response.code());
 							if (!response.isSuccessful()) {
 								execJs(callbackJsName, initJsonError(response.code(), response.message()));
 								return;

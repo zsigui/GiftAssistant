@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 /**
  * 收到的回复消息列表
- *
+ * <p/>
  * Created by zsigui on 16-4-17.
  */
 public class CommentMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
@@ -67,6 +67,18 @@ public class CommentMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 		rvData.setLayoutManager(llm);
 		rvData.addItemDecoration(itemDecoration);
 		rvData.setAdapter(mAdapter);
+		mAdapter.setIsComment(true);
+	}
+
+	private void initReqPage() {
+		if (mReqPageObj == null) {
+			ReqPageData page = new ReqPageData();
+			page.page = PAGE_FIRST;
+			page.pageSize = 10;
+			// 评论为0，点赞为1
+			page.type = 0;
+			mReqPageObj = new JsonReqBase<>(page);
+		}
 	}
 
 	@Override
@@ -77,11 +89,12 @@ public class CommentMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
+					initReqPage();
 					mReqPageObj.data.page = PAGE_FIRST;
 					if (mCallRefresh != null) {
 						mCallRefresh.cancel();
 					}
-					mCallRefresh = Global.getNetEngine().obtainReplyMessage("", mReqPageObj);
+					mCallRefresh = Global.getNetEngine().obtainReplyMessage(mReqPageObj);
 					mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<ReplyMessage>>>() {
 						@Override
 						public void onResponse(Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> call,
@@ -134,11 +147,12 @@ public class CommentMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 					moreLoadFailEnd();
 					return;
 				}
+				initReqPage();
 				mReqPageObj.data.page = mLastPage + 1;
 				if (mCallLoad != null) {
 					mCallLoad.cancel();
 				}
-				mCallLoad = Global.getNetEngine().obtainReplyMessage("", mReqPageObj);
+				mCallLoad = Global.getNetEngine().obtainReplyMessage(mReqPageObj);
 				mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<ReplyMessage>>>() {
 					@Override
 					public void onResponse(Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> call,

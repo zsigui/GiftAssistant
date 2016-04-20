@@ -25,10 +25,13 @@ public class GameObserverReceiver extends BroadcastReceiver {
 		}
 		if (AlarmClockManager.Action.ALARM_PLAY_GAME.equals(intent.getAction())
 				&& intent.getCategories().contains(AlarmClockManager.Category.GCOOL_DEFAULT)) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + intent.getAction());
+			}
 			ThreadUtil.runInThread(new Runnable() {
 				@Override
 				public void run() {
-					ScoreManager.getInstance().judgePlayTime(context, AlarmClockManager.ALARM_WAKE_ELAPSED_TIME);
+					ScoreManager.getInstance().judgePlayTime(context, AlarmClockManager.ALARM_WAKE_ELAPSED_TIME / 1000);
 				}
 			});
 		}

@@ -48,21 +48,21 @@
 			android:layout_marginTop = "10dp"
 			android:hint = "@string/st_feedback_phone_hint" />
 
-	<LinearLayout
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:gravity = "center" >
+	<!--<LinearLayout-->
+			<!--android:layout_width = "match_parent"-->
+			<!--android:layout_height = "wrap_content"-->
+			<!--android:gravity = "center" >-->
 
-		<TextView
-				android:id = "@+id/btn_send"
-				style = "@style/DefaultTextView"
-				android:layout_width = "200dp"
-				android:layout_height = "@dimen/di_btn_bigger_height"
-				android:layout_gravity = "center"
-				android:layout_marginBottom = "25dp"
-				android:layout_marginTop = "20dp"
-				android:background = "@drawable/selector_btn_bigger_red"
-				android:text = "@string/st_feedback_btn"
-				android:textColor = "@color/co_white" />
-	</LinearLayout >
+		<!--<TextView-->
+				<!--android:id = "@+id/btn_send"-->
+				<!--style = "@style/DefaultTextView"-->
+				<!--android:layout_width = "200dp"-->
+				<!--android:layout_height = "@dimen/di_btn_bigger_height"-->
+				<!--android:layout_gravity = "center"-->
+				<!--android:layout_marginBottom = "25dp"-->
+				<!--android:layout_marginTop = "20dp"-->
+				<!--android:background = "@drawable/selector_btn_bigger_red"-->
+				<!--android:text = "@string/st_feedback_btn"-->
+				<!--android:textColor = "@color/co_white" />-->
+	<!--</LinearLayout >-->
 </LinearLayout >

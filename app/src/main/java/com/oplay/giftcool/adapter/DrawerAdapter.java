@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.DrawerModel;
+import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-21.
@@ -46,22 +48,24 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel> {
 		switch (item.count) {
 			case 0:
 				drawerItemHolder.tvCount.setVisibility(View.GONE);
-				if(item.id == KeyConfig.TYPE_ID_TASK) {
-					drawerItemHolder.tvAttend.setText(TEXT_ATTEND);
-					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_red_border);
-					drawerItemHolder.tvAttend.setTextColor(COLOR_ATTEND);
-					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
-				} else {
-					drawerItemHolder.tvAttend.setVisibility(View.GONE);
-				}
-				break;
-			default:
-				if (item.id == KeyConfig.TYPE_ID_TASK) {
+				if(item.id == KeyConfig.TYPE_SIGN_IN_EVERY_DAY) {
+					KLog.d(AppDebugConfig.TAG_WARN, "sign has attended");
 					drawerItemHolder.tvAttend.setText(TEXT_HAS_ATTENDED);
 					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_grey_border);
 					drawerItemHolder.tvAttend.setTextColor(COLOR_HAS_ATTENDED);
 					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
 					drawerItemHolder.tvCount.setVisibility(View.GONE);
+				} else {
+					drawerItemHolder.tvAttend.setVisibility(View.GONE);
+				}
+				break;
+			default:
+				if (item.id == KeyConfig.TYPE_SIGN_IN_EVERY_DAY) {
+					KLog.d(AppDebugConfig.TAG_WARN, "sign not attend");
+					drawerItemHolder.tvAttend.setText(TEXT_ATTEND);
+					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_red_border);
+					drawerItemHolder.tvAttend.setTextColor(COLOR_ATTEND);
+					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
 				} else {
 					drawerItemHolder.tvAttend.setVisibility(View.GONE);
 					drawerItemHolder.tvCount.setVisibility(View.VISIBLE);

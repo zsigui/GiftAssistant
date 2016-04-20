@@ -280,7 +280,7 @@ public class AssistantApp extends Application {
                     .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
                     .cache(cacheFile)
                     .addInterceptor(cacheInterceptor)
-                    .retryOnConnectionFailure(true)
+                    .retryOnConnectionFailure(false)
                     .build();
         }
         return mHttpClient;
@@ -501,6 +501,9 @@ public class AssistantApp extends Application {
     }
 
     public Gson getGson() {
+        if (mGson == null) {
+            initGson();
+        }
         return mGson;
     }
 
@@ -530,6 +533,10 @@ public class AssistantApp extends Application {
     public void setStartImg(String startImg) {
         if (TextUtils.isEmpty(startImg)) {
             return;
+        }
+        if (ImageLoader.getInstance().isInited()) {
+            // 先进行预加载
+            ImageLoader.getInstance().loadImage(startImg, null);
         }
         mStartImg = startImg;
         SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);

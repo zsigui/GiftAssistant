@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.receiver.GameObserverReceiver;
 import com.oplay.giftcool.receiver.StartReceiver;
 import com.socks.library.KLog;
 
@@ -115,7 +116,7 @@ public class AlarmClockManager {
 	 */
 	public void startGameObserverAlarm(Context context) {
 		if (mPlayGameSender == null) {
-			Intent startIntent = new Intent(context, StartReceiver.class);
+			Intent startIntent = new Intent(context, GameObserverReceiver.class);
 			startIntent.setAction(Action.ALARM_PLAY_GAME);
 			startIntent.addCategory(Category.GCOOL_DEFAULT);
 			try {
@@ -127,6 +128,7 @@ public class AlarmClockManager {
 				}
 			}
 		}
+		KLog.d(AppDebugConfig.TAG_WARN, "startGameObserverAlarm");
 		AlarmManager am = getAlarmManager(context);
 		am.cancel(mPlayGameSender);
 		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, mPlayGameSender);

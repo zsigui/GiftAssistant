@@ -118,10 +118,10 @@ public class SocketIOManager {
 								: null));
 					}
 					if (args != null && args.length > 0) {
-						// 处于前台中，直接发送通知
 						try {
 							Gson gson = AssistantApp.getInstance().getGson();
 							final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
+								// 处于前台中，直接发送通知
 							if (SystemUtil.isMyAppInForeground(mAppContext)) {
 								ThreadUtil.runOnUiThread(new Runnable() {
 									@Override

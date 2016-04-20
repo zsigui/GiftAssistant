@@ -15,7 +15,11 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -34,7 +38,8 @@ import retrofit2.Response;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class FeedBackFragment extends BaseFragment implements TextWatcher, TextView.OnEditorActionListener {
+public class FeedBackFragment extends BaseFragment implements TextWatcher, TextView.OnEditorActionListener,
+        OnBackPressListener {
 
     private final static String PAGE_NAME = "意见反馈";
     //	private RadioButton rbFunction;
@@ -43,7 +48,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     private EditText etContent;
     private TextView tvContentCount;
     private EditText etPhone;
-    private TextView btnSend;
+//    private TextView btnSend;
     private TextView tvTypeTitle;
 
     public static FeedBackFragment newInstance() {
@@ -67,17 +72,19 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         etContent = getViewById(R.id.et_content);
         tvContentCount = getViewById(R.id.tv_content_count);
         etPhone = getViewById(R.id.et_phone);
-        btnSend = getViewById(R.id.btn_send);
+//        btnSend = getViewById(R.id.btn_send);
         tvTypeTitle = getViewById(R.id.tv_type_title);
     }
 
     @Override
     protected void setListener() {
-        btnSend.setOnClickListener(this);
+//        btnSend.setOnClickListener(this);
         etContent.addTextChangedListener(this);
         etContent.setOnEditorActionListener(this);
         tvTypeTitle.setOnClickListener(this);
     }
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
@@ -85,6 +92,22 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         tvTypeTitle.setText(Html.fromHtml(String.format("%s  <font color='#f85454'>%s</font>",
                 getResources().getString(R.string.st_feedback_type_title), MixUtil.getQQInfo()[0])));
         InputMethodUtil.showSoftInput(getActivity());
+        if (getContext() != null && getContext() instanceof ToolbarListener) {
+            ((ToolbarListener) getContext()).showRightBtn(View.VISIBLE,
+                    mApp.getResources().getString(R.string.st_feedback_btn));
+            ((ToolbarListener) getContext()).setRightBtnEnabled(false);
+            ((ToolbarListener) getContext()).setRightBtnListener(new OnShareListener() {
+                @Override
+                public void share() {
+                    final long curTime = System.currentTimeMillis();
+                    if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+                        mLastClickTime = curTime;
+                        return;
+                    }
+                    handleCommit();
+                }
+            });
+        }
     }
 
     @Override
@@ -116,10 +139,20 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (s.toString().length() > 500) {
+        final int length = s.toString().trim().length();
+        if (length > 500) {
             s.subSequence(0, 500);
         }
         tvContentCount.setText(String.format("%s/500", s.toString().length()));
+        if (length < 10 || etPhone.getText().toString().trim().isEmpty()) {
+            if (getContext() != null && getContext() instanceof ToolbarListener) {
+                ((ToolbarListener) getContext()).setRightBtnEnabled(false);
+            }
+        } else {
+            if (getContext() != null && getContext() instanceof ToolbarListener) {
+                ((ToolbarListener) getContext()).setRightBtnEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -183,6 +216,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
                                 ToastUtil.showShort("反馈成功，谢谢你");
+                                ScoreManager.getInstance().setTaskFinished(true);
                                 if (getActivity() != null) {
                                     getActivity().onBackPressed();
                                 }
@@ -214,5 +248,15 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     @Override
     public String getPageName() {
         return PAGE_NAME;
+    }
+
+    @Override
+    public boolean onBack() {
+        // 隐藏输入框
+        InputMethodUtil.hideSoftInput(mActivity);
+        if (getContext() != null && getContext() instanceof ToolbarListener) {
+            ((ToolbarListener) getContext()).showRightBtn(View.GONE, "");
+        }
+        return false;
     }
 }

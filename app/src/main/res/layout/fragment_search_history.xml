@@ -5,7 +5,7 @@
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent" >
 
-	<ScrollView
+	<!--<ScrollView
 			xmlns:android = "http://schemas.android.com/apk/res/android"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
@@ -112,15 +112,60 @@
 
 
 		</LinearLayout >
-	</ScrollView >
+	</ScrollView >-->
+
+	<RelativeLayout
+			style = "@style/IndexModuleTitleLayout.Bigger"
+			android:id="@+id/rl_header"
+			android:layout_marginTop = "@dimen/di_index_module_gap" >
+
+		<TextView
+				style = "@style/DefaultTextView.Header"
+				android:layout_alignParentLeft = "true"
+				android:text = "@string/st_search_history_clear_title" />
+
+		<TextView
+				android:id = "@+id/tv_clear"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:layout_height = "match_parent"
+				android:paddingLeft = "10dp"
+				android:text = "@string/st_search_history_clear_sub" />
+	</RelativeLayout >
+	<FrameLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:layout_marginTop = "@dimen/di_divider_height"
+			android:id="@+id/fl_content"
+			android:layout_below="@+id/rl_header"
+			android:background = "@color/co_white" >
+
+		<com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout
+				android:id = "@+id/rl_history"
+				style = "@style/DefaultRelativeLayout"
+				android:paddingBottom = "12dp"
+				android:paddingLeft = "6dp"
+				android:paddingRight = "10dp"
+				android:paddingTop = "6dp"
+				android:visibility = "gone" />
+
+		<TextView
+				android:id = "@+id/tv_history_empty"
+				style = "@style/DefaultTextView.Text"
+				android:layout_width = "match_parent"
+				android:gravity = "center"
+				android:padding = "25dp"
+				android:text = "@string/st_search_history_empty"
+				android:textSize = "13sp"
+				android:visibility = "gone" />
+	</FrameLayout >
 
 	<ImageView
 			android:id = "@+id/iv_hope_gift"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			android:layout_alignParentRight = "true"
-			android:layout_alignParentBottom = "true"
-			android:layout_marginBottom = "100dp"
+			android:layout_below="@+id/fl_content"
 			android:src = "@drawable/ic_hope_gift_side" />
 
 </RelativeLayout >

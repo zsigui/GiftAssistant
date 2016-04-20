@@ -29,6 +29,7 @@ import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.debug.Debug_SDK;
@@ -137,6 +138,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
 				KLog.d(AppDebugConfig.TAG_WARN, "alert message = " + message);
+				ToastUtil.showShort("Alert内容显示:" + message);
 				return super.onJsAlert(view, url, message, result);
 			}
 		});

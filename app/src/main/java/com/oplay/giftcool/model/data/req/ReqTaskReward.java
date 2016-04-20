@@ -20,6 +20,12 @@ public class ReqTaskReward {
 	public int replyNotify;
 
 	/**
+	 * 试玩游戏需要传特定ID
+	 */
+	@SerializedName("app_id")
+	public String appId;
+
+	/**
 	 * 当任务为签到时写入，空则取今日
 	 */
 	@SerializedName("date")

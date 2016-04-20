@@ -1,5 +1,7 @@
 package com.oplay.giftcool.ui.fragment.dialog;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
 import com.oplay.giftcool.R;
@@ -8,7 +10,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 /**
  * Created by zsigui on 16-3-4.
  */
-public class HopeGiftDialog extends BaseFragment_Dialog {
+public class HopeGiftDialog extends BaseFragment_Dialog implements TextWatcher {
 
 	private int mGameId = 0;
 	private String mName;
@@ -38,6 +40,7 @@ public class HopeGiftDialog extends BaseFragment_Dialog {
 	protected void processLogic() {
 		setTitle(getResources().getString(R.string.st_dialog_hope_gift_title));
 		setPositiveBtnText(getResources().getString(R.string.st_dialog_hope_gift_btn_confirm));
+		etName.addTextChangedListener(this);
 		setName(mName);
 		setNote(mNote);
 		setCanEditName(mCanEditName);
@@ -84,5 +87,24 @@ public class HopeGiftDialog extends BaseFragment_Dialog {
 			return etNote.getText().toString().trim();
 		}
 		return mNote;
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		if (s.toString().trim().length() > 0) {
+			btnPositive.setEnabled(true);
+		} else {
+			btnPositive.setEnabled(false);
+		}
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+
 	}
 }

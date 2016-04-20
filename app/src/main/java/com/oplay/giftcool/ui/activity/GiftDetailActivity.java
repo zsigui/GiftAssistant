@@ -151,6 +151,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		if (requestCode == ShareSDKConfig.SHARE_REQUEST_CODE) {
 			switch (resultCode) {
 				case Activity.RESULT_OK:
+					ScoreManager.getInstance().setTaskFinished(true);
 					ScoreManager.getInstance().reward(null, true);
 					break;
 				case Activity.RESULT_CANCELED:

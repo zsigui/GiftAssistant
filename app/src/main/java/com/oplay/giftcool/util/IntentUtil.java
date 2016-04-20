@@ -169,7 +169,7 @@ public class IntentUtil {
 	 * 跳转金币任务界面
 	 */
 	public static void jumpEarnScore(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -189,7 +189,7 @@ public class IntentUtil {
 	 * 跳转我的礼包界面
 	 */
 	public static void jumpMyGift(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -210,7 +210,7 @@ public class IntentUtil {
 	 * 跳转我的钱包界面
 	 */
 	public static void jumpMyWallet(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -222,7 +222,7 @@ public class IntentUtil {
 	 * 跳转我的关注界面
 	 */
 	public static void jumpMyAttention(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -281,7 +281,7 @@ public class IntentUtil {
 	 * 跳转消息中心
 	 */
 	public static void jumpMessageCentral(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
@@ -293,7 +293,7 @@ public class IntentUtil {
 	 * 跳转新礼包通知消息列表
 	 */
 	public static void jumpNewGiftNotify(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
@@ -305,7 +305,7 @@ public class IntentUtil {
 	 * 跳转收到的赞消息列表
 	 */
 	public static void jumpAdmireMessage(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
@@ -317,7 +317,7 @@ public class IntentUtil {
 	 * 跳转系统消息列表
 	 */
 	public static void jumpSystemMessage(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
@@ -329,7 +329,7 @@ public class IntentUtil {
 	 * 跳转收到的回复消息列表
 	 */
 	public static void jumpCommentMessage(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
@@ -369,7 +369,7 @@ public class IntentUtil {
 	 * 跳转反馈界面
 	 */
 	public static void jumpFeedBack(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -381,7 +381,7 @@ public class IntentUtil {
 	 * 跳转用户信息界面
 	 */
 	public static void jumpUserInfo(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -393,7 +393,7 @@ public class IntentUtil {
 	 * 跳转设置用户昵称界面
 	 */
 	public static void jumpUserSetNick(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -405,7 +405,7 @@ public class IntentUtil {
 	 * 跳转设置用户头像界面
 	 */
 	public static void jumpUserSetAvatar(Context context) {
-		if (MixUtil.needLoginFirst(context)){
+		if (MixUtil.needLoginFirst(context)) {
 			return;
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
@@ -440,7 +440,7 @@ public class IntentUtil {
 	 * 跳转每日签到页面
 	 */
 	public static void jumpSignIn(Context context) {
-		IntentUtil.jumpActivityWeb(context, WebViewUrl.getWebUrl(WebViewUrl.SIGNIN),
+		IntentUtil.jumpActivityWeb(context, WebViewUrl.getWebUrl(WebViewUrl.SIGN_IN),
 				context.getString(R.string.st_post_sign_in));
 	}
 
@@ -483,17 +483,17 @@ public class IntentUtil {
 	/**
 	 * 跳转活动详情页面
 	 */
-	public static void jumpPostDetail(Context context, int id) {
+	public static void jumpPostDetail(Context context, int postId) {
 		Intent intent = new Intent(context, PostDetailActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
-		intent.putExtra(KeyConfig.KEY_DATA, id);
+		intent.putExtra(KeyConfig.KEY_DATA, postId);
 		context.startActivity(intent);
 	}
 
 	/**
 	 * 跳转活动评论详情页面
 	 */
-	public static void jumpPostDetail(Context context, int postId, int commentId) {
+	public static void jumpPostReplyDetail(Context context, int postId, int commentId) {
 		Intent intent = new Intent(context, PostDetailActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_COMMENT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, postId);
@@ -506,7 +506,8 @@ public class IntentUtil {
 	 */
 	public static void jumpPostOfficialList(Context context) {
 		Intent intent = new Intent(context, PostListActivity.class);
-		intent.putExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_POST_OFFICIAL);
+		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_OFFICIAL);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
 
@@ -527,7 +528,7 @@ public class IntentUtil {
 	 * 跳转评论详情页面
 	 *
 	 * @param context 上下文
-	 * @param postId 活动ID
+	 * @param postId  活动ID
 	 * @param replyId 评论ID
 	 */
 	public static void jumpReplyDetail(Context context, int postId, int replyId) {

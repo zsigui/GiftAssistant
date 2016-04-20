@@ -20,6 +20,7 @@ import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
+import com.oplay.giftcool.model.data.req.ReqSignInInit;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
@@ -49,6 +50,7 @@ import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.data.resp.message.ReplyMessage;
 import com.oplay.giftcool.model.data.resp.message.SystemMessage;
 import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
+import com.oplay.giftcool.model.data.resp.task.TaskSignInfo;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -279,7 +281,7 @@ public interface NetEngine {
 	@POST(NetUrl.USER_GET_PART_INFO)
 	Call<JsonRespBase<UserInfo>> getUserPartInfo(@Body JsonReqBase<Void> reqData);
 
-	/* ---------------- 金币接口  ---------------- */
+	/* ---------------- 任务接口  ---------------- */
 
 	/**
 	 * 获取金币任务
@@ -292,6 +294,12 @@ public interface NetEngine {
 	 */
 	@POST(NetUrl.SCORE_REWARD)
 	Call<JsonRespBase<MissionReward>> obtainTaskReward(@Body JsonReqBase<ReqTaskReward> reqData);
+
+	/**
+	 * 进行签到信息初始化
+	 */
+	@POST(NetUrl.SCORE_SIGNIN_INIT)
+	Call<JsonRespBase<TaskSignInfo>> obtainDailySignInInfo(@Body JsonReqBase<ReqSignInInit> reqData);
 
 	/* ---------------- 应用接口  ---------------- */
 	@POST(NetUrl.APP_POST_FEEDBACK)
@@ -333,13 +341,13 @@ public interface NetEngine {
 	/**
 	 * 获取回复消息列表，根据url决定是回复的还是点赞
 	 */
-	@POST
-	Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> obtainReplyMessage(@Url String url, @Body JsonReqBase<ReqPageData> reqData);
+	@POST(NetUrl.MESSAGE_REPLY_LIST)
+	Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> obtainReplyMessage(@Body JsonReqBase<ReqPageData> reqData);
 
 	/**
 	 * 获取系统消息列表
 	 */
-	@POST("")
+	@POST(NetUrl.MESSAGE_PUSH_LIST)
 	Call<JsonRespBase<OneTypeDataList<SystemMessage>>> obtainSystemMessage(@Body JsonReqBase<ReqPageData> reqData);
 
 	/*---------------- JS调用的异步方法，传参返回都用JSON字符串 -----------------*/

@@ -3,6 +3,7 @@ package com.oplay.giftcool.model.data.resp.message;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 回复消息实体
@@ -14,54 +15,60 @@ public class ReplyMessage implements Serializable {
 	/**
 	 * 活动ID
 	 */
-	@SerializedName("")
+	@SerializedName("activity_id")
 	public int postId;
 
 	/**
 	 * 评论ID
 	 */
-	@SerializedName("")
-	public int replyId;
+	@SerializedName("comment_id")
+	public int commentId;
 
 	/**
 	 * 收到的赞或评论ID
 	 */
-	@SerializedName("")
-	public int commentId;
+	@SerializedName("ref_comment_id")
+	public int reCommentId;
 
 	/**
 	 * 用户头像
 	 */
-	@SerializedName("")
+	@SerializedName("avatar")
 	public String icon;
 
 	/**
 	 * 用户昵称/手机号/偶玩号
 	 */
-	@SerializedName("")
+	@SerializedName("nick")
 	public String name;
 
 	/**
 	 * 回复内容
 	 */
-	@SerializedName("")
+	@SerializedName("content")
 	public String content;
 
 	/**
 	 * 回复时间s
 	 */
-	@SerializedName("")
+	@SerializedName("create_time")
 	public String time;
 
 	/**
 	 * 评论图片
 	 */
-	@SerializedName("")
-	public String hintPic;
+	@SerializedName("ref_imgs")
+	public ArrayList<String> hintPics;
 
 	/**
 	 * 评论内容，当图片为空时采用
 	 */
-	@SerializedName("")
+	@SerializedName("ref_content")
 	public String hintText;
+
+	/**
+	 * 发表评论的用户ID
+	 */
+	@SerializedName("user_id")
+	public int reCommentUserId;
 }

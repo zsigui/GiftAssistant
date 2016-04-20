@@ -19,6 +19,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
@@ -60,6 +61,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		ScoreManager.getInstance().containDownloadTask(this, null);
 		super.onCreate(savedInstanceState);
 	}
 

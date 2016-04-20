@@ -27,6 +27,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -173,17 +174,19 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
+				KLog.d(AppDebugConfig.TAG_WARN, "isLogin() = " + AccountManager.getInstance().isLogin()
+						+ ", isSignIn = " + ScoreManager.getInstance().isSignInTaskFinished());
 				if (AccountManager.getInstance().isLogin()) {
-					if (AccountManager.getInstance().getUserInfo().isCompleteTodayMission) {
-						updateHintState(KeyConfig.TYPE_ID_TASK, 1);
+					if (ScoreManager.getInstance().isSignInTaskFinished()) {
+						updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 0);
 					} else {
-						updateHintState(KeyConfig.TYPE_ID_TASK, 0);
+						updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
 					}
 					UserInfo user = AccountManager.getInstance().getUserInfo();
 					tvGiftCount.setText(String.valueOf(user.giftCount));
 					ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 				} else {
-					updateHintState(KeyConfig.TYPE_ID_TASK, 0);
+					updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
 					ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 					ivProfile.setTag("");
 					tvGiftCount.setText("0");
@@ -435,12 +438,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				}
 				break;
 			case R.id.ll_gift_count:
-//				if (AccountManager.getInstance().isLogin()) {
-//					IntentUtil.jumpMyGift(MainActivity.this);
-//				} else {
-//					IntentUtil.jumpLogin(MainActivity.this);
-//				}
-				IntentUtil.jumpPostDetail(this, 1);
+				if (AccountManager.getInstance().isLogin()) {
+					IntentUtil.jumpMyGift(MainActivity.this);
+				} else {
+					IntentUtil.jumpLogin(MainActivity.this);
+				}
 				break;
 		}
 	}
@@ -485,6 +487,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public void onUserUpdate(int action) {
 		switch (action) {
 			case ObserverManager.STATUS.USER_UPDATE_ALL:
+			case ObserverManager.STATUS.USER_UPDATE_TASK:
 				updateToolBar();
 				break;
 			case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
@@ -516,9 +519,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					if (count != 0) {
 						mHintCount.put(key, count);
 						ivHint.setVisibility(View.VISIBLE);
-						if (mDrawerFragment != null) {
-							mDrawerFragment.updateCount(key, count);
-						}
 					}
 				} else {
 					// 原先已经存在该键值
@@ -534,9 +534,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 						mHintCount.put(key, count);
 						ivHint.setVisibility(View.VISIBLE);
 					}
-					if (mDrawerFragment != null) {
-						mDrawerFragment.updateCount(key, count);
-					}
+				}
+				if (mDrawerFragment != null) {
+					mDrawerFragment.updateCount(key, count);
 				}
 			}
 		}, 300);
@@ -544,9 +544,26 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void handleFirstOpen() {
-		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null
-				&& hasLoadPic() && mHandler != null) {
-			sIsTodayFirstOpenForBroadcast = false;
+//		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null
+//				&& hasLoadPic() && mHandler != null) {
+			// 每次打开APP显示弹窗
+//			sIsTodayFirstOpenForBroadcast = false;
+//			mHandler.postDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
+//					dialog.show(getSupportFragmentManager(), "broadcast");
+//				}
+//			}, 1000);
+//
+//		}
+
+		if (AccountManager.getInstance().isLogin() && AccountManager.getInstance().getUserInfo().isFirstLogin) {
+			// 首次登录显示弹窗
+//			DialogManager.getInstance().showSignInDialog(
+//					AccountManager.getInstance().getUserInfo().isFirstLogin,
+//					this,
+//					getSupportFragmentManager());
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
@@ -554,13 +571,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 					dialog.show(getSupportFragmentManager(), "broadcast");
 				}
 			}, 1000);
-
-		}
-		if (AccountManager.getInstance().isLogin()) {
-			DialogManager.getInstance().showSignInDialog(
-					AccountManager.getInstance().getUserInfo().isFirstLogin,
-					this,
-					getSupportFragmentManager());
+			AccountManager.getInstance().getUserInfo().isFirstLogin = false;
 		}
 //		else if (sIsTodayFirstOpen && mHandler != null) {
 //			sIsTodayFirstOpen = false;

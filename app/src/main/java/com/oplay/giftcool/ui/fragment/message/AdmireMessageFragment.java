@@ -8,7 +8,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MessageReplyAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -20,7 +19,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -87,6 +85,17 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 		rvData.setAdapter(mAdapter);
 	}
 
+	private void initReqPage() {
+		if (mReqPageObj == null) {
+			ReqPageData page = new ReqPageData();
+			page.page = PAGE_FIRST;
+			page.pageSize = 10;
+			// 评论为0，点赞为1
+			page.type = 1;
+			mReqPageObj = new JsonReqBase<>(page);
+		}
+	}
+
 	@Override
 	protected void lazyLoad() {
 		refreshInitConfig();
@@ -95,11 +104,12 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 			@Override
 			public void run() {
 				if (NetworkUtil.isConnected(getContext())) {
+					initReqPage();
 					mReqPageObj.data.page = PAGE_FIRST;
 					if (mCallRefresh != null) {
 						mCallRefresh.cancel();
 					}
-					mCallRefresh = Global.getNetEngine().obtainReplyMessage(mUrl, mReqPageObj);
+					mCallRefresh = Global.getNetEngine().obtainReplyMessage(mReqPageObj);
 					mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<ReplyMessage>>>() {
 						@Override
 						public void onResponse(Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> call,
@@ -152,11 +162,12 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 					moreLoadFailEnd();
 					return;
 				}
+				initReqPage();
 				mReqPageObj.data.page = mLastPage + 1;
 				if (mCallLoad != null) {
 					mCallLoad.cancel();
 				}
-				mCallLoad = Global.getNetEngine().obtainReplyMessage(mUrl, mReqPageObj);
+				mCallLoad = Global.getNetEngine().obtainReplyMessage(mReqPageObj);
 				mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<ReplyMessage>>>() {
 					@Override
 					public void onResponse(Call<JsonRespBase<OneTypeDataList<ReplyMessage>>> call,

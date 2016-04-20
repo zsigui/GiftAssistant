@@ -96,7 +96,7 @@ public class ShareSDKManager {
 		// 设置分享成功后奖励类型
 		String title;
 		String b_desc;
-		ScoreManager.getInstance().setRewardCode(ScoreManager.RewardType.SHARE_GIFT);
+		ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_GIFT_SHARE);
 		if (gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
 				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
 			title = String.format(

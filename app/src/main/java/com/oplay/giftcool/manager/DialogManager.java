@@ -55,6 +55,7 @@ public class DialogManager {
 		mContext = AssistantApp.getInstance();
 	}
 
+	long mLastClickTime = 0;
 	/**
 	 * 显示求礼包界面
 	 */
@@ -74,6 +75,11 @@ public class DialogManager {
 
 			@Override
 			public void onConfirm() {
+				long curTime = System.currentTimeMillis();
+				if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+					mLastClickTime = curTime;
+					return;
+				}
 				handleHopeGiftRequest(fm, dialog, dialog.getGameId(), dialog.getName(), dialog.getNote());
 				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS);
 			}

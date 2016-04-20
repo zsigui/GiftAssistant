@@ -26,6 +26,7 @@ import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
@@ -320,6 +321,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		}
 		SocketIOManager.getInstance().connectOrReConnect(true);
 		AccountManager.getInstance().notifyUserAll(userModel);
+		ScoreManager.getInstance().initSignInState(getContext());
 		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID
 				.USER_OUWAN_LOGIN, "用户名=" + userModel.userInfo.username);
 		((BaseAppCompatActivity) getActivity()).onBack();

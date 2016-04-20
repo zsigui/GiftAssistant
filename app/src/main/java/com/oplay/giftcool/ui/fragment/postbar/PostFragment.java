@@ -326,8 +326,10 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 									transferIndexPostToArray(mInitData);
 									updateDate(mData);
 									return;
+								} else {
+									mAdapter.toggleButton(false, false);
+									ToastUtil.showShort("没有相关关注快讯");
 								}
-								ToastUtil.showShort("获取出错-返回为空");
 								return;
 							}
 							if (AppDebugConfig.IS_DEBUG) {

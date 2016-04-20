@@ -160,6 +160,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
 			}
 			user = assistantApp.getGson().fromJson(userJson, UserModel.class);
+			if (user != null && user.userInfo != null) {
+				// 将首次登录状态清掉，再次获取已经不属于首次登录
+				user.userInfo.isFirstLogin = false;
+			}
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(AppDebugConfig.TAG_APP, e);
