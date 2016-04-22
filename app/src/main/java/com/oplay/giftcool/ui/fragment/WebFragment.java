@@ -3,11 +3,10 @@ package com.oplay.giftcool.ui.fragment;
 import android.os.Bundle;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * 活动WEB页面
@@ -16,6 +15,11 @@ import com.socks.library.KLog;
  */
 public class WebFragment extends BaseFragment_WebView {
 	private static final String PAGE_NAME = "活动页面";
+
+	/**
+	 * 标识是否处于签到界面
+	 */
+	private boolean isInSignInView = false;
 
 	public static WebFragment newInstance(String url) {
 		WebFragment fragment = new WebFragment();
@@ -46,8 +50,8 @@ public class WebFragment extends BaseFragment_WebView {
 			return;
 		}
 		String url = getArguments().getString(KeyConfig.KEY_URL);
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.e(AppDebugConfig.TAG_FRAG, "frag.url = " + url);
+		if (url != null && url.toLowerCase().contains("checkin")) {
+			isInSignInView = true;
 		}
 		loadUrl(url);
 		mIsSwipeRefresh = true;
@@ -59,6 +63,15 @@ public class WebFragment extends BaseFragment_WebView {
 			reloadPage();
 		}
 		mIsSwipeRefresh = false;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (isInSignInView) {
+			ScoreManager.getInstance().initSignInState(getContext());
+			ScoreManager.getInstance().setTaskFinished(true);
+		}
 	}
 
 	@Override

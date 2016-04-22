@@ -108,13 +108,12 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		}
 		final int postId = getArguments().getInt(KEY_POST);
 		final int commentId = getArguments().getInt(KEY_COMMENT);
-		showBar(true, null);
 
 		reqToken.postId = postId;
 		reqData.put(KEY_POST_ID, postId);
 		reqData.put(KEY_COMMENT_ID, commentId);
 		setReplyTo(commentId, KEY_COMMMENT_TO_DEFAULT);
-		showBar(true, null);
+//		showBar(true, null);
 		mWebView.loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
 	}
 
@@ -137,7 +136,10 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			reqData.put(KEY_COMMENT_ID, commentId);
 		}
 		if (etContent != null) {
-			etContent.setText(String.format("回复%s", name));
+			etContent.setHint(String.format("回复%s", name));
+			etContent.requestFocus();
+//			replyToStep = walkStep++;
+//			llBackground.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -265,8 +267,11 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	 */
 	private void refreshAfterPost() {
 		ToastUtil.showShort("评论成功");
-		hideLoading();
+		etContent.setText("");
+		replyStep = walkStep;
+		InputMethodUtil.hideSoftInput(getActivity());
 		reloadPage();
+		hideLoading();
 	}
 
 	/**
@@ -279,7 +284,9 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 				b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
 						, "UTF-8")).append("&");
 			} catch (UnsupportedEncodingException e) {
-				KLog.d(AppDebugConfig.TAG_WARN, e);
+				if (AppDebugConfig.IS_DEBUG) {
+					e.printStackTrace();
+				}
 			}
 		}
 		if (b.length() > 0) {
@@ -297,18 +304,45 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		DialogManager.getInstance().hideLoadingDialog();
 	}
 
+	private int walkStep = 10;
+	private int wvTouchStep;
+	private int textStep;
+	private int replyStep;
+	private int replyToStep;
+	private boolean mIsDown = false;
+	private long mLastTouchTime = 0;
+
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		switch (v.getId()) {
-			case R.id.et_content:
-				etContent.requestFocus();
-				llBackground.setVisibility(View.VISIBLE);
-				InputMethodUtil.showSoftInput(getActivity());
-				mShowSoftInput = true;
+
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				long curTime = System.currentTimeMillis();
+				if (curTime - mLastClickTime < 100) {
+					mLastTouchTime = curTime;
+					break;
+				}
+				mIsDown = true;
 				break;
-			case R.id.wv_container:
-				InputMethodUtil.hideSoftInput(getActivity());
-				break;
+		}
+		if (mIsDown) {
+			switch (v.getId()) {
+				case R.id.et_content:
+					etContent.requestFocus();
+					if (InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
+						textStep = walkStep;
+						llBackground.setVisibility(View.VISIBLE);
+					}
+//				InputMethodUtil.showSoftInput(getActivity());
+					break;
+				case R.id.wv_container:
+					wvTouchStep = walkStep;
+					InputMethodUtil.hideSoftInput(getActivity());
+//				llBackground.setVisibility(View.GONE);
+					break;
+			}
+			mIsDown = false;
 		}
 		return false;
 	}
@@ -316,6 +350,9 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 
 	@Override
 	public void onGlobalLayout() {
+		if (getActivity() == null) {
+			return;
+		}
 		int softInputHeight = AssistantApp.getInstance().getSoftInputHeight(getActivity());
 		final int curHeight = InputMethodUtil.getSoftInputHeight(getActivity());
 		if (curHeight != 0 && softInputHeight != curHeight) {
@@ -326,12 +363,22 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			mLastSoftInputHeight = softInputHeight;
 			resetLayoutParams();
 		}
-
-		if (curHeight == 0) {
-			if (mShowSoftInput) {
-				llBackground.setVisibility(View.GONE);
-				mShowSoftInput = false;
-			}
+		if (walkStep== textStep) {
+			walkStep ++;
+			InputMethodUtil.showSoftInput(getActivity());
+		} else if (walkStep == wvTouchStep) {
+			walkStep += 5;
+			llBackground.setVisibility(View.GONE);
+		} else if (walkStep - 1 == textStep && curHeight == 0) {
+//			InputMethodUtil.hideSoftInput(getActivity());
+			walkStep += 5;
+			llBackground.setVisibility(View.GONE);
+		} else if (walkStep== replyToStep) {
+			walkStep += 5;
+			InputMethodUtil.showSoftInput(getActivity());
+		} else if (replyStep == walkStep) {
+			walkStep += 5;
+			llBackground.setVisibility(View.GONE);
 		}
 	}
 

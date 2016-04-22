@@ -12,30 +12,30 @@ public class SystemMessage implements Serializable {
 	/**
 	 * 系统消息ID
 	 */
-	@SerializedName("")
+	@SerializedName("message_id")
 	public int id;
 
 	/**
 	 * 消息标题
 	 */
-	@SerializedName("")
+	@SerializedName("title")
 	public String title;
 
 	/**
 	 * 是否已读
 	 */
-	@SerializedName("")
+	@SerializedName("check")
 	public int isRead;
 
 	/**
 	 * 消息内容
 	 */
-	@SerializedName("")
+	@SerializedName("content")
 	public String content;
 
 	/**
 	 * 消息时间
 	 */
-	@SerializedName("")
+	@SerializedName("create_time")
 	public String time;
 }

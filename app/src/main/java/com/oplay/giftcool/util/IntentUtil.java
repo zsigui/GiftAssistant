@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
@@ -23,7 +22,6 @@ import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.activity.WebActivity;
-import com.socks.library.KLog;
 
 /**
  * @author JackieZhuang
@@ -516,7 +514,6 @@ public class IntentUtil {
 	 */
 	public static void jumpImplicit(Context context, String action, int type, String data) {
 		Intent intent = new Intent();
-		KLog.d(AppDebugConfig.TAG_WARN, "action = " + action);
 		intent.setAction(action);
 		intent.addCategory(Intent.CATEGORY_DEFAULT);
 		intent.putExtra(KeyConfig.KEY_DATA, data);
@@ -524,14 +521,4 @@ public class IntentUtil {
 		context.startActivity(intent);
 	}
 
-	/**
-	 * 跳转评论详情页面
-	 *
-	 * @param context 上下文
-	 * @param postId  活动ID
-	 * @param replyId 评论ID
-	 */
-	public static void jumpReplyDetail(Context context, int postId, int replyId) {
-
-	}
 }

@@ -14,6 +14,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.socks.library.KLog;
+import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
 
@@ -73,7 +74,7 @@ public class StatisticsManager {
 
 	}
 
-	private final String TC_APP_KEY = "0CC59F66C9823F0D3EF90AC61D9735FB";
+	private final String TC_APP_KEY = "7E57533EDCF044DA1BF657D786E0FDF7";
 	private final String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
 
 	private static StatisticsManager sInstance;
@@ -101,12 +102,14 @@ public class StatisticsManager {
 				return;
 			}
 			// TalkingData
-//			TCAgent.init(context, TC_APP_KEY,  String.valueOf(channelId));
+			TCAgent.init(context, TC_APP_KEY, String.valueOf(channelId));
+			TCAgent.setReportUncaughtExceptions(true);
 
 			// 友盟
 			AnalyticsConfig.setAppkey(context, UMENG_APP_KEY);
 			AnalyticsConfig.setChannel("m" + channelId);   //友盟渠道号不能纯数字
 			AnalyticsConfig.enableEncrypt(true);
+
 			boolean debugMode = false;
 			if (AppConfig.TEST_MODE) {
 				debugMode = true;
@@ -135,7 +138,7 @@ public class StatisticsManager {
 	public void onResume(Activity context) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onResume(context);
+			TCAgent.onResume(context);
 				MobclickAgent.onResume(context);
 			}
 		}
@@ -144,7 +147,7 @@ public class StatisticsManager {
 	public void onPause(Activity context) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onPause(context);
+			TCAgent.onPause(context);
 				MobclickAgent.onPause(context);
 			}
 		}
@@ -153,7 +156,7 @@ public class StatisticsManager {
 	public void onPageStart(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onPageStart(context, code);
+			TCAgent.onPageStart(context, name);
 				MobclickAgent.onPageStart(name);
 			}
 		}
@@ -162,7 +165,7 @@ public class StatisticsManager {
 	public void onPageEnd(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-//			TCAgent.onPageEnd(context, code);
+			TCAgent.onPageEnd(context, name);
 				MobclickAgent.onPageEnd(name);
 			}
 		}
@@ -178,7 +181,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-//			TCAgent.onEvent(context, id);
+			TCAgent.onEvent(context, id);
 						MobclickAgent.onEvent(context, id);
 					}
 				});
@@ -198,7 +201,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-//			TCAgent.onEvent(context, title, subtitle);
+			TCAgent.onEvent(context, id, subtitle);
 						MobclickAgent.onEvent(context, id, subtitle);
 					}
 				});
@@ -217,7 +220,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-//			TCAgent.onEvent(context, title, subtitle, keyMap);
+			TCAgent.onEvent(context, id, "", keyMap);
 						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
 							keyMap.put("__ct__", String.valueOf(val));
 							MobclickAgent.onEvent(context, id, keyMap);

@@ -164,12 +164,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	// 以下状态结合判断下端回复栏的显示
 	// 实现略丑陋，逻辑已经不会理了
-	private int imgShowStep = 0;
+	private final int BIG_INSCREASE = 5;
+	private final int NORMAL_INSCREASE = 1;
 	private int imgFailStep = 0;
-	private int imgHideStep = 0;
 	private int wvTouchStep = 0;
 	private int contentTouchStep = 0;
-	private int walkStep = 2;
+	private int replyToStep = 0;
+	private int walkStep = BIG_INSCREASE;
 
 	@Override
 	public void onClick(View v) {
@@ -182,16 +183,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 					return;
 				}
 				ivImgAdd.setSelected(true);
-				if (llImgPreview.getVisibility() == View.VISIBLE
-						&& InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
-					imgHideStep = walkStep++;
-					etContent.requestFocus();
+				walkStep += BIG_INSCREASE;
+				if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
 					InputMethodUtil.hideSoftInput(getActivity());
+				} else if (llImgPreview.getVisibility() == View.VISIBLE){
 					llImgPreview.setVisibility(View.GONE);
 				} else {
-					imgShowStep = walkStep++;
 					llImgPreview.setVisibility(View.VISIBLE);
-					InputMethodUtil.hideSoftInput(getActivity());
 				}
 				break;
 			case R.id.tv_send:
@@ -209,10 +207,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 * 选择图片成功返回的处理函数
 	 */
 	public void pickSuccess() {
-		imgShowStep = walkStep++;
 		ivImgAdd.setSelected(true);
-		llImgPreview.setVisibility(View.VISIBLE);
-		InputMethodUtil.hideSoftInput(getActivity());
+		walkStep += BIG_INSCREASE;
+		if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
+			InputMethodUtil.hideSoftInput(getActivity());
+		} else {
+			llImgPreview.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**
@@ -220,11 +221,21 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 */
 	public void pickFailed() {
 		mAdapter.setPicTextVal();
-		imgFailStep = walkStep++;
-		llImgPreview.setVisibility(View.GONE);
-		InputMethodUtil.hideSoftInput(getActivity());
 		ivImgAdd.setSelected(false);
 		etContent.requestFocus();
+		if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
+			imgFailStep = walkStep;
+			InputMethodUtil.hideSoftInput(getActivity());
+		} else if (llImgPreview.getVisibility() == View.VISIBLE) {
+			walkStep += BIG_INSCREASE;
+			llImgPreview.setVisibility(View.GONE);
+		}
+	}
+
+	public void toReply() {
+		if (etContent != null) {
+			etContent.requestFocus();
+		}
 	}
 
 	/**
@@ -416,7 +427,9 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 				b.append(entry.getKey()).append("=").append(URLEncoder.encode(String.valueOf(entry.getValue())
 						, "UTF-8")).append("&");
 			} catch (UnsupportedEncodingException e) {
-				KLog.d(AppDebugConfig.TAG_WARN, e);
+				if (AppDebugConfig.IS_DEBUG) {
+					e.printStackTrace();
+				}
 			}
 		}
 		if (b.length() > 0) {
@@ -434,10 +447,10 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		final int count = mPostImg.size();
 		mPostImg.clear();
 		mAdapter.notifyItemRangeRemoved(0, count);
+		reloadPage();
 		pickFailed();
 		hideLoading();
 		ToastUtil.showShort("回复成功");
-		reloadPage();
 	}
 
 	/**
@@ -498,35 +511,51 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 		}
 	}
 
+	private boolean mIsDown = false;
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		switch (v.getId()) {
-			case R.id.et_content:
-				// EditText点击打开软键盘之前，需要先显示llImgPreview才行，否则页面会被推上去
-				KLog.d(AppDebugConfig.TAG_WARN, "etContent is touch");
-				contentTouchStep = walkStep++;
-				llImgPreview.setVisibility(View.VISIBLE);
-				InputMethodUtil.showSoftInput(getActivity());
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				mIsDown = true;
 				break;
-			case R.id.wv_container:
-				KLog.d(AppDebugConfig.TAG_WARN, "WebView is touch");
-				wvTouchStep = walkStep;
-				walkStep += 2;
-//				llImgPreview.setVisibility(View.GONE);
-				InputMethodUtil.hideSoftInput(getActivity());
-				llImgPreview.requestLayout();
-				break;
+		}
+		if (mIsDown) {
+			switch (v.getId()) {
+				case R.id.et_content:
+					// EditText点击打开软键盘之前，需要先显示llImgPreview才行，否则页面会被推上去
+					if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
+						// ignored
+					} else if (llImgPreview.getVisibility() == View.VISIBLE) {
+						walkStep += BIG_INSCREASE;
+						InputMethodUtil.showSoftInput(getActivity());
+					} else {
+						contentTouchStep = walkStep;
+						llImgPreview.setVisibility(View.VISIBLE);
+					}
+					etContent.requestFocus();
+					break;
+				case R.id.wv_container:
+					if (InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
+						walkStep += BIG_INSCREASE;
+						llImgPreview.setVisibility(View.GONE);
+					} else {
+						InputMethodUtil.hideSoftInput(getActivity());
+					}
+					break;
+			}
+			mIsDown = false;
 		}
 		return false;
 	}
 
 	@Override
 	public void onGlobalLayout() {
+		if (getActivity() == null) {
+			return;
+		}
 		final int curHeight = InputMethodUtil.getSoftInputHeight(getActivity());
 		int softInputHeight = AssistantApp.getInstance().getSoftInputHeight(getActivity());
-		KLog.d(AppDebugConfig.TAG_WARN, "softInputHeight = " + softInputHeight + ", mLastInputHeight = " +
-				mLastSoftInputHeight);
 		if (curHeight > 0 && curHeight != softInputHeight) {
 			softInputHeight = curHeight;
 			AssistantApp.getInstance().setSoftInputHeight(curHeight);
@@ -535,43 +564,19 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			mLastSoftInputHeight = softInputHeight;
 			resetLayoutParams();
 		}
-		KLog.d(AppDebugConfig.TAG_WARN, "curHeight = " + curHeight
-				+ " , walkStep = " + walkStep
-				+ " , contentTouchStep = " + contentTouchStep
-				+ " , imgHideStep = " + imgHideStep
-				+ " , imgShowStep = " + imgShowStep
-				+ ", imgFailStep = " + imgFailStep
-				+ ", wvTouchStep = " + wvTouchStep);
 
-		if (curHeight == 0) {
-
-			if (contentTouchStep == walkStep - 1) {
-//				llImgPreview.setVisibility(View.VISIBLE);
-			} else if (contentTouchStep == walkStep - 2) {
-				llImgPreview.setVisibility(View.GONE);
-			} else if (imgHideStep == walkStep - 1) {
-				llImgPreview.setVisibility(View.GONE);
-			} else if (imgShowStep == walkStep - 1) {
-				llImgPreview.setVisibility(View.VISIBLE);
-			} else if (imgFailStep == walkStep - 1 && contentTouchStep == walkStep - 2) {
-				// 未选取图，保留前一次状态
-				llImgPreview.setVisibility(View.VISIBLE);
-				InputMethodUtil.showSoftInput(getActivity());
-			} else if (wvTouchStep == walkStep - 2) {
-				llImgPreview.setVisibility(View.GONE);
-			}
-			walkStep++;
-		} else {
-			if (contentTouchStep == walkStep - 1) {
-//				llImgPreview.setVisibility(View.VISIBLE);
-				walkStep++;
-			}
+		if (contentTouchStep == walkStep) {
+			walkStep += NORMAL_INSCREASE;
+			InputMethodUtil.showSoftInput(getActivity());
+		} else if ((contentTouchStep == walkStep - NORMAL_INSCREASE && curHeight == 0)
+				|| (imgFailStep == walkStep)
+				|| (wvTouchStep == walkStep)) {
+			walkStep += BIG_INSCREASE;
+			llImgPreview.setVisibility(View.GONE);
 		}
 	}
 
 	private void resetLayoutParams() {
-		KLog.d(AppDebugConfig.TAG_WARN, "resetLayoutParams = mLastSoftInputHeight =" + mLastSoftInputHeight
-				+ ", llImgPreview = " + llImgPreview);
 		if (llImgPreview != null) {
 			ViewGroup.LayoutParams lp = llImgPreview.getLayoutParams();
 			lp.height = mLastSoftInputHeight;

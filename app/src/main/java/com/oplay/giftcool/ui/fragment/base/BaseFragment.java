@@ -16,7 +16,6 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -167,7 +166,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected void refreshFailEnd() {
 		if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
 			if (mViewManager != null) {
-				KLog.d("showErrorRetry");
 				mViewManager.showErrorRetry();
 			}
 			mHasData = false;

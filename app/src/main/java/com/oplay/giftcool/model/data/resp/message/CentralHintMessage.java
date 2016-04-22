@@ -1,5 +1,7 @@
 package com.oplay.giftcool.model.data.resp.message;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -11,31 +13,37 @@ public class CentralHintMessage implements Serializable {
 	/**
 	 * 消息类型代号
 	 */
+	@SerializedName("code")
 	public String code;
 
 	/**
 	 * 消息图标
 	 */
+	@SerializedName("icon")
 	public int icon;
 
 	/**
 	 * 消息标题
 	 */
+	@SerializedName("title")
 	public String title;
 
 	/**
 	 * 显示内容
 	 */
+	@SerializedName("content")
 	public String content;
 
 	/**
 	 * 未读消息数量
 	 */
+	@SerializedName("count")
 	public int count;
 
 	/**
 	 * 是否显示未读消息数量，默认显示
 	 */
+	@SerializedName("showCount")
 	public boolean showCount = true;
 
 	public CentralHintMessage() {

@@ -24,6 +24,7 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
+import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -245,7 +246,7 @@ public class WebViewInterface extends Observable {
 	 */
 	@JavascriptInterface
 	public int jumpCommentDetail(int postId, int commentId) {
-		if (postId == 0 || commentId == 0) {
+		if (commentId == 0) {
 			return RET_PARAM_ERR;
 		}
 		IntentUtil.jumpPostReplyDetail(mHostActivity, postId, commentId);
@@ -338,7 +339,9 @@ public class WebViewInterface extends Observable {
 						}
 					});
 				} catch (Exception e) {
-					KLog.d(AppDebugConfig.TAG_WARN, e);
+					if (AppDebugConfig.IS_DEBUG) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -354,9 +357,15 @@ public class WebViewInterface extends Observable {
 	 */
 	@JavascriptInterface
 	public int setReplyTo(int commentId, String name) {
-		if (mHostFragment != null && mHostFragment instanceof PostCommentFragment) {
-			PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
-			fragment.setReplyTo(commentId, name);
+		if (mHostFragment != null) {
+			if (mHostFragment instanceof PostCommentFragment) {
+				PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
+				fragment.setReplyTo(commentId, name);
+				return RET_SUCCESS;
+			} else if (mHostFragment instanceof PostDetailFragment) {
+				((PostDetailFragment) mHostFragment).toReply();
+				return RET_SUCCESS;
+			}
 		}
 		return RET_OTHER_ERR;
 	}
@@ -365,8 +374,6 @@ public class WebViewInterface extends Observable {
 	 * 执行Js操作
 	 */
 	private void execJs(String callbackJsName, String returnData) {
-		KLog.d(AppDebugConfig.TAG_WARN, "returnData = " + returnData);
-
 		if (callbackJsName != null) {
 			String js = String.format("%s('%s')", callbackJsName, returnData);
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {

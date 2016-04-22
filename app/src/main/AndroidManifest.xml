@@ -194,6 +194,7 @@
 				android:name = ".ui.activity.PostDetailActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
+				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustUnspecified|stateAlwaysHidden" >
 			<intent-filter >
 				<action android:name = "com.oplay.giftcool.action.PostDetail" />
@@ -205,6 +206,7 @@
 				android:name = ".ui.activity.PostListActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
+				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
 				<action android:name = "com.oplay.giftcool.action.PostList" />
@@ -216,6 +218,7 @@
 				android:name = ".ui.activity.MessageActivity"
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
+				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
 				<action android:name = "com.oplay.giftcool.action.MessageList" />
@@ -277,12 +280,12 @@
 			</intent-filter >
 		</receiver >
 
-		<receiver android:name = ".receiver.GameObserverReceiver">
-			<intent-filter>
-				<action android:name="com.oplay.giftcool.clock_action.PLAY_GAME" />
-				<category android:name="com.oplay.giftcool" />
-			</intent-filter>
-		</receiver>
+		<receiver android:name = ".receiver.GameObserverReceiver" >
+			<intent-filter >
+				<action android:name = "com.oplay.giftcool.clock_action.PLAY_GAME" />
+				<category android:name = "com.oplay.giftcool" />
+			</intent-filter >
+		</receiver >
 
 		<receiver android:name = ".download.DownloadNotificationManager$DownloadReceiver" >
 			<intent-filter >

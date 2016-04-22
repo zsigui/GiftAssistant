@@ -82,6 +82,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         etContent.addTextChangedListener(this);
         etContent.setOnEditorActionListener(this);
         tvTypeTitle.setOnClickListener(this);
+        etPhone.addTextChangedListener(this);
     }
 
     private long mLastClickTime = 0;

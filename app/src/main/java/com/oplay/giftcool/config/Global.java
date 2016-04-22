@@ -10,6 +10,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
+import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
@@ -229,26 +230,53 @@ public class Global {
 	 * 消息中心的消息列表数据
 	 */
 	private static ArrayList<CentralHintMessage> mMsgCentralData;
+	/**
+	 * 状态标识消息中心页面需要刷新消息列表
+	 */
 	public static boolean mMsgCentralTobeRefresh = false;
+
+	private static void writeMsgDataToSP(Context context, ArrayList<CentralHintMessage> data) {
+		String s = AssistantApp.getInstance().getGson().toJson(data);
+		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_MSG_CENTRAL_LIST, s);
+	}
 
 	/**
 	 * 更新消息中心的消息列表项中指定代号项的数据
 	 */
 	public static void updateMsgCentralData(Context context, String code, int count, String msg) {
+		KLog.d(AppDebugConfig.TAG_APP, "code = " + code + ", count = " + count);
 		final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
 		for (CentralHintMessage item : data) {
 			if (item.code.equalsIgnoreCase(code)) {
-				if (count != 0) {
-					item.count = count;
-				}
+				KLog.d(AppDebugConfig.TAG_APP, "equal code = " + code + ", count = " + count);
+				item.count = count;
 				if (!TextUtils.isEmpty(msg)) {
 					item.content = msg;
 				}
 				mMsgCentralTobeRefresh = true;
 			}
 		}
-		String s = AssistantApp.getInstance().getGson().toJson(data);
-		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_MSG_CENTRAL_LIST, s);
+		writeMsgDataToSP(context, data);
+	}
+
+	public static void updateMsgCentralData(Context context, MessageCentralUnread unread) {
+		final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
+		for (CentralHintMessage item : data) {
+			if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY)) {
+				item.count = unread.unreadNewGiftCount;
+				mMsgCentralTobeRefresh = true;
+			} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_COMMENT)) {
+				item.count = unread.unreadCommentCount;
+				mMsgCentralTobeRefresh = true;
+			} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_SYSTEM)) {
+				item.count = unread.unreadSystemCount;
+				mMsgCentralTobeRefresh = true;
+			} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_ADMIRE)) {
+				item.count = unread.unreadAdmireCount;
+				mMsgCentralTobeRefresh = true;
+			}
+		}
+		writeMsgDataToSP(context, data);
 	}
 
 	/**
@@ -257,59 +285,45 @@ public class Global {
 	public static ArrayList<CentralHintMessage> getMsgCentralData(Context context) {
 		if (mMsgCentralData == null) {
 			String data = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_MSG_CENTRAL_LIST, null);
-			KLog.d(AppDebugConfig.TAG_WARN, data);
 			if (!TextUtils.isEmpty(data)) {
 				mMsgCentralData = AssistantApp.getInstance().getGson().fromJson(data,
 						new TypeToken<ArrayList<CentralHintMessage>>() {
 						}.getType());
 			}
-//			mMsgCentralData = new HashMap<>();
-//			mMsgCentralData.put(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
-//					new CentralHintMessage(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
-//							R.drawable.ic_task_first_login,
-//							context.getResources().getString(R.string.st_msg_central_new_gift_notify),
-//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
-//							0));
-//			mMsgCentralData.put(KeyConfig.CODE_MSG_ADMIRE,
-//					new CentralHintMessage(KeyConfig.CODE_MSG_ADMIRE,
-//							R.drawable.ic_task_share_gcool,
-//							context.getResources().getString(R.string.st_msg_central_admire),
-//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
-//							0));
-//			mMsgCentralData.put(KeyConfig.CODE_MSG_COMMENT,
-//					new CentralHintMessage(KeyConfig.CODE_MSG_COMMENT,
-//							R.drawable.ic_task_share_gcool,
-//							context.getResources().getString(R.string.st_msg_central_comment),
-//							context.getResources().getString(R.string.st_msg_central_hint_no_reply),
-//							0));
-//			mMsgCentralData.put(KeyConfig.CODE_MSG_SYSTEM,
-//					new CentralHintMessage(KeyConfig.CODE_MSG_SYSTEM,
-//							R.drawable.ic_task_share_gcool,
-//							context.getResources().getString(R.string.st_msg_central_system),
-//							context.getResources().getString(R.string.st_msg_central_hint_no_notify),
-//							0));
 			if (mMsgCentralData == null) {
 				mMsgCentralData = new ArrayList<>();
 				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY,
-						R.drawable.ic_task_first_login,
+						R.drawable.ic_msg_new_gift_notify,
 						context.getResources().getString(R.string.st_msg_central_new_gift_notify),
 						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
 						0));
 				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_ADMIRE,
-						R.drawable.ic_task_attention,
+						R.drawable.ic_msg_admire,
 						context.getResources().getString(R.string.st_msg_central_admire),
 						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
 						0));
 				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_COMMENT,
-						R.drawable.ic_task_new_feedback,
+						R.drawable.ic_msg_comment,
 						context.getResources().getString(R.string.st_msg_central_comment),
 						context.getResources().getString(R.string.st_msg_central_hint_no_reply),
 						0));
 				mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_SYSTEM,
-						R.drawable.ic_task_upload_avator,
+						R.drawable.ic_msg_system,
 						context.getResources().getString(R.string.st_msg_central_system),
 						context.getResources().getString(R.string.st_msg_central_hint_no_notify),
 						0));
+			} else {
+				for (CentralHintMessage item : mMsgCentralData) {
+					if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY)) {
+						item.icon = R.drawable.ic_msg_new_gift_notify;
+					} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_COMMENT)) {
+						item.icon = R.drawable.ic_msg_comment;
+					} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_SYSTEM)) {
+						item.icon = R.drawable.ic_msg_system;
+					} else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_ADMIRE)) {
+						item.icon = R.drawable.ic_msg_admire;
+					}
+				}
 			}
 		}
 		return mMsgCentralData;

@@ -205,15 +205,20 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 						try {
 							TaskInfoThree info = AssistantApp.getInstance().getGson()
 									.fromJson(m.actionInfo, TaskInfoThree.class);
-							if (!getPackName().contains(info.packName)
-									|| ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)) {
-								// 执行中的任务，或者还没有安装的游戏
-								// 设置试玩游戏信息
+							if (m.isCompleted == 0) {
+								// 任务未完成，添加入队列中，已完成则跳过
 								ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
-								missions.add(m);
-							} else {
-								missionCountSub(missionGroup, m);
 							}
+							missions.add(m);
+//							if (!getPackName().contains(info.packName)
+//									|| ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)) {
+//								// 执行中的任务，或者还没有安装的游戏
+//								// 设置试玩游戏信息
+//								ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
+//								missions.add(m);
+//							} else {
+//								missionCountSub(missionGroup, m);
+//							}
 						} catch (Throwable t) {
 							missionCountSub(missionGroup, m);
 							t.printStackTrace();

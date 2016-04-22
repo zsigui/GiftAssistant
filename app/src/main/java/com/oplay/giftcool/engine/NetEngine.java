@@ -45,7 +45,7 @@ import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
-import com.oplay.giftcool.model.data.resp.message.MessageCount;
+import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.data.resp.message.ReplyMessage;
 import com.oplay.giftcool.model.data.resp.message.SystemMessage;
@@ -333,10 +333,10 @@ public interface NetEngine {
 	Call<JsonRespBase<Void>> changePushMessageStatus(@Body JsonReqBase<ReqChangeMessageStatus> reqData);
 
 	/**
-	 * 获取当前未读推送消息数量
+	 * 获取当前消息中心未读消息数量
 	 */
 	@POST(NetUrl.MESSAGE_UNREAD_COUNT)
-	Call<JsonRespBase<OneTypeDataList<MessageCount>>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
+	Call<JsonRespBase<MessageCentralUnread>> obtainUnreadMessageCount(@Body JsonReqBase<Void> reqData);
 
 	/**
 	 * 获取回复消息列表，根据url决定是回复的还是点赞
@@ -347,7 +347,7 @@ public interface NetEngine {
 	/**
 	 * 获取系统消息列表
 	 */
-	@POST(NetUrl.MESSAGE_PUSH_LIST)
+	@POST(NetUrl.MESSAGE_SYSTEM_LIST)
 	Call<JsonRespBase<OneTypeDataList<SystemMessage>>> obtainSystemMessage(@Body JsonReqBase<ReqPageData> reqData);
 
 	/*---------------- JS调用的异步方法，传参返回都用JSON字符串 -----------------*/

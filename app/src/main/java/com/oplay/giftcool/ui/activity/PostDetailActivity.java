@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -38,11 +40,12 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void initView() {
-		setContentView(R.layout.activity_toolbar_with_share);
+		setContentView(R.layout.activity_web);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -68,6 +71,15 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 		super.onDestroy();
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.iv_bar_back:
+				finish();
+				break;
+		}
+	}
+
 	private void handleRedirect(Intent intent) {
 
 		if (intent == null) {
@@ -86,13 +98,13 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 			return;
 		}
 		mTypeHierarchy.add(type);
-		final int postId = getIntent().getIntExtra(KeyConfig.KEY_DATA, 0);
+		final int postId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
 		switch (type) {
 			case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
 				replaceFrag(R.id.fl_container, PostDetailFragment.newInstance(postId));
 				break;
 			case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
-				final int commentId = getIntent().getIntExtra(KeyConfig.KEY_DATA_O, 0);
+				final int commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
 				replaceFrag(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId));
 				break;
 			default:

@@ -128,7 +128,6 @@ public class AlarmClockManager {
 				}
 			}
 		}
-		KLog.d(AppDebugConfig.TAG_WARN, "startGameObserverAlarm");
 		AlarmManager am = getAlarmManager(context);
 		am.cancel(mPlayGameSender);
 		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, mPlayGameSender);

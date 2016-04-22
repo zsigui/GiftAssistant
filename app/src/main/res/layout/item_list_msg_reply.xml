@@ -7,6 +7,7 @@
                 android:paddingLeft = "@dimen/di_list_item_gap_normal"
                 android:paddingBottom = "@dimen/di_list_item_gap_normal"
                 android:paddingRight = "@dimen/di_list_item_gap_small"
+                android:clickable = "true"
                 android:background = "@drawable/selector_opacity_05" >
 
 	<com.makeramen.roundedimageview.RoundedImageView
@@ -25,8 +26,7 @@
 			android:layout_toLeftOf = "@+id/fl_hint"
 			android:layout_marginLeft = "@dimen/di_list_item_gap_small"
 			android:textColor = "@color/co_common_app_second_bg_orange"
-			android:gravity = "left"
-			android:text = "的马西亚" />
+			android:gravity = "left" />
 
 	<TextView
 			android:id = "@+id/tv_content"
@@ -34,12 +34,11 @@
 			android:layout_below = "@+id/tv_name"
 			android:layout_toLeftOf = "@+id/fl_hint"
 			android:layout_alignLeft = "@id/tv_name"
-			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
 			android:textColor = "@color/co_common_text_main"
 			android:gravity = "left"
 			android:layout_centerVertical = "false"
-			android:singleLine = "false"
-			android:text = "的马西亚啊kdj法律考试大家伙看拉到就" />
+			android:singleLine = "false" />
 
 	<TextView
 			android:id = "@+id/tv_time"
@@ -48,7 +47,7 @@
 			android:layout_below = "@+id/tv_content"
 			android:layout_alignLeft = "@id/tv_content"
 			android:gravity = "left"
-			android:layout_marginTop = "@dimen/di_list_item_gap_small"
+			android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
 			android:layout_centerVertical = "false"
 			android:text = "4月3日 11:12" />
 
@@ -68,14 +67,14 @@
 				android:layout_gravity = "left"
 				android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
 				android:padding = "@dimen/di_list_item_gap_very_small"
-				android:singleLine = "false"
-				android:text = "眩晕时间感觉非常之长，收不了了" />
+				android:singleLine = "false" />
 
 		<ImageView
 				android:id = "@+id/iv_hint"
 				android:layout_width = "match_parent"
 				android:layout_height = "match_parent"
 				android:contentDescription = "@null"
+				android:scaleType = "centerCrop"
 				android:visibility = "gone"
 				android:src = "@drawable/ic_img_default" />
 	</FrameLayout >

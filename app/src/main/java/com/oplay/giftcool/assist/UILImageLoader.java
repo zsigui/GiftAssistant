@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftcool.config.Global;
 
@@ -47,9 +46,9 @@ public class UILImageLoader implements cn.finalteam.galleryfinal.ImageLoader {
 				&& !path.startsWith("drawable://")) {
 			path = "file://" + path;
 		}
-		ImageSize imageSize = new ImageSize(width, height);
+//		ImageSize imageSize = new ImageSize(width, height);
 		ImageLoader.getInstance().displayImage(path, new ImageViewAware(imageView),
-				Global.getGalleryImgOptions(), imageSize, null, null);
+				Global.getGalleryImgOptions(), null, null, null);
 //		}
 	}
 

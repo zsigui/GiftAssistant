@@ -1,11 +1,11 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
+import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.WebFragment;
 import com.oplay.giftcool.util.ToastUtil;
@@ -16,14 +16,10 @@ import com.socks.library.KLog;
  */
 public class WebActivity extends BaseAppCompatActivity {
 
-	/**
-	 * 标识是否处于签到界面
-	 */
-	private boolean isInSignInView = false;
 
 	@Override
 	protected void initView() {
-		setContentView(R.layout.activity_common_with_back);
+		setContentView(R.layout.activity_web);
 	}
 
 	@Override
@@ -39,10 +35,8 @@ public class WebActivity extends BaseAppCompatActivity {
 	private void handleRedirect(Intent intent) {
 		String url = intent.getStringExtra(KeyConfig.KEY_DATA);
 		String title = intent.getStringExtra(KeyConfig.KEY_TITLE);
-		KLog.d(AppDebugConfig.TAG_WARN, "url = " + url);
-		if (url != null && url.toLowerCase().contains("checkin")) {
-			KLog.d(AppDebugConfig.TAG_WARN, "isInSignInView = " + isInSignInView);
-			isInSignInView = true;
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_APP, "url = " + url);
 		}
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.e(AppDebugConfig.TAG_APP, "handle intent = " + intent + ", url = " + url);
@@ -51,12 +45,9 @@ public class WebActivity extends BaseAppCompatActivity {
 	}
 
 	@Override
-	protected void doBeforeFinish() {
-		super.doBeforeFinish();
-		KLog.d(AppDebugConfig.TAG_WARN, "close web, isInSignInView = " + isInSignInView);
-		if (isInSignInView) {
-			ScoreManager.getInstance().initSignInState(this);
-			ScoreManager.getInstance().setTaskFinished(true);
+	public void onClick(View v) {
+		if (v.getId() == R.id.iv_bar_back) {
+			finish();
 		}
 	}
 

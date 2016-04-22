@@ -61,7 +61,6 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		KLog.d(AppDebugConfig.TAG_WARN, "itemCount = " + getItemCount() + ", position = " + position);
 		ItemHolder itemHolder = (ItemHolder) holder;
 		itemHolder.ivThumb.setTag(TAG_POSITION, itemHolder);
 		itemHolder.ivThumb.setOnClickListener(this);
@@ -78,7 +77,6 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 		PhotoInfo info = getItem(position);
 		itemHolder.ivDel.setVisibility(View.VISIBLE);
 		itemHolder.ivThumb.setBackgroundResource(0);
-		KLog.d(AppDebugConfig.TAG_WARN, "photoPath = " + info.getPhotoPath());
 		ViewUtil.showImage(itemHolder.ivThumb, "file://" + info.getPhotoPath());
 		itemHolder.ivThumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
@@ -96,7 +94,6 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 	@Override
 	public void onClick(View v) {
 		if (v.getTag(TAG_POSITION) == null) {
-			KLog.d(AppDebugConfig.TAG_WARN, "is pos null");
 			return;
 		}
 		int pos = ((ItemHolder)v.getTag(TAG_POSITION)).getAdapterPosition();
@@ -144,7 +141,9 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 	@Override
 	public void onHandlerFailure(int requestCode, String errorMsg) {
 		// 取消不做处理
-		KLog.d(AppDebugConfig.TAG_WARN, "errorMsg = " + errorMsg);
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_ADAPTER, "errorMsg = " + errorMsg);
+		}
 	}
 
 	private static class ItemHolder extends BaseRVHolder{

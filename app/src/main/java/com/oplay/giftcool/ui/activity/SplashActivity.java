@@ -53,6 +53,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 				judgeToMain();
 			} else {
 				mHandler.postDelayed(mInitRunnable, 100);
+				AssistantApp.getInstance().appInit();
 			}
 		}
 	};

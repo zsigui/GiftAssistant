@@ -102,9 +102,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (!AssistantApp.getInstance().isGlobalInit()) {
-			AssistantApp.getInstance().appInit();
-		}
+		AssistantApp.getInstance().appInit();
 		super.onCreate(savedInstanceState);
 
 		sGlobalHolder = MainActivity.this;
@@ -174,19 +172,20 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				KLog.d(AppDebugConfig.TAG_WARN, "isLogin() = " + AccountManager.getInstance().isLogin()
-						+ ", isSignIn = " + ScoreManager.getInstance().isSignInTaskFinished());
 				if (AccountManager.getInstance().isLogin()) {
 					if (ScoreManager.getInstance().isSignInTaskFinished()) {
 						updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 0);
+						updateHintState(KeyConfig.TYPE_ID_MSG, 0);
 					} else {
 						updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
+						updateHintState(KeyConfig.TYPE_ID_MSG, AccountManager.getInstance().getUnreadMessageCount());
 					}
 					UserInfo user = AccountManager.getInstance().getUserInfo();
 					tvGiftCount.setText(String.valueOf(user.giftCount));
 					ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
 				} else {
 					updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
+					updateHintState(KeyConfig.TYPE_ID_MSG, 0);
 					ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
 					ivProfile.setTag("");
 					tvGiftCount.setText("0");

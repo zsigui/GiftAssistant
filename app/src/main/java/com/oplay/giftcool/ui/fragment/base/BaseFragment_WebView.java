@@ -137,8 +137,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 			@Override
 			public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-				KLog.d(AppDebugConfig.TAG_WARN, "alert message = " + message);
-				ToastUtil.showShort("Alert内容显示:" + message);
+				ToastUtil.showShort(message);
 				return super.onJsAlert(view, url, message, result);
 			}
 		});
@@ -400,8 +399,25 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					goBack();
 					return true;
 				}
+//				mWebView.stopLoading();
+//				((ViewGroup)mContentView).removeView(mWebView);
+//				mWebView.removeAllViews();
+//				mWebView.destroy();
+			}
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.e(e);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		try {
+			if (mWebView != null) {
 				mWebView.stopLoading();
-				((ViewGroup)mContentView).removeView(mWebView);
 				mWebView.removeAllViews();
 				mWebView.destroy();
 			}
@@ -410,6 +426,5 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				KLog.e(e);
 			}
 		}
-		return false;
 	}
 }

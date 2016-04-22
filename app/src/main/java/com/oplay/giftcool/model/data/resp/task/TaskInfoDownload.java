@@ -4,7 +4,7 @@ import com.oplay.giftcool.util.DateUtil;
 
 /**
  * 下载任务信息，用于积分任务记录状态
- *
+ * <p/>
  * Created by zsigui on 16-4-15.
  */
 public class TaskInfoDownload extends TaskInfoThree {
@@ -47,7 +47,7 @@ public class TaskInfoDownload extends TaskInfoThree {
 		this();
 		this.code = code;
 		this.packName = info.packName;
-		this.time = info.time;
+		this.time = info.time * 2 / 3;
 		this.appId = info.appId;
 	}
 }

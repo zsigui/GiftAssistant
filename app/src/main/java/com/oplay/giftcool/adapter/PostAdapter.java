@@ -81,7 +81,8 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 				initHeaderLayoutParams(headerHolder);
 				return headerHolder;
 			case PostTypeUtil.TYPE_FOOTER:
-				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent, false));
+				return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent,
+						false));
 			case PostTypeUtil.TYPE_TITLE_OFFICIAL:
 				final ItemTitleVH titleOneVH = new ItemTitleVH(
 						mInflater.inflate(R.layout.view_index_item_title_1, parent, false));
@@ -166,7 +167,11 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 	 * 设置类型二的内容
 	 */
 	private void setContentTwoData(final ContentTwoHolder holder, final int position, final IndexPostNew item) {
-		ViewUtil.showImage(holder.ivIcon, item.img);
+		if (item.showType == 1) {
+			ViewUtil.showImage(holder.ivIcon, item.banner);
+		} else {
+			ViewUtil.showImage(holder.ivIcon, item.img);
+		}
 		holder.tvPubTime.setText(item.startTime);
 		holder.tvTitle.setText(item.title);
 		holder.tvContent.setText(item.content);
@@ -179,12 +184,11 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 	 */
 	private void setContentOneData(final ContentOneHolder holder, final int position, final IndexPostNew item) {
 		holder.tvTitle.setText(item.title);
-		ViewUtil.showImage(holder.ivIcon, item.img);
-//				if (item.isNew) {
-//					holder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_task_new, 0, 0, 0);
-//				} else {
-//					holder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-//				}
+		if (item.showType == 1) {
+			ViewUtil.showImage(holder.ivIcon, item.banner);
+		} else {
+			ViewUtil.showImage(holder.ivIcon, item.img);
+		}
 		switch (item.state) {
 			case 0:
 				holder.tvState.setText(TEXT_STATE_FINISHED);
@@ -207,7 +211,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 
 	@Override
 	public int getItemViewType(int position) {
-		return mHasFooter && position == getItemCount() - 1 ? PostTypeUtil.TYPE_FOOTER: getItem(position).showType;
+		return mHasFooter && position == getItemCount() - 1 ? PostTypeUtil.TYPE_FOOTER : getItem(position).showType;
 	}
 
 	@Override
@@ -270,7 +274,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 	}
 
 	public void toggleButton(boolean toggleState, boolean needCallBack) {
-		final boolean isRead = (toggleState && !AssistantApp.getInstance().isReadAttention());
+		boolean isRead = toggleState && !AssistantApp.getInstance().isReadAttention();
 		if (tbReadAttention != null) {
 			if (isRead) {
 				tbReadAttention.toggleOn();

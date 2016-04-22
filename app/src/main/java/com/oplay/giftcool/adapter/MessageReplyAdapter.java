@@ -59,15 +59,17 @@ public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements 
 		ViewUtil.showImage(holder.ivIcon, item.icon);
 		if (item.hintPics != null && !item.hintPics.isEmpty()) {
 			ViewUtil.showImage(holder.ivHint, item.hintPics.get(0));
+			holder.ivHint.setVisibility(View.VISIBLE);
 		} else {
 			holder.tvHint.setText(item.hintText);
+			holder.ivHint.setVisibility(View.GONE);
 		}
 		holder.tvTime.setText(DateUtil.optDate(item.time));
 		if (mIsComment) {
 			holder.tvContent.setText(item.content);
 		} else {
 			if (ss == null) {
-				ImageSpan span = new ImageSpan(mContext, R.drawable.ic_msg_admire);
+				ImageSpan span = new ImageSpan(mContext, R.drawable.ic_msg_content_admire);
 				ss = new SpannableString("zan");
 				ss.setSpan(span, 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 			}
@@ -83,7 +85,7 @@ public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements 
 			return;
 		}
 		ReplyMessage item = getItem((Integer) v.getTag(TAG_POSITION));
-		IntentUtil.jumpReplyDetail(mContext, item.postId, item.commentId);
+		IntentUtil.jumpPostReplyDetail(mContext, item.postId, item.reCommentId);
 	}
 
 	@Override

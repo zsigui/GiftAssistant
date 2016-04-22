@@ -3,8 +3,6 @@ package com.oplay.giftcool.ext.retrofit2;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
-import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -44,9 +42,6 @@ public final class DefaultGsonConverterFactory  extends Converter.Factory {
 	@Override
 	public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
 	                                                        Retrofit retrofit) {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "Default - responseBodyConverter - execute");
-		}
 		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
 		return new DefaultGsonResponseBodyConverter<>(gson, adapter);
 	}
@@ -54,9 +49,6 @@ public final class DefaultGsonConverterFactory  extends Converter.Factory {
 	@Override
 	public Converter<?, RequestBody> requestBodyConverter(Type type,
 	                                                      Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "Default - requestBodyConverter - execute");
-		}
 		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
 		return new DefaultGsonRequestBodyConverter<>(gson, adapter);
 	}

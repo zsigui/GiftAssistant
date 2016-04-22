@@ -15,7 +15,7 @@
 			android:max="100"
 			android:scrollbarStyle="insideOverlay"
 			android:layout_width = "match_parent"
-			android:layout_height = "3dp"
+			android:layout_height = "@dimen/di_web_progress_height"
 			android:visibility="gone"
 			android:progressDrawable="@drawable/shape_progress_bar_orange"/>
 </FrameLayout >

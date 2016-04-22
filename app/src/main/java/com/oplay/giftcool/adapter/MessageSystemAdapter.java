@@ -21,7 +21,7 @@ import java.util.ArrayList;
  *
  * Created by zsigui on 16-4-18.
  */
-public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> {
+public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implements View.OnClickListener {
 
 
 
@@ -45,11 +45,24 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> {
 		holder.tvTitle.setText(item.title);
 		holder.tvContent.setText(item.content);
 		holder.tvTime.setText(DateUtil.optDate(item.time));
-		if (item.isRead == 0) {
+		if (item.isRead == 1) {
 			holder.ivNew.setVisibility(View.GONE);
 		} else {
 			holder.ivNew.setVisibility(View.VISIBLE);
 		}
+		holder.itemView.setOnClickListener(this);
+		holder.itemView.setTag(TAG_POSITION, position);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getTag(TAG_POSITION) != null) {
+			return;
+		}
+		final Integer pos = (Integer) v.getTag(TAG_POSITION);
+		final SystemMessage item = getItem(pos);
+		item.isRead = 1;
+		notifyItemChanged(pos);
 	}
 
 	private class MessageHolder extends BaseRVHolder {

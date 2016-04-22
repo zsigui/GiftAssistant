@@ -22,7 +22,7 @@ import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
-import com.oplay.giftcool.model.data.resp.message.MessageCount;
+import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
@@ -62,7 +62,6 @@ public class AccountManager implements OnFinishListener {
     }
 
     private UserModel mUser;
-    private int mUnreadMessageCount = 0;
     private int lastLoginType = UserTypeUtil.TYPE_POHNE;
 
     public boolean isPhoneLogin() {
@@ -108,14 +107,6 @@ public class AccountManager implements OnFinishListener {
             lastLoginType = UserTypeUtil.TYPE_POHNE;
         }
         mUser = user;
-        // 当用户变化，需要进行通知
-        if (notifyAll) {
-            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
-            ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
-        } else {
-            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PART);
-        }
-
 
         // 同步cookie
         syncCookie();
@@ -125,8 +116,15 @@ public class AccountManager implements OnFinishListener {
             NetDataEncrypt.getInstance().initDecryptDataModel(0, "");
         }
 
-        // 更新未读消息数量
-        obtainUnreadPushMessageCount();
+        // 当用户变化，需要进行通知
+        if (notifyAll) {
+            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_ALL);
+            ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
+            // 更新未读消息数量
+            obtainUnreadPushMessageCount();
+        } else {
+            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PART);
+        }
 
         if (isLogin()) {
             OuwanSDKManager.getInstance().login();
@@ -516,7 +514,12 @@ public class AccountManager implements OnFinishListener {
         AccountManager.getInstance().notifyUserAll(null);
     }
 
-    private void setUnreadMessageCount(int unreadMessageCount) {
+
+
+
+    private int mUnreadMessageCount = 0;
+
+    public void setUnreadMessageCount(int unreadMessageCount) {
         mUnreadMessageCount = unreadMessageCount;
     }
 
@@ -533,57 +536,68 @@ public class AccountManager implements OnFinishListener {
     /**
      * 获取未读推送消息的网络请求声明
      */
-    private Call<JsonRespBase<MessageCount>> mCallObtainUnread;
+    private Call<JsonRespBase<MessageCentralUnread>> mCallObtainUnread;
 
     /**
      * 获取未读推送消息数量
      */
     public void obtainUnreadPushMessageCount() {
-//        if (!isLogin()) {
-//            // 未登录，推送消息默认为0
-//            setUnreadMessageCount(0);
-//            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
-//            return;
-//        }
-//        if (mCallObtainUnread != null) {
-//            mCallObtainUnread.cancel();
-//            mCallObtainUnread = mCallObtainUnread.clone();
-//        } else {
-//            mCallObtainUnread = Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>());
-//        }
-//        mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCount>>() {
-//            @Override
-//            public void onResponse(Call<JsonRespBase<MessageCount>> call, Response<JsonRespBase<MessageCount>>
-//                    response) {
-//                if (call.isCanceled()) {
-//                    return;
-//                }
-//                if (response != null && response.isSuccessful()) {
-//                    if (response.body() != null && response.body().isSuccess()) {
-//                        final int count =response.body().getData().count;
-//                        setUnreadMessageCount(count);
-//                        Global.updateMsgCentralData(mContext, KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, count, null);
-//                        ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
-//                                .USER_UPDATE_PUSH_MESSAGE);
-//                        return;
-//                    }
-//                    if (AppDebugConfig.IS_DEBUG) {
-//                        KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-//                                + (response.body() == null ? "解析出错" : response.body().error()));
-//                    }
-//                    return;
-//                }
-//                if (AppDebugConfig.IS_DEBUG) {
-//                    KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-//                            + (response == null ? "返回出错" : response.code()));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonRespBase<MessageCount>> call, Throwable t) {
-//
-//            }
-//        });
+        if (!isLogin()) {
+            // 未登录，推送消息默认为0
+            setUnreadMessageCount(0);
+            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE);
+            return;
+        }
+        if (mCallObtainUnread != null) {
+            mCallObtainUnread.cancel();
+            mCallObtainUnread = mCallObtainUnread.clone();
+        } else {
+            mCallObtainUnread = Global.getNetEngine().obtainUnreadMessageCount(new JsonReqBase<Void>());
+        }
+        mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCentralUnread>>() {
+            @Override
+            public void onResponse(Call<JsonRespBase<MessageCentralUnread>> call, Response<JsonRespBase<MessageCentralUnread>>
+                    response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null && response.body().isSuccess()) {
+                        final MessageCentralUnread unread = response.body().getData();
+                        if (unread != null) {
+                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage = " + unread);
+                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadAdmireCount = " + unread.unreadAdmireCount);
+                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadNewGiftCount = " + unread.unreadNewGiftCount);
+                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadCommentCount = " + unread.unreadCommentCount);
+                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadSystemCount = " + unread.unreadSystemCount);
+                            final int count = unread.unreadAdmireCount + unread.unreadNewGiftCount
+                                    + unread.unreadCommentCount + unread.unreadSystemCount;
+                            setUnreadMessageCount(count);
+                            Global.updateMsgCentralData(mContext, unread);
+                            ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
+                                    .USER_UPDATE_PUSH_MESSAGE);
+                            return;
+                        }
+                    }
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+                                + (response.body() == null ? "解析出错" : response.body().error()));
+                    }
+                    return;
+                }
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
+                            + (response == null ? "返回出错" : response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonRespBase<MessageCentralUnread>> call, Throwable t) {
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_MANAGER, t);
+                }
+            }
+        });
     }
 
     @Override

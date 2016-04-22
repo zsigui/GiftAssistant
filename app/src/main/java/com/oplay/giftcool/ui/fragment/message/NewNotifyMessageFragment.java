@@ -185,6 +185,7 @@ public class NewNotifyMessageFragment extends BaseFragment_Refresh<PushMessage> 
         }
         Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, 0,
                 String.format(getContext().getString(R.string.st_msg_push_list_title), data.get(0).gameName));
+//        AccountManager.getInstance().obtainUnreadPushMessageCount();
         mViewManager.showContent();
         mHasData = true;
         mData = data;

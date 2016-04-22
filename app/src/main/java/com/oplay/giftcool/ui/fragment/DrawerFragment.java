@@ -255,7 +255,7 @@ public class DrawerFragment extends BaseFragment {
 				return pos;
 			}
 		}
-		return pos;
+		return -1;
 	}
 
 
@@ -288,6 +288,9 @@ public class DrawerFragment extends BaseFragment {
 					final UserInfo info = AccountManager.getInstance().getUserInfo();
 					tvScore.setText(String.valueOf(info.score));
 					tvBean.setText(String.valueOf(info.bean));
+				} else {
+					tvScore.setText("0");
+					tvScore.setText("0");
 				}
 				break;
 			case ObserverManager.STATUS.USER_UPDATE_ALL:

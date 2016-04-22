@@ -207,7 +207,6 @@ public class ScoreManager {
 	 */
 	public boolean reward(String ptype, final String appId, final boolean replayImdiate) {
 		if (!AccountManager.getInstance().isLogin()) {
-			KLog.d(AppDebugConfig.TAG_WARN);
 			return false;
 		}
 		final String code;
@@ -226,7 +225,6 @@ public class ScoreManager {
 				mRewardReqBase.data.code = code;
 				mRewardReqBase.data.appId = appId;
 				mRewardReqBase.data.replyNotify = (replayImdiate ? 1 : 0);
-				KLog.d(AppDebugConfig.TAG_WARN, "doRequest");
 				Global.getNetEngine().obtainTaskReward(mRewardReqBase)
 						.enqueue(new Callback<JsonRespBase<MissionReward>>() {
 							@Override
@@ -235,10 +233,8 @@ public class ScoreManager {
 								if (call.isCanceled()) {
 									return;
 								}
-								KLog.d(AppDebugConfig.TAG_WARN, "onResponse");
 								if (response != null && response.isSuccessful()) {
 									if (response.body() != null && response.body().isSuccess()) {
-										KLog.d(AppDebugConfig.TAG_WARN, "response.body() = " + response.body());
 										if (AccountManager.getInstance().isLogin()) {
 											toastByCallback(response.body().getData(), true);
 											return;
@@ -268,8 +264,6 @@ public class ScoreManager {
 
 	private void setCurDownloadTaskSet(Context context) {
 		final String val = AssistantApp.getInstance().getGson().toJson(mCurDownloadTaskSet);
-		KLog.d(AppDebugConfig.TAG_WARN, "write to DownloadTask = " + mCurDownloadTaskSet + ", size = " +
-				mCurDownloadTaskSet.size());
 		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE,
 				SPConfig.KEY_TODAY_DOWNLOAD_TASK, val);
 	}
@@ -304,11 +298,8 @@ public class ScoreManager {
 			}
 		}
 		if (!mCurDownloadTaskSet.isEmpty()) {
-			KLog.d(AppDebugConfig.TAG_WARN, "startGameObserverReceiver");
 			AlarmClockManager.getInstance().startGameObserverAlarm(context);
 		}
-		KLog.d(AppDebugConfig.TAG_WARN, "mCurDownloadTaskSet = " + mCurDownloadTaskSet.size() + ", " +
-				mCurDownloadTaskSet);
 		return mCurDownloadTaskSet;
 	}
 

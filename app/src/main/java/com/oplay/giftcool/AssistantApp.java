@@ -114,6 +114,12 @@ public class AssistantApp extends Application {
 //	private RefWatcher mRefWatcher;
 
     public static AssistantApp getInstance() {
+        if (sInstance == null) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
+            }
+            sInstance = new AssistantApp();
+        }
         return sInstance;
     }
 
@@ -129,14 +135,19 @@ public class AssistantApp extends Application {
         sInstance = this;
         // 启动闹钟通知广播进程来唤醒服务
         AlarmClockManager.getInstance().startWakeAlarm(this);
-//        appInit();
+        appInit();
     }
 
+    private boolean isInitialing = false;
 
     /**
      * 执行APP的初始化工作
      */
     public void appInit() {
+        if (isInitialing || mIsGlobalInit) {
+            return;
+        }
+        isInitialing = true;
         KLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
         // 初始配置加载列表
@@ -498,6 +509,7 @@ public class AssistantApp extends Application {
 
     public void setGlobalInit(boolean isGlobalInit) {
         mIsGlobalInit = isGlobalInit;
+        isInitialing = false;
     }
 
     public Gson getGson() {

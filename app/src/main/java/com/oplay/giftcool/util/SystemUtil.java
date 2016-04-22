@@ -151,9 +151,12 @@ public class SystemUtil {
 	 */
 	public static boolean isForeground(Context context, String packName) {
 		List<AndroidAppProcess> processes = ProcessManager.getRunningForegroundApps(context);
-		for (AndroidAppProcess process : processes) {
-			if (process.getPackageName().equalsIgnoreCase(packName)) {
-				return true;
+		if (processes != null) {
+			for (AndroidAppProcess process : processes) {
+				if (process != null && process.getPackageName() != null
+						&& process.getPackageName().equalsIgnoreCase(packName)) {
+					return true;
+				}
 			}
 		}
 		return false;

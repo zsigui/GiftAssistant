@@ -102,7 +102,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 				}
 
 				// 设置请求对象的值
-				final boolean isRead = false;
+				final boolean isRead = AssistantApp.getInstance().isReadAttention();
 				if (mReqPageObj == null) {
 					ReqIndexPost data = new ReqIndexPost();
 					data.pageSize = 20;
@@ -234,6 +234,14 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 //                return;
 //            }
 			mIsLoadMore = true;
+			final boolean isRead = AssistantApp.getInstance().isReadAttention();
+			if (isRead) {
+				mReqPageObj.data.isAttention = 1;
+				mReqPageObj.data.appNames = Global.getInstalledAppNames();
+			} else {
+				mReqPageObj.data.isAttention = 0;
+				mReqPageObj.data.appNames = null;
+			}
 			mReqPageObj.data.page = mLastPage + 1;
 			if (mCallLoad != null) {
 				mCallLoad.cancel();
@@ -286,7 +294,6 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 			@Override
 			public void run() {
-				mLastPage = PAGE_FIRST;
 				final boolean isRead = AssistantApp.getInstance().isReadAttention();
 				if (isRead) {
 					mReqPageObj.data.appNames = Global.getInstalledAppNames();
@@ -294,7 +301,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 					mReqPageObj.data.appNames = null;
 				}
 				mReqPageObj.data.isAttention = (isRead ? 1 : 0);
-				mReqPageObj.data.page = mLastPage;
+				mReqPageObj.data.page = PAGE_FIRST;
 				mIsSwipeRefresh = true;
 				mCallChange = Global.getNetEngine().obtainPostList(NetUrl.POST_GET_LIST, mReqPageObj);
 				mCallChange.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexPostNew>>>() {
@@ -310,25 +317,18 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 							mRefreshLayout.setRefreshing(false);
 							mRefreshLayout.setEnabled(true);
 							mRefreshLayout.setLoading(false);
+							mRefreshLayout.setCanShowLoad(true);
 						}
 						if (response != null && response.isSuccessful()) {
 							if (response.body() != null && response.body().isSuccess()) {
 								final ArrayList<IndexPostNew> data = response.body().getData().data;
 								if (data != null && !data.isEmpty()) {
 
-									// 切换成功，刷新修改
-									if (mRefreshLayout != null) {
-										mNoMoreLoad = false;
-										mRefreshLayout.setCanShowLoad(true);
-									}
-
 									mInitData.notifyData = data;
 									transferIndexPostToArray(mInitData);
 									updateDate(mData);
-									return;
 								} else {
-									mAdapter.toggleButton(false, false);
-									ToastUtil.showShort("没有相关关注快讯");
+									toggleFailed("没有相关关注快讯");
 								}
 								return;
 							}
@@ -336,13 +336,13 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 								KLog.d(AppDebugConfig.TAG_FRAG, response.body() != null ?
 										response.body().error() : "解析失败");
 							}
-							ToastUtil.blurErrorMsg(PREFIX_POST, response.body());
-							return;
+//							return;
 						}
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, response != null ?
 									response.code() + ", " + response.message() : "返回失败");
 						}
+						toggleFailed("error~获取相关关注快讯失败");
 					}
 
 					@Override
@@ -353,17 +353,23 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, t);
 						}
-						ToastUtil.blurThrow(PREFIX_POST);
+						toggleFailed("error~获取相关关注快讯失败");
 						mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = mIsLoadMore = false;
 						if (mRefreshLayout != null) {
 							mRefreshLayout.setRefreshing(false);
 							mRefreshLayout.setEnabled(true);
 							mRefreshLayout.setLoading(false);
+							mRefreshLayout.setCanShowLoad(true);
 						}
 					}
 				});
 			}
 		});
+	}
+
+	private void toggleFailed(String msg) {
+		mAdapter.toggleButton(false, false);
+		ToastUtil.showShort(msg);
 	}
 
 	@Override

@@ -61,6 +61,8 @@ public class PushMessageManager {
 		public static final int ACTION_GIFT_DETAIL = 6;
 		// 跳转游戏详情页面
 		public static final int ACTION_GAME_DETAIL = 7;
+		// 采取采取任务处理的方式进行处理
+		public static final int ACTION_LIKE_AS_TASK = 11011;
 	}
 
 	/**
@@ -246,6 +248,8 @@ public class PushMessageManager {
 				break;
 			case Status.ACTION_GAME_DETAIL:
 				handleDetailAction(context, data, false);
+				break;
+			case Status.ACTION_LIKE_AS_TASK:
 				break;
 		}
 	}

@@ -131,7 +131,7 @@ public class UploadAvatarFragment extends BaseFragment {
                         return;
                     }
                     if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_WARN, "path = " + resultList.get(0).getPhotoPath());
+                        KLog.d(AppDebugConfig.TAG_FRAG, "upload avatar path = " + resultList.get(0).getPhotoPath());
                     }
                     mCurrentSelectFilePath = resultList.get(0).getPhotoPath();
                     break;

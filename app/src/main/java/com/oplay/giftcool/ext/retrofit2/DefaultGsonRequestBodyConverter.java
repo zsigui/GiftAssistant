@@ -33,7 +33,7 @@ public final class DefaultGsonRequestBodyConverter<T> implements Converter<T, Re
 
 	@Override public RequestBody convert(T value) throws IOException {
 		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, value == null ? "null" : gson.toJson(value));
+			KLog.d(AppDebugConfig.TAG_UTIL, value == null ? "null" : gson.toJson(value));
 		}
 		if (value != null && String.class.getName().equalsIgnoreCase(value.getClass().getName())) {
 			return RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), (String)value);

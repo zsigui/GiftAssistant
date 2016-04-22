@@ -56,7 +56,6 @@ public class SocketIOManager {
 				if (!forceNew) {
 					return;
 				}
-				KLog.d(AppDebugConfig.TAG_WARN, "need to reconnect, ip = " + getRealUrl());
 				close();
 			}
 			IO.Options opts = new IO.Options();
@@ -69,14 +68,11 @@ public class SocketIOManager {
 			mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
-					KLog.d(AppDebugConfig.TAG_WARN, "connect.id = " + mSocket.id());
 //					loginValidate();
 				}
 			}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
-					KLog.d(AppDebugConfig.TAG_WARN, "disconnect = " + (args != null && args.length > 0 ? args[0] :
-							null));
 				}
 			}).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter
 					.Listener() {
@@ -113,10 +109,6 @@ public class SocketIOManager {
 			}).on(CustomSocket.EVENT_MISSION_COMPLETE, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, "args[0] = " + (args != null && args.length > 0 ? args[0]
-								: null));
-					}
 					if (args != null && args.length > 0) {
 						try {
 							Gson gson = AssistantApp.getInstance().getGson();
@@ -138,7 +130,6 @@ public class SocketIOManager {
 					}
 				}
 			});
-			KLog.d(AppDebugConfig.TAG_WARN, "connect, ip = " + getRealUrl());
 			mSocket.connect();
 		} catch (URISyntaxException e) {
 			if (AppDebugConfig.IS_DEBUG) {
@@ -148,9 +139,6 @@ public class SocketIOManager {
 	}
 
 	private void loginValidate() {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "loginValidate is called!");
-		}
 		if (AccountManager.getInstance().isLogin()) {
 			// 发送验证消息
 			try {
@@ -174,8 +162,10 @@ public class SocketIOManager {
 	}
 
 	public void runCandidateReward() {
-		for (final MissionReward reward : mCandidateList) {
-			ScoreManager.getInstance().toastByCallback(reward, true);
+		if (mCandidateList != null && !mCandidateList.isEmpty()) {
+			for (int i = mCandidateList.size() - 1; i >= 0; i--) {
+				ScoreManager.getInstance().toastByCallback(mCandidateList.remove(i), true);
+			}
 		}
 	}
 

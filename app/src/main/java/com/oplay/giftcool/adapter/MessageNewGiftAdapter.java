@@ -13,23 +13,12 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
-import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.StatisticsManager;
-import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.resp.message.PushMessage;
-import com.oplay.giftcool.model.json.base.JsonReqBase;
-import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 推送消息的适配器
@@ -79,92 +68,94 @@ public class MessageNewGiftAdapter extends BaseRVAdapter<PushMessage> implements
 			case R.id.rl_msg:
 			case R.id.ll_to_get:
 				IntentUtil.jumpGiftDetail(mContext, data.giftId);
-                if (data.readState != TypeStatusCode.PUSH_READED) {
-                    notifyHasRead(new int[]{pos}, new int[]{data.id});
-                }
+//                if (data.readState != TypeStatusCode.PUSH_READED) {
+//                    notifyHasRead(new int[]{pos}, new int[]{data.id});
+//                }
+				data.readState = TypeStatusCode.PUSH_READED;
+				notifyItemChanged(pos);
 				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_MESSAGE_CENTER_CLICK,
 						String.format("游戏名:%s, 礼包id:%d, 游戏id:%d", data.gameName, data.giftId, data.gameId));
 				break;
 		}
 	}
 
-	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
-	private Call<JsonRespBase<Void>> mCall;
-
-	/**
-	 * 通知修改已读消息
-	 *
-	 * @param pos
-	 * @param ids
-	 */
-	private void notifyHasRead(final int[] pos, int[] ids) {
-		if (mReqChangeObj == null) {
-			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
-			msg.status = TypeStatusCode.PUSH_READED;
-			mReqChangeObj = new JsonReqBase<>(msg);
-		} else {
-            mReqChangeObj.data.status = TypeStatusCode.PUSH_READED;
-        }
-		// 构造用','分隔的字符串
-		StringBuilder sb = new StringBuilder();
-		if (ids != null && ids.length > 0) {
-			for (int id : ids) {
-				sb.append(id).append(",");
-			}
-			sb.deleteCharAt(sb.length() - 1);
-		}
-		mReqChangeObj.data.msgIds = sb.toString();
-		if (mCall != null) {
-			mCall.cancel();
-		}
-		mCall = Global.getNetEngine().changePushMessageStatus(mReqChangeObj);
-		mCall.enqueue(new Callback<JsonRespBase<Void>>() {
-			@Override
-			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-				if (call.isCanceled()) {
-					return;
-				}
-				if (response != null && response.isSuccessful()) {
-					if (response.body() != null && response.body().isSuccess()) {
-						// 修改消息为已读状态
-						if (pos != null && mData != null) {
-							for (int p : pos) {
-								// 更新为已阅读
-								if (p < mData.size()) {
-									mData.get(p).readState = TypeStatusCode.PUSH_READED;
-									notifyItemChanged(p);
-								}
-							}
-						}
-						AccountManager.getInstance().obtainUnreadPushMessageCount();
-						return;
-					}
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_ADAPTER,
-								(response.body() == null ? "解析出错":response.body().error()));
-					}
-					return;
-				}
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_ADAPTER, (response == null ? "返回出错":response.code() + "," + response.message()));
-				}
-			}
-
-			@Override
-			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_ADAPTER, t);
-				}
-			}
-		});
-	}
+//	private JsonReqBase<ReqChangeMessageStatus> mReqChangeObj;
+//	private Call<JsonRespBase<Void>> mCall;
+//
+//	/**
+//	 * 通知修改已读消息
+//	 *
+//	 * @param pos
+//	 * @param ids
+//	 */
+//	private void notifyHasRead(final int[] pos, int[] ids) {
+//		if (mReqChangeObj == null) {
+//			ReqChangeMessageStatus msg = new ReqChangeMessageStatus();
+//			msg.status = TypeStatusCode.PUSH_READED;
+//			mReqChangeObj = new JsonReqBase<>(msg);
+//		} else {
+//            mReqChangeObj.data.status = TypeStatusCode.PUSH_READED;
+//        }
+//		// 构造用','分隔的字符串
+//		StringBuilder sb = new StringBuilder();
+//		if (ids != null && ids.length > 0) {
+//			for (int id : ids) {
+//				sb.append(id).append(",");
+//			}
+//			sb.deleteCharAt(sb.length() - 1);
+//		}
+//		mReqChangeObj.data.msgIds = sb.toString();
+//		if (mCall != null) {
+//			mCall.cancel();
+//		}
+//		mCall = Global.getNetEngine().changePushMessageStatus(mReqChangeObj);
+//		mCall.enqueue(new Callback<JsonRespBase<Void>>() {
+//			@Override
+//			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+//				if (call.isCanceled()) {
+//					return;
+//				}
+//				if (response != null && response.isSuccessful()) {
+//					if (response.body() != null && response.body().isSuccess()) {
+//						// 修改消息为已读状态
+//						if (pos != null && mData != null) {
+//							for (int p : pos) {
+//								// 更新为已阅读
+//								if (p < mData.size()) {
+//									mData.get(p).readState = TypeStatusCode.PUSH_READED;
+//									notifyItemChanged(p);
+//								}
+//							}
+//						}
+//						AccountManager.getInstance().obtainUnreadPushMessageCount();
+//						return;
+//					}
+//					if (AppDebugConfig.IS_DEBUG) {
+//						KLog.d(AppDebugConfig.TAG_ADAPTER,
+//								(response.body() == null ? "解析出错":response.body().error()));
+//					}
+//					return;
+//				}
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_ADAPTER, (response == null ? "返回出错":response.code() + "," + response.message()));
+//				}
+//			}
+//
+//			@Override
+//			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_ADAPTER, t);
+//				}
+//			}
+//		});
+//	}
 
 	@Override
 	public void release() {
 		super.release();
-		if (mCall != null) {
-			mCall.cancel();
-		}
+//		if (mCall != null) {
+//			mCall.cancel();
+//		}
 	}
 
 	static class ItemHolder extends BaseRVHolder {

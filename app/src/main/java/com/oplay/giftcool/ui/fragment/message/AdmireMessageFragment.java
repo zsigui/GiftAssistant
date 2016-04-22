@@ -57,7 +57,7 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_refresh_rv_container);
+		initViewManger(R.layout.fragment_refresh_rv_container_with_white_bg);
 		rvData = getViewById(R.id.lv_content);
 	}
 
@@ -208,7 +208,10 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 			mViewManager.showEmpty();
 			return;
 		}
-		Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_ADMIRE, 0, data.get(0).content);
+		final ReplyMessage msg = data.get(0);
+		final String s = String.format(getResources().getString(R.string.st_msg_central_get_a_admire), msg.name);
+		Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_ADMIRE, 0, s);
+//		AccountManager.getInstance().obtainUnreadPushMessageCount();
 		mViewManager.showContent();
 		mHasData = true;
 		mData = data;
@@ -265,24 +268,26 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
 								}
 								if (response != null && response.isSuccessful()) {
 									if (response.body() != null && response.body().isSuccess()) {
-										KLog.d(AppDebugConfig.TAG_WARN, "修改成功");
+										if (AppDebugConfig.IS_DEBUG) {
+											KLog.d(AppDebugConfig.TAG_FRAG, "修改成功");
+										}
 										return;
 									}
 									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析出错" :
+										KLog.d(AppDebugConfig.TAG_FRAG, response.body() == null ? "解析出错" :
 												response.body().error());
 									}
 									return;
 								}
 								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_WARN, response == null ? "服务器出错" :
+									KLog.d(AppDebugConfig.TAG_FRAG, response == null ? "服务器出错" :
 											response.code() + ":" + response.body());
 								}
 							}
 
 							@Override
 							public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-								KLog.d(AppDebugConfig.TAG_WARN, t);
+								KLog.d(AppDebugConfig.TAG_FRAG, t);
 							}
 						});
 			}

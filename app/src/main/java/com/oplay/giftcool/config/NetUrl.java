@@ -208,12 +208,12 @@ public class NetUrl {
 	/**
 	 * 修改用户昵称
 	 */
-	public static final String USER_MODIFY_NICK = "account/modify_account_nick";
+	public static final String USER_MODIFY_NICK = "v2/account/modify_account_nick";
 
 	/**
 	 * 修改用户头像
 	 */
-	public static final String USER_MODIFY_AVATAR = "account/change_account_avartar";
+	public static final String USER_MODIFY_AVATAR = "v2/account/change_account_avatar";
 
 	/**
 	 * 修改绑定手机-第一步
@@ -306,11 +306,17 @@ public class NetUrl {
 	/**
 	 * 获取消息中心未读消息数量
 	 */
-	public static final String MESSAGE_UNREAD_COUNT = "message_unread_count/";
+	public static final String MESSAGE_UNREAD_COUNT = "account/user_message";
 
 	/**
 	 * 用户收到的赞/评论
 	 */
 	public static final String MESSAGE_REPLY_LIST = "activity/user_notice";
+
+	/**
+	 * 系统消息
+	 */
+	public static final String MESSAGE_SYSTEM_LIST = "message/system_message_list";
+
 
 }

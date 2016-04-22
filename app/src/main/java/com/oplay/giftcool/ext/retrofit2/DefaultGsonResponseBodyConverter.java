@@ -28,7 +28,7 @@ final class DefaultGsonResponseBodyConverter<T> implements Converter<ResponseBod
 		try {
 			T data = adapter.read(jsonReader);
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, data == null? "null" : data.toString());
+				KLog.d(AppDebugConfig.TAG_UTIL, data == null? "null" : data.toString());
 			}
 			return data;
 		} finally {

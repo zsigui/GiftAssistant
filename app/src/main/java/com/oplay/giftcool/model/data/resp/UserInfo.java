@@ -74,6 +74,6 @@ public class UserInfo implements Serializable {
 	 * 是否首次登录
 	 */
 	@SerializedName("first_login")
-	public boolean isFirstLogin;
+	public boolean isFirstLogin = false;
 
 }
