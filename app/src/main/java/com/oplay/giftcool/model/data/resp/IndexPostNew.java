@@ -42,7 +42,7 @@ public class IndexPostNew implements Serializable {
 	public String title;
 
 	/**
-	 * 活动状态，暂时初定 0 已结束 1 进行中
+	 * 活动状态，暂时初定 0 进行中 1 未开始 2 已结束
 	 */
 	@SerializedName("status")
 	public int state;

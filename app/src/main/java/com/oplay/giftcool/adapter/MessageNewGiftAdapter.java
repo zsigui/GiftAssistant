@@ -46,7 +46,7 @@ public class MessageNewGiftAdapter extends BaseRVAdapter<PushMessage> implements
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		PushMessage data = getItem(position);
 		ItemHolder itemHolder = (ItemHolder) holder;
-		itemHolder.tvTime.setText(DateUtil.optDate(data.time));
+		itemHolder.tvTime.setText(DateUtil.optDate(data.time, data.timestamp));
 		itemHolder.ivHint.setVisibility(data.readState == TypeStatusCode.PUSH_UNREAD ? View.VISIBLE : View.GONE);
 		itemHolder.tvName.setText(String.format(TITLE_MODULE, data.gameName));
 		itemHolder.tvContent.setText(String.format(CONTENT_MODULE, data.giftContent));

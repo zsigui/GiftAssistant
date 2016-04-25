@@ -462,7 +462,15 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
         return super.onBack();
     }
 
-    /**
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (mWebView != null && BaseFragment_WebView.sScrollMap != null) {
+			BaseFragment_WebView.sScrollMap.put(mWebView.getUrl(), mWebView.getScrollY());
+		}
+	}
+
+	/**
 	 * 根据文件获取图片字节数组的Base64编码字符串
 	 */
 	private String generateImageStringParam(String filePath) {

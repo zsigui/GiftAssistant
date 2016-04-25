@@ -30,6 +30,20 @@ public class DateUtil {
 		return result;
 	}
 
+	/**
+	 * 提取时间，针对 MM-dd HH:mm 格式
+	 */
+	public static String optDate(String date, long time) {
+		String result;
+		if (isToday(time)) {
+			result = "今日 " + date.substring(6, date.length());
+		} else {
+			result = String.format("%s月%s日 %s", date.substring(0, 2), date.substring(3, 5),
+					date.substring(6, date.length()));
+		}
+		return result;
+	}
+
 	public static String formatTime(String timeStr, String format) {
 		if (TextUtils.isEmpty(timeStr))
 			return null;

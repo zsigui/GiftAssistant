@@ -41,6 +41,8 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 						}
 						start = end;
 					}
+				} else {
+					KLog.d(AppDebugConfig.TAG_ENCRYPT, "response = " + json);
 				}
 			}
 			return gson.fromJson(json, type);

@@ -264,8 +264,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
 		showLoading();
 		final ReqLogin login = new ReqLogin();
 		if (!login.setPhoneUser(etPhone.getText().toString())) {
-			hideLoading();
 			showToast("手机号码格式不符合要求");
+			hideLoading();
 			return;
 		}
 		btnSendCode.setEnabled(false);

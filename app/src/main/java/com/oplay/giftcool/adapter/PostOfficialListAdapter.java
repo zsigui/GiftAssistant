@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -26,6 +27,7 @@ public class PostOfficialListAdapter extends BaseRVAdapter<IndexPostNew> impleme
 	// 重复使用的文字类型
 	private final String TEXT_STATE_DOING;
 	private final String TEXT_STATE_FINISHED;
+	private final String TEXT_STATE_WAIT;
 
 	public PostOfficialListAdapter(Context context) {
 		this(context, null);
@@ -36,6 +38,7 @@ public class PostOfficialListAdapter extends BaseRVAdapter<IndexPostNew> impleme
 		super(context, data);
 		TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
 		TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
+		TEXT_STATE_WAIT = context.getResources().getString(R.string.st_index_post_text_wait);
 	}
 
 	@Override
@@ -48,19 +51,21 @@ public class PostOfficialListAdapter extends BaseRVAdapter<IndexPostNew> impleme
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		final IndexPostNew item = getItem(position);
 		OfficialHolder officialHolder = (OfficialHolder) holder;
-		officialHolder.tvTitle.setText(item.title);
-		ViewUtil.showImage(officialHolder.ivIcon, item.img);
-//				if (item.isNew) {
-//					officialHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_task_new, 0, 0, 0);
-//				} else {
-//					officialHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-//				}
+		if (item.showType == 1) {
+			ViewUtil.showImage(officialHolder.ivIcon, item.banner);
+		} else {
+			ViewUtil.showImage(officialHolder.ivIcon, item.img);
+		}
 		switch (item.state) {
-			case 0:
+			case TypeStatusCode.POST_FINISHED:
 				officialHolder.tvState.setText(TEXT_STATE_FINISHED);
 				officialHolder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
 				break;
-			case 1:
+			case TypeStatusCode.POST_WAIT:
+				officialHolder.tvState.setText(TEXT_STATE_WAIT);
+				officialHolder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
+				break;
+			case TypeStatusCode.POST_BEING:
 				officialHolder.tvState.setText(TEXT_STATE_DOING);
 				officialHolder.tvState.setBackgroundResource(R.drawable.ic_post_enabled);
 				break;
@@ -68,6 +73,7 @@ public class PostOfficialListAdapter extends BaseRVAdapter<IndexPostNew> impleme
 		officialHolder.itemView.setOnClickListener(this);
 		officialHolder.itemView.setTag(TAG_POSITION, position);
 		officialHolder.tvContent.setText(item.content);
+		officialHolder.tvTitle.setText(item.title);
 	}
 
 	@Override

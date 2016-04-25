@@ -17,6 +17,7 @@ import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
@@ -101,11 +102,11 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 		final int postId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
 		switch (type) {
 			case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
-				reattachFrag(R.id.fl_container, PostDetailFragment.newInstance(postId), "detail");
+				replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(postId), "", true);
 				break;
 			case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
 				final int commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
-                reattachFrag(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId), "commentDetail");
+				replaceFragWithTitle(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId), "", true);
 				break;
 			default:
 				mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
@@ -137,16 +138,20 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 	@Override
 	public boolean onBack() {
 		InputMethodUtil.hideSoftInput(this);
+		KLog.d(AppDebugConfig.TAG_WARN, "onBack = " + getTopFragment() + ", instanceOf = " + (getTopFragment() instanceof OnBackPressListener));
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
-
+			KLog.d(AppDebugConfig.TAG_WARN, "onBack");
 			return false;
 		}
 		if (!popFrag() && !isFinishing()) {
 			mNeedWorkCallback = false;
 			if (MainActivity.sGlobalHolder == null) {
 				IntentUtil.jumpHome(this, false);
+			}
+			if (BaseFragment_WebView.sScrollMap != null) {
+				BaseFragment_WebView.sScrollMap.clear();
 			}
 			finish();
 		} else {

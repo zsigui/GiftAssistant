@@ -52,6 +52,12 @@ public class PushMessage implements Serializable {
 	public String time;
 
 	/**
+	 * 时间戳
+	 */
+	@SerializedName("timestamp")
+	public long timestamp;
+
+	/**
 	 * 是否已读, 0未读，1已读
 	 */
 	@SerializedName("status")

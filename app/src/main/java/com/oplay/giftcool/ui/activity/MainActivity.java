@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -42,8 +41,6 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
-
-import java.io.File;
 
 /**
  * @author micle
@@ -459,7 +456,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     @Override
     public void onBackPressed() {
 
-        if (System.currentTimeMillis() - mLastClickTime <= 1000) {
+        if (System.currentTimeMillis() - mLastClickTime <= 3000) {
             mApp.appExit();
             // 发送退出指令
             finish();
@@ -596,19 +593,19 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 //		}
     }
 
-    private boolean hasLoadPic() {
-        boolean hasLoad = false;
-        String imageUrl = AssistantApp.getInstance().getBroadcastBanner().url;
-        if (imageUrl != null) {
-            File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
-            if (file != null && file.exists()) {
-                hasLoad = true;
-            } else {
-                ImageLoader.getInstance().loadImage(imageUrl, null);
-            }
-        }
-        return hasLoad;
-    }
+//    private boolean hasLoadPic() {
+//        boolean hasLoad = false;
+//        String imageUrl = AssistantApp.getInstance().getBroadcastBanner().url;
+//        if (imageUrl != null) {
+//            File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
+//            if (file != null && file.exists()) {
+//                hasLoad = true;
+//            } else {
+//                ImageLoader.getInstance().loadImage(imageUrl, null);
+//            }
+//        }
+//        return hasLoad;
+//    }
 
     /**
      * 处理更新逻辑

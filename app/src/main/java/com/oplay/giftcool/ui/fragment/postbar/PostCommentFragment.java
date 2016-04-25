@@ -112,8 +112,8 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		reqData.put(KEY_POST_ID, postId);
 		reqData.put(KEY_COMMENT_ID, commentId);
 		setReplyTo(commentId, KEY_COMMMENT_TO_DEFAULT);
-//		showBar(true, null);
-		mWebView.loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
+		showBar(true, null);
+		loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
 	}
 
 	@Override
@@ -164,6 +164,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	 */
 	private Call<JsonRespBase<Void>> mCallPost;
 	private Call<JsonRespBase<PostToken>> mCallGetToken;
+
 	/**
 	 * 执行发送消息服务
 	 */
@@ -303,8 +304,8 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		DialogManager.getInstance().hideLoadingDialog();
 	}
 
-    private final int BIG_INCREASE = 5;
-    private final int NORMAL_INCREASE = 1;
+	private final int BIG_INCREASE = 5;
+	private final int NORMAL_INCREASE = 1;
 	private int walkStep = BIG_INCREASE;
 	private int wvTouchStep = 0;
 	private int textStep = 0;
@@ -361,11 +362,11 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			mLastSoftInputHeight = softInputHeight;
 			resetLayoutParams();
 		}
-		if (walkStep== textStep) {
+		if (walkStep == textStep) {
 			walkStep += NORMAL_INCREASE;
 			InputMethodUtil.showSoftInput(getActivity());
 		} else if ((walkStep - NORMAL_INCREASE == textStep && curHeight == 0)
-                || walkStep == wvTouchStep) {
+				|| walkStep == wvTouchStep) {
 			walkStep += BIG_INCREASE;
 			llBackground.setVisibility(View.GONE);
 		}

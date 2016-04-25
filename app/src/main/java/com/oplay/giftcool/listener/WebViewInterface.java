@@ -27,6 +27,7 @@ import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import org.json.JSONObject;
@@ -278,17 +279,24 @@ public class WebViewInterface extends Observable {
 	 * 显示底部的回复栏
 	 */
 	@JavascriptInterface
-	public int showBottomBar(boolean isShow) {
+	public int showBottomBar(final boolean isShow) {
 		if (mHostFragment == null) {
 			return RET_INTERNAL_ERR;
 		}
 		if (mHostFragment instanceof ShowBottomBarListener) {
-			((ShowBottomBarListener) mHostFragment).showBar(isShow, null);
+			ThreadUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					((ShowBottomBarListener) mHostFragment).showBar(isShow, null);
+				}
+			});
 			return RET_SUCCESS;
 		} else {
 			return RET_OTHER_ERR;
 		}
 	}
+
+	private Call<Object> mCall;
 
 	/**
 	 * 进行异步网络请求
@@ -309,9 +317,11 @@ public class WebViewInterface extends Observable {
 					return;
 				}
 				try {
-					Call<Object> mCall;
 					JSONObject realReqParam = new JSONObject(reqParam);
 					Object a = AssistantApp.getInstance().getGson().fromJson(realReqParam.toString(), Object.class);
+					if (mCall != null) {
+						mCall.cancel();
+					}
 					if (TextUtils.isEmpty(reqMethod) || reqMethod.equalsIgnoreCase("POST")) {
 						mCall = Global.getNetEngine().asyncPostForJsCall(reqUrl, new JsonReqBase<Object>(a));
 					} else {
@@ -320,6 +330,9 @@ public class WebViewInterface extends Observable {
 					mCall.enqueue(new Callback<Object>() {
 						@Override
 						public void onResponse(Call<Object> call, Response<Object> response) {
+							if (call.isCanceled()) {
+								return;
+							}
 							if (response == null) {
 								execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EMPTY_RESPONSE, "response为空"));
 								return;
@@ -334,6 +347,9 @@ public class WebViewInterface extends Observable {
 
 						@Override
 						public void onFailure(Call<Object> call, Throwable t) {
+							if (call.isCanceled()) {
+								return;
+							}
 							String returnData = initJsonError(NetStatusCode.ERR_EXEC_FAIL, t.getMessage());
 							execJs(callbackJsName, returnData);
 						}
@@ -342,6 +358,7 @@ public class WebViewInterface extends Observable {
 					if (AppDebugConfig.IS_DEBUG) {
 						e.printStackTrace();
 					}
+					execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EXEC_FAIL, "执行异常"));
 				}
 			}
 		});
@@ -356,16 +373,20 @@ public class WebViewInterface extends Observable {
 	 * @return
 	 */
 	@JavascriptInterface
-	public int setReplyTo(int commentId, String name) {
+	public int setReplyTo(final int commentId, final String name) {
 		if (mHostFragment != null) {
-			if (mHostFragment instanceof PostCommentFragment) {
-				PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
-				fragment.setReplyTo(commentId, name);
-				return RET_SUCCESS;
-			} else if (mHostFragment instanceof PostDetailFragment) {
-				((PostDetailFragment) mHostFragment).toReply();
-				return RET_SUCCESS;
-			}
+			ThreadUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (mHostFragment instanceof PostCommentFragment) {
+						PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
+						fragment.setReplyTo(commentId, name);
+					} else if (mHostFragment instanceof PostDetailFragment) {
+						((PostDetailFragment) mHostFragment).toReply();
+					}
+				}
+			});
+			return RET_SUCCESS;
 		}
 		return RET_OTHER_ERR;
 	}
@@ -381,6 +402,10 @@ public class WebViewInterface extends Observable {
 			} else {
 				mWebView.evaluateJavascript(js, null);
 			}
+		}
+		if (mCall != null) {
+			mCall.cancel();
+			mCall = null;
 		}
 	}
 

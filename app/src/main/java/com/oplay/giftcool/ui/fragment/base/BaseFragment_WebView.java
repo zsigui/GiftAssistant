@@ -36,12 +36,14 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by zsigui on 16-1-14.
  */
 public abstract class BaseFragment_WebView extends BaseFragment implements DownloadListener, OnBackPressListener {
+
 
 	protected WebView mWebView;
 	private WebSettings mSettings;
@@ -52,8 +54,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	protected int mScrollY;
 	private boolean mInit = false;
 	private boolean mIsLoadingFailed;
+	private String mUrl;
 
 	private List<String> mTitles = new ArrayList<>();
+	public static final HashMap<String, Integer> sScrollMap = new HashMap<>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +70,11 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mProgressBar = getViewById(R.id.pb_percent);
 		mWebView = getViewById(R.id.wv_container);
 		mWebView.setWebViewClient(new WebViewClient() {
+			@Override
+			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+				return interceptRequest(view, request);
+			}
+
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
@@ -91,30 +100,38 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				boolean hasFind;
 				Uri mUri = Uri.parse(url);
-                if (mUri == null) {
-                    return false;
-                }
+				if (mUri == null) {
+					return false;
+				}
 				final String host = mUri.getHost();
-                if (TextUtils.isEmpty(host)) {
-                    return false;
-                }
+				if (TextUtils.isEmpty(host)) {
+					return false;
+				}
 				//首先域名匹配
-                // 对于部分机型 getBaseUrl 可能为null
+				// 对于部分机型 getBaseUrl 可能为null
 				if (WebViewUrl.getBaseUrl().contains(host)
-                        || NetUrl.getBaseUrl().contains(host)) {
+						|| NetUrl.getBaseUrl().contains(host)) {
 					//其次路径匹配
+					if (mWebView != null) {
+						sScrollMap.put(mUrl, mWebView.getScrollY());
+						KLog.d(AppDebugConfig.TAG_WARN, "mUrl = " + mUrl + ", url = " + url + ", scrollY = " +
+								mWebView.getScrollY());
+						mUrl = url;
+					}
+//					loadUrl(url);
 					hasFind = false;
 				} else {
-					Intent in = new Intent (Intent.ACTION_VIEW , Uri.parse(url));
+					Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 					startActivity(in);
 					hasFind = true;
 				}
-				return hasFind || super.shouldOverrideUrlLoading(view, url);
+				return hasFind;
 			}
 
 
 		});
-		mWebView.setWebChromeClient(new WebChromeClient() {
+		final WebChromeClient client = new WebChromeClient() {
+
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				super.onProgressChanged(view, newProgress);
@@ -140,7 +157,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				ToastUtil.showShort(message);
 				return super.onJsAlert(view, url, message, result);
 			}
-		});
+
+
+		};
+		mWebView.setWebChromeClient(client);
 		// 开启硬件加速，否则部分手机（如vivo）WebView会很卡
 		if (Build.VERSION.SDK_INT >= 11) {
 			mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -221,9 +241,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	 * @return
 	 */
 	protected WebResourceResponse interceptRequest(WebView view, WebResourceRequest request) {
-
 		return null;
 	}
+
+
 
 	protected void onWebPageStarted() {
 		if (AppDebugConfig.IS_DEBUG) {
@@ -270,14 +291,22 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			}
 			// 必须page load finish 才能重新setScrollY
 			if (mWebView != null && mInit) {
+				mUrl = mWebView.getUrl();
+				if (sScrollMap.containsKey(mUrl)) {
+					mScrollY = sScrollMap.get(mUrl);
+				} else {
+					mScrollY = 0;
+				}
 				mWebView.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						if (mWebView != null && mScrollX > 0 && mScrollY > 0) {
-							mWebView.scrollTo(mScrollX, mScrollY);
+							KLog.d(AppDebugConfig.TAG_WARN, "scroll to x = " + mScrollX + ", y = " + mScrollY);
+						if (mWebView != null && (mScrollX > 0 || mScrollY > 0)) {
+							mWebView.scrollBy(mScrollX, mScrollY);
+							KLog.d(AppDebugConfig.TAG_WARN, "y = " + mWebView.getScrollY());
 						}
 					}
-				}, 55);
+				}, 500);
 			}
 			mInit = true;
 //			mSettings.setBlockNetworkImage(false);
@@ -326,6 +355,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	public void goBack() {
 		if (mWebView != null && mWebView.canGoBack()) {
 			mWebView.goBack();
+			final Integer y = sScrollMap.remove(mUrl);
 			if (mTitles.size() > 1) {
 				mTitles.remove(mTitles.size() - 1);
 				if (getContext() != null && getContext() instanceof SetTitleListner) {
@@ -342,12 +372,16 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	}
 
 	public void loadUrl(String url) {
+		mUrl = url;
 		if (AppDebugConfig.IS_DEBUG) {
-			AppDebugConfig.logMethodWithParams(this, url);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + url);
+			AppDebugConfig.logMethodWithParams(this, mUrl);
+            KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + mUrl);
 		}
 		if (mWebView != null) {
-			mWebView.loadUrl(url);
+			if (sScrollMap.get(mUrl) != null) {
+				mScrollY = sScrollMap.get(mUrl);
+			}
+			mWebView.loadUrl(mUrl);
 		}
 	}
 
@@ -356,9 +390,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	 * 需要在setting设置完之后设置，方法可在processLogic中调用
  	 */
 	public void postUrl(String url, byte[] postData) {
+		mUrl = url;
 		if (AppDebugConfig.IS_DEBUG) {
-			AppDebugConfig.logMethodWithParams(this, url);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + url);
+			AppDebugConfig.logMethodWithParams(this, mUrl);
+            KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + mUrl);
 		}
 		if (mWebView != null) {
 			mWebView.postUrl(url, postData);
@@ -396,9 +431,11 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		try {
 			if (mWebView != null) {
 				if (mWebView.canGoBack()) {
+					KLog.d(AppDebugConfig.TAG_WARN, "canGoBack");
 					goBack();
 					return true;
 				}
+				KLog.d(AppDebugConfig.TAG_WARN, "canNotGoBack");
 //				mWebView.stopLoading();
 //				((ViewGroup)mContentView).removeView(mWebView);
 //				mWebView.removeAllViews();
@@ -421,6 +458,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				mWebView.removeAllViews();
 				mWebView.destroy();
 			}
+			final Integer y = sScrollMap.remove(mUrl);
+			KLog.d(AppDebugConfig.TAG_WARN, "url = " + mUrl + ", y = " + y);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

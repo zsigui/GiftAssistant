@@ -16,6 +16,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
+import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.FooterListener;
@@ -42,6 +43,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 	// 重复使用的文字类型
 	private final String TEXT_STATE_DOING;
 	private final String TEXT_STATE_FINISHED;
+	private final String TEXT_STATE_WAIT;
 	private final String TEXT_OFFICIAL;
 	private final String TEXT_NOTIFY;
 	private final String TEXT_READ_ATTENTION;
@@ -57,6 +59,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 		SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;
 		TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
 		TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
+		TEXT_STATE_WAIT = context.getResources().getString(R.string.st_index_post_text_wait);
 		TEXT_OFFICIAL = context.getResources().getString(R.string.st_index_post_official);
 		TEXT_NOTIFY = context.getResources().getString(R.string.st_index_post_notify);
 		TEXT_READ_ATTENTION = context.getResources().getString(R.string.st_index_post_read_attention);
@@ -190,11 +193,15 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 			ViewUtil.showImage(holder.ivIcon, item.img);
 		}
 		switch (item.state) {
-			case 0:
+			case TypeStatusCode.POST_FINISHED:
 				holder.tvState.setText(TEXT_STATE_FINISHED);
 				holder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
 				break;
-			case 1:
+			case TypeStatusCode.POST_WAIT:
+				holder.tvState.setText(TEXT_STATE_WAIT);
+				holder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
+				break;
+			case TypeStatusCode.POST_BEING:
 				holder.tvState.setText(TEXT_STATE_DOING);
 				holder.tvState.setBackgroundResource(R.drawable.ic_post_enabled);
 				break;

@@ -130,7 +130,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 								// 获取数据成功
 								refreshSuccessEnd();
 								transferIndexPostToArray(response.body().getData());
-								updateDate(mData);
+								updateData(mData);
 								return;
 							}
 						}
@@ -196,7 +196,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		}
 	}
 
-	public void updateDate(ArrayList<IndexPostNew> data) {
+	public void updateData(ArrayList<IndexPostNew> data) {
 		if (data == null) {
 			return;
 		}
@@ -326,7 +326,9 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 									mInitData.notifyData = data;
 									transferIndexPostToArray(mInitData);
-									updateDate(mData);
+									mNoMoreLoad = false;
+									mRefreshLayout.setCanShowLoad(true);
+									updateData(mData);
 								} else {
 									toggleFailed("没有相关关注快讯");
 								}

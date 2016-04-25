@@ -14,4 +14,9 @@ public abstract class TypeStatusCode {
 	// 推送消息状态
 	public static final int PUSH_UNREAD = 0;
 	public static final int PUSH_READED = 1;
+
+	// 官方活动状态
+	public static final int POST_BEING = 0;
+	public static final int POST_WAIT = 1;
+	public static final int POST_FINISHED = 2;
 }
