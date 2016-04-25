@@ -64,7 +64,6 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	private TextView tvSend;
 	private View llBackground;
 	private int mLastSoftInputHeight;
-	private boolean mShowSoftInput = false;
 
 	/**
 	 * 请求参数字典
@@ -136,9 +135,9 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			reqData.put(KEY_COMMENT_ID, commentId);
 		}
 		if (etContent != null) {
+			walkStep += BIG_INCREASE;
 			etContent.setHint(String.format("回复%s", name));
 			etContent.requestFocus();
-//			replyToStep = walkStep++;
 //			llBackground.setVisibility(View.VISIBLE);
 		}
 	}
@@ -304,11 +303,12 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		DialogManager.getInstance().hideLoadingDialog();
 	}
 
-	private int walkStep = 10;
-	private int wvTouchStep;
-	private int textStep;
-	private int replyStep;
-	private int replyToStep;
+    private final int BIG_INCREASE = 5;
+    private final int NORMAL_INCREASE = 1;
+	private int walkStep = BIG_INCREASE;
+	private int wvTouchStep = 0;
+	private int textStep = 0;
+	private int replyStep = 0;
 	private boolean mIsDown = false;
 	private long mLastTouchTime = 0;
 
@@ -319,7 +319,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				long curTime = System.currentTimeMillis();
-				if (curTime - mLastClickTime < 100) {
+				if (curTime - mLastTouchTime < 100) {
 					mLastTouchTime = curTime;
 					break;
 				}
@@ -334,12 +334,10 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 						textStep = walkStep;
 						llBackground.setVisibility(View.VISIBLE);
 					}
-//				InputMethodUtil.showSoftInput(getActivity());
 					break;
 				case R.id.wv_container:
 					wvTouchStep = walkStep;
 					InputMethodUtil.hideSoftInput(getActivity());
-//				llBackground.setVisibility(View.GONE);
 					break;
 			}
 			mIsDown = false;
@@ -364,20 +362,11 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 			resetLayoutParams();
 		}
 		if (walkStep== textStep) {
-			walkStep ++;
+			walkStep += NORMAL_INCREASE;
 			InputMethodUtil.showSoftInput(getActivity());
-		} else if (walkStep == wvTouchStep) {
-			walkStep += 5;
-			llBackground.setVisibility(View.GONE);
-		} else if (walkStep - 1 == textStep && curHeight == 0) {
-//			InputMethodUtil.hideSoftInput(getActivity());
-			walkStep += 5;
-			llBackground.setVisibility(View.GONE);
-		} else if (walkStep== replyToStep) {
-			walkStep += 5;
-			InputMethodUtil.showSoftInput(getActivity());
-		} else if (replyStep == walkStep) {
-			walkStep += 5;
+		} else if ((walkStep - NORMAL_INCREASE == textStep && curHeight == 0)
+                || walkStep == wvTouchStep) {
+			walkStep += BIG_INCREASE;
 			llBackground.setVisibility(View.GONE);
 		}
 	}

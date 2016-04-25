@@ -244,11 +244,11 @@ public class Global {
 	 * 更新消息中心的消息列表项中指定代号项的数据
 	 */
 	public static void updateMsgCentralData(Context context, String code, int count, String msg) {
-		KLog.d(AppDebugConfig.TAG_APP, "code = " + code + ", count = " + count);
+		KLog.d(AppDebugConfig.TAG_WARN, "code = " + code + ", count = " + count);
 		final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
 		for (CentralHintMessage item : data) {
 			if (item.code.equalsIgnoreCase(code)) {
-				KLog.d(AppDebugConfig.TAG_APP, "equal code = " + code + ", count = " + count);
+				KLog.d(AppDebugConfig.TAG_WARN, "equal code = " + code + ", count = " + count);
 				item.count = count;
 				if (!TextUtils.isEmpty(msg)) {
 					item.content = msg;

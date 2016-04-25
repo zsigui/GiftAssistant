@@ -135,7 +135,7 @@ public class AssistantApp extends Application {
         sInstance = this;
         // 启动闹钟通知广播进程来唤醒服务
         AlarmClockManager.getInstance().startWakeAlarm(this);
-        appInit();
+//        appInit();
     }
 
     private boolean isInitialing = false;

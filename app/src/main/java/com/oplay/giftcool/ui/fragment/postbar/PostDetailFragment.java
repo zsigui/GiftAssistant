@@ -164,13 +164,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	// 以下状态结合判断下端回复栏的显示
 	// 实现略丑陋，逻辑已经不会理了
-	private final int BIG_INSCREASE = 5;
-	private final int NORMAL_INSCREASE = 1;
+	private final int BIG_INCREASE = 5;
+	private final int NORMAL_INCREASE = 1;
 	private int imgFailStep = 0;
 	private int wvTouchStep = 0;
 	private int contentTouchStep = 0;
 	private int replyToStep = 0;
-	private int walkStep = BIG_INSCREASE;
+	private int walkStep = BIG_INCREASE;
 
 	@Override
 	public void onClick(View v) {
@@ -183,7 +183,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 					return;
 				}
 				ivImgAdd.setSelected(true);
-				walkStep += BIG_INSCREASE;
+				walkStep += BIG_INCREASE;
 				if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
 					InputMethodUtil.hideSoftInput(getActivity());
 				} else if (llImgPreview.getVisibility() == View.VISIBLE){
@@ -208,7 +208,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 */
 	public void pickSuccess() {
 		ivImgAdd.setSelected(true);
-		walkStep += BIG_INSCREASE;
+		walkStep += BIG_INCREASE;
 		if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
 			InputMethodUtil.hideSoftInput(getActivity());
 		} else {
@@ -222,12 +222,11 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	public void pickFailed() {
 		mAdapter.setPicTextVal();
 		ivImgAdd.setSelected(false);
-		etContent.requestFocus();
 		if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
 			imgFailStep = walkStep;
 			InputMethodUtil.hideSoftInput(getActivity());
 		} else if (llImgPreview.getVisibility() == View.VISIBLE) {
-			walkStep += BIG_INSCREASE;
+			walkStep += BIG_INCREASE;
 			llImgPreview.setVisibility(View.GONE);
 		}
 	}
@@ -442,18 +441,28 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	 * 在提交回复后执行刷新UI操作
 	 */
 	private void refreshAfterPost() {
-		etContent.setText("");
-		ivImgAdd.setSelected(false);
-		final int count = mPostImg.size();
-		mPostImg.clear();
-		mAdapter.notifyItemRangeRemoved(0, count);
+        clearState();
 		reloadPage();
-		pickFailed();
 		hideLoading();
 		ToastUtil.showShort("回复成功");
 	}
 
-	/**
+    private void clearState() {
+        etContent.setText("");
+        ivImgAdd.setSelected(false);
+        final int count = mPostImg.size();
+        mPostImg.clear();
+        mAdapter.notifyItemRangeRemoved(0, count);
+        pickFailed();
+    }
+
+    @Override
+    public boolean onBack() {
+        clearState();
+        return super.onBack();
+    }
+
+    /**
 	 * 根据文件获取图片字节数组的Base64编码字符串
 	 */
 	private String generateImageStringParam(String filePath) {
@@ -524,22 +533,25 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			switch (v.getId()) {
 				case R.id.et_content:
 					// EditText点击打开软键盘之前，需要先显示llImgPreview才行，否则页面会被推上去
-					if (InputMethodUtil.getSoftInputHeight(getActivity()) != 0) {
-						// ignored
-					} else if (llImgPreview.getVisibility() == View.VISIBLE) {
-						walkStep += BIG_INSCREASE;
-						InputMethodUtil.showSoftInput(getActivity());
-					} else {
-						contentTouchStep = walkStep;
-						llImgPreview.setVisibility(View.VISIBLE);
+                    etContent.requestFocus();
+					if (InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
+                        contentTouchStep = walkStep;
+                        if (llImgPreview.getVisibility() == View.VISIBLE) {
+						    walkStep += NORMAL_INCREASE;
+						    InputMethodUtil.showSoftInput(getActivity());
+                        } else {
+                            llImgPreview.setVisibility(View.VISIBLE);
+                        }
 					}
-					etContent.requestFocus();
 					break;
 				case R.id.wv_container:
 					if (InputMethodUtil.getSoftInputHeight(getActivity()) == 0) {
-						walkStep += BIG_INSCREASE;
-						llImgPreview.setVisibility(View.GONE);
+						walkStep += BIG_INCREASE;
+                        if (llImgPreview.getVisibility() == View.VISIBLE) {
+                            llImgPreview.setVisibility(View.GONE);
+                        }
 					} else {
+                        wvTouchStep = walkStep;
 						InputMethodUtil.hideSoftInput(getActivity());
 					}
 					break;
@@ -565,13 +577,18 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 			resetLayoutParams();
 		}
 
+//        KLog.d(AppDebugConfig.TAG_WARN, "curHeight = " + curHeight
+//        + ", contentTouchStep = " + contentTouchStep
+//        + ", imgFailStep = " + imgFailStep
+//        + ", wvTouchStep = " + wvTouchStep
+//        + ", walkStep = " + walkStep);
 		if (contentTouchStep == walkStep) {
-			walkStep += NORMAL_INSCREASE;
+			walkStep += NORMAL_INCREASE;
 			InputMethodUtil.showSoftInput(getActivity());
-		} else if ((contentTouchStep == walkStep - NORMAL_INSCREASE && curHeight == 0)
+		} else if ((contentTouchStep == walkStep - NORMAL_INCREASE && curHeight == 0)
 				|| (imgFailStep == walkStep)
 				|| (wvTouchStep == walkStep)) {
-			walkStep += BIG_INSCREASE;
+			walkStep += BIG_INCREASE;
 			llImgPreview.setVisibility(View.GONE);
 		}
 	}

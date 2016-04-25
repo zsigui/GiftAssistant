@@ -45,7 +45,7 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -101,11 +101,11 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 		final int postId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
 		switch (type) {
 			case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
-				replaceFrag(R.id.fl_container, PostDetailFragment.newInstance(postId));
+				reattachFrag(R.id.fl_container, PostDetailFragment.newInstance(postId), "detail");
 				break;
 			case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
 				final int commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
-				replaceFrag(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId));
+                reattachFrag(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId), "commentDetail");
 				break;
 			default:
 				mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
@@ -140,6 +140,7 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
+
 			return false;
 		}
 		if (!popFrag() && !isFinishing()) {

@@ -195,7 +195,7 @@
 				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
 				android:screenOrientation = "sensorPortrait"
 				android:launchMode = "singleTop"
-				android:windowSoftInputMode = "adjustUnspecified|stateAlwaysHidden" >
+				android:windowSoftInputMode = "adjustNothing|stateAlwaysHidden" >
 			<intent-filter >
 				<action android:name = "com.oplay.giftcool.action.PostDetail" />
 				<category android:name = "android.intent.category.DEFAULT" />
