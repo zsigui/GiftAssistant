@@ -69,6 +69,15 @@ public class WebViewInterface extends Observable {
 	}
 
 	@JavascriptInterface
+	public int jumpToGame(int id) {
+		if (id <= 0) {
+			return RET_PARAM_ERR;
+		}
+		IntentUtil.jumpGameDetail(mHostActivity, id);
+		return RET_SUCCESS;
+	}
+
+	@JavascriptInterface
 	public int seizeGiftCode(String giftJson) {
 		if (TextUtils.isEmpty(giftJson)) {
 			return RET_PARAM_ERR;

@@ -10,7 +10,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -24,7 +23,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
-import com.socks.library.KLog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,16 +95,20 @@ public class AboutFragment extends BaseFragment {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                if (response != null && response.isSuccessful() && response.body() != null &&
-                        response.body().getCode() == NetStatusCode.SUCCESS) {
-                    mUpdateInfo = response.body().getData();
-                    if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
-                        setUpdate(String.format(mContext.getResources().getString(R.string
-                                .st_about_wait_update_text), mUpdateInfo.versionName));
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null && response.body().isSuccess()) {
+                        mUpdateInfo = response.body().getData();
+                        if (mUpdateInfo != null && mUpdateInfo.checkoutUpdateInfo(getContext())) {
+                            setUpdate(String.format(mContext.getResources().getString(R.string
+                                    .st_about_wait_update_text), mUpdateInfo.versionName));
+                            return;
+                        }
+                        setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
                         return;
                     }
                 }
-                setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
+                setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
             }
 
             @Override
@@ -114,9 +116,7 @@ public class AboutFragment extends BaseFragment {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.e(AppDebugConfig.TAG_FRAG, t);
-                }
+                AppDebugConfig.warn(AppDebugConfig.TAG_FRAG, t);
                 setUpdate(mContext.getResources().getString(R.string
                         .st_about_check_update_failed));
             }

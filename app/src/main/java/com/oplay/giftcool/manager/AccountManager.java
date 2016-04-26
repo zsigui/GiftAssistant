@@ -148,6 +148,8 @@ public class AccountManager implements OnFinishListener {
 
     public boolean isLogin() {
         return (mUser != null
+                && getUserSesion() != null
+                && getUserInfo() != null
                 && !TextUtils.isEmpty(getUserSesion().session)
                 && getUserInfo().uid != 0);
     }

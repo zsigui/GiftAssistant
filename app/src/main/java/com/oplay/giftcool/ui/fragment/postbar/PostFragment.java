@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.postbar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -129,8 +130,13 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								// 获取数据成功
 								refreshSuccessEnd();
-								transferIndexPostToArray(response.body().getData());
+								final IndexPost data = response.body().getData();
+								transferIndexPostToArray(data);
 								updateData(mData);
+								if (data.notifyData == null || data.notifyData.isEmpty()) {
+									// 关注快讯为空
+									toggleFailed(null);
+								}
 								return;
 							}
 						}
@@ -371,7 +377,9 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 	private void toggleFailed(String msg) {
 		mAdapter.toggleButton(false, false);
-		ToastUtil.showShort(msg);
+		if (!TextUtils.isEmpty(msg)) {
+			ToastUtil.showShort(msg);
+		}
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class ToggleButton extends View{
 	/** 画笔*/
 	private Paint paint ;
 	/** 开关状态*/
-	private boolean toggleOn = false;
+	private boolean toggleOn = true;
 	/** 边框大小*/
 	private int borderWidth = 2;
 	/** 垂直中心*/

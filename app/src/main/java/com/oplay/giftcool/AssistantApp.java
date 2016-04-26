@@ -254,7 +254,7 @@ public class AssistantApp extends Application {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     // 请求时携带版本信息
-                    String headerValue = String.format(ConstString.TEXT_HEADER,
+                    final String headerValue = String.format(ConstString.TEXT_HEADER,
                             AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
                             AppConfig.SDK_VER_NAME, getChannelId());
                     String headerName = "X-Client-Info";
@@ -377,7 +377,7 @@ public class AssistantApp extends Application {
                 SPConfig.KEY_REMEMBER_PWD, true);
         setIsPlayDownloadComplete(mIsPlayDownloadComplete);
         mIsReadAttention = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_IS_READ_ATTENTION, false);
+                SPConfig.KEY_IS_READ_ATTENTION, true);
         getSoftInputHeight(null);
     }
 

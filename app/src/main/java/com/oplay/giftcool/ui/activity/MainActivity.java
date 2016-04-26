@@ -151,7 +151,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         mCtvs[INDEX_GAME] = ctvGame;
         mCtvs[INDEX_POST] = ctvEssay;
         if (!AssistantApp.getInstance().isAllowDownload()) {
-            llTab.setVisibility(View.GONE);
+            ctvGame.setVisibility(View.GONE);
         }
     }
 

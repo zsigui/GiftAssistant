@@ -17,19 +17,17 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
-import com.oplay.giftcool.config.util.GameTypeUtil;
-import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.util.GameTypeUtil;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
-import com.oplay.giftcool.model.AppStatus;
-import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
@@ -41,8 +39,6 @@ import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
-import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
@@ -55,7 +51,6 @@ import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
-import java.util.HashSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -407,11 +402,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				if (mData == null) {
 					return;
 				}
-				if (AssistantApp.getInstance().isAllowDownload()
-						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE
-						&& !isInstalledGame()) {
-					return;
-				}
+				// 取消强制要求下载的模块
+//				if (AssistantApp.getInstance().isAllowDownload()
+//						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+//					return;
+//				}
 				PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);
 				break;
             case R.id.tv_qq:
@@ -428,54 +423,54 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 	/**
 	 * 判断是否安装了游戏，如果没有，弹窗提示下载安装
 	 */
-	private boolean isInstalledGame() {
-		HashSet<String> appNames = Global.getInstalledAppNames();
-		for (String name : appNames) {
-			if (mData.gameData.name.startsWith(name)) {
-				// 前缀匹配成功，表明有安装该游戏，返回成功
-				return true;
-			}
-		}
-		if (mAppInfo == null) {
-			ToastUtil.showShort("页面信息错误，请重新进入");
-			return false;
-		}
-		final ConfirmDialog dialog = ConfirmDialog.newInstance();
-		dialog.setTitle("小贴士");
-		dialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
-				mData.gameData.name)));
-		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus
-				.INSTALLABLE) {
-			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
-			dialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
-		} else {
-			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
-		}
-		dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-			@Override
-			public void onCancel() {
-				dialog.dismissAllowingStateLoss();
-			}
-
-			@Override
-			public void onConfirm() {
-				if (mAppInfo != null) {
-					if (mAppInfo.downloadStatus != null) {
-						if (mAppInfo.downloadStatus == DownloadStatus.DOWNLOADING) {
-							ToastUtil.showShort("已经在下载中，请等待下载完成");
-							dialog.dismissAllowingStateLoss();
-							return;
-						}
-						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
-					}
-					mAppInfo.handleOnClick(getChildFragmentManager());
-				}
-				dialog.dismissAllowingStateLoss();
-			}
-		});
-		dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
-		return false;
-	}
+//	private boolean isInstalledGame() {
+//		HashSet<String> appNames = Global.getInstalledAppNames();
+//		for (String name : appNames) {
+//			if (mData.gameData.name.startsWith(name)) {
+//				// 前缀匹配成功，表明有安装该游戏，返回成功
+//				return true;
+//			}
+//		}
+//		if (mAppInfo == null) {
+//			ToastUtil.showShort("页面信息错误，请重新进入");
+//			return false;
+//		}
+//		final ConfirmDialog dialog = ConfirmDialog.newInstance();
+//		dialog.setTitle("小贴士");
+//		dialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
+//				mData.gameData.name)));
+//		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus
+//				.INSTALLABLE) {
+//			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
+//			dialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
+//		} else {
+//			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
+//		}
+//		dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//			@Override
+//			public void onCancel() {
+//				dialog.dismissAllowingStateLoss();
+//			}
+//
+//			@Override
+//			public void onConfirm() {
+//				if (mAppInfo != null) {
+//					if (mAppInfo.downloadStatus != null) {
+//						if (mAppInfo.downloadStatus == DownloadStatus.DOWNLOADING) {
+//							ToastUtil.showShort("已经在下载中，请等待下载完成");
+//							dialog.dismissAllowingStateLoss();
+//							return;
+//						}
+//						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
+//					}
+//					mAppInfo.handleOnClick(getChildFragmentManager());
+//				}
+//				dialog.dismissAllowingStateLoss();
+//			}
+//		});
+//		dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
+//		return false;
+//	}
 
 	private Runnable mProgressRunnable;
 

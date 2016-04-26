@@ -9,7 +9,6 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
@@ -27,8 +26,8 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -93,15 +92,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	/**
 	 * 判断是否今日首次登录
 	 */
-//	public void judgeFirstOpenToday() {
-//		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
-//		// 首次打开APP 或者 今日首次登录
-//		MainActivity.sIsTodayFirstOpen = (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
-//		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
-//		// 写入当前时间
-//		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
-//				.currentTimeMillis());
-//	}
+	public boolean judgeFirstOpenToday() {
+		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+		// 首次打开APP 或者 今日首次登录
+		// 写入当前时间
+		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
+				.currentTimeMillis());
+		return (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
+	}
 
 	/**
 	 * 需要在此完成一些APP全局常量初始化的获取工作
@@ -141,7 +139,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
 		doClearWorkForOldVer();
 		// 判断是否今日首次打开APP
-//		judgeFirstOpenToday();
+		if (judgeFirstOpenToday()) {
+			// 进行应用信息上报
+			reportedAppInfo();
+		}
 
 		try {
 			OuwanSDKManager.getInstance().init();
@@ -173,8 +174,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		// 每次登录请求一次更新用户状态和数据
 		AccountManager.getInstance().updateUserSession();
 
-		// 进行应用信息上报
-		reportedAppInfo();
 
 		assistantApp.setGlobalInit(true);
 	}
@@ -186,7 +185,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		try {
 			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
 			if (response != null && response.isSuccessful()) {
-				if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+				if (response.body() != null && response.body().isSuccess()) {
 					InitAppResult initData = response.body().getData();
 					if (initData != null) {
 						if (initData.initAppConfig != null) {
@@ -204,10 +203,13 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 						return true;
 					}
 				}
+				KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析失败" : response.body().error());
+				return false;
 			}
+			KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败" : response.message());
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(e);
+				e.printStackTrace();
 			}
 		}
 		return false;
@@ -237,28 +239,26 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 									if (AppDebugConfig.IS_DEBUG) {
 										KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
 									}
-									return;
 								}
-								ThreadUtil.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										reportedAppInfo();
-									}
-								}, 30 * 1000);
+								AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
+//								ThreadUtil.runOnUiThread(new Runnable() {
+//									@Override
+//									public void run() {
+//										reportedAppInfo();
+//									}
+//								}, 30 * 1000);
 							}
 
 							@Override
 							public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.d(AppDebugConfig.TAG_APP, t);
-								}
+								AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
 								// 上报失败，等待30秒后继续执行
-								ThreadUtil.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										reportedAppInfo();
-									}
-								}, 30 * 1000);
+//								ThreadUtil.runOnUiThread(new Runnable() {
+//									@Override
+//									public void run() {
+//										reportedAppInfo();
+//									}
+//								}, 30 * 1000);
 							}
 						});
 			}

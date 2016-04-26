@@ -3,9 +3,12 @@ package com.oplay.giftcool.config;
 import android.os.Debug;
 import android.util.Log;
 
+import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.socks.library.KLog;
 
 import java.lang.reflect.Field;
+
+import retrofit2.Response;
 
 /**
  * @author micle
@@ -172,5 +175,50 @@ public class AppDebugConfig {
 			}
 		}
 
+	}
+
+	public static <T> void warnResp(Response<JsonRespBase<T>> response) {
+		warnResp(AppDebugConfig.TAG_APP, response);
+	}
+
+	public static <T> void warnResp(String tag, Response<JsonRespBase<T>> response) {
+		if (IS_DEBUG) {
+			if (response == null || !response.isSuccessful()) {
+				warn(tag, response);
+			} else if (response.body() == null || !response.body().isSuccess()) {
+				warn(tag, response.body());
+			}
+		}
+	}
+
+	public static <T> void warn(String tag, Response<JsonRespBase<T>> response) {
+		if (IS_DEBUG) {
+			KLog.w(tag, response == null ? "返回出错!" : response.code() + ": " + response.message());
+		}
+	}
+
+	public static <T> void warn(Response<JsonRespBase<T>> response) {
+		warn(AppDebugConfig.TAG_APP, response);
+	}
+
+	public static <T> void warn(String tag, JsonRespBase<T> respBase) {
+		if (IS_DEBUG) {
+			KLog.w(tag, respBase == null ? "解析结构出错!" : respBase.error());
+		}
+	}
+
+	public static <T> void warn(JsonRespBase<T> respBase) {
+		warn(AppDebugConfig.TAG_APP, respBase);
+	}
+
+	public static void warn(String tag, Throwable t) {
+		if (AppDebugConfig.IS_DEBUG) {
+//			KLog.d(tag, t);
+			t.printStackTrace();
+		}
+	}
+
+	public static void warn(Throwable t) {
+		warn(AppDebugConfig.TAG_APP, t);
 	}
 }

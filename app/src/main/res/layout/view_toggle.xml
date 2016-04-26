@@ -10,4 +10,5 @@
     app:tb_spotColor = "@color/co_white"
     app:tb_offBorderColor = "@color/co_common_content_bg"
     app:tb_borderWidth="0.5dp"
+
     android:layout_height="20dp" />
