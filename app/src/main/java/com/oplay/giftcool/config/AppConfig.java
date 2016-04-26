@@ -6,8 +6,8 @@ package com.oplay.giftcool.config;
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 1105;
-	public static final String SDK_VER_NAME = "V1.1.5";
+	public static final int SDK_VER = 1005;
+	public static final String SDK_VER_NAME = "V1.0.5";
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 
 	/* 上传头像的大小 */

@@ -10,6 +10,8 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.download.silent.SilentDownloadManager;
+import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -261,6 +263,13 @@ public class DialogManager {
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
+                DownloadInfo info = new DownloadInfo();
+                info.setDestUrl(appInfo.destUrl);
+                info.setDownloadUrl(appInfo.downloadUrl);
+                info.setTotalSize(appInfo.apkFileSize);
+                info.setMd5Sum(appInfo.apkMd5);
+                info.setIsDownload(true);
+                SilentDownloadManager.getInstance().startDownload(info);
 				confirmDialog.dismiss();
 			}
 

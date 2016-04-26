@@ -11,6 +11,8 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
+import com.oplay.giftcool.download.silent.SilentDownloadManager;
+import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.PushMessageManager;
@@ -119,6 +121,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		// 初始化推送SDK
 		PushMessageManager.getInstance().initPush(assistantApp);
 
+        testDownload();
 
 		// 初始化设备配置
 		assistantApp.initAppConfig();
@@ -178,7 +181,16 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		assistantApp.setGlobalInit(true);
 	}
 
-	private boolean initAndCheckUpdate() {
+    private void testDownload() {
+        DownloadInfo info = new DownloadInfo();
+        info.setTotalSize(95827865);
+        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
+        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5.0_250_chn_1856000_92efbb4bde7721b1.owk");
+        info.setIsDownload(true);
+        SilentDownloadManager.getInstance().startDownload(info);
+    }
+
+    private boolean initAndCheckUpdate() {
 		ReqInitApp data = new ReqInitApp();
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
