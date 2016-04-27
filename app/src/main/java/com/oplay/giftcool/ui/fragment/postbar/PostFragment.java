@@ -134,7 +134,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 								updateData(mData);
 								if (data.notifyData == null || data.notifyData.isEmpty()) {
 									// 关注快讯为空
-									toggleFailed(null);
+									mAdapter.toggleButton(false, true);
 								}
 								return;
 							}

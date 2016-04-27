@@ -418,7 +418,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			if (mPostFragment != null) {
 				mPostFragment.setPagePosition(mJumpPostPos);
 			}
-			mJumpGiftPos = -1;
+			mJumpPostPos = -1;
 		}
 	}
 
