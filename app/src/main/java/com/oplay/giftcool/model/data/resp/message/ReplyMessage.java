@@ -55,6 +55,12 @@ public class ReplyMessage implements Serializable {
 	public String time;
 
 	/**
+	 * 时间戳
+	 */
+	@SerializedName("timestamp")
+	public long timestamp;
+
+	/**
 	 * 我的回复的图片
 	 */
 	@SerializedName("ref_imgs")
@@ -65,6 +71,7 @@ public class ReplyMessage implements Serializable {
 	 */
 	@SerializedName("ref_content")
 	public String hintText;
+
 
 	/**
 	 * 发表评论的用户ID

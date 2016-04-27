@@ -8,12 +8,10 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.database.DownloadDBHelper;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnInstallListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -606,9 +604,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
 		if (appInfo != null) {
 			stopDownloadingTask(appInfo);
-			mManagerList.add(getEndOfPaused(), appInfo);
 			appInfo.downloadStatus = DownloadStatus.FINISHED;
 			appInfo.completeSize = appInfo.apkFileSize;
+			mManagerList.add(getEndOfPaused(), appInfo);
 			mFinishedCnt++;
 			DownloadNotificationManager.showDownload(mApplicationContext);
 			DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
@@ -668,5 +666,9 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		if (MainActivity.sGlobalHolder != null) {
 			MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, getEndOfPaused());
 		}
+	}
+
+	public boolean contains(String downloadUrl) {
+		return mUrl_AppInfo != null && mUrl_AppInfo.containsKey(downloadUrl);
 	}
 }

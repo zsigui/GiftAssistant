@@ -10,7 +10,10 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.WebData;
+import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -27,6 +30,8 @@ public class BannerTypeUtil {
 	public static final int ACTION_GIFT_DETAIL = 4;
 	public static final int ACTION_GAME_DETAIL_GIFT = 5;
 	public static final int ACTION_JOIN_QQ_GROUP = 6;
+	public static final int ACTION_POST = 7;
+	public static final int ACTION_POST_DETAIL = 8;
 
 	public static void handleBanner(Context context, IndexBanner banner) {
 		if (banner == null) {
@@ -68,6 +73,15 @@ public class BannerTypeUtil {
 						return;
 					}
 					IntentUtil.joinQQGroup(context, banner.extData);
+					break;
+				case ACTION_POST:
+					if (MainActivity.sGlobalHolder != null) {
+						MainActivity.sGlobalHolder.jumpToIndexPost(PostFragment.INDEX_HEADER);
+					}
+					break;
+				case ACTION_POST_DETAIL:
+					IndexPostNew post_p = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexPostNew.class);
+					IntentUtil.jumpPostDetail(context, post_p.id);
 					break;
 				case ACTION_DEFAULT:
 				default:

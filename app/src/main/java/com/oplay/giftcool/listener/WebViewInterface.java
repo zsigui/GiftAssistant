@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import com.google.gson.JsonSyntaxException;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -28,6 +29,7 @@ import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import org.json.JSONObject;
@@ -404,6 +406,10 @@ public class WebViewInterface extends Observable {
 	 * 执行Js操作
 	 */
 	private void execJs(String callbackJsName, String returnData) {
+		if (mWebView == null) {
+			ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+			return;
+		}
 		if (callbackJsName != null) {
 			String js = String.format("%s('%s')", callbackJsName, returnData);
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {

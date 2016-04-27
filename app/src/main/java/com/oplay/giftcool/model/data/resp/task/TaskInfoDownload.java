@@ -46,7 +46,7 @@ public class TaskInfoDownload extends TaskInfoThree {
 	public TaskInfoDownload(String code, TaskInfoThree info) {
 		this();
 		this.code = code;
-		this.packName = info.packName;
+		this.packName = info.packName.trim();
 		this.time = info.time * 2 / 3;
 		this.appId = info.appId;
 	}

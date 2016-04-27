@@ -60,7 +60,7 @@
 	<uses-permission android:name = "android.permission.WRITE_SETTINGS" />
 
 	<application
-			android:name = "com.excelliance.open.LBApplication"
+			android:name = "com.oplay.giftcool.AssistantApp"
 			android:allowBackup = "false"
 			android:icon = "@mipmap/ic_launcher"
 			android:label = "@string/app_name"
@@ -71,13 +71,13 @@
 				android:name = ".ui.activity.SplashActivity"
 				android:launchMode = "singleTop"
 				android:screenOrientation = "sensorPortrait" >
-			<!--<intent-filter >
-				<action android:code = "android.intent.action.MAIN" />
-				<category android:code = "android.intent.category.LAUNCHER" />
+			<intent-filter >
+				<action android:name = "android.intent.action.MAIN" />
+				<category android:name = "android.intent.category.LAUNCHER" />
 			</intent-filter >
 			<intent-filter >
-				<action android:code = "android.intent.action.CREATE_SHORTCUT" />
-			</intent-filter >-->
+				<action android:name = "android.intent.action.CREATE_SHORTCUT" />
+			</intent-filter >
 		</activity >
 
 		<activity
@@ -585,398 +585,398 @@
 
 
 		<!-- lebian sdk components begin -->
-		<activity
-				android:name = "com.excelliance.open.KXQP"
-				android:configChanges = "orientation|screenSize"
-				android:process = ":lbmain"
-				android:screenOrientation = "portrait"
-				android:theme = "@android:style/Theme.NoTitleBar.Fullscreen" >
-			<intent-filter >
-				<!--请勿删除此intent filter，如果其余SDK要求设置他们的activity为主activity，只需将下面的meta data配置为他们的主activity即可-->
-				<action android:name = "android.intent.action.MAIN" />
-				<category android:name = "android.intent.category.LAUNCHER" />
-			</intent-filter >
-			<meta-data
-					android:name = "mainActivity"
-					android:value = "${applicationId}.ui.activity.SplashActivity" />
-		</activity >
-		<activity
-				android:name = "com.excelliance.open.platform.NextChapter"
-				android:configChanges = "orientation|screenSize"
-				android:process = ":lbmain"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_main_app_theme" >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.startNextChapter" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
+		<!--<activity-->
+				<!--android:name = "com.excelliance.open.KXQP"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:process = ":lbmain"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@android:style/Theme.NoTitleBar.Fullscreen" >-->
+			<!--<intent-filter >-->
+				<!--&lt;!&ndash;请勿删除此intent filter，如果其余SDK要求设置他们的activity为主activity，只需将下面的meta data配置为他们的主activity即可&ndash;&gt;-->
+				<!--<action android:name = "android.intent.action.MAIN" />-->
+				<!--<category android:name = "android.intent.category.LAUNCHER" />-->
+			<!--</intent-filter >-->
+			<!--<meta-data-->
+					<!--android:name = "mainActivity"-->
+					<!--android:value = "${applicationId}.ui.activity.SplashActivity" />-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.open.platform.NextChapter"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:process = ":lbmain"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_main_app_theme" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.startNextChapter" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+		<!--</activity >-->
 
-		<activity
-				android:name = "com.excelliance.open.PromptActivity"
-				android:configChanges = "orientation|screenSize"
-				android:process = ":lbmain"
-				android:screenOrientation = "portrait"
-				android:theme = "@android:style/Theme.Translucent.NoTitleBar" >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.startPromptActivity" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
+		<!--<activity-->
+				<!--android:name = "com.excelliance.open.PromptActivity"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:process = ":lbmain"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@android:style/Theme.Translucent.NoTitleBar" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.startPromptActivity" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+		<!--</activity >-->
 
-		<receiver
-				android:name = "com.excelliance.open.notification.BGReceiver"
-				android:process = ":lbmain" >
-			<intent-filter >
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.appstate" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.queryUpdate" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "android.intent.action.MEDIA_MOUNTED" />
-				<data android:scheme = "file" />
-			</intent-filter >
-		</receiver >
-		<service
-				android:name = "com.excelliance.open.BGService"
-				android:process = ":download" >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.gameverchk" />
-				<action android:name = "com.excelliance.open.action.apkverchk" />
-				<action android:name = "com.excelliance.open.action.dmchk" />
-				<action android:name = "com.excelliance.open.action.fw" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.NEXT_CHAPTER" />
-				<action android:name = "com.excelliance.open.action.PLAT_DO" />
-			</intent-filter >
-		</service >
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.open.notification.BGReceiver"-->
+				<!--android:process = ":lbmain" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.appstate" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.queryUpdate" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "android.intent.action.MEDIA_MOUNTED" />-->
+				<!--<data android:scheme = "file" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.open.BGService"-->
+				<!--android:process = ":download" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.gameverchk" />-->
+				<!--<action android:name = "com.excelliance.open.action.apkverchk" />-->
+				<!--<action android:name = "com.excelliance.open.action.dmchk" />-->
+				<!--<action android:name = "com.excelliance.open.action.fw" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.NEXT_CHAPTER" />-->
+				<!--<action android:name = "com.excelliance.open.action.PLAT_DO" />-->
+			<!--</intent-filter >-->
+		<!--</service >-->
 
-		<activity
-				android:name = "com.excelliance.kxqp.platform.GameActivity"
-				android:configChanges = "orientation|screenSize"
-				android:process = ":lbmain"
-				android:screenOrientation = "portrait" >
-		</activity >
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.GameActivity"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:process = ":lbmain"-->
+				<!--android:screenOrientation = "portrait" >-->
+		<!--</activity >-->
 
-		<service
-				android:name = "com.android.ggapsvc.LBService"
-				android:process = ":lebian" >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.actlbs1" />
-				<action android:name = "com.excelliance.open.action.actlbs2" />
-				<action android:name = "com.excelliance.open.action.actlbs3" />
-				<action android:name = "com.excelliance.open.action.ACT_LBService" />
-			</intent-filter >
-		</service >
+		<!--<service-->
+				<!--android:name = "com.android.ggapsvc.LBService"-->
+				<!--android:process = ":lebian" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.actlbs1" />-->
+				<!--<action android:name = "com.excelliance.open.action.actlbs2" />-->
+				<!--<action android:name = "com.excelliance.open.action.actlbs3" />-->
+				<!--<action android:name = "com.excelliance.open.action.ACT_LBService" />-->
+			<!--</intent-filter >-->
+		<!--</service >-->
 
-		<receiver
-				android:name = "com.excelliance.kxqp.notification.NotificationReceiver"
-				android:process = ":lebian" >
-			<intent-filter >
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.ACT_LB_RECEIVER" />
-				<action android:name = "com.excelliance.open.action.downloadcomponent.progress" />
-			</intent-filter >
-		</receiver >
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.notification.NotificationReceiver"-->
+				<!--android:process = ":lebian" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.ACT_LB_RECEIVER" />-->
+				<!--<action android:name = "com.excelliance.open.action.downloadcomponent.progress" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
 
-		<service
-				android:name = "com.excelliance.kxqp.platform.PlatformService"
-				android:process = ":lbmain" >
-			<intent-filter >
-				<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.BIND_REMOTE" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.UNBIND_REMOTE" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.platform.gameplugin.action.START_FROM_SHORTCUT" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "com.excelliance.open.action.ACTIVITY_STATE" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</service >
-		<service android:name = "com.excelliance.open.PrestartService" />
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.BootService" >
-		</service >
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.PlatformService"-->
+				<!--android:process = ":lbmain" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.BIND_REMOTE" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.UNBIND_REMOTE" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.platform.gameplugin.action.START_FROM_SHORTCUT" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "com.excelliance.open.action.ACTIVITY_STATE" />-->
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+			<!--</intent-filter >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.open.PrestartService" />-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.BootService" >-->
+		<!--</service >-->
 
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy1"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy2"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy3"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy4"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy5"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT1"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT2"
-				android:configChanges = "orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleInstance"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI2"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleInstance"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySIT1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleInstance"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST2"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTT1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop2"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy" >
-		</activity >
-		<activity
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTopT1"
-				android:configChanges = "orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/lebian_activity_proxy_t" >
-		</activity >
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy2"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy3"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy4"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy5"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT2"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleInstance"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI2"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleInstance"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySIT1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleInstance"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTask"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST2"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTask"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTT1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTask"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTop"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop2"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTop"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTopT1"-->
+				<!--android:configChanges = "orientation|screenSize"-->
+				<!--android:launchMode = "singleTop"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
+		<!--</activity >-->
 
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy1" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy2" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy3" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy4" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy5" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy6" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy7" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy8" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy9" >
-		</service >
-		<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy10" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A1"
-				android:process = ":platform.gameplugin_SP_A" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A2"
-				android:process = ":platform.gameplugin_SP_A" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A3"
-				android:process = ":platform.gameplugin_SP_A" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A4"
-				android:process = ":platform.gameplugin_SP_A" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B1"
-				android:process = ":platform.gameplugin_SP_B" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B2"
-				android:process = ":platform.gameplugin_SP_B" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B3"
-				android:process = ":platform.gameplugin_SP_B" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B4"
-				android:process = ":platform.gameplugin_SP_B" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C1"
-				android:process = ":platform.gameplugin_SP_C" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C2"
-				android:process = ":platform.gameplugin_SP_C" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C3"
-				android:process = ":platform.gameplugin_SP_C" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C4"
-				android:process = ":platform.gameplugin_SP_C" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D1"
-				android:process = ":platform.gameplugin_SP_D" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D2"
-				android:process = ":platform.gameplugin_SP_D" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D3"
-				android:process = ":platform.gameplugin_SP_D" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D4"
-				android:process = ":platform.gameplugin_SP_D" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E1"
-				android:process = ":platform.gameplugin_SP_E" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E2"
-				android:process = ":platform.gameplugin_SP_E" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E3"
-				android:process = ":platform.gameplugin_SP_E" >
-		</service >
-		<service
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E4"
-				android:process = ":platform.gameplugin_SP_E" >
-		</service >
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy1" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy2" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy3" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy4" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy5" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy6" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy7" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy8" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy9" >-->
+		<!--</service >-->
+		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy10" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A1"-->
+				<!--android:process = ":platform.gameplugin_SP_A" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A2"-->
+				<!--android:process = ":platform.gameplugin_SP_A" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A3"-->
+				<!--android:process = ":platform.gameplugin_SP_A" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A4"-->
+				<!--android:process = ":platform.gameplugin_SP_A" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B1"-->
+				<!--android:process = ":platform.gameplugin_SP_B" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B2"-->
+				<!--android:process = ":platform.gameplugin_SP_B" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B3"-->
+				<!--android:process = ":platform.gameplugin_SP_B" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B4"-->
+				<!--android:process = ":platform.gameplugin_SP_B" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C1"-->
+				<!--android:process = ":platform.gameplugin_SP_C" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C2"-->
+				<!--android:process = ":platform.gameplugin_SP_C" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C3"-->
+				<!--android:process = ":platform.gameplugin_SP_C" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C4"-->
+				<!--android:process = ":platform.gameplugin_SP_C" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D1"-->
+				<!--android:process = ":platform.gameplugin_SP_D" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D2"-->
+				<!--android:process = ":platform.gameplugin_SP_D" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D3"-->
+				<!--android:process = ":platform.gameplugin_SP_D" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D4"-->
+				<!--android:process = ":platform.gameplugin_SP_D" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E1"-->
+				<!--android:process = ":platform.gameplugin_SP_E" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E2"-->
+				<!--android:process = ":platform.gameplugin_SP_E" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E3"-->
+				<!--android:process = ":platform.gameplugin_SP_E" >-->
+		<!--</service >-->
+		<!--<service-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E4"-->
+				<!--android:process = ":platform.gameplugin_SP_E" >-->
+		<!--</service >-->
 
-		<receiver android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" />
-			</intent-filter >
-		</receiver >
-		<receiver
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A"
-				android:process = ":platform.gameplugin_SP_A" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A" />
-			</intent-filter >
-		</receiver >
-		<receiver
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B"
-				android:process = ":platform.gameplugin_SP_B" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B" />
-			</intent-filter >
-		</receiver >
-		<receiver
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C"
-				android:process = ":platform.gameplugin_SP_C" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C" />
-			</intent-filter >
-		</receiver >
-		<receiver
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D"
-				android:process = ":platform.gameplugin_SP_D" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D" />
-			</intent-filter >
-		</receiver >
-		<receiver
-				android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E"
-				android:process = ":platform.gameplugin_SP_E" >
-			<intent-filter >
-				<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E" />
-			</intent-filter >
-		</receiver >
+		<!--<receiver android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A"-->
+				<!--android:process = ":platform.gameplugin_SP_A" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B"-->
+				<!--android:process = ":platform.gameplugin_SP_B" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C"-->
+				<!--android:process = ":platform.gameplugin_SP_C" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D"-->
+				<!--android:process = ":platform.gameplugin_SP_D" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+		<!--<receiver-->
+				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E"-->
+				<!--android:process = ":platform.gameplugin_SP_E" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
 		<!-- lebian sdk components end -->
 		<!-- 乐变参数 -->
-		<meta-data
-				android:name = "ClientChId"
-				android:value = "${loveotaClientID}" />
-		<meta-data
-				android:name = "MainChId"
-				android:value = "${loveotaMainChId}" />
+		<!--<meta-data-->
+				<!--android:name = "ClientChId"-->
+				<!--android:value = "${loveotaClientID}" />-->
+		<!--<meta-data-->
+				<!--android:name = "MainChId"-->
+				<!--android:value = "${loveotaMainChId}" />-->
 	</application >
 
 </manifest >

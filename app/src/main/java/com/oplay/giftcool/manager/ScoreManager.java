@@ -205,7 +205,7 @@ public class ScoreManager {
 	 * @param ptype         分享类型采用setRewardType并设置该值为RewardType.NOTHING
 	 * @param replayImdiate 是否立即返回结果
 	 */
-	public boolean reward(String ptype, final String appId, final boolean replayImdiate) {
+	public synchronized boolean reward(String ptype, final String appId, final boolean replayImdiate) {
 		if (!AccountManager.getInstance().isLogin()) {
 			return false;
 		}
@@ -271,7 +271,7 @@ public class ScoreManager {
 	/**
 	 * 获取今天进行的下载任务列表
 	 */
-	private HashMap<String, TaskInfoDownload> getCurDownloadTaskSet(Context context) {
+	private synchronized HashMap<String, TaskInfoDownload> getCurDownloadTaskSet(Context context) {
 		synchronized (this) {
 			if (mCurDownloadTaskSet == null) {
 				String data = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE,
@@ -306,7 +306,7 @@ public class ScoreManager {
 	/**
 	 * 添加新的下载任务
 	 */
-	public void addDownloadWork(Context context, String code, TaskInfoThree info) {
+	public synchronized void addDownloadWork(Context context, String code, TaskInfoThree info) {
 
 		TaskInfoDownload download = new TaskInfoDownload(code, info);
 		// 保存状态，以便下次启动之类的有效
@@ -317,7 +317,7 @@ public class ScoreManager {
 	/**
 	 * 判断当前下载任务包名是否存在列表中
 	 */
-	public boolean containDownloadTask(Context context, String packName) {
+	public synchronized boolean containDownloadTask(Context context, String packName) {
 		return getCurDownloadTaskSet(context).containsKey(packName)
 				&& getCurDownloadTaskSet(context).get(packName).isToday();
 	}
@@ -325,27 +325,42 @@ public class ScoreManager {
 	/**
 	 * 判断试玩游戏前台任务，累积时间
 	 */
-	public void judgePlayTime(Context context, int elapseTime) {
+	public synchronized void judgePlayTime(final Context context, final int elapseTime) {
 		Iterator<Map.Entry<String, TaskInfoDownload>> it = getCurDownloadTaskSet(context).entrySet().iterator();
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_WARN, "judgePlayTime is start");
+		}
 		while (it.hasNext()) {
 			final Map.Entry<String, TaskInfoDownload> entry = it.next();
 			final TaskInfoDownload info = entry.getValue();
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WARN, "packageName = " + info.packName +  ", isForeground = " + SystemUtil.isForeground(context, info.packName));
+			}
 			if (SystemUtil.isForeground(context, info.packName)) {
 				info.hasPlayTime += elapseTime;
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime);
+				}
+			}
+
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WARN, "isToday = " + info.isToday() + ", isFinished = " + info.isFinished()
+				+ ", hasPlayTime = " + info.hasPlayTime + ", time = " + info.time);
 			}
 			if (!info.isToday()) {
 				it.remove();
 			} else {
 				if (info.isFinished()) {
-					if (ScoreManager.getInstance().reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId),
-							false)) {
-						it.remove();
-						ScoreManager.getInstance().setTaskFinished(true);
-					}
+					reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), false);
+					it.remove();
+					setTaskFinished(true);
 				}
 			}
 		}
 		if (!mCurDownloadTaskSet.isEmpty()) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WARN, "no finished, continue!");
+			}
 			// 任务没完成，继续监测
 			AlarmClockManager.getInstance().startGameObserverAlarm(context);
 		}

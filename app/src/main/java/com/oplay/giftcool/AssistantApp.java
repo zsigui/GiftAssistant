@@ -222,7 +222,7 @@ public class AssistantApp extends Application {
 //            StatisticsManager.getInstance().exit(this);
         } catch (Exception e) {
             if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "appExit exception : " + e);
+                AppDebugConfig.warn(e);
             }
         }
     }
@@ -365,7 +365,7 @@ public class AssistantApp extends Application {
         mShouldPushMsg = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_ACCEPT_PUSH, true);
         mShouldAutoInstall = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_INSTALL, false);
+                SPConfig.KEY_AUTO_INSTALL, true);
         mShouldAutoFocus = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_AUTO_FOCUS, true);
         mIsAllowDownload = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,

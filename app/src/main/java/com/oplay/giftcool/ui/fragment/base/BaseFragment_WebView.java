@@ -256,7 +256,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		if (mViewManager != null) {
 			mViewManager.showContent();
 		}
+		doAtWebStart();
 	}
+
 
 	protected void onWebReceivedError() {
 		if (AppDebugConfig.IS_DEBUG) {
@@ -300,11 +302,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				mWebView.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-							KLog.d(AppDebugConfig.TAG_WARN, "scroll to x = " + mScrollX + ", y = " + mScrollY);
 						if (mWebView != null && (mScrollX > 0 || mScrollY > 0)) {
 							mWebView.scrollBy(mScrollX, mScrollY);
-							KLog.d(AppDebugConfig.TAG_WARN, "y = " + mWebView.getScrollY());
 						}
+						doAfterWebViewInit();
 					}
 				}, 500);
 			}
@@ -318,6 +319,14 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				mViewManager.showErrorRetry();
 			}
 		}
+	}
+
+	protected void doAtWebStart() {
+
+	}
+
+	protected void doAfterWebViewInit() {
+
 	}
 
 	@Override
@@ -458,8 +467,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				mWebView.removeAllViews();
 				mWebView.destroy();
 			}
-			final Integer y = sScrollMap.remove(mUrl);
-			KLog.d(AppDebugConfig.TAG_WARN, "url = " + mUrl + ", y = " + y);
+			sScrollMap.remove(mUrl);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);

@@ -7,8 +7,10 @@ import android.content.Intent;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.receiver.GameObserverReceiver;
 import com.oplay.giftcool.receiver.StartReceiver;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
 /**
@@ -72,7 +74,7 @@ public class AlarmClockManager {
 	/**
 	 * 启动唤醒闹钟
 	 */
-	public void startWakeAlarm(Context context) {
+	public void startWakeAlarm(final Context context) {
 		if (alarmSender == null) {
 			Intent startIntent = new Intent(context, StartReceiver.class);
 			startIntent.setAction(AlarmClockManager.Action.ALARM_WAKE);
@@ -92,6 +94,9 @@ public class AlarmClockManager {
 				@Override
 				public void run() {
 					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
+					if (NetworkUtil.isWifiConnected(context)) {
+						SilentDownloadManager.getInstance().startDownload();
+					}
 				}
 			});
 		}

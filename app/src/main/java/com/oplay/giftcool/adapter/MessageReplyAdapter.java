@@ -64,7 +64,7 @@ public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements 
 			holder.tvHint.setText(item.hintText);
 			holder.ivHint.setVisibility(View.GONE);
 		}
-		holder.tvTime.setText(DateUtil.optDate(item.time));
+		holder.tvTime.setText(DateUtil.optDate(item.time, item.timestamp));
 		if (mIsComment) {
 			holder.tvContent.setText(item.content);
 		} else {

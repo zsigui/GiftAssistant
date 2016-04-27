@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
@@ -103,23 +104,25 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		if (param == null) {
 			return;
 		}
-		ThreadUtil.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				int visible = isShow ? View.VISIBLE : View.GONE;
-				mAppInfo = (IndexGameNew) param;
-				if (downloadLayout != null) {
-					downloadLayout.setVisibility(visible);
+		if (AssistantApp.getInstance().isAllowDownload()) {
+			ThreadUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					int visible = isShow ? View.VISIBLE : View.GONE;
+					mAppInfo = (IndexGameNew) param;
+					if (downloadLayout != null) {
+						downloadLayout.setVisibility(visible);
+					}
+					if (isShow && btnDownload != null) {
+						mAppInfo.initAppInfoStatus(getContext());
+						int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
+								.downloadUrl);
+						btnDownload.setStatus(mAppInfo.appStatus, "");
+						btnDownload.setProgress(progress);
+					}
 				}
-				if (isShow && btnDownload != null) {
-					mAppInfo.initAppInfoStatus(getContext());
-					int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
-							.downloadUrl);
-					btnDownload.setStatus(mAppInfo.appStatus, "");
-					btnDownload.setProgress(progress);
-				}
-			}
-		});
+			});
+		}
 	}
 
 //	public void setDownloadBtn(final boolean isShow, final FragmentActivity hostActivity, final IndexGameNew appInfo) {

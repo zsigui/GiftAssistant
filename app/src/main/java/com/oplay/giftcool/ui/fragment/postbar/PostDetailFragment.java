@@ -146,7 +146,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 		reqToken.postId = postId;
 		reqData.put(KEY_POST_ID, postId);
-		showBar(true, null);
+//		showBar(true, null);
 		loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), postId));
 	}
 
@@ -171,6 +171,16 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	private int contentTouchStep = 0;
 	private int replyToStep = 0;
 	private int walkStep = BIG_INCREASE;
+
+	@Override
+	protected void doAtWebStart() {
+		showBar(false, null);
+	}
+
+	@Override
+	protected void doAfterWebViewInit() {
+		showBar(true, null);
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -443,6 +453,10 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	private void refreshAfterPost() {
         clearState();
 		reloadPage();
+//		if (mWebView != null) {
+//			loadUrl(mWebView.getUrl() + "#comment");
+//			reloadPage();
+//		}
 		hideLoading();
 		ToastUtil.showShort("回复成功");
 	}

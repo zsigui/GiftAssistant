@@ -10,6 +10,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
+import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
@@ -180,6 +181,8 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 
 	public void startDownload() {
 		try {
+			// 当处于下载，取消此处可能的下载
+			SilentDownloadManager.getInstance().quickDownload(downloadUrl);
 			ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
             if (!isSilent) {
                 ToastUtil.showShort("已添加新的下载任务");

@@ -56,7 +56,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 	private final String KEY_CUID = "cuid";
 	private final String KEY_TOKEN = "token";
 	private final String KEY_CONTENT = "content";
-	private final String KEY_COMMMENT_TO_DEFAULT = "楼主";
+	private final String KEY_COMMENT_TO_DEFAULT = "楼主";
 
 
 	private LinearLayout llBottom;
@@ -111,14 +111,24 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 		reqToken.postId = postId;
 		reqData.put(KEY_POST_ID, postId);
 		reqData.put(KEY_COMMENT_ID, commentId);
-		setReplyTo(commentId, KEY_COMMMENT_TO_DEFAULT);
-		showBar(true, null);
+		setReplyTo(commentId, KEY_COMMENT_TO_DEFAULT);
+//		showBar(true, null);
 		loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
 	}
 
 	@Override
 	protected void lazyLoad() {
 
+	}
+
+	@Override
+	protected void doAtWebStart() {
+		showBar(false, null);
+	}
+
+	@Override
+	protected void doAfterWebViewInit() {
+		showBar(true, null);
 	}
 
 	@Override

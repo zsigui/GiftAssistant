@@ -27,6 +27,7 @@ public class DownloadInfo {
 
 	private String mTempFileName;
 	private String mStoreFileName;
+	private int mRetryTime;
 	/**
 	 * 指示下载状态
 	 */
@@ -84,6 +85,14 @@ public class DownloadInfo {
 			mStoreFileName = createDownloadFilePath(mDownloadUrl, mDestUrl);
 		}
 		return mStoreFileName;
+	}
+
+	public int getRetryTime() {
+		return mRetryTime;
+	}
+
+	public void setRetryTime(int retryTime) {
+		mRetryTime = retryTime;
 	}
 
 	public boolean isDownload() {

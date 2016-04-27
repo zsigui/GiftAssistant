@@ -158,7 +158,7 @@
 	<string name = "st_wallet_score_note" >金币说明</string >
 
 	<!-- 设置 - 金币任务 -->
-	<string name = "st_task_title" >赚金币</string >
+	<string name = "st_task_title" >金币任务</string >
 	<string name = "st_task_btn_to_do" >去完成</string >
 	<string name = "st_task_btn_finished" >已完成</string >
 	<string name = "st_task_lottery_btn" >我要抽奖</string >

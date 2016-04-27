@@ -23,7 +23,6 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -183,7 +182,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		header.showType = PostTypeUtil.TYPE_HEADER;
 		mData.add(header);
 
-		mIndexOfficialHeader = mData.size();
+		mIndexOfficialHeader = mData.size() - 1;
 		// 添加官方活动部分
 		IndexPostNew titleOne = new IndexPostNew();
 		titleOne.showType = PostTypeUtil.TYPE_TITLE_OFFICIAL;
@@ -192,7 +191,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 			mData.addAll(data.officialData);
 		}
 
-		mIndexNotifyHeader = mData.size();
+		mIndexNotifyHeader = mData.size() - 1;
 		IndexPostNew titleTwo = new IndexPostNew();
 		titleTwo.showType = PostTypeUtil.TYPE_TITLE_GAME;
 		mData.add(titleTwo);
@@ -406,27 +405,27 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 	}
 
 	public void setPagePosition(final int type) {
-		ThreadUtil.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (rvData != null) {
-					switch (type) {
-						case INDEX_HEADER:
-							rvData.smoothScrollToPosition(0);
-							break;
-						case INDEX_OFFICIAL:
-							rvData.smoothScrollToPosition(mIndexOfficialHeader < mAdapter.getItemCount() ?
-									mIndexOfficialHeader : mAdapter.getItemCount() - 1);
-							break;
-						case INDEX_NOTIFY:
-							rvData.smoothScrollToPosition(mIndexNotifyHeader < mAdapter.getItemCount() ?
-									mIndexNotifyHeader : mAdapter.getItemCount() - 1);
-							break;
-					}
-
-				}
-			}
-		});
+//		ThreadUtil.runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				if (rvData != null) {
+//					switch (type) {
+//						case INDEX_HEADER:
+//							rvData.smoothScrollToPosition(0);
+//							break;
+//						case INDEX_OFFICIAL:
+////							rvData.smoothScrollToPosition(mIndexOfficialHeader < mAdapter.getItemCount() ?
+////									mIndexOfficialHeader : mAdapter.getItemCount() - 1);
+//							break;
+//						case INDEX_NOTIFY:
+////							rvData.smoothScrollToPosition(mIndexNotifyHeader < mAdapter.getItemCount() ?
+////									mIndexNotifyHeader : mAdapter.getItemCount() - 1);
+//							break;
+//					}
+//
+//				}
+//			}
+//		});
 	}
 
 	@Override

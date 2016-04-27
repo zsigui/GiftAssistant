@@ -38,4 +38,10 @@ public class SystemMessage implements Serializable {
 	 */
 	@SerializedName("create_time")
 	public String time;
+
+	/**
+	 * 时间戳
+	 */
+	@SerializedName("timestamp")
+	public long timestamp;
 }

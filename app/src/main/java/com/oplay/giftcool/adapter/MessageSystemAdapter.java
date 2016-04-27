@@ -44,7 +44,7 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
 		SystemMessage item = getItem(position);
 		holder.tvTitle.setText(item.title);
 		holder.tvContent.setText(item.content);
-		holder.tvTime.setText(DateUtil.optDate(item.time));
+		holder.tvTime.setText(DateUtil.optDate(item.time, item.timestamp));
 		if (item.isRead == 1) {
 			holder.ivNew.setVisibility(View.GONE);
 		} else {

@@ -114,79 +114,79 @@ public class DialogManager {
 		mCallHopeGift = Global.getNetEngine().commitHopeGift(new JsonReqBase<ReqHopeGift>(reqHopeGift));
 		showLoadingDialog(fm);
 		mCallHopeGift.enqueue(new Callback<JsonRespBase<Void>>() {
-					@Override
-					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-						hideLoadingDialog();
-						if (call.isCanceled()) {
-							return;
-						}
-						if (response != null && response.isSuccessful()) {
-							JsonRespBase<Void> resp = response.body();
-							if (resp != null) {
+			@Override
+			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+				hideLoadingDialog();
+				if (call.isCanceled()) {
+					return;
+				}
+				if (response != null && response.isSuccessful()) {
+					JsonRespBase<Void> resp = response.body();
+					if (resp != null) {
 
-								if (resp.isSuccess()
-										|| resp.getCode() == NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT
-										|| resp.getCode() == NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT) {
-									// 构建确定弹窗
-									final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-									confirmDialog.setNegativeVisibility(View.GONE);
-									confirmDialog.setPositiveBtnText(mContext.getString(R.string
-											.st_dialog_btn_success_confirm));
-									dialog.dismissAllowingStateLoss();
-									String title;
-									String content;
-									switch (resp.getCode()) {
-										case NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT:
-											title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
-											content = mContext.getString(R.string
-													.st_dialog_hope_gift_fail_game_limit_content);
-											break;
-										case NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT:
-											title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
-											content = mContext.getString(R.string
-													.st_dialog_hope_gift_fail_total_limit_content);
-											break;
-										default:
-											title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
-											content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
-									}
-									confirmDialog.setTitle(title);
-									confirmDialog.setContent(content);
-									confirmDialog.show(fm, "confirm");
-								} else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
-										|| resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
-									// 登录状态失效
-									ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
-									AccountManager.getInstance().notifyUserAll(null);
-								} else {
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
-												response.body().error()));
-									}
-								}
-
-								return;
+						if (resp.isSuccess()
+								|| resp.getCode() == NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT
+								|| resp.getCode() == NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT) {
+							// 构建确定弹窗
+							final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+							confirmDialog.setNegativeVisibility(View.GONE);
+							confirmDialog.setPositiveBtnText(mContext.getString(R.string
+									.st_dialog_btn_success_confirm));
+							dialog.dismissAllowingStateLoss();
+							String title;
+							String content;
+							switch (resp.getCode()) {
+								case NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT:
+									title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+									content = mContext.getString(R.string
+											.st_dialog_hope_gift_fail_game_limit_content);
+									break;
+								case NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT:
+									title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+									content = mContext.getString(R.string
+											.st_dialog_hope_gift_fail_total_limit_content);
+									break;
+								default:
+									title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
+									content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
 							}
-							return;
+							confirmDialog.setTitle(title);
+							confirmDialog.setContent(content);
+							confirmDialog.show(fm, "confirm");
+						} else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
+								|| resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
+							// 登录状态失效
+							ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+							AccountManager.getInstance().notifyUserAll(null);
+						} else {
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
+										response.body().error()));
+							}
 						}
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));
-						}
-						ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
-					}
 
-					@Override
-					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-						hideLoadingDialog();
-						if (call.isCanceled()) {
-							return;
-						}
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_MANAGER, t);
-						}
-						ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+						return;
 					}
-				});
+					return;
+				}
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));
+				}
+				ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+			}
+
+			@Override
+			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+				hideLoadingDialog();
+				if (call.isCanceled()) {
+					return;
+				}
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_MANAGER, t);
+				}
+				ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+			}
+		});
 	}
 
 
@@ -263,13 +263,16 @@ public class DialogManager {
 		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 			@Override
 			public void onCancel() {
-                DownloadInfo info = new DownloadInfo();
-                info.setDestUrl(appInfo.destUrl);
-                info.setDownloadUrl(appInfo.downloadUrl);
-                info.setTotalSize(appInfo.apkFileSize);
-                info.setMd5Sum(appInfo.apkMd5);
-                info.setIsDownload(true);
-                SilentDownloadManager.getInstance().startDownload(info);
+				if (appInfo.isSilent) {
+					// 允许默认先下载
+					DownloadInfo info = new DownloadInfo();
+					info.setDestUrl(appInfo.destUrl);
+					info.setDownloadUrl(appInfo.downloadUrl);
+					info.setTotalSize(appInfo.apkFileSize);
+					info.setMd5Sum(appInfo.apkMd5);
+					info.setIsDownload(true);
+					SilentDownloadManager.getInstance().startDownload(info);
+				}
 				confirmDialog.dismiss();
 			}
 

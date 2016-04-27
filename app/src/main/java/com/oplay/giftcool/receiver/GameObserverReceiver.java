@@ -31,7 +31,9 @@ public class GameObserverReceiver extends BroadcastReceiver {
 			ThreadUtil.runInThread(new Runnable() {
 				@Override
 				public void run() {
-					ScoreManager.getInstance().judgePlayTime(context, AlarmClockManager.ALARM_WAKE_ELAPSED_TIME / 1000);
+					final int time = AlarmClockManager.ALARM_WAKE_ELAPSED_TIME / 1000;
+					KLog.d(AppDebugConfig.TAG_WARN, "elpaseTime = " + time + ", time = " + (time /  1000));
+					ScoreManager.getInstance().judgePlayTime(context, time);
 				}
 			});
 		}
