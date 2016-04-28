@@ -64,7 +64,7 @@ mkdir -p ${OUTPUTDIR}
 
 # spilt $CHNNAMES to array
 IFS=',' read -ra CHNARRAY <<< ${CHNNAMES}
-DATE=`date +%Y%m%d%H%m`
+DATE=`date +%Y%m%d%H%M`
 for i in ${CHNARRAY[@]}
 do
     DESTAPK=${OUTPUTDIR}/${NAME}_v${VERSION}_${i}_${DATE}.apk

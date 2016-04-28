@@ -167,8 +167,9 @@ public class SocketIOManager {
 				@Override
 				public void run() {
 					for (int i = mCandidateList.size() - 1; i >= 0; i--) {
-						ScoreManager.getInstance().toastByCallback(mCandidateList.remove(i), true);
+						ScoreManager.getInstance().toastByCallback(mCandidateList.remove(i), false);
 					}
+					AccountManager.getInstance().updatePartUserInfo();
 				}
 			});
 		}

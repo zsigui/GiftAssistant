@@ -18,8 +18,8 @@ VERSION=1.2.0
 CHNNAMES=0,1972000
 TEMPOUTPUT=${CWD}/../apk/temp-unsigned
 SOURCEAPK=${CWD}/../apk/src/app-release.encrypted.apk
-OUTPUT=${CWD}/../apk/output/V${VERSION}
-EXTENSION=.${NAME}
+OUTPUT=${CWD}/../apk/output
+EXTENSION=.giftcool
 
 # 签名参数
 KEYSTORE=${CWD}/../app/keystore/gift_cool.keystore

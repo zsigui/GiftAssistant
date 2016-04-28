@@ -136,6 +136,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 
 				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+						ScoreManager.getInstance().setTaskFinished(false);
 						ArrayList<ScoreMissionGroup> missionGroups = response.body().getData();
 						mData = transferToMissionList(missionGroups);
 						setTaskIcon(mData);
@@ -410,7 +411,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				if (tvScore != null && AccountManager.getInstance().isLogin()) {
 					tvScore.setText(String.valueOf(AccountManager.getInstance().getUserInfo().score));
 				}
-				break;
+//				break;
 			case ObserverManager.STATUS.USER_UPDATE_ALL:
 			case ObserverManager.STATUS.USER_UPDATE_TASK:
 				notifyRefresh();
