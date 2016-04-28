@@ -27,6 +27,7 @@ import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
+import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -213,6 +214,7 @@ public class AssistantApp extends Application {
             setGlobalInit(false);
             PushMessageManager.getInstance().exit(this);
             SilentDownloadManager.getInstance().stopAllDownload();
+            SocketIOManager.getInstance().close();
             if (ImageLoader.getInstance().isInited()) {
                 ImageLoader.getInstance().clearMemoryCache();
                 ImageLoader.getInstance().stop();

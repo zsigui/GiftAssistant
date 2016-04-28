@@ -322,8 +322,10 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 		SocketIOManager.getInstance().connectOrReConnect(true);
 		AccountManager.getInstance().notifyUserAll(userModel);
 		ScoreManager.getInstance().initSignInState(getContext());
-		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID
-				.USER_OUWAN_LOGIN, "用户名=" + userModel.userInfo.username);
+		StatisticsManager.getInstance().trace(getContext(),
+				StatisticsManager.ID.USER_OUWAN_LOGIN,
+				StatisticsManager.ID.STR_USER_OUWAN_LOGIN,
+				"用户名:" + userModel.userInfo.username);
 		((BaseAppCompatActivity) getActivity()).onBack();
 	}
 

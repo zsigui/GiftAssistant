@@ -72,7 +72,10 @@ public class DialogManager {
 				if (dialog != null) {
 					dialog.dismissAllowingStateLoss();
 				}
-				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_HOPE_GIFT_QUICK);
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.USER_HOPE_GIFT_QUICK,
+						StatisticsManager.ID.STR_USER_HOPE_GIFT,
+						StatisticsManager.ID.STR_USER_HOPE_GIFT_QUICK);
 			}
 
 			@Override
@@ -83,7 +86,10 @@ public class DialogManager {
 					return;
 				}
 				handleHopeGiftRequest(fm, dialog, dialog.getGameId(), dialog.getName(), dialog.getNote());
-				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS);
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS,
+						StatisticsManager.ID.STR_USER_HOPE_GIFT,
+						StatisticsManager.ID.STR_USER_HOPE_GIFT_SUCCESS);
 			}
 		};
 		dialog.setListener(dialogClickListener);
@@ -147,6 +153,7 @@ public class DialogManager {
 											.st_dialog_hope_gift_fail_total_limit_content);
 									break;
 								default:
+									ScoreManager.getInstance().setTaskFinished(true);
 									title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
 									content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
 							}
@@ -278,7 +285,9 @@ public class DialogManager {
 
 			@Override
 			public void onConfirm() {
-				StatisticsManager.getInstance().trace(context, StatisticsManager.ID.APP_UPDATE, "点击更新");
+				StatisticsManager.getInstance().trace(context,
+						StatisticsManager.ID.UPGRADE,
+						StatisticsManager.ID.STR_UPGRADE);
 				appInfo.startDownload();
 				confirmDialog.dismiss();
 			}

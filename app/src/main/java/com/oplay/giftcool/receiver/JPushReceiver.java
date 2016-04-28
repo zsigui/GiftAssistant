@@ -98,7 +98,8 @@ public class JPushReceiver extends BroadcastReceiver {
 						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
 						StatisticsManager.getInstance().trace(
 								AssistantApp.getInstance().getApplicationContext(),
-								StatisticsManager.ID.APP_PUSH_OPENED,
+								StatisticsManager.ID.PUSH_MESSAGE_OPENED,
+								StatisticsManager.ID.STR_PUSH_MESSAGE_OPENED,
 								kv, 1);
 					}
 				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
@@ -126,7 +127,8 @@ public class JPushReceiver extends BroadcastReceiver {
 						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
 						StatisticsManager.getInstance().trace(
 								AssistantApp.getInstance().getApplicationContext(),
-								StatisticsManager.ID.APP_PUSH_RECEIVED,
+								StatisticsManager.ID.PUSH_MESSAGE_RECEIVED,
+								StatisticsManager.ID.STR_PUSH_MESSAGE_RECEIVED,
 								kv, 1);
 					}
 				}

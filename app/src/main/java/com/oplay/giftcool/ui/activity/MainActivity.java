@@ -138,7 +138,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onDestroy() {
 		super.onDestroy();
 		ObserverManager.getInstance().removeUserUpdateListener(this);
-		SocketIOManager.getInstance().close();
 	}
 
 	protected void initView() {
@@ -226,6 +225,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 						jumpToIndexGame(data);
 						break;
 					case KeyConfig.TYPE_ID_INDEX_POST:
+						jumpToIndexPost(data);
 						break;
 				}
 			}

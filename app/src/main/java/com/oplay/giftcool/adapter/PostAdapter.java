@@ -20,6 +20,7 @@ import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.FooterListener;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.IntentUtil;
@@ -236,14 +237,23 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 			case R.id.iv_sign_in_everyday:
 				// 跳转签到页面
 				IntentUtil.jumpSignIn(mContext);
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.SIGN_IN_FROM_ACTIVITY,
+						StatisticsManager.ID.STR_SIGN_IN_FROM_ACTIVITY);
 				break;
 			case R.id.iv_lottery_everyday:
 				// 跳转每日抽奖页面
 				IntentUtil.jumpLottery(mContext);
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.LOTTERY_FROM_ACTIVITY,
+						StatisticsManager.ID.STR_LOTTERY_FROM_ACTIVITY);
 				break;
 			case R.id.iv_task_everyday:
 				// 跳转每日任务列表页面
 				IntentUtil.jumpEarnScore(mContext);
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.TASK_FROM_ACTIVITY,
+						StatisticsManager.ID.STR_TASK_FROM_ACTIVITY);
 				break;
 			case R.id.tb_read_attention:
 				// 只看我关注的游戏资讯

@@ -571,6 +571,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		}
 		IndexBanner banner = mGiftData.banner.get(position);
 		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.GIFT_BANNER,
+				StatisticsManager.ID.STR_GIFT_BANNER,
 				String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(getContext(), banner);
 	}

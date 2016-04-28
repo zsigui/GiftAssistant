@@ -33,45 +33,71 @@ public class StatisticsManager {
 	 gm = game 游戏事件  ;  gf = gift 礼包事件  ; us = 用户事件  ; ap = 应用事件
 	 */
 	public interface ID {
-		// 礼包首页推荐图
-		String GIFT_BANNER = "gf000001";
-		// 抢礼包-偶玩豆支付
-		String GIFT_BEAN_SEIZE = "gf000002";
-		// 抢礼包-金币支付
-		String GIFT_SCORE_SEIZE = "gf000003";
-		// 首页0元礼包项点击事件
-		String GIFT_ZERO_ITEM = "gf000004";
-		// 首页限量礼包项点击事件
-		String GIFT_LIMIT_ITEM = "gf000005";
+		// 礼包首页轮播图
+		String GIFT_BANNER = "gift_banner";
+		String STR_GIFT_BANNER = "礼包首页轮播图";
 		// 抢礼包点击事件
-		String GIFT_SEIZE_CLICK = "gf000006";
-		// 游戏首页推荐图
-		String GAME_BANNER = "gm000001";
+		String GIFT_SEIZE_CLICK = "gift_seize_click";
+		String STR_GIFT_SEIZE_CLICK = "抢礼包点击";
+		String STR_GIFT_SEIZE_NO_PAY = "尚未支付";
+		// 抢礼包-偶玩豆支付
+		String GIFT_BEAN_SEIZE = "seize_gift_pay_by_bean";
+		String STR_GIFT_BEAN_SEIZE = "抢礼包-偶玩豆支付";
+		// 抢礼包-金币支付
+		String GIFT_GOLD_SEIZE = "seize_gift_pay_by_gold";
+		String STR_GIFT_GOLD_SEIZE = "抢礼包-金币支付";
+		// 首页0元礼包项点击事件
+		String GIFT_ZERO_ITEM = "index_gift_zero_click";
+		String STR_GIFT_ZERO_ITEM = "首页0元礼包项点击";
+		// 首页限量礼包项点击事件
+		String GIFT_LIMIT_ITEM = "index_gift_limit_click";
+		String STR_GIFT_LIMIT_ITEM = "首页限量礼包项点击";
+		// 游戏首页轮播图
+		String GAME_BANNER = "game_banner";
+		String STR_GAME_BANNER = "游戏首页轮播图";
 		// 搜索
-		String USER_SEARCH = "us000001";
+		String USER_SEARCH = "search";
+		String STR_USER_SEARCH = "搜索";
 		// 求礼包-提交
-		String USER_HOPE_GIFT_SUCCESS = "us000002";
+		String STR_USER_HOPE_GIFT = "求礼包";
+		String USER_HOPE_GIFT_SUCCESS = "request_gift_success";
+		String STR_USER_HOPE_GIFT_SUCCESS = "求礼包-提交";
 		// 求礼包-取消
-		String USER_HOPE_GIFT_QUICK = "us000003";
+		String USER_HOPE_GIFT_QUICK = "request_gift_quick";
+		String STR_USER_HOPE_GIFT_QUICK = "求礼包-取消";
 		// 手机登录
-		String USER_PHONE_LOGIN = "us000004";
+		String USER_PHONE_LOGIN = "user_phone_login";
+		String STR_USER_PHONE_LOGIN = "使用手机登录";
 		// 偶玩账号登录
-		String USER_OUWAN_LOGIN = "us000005";
-		// 登录状态保存方式登录
-		String USER_LOGIN_WITH_SESSION = "us000006";
-		// 消息中心消息被点击
-		String USER_MESSAGE_CENTER_CLICK = "us000007";
+		String USER_OUWAN_LOGIN = "user_ouwan_login";
+		String STR_USER_OUWAN_LOGIN = "偶玩账号登录";
+		// 每日自动登录
+		String USER_LOGIN_WITH_SESSION = "auto_login_with_session";
+		String STR_USER_LOGIN_WITH_SESSION = "每日自动登录";
+		// 新礼包消息被点击
+		String NEW_GIFT_MESSAGE_CLICK = "new_gift_notify_message_click";
+		String STR_NEW_GIFT_MESSAGE_CLICK = "新礼包消息被点击";
 		// 更新弹窗
-		String APP_UPDATE = "ap000001";
+		String UPGRADE = "upgrade";
+		String STR_UPGRADE = "更新应用";
 		// 活动弹窗
-		String APP_ACTIVITY = "ap000002";
+		String CLICK_FIRST_LOGIN_DIALOG = "first_login_dialog_click";
+		String STR_CLICK_FIRST_LOGIN_DIALOG = "点击首次登录弹窗";
 		// 推送消息已接收
-		String APP_PUSH_RECEIVED = "ap000003";
+		String PUSH_MESSAGE_RECEIVED = "push_message_received";
+		String STR_PUSH_MESSAGE_RECEIVED = "推送消息已接收";
 		// 推送消息已打开
-		String APP_PUSH_OPENED = "ap000004";
-		// 签到弹窗
-		String APP_SIGN_IN = "ap000005";
-
+		String PUSH_MESSAGE_OPENED = "push_message_opened";
+		String STR_PUSH_MESSAGE_OPENED = "推送消息已打开";
+		// 活动页面的每日签到点击
+		String SIGN_IN_FROM_ACTIVITY = "jump_sign_in_page_from_activity";
+		String STR_SIGN_IN_FROM_ACTIVITY = "活动页面的每日签到点击";
+		// 活动页面的每日抽奖点击
+		String LOTTERY_FROM_ACTIVITY = "jump_lottery_page_from_activity";
+		String STR_LOTTERY_FROM_ACTIVITY = "活动页面的每日抽奖点击";
+		// 活动页面的每日任务点击
+		String TASK_FROM_ACTIVITY = "jump_task_page_from_activity";
+		String STR_TASK_FROM_ACTIVITY = "活动页面的每日任务点击";
 	}
 
 	private final String TC_APP_KEY = "7E57533EDCF044DA1BF657D786E0FDF7";
@@ -171,7 +197,7 @@ public class StatisticsManager {
 		}
 	}
 
-	public void trace(final Context context, final String id) {
+	public void trace(final Context context, final String id, final String title) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
@@ -181,7 +207,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-			TCAgent.onEvent(context, id);
+						TCAgent.onEvent(context, title);
 						MobclickAgent.onEvent(context, id);
 					}
 				});
@@ -189,7 +215,7 @@ public class StatisticsManager {
 		}
 	}
 
-	public void trace(final Context context, final String id, final String subtitle) {
+	public void trace(final Context context, final String id, final String title, final String subtitle) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " +
@@ -201,7 +227,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-			TCAgent.onEvent(context, id, subtitle);
+			TCAgent.onEvent(context, title, subtitle);
 						MobclickAgent.onEvent(context, id, subtitle);
 					}
 				});
@@ -209,7 +235,13 @@ public class StatisticsManager {
 		}
 	}
 
-	public void trace(final Context context, final String id, final Map keyMap, final int val) {
+	public void trace(final Context context, final String id, final String title,
+	                  final Map<String, String> keyMap, final int val) {
+		trace(context, id, title, "", keyMap, val);
+	}
+
+	public void trace(final Context context, final String id, final String title, final String subTitle,
+	                  final Map<String, String> keyMap, final int val) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", " +
@@ -220,7 +252,10 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-			TCAgent.onEvent(context, id, "", keyMap);
+						TCAgent.onEvent(context, title, subTitle, keyMap);
+						if (!TextUtils.isEmpty(subTitle)) {
+							keyMap.put("SubTitle", subTitle);
+						}
 						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
 							keyMap.put("__ct__", String.valueOf(val));
 							MobclickAgent.onEvent(context, id, keyMap);

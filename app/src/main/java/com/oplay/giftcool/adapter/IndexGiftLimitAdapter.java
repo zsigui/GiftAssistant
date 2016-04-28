@@ -64,7 +64,9 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 			if (AppDebugConfig.IS_STATISTICS_SHOW) {
 				IndexGiftNew data = mData.get(i);
 				if (data != null) {
-					StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_LIMIT_ITEM,
+					StatisticsManager.getInstance().trace(mContext,
+							StatisticsManager.ID.GIFT_LIMIT_ITEM,
+							StatisticsManager.ID.STR_GIFT_LIMIT_ITEM,
 							String.format("第%s项点击:[%s]%s", i, data.gameName, data.name));
 				}
 			}

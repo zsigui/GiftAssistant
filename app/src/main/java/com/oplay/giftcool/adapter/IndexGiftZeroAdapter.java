@@ -113,6 +113,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 				IntentUtil.jumpGiftDetail(mContext, data.id);
 				if (AppDebugConfig.IS_STATISTICS_SHOW) {
 					StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_ZERO_ITEM,
+							StatisticsManager.ID.STR_GIFT_ZERO_ITEM,
 							String.format("第%s项点击:[%s]%s", position, data.gameName, data.name));
 				}
 			}

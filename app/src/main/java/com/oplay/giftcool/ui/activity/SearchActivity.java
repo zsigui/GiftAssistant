@@ -366,7 +366,9 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 				mCallResult.cancel();
 			}
 			StatisticsManager.getInstance().trace(getApplicationContext(),
-					StatisticsManager.ID.USER_SEARCH, "关键字: " + keyword);
+					StatisticsManager.ID.USER_SEARCH,
+					StatisticsManager.ID.STR_USER_SEARCH,
+					"关键字: " + keyword);
 			ReqSearchKey data = new ReqSearchKey();
 			data.searchKey = keyword;
 			mCallResult = Global.getNetEngine().obtainSearchResult(new JsonReqBase<ReqSearchKey>(data));

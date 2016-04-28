@@ -422,7 +422,9 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			return;
 		}
 		IndexBanner banner = mData.banner.get(position);
-		StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.GIFT_BANNER,
+		StatisticsManager.getInstance().trace(mContext,
+				StatisticsManager.ID.GIFT_BANNER,
+				StatisticsManager.ID.STR_GIFT_BANNER,
 				String.format("第%d推广位，标题：%s", position, banner.title));
 		BannerTypeUtil.handleBanner(mContext, banner);
 	}

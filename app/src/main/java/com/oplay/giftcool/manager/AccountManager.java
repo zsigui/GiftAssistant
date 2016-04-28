@@ -430,7 +430,8 @@ public class AccountManager implements OnFinishListener {
                                 // 请求更新数据
                                 updateUserInfo();
                                 StatisticsManager.getInstance().trace(mContext,
-                                        StatisticsManager.ID.USER_LOGIN_WITH_SESSION);
+                                        StatisticsManager.ID.USER_LOGIN_WITH_SESSION,
+                                        StatisticsManager.ID.STR_USER_LOGIN_WITH_SESSION);
                                 return;
                             }
                             if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {

@@ -87,7 +87,7 @@ public class PicDialog extends DialogFragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.APP_ACTIVITY, "签到弹窗");
+		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.CLICK_FIRST_LOGIN_DIALOG, "签到弹窗");
 		if (mDialogClickListener != null) {
 			mDialogClickListener.onConfirm();
 		}

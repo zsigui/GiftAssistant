@@ -77,7 +77,9 @@ public class MessageNewGiftAdapter extends BaseRVAdapter<PushMessage> implements
 //                }
 				data.readState = TypeStatusCode.PUSH_READED;
 				notifyItemChanged(pos);
-				StatisticsManager.getInstance().trace(mContext, StatisticsManager.ID.USER_MESSAGE_CENTER_CLICK,
+				StatisticsManager.getInstance().trace(mContext,
+						StatisticsManager.ID.NEW_GIFT_MESSAGE_CLICK,
+						StatisticsManager.ID.STR_NEW_GIFT_MESSAGE_CLICK,
 						String.format("游戏名:%s, 礼包id:%d, 游戏id:%d", data.gameName, data.giftId, data.gameId));
 				break;
 		}

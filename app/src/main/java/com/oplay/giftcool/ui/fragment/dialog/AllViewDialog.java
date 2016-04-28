@@ -79,7 +79,9 @@ public class AllViewDialog extends DialogFragment implements View.OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.APP_ACTIVITY, "参与活动");
+		StatisticsManager.getInstance().trace(getContext(),
+				StatisticsManager.ID.CLICK_FIRST_LOGIN_DIALOG,
+				StatisticsManager.ID.STR_CLICK_FIRST_LOGIN_DIALOG);
 		BannerTypeUtil.handleBanner(getContext(), mData);
 		dismissAllowingStateLoss();
 	}
