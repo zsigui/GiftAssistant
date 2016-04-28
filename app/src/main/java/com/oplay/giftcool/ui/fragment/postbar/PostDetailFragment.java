@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -174,11 +173,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
 	@Override
 	protected void doAtWebStart() {
+		super.doAtWebStart();
 		showBar(false, null);
 	}
 
 	@Override
 	protected void doAfterWebViewInit() {
+		super.doAfterWebViewInit();
 		showBar(true, null);
 	}
 
@@ -534,11 +535,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	@Override
 	public void showBar(boolean isShow, Object param) {
 		if (isShow) {
+			KLog.d(AppDebugConfig.TAG_WARN, "show");
 			llBottomBar.setVisibility(View.VISIBLE);
-			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_in);
+//			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_in);
 		} else {
+			KLog.d(AppDebugConfig.TAG_WARN, "gone");
 			llBottomBar.setVisibility(View.GONE);
-			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_out);
+//			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_out);
 		}
 	}
 

@@ -351,7 +351,7 @@ public class ScoreManager {
 				it.remove();
 			} else {
 				if (info.isFinished()) {
-					reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), false);
+					reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), true);
 					it.remove();
 					setTaskFinished(true);
 				}

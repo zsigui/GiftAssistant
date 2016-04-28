@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
@@ -146,11 +147,11 @@ public class AlarmClockManager {
 	}
 
 	public interface Action {
-		String ALARM_WAKE = "com.oplay.gitcool.clock_action.ALARM_WAKE";
-		String ALARM_PLAY_GAME = "com.oplay.giftcool.clock_action.PLAY_GAME";
+		String ALARM_WAKE = AppConfig.PACKAGE_NAME + ".clock_action.ALARM_WAKE";
+		String ALARM_PLAY_GAME = AppConfig.PACKAGE_NAME + ".clock_action.PLAY_GAME";
 	}
 
 	public interface Category {
-		String GCOOL_DEFAULT = "com.oplay.giftcool";
+		String GCOOL_DEFAULT = AppConfig.PACKAGE_NAME;
 	}
 }

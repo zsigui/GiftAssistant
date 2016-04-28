@@ -163,9 +163,14 @@ public class SocketIOManager {
 
 	public void runCandidateReward() {
 		if (mCandidateList != null && !mCandidateList.isEmpty()) {
-			for (int i = mCandidateList.size() - 1; i >= 0; i--) {
-				ScoreManager.getInstance().toastByCallback(mCandidateList.remove(i), true);
-			}
+			ThreadUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					for (int i = mCandidateList.size() - 1; i >= 0; i--) {
+						ScoreManager.getInstance().toastByCallback(mCandidateList.remove(i), true);
+					}
+				}
+			});
 		}
 	}
 

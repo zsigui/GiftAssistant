@@ -361,7 +361,7 @@ public class AssistantApp extends Application {
         mShouldAutoCheckUpdate = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_AUTO_CHECK_UPDATE, true);
         mShouldAutoDeleteApk = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_DELETE_APK, false);
+                SPConfig.KEY_AUTO_DELETE_APK, true);
         mShouldPushMsg = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
                 SPConfig.KEY_ACCEPT_PUSH, true);
         mShouldAutoInstall = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
@@ -481,7 +481,7 @@ public class AssistantApp extends Application {
                 ImageLoader.getInstance().resume();
             }
         }
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_DELETE_APK,
+        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_SAVE_FLOW,
                 isSaveFlow);
     }
 

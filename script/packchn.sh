@@ -17,7 +17,7 @@ printUsage()
 setDefaultVar()
 {
     # default arguments for channel 0
-    [ -z ${VERSION} ] && VERSION=1.2.0
+    [ -z ${VERSION} ] && VERSION=1.0.0
     [ -z ${NAME} ] && NAME=giftcool
     [ -z ${CHNNAMES} ] && CHNNAMES=10000
     # get current shell absolute dir

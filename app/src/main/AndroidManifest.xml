@@ -65,6 +65,7 @@
 			android:icon = "@mipmap/ic_launcher"
 			android:label = "@string/app_name"
 			android:theme = "@style/AppTheme"
+			android:taskAffinity="${applicationId}"
 			tools:replace = "android:icon, android:theme, android:allowBackup" >
 
 		<activity
@@ -87,7 +88,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.Main" />
+				<action android:name = "${applicationId}.action.Main" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -99,7 +100,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "stateVisible|adjustPan" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.Search" />
+				<action android:name = "${applicationId}.action.Search" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -111,7 +112,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.GiftList" />
+				<action android:name = "${applicationId}.action.GiftList" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -142,7 +143,7 @@
 						android:scheme = "http" />
 			</intent-filter >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.GiftDetail" />
+				<action android:name = "${applicationId}.action.GiftDetail" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -154,7 +155,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.GameList" />
+				<action android:name = "${applicationId}.action.GameList" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -167,7 +168,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.Setting" />
+				<action android:name = "${applicationId}.action.Setting" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -185,7 +186,7 @@
 				android:screenOrientation = "sensorPortrait"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.Web" />
+				<action android:name = "${applicationId}.action.Web" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -197,7 +198,7 @@
 				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustNothing|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.PostDetail" />
+				<action android:name = "${applicationId}.action.PostDetail" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -209,7 +210,7 @@
 				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.PostList" />
+				<action android:name = "${applicationId}.action.PostList" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -221,7 +222,7 @@
 				android:launchMode = "singleTop"
 				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.action.MessageList" />
+				<action android:name = "${applicationId}.action.MessageList" />
 				<category android:name = "android.intent.category.DEFAULT" />
 			</intent-filter >
 		</activity >
@@ -256,7 +257,7 @@
 			<intent-filter android:priority = "1000" >
 				<action android:name = "android.intent.action.BOOT_COMPLETED" />
 				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-				<action android:name = "com.oplay.giftcool.action.ALARM_WAKE" />
+				<action android:name = "${applicationId}.action.ALARM_WAKE" />
 				<action android:name = "com.tencent.mm.permission.MM_AUTO_HEARD_MESSAGE" />
 				<action android:name = "com.tencent.mm.permission.MM_AUTO_REPLY_MESSAGE" />
 				<action android:name = "com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_REGISTER" />
@@ -282,15 +283,15 @@
 
 		<receiver android:name = ".receiver.GameObserverReceiver" >
 			<intent-filter >
-				<action android:name = "com.oplay.giftcool.clock_action.PLAY_GAME" />
-				<category android:name = "com.oplay.giftcool" />
+				<action android:name = "${applicationId}.clock_action.PLAY_GAME" />
+				<category android:name = "${applicationId}" />
 			</intent-filter >
 		</receiver >
 
 		<receiver android:name = ".download.DownloadNotificationManager$DownloadReceiver" >
 			<intent-filter >
 				<action android:name = "giftcool.action.download.SHOW_VIEW" />
-				<category android:name = "com.oplay.giftcool" />
+				<category android:name = "${applicationId}" />
 			</intent-filter >
 		</receiver >
 

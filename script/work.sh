@@ -18,7 +18,7 @@ VERSION=1.2.0
 CHNNAMES=0,1972000
 TEMPOUTPUT=${CWD}/../apk/temp-unsigned
 SOURCEAPK=${CWD}/../apk/src/app-release.encrypted.apk
-OUTPUT=${CWD}/../apk/output
+OUTPUT=${CWD}/../apk/output/V${VERSION}
 EXTENSION=.${NAME}
 
 # 签名参数
@@ -52,7 +52,7 @@ echo $(pwd)
 #${CWD}/../gradlew clean assembleRelease -x lint --parallel
 #ant -f ${CWD}/../build.xml clean && ant -f ${CWD}/../build.xml
 ${CWD}/packchn.sh -s ${SOURCEAPK} -o ${TEMPOUTPUT} -v ${VERSION} -c ${CHNNAMES} -n ${NAME} -e ${EXTENSION}
-${CWD}/sign.sh -i ${TEMPOUTPUT} -o ${OUTPUT} -f ${KEYSTORE} -k ${KEYPASS} -s ${STOREPASS} -n ${KEYSTORENAME}
+${CWD}/sign.sh -i ${TEMPOUTPUT} -o ${OUTPUT} -f ${KEYSTORE} -k ${KEYPASS} -s ${STOREPASS} -n ${KEYSTORENAME} -v ${VERSION}
 
 [ -d ${TEMPOUTPUT} ] && rm -r ${TEMPOUTPUT}
 

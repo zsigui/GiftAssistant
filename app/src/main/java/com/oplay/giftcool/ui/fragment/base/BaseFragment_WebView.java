@@ -78,6 +78,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
+				KLog.d(AppDebugConfig.TAG_WARN, "onPageStarted");
 				onWebPageStarted();
 			}
 
@@ -85,6 +86,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				onWebPageFinished();
+				KLog.d(AppDebugConfig.TAG_WARN, "onPageFinished");
 				if (!mSettings.getLoadsImagesAutomatically()) {
 					mSettings.setLoadsImagesAutomatically(true);
 				}
@@ -93,11 +95,13 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				super.onReceivedError(view, errorCode, description, failingUrl);
+				KLog.d(AppDebugConfig.TAG_WARN, "onReceivedError");
 				onWebReceivedError();
 			}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				KLog.d(AppDebugConfig.TAG_WARN, "shouldOverrideUrlLoading");
 				boolean hasFind;
 				Uri mUri = Uri.parse(url);
 				if (mUri == null) {
@@ -292,7 +296,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				}
 			}
 			// 必须page load finish 才能重新setScrollY
-			if (mWebView != null && mInit) {
+			if (mWebView != null) {
 				mUrl = mWebView.getUrl();
 				if (sScrollMap.containsKey(mUrl)) {
 					mScrollY = sScrollMap.get(mUrl);
@@ -309,7 +313,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					}
 				}, 500);
 			}
-			mInit = true;
+//			mInit = true;
 //			mSettings.setBlockNetworkImage(false);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
@@ -326,7 +330,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	}
 
 	protected void doAfterWebViewInit() {
-
 	}
 
 	@Override

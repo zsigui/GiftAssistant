@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -37,7 +38,6 @@ import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -201,9 +201,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
-			SocketIOManager.getInstance().connectOrReConnect(false);
-		}
 		mActive = true;
 	}
 
@@ -218,7 +215,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		super.onNewIntent(intent);
 		try {
 			if (intent != null && intent.getAction() != null
-					&& intent.getAction().equals("com.oplay.giftcool.action.Main")) {
+					&& intent.getAction().equals(AppConfig.PACKAGE_NAME + ".action.Main")) {
 				int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
 				int data = Integer.parseInt(intent.getStringExtra(KeyConfig.KEY_DATA));
 				switch (type) {
@@ -281,13 +278,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				break;
 		}
 
-		// 延后通知任务执行
-		ThreadUtil.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				SocketIOManager.getInstance().runCandidateReward();
-			}
-		});
 	}
 
 	private void showToolbarSearch(boolean showSearch) {

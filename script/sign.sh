@@ -7,8 +7,9 @@ KEYSTORENAME=giftcool
 SOURCEDIR=${CWD}/../apk/temp-unsigned
 OUTPUTDIR=${CWD}/../apk/output
 UNALIGNAPK=temp-unalign.apk
+VERSION=default
 
-while getopts "f:k:s:n:i:o:" OPTION
+while getopts "f:k:s:n:i:o:v" OPTION
 do
     case ${OPTION} in
         f)
@@ -29,15 +30,18 @@ do
         o)
             OUTPUTDIR=${OPTARG}
             ;;
+        v)
+            VERSION=${OPTARG}
+            ;;
         \?)
-            echo "use variable of :keystore:keypass:storepass:keyname:srcdir:outputdir:"
+            echo "use variable of :keystore:keypass:storepass:keyname:srcdir:outputdir:version"
             ;;
     esac
 done
 
 echo ${SOURCEDIR}
 [ ! -d ${SOURCEDIR} ] && { echo "path argument is not a available directory!" ; exit 1; }
-[ -z ${OUTPUTDIR} ] && OUTPUTDIR=${CWD}/../apk/output
+[ -z ${OUTPUTDIR} ] && OUTPUTDIR=${CWD}/../apk/output/V${VERSION}
 [ ! -d ${OUTPUTDIR} ] && mkdir -p ${OUTPUTDIR}
 
 for APKFILE in `ls ${SOURCEDIR} | grep '.*apk$'`

@@ -14,6 +14,7 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.IntentUtil;
@@ -37,7 +38,7 @@ public class DownloadNotificationManager {
 	public static final int REQUEST_ID_USERMESSAGE = 1024;
 
 	public static final String ACTION_OPEN_DOWNLOAD_FRAGMENT = "giftcool.action.download.SHOW_VIEW";
-	public static final String CATEGORY_DOWNLOAD = "com.oplay.giftcool";
+	public static final String CATEGORY_DOWNLOAD = AppConfig.PACKAGE_NAME;
 
 	public static class DownloadReceiver extends BroadcastReceiver {
 

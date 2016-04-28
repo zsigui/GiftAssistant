@@ -123,11 +123,13 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 
 	@Override
 	protected void doAtWebStart() {
+		super.doAtWebStart();
 		showBar(false, null);
 	}
 
 	@Override
 	protected void doAfterWebViewInit() {
+		super.doAfterWebViewInit();
 		showBar(true, null);
 	}
 

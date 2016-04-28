@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ScoreTaskAdapter;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
@@ -342,7 +343,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	 * 处理额外信息类型为一(进行页面跳转)的数据
 	 */
 	public static void handleInfoOne(Context context, TaskInfoOne taskInfo) {
-		final String ACTION_PREFIX = "com.oplay.giftcool.action.";
+		final String ACTION_PREFIX = AppConfig.PACKAGE_NAME +  ".action.";
 		if ("GameDetail".equals(taskInfo.action)) {
 			IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
 		} else if ("GiftDetail".equals(taskInfo.action)) {
