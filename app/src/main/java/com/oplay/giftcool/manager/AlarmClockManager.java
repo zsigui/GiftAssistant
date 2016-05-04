@@ -7,11 +7,11 @@ import android.content.Intent;
 
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
-import com.oplay.giftcool.receiver.GameObserverReceiver;
 import com.oplay.giftcool.receiver.StartReceiver;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.SystemUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 /**
@@ -33,7 +33,9 @@ public class AlarmClockManager {
 		return sInstance;
 	}
 
-	private AlarmClockManager(){}
+	private AlarmClockManager(){
+		mObserverGame = false;
+	}
 
 
 	private AlarmManager mManager;
@@ -44,6 +46,7 @@ public class AlarmClockManager {
 	private int mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
 	// 唤醒的次数
 	private int mWakeCount = 0;
+	private int mBackgoundWakeCount = 0;
 	// 是否允许通知礼包更新
 	private boolean mAllowNotifyGiftUpdate;
 
@@ -72,10 +75,22 @@ public class AlarmClockManager {
 		mAllowNotifyGiftUpdate = allowNotifyGiftUpdate;
 	}
 
+
+	private boolean mObserverGame = false;
+
+	public boolean isObserverGame() {
+		return mObserverGame;
+	}
+
+	public void setObserverGame(boolean observerGame) {
+		mObserverGame = observerGame;
+	}
+
 	/**
 	 * 启动唤醒闹钟
 	 */
 	public void startWakeAlarm(final Context context) {
+
 		if (alarmSender == null) {
 			Intent startIntent = new Intent(context, StartReceiver.class);
 			startIntent.setAction(AlarmClockManager.Action.ALARM_WAKE);
@@ -91,64 +106,95 @@ public class AlarmClockManager {
 		mWakeCount++;
 		if (mAllowNotifyGiftUpdate && mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0) {
 			// 允许的情况下，每唤醒3次通知一次更新
-			Global.THREAD_POOL.execute(new Runnable() {
+			notifyGiftUpdate(context);
+		}
+
+		if (mObserverGame) {
+			ThreadUtil.runInThread(new Runnable() {
 				@Override
 				public void run() {
-					ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
-					if (NetworkUtil.isWifiConnected(context)) {
-						SilentDownloadManager.getInstance().startDownload();
-					}
+					ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
 				}
 			});
+		}
+
+		if (!SystemUtil.isMyAppInForeground()) {
+			// 判断应用是否处于后台
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_MANAGER,
+						"Wake Alarm is running when app in background! elapsed time = " + mElapsedTime);
+			}
+			mBackgoundWakeCount++;
+			if (mBackgoundWakeCount > 6) {
+				// 5分钟
+				mElapsedTime = 30 * ALARM_WAKE_ELAPSED_TIME;
+			} else if (mBackgoundWakeCount > 3) {
+				// 20秒
+				mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
+			}
+		} else {
+			mBackgoundWakeCount = 0;
 		}
 		AlarmManager am = getAlarmManager(context);
 		am.cancel(alarmSender);
 		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + mElapsedTime, alarmSender);
 	}
 
-
-	/**
-	 * 停止唤醒闹钟
-	 */
-	public void stopWakeAlarm(Context context) {
-		getAlarmManager(context).cancel(alarmSender);
-	}
-
-	// 试玩游戏的意图
-	private PendingIntent mPlayGameSender;
-
-	/**
-	 * 开启试玩游戏的闹钟监听服务
-	 */
-	public void startGameObserverAlarm(Context context) {
-		if (mPlayGameSender == null) {
-			Intent startIntent = new Intent(context, GameObserverReceiver.class);
-			startIntent.setAction(Action.ALARM_PLAY_GAME);
-			startIntent.addCategory(Category.GCOOL_DEFAULT);
-			try {
-				mPlayGameSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
-						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-			} catch (Exception e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+	private void notifyGiftUpdate(final Context context) {
+		ThreadUtil.runInThread(new Runnable() {
+			@Override
+			public void run() {
+				ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
+				if (NetworkUtil.isWifiConnected(context)) {
+					SilentDownloadManager.getInstance().startDownload();
 				}
 			}
-		}
-		AlarmManager am = getAlarmManager(context);
-		am.cancel(mPlayGameSender);
-		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, mPlayGameSender);
+		});
 	}
 
-	/**
-	 * 停止试玩游戏的闹钟监听服务
-	 */
-	public void stopGameObserverAlarm(Context context) {
-		getAlarmManager(context).cancel(mPlayGameSender);
-	}
+
+//	/**
+//	 * 停止唤醒闹钟
+//	 */
+//	public void stopWakeAlarm(Context context) {
+//		getAlarmManager(context).cancel(alarmSender);
+//	}
+//
+//	// 试玩游戏的意图
+//	private PendingIntent mPlayGameSender;
+//
+//	/**
+//	 * 开启试玩游戏的闹钟监听服务
+//	 */
+//	public void startGameObserverAlarm(Context context) {
+//		if (mPlayGameSender == null) {
+//			Intent startIntent = new Intent(context, GameObserverReceiver.class);
+//			startIntent.setAction(Action.ALARM_PLAY_GAME);
+//			startIntent.addCategory(Category.GCOOL_DEFAULT);
+//			try {
+//				mPlayGameSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
+//						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//			} catch (Exception e) {
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+//				}
+//			}
+//		}
+//		AlarmManager am = getAlarmManager(context);
+//		am.cancel(mPlayGameSender);
+//		am.set(AlarmManager.RTC, System.currentTimeMillis() + ALARM_WAKE_ELAPSED_TIME, mPlayGameSender);
+//	}
+//
+//	/**
+//	 * 停止试玩游戏的闹钟监听服务
+//	 */
+//	public void stopGameObserverAlarm(Context context) {
+//		getAlarmManager(context).cancel(mPlayGameSender);
+//	}
 
 	public interface Action {
 		String ALARM_WAKE = AppConfig.PACKAGE_NAME + ".clock_action.ALARM_WAKE";
-		String ALARM_PLAY_GAME = AppConfig.PACKAGE_NAME + ".clock_action.PLAY_GAME";
+//		String ALARM_PLAY_GAME = AppConfig.PACKAGE_NAME + ".clock_action.PLAY_GAME";
 	}
 
 	public interface Category {

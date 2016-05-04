@@ -140,7 +140,7 @@ public class SystemUtil {
 	/**
 	 * 判断本地应用是否处于前台
 	 */
-	public static boolean isMyAppInForeground(Context context) {
+	public static boolean isMyAppInForeground() {
 		return ProcessManager.isMyProcessInTheForeground();
 	}
 

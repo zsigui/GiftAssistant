@@ -25,14 +25,15 @@ import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.SocketIOManager;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.socks.library.KLog;
 
 import cn.jpush.android.api.JPushInterface;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * @author micle
@@ -359,6 +360,9 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		if (AppDebugConfig.IS_DEBUG) {
 			KLog.d(AppDebugConfig.TAG_MANAGER, "doBeforeFinish called");
 		}
+		if (MainActivity.sGlobalHolder == null) {
+			IntentUtil.jumpHome(this, true);
+		}
 	}
 
 	/**
@@ -449,23 +453,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 		if (count > 0) {
 			mCurTopFragment = getSupportFragmentManager()
 					.findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
-		}
-	}
-
-	public void showSuccessHint(final String title) {
-		if (isMainThread()) {
-			new SweetAlertDialog(BaseAppCompatActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-					.setTitleText(title)
-					.show();
-		} else {
-			mHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					new SweetAlertDialog(BaseAppCompatActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-							.setTitleText(title)
-							.show();
-				}
-			});
 		}
 	}
 

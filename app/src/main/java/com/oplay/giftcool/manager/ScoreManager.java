@@ -298,7 +298,7 @@ public class ScoreManager {
 			}
 		}
 		if (!mCurDownloadTaskSet.isEmpty()) {
-			AlarmClockManager.getInstance().startGameObserverAlarm(context);
+			AlarmClockManager.getInstance().setObserverGame(true);
 		}
 		return mCurDownloadTaskSet;
 	}
@@ -334,18 +334,11 @@ public class ScoreManager {
 			final Map.Entry<String, TaskInfoDownload> entry = it.next();
 			final TaskInfoDownload info = entry.getValue();
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "packageName = " + info.packName +  ", isForeground = " + SystemUtil.isForeground(context, info.packName));
+				KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime
+				+ ", isForeground = " + SystemUtil.isForeground(context, info.packName));
 			}
 			if (SystemUtil.isForeground(context, info.packName)) {
 				info.hasPlayTime += elapseTime;
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime);
-				}
-			}
-
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "isToday = " + info.isToday() + ", isFinished = " + info.isFinished()
-				+ ", hasPlayTime = " + info.hasPlayTime + ", time = " + info.time);
 			}
 			if (!info.isToday()) {
 				it.remove();
@@ -357,12 +350,16 @@ public class ScoreManager {
 				}
 			}
 		}
+
 		if (!mCurDownloadTaskSet.isEmpty()) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_WARN, "no finished, continue!");
 			}
 			// 任务没完成，继续监测
-			AlarmClockManager.getInstance().startGameObserverAlarm(context);
+			AlarmClockManager.getInstance().setObserverGame(true);
+		} else {
+			// 任务完成,不监测
+			AlarmClockManager.getInstance().setObserverGame(false);
 		}
 		// 进行一次写入
 		setCurDownloadTaskSet(context);

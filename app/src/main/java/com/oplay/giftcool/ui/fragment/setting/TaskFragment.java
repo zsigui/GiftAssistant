@@ -1,7 +1,5 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ScoreTaskAdapter;
-import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
@@ -22,7 +19,6 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
-import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.task.ScoreMission;
 import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
@@ -320,7 +316,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				case TaskTypeUtil.MISSION_TYPE_JUMP_PAGE:
 					final TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
 							mission.actionInfo, TaskInfoOne.class);
-					handleInfoOne(getContext(), infoOne);
+					IntentUtil.handleJumpInfo(getContext(), infoOne);
 					break;
 				case TaskTypeUtil.MISSION_TYPE_EXECUTE_LOGIC:
 					final TaskInfoTwo infoTwo = AssistantApp.getInstance().getGson().fromJson(
@@ -336,39 +332,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 		} catch (Throwable t) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_FRAG, t);
-			}
-		}
-	}
-
-	/**
-	 * 处理额外信息类型为一(进行页面跳转)的数据
-	 */
-	public static void handleInfoOne(Context context, TaskInfoOne taskInfo) {
-		final String ACTION_PREFIX = AppConfig.PACKAGE_NAME +  ".action.";
-		if ("GameDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
-		} else if ("GiftDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpGiftDetail(context, taskInfo.id);
-		} else if ("PostDetail".equals(taskInfo.action)) {
-			IntentUtil.jumpPostDetail(context, taskInfo.id);
-		} else if ("Sdk".equals(taskInfo.action)) {
-			switch (taskInfo.id) {
-				case TaskTypeUtil.INFO_ONE_SDK_RECHARGE:
-					OuwanSDKManager.getInstance().recharge();
-					break;
-				case TaskTypeUtil.INFO_ONE_SDK_BIND_OUWAN:
-					OuwanSDKManager.getInstance().showBindOuwanView(context);
-					break;
-				case TaskTypeUtil.INFO_ONE_SDK_BIND_PHONE:
-					OuwanSDKManager.getInstance().showBindPhoneView(context);
-					break;
-			}
-		} else {
-			IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.id, taskInfo.data);
-			if ("Main".equals(taskInfo.action)) {
-				if (context != null && context instanceof Activity) {
-					((Activity) context).finish();
-				}
 			}
 		}
 	}
@@ -400,7 +363,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	private void handleInfoThree(String code, TaskInfoThree infoThree) {
 		// 设置试玩游戏信息
 //		ScoreManager.getInstance().addDownloadWork(getContext(), code, infoThree);
-		AlarmClockManager.getInstance().startGameObserverAlarm(getContext());
+		AlarmClockManager.getInstance().setObserverGame(true);
 		IntentUtil.jumpGameDetail(getContext(), infoThree.appId);
 	}
 

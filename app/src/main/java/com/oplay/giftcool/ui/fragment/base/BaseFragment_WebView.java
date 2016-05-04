@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.base;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -71,8 +73,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mWebView = getViewById(R.id.wv_container);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
-			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-				return interceptRequest(view, request);
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//				super.onReceivedSslError(view, handler, error);
+				KLog.d(AppDebugConfig.TAG_WARN, "onReceivedSslError");
+				handler.proceed();
 			}
 
 			@Override
@@ -180,6 +184,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		// initWithView mSettings
 		mSettings = mWebView.getSettings();
 
+		mSettings.setDomStorageEnabled(true);
 		//JS监听
 		mSettings.setJavaScriptEnabled(true);
 		mJsInterfaceObject = new WebViewInterface(getActivity(), this, mWebView);
@@ -227,7 +232,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 				mSettings.setAppCacheEnabled(true);
 			}
 			mSettings.setAllowFileAccess(true);
-			mSettings.setDomStorageEnabled(true);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				Debug_SDK.e(e);

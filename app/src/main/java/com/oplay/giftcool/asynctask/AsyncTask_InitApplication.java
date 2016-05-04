@@ -15,8 +15,6 @@ import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
-import com.oplay.giftcool.manager.PushMessageManager;
-import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
@@ -117,9 +115,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
 
 		// 初始化统计工具
-		StatisticsManager.getInstance().init(assistantApp, assistantApp.getChannelId());
-		// 初始化推送SDK
-		PushMessageManager.getInstance().initPush(assistantApp);
+		assistantApp.initPushAndStatics();
 
 //        testDownload();
 

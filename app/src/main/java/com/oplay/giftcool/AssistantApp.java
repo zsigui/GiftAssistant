@@ -28,6 +28,7 @@ import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.SocketIOManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -68,576 +69,585 @@ import retrofit2.Retrofit;
  */
 public class AssistantApp extends Application {
 
-    private static AssistantApp sInstance;
-    private Retrofit mRetrofit;
-    private Gson mGson;
+	private static AssistantApp sInstance;
+	private Retrofit mRetrofit;
+	private Gson mGson;
 
-    private UpdateInfo mUpdateInfo;
-    private ArrayList<InitQQ> mQQInfo;
-    private String mStartImg;
-    private IndexBanner mBroadcastBanner;
-    private int mChannelId = -1;
+	private UpdateInfo mUpdateInfo;
+	private ArrayList<InitQQ> mQQInfo;
+	private String mStartImg;
+	private IndexBanner mBroadcastBanner;
+	private int mChannelId = -1;
 
-    private int mSoftInputHeight = 0;
+	private int mSoftInputHeight = 0;
 
-    // 是否安装完成自动删除
-    private boolean mShouldAutoDeleteApk = false;
-    // 是否自动检查版本更新
-    private boolean mShouldAutoCheckUpdate = true;
-    // 是否自动关注
-    private boolean mShouldAutoFocus = true;
-    // 是否推送消息
-    private boolean mShouldPushMsg = true;
-    // 是否已经完成全局初始化
-    private boolean mIsGlobalInit = false;
-    // 是否允许显示下载，根据渠道获取而定
-    private boolean mIsAllowDownload = true;
-    // 是否记住密码
-    private boolean mIsRememberPwd = true;
-    // 活动页面的游戏资讯是否只查看已关注的
-    private boolean mIsReadAttention = false;
+	// 是否安装完成自动删除
+	private boolean mShouldAutoDeleteApk = false;
+	// 是否自动检查版本更新
+	private boolean mShouldAutoCheckUpdate = true;
+	// 是否自动关注
+	private boolean mShouldAutoFocus = true;
+	// 是否推送消息
+	private boolean mShouldPushMsg = true;
+	// 是否已经完成全局初始化
+	private boolean mIsGlobalInit = false;
+	// 是否允许显示下载，根据渠道获取而定
+	private boolean mIsAllowDownload = true;
+	// 是否记住密码
+	private boolean mIsRememberPwd = true;
+	// 活动页面的游戏资讯是否只查看已关注的
+	private boolean mIsReadAttention = false;
 
-    // 以下暂无
-    // 是否下载完成自动安装
-    private boolean mShouldAutoInstall = false;
-    // 是否开启省流模式
-    private boolean mIsSaveFlow = false;
-    // 是否启用下载完成提示音
-    private boolean mIsPlayDownloadComplete = false;
+	// 以下暂无
+	// 是否下载完成自动安装
+	private boolean mShouldAutoInstall = false;
+	// 是否开启省流模式
+	private boolean mIsSaveFlow = false;
+	// 是否启用下载完成提示音
+	private boolean mIsPlayDownloadComplete = false;
 
-    // 说明今日是否推送过消息
-    private boolean mIsPushedToday = false;
-    // 是否在任务栏显示每日抽奖入口
-    private boolean mHasLottery = true;
+	// 说明今日是否推送过消息
+	private boolean mIsPushedToday = false;
+	// 是否在任务栏显示每日抽奖入口
+	private boolean mHasLottery = true;
 
-    private OkHttpClient mHttpClient;
+	private OkHttpClient mHttpClient;
 
-    // LeakCanary 用于检测内存泄露
+	// LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
 
-    public static AssistantApp getInstance() {
-        if (sInstance == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
-            }
-            sInstance = new AssistantApp();
-        }
-        return sInstance;
-    }
+	public static AssistantApp getInstance() {
+		if (sInstance == null) {
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
+			}
+			sInstance = new AssistantApp();
+		}
+		return sInstance;
+	}
 
-    public Retrofit getRetrofit() {
-        return mRetrofit;
-    }
+	public Retrofit getRetrofit() {
+		return mRetrofit;
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+	@Override
+	public void onCreate() {
+		super.onCreate();
 //		mRefWatcher = LeakCanary.install(this);
-        // enabled StrictMode only in TEST
-        sInstance = this;
-        // 启动闹钟通知广播进程来唤醒服务
-        AlarmClockManager.getInstance().startWakeAlarm(this);
+		// enabled StrictMode only in TEST
+		sInstance = this;
+		// 启动闹钟通知广播进程来唤醒服务
+		AlarmClockManager.getInstance().startWakeAlarm(this);
+		initPushAndStatics();
 //        appInit();
-    }
+	}
 
-    private boolean isInitialing = false;
+	private boolean isInitialing = false;
 
-    /**
-     * 执行APP的初始化工作
-     */
-    public void appInit() {
-        if (isInitialing || mIsGlobalInit) {
-            return;
-        }
-        isInitialing = true;
-        KLog.init(AppDebugConfig.IS_DEBUG);
-        initImageLoader();
-        // 初始配置加载列表
-        initLoadingView();
-        // 初始化照片墙控件
-        initGalleryFinal();
-        Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
-    }
+	public void initPushAndStatics() {
+		// 初始化统计工具
+		StatisticsManager.getInstance().init(this, getChannelId());
+		// 初始化推送SDK
+		PushMessageManager.getInstance().initPush(this);
+	}
 
-    public void initLoadingView() {
-        LoadAndRetryViewManager.setDefaultEmptyViewId(R.layout.fragment_data_empty);
-        LoadAndRetryViewManager.setDefaultLoadViewId(R.layout.fragment_data_loading);
-        // 加载失败，错误或者重试
-        LoadAndRetryViewManager.setDefaultErrorRetryViewId(R.layout.fragment_error_net);
-    }
+	/**
+	 * 执行APP的初始化工作
+	 */
+	public void appInit() {
+		if (isInitialing || mIsGlobalInit) {
+			return;
+		}
+		isInitialing = true;
+		KLog.init(AppDebugConfig.IS_DEBUG);
+		initImageLoader();
+		// 初始配置加载列表
+		initLoadingView();
+		// 初始化照片墙控件
+		initGalleryFinal();
+		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+	}
+
+	public void initLoadingView() {
+		LoadAndRetryViewManager.setDefaultEmptyViewId(R.layout.fragment_data_empty);
+		LoadAndRetryViewManager.setDefaultLoadViewId(R.layout.fragment_data_loading);
+		// 加载失败，错误或者重试
+		LoadAndRetryViewManager.setDefaultErrorRetryViewId(R.layout.fragment_error_net);
+	}
 
 
-    public void initGalleryFinal() {
-        int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
-        int textColor = Color.WHITE;
-        ThemeConfig theme = new ThemeConfig.Builder()
-                .setTitleBarBgColor(bgColor)
-                .setTitleBarIconColor(textColor)
-                .setIconCheck(R.drawable.selector_check_box)
-                .setIconBack(R.drawable.ic_bar_back)
-                .setIconDelete(R.drawable.ic_photo_delete)
-                .setFabNornalColor(getResources().getColor(R.color.co_btn_red))
-                .setFabPressedColor(getResources().getColor(R.color.co_btn_red_pressed))
-                .setPreviewBg(getResources().getDrawable(R.color.co_opacity_80))
-                .build();
-        FunctionConfig config = new FunctionConfig.Builder()
-                .setEnableCamera(false)
-                .setEnablePreview(false)
-                .setEnableRotate(false)
-                .setEnableCrop(false)
-                .setEnableEdit(false)
-                .build();
-        UILImageLoader imageLoader = new UILImageLoader();
-        File folder = StorageUtils.getOwnCacheDirectory(getApplicationContext(), Global.IMG_CACHE_PATH);
-        CoreConfig coreConfig = new CoreConfig.Builder(getApplicationContext(), imageLoader, theme)
-                .setFunctionConfig(config)
-                .setTakePhotoFolder(folder)
-                .setEditPhotoCacheFolder(folder)
-                .build();
-        GalleryFinal.init(coreConfig);
-    }
+	public void initGalleryFinal() {
+		int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
+		int textColor = Color.WHITE;
+		ThemeConfig theme = new ThemeConfig.Builder()
+				.setTitleBarBgColor(bgColor)
+				.setTitleBarIconColor(textColor)
+				.setIconCheck(R.drawable.selector_check_box)
+				.setIconBack(R.drawable.ic_bar_back)
+				.setIconDelete(R.drawable.ic_photo_delete)
+				.setFabNornalColor(getResources().getColor(R.color.co_btn_red))
+				.setFabPressedColor(getResources().getColor(R.color.co_btn_red_pressed))
+				.setPreviewBg(getResources().getDrawable(R.color.co_opacity_80))
+				.build();
+		FunctionConfig config = new FunctionConfig.Builder()
+				.setEnableCamera(false)
+				.setEnablePreview(false)
+				.setEnableRotate(false)
+				.setEnableCrop(false)
+				.setEnableEdit(false)
+				.build();
+		UILImageLoader imageLoader = new UILImageLoader();
+		File folder = StorageUtils.getOwnCacheDirectory(getApplicationContext(), Global.IMG_CACHE_PATH);
+		CoreConfig coreConfig = new CoreConfig.Builder(getApplicationContext(), imageLoader, theme)
+				.setFunctionConfig(config)
+				.setTakePhotoFolder(folder)
+				.setEditPhotoCacheFolder(folder)
+				.build();
+		GalleryFinal.init(coreConfig);
+	}
 
-    /**
-     * get a watcher to watch whether exits the problem of memory leak
-     */
+	/**
+	 * get a watcher to watch whether exits the problem of memory leak
+	 */
 //	public static RefWatcher getRefWatcher(Context context) {
 //		return ((AssistantApp) context.getApplicationContext()).mRefWatcher;
 //	}
 
-    /**
-     * do work to release the resource when app appExit
-     */
-    public void appExit() {
-        try {
+	/**
+	 * do work to release the resource when app appExit
+	 */
+	public void appExit() {
+		try {
 //			AlarmClockManager.getInstance().stopWakeAlarm(this);
-            ThreadUtil.destroy();
-            setGlobalInit(false);
-            PushMessageManager.getInstance().exit(this);
-            SilentDownloadManager.getInstance().stopAllDownload();
-            SocketIOManager.getInstance().close();
-            if (ImageLoader.getInstance().isInited()) {
-                ImageLoader.getInstance().clearMemoryCache();
-                ImageLoader.getInstance().stop();
+			ThreadUtil.destroy();
+			setGlobalInit(false);
+			PushMessageManager.getInstance().exit(this);
+			SilentDownloadManager.getInstance().stopAllDownload();
+			AlarmClockManager.getInstance().setObserverGame(false);
+			SocketIOManager.getInstance().close();
+			if (ImageLoader.getInstance().isInited()) {
+				ImageLoader.getInstance().clearMemoryCache();
+				ImageLoader.getInstance().stop();
 //				ImageLoader.getInstance().destroy();
-            }
+			}
 //            DownloadNotificationManager.cancelDownload(getApplicationContext());
 //            StatisticsManager.getInstance().exit(this);
-        } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(e);
-            }
-        }
-    }
+		} catch (Exception e) {
+			if (AppDebugConfig.IS_DEBUG) {
+				AppDebugConfig.warn(e);
+			}
+		}
+	}
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMemoryInfo();
-        }
-        if (ImageLoader.getInstance().isInited()) {
-            ImageLoader.getInstance().clearMemoryCache();
-        }
-    }
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		if (AppDebugConfig.IS_DEBUG) {
+			AppDebugConfig.logMemoryInfo();
+		}
+		if (ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().clearMemoryCache();
+		}
+	}
 
-    public void initGson() {
-        if (mGson == null) {
-            mGson = new GsonBuilder()
-                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
-                    .serializeNulls()
-                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                    .create();
-        }
-    }
+	public void initGson() {
+		if (mGson == null) {
+			mGson = new GsonBuilder()
+					.registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+					.serializeNulls()
+					.setDateFormat("yyyy-MM-dd HH:mm:ss")
+					.create();
+		}
+	}
 
-    public OkHttpClient getHttpClient() {
-        if (mHttpClient == null) {
-            File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
-            Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
-            Interceptor cacheInterceptor = new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    // 请求时携带版本信息
-                    final String headerValue = String.format(ConstString.TEXT_HEADER,
-                            AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-                            AppConfig.SDK_VER_NAME, getChannelId());
-                    String headerName = "X-Client-Info";
-                    Request newRequest;
-                    newRequest = chain.request().newBuilder()
-                            .addHeader(headerName, headerValue)
-                            .build();
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
-                    }
-                    Response response = chain.proceed(newRequest);
+	public OkHttpClient getHttpClient() {
+		if (mHttpClient == null) {
+			File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
+			Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
+			Interceptor cacheInterceptor = new Interceptor() {
+				@Override
+				public Response intercept(Chain chain) throws IOException {
+					// 请求时携带版本信息
+					final String headerValue = String.format(ConstString.TEXT_HEADER,
+							AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+							AppConfig.SDK_VER_NAME, getChannelId());
+					String headerName = "X-Client-Info";
+					Request newRequest;
+					newRequest = chain.request().newBuilder()
+							.addHeader(headerName, headerValue)
+							.build();
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
+					}
+					Response response = chain.proceed(newRequest);
 
-                    CacheControl cacheControl;
-                    if (NetworkUtil.isConnected(getApplicationContext())) {
-                        cacheControl = new CacheControl.Builder()
-                                .noCache()
-                                .build();
-                    } else {
-                        cacheControl = new CacheControl.Builder()
-                                .onlyIfCached()
-                                .maxStale(365, TimeUnit.DAYS)
-                                .build();
-                    }
-                    String cacheControlStr = cacheControl.toString();
-                    return response.newBuilder()
-                            .removeHeader("Pragma")
-                            .header("Cache-Control", cacheControlStr)
-                            .build();
-                }
-            };
+					CacheControl cacheControl;
+					if (NetworkUtil.isConnected(getApplicationContext())) {
+						cacheControl = new CacheControl.Builder()
+								.noCache()
+								.build();
+					} else {
+						cacheControl = new CacheControl.Builder()
+								.onlyIfCached()
+								.maxStale(365, TimeUnit.DAYS)
+								.build();
+					}
+					String cacheControlStr = cacheControl.toString();
+					return response.newBuilder()
+							.removeHeader("Pragma")
+							.header("Cache-Control", cacheControlStr)
+							.build();
+				}
+			};
 
-            mHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .cache(cacheFile)
-                    .addInterceptor(cacheInterceptor)
-                    .retryOnConnectionFailure(false)
-                    .build();
-        }
-        return mHttpClient;
-    }
+			mHttpClient = new OkHttpClient.Builder()
+					.connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+					.readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+					.cache(cacheFile)
+					.addInterceptor(cacheInterceptor)
+					.retryOnConnectionFailure(false)
+					.build();
+		}
+		return mHttpClient;
+	}
 
-    public void initRetrofit() {
-        initGson();
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl(NetUrl.getBaseUrl())
-                .client(getHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(mGson))
-                .build();
-    }
+	public void initRetrofit() {
+		initGson();
+		mRetrofit = new Retrofit.Builder()
+				.baseUrl(NetUrl.getBaseUrl())
+				.client(getHttpClient())
+				.addConverterFactory(GsonConverterFactory.create(mGson))
+				.build();
+	}
 
-    /**
-     * 重设网络并重初始化，测试使用
-     */
-    public void resetInitForTest() {
-        if (AppConfig.TEST_MODE) {
-            setGlobalInit(false);
-            appInit();
-        }
-    }
+//    /**
+//     * 重设网络并重初始化，测试使用
+//     */
+//    public void resetInitForTest() {
+//        if (AppConfig.TEST_MODE) {
+//            setGlobalInit(false);
+//            appInit();
+//        }
+//    }
 
-    /**
-     * initial the configuration of Universal-Image-Loader
-     */
-    public void initImageLoader() {
-        if (ImageLoader.getInstance().isInited()) {
-            ImageLoader.getInstance().resume();
-            return;
-        }
-        try {
-            final DisplayImageOptions options = Global.getDefaultImgOptions();
-            final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
-            final long maxAgeTimeInSeconds = 7 * 24 * 60 * 60;   // 7 days cache
-            final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                    .threadPoolSize(3)
-                    .denyCacheImageMultipleSizesInMemory()
-                    .memoryCache(new WeakMemoryCache())
-                    .diskCache(new LimitedAgeDiskCache(cacheDir, maxAgeTimeInSeconds))
-                    .defaultDisplayImageOptions(options) // default
-                    .memoryCacheSize(5 * 1024 * 1024)   // memory cache size 5M
-                    .diskCacheSize(100 * 1024 * 1024)   // disk cache size 100M
-                    .threadPriority(Thread.NORM_PRIORITY - 2)
-                    .build();
-            ImageLoader.getInstance().init(config);
-            L.writeLogs(false);
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
-            }
-        } catch (Throwable e) {
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed");
-                KLog.e(e);
-            }
-        }
-    }
+	/**
+	 * initial the configuration of Universal-Image-Loader
+	 */
+	public void initImageLoader() {
+		if (ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().resume();
+			return;
+		}
+		try {
+			final DisplayImageOptions options = Global.getDefaultImgOptions();
+			final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
+			final long maxAgeTimeInSeconds = 7 * 24 * 60 * 60;   // 7 days cache
+			final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+					.threadPoolSize(3)
+					.denyCacheImageMultipleSizesInMemory()
+					.memoryCache(new WeakMemoryCache())
+					.diskCache(new LimitedAgeDiskCache(cacheDir, maxAgeTimeInSeconds))
+					.defaultDisplayImageOptions(options) // default
+					.memoryCacheSize(5 * 1024 * 1024)   // memory cache size 5M
+					.diskCacheSize(100 * 1024 * 1024)   // disk cache size 100M
+					.threadPriority(Thread.NORM_PRIORITY - 2)
+					.build();
+			ImageLoader.getInstance().init(config);
+			L.writeLogs(false);
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
+			}
+		} catch (Throwable e) {
+			ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed");
+				KLog.e(e);
+			}
+		}
+	}
 
-    /**
-     * 读写SP里的全局APP配置，最好在线程中调用
-     */
-    public void initAppConfig() {
-        mShouldAutoCheckUpdate = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_CHECK_UPDATE, true);
-        mShouldAutoDeleteApk = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_DELETE_APK, true);
-        mShouldPushMsg = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_ACCEPT_PUSH, true);
-        mShouldAutoInstall = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_INSTALL, true);
-        mShouldAutoFocus = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_AUTO_FOCUS, true);
-        mIsAllowDownload = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_IS_ALLOW_DOWNLOAD, true);
-        mIsSaveFlow = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_IS_SAVE_FLOW, false);
-        setIsSaveFlow(mIsSaveFlow);
-        mIsPlayDownloadComplete = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_IS_PLAY_DOWNLOAD_COMPLETE, true);
-        mIsRememberPwd = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_REMEMBER_PWD, true);
-        setIsPlayDownloadComplete(mIsPlayDownloadComplete);
-        mIsReadAttention = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_IS_READ_ATTENTION, true);
-        getSoftInputHeight(null);
-    }
+	/**
+	 * 读写SP里的全局APP配置，最好在线程中调用
+	 */
+	public void initAppConfig() {
+		mShouldAutoCheckUpdate = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_AUTO_CHECK_UPDATE, true);
+		mShouldAutoDeleteApk = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_AUTO_DELETE_APK, true);
+		mShouldPushMsg = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_ACCEPT_PUSH, true);
+		mShouldAutoInstall = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_AUTO_INSTALL, true);
+		mShouldAutoFocus = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_AUTO_FOCUS, true);
+		mIsAllowDownload = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_IS_ALLOW_DOWNLOAD, true);
+		mIsSaveFlow = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_IS_SAVE_FLOW, false);
+		setIsSaveFlow(mIsSaveFlow);
+		mIsPlayDownloadComplete = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_IS_PLAY_DOWNLOAD_COMPLETE, true);
+		mIsRememberPwd = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_REMEMBER_PWD, true);
+		setIsPlayDownloadComplete(mIsPlayDownloadComplete);
+		mIsReadAttention = SPUtil.getBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE,
+				SPConfig.KEY_IS_READ_ATTENTION, true);
+		getSoftInputHeight(null);
+	}
 
-    /**
-     * 是否进行自动检查更新
-     */
-    public boolean isShouldAutoCheckUpdate() {
-        return mShouldAutoCheckUpdate;
-    }
+	/**
+	 * 是否进行自动检查更新
+	 */
+	public boolean isShouldAutoCheckUpdate() {
+		return mShouldAutoCheckUpdate;
+	}
 
-    /**
-     * 设置是否自动检查更新
-     */
-    public void setShouldAutoCheckUpdate(boolean shouldAutoCheckUpdate) {
-        mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_CHECK_UPDATE,
-                shouldAutoCheckUpdate);
-    }
+	/**
+	 * 设置是否自动检查更新
+	 */
+	public void setShouldAutoCheckUpdate(boolean shouldAutoCheckUpdate) {
+		mShouldAutoCheckUpdate = shouldAutoCheckUpdate;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_CHECK_UPDATE,
+				shouldAutoCheckUpdate);
+	}
 
-    /**
-     * 是否在抢礼包后自动关注游戏
-     */
-    public boolean isShouldAutoFocus() {
-        return mShouldAutoFocus;
-    }
+	/**
+	 * 是否在抢礼包后自动关注游戏
+	 */
+	public boolean isShouldAutoFocus() {
+		return mShouldAutoFocus;
+	}
 
-    /**
-     * 设置是否在抢礼包之后自动关注所属游戏
-     */
-    public void setShouldAutoFocus(boolean shouldAutoFocus) {
-        mShouldAutoFocus = shouldAutoFocus;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_FOCUS,
-                shouldAutoFocus);
-    }
+	/**
+	 * 设置是否在抢礼包之后自动关注所属游戏
+	 */
+	public void setShouldAutoFocus(boolean shouldAutoFocus) {
+		mShouldAutoFocus = shouldAutoFocus;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_FOCUS,
+				shouldAutoFocus);
+	}
 
-    public void setIsRememberPwd(boolean isRememberPwd) {
-        mIsRememberPwd = isRememberPwd;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_REMEMBER_PWD,
-                isRememberPwd);
-    }
+	public void setIsRememberPwd(boolean isRememberPwd) {
+		mIsRememberPwd = isRememberPwd;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_REMEMBER_PWD,
+				isRememberPwd);
+	}
 
-    public boolean isRememberPwd() {
-        return mIsRememberPwd;
-    }
+	public boolean isRememberPwd() {
+		return mIsRememberPwd;
+	}
 
-    public boolean isShouldPushMsg() {
-        return mShouldPushMsg;
-    }
+	public boolean isShouldPushMsg() {
+		return mShouldPushMsg;
+	}
 
-    public void setShouldPushMsg(boolean shouldPushMsg) {
-        mShouldPushMsg = shouldPushMsg;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_ACCEPT_PUSH,
-                shouldPushMsg);
-        if (shouldPushMsg) {
-            if (JPushInterface.isPushStopped(this)) {
-                JPushInterface.resumePush(this);
-            }
-        } else {
-            if (!JPushInterface.isPushStopped(this)) {
-                JPushInterface.stopPush(this);
-            }
-        }
-    }
+	public void setShouldPushMsg(boolean shouldPushMsg) {
+		mShouldPushMsg = shouldPushMsg;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_ACCEPT_PUSH,
+				shouldPushMsg);
+		if (shouldPushMsg) {
+			if (JPushInterface.isPushStopped(this)) {
+				JPushInterface.resumePush(this);
+			}
+		} else {
+			if (!JPushInterface.isPushStopped(this)) {
+				JPushInterface.stopPush(this);
+			}
+		}
+	}
 
-    public boolean isShouldAutoInstall() {
-        return mShouldAutoInstall;
-    }
+	public boolean isShouldAutoInstall() {
+		return mShouldAutoInstall;
+	}
 
-    public void setShouldAutoInstall(boolean shouldAutoInstall) {
-        mShouldAutoInstall = shouldAutoInstall;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_INSTALL,
-                shouldAutoInstall);
-    }
+	public void setShouldAutoInstall(boolean shouldAutoInstall) {
+		mShouldAutoInstall = shouldAutoInstall;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_INSTALL,
+				shouldAutoInstall);
+	}
 
-    public boolean isShouldAutoDeleteApk() {
-        return mShouldAutoDeleteApk;
-    }
+	public boolean isShouldAutoDeleteApk() {
+		return mShouldAutoDeleteApk;
+	}
 
-    public void setShouldAutoDeleteApk(boolean shouldAutoDeleteApk) {
-        mShouldAutoDeleteApk = shouldAutoDeleteApk;
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_DELETE_APK,
-                shouldAutoDeleteApk);
-    }
+	public void setShouldAutoDeleteApk(boolean shouldAutoDeleteApk) {
+		mShouldAutoDeleteApk = shouldAutoDeleteApk;
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_AUTO_DELETE_APK,
+				shouldAutoDeleteApk);
+	}
 
 
-    public boolean isSaveFlow() {
-        return mIsSaveFlow;
-    }
+	public boolean isSaveFlow() {
+		return mIsSaveFlow;
+	}
 
-    public void setIsSaveFlow(boolean isSaveFlow) {
-        mIsSaveFlow = isSaveFlow;
-        if (ImageLoader.getInstance().isInited()) {
-            if (mIsSaveFlow) {
-                ImageLoader.getInstance().clearMemoryCache();
-                ImageLoader.getInstance().pause();
-                ImageLoader.getInstance().denyNetworkDownloads(true);
-            } else {
-                ImageLoader.getInstance().denyNetworkDownloads(false);
-                ImageLoader.getInstance().resume();
-            }
-        }
-        SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_SAVE_FLOW,
-                isSaveFlow);
-    }
+	public void setIsSaveFlow(boolean isSaveFlow) {
+		mIsSaveFlow = isSaveFlow;
+		if (ImageLoader.getInstance().isInited()) {
+			if (mIsSaveFlow) {
+				ImageLoader.getInstance().clearMemoryCache();
+				ImageLoader.getInstance().pause();
+				ImageLoader.getInstance().denyNetworkDownloads(true);
+			} else {
+				ImageLoader.getInstance().denyNetworkDownloads(false);
+				ImageLoader.getInstance().resume();
+			}
+		}
+		SPUtil.putBoolean(getApplicationContext(), SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_SAVE_FLOW,
+				isSaveFlow);
+	}
 
-    public boolean isAllowDownload() {
-        return mIsAllowDownload;
-    }
+	public boolean isAllowDownload() {
+		return mIsAllowDownload;
+	}
 
-    public void setAllowDownload(boolean isAllowDownload) {
-        mIsAllowDownload = isAllowDownload;
-    }
+	public void setAllowDownload(boolean isAllowDownload) {
+		mIsAllowDownload = isAllowDownload;
+	}
 
-    public boolean isPlayDownloadComplete() {
-        return mIsPlayDownloadComplete;
-    }
+	public boolean isPlayDownloadComplete() {
+		return mIsPlayDownloadComplete;
+	}
 
-    public void setIsPlayDownloadComplete(boolean isPlayDownloadComplete) {
-        mIsPlayDownloadComplete = isPlayDownloadComplete;
-        if (mIsPlayDownloadComplete) {
-            // preload download complete sound
-            SoundPlayer.getInstance(this);
-        }
-    }
+	public void setIsPlayDownloadComplete(boolean isPlayDownloadComplete) {
+		mIsPlayDownloadComplete = isPlayDownloadComplete;
+		if (mIsPlayDownloadComplete) {
+			// preload download complete sound
+			SoundPlayer.getInstance(this);
+		}
+	}
 
-    public boolean isGlobalInit() {
-        return mIsGlobalInit;
-    }
+	public boolean isGlobalInit() {
+		return mIsGlobalInit;
+	}
 
-    public void setGlobalInit(boolean isGlobalInit) {
-        mIsGlobalInit = isGlobalInit;
-        isInitialing = false;
-    }
+	public void setGlobalInit(boolean isGlobalInit) {
+		mIsGlobalInit = isGlobalInit;
+		isInitialing = false;
+	}
 
-    public Gson getGson() {
-        if (mGson == null) {
-            initGson();
-        }
-        return mGson;
-    }
+	public Gson getGson() {
+		if (mGson == null) {
+			initGson();
+		}
+		return mGson;
+	}
 
-    public UpdateInfo getUpdateInfo() {
-        return mUpdateInfo;
-    }
+	public UpdateInfo getUpdateInfo() {
+		return mUpdateInfo;
+	}
 
-    public void setUpdateInfo(UpdateInfo updateInfo) {
-        mUpdateInfo = updateInfo;
-    }
+	public void setUpdateInfo(UpdateInfo updateInfo) {
+		mUpdateInfo = updateInfo;
+	}
 
-    public ArrayList<InitQQ> getQQInfo() {
-        return mQQInfo;
-    }
+	public ArrayList<InitQQ> getQQInfo() {
+		return mQQInfo;
+	}
 
-    public void setQQInfo(ArrayList<InitQQ> QQInfo) {
-        mQQInfo = QQInfo;
-    }
+	public void setQQInfo(ArrayList<InitQQ> QQInfo) {
+		mQQInfo = QQInfo;
+	}
 
-    public String getStartImg() {
-        return SPUtil.getString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, null);
-    }
+	public String getStartImg() {
+		return SPUtil.getString(this, SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, null);
+	}
 
-    /**
-     * 设置启动闪屏图的地址
-     */
-    public void setStartImg(String startImg) {
-        if (TextUtils.isEmpty(startImg)) {
-            return;
-        }
-        if (ImageLoader.getInstance().isInited()) {
-            // 先进行预加载
-            ImageLoader.getInstance().loadImage(startImg, null);
-        }
-        mStartImg = startImg;
-        SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);
-    }
+	/**
+	 * 设置启动闪屏图的地址
+	 */
+	public void setStartImg(String startImg) {
+		if (TextUtils.isEmpty(startImg)) {
+			return;
+		}
+		if (ImageLoader.getInstance().isInited()) {
+			// 先进行预加载
+			ImageLoader.getInstance().loadImage(startImg, null);
+		}
+		mStartImg = startImg;
+		SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);
+	}
 
-    /**
-     * 获取活动弹窗
-     */
-    public IndexBanner getBroadcastBanner() {
-        return mBroadcastBanner;
-    }
+	/**
+	 * 获取活动弹窗
+	 */
+	public IndexBanner getBroadcastBanner() {
+		return mBroadcastBanner;
+	}
 
-    /**
-     * 设置活动弹窗内容
-     */
-    public void setBroadcastBanner(IndexBanner broadcastBanner) {
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_APP, "broadcastBanner = " + broadcastBanner);
-        }
-        if (broadcastBanner == null) {
-            return;
-        }
-        mBroadcastBanner = broadcastBanner;
-        if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
-            ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
-        }
-    }
+	/**
+	 * 设置活动弹窗内容
+	 */
+	public void setBroadcastBanner(IndexBanner broadcastBanner) {
+		if (AppDebugConfig.IS_DEBUG) {
+			KLog.d(AppDebugConfig.TAG_APP, "broadcastBanner = " + broadcastBanner);
+		}
+		if (broadcastBanner == null) {
+			return;
+		}
+		mBroadcastBanner = broadcastBanner;
+		if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
+			ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
+		}
+	}
 
-    /**
-     * 获取渠道ID
-     */
-    public int getChannelId() {
-        if (mChannelId == -1) {
-            mChannelId = ChannelUtil.getChannelId(this);
-        }
-        return mChannelId;
-    }
+	/**
+	 * 获取渠道ID
+	 */
+	public int getChannelId() {
+		if (mChannelId == -1) {
+			mChannelId = ChannelUtil.getChannelId(this);
+		}
+		return mChannelId;
+	}
 
-    /**
-     * 今日是否已经进行了推送
-     */
-    public boolean isPushedToday() {
-        if (!mIsPushedToday) {
-            long storeTime = SPUtil.getLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, 0);
-            if (storeTime != 0 && DateUtil.isToday(storeTime)) {
-                mIsPushedToday = true;
-            }
-        }
-        return mIsPushedToday;
-    }
+	/**
+	 * 今日是否已经进行了推送
+	 */
+	public boolean isPushedToday() {
+		if (!mIsPushedToday) {
+			long storeTime = SPUtil.getLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, 0);
+			if (storeTime != 0 && DateUtil.isToday(storeTime)) {
+				mIsPushedToday = true;
+			}
+		}
+		return mIsPushedToday;
+	}
 
-    /**
-     * 设置今日已经进行了推送
-     */
-    public void setPushedToday() {
-        mIsPushedToday = true;
-        SPUtil.putLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, System.currentTimeMillis());
-    }
+	/**
+	 * 设置今日已经进行了推送
+	 */
+	public void setPushedToday() {
+		mIsPushedToday = true;
+		SPUtil.putLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_PUSH_TIME, System.currentTimeMillis());
+	}
 
-    public void setIsReadAttention(boolean isReadAttention) {
-        mIsReadAttention = isReadAttention;
-        SPUtil.putBoolean(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_READ_ATTENTION, mIsReadAttention);
-    }
+	public void setIsReadAttention(boolean isReadAttention) {
+		mIsReadAttention = isReadAttention;
+		SPUtil.putBoolean(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_IS_READ_ATTENTION, mIsReadAttention);
+	}
 
-    public boolean isReadAttention() {
-        return mIsReadAttention;
-    }
+	public boolean isReadAttention() {
+		return mIsReadAttention;
+	}
 
-    public int getSoftInputHeight(Activity activity) {
-        if (mSoftInputHeight == 0) {
-            mSoftInputHeight = SPUtil.getInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, 0);
-            if (activity != null && mSoftInputHeight == 0) {
-                mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
-                setSoftInputHeight(mSoftInputHeight);
-            }
-        }
-        return mSoftInputHeight;
-    }
+	public int getSoftInputHeight(Activity activity) {
+		if (mSoftInputHeight == 0) {
+			mSoftInputHeight = SPUtil.getInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, 0);
+			if (activity != null && mSoftInputHeight == 0) {
+				mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
+				setSoftInputHeight(mSoftInputHeight);
+			}
+		}
+		return mSoftInputHeight;
+	}
 
-    public void setSoftInputHeight(int softInputHeight) {
-        if (softInputHeight != 0) {
-            mSoftInputHeight = softInputHeight;
-            SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
-        }
-    }
+	public void setSoftInputHeight(int softInputHeight) {
+		if (softInputHeight != 0) {
+			mSoftInputHeight = softInputHeight;
+			SPUtil.putInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, softInputHeight);
+		}
+	}
 
 
 }

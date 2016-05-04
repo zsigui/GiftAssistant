@@ -62,7 +62,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_refresh_lv_container);
+        initViewManger(R.layout.fragment_attention_data);
         View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty, null);
         mViewManager.setEmptyView(emptyView);
         btnToGet = getViewById(emptyView, R.id.btn_to_get);
@@ -86,6 +86,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
         reqPageData.page = PAGE_FIRST;
         reqPageData.pageSize = PAGE_SIZE;
         mReqPageObj = new JsonReqBase<ReqPageData>(reqPageData);
+        mRefreshLayout.setEnabled(false);
     }
 
     /**

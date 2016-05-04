@@ -94,7 +94,7 @@
 				android:drawablePadding = "4dp" />
 
 		<TextView
-				android:id = "@+id/tv_remain"
+				android:id = "@+id/tv_new_add"
 				style = "@style/DefaultTextView.Text"
 				android:layout_below = "@+id/tv_consume"
 				android:layout_marginLeft = "14dp"
@@ -107,11 +107,11 @@
 				style = "?android:attr/progressBarStyleHorizontal"
 				android:layout_width = "120dp"
 				android:layout_height = "@dimen/di_gift_common_pb_diameter"
-				android:layout_alignTop = "@+id/tv_remain"
+				android:layout_alignTop = "@+id/tv_new_add"
 				android:layout_marginLeft = "4dp"
 				android:layout_marginTop = "5dp"
 				android:layout_toLeftOf = "@+id/btn_send"
-				android:layout_toRightOf = "@+id/tv_remain"
+				android:layout_toRightOf = "@+id/tv_new_add"
 				android:max = "100"
 				android:visibility = "gone"
 				android:progressDrawable = "@drawable/shape_progress_bar_orange" />

@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:background = "@color/co_white"
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content"
+              android:orientation = "vertical"
+              android:padding = "@dimen/di_list_item_gap_big" >
+
+	<TextView
+			android:id = "@+id/tv_intro"
+			android:layout_width = "match_parent"
+			style = "@style/DefaultTextView.Text"
+			android:maxLines = "3"
+			android:singleLine = "false"
+			android:gravity = "left"
+			android:lineSpacingExtra = "@dimen/di_line_space_extra_normal" />
+
+
+	<TextView
+			style = "@style/DefaultTextView.Header"
+			android:layout_gravity = "center_horizontal"
+			android:text = "展开全文"
+			android:drawablePadding = "@dimen/di_line_space_extra_big"
+			android:textColor = "@color/co_common_app_second_bg_orange"
+			android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+			android:drawableRight = "@drawable/ic_arrow_expand" />
+</LinearLayout >

@@ -208,15 +208,22 @@ public class DialogManager {
 	 * 显示加载弹窗，指定显示内容
 	 */
 	public void showLoadingDialog(final FragmentManager fm, final String loadText) {
+		if (fm == null) {
+			return;
+		}
 		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				final String tag = LoadingDialog.class.getSimpleName();
+				if (fm.findFragmentByTag(tag) != null) {
+					return;
+				}
 				if (mLoadingDialog == null) {
 					mLoadingDialog = LoadingDialog.newInstance();
 				}
 				mLoadingDialog.setCancelable(false);
 				mLoadingDialog.setLoadText(loadText);
-				mLoadingDialog.show(fm, LoadingDialog.class.getSimpleName());
+				mLoadingDialog.show(fm, tag);
 			}
 		});
 	}

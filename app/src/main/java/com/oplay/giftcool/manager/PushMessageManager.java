@@ -22,6 +22,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.model.data.resp.message.PushMessageApp;
 import com.oplay.giftcool.model.data.resp.message.PushMessageDetail;
 import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.DateUtil;
@@ -61,7 +62,7 @@ public class PushMessageManager {
 		public static final int ACTION_GIFT_DETAIL = 6;
 		// 跳转游戏详情页面
 		public static final int ACTION_GAME_DETAIL = 7;
-		// 采取采取任务处理的方式进行处理
+		// 采取任务处理的方式进行处理
 		public static final int ACTION_LIKE_AS_TASK = 11011;
 	}
 
@@ -119,6 +120,8 @@ public class PushMessageManager {
 	private final int END_HOUR = 8;
 	private final int END_MINUTE = 30;
 
+	private boolean mIsInit = true;
+
 	public static PushMessageManager getInstance() {
 		if (sInstance == null) {
 			sInstance = new PushMessageManager();
@@ -140,6 +143,9 @@ public class PushMessageManager {
 	 * 初始化推送设置
 	 */
 	public void initPush(Context context) {
+		if (mIsInit) {
+			return;
+		}
 		JPushInterface.init(context);
 		JPushInterface.setDebugMode(AppConfig.TEST_MODE);
 		// 设置通知静默时间，不震动和响铃，晚上10点30分-早上8点
@@ -153,17 +159,17 @@ public class PushMessageManager {
 		JPushInterface.setDefaultPushNotificationBuilder(builder);
 		// 设置保留最近通知条数 5
 		JPushInterface.setLatestNotificationNumber(context, 5);
-
+		mIsInit = true;
 	}
 
-	/**
-	 * 重新初始化推送设置，会判断推送服务是否存在，不存在则重启，存在则不做处理
-	 */
-	public void reInitPush(Context context) {
+//	/**
+//	 * 重新初始化推送设置，会判断推送服务是否存在，不存在则重启，存在则不做处理
+//	 */
+//	public void reInitPush(Context context) {
 //		if (JPushInterface.isPushStopped(context)) {
-			JPushInterface.init(context);
+//			initPush(context);
 //		}
-	}
+//	}
 
 	/**
 	 * 处理多日未打开应用的唤醒行为
@@ -250,8 +256,15 @@ public class PushMessageManager {
 				handleDetailAction(context, data, false);
 				break;
 			case Status.ACTION_LIKE_AS_TASK:
+				handleTaskAction(context, data);
 				break;
 		}
+	}
+
+	private void handleTaskAction(Context context, PushMessageExtra data) {
+		TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
+				data.extraJson, TaskInfoOne.class);
+		IntentUtil.handleJumpInfo(context, infoOne);
 	}
 
 
@@ -395,6 +408,7 @@ public class PushMessageManager {
 	 */
 	public void exit(Context context) {
 		JPushInterface.clearLocalNotifications(context);
-//		JPushInterface.onKillProcess(context);
+		JPushInterface.onKillProcess(context);
+		mIsInit = false;
 	}
 }

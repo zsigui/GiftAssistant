@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.listener.OnLoadListener;
 import com.oplay.giftcool.ui.widget.layout.RefreshLayout;
 import com.oplay.giftcool.util.ToastUtil;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * @date 2016/1/3
  */
 public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implements SwipeRefreshLayout
-		.OnRefreshListener, RefreshLayout.OnLoadListener {
+		.OnRefreshListener, OnLoadListener {
 
 	public static final int PAGE_FIRST = 1;
 

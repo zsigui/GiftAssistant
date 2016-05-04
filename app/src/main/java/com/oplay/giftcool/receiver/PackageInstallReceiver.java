@@ -11,8 +11,6 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.InstallNotifier;
-import com.oplay.giftcool.manager.AlarmClockManager;
-import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -50,7 +48,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
                 }
 				try {
 					handleAppState(context, packName);
-					handlePlayDownloadTask(context, packName);
+//					handlePlayDownloadTask(context, packName);
 				} catch (Throwable e) {
 					if (AppDebugConfig.IS_DEBUG) {
 						KLog.e(e);
@@ -76,15 +74,15 @@ public class PackageInstallReceiver extends BroadcastReceiver {
 		}
 	}
 
-	/**
-	 * 判断是否指定试玩游戏，并开启服务监听游戏的启动状态
-	 */
-	private void handlePlayDownloadTask(Context context, String packName) {
-		final boolean contain = ScoreManager.getInstance().containDownloadTask(context, packName);
-		if (contain) {
-			AlarmClockManager.getInstance().startGameObserverAlarm(context);
-		}
-	}
+//	/**
+//	 * 判断是否指定试玩游戏，并开启服务监听游戏的启动状态
+//	 */
+//	private void handlePlayDownloadTask(Context context, String packName) {
+//		final boolean contain = ScoreManager.getInstance().containDownloadTask(context, packName);
+//		if (contain) {
+//			AlarmClockManager.getInstance().setObserverGame(true);
+//		}
+//	}
 
 	/**
 	 * 处理游戏下载安装后的APP状态变化

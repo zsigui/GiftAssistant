@@ -195,16 +195,16 @@ public class AccountManager implements OnFinishListener {
                             }
                             if (response != null && response.isSuccessful()) {
                                 if (response.body() != null && response.body().isSuccess()) {
-                                    UserModel user = getUser();
-                                    if (user == null) {
-                                        // 重置登录
-                                        notifyUserAll(null);
-                                        return;
-                                    }
                                     final UserModel userModel = response.body().getData();
                                     if (userModel == null) {
                                         return;
                                     }
+                                    if (!isLogin()) {
+                                        // 重置登录
+                                        notifyUserAll(null);
+                                        return;
+                                    }
+                                    UserModel user = getUser();
                                     user.userInfo = userModel.userInfo;
                                     notifyUserAll(user);
                                     updateJPushTagAndAlias();
@@ -274,7 +274,7 @@ public class AccountManager implements OnFinishListener {
                             if (response != null && response.isSuccessful()) {
                                 if (response.body() != null && response.body().isSuccess()) {
                                     UserModel user = getUser();
-                                    if (user == null) {
+                                    if (!isLogin()) {
                                         // 重置登录信息，表示未登录
                                         notifyUserAll(null);
                                         return;
@@ -515,6 +515,7 @@ public class AccountManager implements OnFinishListener {
             }
         });
         AccountManager.getInstance().notifyUserAll(null);
+        SocketIOManager.getInstance().close();
     }
 
 

@@ -11,6 +11,8 @@ import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
+import com.oplay.giftcool.manager.AlarmClockManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
@@ -221,6 +223,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 		try {
 			if (isFileExists()) {
 				InstallAppUtil.install(mContext, this);
+				handlePlayDownloadTask(mContext, packageName);
 			} else {
 				ToastUtil.showShort("安装失败-安装文件已被移除");
 				DownloadNotificationManager.clearDownloadComplete(mContext, destUrl);
@@ -237,10 +240,18 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	public void startApp() {
 		try {
 			Util_System_Intent.startActivityByPackageName(mContext, packageName);
+			handlePlayDownloadTask(getContext(), packageName);
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.e(e);
 			}
+		}
+	}
+
+	private void handlePlayDownloadTask(Context context, String packName) {
+		final boolean contain = ScoreManager.getInstance().containDownloadTask(context, packName);
+		if (contain) {
+			AlarmClockManager.getInstance().setObserverGame(true);
 		}
 	}
 

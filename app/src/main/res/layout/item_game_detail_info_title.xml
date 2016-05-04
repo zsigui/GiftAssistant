@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id = "@+id/ll_item"
+              android:background = "@color/co_transparent"
+              style = "@style/IndexModuleLayout" >
+
+	<View
+			android:background = "@color/co_divider_bg"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_index_module_gap" />
+
+	<TextView
+			android:id="@+id/tv_title"
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_index_hoz_module_title_height"
+			style = "@style/DefaultTextView.Header"
+			android:text = "游戏简介"
+			android:background = "@color/co_white"
+			android:paddingLeft = "@dimen/di_list_item_gap_normal" />
+</LinearLayout >

@@ -101,7 +101,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 							SPConfig.SP_APP_DEVICE_FILE,
 							SPConfig.KEY_TEST_REQUEST_URI,
 							dialog.getContent());
-					AssistantApp.getInstance().resetInitForTest();
+//					AssistantApp.getInstance().resetInitForTest();
 					initAction();
 					dialog.dismissAllowingStateLoss();
 				}
@@ -110,7 +110,9 @@ public class SplashActivity extends BaseAppCompatActivity {
 			dialog.show(getSupportFragmentManager(), "init");
 			return;
 		}
-		initAction();
+		if (!AppConfig.TEST_MODE) {
+			initAction();
+		}
 	}
 
 	private void initAction() {
@@ -161,11 +163,11 @@ public class SplashActivity extends BaseAppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		if (System.currentTimeMillis() - mLastClickTime <= 1000) {
+		if (System.currentTimeMillis() - mLastClickTime <= 3000) {
 			mLastClickTime = System.currentTimeMillis();
 			mApp.appExit();
 			finish();
-			System.exit(0);
+//			System.exit(0);
 		}
 	}
 

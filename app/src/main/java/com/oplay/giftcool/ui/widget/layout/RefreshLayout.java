@@ -20,6 +20,7 @@ import android.widget.ListView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.FooterListener;
+import com.oplay.giftcool.listener.OnLoadListener;
 import com.socks.library.KLog;
 
 /**
@@ -340,13 +341,5 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 		}
 	}
 
-	/**
-	 * 加载更多的监听器
-	 *
-	 * @author mrsimple
-	 */
-	public interface OnLoadListener {
-		void onLoad();
-	}
 }
 

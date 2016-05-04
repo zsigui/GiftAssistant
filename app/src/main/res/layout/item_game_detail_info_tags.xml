@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:orientation = "vertical"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		android:background = "@color/co_white" >
+
+	<View
+			android:layout_width = "match_parent"
+			android:layout_height = "@dimen/di_index_module_gap"
+			android:background = "@color/co_divider_bg" />
+
+	<com.oplay.giftcool.ui.widget.layout.GCRecyclerView
+			android:id = "@+id/rv_pics"
+			android:layout_width = "match_parent"
+			android:layout_height = "180dp" />
+
+	<com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout
+			android:id = "@+id/tf_tags"
+			android:orientation = "vertical"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:paddingBottom = "@dimen/di_list_item_gap_small"
+			android:paddingLeft = "@dimen/di_list_item_gap_very_small"
+			android:paddingRight = "@dimen/di_list_item_gap_very_small"
+			android:paddingTop = "@dimen/di_list_item_gap_normal" >
+
+	</com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout >
+</LinearLayout >

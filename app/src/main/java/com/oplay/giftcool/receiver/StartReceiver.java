@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AlarmClockManager;
-import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
@@ -38,17 +37,21 @@ public class StartReceiver extends BroadcastReceiver {
 //			PushMessageManager.getInstance().reInitPush(context);
 		if (!SystemUtil.isServiceRunning(context, PushService.class.getName())) {
 			// 服务不处于运行中，重启该服务
-			if (!AssistantApp.getInstance().isGlobalInit()) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
-				}
-				AssistantApp.getInstance().appInit();
-			} else {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stop, re-started again");
-				}
-				PushMessageManager.getInstance().reInitPush(context);
+//			if (!AssistantApp.getInstance().isGlobalInit()) {
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
+//				}
+//				AssistantApp.getInstance().appInit();
+//			} else {
+//				if (AppDebugConfig.IS_DEBUG) {
+//					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stop, re-started again");
+//				}
+//				PushMessageManager.getInstance().reInitPush(context);
+//			}
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
 			}
+			AssistantApp.getInstance().initPushAndStatics();
 		} else {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");

@@ -44,7 +44,7 @@ public class JPushReceiver extends BroadcastReceiver {
 									connected);
 						}
 						// 重新连接
-						JPushInterface.init(AssistantApp.getInstance().getApplicationContext());
+						JPushInterface.init(context);
 					}
 				} else if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
 					// 传递RegistrationId给服务器

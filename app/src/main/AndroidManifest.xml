@@ -281,12 +281,12 @@
 			</intent-filter >
 		</receiver >
 
-		<receiver android:name = ".receiver.GameObserverReceiver" >
-			<intent-filter >
-				<action android:name = "${applicationId}.clock_action.PLAY_GAME" />
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-		</receiver >
+		<!--<receiver android:name = ".receiver.GameObserverReceiver" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "${applicationId}.clock_action.PLAY_GAME" />-->
+				<!--<category android:name = "${applicationId}" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
 
 		<receiver android:name = ".download.DownloadNotificationManager$DownloadReceiver" >
 			<intent-filter >

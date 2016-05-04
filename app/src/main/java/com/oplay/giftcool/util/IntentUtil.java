@@ -1,15 +1,20 @@
 package com.oplay.giftcool.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
@@ -63,8 +68,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftDetail(Context context, int id, boolean newTask) {
 		Intent intent = new Intent(context, GiftDetailActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		context.startActivity(intent);
@@ -75,6 +79,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftHotList(Context context, String gameKey) {
 		Intent intent = new Intent(context, GiftListActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIKE);
 		intent.putExtra(KeyConfig.KEY_DATA, gameKey);
 		context.startActivity(intent);
@@ -85,10 +90,11 @@ public class IntentUtil {
 	 */
 	public static void jumpGiftLimitList(Context context, boolean needNewTask) {
 		Intent intent = new Intent(context, GiftListActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
-		if (needNewTask) {
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		}
+//		if (needNewTask) {
+//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		}
 		context.startActivity(intent);
 	}
 
@@ -98,6 +104,7 @@ public class IntentUtil {
 	public static void jumpGiftNewList(Context context) {
 		Intent intent = new Intent(context, GiftListActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_NEW);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -121,8 +128,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGameDetail(Context context, int id, int status) {
 		Intent intent = new Intent(context, GameDetailActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(KeyConfig.KEY_DATA, id);
 		intent.putExtra(KeyConfig.KEY_STATUS, status);
 		context.startActivity(intent);
@@ -140,6 +146,7 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_TYPE);
 		intent.putExtra(KeyConfig.KEY_DATA, type);
 		intent.putExtra(KeyConfig.KEY_NAME, title);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -150,6 +157,7 @@ public class IntentUtil {
 	 */
 	public static void jumpGameNewList(Context context) {
 		Intent intent = new Intent(context, GameListActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_NEW);
 		context.startActivity(intent);
 	}
@@ -160,6 +168,7 @@ public class IntentUtil {
 	public static void jumpGameHotList(Context context) {
 		Intent intent = new Intent(context, GameListActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GAME_HOT);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -172,6 +181,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_TASK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -180,6 +190,7 @@ public class IntentUtil {
 	 */
 	public static void jumpSearch(Context context) {
 		Intent intent = new Intent(context, SearchActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -192,6 +203,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_GIFT_CODE);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -201,6 +213,7 @@ public class IntentUtil {
 	public static void jumpSetting(Context context) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SETTING);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -213,6 +226,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_WALLET);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -225,6 +239,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MY_ATTENTION);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -234,9 +249,10 @@ public class IntentUtil {
 	public static void jumpDownloadManager(Context context, boolean newTask) {
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
-		if (newTask) {
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		}
+//		if (newTask) {
+//			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//		}
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -284,6 +300,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -296,6 +313,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_NEW_GIFT_NOTIFY);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -308,6 +326,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_ADMIRE);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -320,6 +339,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_SYSTEM);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -332,6 +352,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, MessageActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_MSG_COMMENT);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -360,6 +381,7 @@ public class IntentUtil {
 	public static void jumpLogin(Context context, int type) {
 		Intent intent = new Intent(context, LoginActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -372,6 +394,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_FEEDBACK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -384,6 +407,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USERINFO);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -396,6 +420,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_NICK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -408,6 +433,7 @@ public class IntentUtil {
 		}
 		Intent intent = new Intent(context, SettingActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_USER_SET_AVATAR);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -452,6 +478,7 @@ public class IntentUtil {
 		Intent intent = new Intent(context, WebActivity.class);
 		intent.putExtra(KeyConfig.KEY_DATA, url);
 		intent.putExtra(KeyConfig.KEY_TITLE, title);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -468,7 +495,7 @@ public class IntentUtil {
 		intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq" +
 				".com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + qqKey));
 		// 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
-//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		try {
 			context.startActivity(intent);
 			return true;
@@ -485,6 +512,7 @@ public class IntentUtil {
 		Intent intent = new Intent(context, PostDetailActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, postId);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -496,6 +524,7 @@ public class IntentUtil {
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_COMMENT_DETAIL);
 		intent.putExtra(KeyConfig.KEY_DATA, postId);
 		intent.putExtra(KeyConfig.KEY_DATA_O, commentId);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -506,6 +535,7 @@ public class IntentUtil {
 		Intent intent = new Intent(context, PostListActivity.class);
 		intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_OFFICIAL);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
@@ -518,7 +548,40 @@ public class IntentUtil {
 		intent.addCategory(Intent.CATEGORY_DEFAULT);
 		intent.putExtra(KeyConfig.KEY_DATA, data);
 		intent.putExtra(KeyConfig.KEY_TYPE, type);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
 	}
 
+	/**
+	 * 处理额外信息类型为一(进行页面跳转)的数据
+	 */
+	public static void handleJumpInfo(Context context, TaskInfoOne taskInfo) {
+		final String ACTION_PREFIX = AppConfig.PACKAGE_NAME +  ".action.";
+		if ("GameDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
+		} else if ("GiftDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpGiftDetail(context, taskInfo.id);
+		} else if ("PostDetail".equals(taskInfo.action)) {
+			IntentUtil.jumpPostDetail(context, taskInfo.id);
+		} else if ("Sdk".equals(taskInfo.action)) {
+			switch (taskInfo.id) {
+				case TaskTypeUtil.INFO_ONE_SDK_RECHARGE:
+					OuwanSDKManager.getInstance().recharge();
+					break;
+				case TaskTypeUtil.INFO_ONE_SDK_BIND_OUWAN:
+					OuwanSDKManager.getInstance().showBindOuwanView(context);
+					break;
+				case TaskTypeUtil.INFO_ONE_SDK_BIND_PHONE:
+					OuwanSDKManager.getInstance().showBindPhoneView(context);
+					break;
+			}
+		} else {
+			IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.id, taskInfo.data);
+			if ("Main".equals(taskInfo.action)) {
+				if (context != null && context instanceof Activity) {
+					((Activity) context).finish();
+				}
+			}
+		}
+	}
 }

@@ -36,7 +36,6 @@ import org.apache.http.protocol.HTTP;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -240,7 +239,8 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 				final int start = decodedUrl.lastIndexOf(File.separatorChar) + 1;
 				final int end = decodedUrl.lastIndexOf('.');
 				temp = decodedUrl.substring(start, end);
-			} catch (UnsupportedEncodingException e) {
+			} catch (Throwable e) {
+				AppDebugConfig.warn(AppDebugConfig.TAG_WARN, e);
 				temp = Coder_Md5.md5(identify);
 			}
 		} else {
@@ -258,7 +258,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	}
 
 	public void removeDownloadTask(final String url, boolean needDeleteTemp) {
-		if (needDeleteTemp) {
+		if (needDeleteTemp && mUrl_AppInfo != null) {
 			final GameDownloadInfo info = mUrl_AppInfo.get(url);
 			if (info != null) {
 				final File f = getDownloadTempFile(info.downloadUrl, info.destUrl);
@@ -275,7 +275,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 		}
 		for (int i = mManagerList.size() - 1; i >= 0 ; i--) {
 			GameDownloadInfo everyInfo = mManagerList.get(i);
-			if (everyInfo.downloadUrl.equals(info.downloadUrl)) {
+			if (everyInfo != null && everyInfo.downloadUrl.equals(info.downloadUrl)) {
 				DownloadStatus ds = everyInfo.downloadStatus;
 				switch (ds) {
 					case DOWNLOADING:

@@ -108,7 +108,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		tvScore = getViewById(R.id.tv_score);
 		tvOr = getViewById(R.id.tv_or);
 		tvBean = getViewById(R.id.tv_bean);
-		tvRemain = getViewById(R.id.tv_remain);
+		tvRemain = getViewById(R.id.tv_new_add);
 		tvContent = getViewById(R.id.et_content);
 		tvDeadline = getViewById(R.id.tv_deadline);
 		tvUsage = getViewById(R.id.tv_usage);

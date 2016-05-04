@@ -6,12 +6,11 @@
 			android:topLeftRadius = "@dimen/di_btn_radius"
 			android:topRightRadius = "@dimen/di_btn_radius" />
 	<padding
-			android:bottom = "@dimen/di_btn_small_padding_top_bottom"
+			android:bottom = "@dimen/di_btn_bigger_padding_top_bottom"
 			android:left = "@dimen/di_btn_radius"
 			android:right = "@dimen/di_btn_radius"
-			android:top = "@dimen/di_btn_small_padding_top_bottom" />
+			android:top = "@dimen/di_btn_bigger_padding_top_bottom" />
 	<solid android:color = "@color/co_transparent" />
-	<stroke
-			android:color = "@color/co_btn_grey"
-			android:width = "1dp" />
+	<stroke android:color="@color/co_btn_green"
+	        android:width="1dp" />
 </shape >

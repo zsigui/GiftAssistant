@@ -30,6 +30,7 @@ public class SocketIOManager {
 	private final String URI_WS = "/ws";
 	private static SocketIOManager manager;
 	private Context mAppContext;
+	private boolean mIsConnecting = false;
 
 
 	private SocketIOManager() {
@@ -51,28 +52,42 @@ public class SocketIOManager {
 	}
 
 	public void connectOrReConnect(boolean forceNew) {
+		if (mIsConnecting) {
+			return;
+		}
 		try {
+			if (!AccountManager.getInstance().isLogin()) {
+				return;
+			}
 			if (isConnected()) {
 				if (!forceNew) {
 					return;
 				}
 				close();
 			}
+			mIsConnecting = true;
 			IO.Options opts = new IO.Options();
 			opts.forceNew = true;
 			opts.reconnection = true;
 			opts.reconnectionAttempts = 0;
-//				// 断开后，间隔10秒再次重试
-			opts.reconnectionDelay = 10 * 1000;
+//				// 断开后，间隔30秒再次重试
+			opts.reconnectionDelay = 25 * 1000;
 			mSocket = IO.socket(getRealUrl(), opts);
 			mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
 //					loginValidate();
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_WARN, "socketIO is connect");
+					}
+					mIsConnecting = true;
 				}
 			}).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_WARN, "socketIO is disconnect");
+					}
 				}
 			}).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter
 					.Listener() {
@@ -109,21 +124,23 @@ public class SocketIOManager {
 			}).on(CustomSocket.EVENT_MISSION_COMPLETE, new Emitter.Listener() {
 				@Override
 				public void call(Object... args) {
-					if (args != null && args.length > 0) {
+					if (args != null && args.length > 0 && args[0] != null) {
 						try {
 							Gson gson = AssistantApp.getInstance().getGson();
 							final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
 								// 处于前台中，直接发送通知
-							if (SystemUtil.isMyAppInForeground(mAppContext)) {
-								ThreadUtil.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										ScoreManager.getInstance().toastByCallback(reward, true);
-									}
-								});
-							} else {
-								// 加入候选队列等待后面通知
-								mCandidateList.add(reward);
+							if (reward != null) {
+								if (SystemUtil.isMyAppInForeground()) {
+									ThreadUtil.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											ScoreManager.getInstance().toastByCallback(reward, true);
+										}
+									});
+								} else {
+									// 加入候选队列等待后面通知
+									mCandidateList.add(reward);
+								}
 							}
 						} catch (Exception ignored) {
 						}
@@ -139,25 +156,27 @@ public class SocketIOManager {
 	}
 
 	private void loginValidate() {
-		if (AccountManager.getInstance().isLogin()) {
-			// 发送验证消息
-			try {
-				JSONObject obj = new JSONObject();
-				JSONObject data = new JSONObject();
-				data.put("cuid", AccountManager.getInstance().getUserSesion().uid);
-				data.put("sessionId", AccountManager.getInstance().getUserSesion().session);
-				data.put("cid", MobileInfoModel.getInstance().getCid());
-				data.put("imei", MobileInfoModel.getInstance().getImei());
-				obj.put("d", data);
-				mSocket.emit(CustomSocket.EVENT_LOGIN, obj);
-			} catch (JSONException e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_MANAGER, e);
+		if (mSocket != null) {
+			if (AccountManager.getInstance().isLogin()) {
+				// 发送验证消息
+				try {
+					JSONObject obj = new JSONObject();
+					JSONObject data = new JSONObject();
+					data.put("cuid", AccountManager.getInstance().getUserSesion().uid);
+					data.put("sessionId", AccountManager.getInstance().getUserSesion().session);
+					data.put("cid", MobileInfoModel.getInstance().getCid());
+					data.put("imei", MobileInfoModel.getInstance().getImei());
+					obj.put("d", data);
+					mSocket.emit(CustomSocket.EVENT_LOGIN, obj);
+				} catch (JSONException e) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_MANAGER, e);
+					}
 				}
+			} else {
+				// 已经退出登录，则主动断开连接
+				close();
 			}
-		} else {
-			// 已经退出登录，则主动断开连接
-			mSocket.disconnect();
 		}
 	}
 
@@ -176,10 +195,12 @@ public class SocketIOManager {
 	}
 
 	public void close() {
+		KLog.d(AppDebugConfig.TAG_WARN, "close socket io");
 		if (isConnected()) {
 			mSocket.disconnect();
 			mSocket.close();
 			mSocket = null;
+			KLog.d(AppDebugConfig.TAG_WARN, "close socket io success");
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -75,6 +76,19 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	protected void initView() {
 		setContentView(R.layout.activity_search);
 		mSearchLayout = getViewById(R.id.sl_search);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			mResultFragment = (ResultFragment) getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
+			mEmptySearchFragment = (EmptySearchFragment) getSupportFragmentManager().findFragmentByTag(TAG_EMPTY);
+			mHistoryFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
+			mPromptFragment = (PromptFragment) getSupportFragmentManager().findFragmentByTag(TAG_PROMPT);
+			mNetErrorFragment = (NetErrorFragment) getSupportFragmentManager().findFragmentByTag(TAG_ERROR);
+			mLoadingFragment = (LoadingFragment) getSupportFragmentManager().findFragmentByTag(TAG_LOADING);
+		}
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -157,28 +171,22 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 * 先判断隐藏所有可见的Fragment
 	 */
 	private void hideAllFragment(FragmentTransaction ft, int id) {
-		if (mResultFragment != null && mResultFragment.isVisible()
-				&& id != PAGE_CONTENT) {
+		if (mResultFragment != null && id != PAGE_CONTENT) {
 			ft.hide(mResultFragment);
 		}
-		if (mLoadingFragment != null && mLoadingFragment.isVisible()
-				&& id != PAGE_LOADING) {
+		if (mLoadingFragment != null && id != PAGE_LOADING) {
 			ft.hide(mLoadingFragment);
 		}
-		if (mEmptySearchFragment != null && mEmptySearchFragment.isVisible()
-				&& id != PAGE_EMPTY) {
+		if (mEmptySearchFragment != null && id != PAGE_EMPTY) {
 			ft.hide(mEmptySearchFragment);
 		}
-		if (mHistoryFragment != null && mHistoryFragment.isVisible()
-				&& id != PAGE_HISTORY) {
+		if (mHistoryFragment != null && id != PAGE_HISTORY) {
 			ft.hide(mHistoryFragment);
 		}
-		if (mPromptFragment != null && mPromptFragment.isVisible()
-				&& id != PAGE_PROMPT) {
+		if (mPromptFragment != null && id != PAGE_PROMPT) {
 			ft.hide(mPromptFragment);
 		}
-		if (mNetErrorFragment != null && mNetErrorFragment.isVisible()
-				&& id != PAGE_ERROR) {
+		if (mNetErrorFragment != null && id != PAGE_ERROR) {
 			ft.hide(mNetErrorFragment);
 		}
 	}
@@ -192,6 +200,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mHistoryFragment == null) {
             Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
             if (f != null) {
+	            mHistoryFragment = (HistoryFragment) f;
 	            ft.show(f);
             } else {
 			    mHistoryFragment = HistoryFragment.newInstance(data);
@@ -201,7 +210,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			ft.show(mHistoryFragment);
 		}
 		mHistoryFragment.updateHistoryData(data);
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 
@@ -216,6 +225,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mPromptFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_PROMPT);
 			if (f != null) {
+				mPromptFragment = (PromptFragment) f;
 				ft.show(f);
 			} else {
 				mPromptFragment = PromptFragment.newInstance(data);
@@ -225,7 +235,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			ft.show(mPromptFragment);
 		}
 		mPromptFragment.updateData(data);
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 	/**
@@ -239,6 +249,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mResultFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
 			if (f != null) {
+				mResultFragment = (ResultFragment) f;
 				ft.show(f);
 			} else {
 				mResultFragment = ResultFragment.newInstance(data);
@@ -248,7 +259,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 			ft.show(mResultFragment);
 		}
 		mResultFragment.updateData(data, name, id);
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 	/**
@@ -260,6 +271,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mEmptySearchFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_EMPTY);
 			if (f != null) {
+				mEmptySearchFragment = (EmptySearchFragment) f;
 				ft.show(f);
 			} else {
 				mEmptySearchFragment = EmptySearchFragment.newInstance(mLastSearchKey, 0);
@@ -268,7 +280,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		} else {
 			ft.show(mEmptySearchFragment);
 		}
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 	/**
@@ -284,6 +296,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mNetErrorFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_ERROR);
 			if (f != null) {
+				mNetErrorFragment = (NetErrorFragment) f;
 				ft.show(f);
 			} else {
 				mNetErrorFragment = NetErrorFragment.newInstance();
@@ -292,7 +305,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		} else {
 			ft.show(mNetErrorFragment);
 		}
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 
@@ -305,6 +318,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		if (mLoadingFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_LOADING);
 			if (f != null) {
+				mLoadingFragment = (LoadingFragment) f;
 				ft.show(f);
 			} else {
 				mLoadingFragment = LoadingFragment.newInstance();
@@ -313,7 +327,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		} else {
 			ft.show(mLoadingFragment);
 		}
-		ft.commitAllowingStateLoss();
+		ft.commit();
 	}
 
 	public void sendSearchRequest(String keyword, int id) {

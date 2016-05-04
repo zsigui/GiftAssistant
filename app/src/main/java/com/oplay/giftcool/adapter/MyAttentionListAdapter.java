@@ -66,7 +66,7 @@ public class MyAttentionListAdapter extends BaseListAdapter<MyAttention> impleme
 		holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
 		holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
 		holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
-		holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_remain);
+		holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_add);
 		holder.btnQuickFocus = ViewUtil.getViewById(convertView, R.id.btn_quick_focus);
 		return convertView;
 	}

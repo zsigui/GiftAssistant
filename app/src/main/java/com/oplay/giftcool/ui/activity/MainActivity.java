@@ -107,9 +107,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
 		}
 		super.onCreate(savedInstanceState);
-
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
+		handleIntent(getIntent());
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
 		SocketIOManager.getInstance().connectOrReConnect(false);
 	}
@@ -212,6 +212,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		handleIntent(intent);
+	}
+
+	private void handleIntent(Intent intent) {
 		try {
 			if (intent != null && intent.getAction() != null
 					&& intent.getAction().equals(AppConfig.PACKAGE_NAME + ".action.Main")) {
@@ -474,7 +478,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	public void jumpToIndexGame(int gamePosition) {
 		mJumpGamePos = gamePosition;
-		mJumpGamePos = mJumpGiftPos = -1;
+		mJumpPostPos = mJumpGiftPos = -1;
 		if (mActive) {
 			jumpFragment();
 		}

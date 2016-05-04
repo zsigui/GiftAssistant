@@ -48,7 +48,7 @@ public class DrawerAdapter extends BaseRVAdapter<DrawerModel> {
 				drawerItemHolder.tvCount.setVisibility(View.GONE);
 				if(item.id == KeyConfig.TYPE_SIGN_IN_EVERY_DAY) {
 					drawerItemHolder.tvAttend.setText(TEXT_HAS_ATTENDED);
-					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_grey_border);
+					drawerItemHolder.tvAttend.setBackgroundResource(R.drawable.shape_rect_btn_grey_border_small);
 					drawerItemHolder.tvAttend.setTextColor(COLOR_HAS_ATTENDED);
 					drawerItemHolder.tvAttend.setVisibility(View.VISIBLE);
 				} else {
