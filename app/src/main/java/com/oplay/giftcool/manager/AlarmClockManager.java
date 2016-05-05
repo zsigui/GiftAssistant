@@ -25,8 +25,9 @@ public class AlarmClockManager {
 	private static final int NOTIFY_GIFT_UPDATE_ELAPSED_COUNT = 2;
 
 	public static AlarmClockManager sInstance;
+    private boolean mNeedBindJpushTag;
 
-	public static AlarmClockManager getInstance() {
+    public static AlarmClockManager getInstance() {
 		if (sInstance == null) {
 			sInstance = new AlarmClockManager();
 		}
@@ -98,13 +99,19 @@ public class AlarmClockManager {
 		}
 
 		if (mObserverGame && mBackgoundWakeCount < 5) {
+            // 处理观察试玩游戏
 			ThreadUtil.runInThread(new Runnable() {
-				@Override
-				public void run() {
-					ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
-				}
-			});
+                @Override
+                public void run() {
+                    ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
+                }
+            });
 		}
+
+        if (mNeedBindJpushTag) {
+            AccountManager.getInstance().updateJPushTagAndAlias();
+            setNeedBindJPushTag(false);
+        }
 
 		if (!SystemUtil.isMyAppInForeground()) {
 			// 判断应用是否处于后台
@@ -176,6 +183,10 @@ public class AlarmClockManager {
 			}
 		});
 	}
+
+    public void setNeedBindJPushTag(boolean needBindJpushTag) {
+        mNeedBindJpushTag = needBindJpushTag;
+    }
 
 
 //	/**

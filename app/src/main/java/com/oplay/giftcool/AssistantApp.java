@@ -138,7 +138,7 @@ public class AssistantApp extends Application {
 		sInstance = this;
 		// 启动闹钟通知广播进程来唤醒服务
 		AlarmClockManager.getInstance().startWakeAlarm(this);
-		initPushAndStatics();
+        initPushAndStatics();
 //        appInit();
 	}
 
@@ -146,7 +146,7 @@ public class AssistantApp extends Application {
 
 	public void initPushAndStatics() {
 		// 初始化统计工具
-		StatisticsManager.getInstance().init(this, getChannelId());
+//		StatisticsManager.getInstance().init(this, getChannelId());
 		// 初始化推送SDK
 		PushMessageManager.getInstance().initPush(this);
 	}

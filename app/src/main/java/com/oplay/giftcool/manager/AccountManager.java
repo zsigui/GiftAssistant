@@ -122,6 +122,7 @@ public class AccountManager implements OnFinishListener {
             ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
             // 更新未读消息数量
             obtainUnreadPushMessageCount();
+            updateJPushTagAndAlias();
         } else {
             ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PART);
         }
@@ -207,7 +208,7 @@ public class AccountManager implements OnFinishListener {
                                     UserModel user = getUser();
                                     user.userInfo = userModel.userInfo;
                                     notifyUserAll(user);
-                                    updateJPushTagAndAlias();
+//                                    updateJPushTagAndAlias();
                                     return;
                                 }
                                 if (AppDebugConfig.IS_DEBUG) {
@@ -464,7 +465,7 @@ public class AccountManager implements OnFinishListener {
     /**
      * 更新Jpush的别名和标签信息（暂只设置别名）
      */
-    private void updateJPushTagAndAlias() {
+    public void updateJPushTagAndAlias() {
         if (!isLogin()) {
             // 用户不处于登录状态，不进行别名标记
             JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));
