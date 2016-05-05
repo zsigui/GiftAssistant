@@ -4,12 +4,18 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
+import com.oplay.giftcool.engine.NoEncryptEngine;
+import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
+
+import retrofit2.Retrofit;
 
 /**
  * Created by zsigui on 15-12-31.
@@ -25,9 +31,21 @@ public class GameDetailActivity extends BaseAppCompatActivity {
 	private int[] mThemeColorStr = {R.string.st_rainbow_color_1, R.string.st_rainbow_color_2,
 			R.string.st_rainbow_color_3, R.string.st_rainbow_color_4, R.string.st_rainbow_color_5};
 
+	private NoEncryptEngine mEngine;
+
+	public NoEncryptEngine getEngine() {
+		return mEngine;
+	}
+
 	@Override
 	protected void processLogic() {
 		loadData();
+		mEngine = new Retrofit.Builder()
+				.baseUrl(NetUrl.getBaseUrl())
+				.client(AssistantApp.getInstance().getHttpClient())
+				.addConverterFactory(DefaultGsonConverterFactory.create(AssistantApp.getInstance().getGson()))
+				.build()
+				.create(NoEncryptEngine.class);
 	}
 
 	@Override

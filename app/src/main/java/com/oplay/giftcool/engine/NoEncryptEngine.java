@@ -1,11 +1,14 @@
 package com.oplay.giftcool.engine;
 
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.model.data.resp.GameDetail;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * 设置不需要加密的连接请求(不适用json方式)
@@ -26,4 +29,7 @@ public interface NoEncryptEngine {
 
 	@POST(NetUrl.POST_REPLY)
 	Call<JsonRespBase<Void>> commitReply(@Body String reqData);
+
+	@GET("app_detail_web/")
+	Call<JsonRespBase<GameDetail>> obtainGameDetail(@Query("app_id") int appId);
 }

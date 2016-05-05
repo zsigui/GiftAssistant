@@ -128,8 +128,11 @@ public class StatisticsManager {
 				return;
 			}
 			// TalkingData
+			TCAgent.LOG_ON = AppConfig.TEST_MODE;
 			TCAgent.init(context, TC_APP_KEY, String.valueOf(channelId));
-			TCAgent.setReportUncaughtExceptions(true);
+			TCAgent.setReportUncaughtExceptions(false);
+			TCAgent.setAdditionalVersionNameAndCode(AppConfig.SDK_VER_NAME, AppConfig.SDK_VER);
+			TCAgent.setPushDisabled();
 
 			// 友盟
 			AnalyticsConfig.setAppkey(context, UMENG_APP_KEY);
@@ -164,7 +167,7 @@ public class StatisticsManager {
 	public void onResume(Activity context) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-			TCAgent.onResume(context);
+				TCAgent.onResume(context);
 				MobclickAgent.onResume(context);
 			}
 		}
@@ -173,7 +176,7 @@ public class StatisticsManager {
 	public void onPause(Activity context) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
 			if (mIsInit) {
-			TCAgent.onPause(context);
+				TCAgent.onPause(context);
 				MobclickAgent.onPause(context);
 			}
 		}
@@ -181,8 +184,8 @@ public class StatisticsManager {
 
 	public void onPageStart(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
-			if (mIsInit) {
-			TCAgent.onPageStart(context, name);
+			if (mIsInit && !TextUtils.isEmpty(name)) {
+				TCAgent.onPageStart(context, name);
 				MobclickAgent.onPageStart(name);
 			}
 		}
@@ -190,8 +193,8 @@ public class StatisticsManager {
 
 	public void onPageEnd(Context context, String name) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
-			if (mIsInit) {
-			TCAgent.onPageEnd(context, name);
+			if (mIsInit && !TextUtils.isEmpty(name)) {
+				TCAgent.onPageEnd(context, name);
 				MobclickAgent.onPageEnd(name);
 			}
 		}
@@ -227,7 +230,7 @@ public class StatisticsManager {
 					@Override
 					public void run() {
 
-			TCAgent.onEvent(context, title, subtitle);
+						TCAgent.onEvent(context, title, subtitle);
 						MobclickAgent.onEvent(context, id, subtitle);
 					}
 				});

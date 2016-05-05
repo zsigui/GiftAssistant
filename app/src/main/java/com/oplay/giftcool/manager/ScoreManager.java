@@ -297,9 +297,9 @@ public class ScoreManager {
 				}
 			}
 		}
-		if (!mCurDownloadTaskSet.isEmpty()) {
-			AlarmClockManager.getInstance().setObserverGame(true);
-		}
+//		if (!mCurDownloadTaskSet.isEmpty()) {
+//			AlarmClockManager.getInstance().setObserverGame(true);
+//		}
 		return mCurDownloadTaskSet;
 	}
 

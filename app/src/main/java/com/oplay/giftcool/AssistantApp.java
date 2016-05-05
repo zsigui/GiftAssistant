@@ -220,8 +220,8 @@ public class AssistantApp extends Application {
 		try {
 //			AlarmClockManager.getInstance().stopWakeAlarm(this);
 			ThreadUtil.destroy();
-			setGlobalInit(false);
-			PushMessageManager.getInstance().exit(this);
+//			setGlobalInit(false);
+//			PushMessageManager.getInstance().exit(this);
 			SilentDownloadManager.getInstance().stopAllDownload();
 			AlarmClockManager.getInstance().setObserverGame(false);
 			SocketIOManager.getInstance().close();
@@ -231,7 +231,7 @@ public class AssistantApp extends Application {
 //				ImageLoader.getInstance().destroy();
 			}
 //            DownloadNotificationManager.cancelDownload(getApplicationContext());
-//            StatisticsManager.getInstance().exit(this);
+            StatisticsManager.getInstance().exit(this);
 		} catch (Exception e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				AppDebugConfig.warn(e);

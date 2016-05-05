@@ -162,3 +162,12 @@
 }
 #lebian sdk end
 
+#talking data sdk begin
+-dontwarn com.tendcloud.tenddata.**
+-keep public class com.tendcloud.tenddata.** { public protected *;}
+-keepclassmembers class com.tendcloud.tenddata.**{
+public void *(***);
+}
+-keep class com.talkingdata.sdk.TalkingDataSDK {public *;}
+-keep class com.apptalkingdata.** {*;}
+#talking data sdk end

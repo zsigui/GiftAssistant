@@ -24,6 +24,7 @@ import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -307,12 +308,14 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 			SocketIOManager.getInstance().connectOrReConnect(false);
 		}
 		SocketIOManager.getInstance().runCandidateReward();
+		AlarmClockManager.getInstance().onResume(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		JPushInterface.onPause(this);
+		AlarmClockManager.getInstance().onPause(this);
 	}
 
 	/**

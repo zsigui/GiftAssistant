@@ -6,7 +6,7 @@
               android:padding = "@dimen/di_list_item_gap_big" >
 
 	<TextView
-			android:id = "@+id/tv_intro"
+			android:id = "@+id/tv_desc"
 			android:layout_width = "match_parent"
 			style = "@style/DefaultTextView.Text"
 			android:maxLines = "3"
@@ -17,6 +17,7 @@
 
 	<TextView
 			style = "@style/DefaultTextView.Header"
+			android:id="@+id/tv_expand"
 			android:layout_gravity = "center_horizontal"
 			android:text = "展开全文"
 			android:drawablePadding = "@dimen/di_line_space_extra_big"

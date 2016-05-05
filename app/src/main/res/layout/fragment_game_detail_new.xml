@@ -23,8 +23,8 @@
 
 			<com.makeramen.roundedimageview.RoundedImageView
 					android:id = "@+id/iv_icon"
-					android:layout_width = "@dimen/di_icon_bigger_diameter"
-					android:layout_height = "@dimen/di_icon_bigger_diameter"
+					android:layout_width = "@dimen/di_icon_diameter"
+					android:layout_height = "@dimen/di_icon_diameter"
 					android:scaleType = "centerCrop"
 					app:riv_border_color = "@color/co_stroke_bg"
 					app:riv_border_width = "@dimen/di_icon_border_size"
@@ -45,7 +45,8 @@
 						android:layout_height = "wrap_content"
 						android:text = "蜀山剑道"
 						android:textColor = "@color/co_white"
-						android:textSize = "18sp" />
+						android:textStyle="bold"
+						android:textSize = "@dimen/di_text_size_big" />
 
 				<TextView
 						android:id = "@+id/tv_play"
@@ -167,12 +168,12 @@
 				app:stl_indicatorThickness = "3dp"
 				app:stl_indicatorColor = "@color/co_tabs_indicator_common_bg" />
 
-		<com.oplay.giftcool.ui.widget.layout.GCViewPager
+		<android.support.v4.view.ViewPager
 				android:id = "@id/id_stickynavlayout_viewpager"
 				android:layout_width = "match_parent"
 				android:layout_height = "match_parent" >
 
-		</com.oplay.giftcool.ui.widget.layout.GCViewPager >
+		</android.support.v4.view.ViewPager >
 	</com.oplay.giftcool.ui.widget.layout.GCStickyNavLayout >
 
 	<LinearLayout

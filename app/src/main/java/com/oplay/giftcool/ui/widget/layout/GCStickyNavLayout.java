@@ -14,6 +14,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.OverScroller;
@@ -134,6 +135,20 @@ public class GCStickyNavLayout extends LinearLayout {
 						ev2.setAction(MotionEvent.ACTION_DOWN);
 						return dispatchTouchEvent(ev2);
 					}
+				} else if (mInnerScrollView instanceof WebView) {
+
+					WebView wv = (WebView) mInnerScrollView;
+
+					if (!isInControl && isTopHidden && dy > 0
+							&& wv.getScrollY() == 0) {
+
+						isInControl = true;
+						ev.setAction(MotionEvent.ACTION_CANCEL);
+						MotionEvent ev2 = MotionEvent.obtain(ev);
+						dispatchTouchEvent(ev);
+						ev2.setAction(MotionEvent.ACTION_DOWN);
+						return dispatchTouchEvent(ev2);
+					}
 				}
 				break;
 		}
@@ -154,7 +169,7 @@ public class GCStickyNavLayout extends LinearLayout {
 			case MotionEvent.ACTION_MOVE:
 				float dy = y - mLastY;
 				getCurrentScrollView();
-				if (Math.abs(dy) > mTouchSlop) {
+				if (mInnerScrollView != null && Math.abs(dy) > mTouchSlop) {
 					mDragging = true;
 					if (mInnerScrollView instanceof ScrollView) {
 						// 如果topView没有隐藏
@@ -162,9 +177,7 @@ public class GCStickyNavLayout extends LinearLayout {
 						if (!isTopHidden
 								|| (mInnerScrollView.getScrollY() == 0 && dy > 0)) {
 
-							initVelocityTrackerIfNotExists();
-							mVelocityTracker.addMovement(ev);
-							mLastY = y;
+							doInterceptOption(ev, y);
 							return true;
 						}
 					} else if (mInnerScrollView instanceof ListView) {
@@ -177,18 +190,24 @@ public class GCStickyNavLayout extends LinearLayout {
 						if (!isTopHidden
 								|| (c != null && c.getTop() == 0 && dy > 0)) {
 
-							initVelocityTrackerIfNotExists();
-							mVelocityTracker.addMovement(ev);
-							mLastY = y;
+							doInterceptOption(ev, y);
 							return true;
 						}
 					} else if (mInnerScrollView instanceof RecyclerView) {
 						RecyclerView rv = (RecyclerView) mInnerScrollView;
 						if (!isTopHidden || (!android.support.v4.view.ViewCompat.canScrollVertically(rv, -1) &&
 								isTopHidden && dy > 0)) {
-							initVelocityTrackerIfNotExists();
-							mVelocityTracker.addMovement(ev);
-							mLastY = y;
+							doInterceptOption(ev, y);
+							return true;
+						}
+					} else if (mInnerScrollView instanceof WebView) {
+
+						WebView wv = (WebView) mInnerScrollView;
+
+						if (!isTopHidden
+								|| (mInnerScrollView.getScrollY() == 0 && dy > 0)) {
+
+							doInterceptOption(ev, y);
 							return true;
 						}
 					}
@@ -204,6 +223,12 @@ public class GCStickyNavLayout extends LinearLayout {
 		return super.onInterceptTouchEvent(ev);
 	}
 
+	private void doInterceptOption(MotionEvent ev, float y) {
+		initVelocityTrackerIfNotExists();
+		mVelocityTracker.addMovement(ev);
+		mLastY = y;
+	}
+
 	private void getCurrentScrollView() {
 
 		int currentItem = mViewPager.getCurrentItem();
@@ -212,14 +237,18 @@ public class GCStickyNavLayout extends LinearLayout {
 			FragmentPagerAdapter fadapter = (FragmentPagerAdapter) a;
 			Fragment item = (Fragment) fadapter.instantiateItem(mViewPager,
 					currentItem);
-			mInnerScrollView = (ViewGroup) (item.getView()
-					.findViewById(R.id.id_stickynavlayout_innerscrollview));
+			if (item.getView() != null) {
+				mInnerScrollView = (ViewGroup) (item.getView()
+						.findViewById(R.id.id_stickynavlayout_innerscrollview));
+			}
 		} else if (a instanceof FragmentStatePagerAdapter) {
 			FragmentStatePagerAdapter fsAdapter = (FragmentStatePagerAdapter) a;
 			Fragment item = (Fragment) fsAdapter.instantiateItem(mViewPager,
 					currentItem);
-			mInnerScrollView = (ViewGroup) (item.getView()
-					.findViewById(R.id.id_stickynavlayout_innerscrollview));
+			if (item.getView() != null) {
+				mInnerScrollView = (ViewGroup) (item.getView()
+						.findViewById(R.id.id_stickynavlayout_innerscrollview));
+			}
 		}
 
 	}

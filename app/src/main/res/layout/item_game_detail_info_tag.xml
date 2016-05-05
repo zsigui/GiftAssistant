@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.oplay.giftcool.ui.widget.button.TagButton
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		android:id = "@+id/tv_tag"
+		android:clickable = "false"
+		style = "@style/DefaultTextView"
+		android:layout_width = "wrap_content"
+		android:textSize = "@dimen/di_text_size_small"
+		android:paddingLeft = "@dimen/di_list_item_gap_very_small"
+		android:paddingRight = "@dimen/di_list_item_gap_very_small"
+		android:paddingTop = "@dimen/di_line_space_extra_big"
+		android:paddingBottom = "@dimen/di_line_space_extra_big"
+		android:layout_marginRight = "@dimen/di_line_space_extra_big" />
