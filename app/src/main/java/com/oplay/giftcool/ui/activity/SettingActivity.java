@@ -64,6 +64,8 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 		ObserverManager.getInstance().addUserUpdateListener(this);
 	}
 
+
+
 	@Override
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);

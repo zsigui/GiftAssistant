@@ -38,6 +38,7 @@ import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -107,6 +108,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
 		}
 		super.onCreate(savedInstanceState);
+		PermissionUtil.judgePermission(this);
 		sGlobalHolder = MainActivity.this;
 		updateToolBar();
 		handleIntent(getIntent());
@@ -414,6 +416,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			}
 			mJumpPostPos = -1;
 		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		PermissionUtil.doAfterRequest(this, requestCode, grantResults);
 	}
 
 	@Override

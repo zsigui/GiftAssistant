@@ -310,7 +310,7 @@ public class ScoreManager {
 
 		TaskInfoDownload download = new TaskInfoDownload(code, info);
 		// 保存状态，以便下次启动之类的有效
-		mCurDownloadTaskSet.put(code, download);
+		getCurDownloadTaskSet(context).put(code, download);
 		setCurDownloadTaskSet(context);
 	}
 

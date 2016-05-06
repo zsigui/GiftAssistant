@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,7 +20,6 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
-import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -66,7 +64,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 //        MixUtil.createDesktopShortcut(getApplicationContext());
-		PermissionUtil.judgePermission(this);
 	}
 
 	private TestChoiceDialog mDialog;
@@ -185,9 +182,4 @@ public class SplashActivity extends BaseAppCompatActivity {
 		SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		PermissionUtil.doAfterRequest(this, requestCode, grantResults);
-	}
 }

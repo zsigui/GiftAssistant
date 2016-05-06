@@ -132,9 +132,9 @@ public class StatisticsManager {
 			}
 			try {
 				// TalkingData
-				TCAgent.LOG_ON = AppConfig.TEST_MODE;
+				TCAgent.LOG_ON = true;
 				TCAgent.init(context, TC_APP_KEY, String.valueOf(channelId));
-				TCAgent.setReportUncaughtExceptions(false);
+				TCAgent.setReportUncaughtExceptions(true);
 				TCAgent.setAdditionalVersionNameAndCode(AppConfig.SDK_VER_NAME, AppConfig.SDK_VER);
 				TCAgent.setPushDisabled();
 
