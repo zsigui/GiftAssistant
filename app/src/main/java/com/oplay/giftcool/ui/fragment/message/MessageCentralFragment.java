@@ -7,12 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MessageCentralAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.socks.library.KLog;
 
 /**
  * 消息中心页面
@@ -51,7 +49,6 @@ public class MessageCentralFragment extends BaseFragment {
 		rvData.setLayoutManager(llm);
 		rvData.addItemDecoration(itemDecoration);
 		rvData.setAdapter(mAdapter);
-		KLog.d(AppDebugConfig.TAG_WARN, "processLogic");
 		Global.mMsgCentralTobeRefresh = false;
 	}
 
@@ -63,7 +60,6 @@ public class MessageCentralFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		KLog.d(AppDebugConfig.TAG_WARN, "onResume = " + Global.mMsgCentralTobeRefresh);
 		if (Global.mMsgCentralTobeRefresh) {
 			if (MainActivity.sGlobalHolder != null) {
 				MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_MSG, 0);

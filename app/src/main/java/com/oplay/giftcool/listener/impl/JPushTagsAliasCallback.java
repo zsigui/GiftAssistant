@@ -3,6 +3,7 @@ package com.oplay.giftcool.listener.impl;
 import android.content.Context;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
@@ -31,6 +32,7 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
             if (AppDebugConfig.IS_DEBUG) {
                 KLog.d(AppDebugConfig.TAG_JPUSH, "set alias success : " + alias);
             }
+            AccountManager.getInstance().setHasSetAliasSuccess(true);
         } else {
             if (AppDebugConfig.IS_DEBUG) {
                 KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed : " + alias + ", code = " + code);
@@ -43,13 +45,16 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
                     }
                 };
             }
-            if (count++ < 3) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed, wait for 5s to run again! ");
+            AccountManager.getInstance().setHasSetAliasSuccess(false);
+            if (AccountManager.getInstance().isLogin()) {
+                if (count++ < 3) {
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed, wait for 5s to run again! ");
+                    }
+                    ThreadUtil.runOnUiThread(mRunnable, 5000);
+                } else {
+                    AlarmClockManager.getInstance().setNeedBindJPushTag(true);
                 }
-                ThreadUtil.runOnUiThread(mRunnable, 5000);
-            } else {
-                AlarmClockManager.getInstance().setNeedBindJPushTag(true);
             }
         }
     }

@@ -78,7 +78,7 @@ public class SocketIOManager {
 				public void call(Object... args) {
 //					loginValidate();
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, "socketIO is connect");
+						KLog.d(AppDebugConfig.TAG_WARN, "SocketIO连接");
 					}
 					mIsConnecting = true;
 				}
@@ -86,7 +86,7 @@ public class SocketIOManager {
 				@Override
 				public void call(Object... args) {
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, "socketIO is disconnect");
+						KLog.d(AppDebugConfig.TAG_WARN, "SocketIO断开连接");
 					}
 				}
 			}).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter
@@ -195,12 +195,12 @@ public class SocketIOManager {
 	}
 
 	public void close() {
-		KLog.d(AppDebugConfig.TAG_WARN, "close socket io");
+		KLog.d(AppDebugConfig.TAG_MANAGER, "SocketIO关闭");
 		if (isConnected()) {
 			mSocket.disconnect();
 			mSocket.close();
 			mSocket = null;
-			KLog.d(AppDebugConfig.TAG_WARN, "close socket io success");
+			KLog.d(AppDebugConfig.TAG_MANAGER, "SocketIO关闭成功");
 		}
 	}
 

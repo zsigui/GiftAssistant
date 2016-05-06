@@ -211,10 +211,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 						return true;
 					}
 				}
-				KLog.d(AppDebugConfig.TAG_WARN, response.body() == null ? "解析失败" : response.body().error());
+				AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response.body());
 				return false;
 			}
-			KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败" : response.message());
+			AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response);
 		} catch (Throwable e) {
 			if (AppDebugConfig.IS_DEBUG) {
 				e.printStackTrace();

@@ -37,6 +37,7 @@
 			android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
 			android:textColor = "@color/co_common_text_main"
 			android:gravity = "left"
+			android:textSize = "@dimen/di_text_size_normal"
 			android:layout_centerVertical = "false"
 			android:singleLine = "false" />
 

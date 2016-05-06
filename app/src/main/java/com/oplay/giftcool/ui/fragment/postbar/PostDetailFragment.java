@@ -535,11 +535,9 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 	@Override
 	public void showBar(boolean isShow, Object param) {
 		if (isShow) {
-			KLog.d(AppDebugConfig.TAG_WARN, "show");
 			llBottomBar.setVisibility(View.VISIBLE);
 //			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_in);
 		} else {
-			KLog.d(AppDebugConfig.TAG_WARN, "gone");
 			llBottomBar.setVisibility(View.GONE);
 //			AnimationUtils.loadAnimation(getContext(), R.anim.show_fade_out);
 		}

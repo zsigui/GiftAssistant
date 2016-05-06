@@ -327,9 +327,6 @@ public class ScoreManager {
 	 */
 	public synchronized void judgePlayTime(final Context context, final int elapseTime) {
 		Iterator<Map.Entry<String, TaskInfoDownload>> it = getCurDownloadTaskSet(context).entrySet().iterator();
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "judgePlayTime is start");
-		}
 		while (it.hasNext()) {
 			final Map.Entry<String, TaskInfoDownload> entry = it.next();
 			final TaskInfoDownload info = entry.getValue();

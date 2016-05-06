@@ -240,7 +240,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 				final int end = decodedUrl.lastIndexOf('.');
 				temp = decodedUrl.substring(start, end);
 			} catch (Throwable e) {
-				AppDebugConfig.warn(AppDebugConfig.TAG_WARN, e);
+				AppDebugConfig.warn(AppDebugConfig.TAG_MANAGER, e);
 				temp = Coder_Md5.md5(identify);
 			}
 		} else {

@@ -6,8 +6,8 @@ package com.oplay.giftcool.config;
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 1200;
-	public static final String SDK_VER_NAME = "V1.2.0";
+	public static final int SDK_VER = 1201;
+	public static final String SDK_VER_NAME = "V1.2.1";
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 
 	/* 上传头像的大小 */
@@ -28,8 +28,8 @@ public class AppConfig {
 	public static final String APP_SECRET = "3b4446772144ade3";
 
 	/* 测试环境 */
-	public static final boolean TEST_MODE = true;
-//	public static final boolean TEST_MODE = false;
+//	public static final boolean TEST_MODE = true;
+	public static final boolean TEST_MODE = false;
 
 
 	/* Retrofit 访问网络连接超时时间，单位 ms */

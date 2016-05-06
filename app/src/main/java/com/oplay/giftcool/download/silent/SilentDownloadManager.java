@@ -61,7 +61,6 @@ public class SilentDownloadManager {
 
 	public static SilentDownloadManager getInstance() {
 		if (mInstance == null) {
-			KLog.d(AppDebugConfig.TAG_WARN, "instance init");
 			mInstance = new SilentDownloadManager(AssistantApp.getInstance().getApplicationContext(),
 					Global.EXTERNAL_DOWNLOAD);
 		}
@@ -129,7 +128,7 @@ public class SilentDownloadManager {
 	public synchronized void startDownload() {
 		if (mIsRunning || mTotalDownloadMap.isEmpty()) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "mIsRunning = " + mIsRunning + ", totalMap.size = " + mTotalDownloadMap.size());
+				KLog.d(AppDebugConfig.TAG_MANAGER, "mIsRunning = " + mIsRunning + ", totalMap.size = " + mTotalDownloadMap.size());
 			}
 			return;
 		}
@@ -195,7 +194,6 @@ public class SilentDownloadManager {
 						info.setDownloadSize(Long.parseLong(line.substring(T_DOWNLOAD_SIZE.length() + 1)));
 					} else if (line.startsWith(T_END)) {
 						if (isValid(info)) {
-							KLog.d(AppDebugConfig.TAG_WARN, "write to result");
 							result.put(info.getDownloadUrl(), info);
 						}
 						info = null;
@@ -204,7 +202,7 @@ public class SilentDownloadManager {
 			}
 			br.close();
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "成功从config文件读取文件");
+				KLog.d(AppDebugConfig.TAG_MANAGER, "成功从config文件读取文件");
 			}
 		} catch (IOException e) {
 			AppDebugConfig.warn(e);
@@ -353,7 +351,7 @@ public class SilentDownloadManager {
 			return;
 		}
 		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "停止所有下载任务");
+			KLog.d(AppDebugConfig.TAG_MANAGER, "停止所有下载任务");
 		}
 		mIsBeingStop = true;
 		stopThreadRunning();
@@ -364,7 +362,7 @@ public class SilentDownloadManager {
 		writeConfigFile(new File(mDirPath, CONFIG_FILE), mTotalDownloadMap);
 		mIsBeingStop = false;
 		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN, "stopAllDownload.mIsRunning = " + mIsRunning);
+			KLog.d(AppDebugConfig.TAG_MANAGER, "stopAllDownload.mIsRunning = " + mIsRunning);
 		}
 	}
 

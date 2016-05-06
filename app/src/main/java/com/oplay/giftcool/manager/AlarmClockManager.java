@@ -109,7 +109,10 @@ public class AlarmClockManager {
 		}
 
 		if (mNeedBindJpushTag) {
-			AccountManager.getInstance().updateJPushTagAndAlias();
+			if (AccountManager.getInstance().isLogin()
+					&& !AccountManager.getInstance().isHasSetAliasSuccess()) {
+				AccountManager.getInstance().updateJPushTagAndAlias();
+			}
 			setNeedBindJPushTag(false);
 		}
 
@@ -125,15 +128,17 @@ public class AlarmClockManager {
 						"Wake Alarm is running when app in background! elapsed time = " + mElapsedTime);
 			}
 			mBackgoundWakeCount++;
+			setNeedBindJPushTag(true);
 			if (mBackgoundWakeCount > 10) {
 				// 10分钟
 				mElapsedTime = 20 * ALARM_WAKE_ELAPSED_TIME;
+				AccountManager.getInstance().setHasSetAliasSuccess(false);
 			} else if (mBackgoundWakeCount > 6) {
 				// 5分钟
 				mElapsedTime = 10 * ALARM_WAKE_ELAPSED_TIME;
+				AccountManager.getInstance().setHasSetAliasSuccess(false);
 			} else if (mBackgoundWakeCount > 3) {
 				// 1分钟
-				setNeedBindJPushTag(true);
 				mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
 			}
 		} else {

@@ -91,18 +91,18 @@ public class DownloadThread extends Thread {
 				if (info == null) {
 					// 列表已经无任务了，退出
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, String.format("线程%s无任务，退出执行", mTag));
+						KLog.d(AppDebugConfig.TAG_UTIL, String.format("线程%s无任务，退出执行", mTag));
 					}
 					mIsStop = true;
 					return;
 				}
 				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, String.format("线程%s执行下载任务：%s", mTag, info.getDownloadUrl()));
+					KLog.d(AppDebugConfig.TAG_UTIL, String.format("线程%s执行下载任务：%s", mTag, info.getDownloadUrl()));
 				}
 				if (initRange(info)) {
 					if (info.isDownload()) {
 						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_WARN, String.format("下载任务：%s， 初始化完毕！", info.getDownloadUrl()));
+							KLog.d(AppDebugConfig.TAG_UTIL, String.format("下载任务：%s， 初始化完毕！", info.getDownloadUrl()));
 						}
 						URL url = new URL(info.getDownloadUrl());
 						HttpURLConnection connection = (HttpURLConnection) url.openConnection();

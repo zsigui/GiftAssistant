@@ -462,14 +462,24 @@ public class AccountManager implements OnFinishListener {
         }
     }
 
+    private boolean mHasSetAliasSuccess = false;
+
+    public boolean isHasSetAliasSuccess() {
+        return mHasSetAliasSuccess;
+    }
+
+    public void setHasSetAliasSuccess(boolean hasSetAliasSuccess) {
+        mHasSetAliasSuccess = hasSetAliasSuccess;
+    }
+
     /**
      * 更新Jpush的别名和标签信息（暂只设置别名）
      */
     public void updateJPushTagAndAlias() {
-        KLog.d(AppDebugConfig.TAG_WARN, "isLogin = " + isLogin());
         if (!isLogin()) {
             // 用户不处于登录状态，不进行别名标记
             JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));
+            mHasSetAliasSuccess = false;
             return;
         }
         // 使用uid进行别名标记
@@ -571,11 +581,6 @@ public class AccountManager implements OnFinishListener {
                     if (response.body() != null && response.body().isSuccess()) {
                         final MessageCentralUnread unread = response.body().getData();
                         if (unread != null) {
-                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage = " + unread);
-                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadAdmireCount = " + unread.unreadAdmireCount);
-                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadNewGiftCount = " + unread.unreadNewGiftCount);
-                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadCommentCount = " + unread.unreadCommentCount);
-                            KLog.d(AppDebugConfig.TAG_WARN, "getUnreadMessage-unreadSystemCount = " + unread.unreadSystemCount);
                             final int count = unread.unreadAdmireCount + unread.unreadNewGiftCount
                                     + unread.unreadCommentCount + unread.unreadSystemCount;
                             setUnreadMessageCount(count);

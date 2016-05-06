@@ -138,11 +138,9 @@ public class PostDetailActivity extends BaseAppCompatActivity {
 	@Override
 	public boolean onBack() {
 		InputMethodUtil.hideSoftInput(this);
-		KLog.d(AppDebugConfig.TAG_WARN, "onBack = " + getTopFragment() + ", instanceOf = " + (getTopFragment() instanceof OnBackPressListener));
 		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
 				&& ((OnBackPressListener) getTopFragment()).onBack()) {
 			// back事件被处理
-			KLog.d(AppDebugConfig.TAG_WARN, "onBack");
 			return false;
 		}
 		if (!popFrag() && !isFinishing()) {

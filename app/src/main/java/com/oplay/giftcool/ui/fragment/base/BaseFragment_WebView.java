@@ -82,7 +82,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
-				KLog.d(AppDebugConfig.TAG_WARN, "onPageStarted");
 				onWebPageStarted();
 			}
 
@@ -90,7 +89,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				onWebPageFinished();
-				KLog.d(AppDebugConfig.TAG_WARN, "onPageFinished");
 				if (!mSettings.getLoadsImagesAutomatically()) {
 					mSettings.setLoadsImagesAutomatically(true);
 				}
@@ -99,13 +97,11 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				super.onReceivedError(view, errorCode, description, failingUrl);
-				KLog.d(AppDebugConfig.TAG_WARN, "onReceivedError");
 				onWebReceivedError();
 			}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				KLog.d(AppDebugConfig.TAG_WARN, "shouldOverrideUrlLoading");
 				boolean hasFind;
 				Uri mUri = Uri.parse(url);
 				if (mUri == null) {
@@ -122,8 +118,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 					//其次路径匹配
 					if (mWebView != null) {
 						sScrollMap.put(mUrl, mWebView.getScrollY());
-						KLog.d(AppDebugConfig.TAG_WARN, "mUrl = " + mUrl + ", url = " + url + ", scrollY = " +
-								mWebView.getScrollY());
 						mUrl = url;
 					}
 //					loadUrl(url);
@@ -447,11 +441,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		try {
 			if (mWebView != null) {
 				if (mWebView.canGoBack()) {
-					KLog.d(AppDebugConfig.TAG_WARN, "canGoBack");
 					goBack();
 					return true;
 				}
-				KLog.d(AppDebugConfig.TAG_WARN, "canNotGoBack");
 //				mWebView.stopLoading();
 //				((ViewGroup)mContentView).removeView(mWebView);
 //				mWebView.removeAllViews();

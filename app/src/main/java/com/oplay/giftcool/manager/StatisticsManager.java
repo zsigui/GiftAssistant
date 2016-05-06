@@ -124,7 +124,9 @@ public class StatisticsManager {
 	 */
 	public void init(Context context, int channelId) {
 		if (AppDebugConfig.IS_STATISTICS_SHOW) {
-			KLog.d(AppDebugConfig.TAG_WARN, "statics init = " + mIsInit);
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_STATICS, "statics init = " + mIsInit);
+			}
 			if (mIsInit) {
 				return;
 			}
