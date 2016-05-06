@@ -86,6 +86,10 @@ public class GalleryFinal {
         return mThemeConfig;
     }
 
+    public static boolean isInit() {
+        return mThemeConfig != null && mCoreConfig != null && mGlobalFunctionConfig != null;
+    }
+
     /**
      * 打开Gallery-单选
      *

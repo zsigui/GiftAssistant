@@ -155,6 +155,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject{
 	}
 
 	public boolean isFileExists() {
+		KLog.d(AppDebugConfig.TAG_WARN, "mDestFile = " + (mDestFile != null ? mDestFile.getAbsolutePath() : "no dest"));
 		return mDestFile != null && mDestFile.exists();
 	}
 

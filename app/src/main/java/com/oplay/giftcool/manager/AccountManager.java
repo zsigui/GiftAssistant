@@ -466,6 +466,7 @@ public class AccountManager implements OnFinishListener {
      * 更新Jpush的别名和标签信息（暂只设置别名）
      */
     public void updateJPushTagAndAlias() {
+        KLog.d(AppDebugConfig.TAG_WARN, "isLogin = " + isLogin());
         if (!isLogin()) {
             // 用户不处于登录状态，不进行别名标记
             JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));

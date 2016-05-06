@@ -83,7 +83,6 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
 		super.onClick(v);
 		switch (v.getId()) {
 			case R.id.btn_download:
-				String s = null;s.length();
 				if (mAppInfo != null) {
 					mAppInfo.handleOnClick(getChildFragmentManager());
 				}

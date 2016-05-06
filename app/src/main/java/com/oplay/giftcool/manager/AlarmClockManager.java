@@ -25,16 +25,16 @@ public class AlarmClockManager {
 	private static final int NOTIFY_GIFT_UPDATE_ELAPSED_COUNT = 2;
 
 	public static AlarmClockManager sInstance;
-    private boolean mNeedBindJpushTag;
+	private boolean mNeedBindJpushTag;
 
-    public static AlarmClockManager getInstance() {
+	public static AlarmClockManager getInstance() {
 		if (sInstance == null) {
 			sInstance = new AlarmClockManager();
 		}
 		return sInstance;
 	}
 
-	private AlarmClockManager(){
+	private AlarmClockManager() {
 		mObserverGame = false;
 	}
 
@@ -71,7 +71,7 @@ public class AlarmClockManager {
 
 	/**
 	 * 设置是否允许通知礼包更新
- 	 */
+	 */
 	public void setAllowNotifyGiftUpdate(boolean allowNotifyGiftUpdate) {
 		mAllowNotifyGiftUpdate = allowNotifyGiftUpdate;
 	}
@@ -99,20 +99,25 @@ public class AlarmClockManager {
 		}
 
 		if (mObserverGame && mBackgoundWakeCount < 5) {
-            // 处理观察试玩游戏
+			// 处理观察试玩游戏
 			ThreadUtil.runInThread(new Runnable() {
-                @Override
-                public void run() {
-                    ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
-                }
-            });
+				@Override
+				public void run() {
+					ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
+				}
+			});
 		}
 
-        if (mNeedBindJpushTag) {
-            AccountManager.getInstance().updateJPushTagAndAlias();
-            setNeedBindJPushTag(false);
-        }
+		if (mNeedBindJpushTag) {
+			AccountManager.getInstance().updateJPushTagAndAlias();
+			setNeedBindJPushTag(false);
+		}
 
+
+		initAndSetWakeAlarm(context);
+	}
+
+	private void resetWakeElapsed() {
 		if (!SystemUtil.isMyAppInForeground()) {
 			// 判断应用是否处于后台
 			if (AppDebugConfig.IS_DEBUG) {
@@ -128,33 +133,38 @@ public class AlarmClockManager {
 				mElapsedTime = 10 * ALARM_WAKE_ELAPSED_TIME;
 			} else if (mBackgoundWakeCount > 3) {
 				// 1分钟
+				setNeedBindJPushTag(true);
 				mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
 			}
 		} else {
 			mBackgoundWakeCount = 0;
 			mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
 		}
-
-		initAndSetWakeAlarm(context);
 	}
 
 
-	private void initAndSetWakeAlarm(Context context) {
-		if (alarmSender == null) {
-			Intent startIntent = new Intent(context, StartReceiver.class);
-			startIntent.setAction(Action.ALARM_WAKE);
-			try {
-				alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
-						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-			} catch (Exception e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+	private void initAndSetWakeAlarm(final Context context) {
+		ThreadUtil.runInThread(new Runnable() {
+			@Override
+			public void run() {
+				resetWakeElapsed();
+				if (alarmSender == null) {
+					Intent startIntent = new Intent(context, StartReceiver.class);
+					startIntent.setAction(Action.ALARM_WAKE);
+					try {
+						alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
+								startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+					} catch (Exception e) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+						}
+					}
 				}
+				AlarmManager am = getAlarmManager(context);
+				am.cancel(alarmSender);
+				am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
 			}
-		}
-		AlarmManager am = getAlarmManager(context);
-		am.cancel(alarmSender);
-		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
+		});
 	}
 
 	// 用于统计活动的Activity数量,以重置轮询间隔
@@ -184,9 +194,9 @@ public class AlarmClockManager {
 		});
 	}
 
-    public void setNeedBindJPushTag(boolean needBindJpushTag) {
-        mNeedBindJpushTag = needBindJpushTag;
-    }
+	public void setNeedBindJPushTag(boolean needBindJpushTag) {
+		mNeedBindJpushTag = needBindJpushTag;
+	}
 
 
 //	/**

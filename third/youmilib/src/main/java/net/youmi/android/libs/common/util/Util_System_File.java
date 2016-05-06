@@ -46,7 +46,6 @@ public class Util_System_File {
 				sb.append("chmod ").append(destFilePermission).append(" ").append(file.getAbsolutePath());
 				String cmd = sb.toString();
 				Runtime.getRuntime().exec(cmd);
-
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "chmod cmd is:[%s]", destFilePermission);
 				}

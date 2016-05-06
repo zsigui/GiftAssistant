@@ -251,7 +251,7 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 				tempDownloadDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
 						+ Global.EXTERNAL_DOWNLOAD);
 			} else {
-				tempDownloadDir = mApplicationContext.getFilesDir();
+				tempDownloadDir = mApplicationContext.getCacheDir();
 			}
 		}
 		return new File(tempDownloadDir, temp + Global.TEMP_FILE_NAME_SUFFIX);
@@ -523,6 +523,14 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 	private void initStatus() {
 		for (GameDownloadInfo i : mManagerList) {
 			i.initAppInfoStatus(mApplicationContext);
+		}
+	}
+
+	public void resetDownloadDir() {
+		try {
+			mAbsDownloadDir = newDownloadDir();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

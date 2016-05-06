@@ -138,15 +138,19 @@ public class AssistantApp extends Application {
 		sInstance = this;
 		// 启动闹钟通知广播进程来唤醒服务
 		AlarmClockManager.getInstance().startWakeAlarm(this);
-        initPushAndStatics();
+//        initPushAndStatics();
 //        appInit();
 	}
 
+	// 标识是否处于初始化中
 	private boolean isInitialing = false;
 
+	/**
+	 * 执行推送和统计的初始化
+	 */
 	public void initPushAndStatics() {
 		// 初始化统计工具
-//		StatisticsManager.getInstance().init(this, getChannelId());
+		StatisticsManager.getInstance().init(this, getChannelId());
 		// 初始化推送SDK
 		PushMessageManager.getInstance().initPush(this);
 	}
@@ -177,6 +181,9 @@ public class AssistantApp extends Application {
 
 
 	public void initGalleryFinal() {
+		if (GalleryFinal.isInit()) {
+			return;
+		}
 		int bgColor = getResources().getColor(R.color.co_common_app_main_bg);
 		int textColor = Color.WHITE;
 		ThemeConfig theme = new ThemeConfig.Builder()
@@ -220,7 +227,7 @@ public class AssistantApp extends Application {
 		try {
 //			AlarmClockManager.getInstance().stopWakeAlarm(this);
 			ThreadUtil.destroy();
-//			setGlobalInit(false);
+			setGlobalInit(false);
 //			PushMessageManager.getInstance().exit(this);
 			SilentDownloadManager.getInstance().stopAllDownload();
 			AlarmClockManager.getInstance().setObserverGame(false);
@@ -586,7 +593,8 @@ public class AssistantApp extends Application {
 			return;
 		}
 		mBroadcastBanner = broadcastBanner;
-		if (!TextUtils.isEmpty(broadcastBanner.url) && ImageLoader.getInstance().isInited()) {
+		if (!TextUtils.isEmpty(broadcastBanner.url)) {
+			AssistantApp.getInstance().initImageLoader();
 			ImageLoader.getInstance().loadImage(broadcastBanner.url, null);
 		}
 	}

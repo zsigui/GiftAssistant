@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +21,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
@@ -64,7 +66,10 @@ public class SplashActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 //        MixUtil.createDesktopShortcut(getApplicationContext());
+		PermissionUtil.judgePermission(this);
 	}
+
+	private TestChoiceDialog mDialog;
 
 	@Override
 	protected void onResume() {
@@ -77,20 +82,23 @@ public class SplashActivity extends BaseAppCompatActivity {
 //				}
 //			}
 //		});
-			final TestChoiceDialog dialog = TestChoiceDialog.newInstances();
 		if (AppConfig.TEST_MODE) {
-			dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+			if (mDialog != null) {
+				return;
+			}
+			mDialog = TestChoiceDialog.newInstances();
+			mDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 				@Override
 				public void onCancel() {
 					ToastUtil.showShort("不做修改");
 					initAction();
-					dialog.dismissAllowingStateLoss();
+					mDialog.dismissAllowingStateLoss();
 				}
 
 				@Override
 				public void onConfirm() {
 					ToastUtil.showShort("使用新的地址重新加载");
-					String[] s = dialog.getContent().split("\n");
+					String[] s = mDialog.getContent().split("\n");
 					NetUrl.REAL_URL = s[0].trim();
 					if (s.length > 1) {
 						WebViewUrl.REAL_URL = s[1].trim();
@@ -98,30 +106,23 @@ public class SplashActivity extends BaseAppCompatActivity {
 					SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
 							SPConfig.SP_APP_DEVICE_FILE,
 							SPConfig.KEY_TEST_REQUEST_URI,
-							dialog.getContent());
-//					AssistantApp.getInstance().resetInitForTest();
+							mDialog.getContent());
 					initAction();
-					dialog.dismissAllowingStateLoss();
+					mDialog.dismissAllowingStateLoss();
 				}
 			});
-			dialog.setCancelable(false);
-			dialog.show(getSupportFragmentManager(), "init");
-			return;
-		}
-		if (!AppConfig.TEST_MODE) {
+			mDialog.setCancelable(false);
+			mDialog.show(getSupportFragmentManager(), "init");
+		} else {
 			initAction();
 		}
+
 	}
 
 	private void initAction() {
 		judgeFirstOpenToday();
-		if (!mApp.isGlobalInit()) {
-
-			mFirstInitTime = System.currentTimeMillis();
-			mHandler.post(mInitRunnable);
-		} else {
-			judgeToMain();
-		}
+		mFirstInitTime = System.currentTimeMillis();
+		mHandler.post(mInitRunnable);
 	}
 
 	@Override
@@ -182,5 +183,11 @@ public class SplashActivity extends BaseAppCompatActivity {
 		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
 		// 写入当前时间
 		SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		PermissionUtil.doAfterRequest(this, requestCode, grantResults);
 	}
 }

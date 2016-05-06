@@ -61,9 +61,6 @@ public class JPushReceiver extends BroadcastReceiver {
 					if (extra == null) {
 						return;
 					}
-					if (AssistantApp.getInstance().getGson() == null) {
-						AssistantApp.getInstance().initGson();
-					}
 					PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
 					PushMessageManager.getInstance().handleCustomMessage(context, msg, intent);
@@ -79,9 +76,6 @@ public class JPushReceiver extends BroadcastReceiver {
 					}
 					if (extra == null) {
 						return;
-					}
-					if (AssistantApp.getInstance().getGson() == null) {
-						AssistantApp.getInstance().initGson();
 					}
 					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
@@ -112,9 +106,6 @@ public class JPushReceiver extends BroadcastReceiver {
 					}
 					if (extra == null) {
 						return;
-					}
-					if (AssistantApp.getInstance().getGson() == null) {
-						AssistantApp.getInstance().initGson();
 					}
 					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);

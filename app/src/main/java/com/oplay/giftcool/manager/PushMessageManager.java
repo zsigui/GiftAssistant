@@ -143,7 +143,7 @@ public class PushMessageManager {
 	 * 初始化推送设置
 	 */
 	public void initPush(Context context) {
-		if (mIsInit) {
+		if (mIsInit && !JPushInterface.isPushStopped(context)) {
 			return;
 		}
 		JPushInterface.init(context);

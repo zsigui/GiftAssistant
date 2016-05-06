@@ -89,7 +89,7 @@ public class ApkDownloadDir extends AbsDownloadDir {
 	private static synchronized ApkDownloadDir getDataFileDirInstance(Context context) {
 		try {
 			if (mDataFileDirInstance == null) {
-				final File dir = new File(context.getFilesDir().getAbsolutePath());
+				final File dir = new File(context.getCacheDir().getAbsolutePath());
 				mDataFileDirInstance = new ApkDownloadDir(dir, UN_LIMT_STORE_SIZE, UN_LIMT_STORE_TIME);
 			}
 			return mDataFileDirInstance;

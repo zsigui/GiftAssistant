@@ -118,6 +118,11 @@ public class SilentDownloadManager {
 		startDownload();
 	}
 
+
+	public void resetDownloadDir() {
+		mDirPath = StorageUtils.getOwnCacheDirectory(mContext, Global.EXTERNAL_DOWNLOAD).getAbsolutePath();
+	}
+
 	/**
 	 * 开启下载线程
 	 */

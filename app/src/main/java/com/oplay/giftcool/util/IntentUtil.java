@@ -441,9 +441,6 @@ public class IntentUtil {
 	 * 跳转礼包首页
 	 */
 	public static void jumpHome(Context context, boolean isNewTask) {
-		if (!AssistantApp.getInstance().isGlobalInit()) {
-			AssistantApp.getInstance().appInit();
-		}
 		Intent intent = new Intent(context, MainActivity.class);
 		if (isNewTask) {
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

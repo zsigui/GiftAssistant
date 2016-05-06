@@ -126,7 +126,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			CommonUtil.initMobileInfoModel(mContext);
 		}
 
-		// 初始化网络下载模块, 需要在initMobileInfoModel后设置
+		// 初始化网络下载模块
 		assistantApp.initRetrofit();
 		Global.resetNetEngine();
 		// 初始化配置，获取更新信息

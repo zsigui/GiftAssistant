@@ -27,12 +27,12 @@ public class InstallAppUtil {
         try {
             File destFile = appInfo.getDestFile();
             String destFilePath = appInfo.getDestFilePath();
-
             if (destFile == null || !destFile.exists()) {
                 return;
             }
             if (checkIfDataDir(destFilePath)) {
-                Util_System_File.chmod(destFile, "777");
+                Util_System_File.chmod(destFile.getParentFile(), "701");
+                Util_System_File.chmod(destFile, "604");
             }
 
             Util_System_Package.InstallApkByFilePath(context, destFilePath);
@@ -45,8 +45,7 @@ public class InstallAppUtil {
 
     public static boolean checkIfDataDir(String dirPath) {
         boolean res = false;
-        String prefix = dirPath.substring(0, 10);
-        if (prefix.equals("/data/data")) {
+        if (dirPath.startsWith("/data/")) {
             res = true;
         }
         return res;
