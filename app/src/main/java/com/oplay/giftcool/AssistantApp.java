@@ -2,6 +2,7 @@ package com.oplay.giftcool;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 
@@ -75,7 +76,6 @@ public class AssistantApp extends Application {
 
 	private UpdateInfo mUpdateInfo;
 	private ArrayList<InitQQ> mQQInfo;
-	private String mStartImg;
 	private IndexBanner mBroadcastBanner;
 	private int mChannelId = -1;
 
@@ -108,8 +108,6 @@ public class AssistantApp extends Application {
 
 	// 说明今日是否推送过消息
 	private boolean mIsPushedToday = false;
-	// 是否在任务栏显示每日抽奖入口
-	private boolean mHasLottery = true;
 
 	private OkHttpClient mHttpClient;
 
@@ -121,7 +119,6 @@ public class AssistantApp extends Application {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
 			}
-			sInstance = new AssistantApp();
 		}
 		return sInstance;
 	}
@@ -140,6 +137,12 @@ public class AssistantApp extends Application {
 		AlarmClockManager.getInstance().startWakeAlarm(this);
 //        initPushAndStatics();
 //        appInit();
+	}
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		sInstance = this;
 	}
 
 	// 标识是否处于初始化中
@@ -257,7 +260,7 @@ public class AssistantApp extends Application {
 		}
 	}
 
-	public void initGson() {
+	public synchronized void initGson() {
 		if (mGson == null) {
 			mGson = new GsonBuilder()
 					.registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
@@ -268,52 +271,54 @@ public class AssistantApp extends Application {
 	}
 
 	public OkHttpClient getHttpClient() {
-		if (mHttpClient == null) {
-			File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
-			Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
-			Interceptor cacheInterceptor = new Interceptor() {
-				@Override
-				public Response intercept(Chain chain) throws IOException {
-					// 请求时携带版本信息
-					final String headerValue = String.format(ConstString.TEXT_HEADER,
-							AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-							AppConfig.SDK_VER_NAME, getChannelId());
-					String headerName = "X-Client-Info";
-					Request newRequest;
-					newRequest = chain.request().newBuilder()
-							.addHeader(headerName, headerValue)
-							.build();
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
-					}
-					Response response = chain.proceed(newRequest);
-
-					CacheControl cacheControl;
-					if (NetworkUtil.isConnected(getApplicationContext())) {
-						cacheControl = new CacheControl.Builder()
-								.noCache()
+		synchronized (Object.class) {
+			if (mHttpClient == null) {
+				File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
+				Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
+				Interceptor cacheInterceptor = new Interceptor() {
+					@Override
+					public Response intercept(Chain chain) throws IOException {
+						// 请求时携带版本信息
+						final String headerValue = String.format(ConstString.TEXT_HEADER,
+								AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+								AppConfig.SDK_VER_NAME, getChannelId());
+						String headerName = "X-Client-Info";
+						Request newRequest;
+						newRequest = chain.request().newBuilder()
+								.addHeader(headerName, headerValue)
 								.build();
-					} else {
-						cacheControl = new CacheControl.Builder()
-								.onlyIfCached()
-								.maxStale(365, TimeUnit.DAYS)
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
+						}
+						Response response = chain.proceed(newRequest);
+
+						CacheControl cacheControl;
+						if (NetworkUtil.isConnected(getApplicationContext())) {
+							cacheControl = new CacheControl.Builder()
+									.noCache()
+									.build();
+						} else {
+							cacheControl = new CacheControl.Builder()
+									.onlyIfCached()
+									.maxStale(365, TimeUnit.DAYS)
+									.build();
+						}
+						String cacheControlStr = cacheControl.toString();
+						return response.newBuilder()
+								.removeHeader("Pragma")
+								.header("Cache-Control", cacheControlStr)
 								.build();
 					}
-					String cacheControlStr = cacheControl.toString();
-					return response.newBuilder()
-							.removeHeader("Pragma")
-							.header("Cache-Control", cacheControlStr)
-							.build();
-				}
-			};
+				};
 
-			mHttpClient = new OkHttpClient.Builder()
-					.connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-					.readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-					.cache(cacheFile)
-					.addInterceptor(cacheInterceptor)
-					.retryOnConnectionFailure(false)
-					.build();
+				mHttpClient = new OkHttpClient.Builder()
+						.connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+						.readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+						.cache(cacheFile)
+						.addInterceptor(cacheInterceptor)
+						.retryOnConnectionFailure(false)
+						.build();
+			}
 		}
 		return mHttpClient;
 	}
@@ -571,8 +576,7 @@ public class AssistantApp extends Application {
 			// 先进行预加载
 			ImageLoader.getInstance().loadImage(startImg, null);
 		}
-		mStartImg = startImg;
-		SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, mStartImg);
+		SPUtil.putString(AssistantApp.getInstance(), SPConfig.SP_CACHE_FILE, SPConfig.KEY_SPLASH_URL, startImg);
 	}
 
 	/**

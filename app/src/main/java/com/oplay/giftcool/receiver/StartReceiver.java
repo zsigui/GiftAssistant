@@ -26,6 +26,9 @@ public class StartReceiver extends BroadcastReceiver {
 			}
 			return;
 		}
+		if (AssistantApp.getInstance() == null) {
+			return;
+		}
 		if (context == null) {
 			context = AssistantApp.getInstance().getApplicationContext();
 		}

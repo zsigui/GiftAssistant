@@ -104,8 +104,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		AssistantApp.getInstance().appInit();
 		if (savedInstanceState != null) {
 			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			mGiftFragment.setRetainInstance(true);
 			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+			mGameFragment.setRetainInstance(true);
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
+			mPostFragment.setRetainInstance(true);
+			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
+			mDrawerFragment.setRetainInstance(true);
 		}
 		super.onCreate(savedInstanceState);
 		PermissionUtil.judgePermission(this);
@@ -140,6 +145,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	protected void onDestroy() {
 		super.onDestroy();
 		ObserverManager.getInstance().removeUserUpdateListener(this);
+		sGlobalHolder = null;
 	}
 
 	protected void initView() {
@@ -583,7 +589,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 //
 //		}
 
-		if (AccountManager.getInstance().isLogin() && AccountManager.getInstance().getUserInfo().isFirstLogin) {
+		if (AccountManager.getInstance().isLogin()
+				&& AssistantApp.getInstance().getBroadcastBanner() != null
+				&& AccountManager.getInstance().getUserInfo().isFirstLogin) {
 			// 首次登录显示弹窗
 //			DialogManager.getInstance().showSignInDialog(
 //					AccountManager.getInstance().getUserInfo().isFirstLogin,
