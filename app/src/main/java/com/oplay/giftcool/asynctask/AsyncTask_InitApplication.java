@@ -14,6 +14,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
@@ -116,6 +117,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
 		// 初始化统计工具
 		assistantApp.initPushAndStatics();
+		// 初始化照片墙控件
+		assistantApp.initGalleryFinal();
+		AlarmClockManager.getInstance().initAndSetWakeAlarm(assistantApp);
 
 //        testDownload();
 

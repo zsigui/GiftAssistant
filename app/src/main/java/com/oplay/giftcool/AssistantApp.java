@@ -176,9 +176,6 @@ public class AssistantApp extends Application {
 			return;
 		}
 		isInitialing = true;
-		initPushAndStatics();
-		// 初始化照片墙控件
-		initGalleryFinal();
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 

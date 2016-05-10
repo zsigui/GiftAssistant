@@ -129,7 +129,7 @@ public class AlarmClockManager {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_MANAGER,
 						"Wake Alarm is running when app in background! elapsed time = " + mElapsedTime
-				+ ", background count = " + mBackgroundWakeCount);
+								+ ", background count = " + mBackgroundWakeCount);
 			}
 			mBackgroundWakeCount++;
 			setNeedBindJPushTag(true);
@@ -152,23 +152,28 @@ public class AlarmClockManager {
 	}
 
 
-	private void initAndSetWakeAlarm(final Context context) {
-		resetWakeElapsed();
-		if (alarmSender == null) {
-			Intent startIntent = new Intent(context, StartReceiver.class);
-			startIntent.setAction(Action.ALARM_WAKE);
-			try {
-				alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
-						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-			} catch (Exception e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+	public void initAndSetWakeAlarm(final Context context) {
+		ThreadUtil.runInThread(new Runnable() {
+			@Override
+			public void run() {
+				resetWakeElapsed();
+				if (alarmSender == null) {
+					Intent startIntent = new Intent(context, StartReceiver.class);
+					startIntent.setAction(Action.ALARM_WAKE);
+					try {
+						alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
+								startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+					} catch (Exception e) {
+						if (AppDebugConfig.IS_DEBUG) {
+							KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
+						}
+					}
 				}
+				AlarmManager am = getAlarmManager(context);
+				am.cancel(alarmSender);
+				am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
 			}
-		}
-		AlarmManager am = getAlarmManager(context);
-		am.cancel(alarmSender);
-		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
+		});
 	}
 
 	// 用于统计活动的Activity数量,以重置轮询间隔
@@ -177,7 +182,7 @@ public class AlarmClockManager {
 	public void onResume(Context context) {
 		if (mActiveActivityCount == 0) {
 			mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
-			initAndSetWakeAlarm(context);
+//			initAndSetWakeAlarm(context);
 		}
 		mActiveActivityCount++;
 	}
