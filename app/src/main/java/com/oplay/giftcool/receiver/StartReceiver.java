@@ -60,12 +60,6 @@ public class StartReceiver extends BroadcastReceiver {
 				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");
 			}
 		}
-		if (Intent.ACTION_BATTERY_LOW.equals(action)) {
-			// 手机没电,降低运行频率
-			AlarmClockManager.getInstance().setElapsedTime(AlarmClockManager.ALARM_WAKE_ELAPSED_TIME * 3);
-		} else if (Intent.ACTION_BATTERY_OKAY.equals(action) || Intent.ACTION_POWER_CONNECTED.equals(action)) {
-			AlarmClockManager.getInstance().setElapsedTime(AlarmClockManager.ALARM_WAKE_ELAPSED_TIME);
-		}
 		AlarmClockManager.getInstance().startWakeAlarm(context.getApplicationContext());
 	}
 }

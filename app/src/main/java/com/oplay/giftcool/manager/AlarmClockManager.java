@@ -47,7 +47,7 @@ public class AlarmClockManager {
 	private int mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
 	// 唤醒的次数
 	private int mWakeCount = 0;
-	private int mBackgoundWakeCount = 0;
+	private int mBackgroundWakeCount = 0;
 	// 是否允许通知礼包更新
 	private boolean mAllowNotifyGiftUpdate;
 
@@ -93,12 +93,15 @@ public class AlarmClockManager {
 	public void startWakeAlarm(final Context context) {
 
 		mWakeCount++;
-		if (mAllowNotifyGiftUpdate && mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0) {
+		if (mAllowNotifyGiftUpdate && mBackgroundWakeCount == 0
+				&& mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0) {
 			// 允许的情况下，每唤醒2次通知一次更新
 			notifyGiftUpdate(context);
 		}
 
-		if (mObserverGame && mBackgoundWakeCount < 5) {
+		if (mObserverGame
+				&& mActiveActivityCount <= 0
+				&& mBackgroundWakeCount < 4) {
 			// 处理观察试玩游戏
 			ThreadUtil.runInThread(new Runnable() {
 				@Override
@@ -125,51 +128,47 @@ public class AlarmClockManager {
 			// 判断应用是否处于后台
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_MANAGER,
-						"Wake Alarm is running when app in background! elapsed time = " + mElapsedTime);
+						"Wake Alarm is running when app in background! elapsed time = " + mElapsedTime
+				+ ", background count = " + mBackgroundWakeCount);
 			}
-			mBackgoundWakeCount++;
+			mBackgroundWakeCount++;
 			setNeedBindJPushTag(true);
-			if (mBackgoundWakeCount > 10) {
-				// 10分钟
-				mElapsedTime = 20 * ALARM_WAKE_ELAPSED_TIME;
+			if (mBackgroundWakeCount > 9) {
+				// 20分钟
+				mElapsedTime = 40 * ALARM_WAKE_ELAPSED_TIME;
 				AccountManager.getInstance().setHasSetAliasSuccess(false);
-			} else if (mBackgoundWakeCount > 6) {
+			} else if (mBackgroundWakeCount > 5) {
 				// 5分钟
 				mElapsedTime = 10 * ALARM_WAKE_ELAPSED_TIME;
 				AccountManager.getInstance().setHasSetAliasSuccess(false);
-			} else if (mBackgoundWakeCount > 3) {
+			} else if (mBackgroundWakeCount > 2) {
 				// 1分钟
 				mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
 			}
 		} else {
-			mBackgoundWakeCount = 0;
+			mBackgroundWakeCount = 0;
 			mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
 		}
 	}
 
 
 	private void initAndSetWakeAlarm(final Context context) {
-		ThreadUtil.runInThread(new Runnable() {
-			@Override
-			public void run() {
-				resetWakeElapsed();
-				if (alarmSender == null) {
-					Intent startIntent = new Intent(context, StartReceiver.class);
-					startIntent.setAction(Action.ALARM_WAKE);
-					try {
-						alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
-								startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-					} catch (Exception e) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
-						}
-					}
+		resetWakeElapsed();
+		if (alarmSender == null) {
+			Intent startIntent = new Intent(context, StartReceiver.class);
+			startIntent.setAction(Action.ALARM_WAKE);
+			try {
+				alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
+						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+			} catch (Exception e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
 				}
-				AlarmManager am = getAlarmManager(context);
-				am.cancel(alarmSender);
-				am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
 			}
-		});
+		}
+		AlarmManager am = getAlarmManager(context);
+		am.cancel(alarmSender);
+		am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
 	}
 
 	// 用于统计活动的Activity数量,以重置轮询间隔
@@ -188,6 +187,9 @@ public class AlarmClockManager {
 	}
 
 	private void notifyGiftUpdate(final Context context) {
+		if (context == null) {
+			return;
+		}
 		ThreadUtil.runInThread(new Runnable() {
 			@Override
 			public void run() {

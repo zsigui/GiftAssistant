@@ -7,7 +7,7 @@ package com.oplay.giftcool.config;
  */
 public class ConstString {
 
-	public static final String TEXT_HEADER = "pn=%s&vc=%d&vn=%s&chn=%d";
+	public static final String TEXT_HEADER = "pn=%s&vc=%d&vn=%s&chn=%d&ov=%s";
 
 	public static final String TEXT_NET_ERROR = "网络连接错误";
 	public static final String TEXT_EXECUTE_ERROR = "执行出错，请求失败";

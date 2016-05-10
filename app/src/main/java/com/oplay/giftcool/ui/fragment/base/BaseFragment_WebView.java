@@ -3,7 +3,6 @@ package com.oplay.giftcool.ui.fragment.base;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -63,7 +61,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mContentView = super.onCreateView(inflater, container, savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 		initWebView();
 		return mContentView;
 	}
@@ -73,21 +71,20 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mWebView = getViewById(R.id.wv_container);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
-			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-//				super.onReceivedSslError(view, handler, error);
-				KLog.d(AppDebugConfig.TAG_WARN, "onReceivedSslError");
-				handler.proceed();
-			}
-
-			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onPageStarted: " + url);
+				}
 				onWebPageStarted();
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onPageFinished: " + url);
+				}
 				onWebPageFinished();
 				if (!mSettings.getLoadsImagesAutomatically()) {
 					mSettings.setLoadsImagesAutomatically(true);
@@ -97,12 +94,18 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				super.onReceivedError(view, errorCode, description, failingUrl);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onReceivedError: " + description);
+				}
 				onWebReceivedError();
 			}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				boolean hasFind;
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "shouldOverrideUrlLoading: " + url);
+				}
 				Uri mUri = Uri.parse(url);
 				if (mUri == null) {
 					return false;
@@ -137,17 +140,26 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				super.onProgressChanged(view, newProgress);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onProgressChanged: " + newProgress);
+				}
 				onWebProgressChangedMethod(newProgress);
 			}
 
 			@Override
 			public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onJsBeforeUnload: " + message);
+				}
 				return super.onJsBeforeUnload(view, url, message, result);
 			}
 
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onReceivedTitle: " + title);
+				}
 				if (getContext() != null && getContext() instanceof SetTitleListner) {
 					mTitles.add(title);
 					((SetTitleListner) getContext()).setBarTitle(title);
@@ -157,6 +169,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
 				ToastUtil.showShort(message);
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "onJsAlert: " + message);
+				}
 				return super.onJsAlert(view, url, message, result);
 			}
 
@@ -184,6 +199,11 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mJsInterfaceObject = new WebViewInterface(getActivity(), this, mWebView);
 		if (mWebView != null) {
 			mWebView.addJavascriptInterface(mJsInterfaceObject, "GiftCool");
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				mWebView.removeJavascriptInterface("accessibility");
+				mWebView.removeJavascriptInterface("accessibilityTraversal");
+				mWebView.removeJavascriptInterface("searchBoxJavaBridge_");
+			}
 		}
 		mSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
@@ -385,12 +405,21 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		mUrl = url;
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, mUrl);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + mUrl);
+			KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + mUrl);
 		}
 		if (mWebView != null) {
 			if (sScrollMap.get(mUrl) != null) {
 				mScrollY = sScrollMap.get(mUrl);
 			}
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_WARN, "loadUrl: " + url);
+			}
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+				mWebView.clearView();
+			} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+				mWebView.loadUrl("about:blank");
+			}
+
 			mWebView.loadUrl(mUrl);
 		}
 	}
@@ -398,12 +427,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 	/**
 	 *
 	 * 需要在setting设置完之后设置，方法可在processLogic中调用
- 	 */
+	 */
 	public void postUrl(String url, byte[] postData) {
 		mUrl = url;
 		if (AppDebugConfig.IS_DEBUG) {
 			AppDebugConfig.logMethodWithParams(this, mUrl);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + mUrl);
+			KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + mUrl);
 		}
 		if (mWebView != null) {
 			mWebView.postUrl(url, postData);

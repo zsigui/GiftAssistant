@@ -36,6 +36,8 @@ import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
 import retrofit2.Call;
@@ -348,14 +350,27 @@ public class AccountManager implements OnFinishListener {
             cookies.add(String.format("sessionid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
                     getUserSesion().session, WebViewUrl.URL_DOMAIN, expiredDate));
         }
-        cookies.add(String.format("version=%d;Domain=%s;Expires=%s;Path=/;",
-                AppConfig.SDK_VER, WebViewUrl.URL_DOMAIN, expiredDate));
-        cookies.add(String.format("version_name=%s;Domain=%s;Expires=%s;Path=/;",
-                AppConfig.SDK_VER_NAME, WebViewUrl.URL_DOMAIN, expiredDate));
-        cookies.add(String.format("cid=%s;Domain=%s;Expires=%s;Path=/;HttpOnly",
-                MobileInfoModel.getInstance().getCid(), WebViewUrl.URL_DOMAIN, expiredDate));
-        cookies.add(String.format("chnid=%d;Domain=%s;Expires=%s;Path=/;",
-                AssistantApp.getInstance().getChannelId(), WebViewUrl.URL_DOMAIN, expiredDate));
+
+        HashMap<String, String> cookieMap = new HashMap<>();
+        cookieMap.put("version", String.valueOf(AppConfig.SDK_VER));
+        cookieMap.put("version_name", AppConfig.SDK_VER_NAME);
+        cookieMap.put("imei", MobileInfoModel.getInstance().getImei());
+        cookieMap.put("imsi", MobileInfoModel.getInstance().getImsi());
+        cookieMap.put("cid", MobileInfoModel.getInstance().getCid());
+        cookieMap.put("mac", MobileInfoModel.getInstance().getMac());
+        cookieMap.put("apn", MobileInfoModel.getInstance().getApn());
+        cookieMap.put("cn", MobileInfoModel.getInstance().getCn());
+        cookieMap.put("dd", MobileInfoModel.getInstance().getDd());
+        cookieMap.put("dv", MobileInfoModel.getInstance().getDv());
+        cookieMap.put("os", MobileInfoModel.getInstance().getOs());
+        cookieMap.put("chn", String.valueOf(MobileInfoModel.getInstance().getChn()));
+        cookieMap.put("chnid", String.valueOf(MobileInfoModel.getInstance().getChn()));
+        cookieMap.put("X-Client-Info", AssistantApp.getInstance().getHeaderValue());
+
+        for (Map.Entry<String, String> cookie : cookieMap.entrySet()) {
+            cookies.add(String.format("%s=%s;Domain=%s;Expires=%s;Path=/;", cookie.getKey(), cookie.getValue()
+                    , WebViewUrl.URL_DOMAIN, expiredDate));
+        }
         syncCookie(WebViewUrl.URL_BASE, cookies);
     }
 
@@ -388,6 +403,7 @@ public class AccountManager implements OnFinishListener {
     private Call<JsonRespBase<UpdateSession>> mCallUpdateSession;
 
     private long mLastRequestTime = 0;
+
     /**
      * 更新Session的实际网络请求方法
      */
@@ -531,8 +547,6 @@ public class AccountManager implements OnFinishListener {
     }
 
 
-
-
     private int mUnreadMessageCount = 0;
 
     public void setUnreadMessageCount(int unreadMessageCount) {
@@ -572,8 +586,9 @@ public class AccountManager implements OnFinishListener {
         }
         mCallObtainUnread.enqueue(new Callback<JsonRespBase<MessageCentralUnread>>() {
             @Override
-            public void onResponse(Call<JsonRespBase<MessageCentralUnread>> call, Response<JsonRespBase<MessageCentralUnread>>
-                    response) {
+            public void onResponse(Call<JsonRespBase<MessageCentralUnread>> call,
+                                   Response<JsonRespBase<MessageCentralUnread>>
+                                           response) {
                 if (call.isCanceled()) {
                     return;
                 }

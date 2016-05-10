@@ -66,7 +66,7 @@ public class JsHandler_Pay_With_AlipaySDK extends JsHandler_abstract_Params_NoPs
 				public void run() {
 					try {
 						PayTask alipay = new PayTask(sdkHandler.getActivity());
-						String result = alipay.pay(orderInfo);
+						String result = alipay.pay(orderInfo, true);
 						callBack(result);
 					} catch (Throwable e) {
 						Debug_Log.e(e);

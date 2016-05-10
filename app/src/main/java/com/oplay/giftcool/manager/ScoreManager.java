@@ -263,7 +263,7 @@ public class ScoreManager {
 	private HashMap<String, TaskInfoDownload> mCurDownloadTaskSet;
 
 	private void setCurDownloadTaskSet(Context context) {
-		final String val = AssistantApp.getInstance().getGson().toJson(mCurDownloadTaskSet);
+		final String val = AssistantApp.getInstance().getGson().toJson(getCurDownloadTaskSet(context));
 		SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE,
 				SPConfig.KEY_TODAY_DOWNLOAD_TASK, val);
 	}
@@ -326,40 +326,50 @@ public class ScoreManager {
 	 * 判断试玩游戏前台任务，累积时间
 	 */
 	public synchronized void judgePlayTime(final Context context, final int elapseTime) {
-		Iterator<Map.Entry<String, TaskInfoDownload>> it = getCurDownloadTaskSet(context).entrySet().iterator();
-		while (it.hasNext()) {
-			final Map.Entry<String, TaskInfoDownload> entry = it.next();
-			final TaskInfoDownload info = entry.getValue();
+		try {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime
-				+ ", isForeground = " + SystemUtil.isForeground(context, info.packName));
+				KLog.d(AppDebugConfig.TAG_WARN, "judgePlayTime is running!");
 			}
-			if (SystemUtil.isForeground(context, info.packName)) {
-				info.hasPlayTime += elapseTime;
-			}
-			if (!info.isToday()) {
-				it.remove();
-			} else {
-				if (info.isFinished()) {
-					reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), true);
+			Iterator<Map.Entry<String, TaskInfoDownload>> it = getCurDownloadTaskSet(context).entrySet().iterator();
+			while (it.hasNext()) {
+				final Map.Entry<String, TaskInfoDownload> entry = it.next();
+				final TaskInfoDownload info = entry.getValue();
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime
+
+							+ ", isForeground = " + SystemUtil.isForeground(context, info.packName));
+				}
+				if (SystemUtil.isForeground(context, info.packName)) {
+					info.hasPlayTime += elapseTime;
+				}
+				if (!info.isToday()) {
 					it.remove();
-					setTaskFinished(true);
+				} else {
+					if (info.isFinished()) {
+						reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), true);
+						it.remove();
+						setTaskFinished(true);
+					}
 				}
 			}
-		}
 
-		if (!mCurDownloadTaskSet.isEmpty()) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "no finished, continue!");
+			if (!getCurDownloadTaskSet(context).isEmpty()) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, "no finished, continue!");
+				}
+				// 任务没完成，继续监测
+				AlarmClockManager.getInstance().setObserverGame(true);
+			} else {
+				// 任务完成,不监测
+				AlarmClockManager.getInstance().setObserverGame(false);
 			}
-			// 任务没完成，继续监测
-			AlarmClockManager.getInstance().setObserverGame(true);
-		} else {
-			// 任务完成,不监测
-			AlarmClockManager.getInstance().setObserverGame(false);
+			// 进行一次写入
+			setCurDownloadTaskSet(context);
+		} catch (Throwable t) {
+			if (AppDebugConfig.IS_DEBUG) {
+				AppDebugConfig.warn(AppDebugConfig.TAG_MANAGER, t);
+			}
 		}
-		// 进行一次写入
-		setCurDownloadTaskSet(context);
 	}
 
 	public boolean isTaskFinished() {

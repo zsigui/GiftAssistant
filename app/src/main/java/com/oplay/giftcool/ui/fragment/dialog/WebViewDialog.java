@@ -96,8 +96,14 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
         WebViewInterface mJsInterfaceObject = new WebViewInterface(getActivity(), this, wv);
         if (wv != null) {
             wv.addJavascriptInterface(mJsInterfaceObject, "GiftCool");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                wv.removeJavascriptInterface("accessibility");
+                wv.removeJavascriptInterface("accessibilityTraversal");
+                wv.removeJavascriptInterface("searchBoxJavaBridge_");
+            }
         }
         mSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+
 
         // 缩放
         mSettings.setSupportZoom(false);
@@ -228,7 +234,7 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
             }
         }
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Bundle args = getArguments();
