@@ -414,12 +414,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_WARN, "loadUrl: " + url);
 			}
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-				mWebView.clearView();
-			} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-				mWebView.loadUrl("about:blank");
-			}
-
 			mWebView.loadUrl(mUrl);
 		}
 	}

@@ -15,11 +15,11 @@ CWD=$(dirname $(readlink -f $0))
 NAME=giftcool
 VERSION=1.2.3
 # 150000 is for weixin hongbao
-CHNNAMES=0,10000
+CHNNAMES=0,10000,1889000
 TEMPOUTPUT=${CWD}/../apk/temp-unsigned
 SOURCEAPK=${CWD}/../apk/src/app-release.encrypted.apk
 OUTPUT=${CWD}/../apk/output
-EXTENSION=.giftcool
+EXTENSION=.gift_cool
 
 # 签名参数
 KEYSTORE=${CWD}/../app/keystore/gift_cool.keystore
