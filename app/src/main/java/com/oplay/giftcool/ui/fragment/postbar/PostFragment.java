@@ -23,6 +23,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
@@ -48,6 +49,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
 	private int mIndexOfficialHeader = 1;
 	private int mIndexNotifyHeader = 2;
+	private final int PAGE_SIZE = 20;
 
 	// 页面控件
 	private RecyclerView rvData;
@@ -105,7 +107,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 				final boolean isRead = AssistantApp.getInstance().isReadAttention();
 				if (mReqPageObj == null) {
 					ReqIndexPost data = new ReqIndexPost();
-					data.pageSize = 20;
+					data.pageSize = PAGE_SIZE;
 					data.isAttention = (isRead ? 1 : 0);
 					mReqPageObj = new JsonReqBase<ReqIndexPost>(data);
 				}
@@ -136,6 +138,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 									// 关注快讯为空
 									mAdapter.toggleButton(false, true);
 								}
+								FileUtil.writeCacheByKey(getContext(), NetUrl.POST_GET_INDEX, data);
 								return;
 							}
 						}
@@ -143,7 +146,8 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 							KLog.d(AppDebugConfig.TAG_FRAG, (response == null ?
 									"返回出错" : response.code() + ", " + response.message()));
 						}
-						refreshFailEnd();
+//						refreshFailEnd();
+						readCacheData();
 					}
 
 					@Override
@@ -154,11 +158,35 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, t);
 						}
-						refreshFailEnd();
+//						refreshFailEnd();
+						readCacheData();
 					}
 				});
 			}
 		});
+	}
+
+
+	private void readCacheData() {
+		FileUtil.readCacheByKey(getContext(), NetUrl.POST_GET_INDEX,
+				new CallbackListener<IndexPost>() {
+
+					@Override
+					public void doCallBack(IndexPost data) {
+						if (data != null) {
+							// 获取数据成功
+							refreshSuccessEnd();
+							transferIndexPostToArray(data);
+							updateData(mData);
+							if (data.notifyData == null || data.notifyData.isEmpty()) {
+								// 关注快讯为空
+								mAdapter.toggleButton(false, true);
+							}
+						} else {
+							refreshFailEnd();
+						}
+					}
+				}, IndexPost.class);
 	}
 
 	/**
@@ -198,6 +226,10 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 		// 添加游戏快讯部分
 		if (data.notifyData != null && !data.notifyData.isEmpty()) {
 			mData.addAll(data.notifyData);
+		}
+		if (data.notifyData == null || data.notifyData.size() < 10) {
+			mRefreshLayout.setCanShowLoad(false);
+			mNoMoreLoad = true;
 		}
 	}
 
@@ -466,7 +498,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 	private OneTypeDataList<IndexPostNew> getLoadData() {
 		OneTypeDataList<IndexPostNew> data = new OneTypeDataList<>();
 		data.data = getRefreshData();
-		data.pageSize = 20;
+		data.pageSize = PAGE_SIZE;
 		data.isEndPage = (int) (Math.random() * 2) == 0 ? false : true;
 		return data;
 	}

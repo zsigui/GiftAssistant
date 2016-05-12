@@ -29,11 +29,13 @@ import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -106,7 +108,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	 * 需要在此完成一些APP全局常量初始化的获取工作
 	 */
 	private void doInit() {
-		AssistantApp assistantApp = AssistantApp.getInstance();
+		final AssistantApp assistantApp = AssistantApp.getInstance();
 		if (assistantApp.isGlobalInit()) {
 			return;
 		}
@@ -141,11 +143,19 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		}
 
 		doClearWorkForOldVer();
+		Global.getInstalledAppNames();
 		// 判断是否今日首次打开APP
-		if (judgeFirstOpenToday()) {
-			// 进行应用信息上报
-			reportedAppInfo();
-		}
+		ThreadUtil.runInThread(new Runnable() {
+			@Override
+			public void run() {
+				ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
+				if (judgeFirstOpenToday()) {
+					// 进行应用信息上报
+					reportedAppInfo(infos);
+				}
+
+			}
+		});
 
 		try {
 			OuwanSDKManager.getInstance().init();
@@ -181,16 +191,17 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		assistantApp.setGlobalInit(true);
 	}
 
-    private void testDownload() {
-        DownloadInfo info = new DownloadInfo();
-        info.setTotalSize(95827865);
-        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
-        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5.0_250_chn_1856000_92efbb4bde7721b1.owk");
-        info.setIsDownload(true);
-        SilentDownloadManager.getInstance().startDownload(info);
-    }
+	private void testDownload() {
+		DownloadInfo info = new DownloadInfo();
+		info.setTotalSize(95827865);
+		info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
+		info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5.0_250_chn_1856000_92efbb4bde7721b1" +
+				".owk");
+		info.setIsDownload(true);
+		SilentDownloadManager.getInstance().startDownload(info);
+	}
 
-    private boolean initAndCheckUpdate() {
+	private boolean initAndCheckUpdate() {
 		ReqInitApp data = new ReqInitApp();
 		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
 		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
@@ -230,64 +241,62 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	/**
 	 * 上报应用信息
 	 */
-	private void reportedAppInfo() {
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				ReqReportedInfo info = new ReqReportedInfo();
-				info.brand = Build.MODEL;
-				info.osVersion = Build.VERSION.RELEASE;
-				info.sdkVersion = String.valueOf(Build.VERSION.SDK_INT);
-				info.appInfos = getAppInfos(AssistantApp.getInstance().getApplicationContext());
-				final JsonReqBase<ReqReportedInfo> reqData = new JsonReqBase<ReqReportedInfo>(info);
-				Global.getNetEngine().reportedAppInfo(reqData)
-						.enqueue(new Callback<JsonRespBase<Void>>() {
-							@Override
-							public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
-									response) {
-								if (response != null && response.isSuccessful()
-										&& response.body() != null && response.body().isSuccess()) {
-									// 执行上报成功
-									if (AppDebugConfig.IS_DEBUG) {
-										KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
-									}
-								}
-								AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
+	private void reportedAppInfo(ArrayList<AppBaseInfo> appBaseInfos) {
+		ReqReportedInfo info = new ReqReportedInfo();
+		info.brand = Build.MODEL;
+		info.osVersion = Build.VERSION.RELEASE;
+		info.sdkVersion = String.valueOf(Build.VERSION.SDK_INT);
+		info.appInfos = appBaseInfos;
+		final JsonReqBase<ReqReportedInfo> reqData = new JsonReqBase<ReqReportedInfo>(info);
+		Global.getNetEngine().reportedAppInfo(reqData)
+				.enqueue(new Callback<JsonRespBase<Void>>() {
+					@Override
+					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
+							response) {
+						if (response != null && response.isSuccessful()
+								&& response.body() != null && response.body().isSuccess()) {
+							// 执行上报成功
+							if (AppDebugConfig.IS_DEBUG) {
+								KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
+							}
+						}
+						AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
 //									public void run() {
 //										reportedAppInfo();
 //									}
 //								}, 30 * 1000);
-							}
+					}
 
-							@Override
-							public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-								AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
-								// 上报失败，等待30秒后继续执行
+					@Override
+					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+						AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
+						// 上报失败，等待30秒后继续执行
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
 //									public void run() {
 //										reportedAppInfo();
 //									}
 //								}, 30 * 1000);
-							}
-						});
-			}
-		});
+					}
+				});
 	}
 
 	/**
 	 * 获取已安装应用信息
 	 */
 	private ArrayList<AppBaseInfo> getAppInfos(Context context) {
-		ArrayList<AppBaseInfo> result = new ArrayList<>();
+		HashSet<String> appNames = new HashSet<>();
+
+		final ArrayList<AppBaseInfo> result = new ArrayList<>();
 		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
 		for (int i = 0; i < packages.size(); i++) {
 			try {
 				final PackageInfo packageInfo = packages.get(i);
 				final AppBaseInfo info = new AppBaseInfo();
 				info.name = packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
+				appNames.add(info.name);
 				info.pkg = packageInfo.packageName;
 				info.vc = String.valueOf(packageInfo.versionCode);
 				info.vn = packageInfo.versionName;
@@ -298,6 +307,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 				}
 			}
 		}
+
+		Global.setInstalledAppNames(appNames);
 		return result;
 	}
 }

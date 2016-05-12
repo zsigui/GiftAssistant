@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.listener.OnLoadListener;
 import com.oplay.giftcool.ui.widget.layout.RefreshLayout;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -57,7 +58,11 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	protected void refreshFailEnd() {
 		if (mIsSwipeRefresh) {
-			ToastUtil.showShort("刷新请求出错");
+			if (NetworkUtil.isConnected(getContext())) {
+				ToastUtil.showShort("刷新请求出错-服务器获取数据异常");
+			} else {
+				ToastUtil.showShort("刷新请求出错-网络异常");
+			}
 		}
 		super.refreshFailEnd();
 		mRefreshLayout.setEnabled(true);
@@ -106,7 +111,11 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	protected void moreLoadFailEnd() {
 		mIsLoadMore = false;
 		mRefreshLayout.setLoading(false);
-		showToast("异常，加载失败");
+		if (NetworkUtil.isConnected(getContext())) {
+			showToast("加载失败-从服务器获取数据出错");
+		} else {
+			showToast("加载失败-网络异常");
+		}
 	}
 
 	@Override

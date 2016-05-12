@@ -171,7 +171,9 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 * 先判断隐藏所有可见的Fragment
 	 */
 	private void hideAllFragment(FragmentTransaction ft, int id) {
+		KLog.d(AppDebugConfig.TAG_WARN, "hide id = " + id);
 		if (mResultFragment != null && id != PAGE_CONTENT) {
+			KLog.d(AppDebugConfig.TAG_WARN, "hide result");
 			ft.hide(mResultFragment);
 		}
 		if (mLoadingFragment != null && id != PAGE_LOADING) {
@@ -198,14 +200,14 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		hideAllFragment(ft, PAGE_HISTORY);
 		if (mHistoryFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
-            if (f != null) {
-	            mHistoryFragment = (HistoryFragment) f;
-	            ft.show(f);
-            } else {
-			    mHistoryFragment = HistoryFragment.newInstance(data);
-	            ft.add(R.id.fl_container, mHistoryFragment, TAG_HISTORY);
-            }
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_HISTORY);
+			if (f != null) {
+				mHistoryFragment = (HistoryFragment) f;
+				ft.show(f);
+			} else {
+				mHistoryFragment = HistoryFragment.newInstance(data);
+				ft.add(R.id.fl_container, mHistoryFragment, TAG_HISTORY);
+			}
 		} else {
 			ft.show(mHistoryFragment);
 		}
@@ -246,10 +248,14 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	private void displayDataUI(SearchDataResult data, String name, int id) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		hideAllFragment(ft, PAGE_CONTENT);
+		KLog.d(AppDebugConfig.TAG_WARN, "result = " + mResultFragment);
 		if (mResultFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
 			if (f != null) {
 				mResultFragment = (ResultFragment) f;
+				KLog.d(AppDebugConfig.TAG_WARN, "is not null : show Result = " + mResultFragment.isResumed() + ", " +
+						mResultFragment.isVisible()
+						+ ", " + mResultFragment.isAdded() + ", " + mResultFragment.isDetached());
 				ft.show(f);
 			} else {
 				mResultFragment = ResultFragment.newInstance(data);
@@ -402,10 +408,12 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 								// 不更新
 								return;
 							}
-							if ((data.games == null || data.games.size() == 0)
-									&& (data.gifts == null || data.gifts.size() == 0)) {
-								displayEmptyUI();
-								return;
+							if (data.gifts == null || data.gifts.size() == 0) {
+								if ((data.games == null || data.games.size() == 0) ||
+										!AssistantApp.getInstance().isAllowDownload()) {
+									displayEmptyUI();
+									return;
+								}
 							}
 							// display list here
 							displayDataUI(data, mLastSearchKey, id);

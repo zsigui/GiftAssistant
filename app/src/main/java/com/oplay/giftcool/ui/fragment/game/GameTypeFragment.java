@@ -8,16 +8,20 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameTagAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.util.IndexTypeUtil;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.util.FileUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -102,7 +106,9 @@ public class GameTypeFragment extends BaseFragment {
 				if (response != null && response.isSuccessful()) {
 					if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 						refreshSuccessEnd();
-						updateData(response.body().getData());
+						ArrayList<GameTypeMain> data = response.body().getData();
+						updateData(data);
+						FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_TYPE, data);
 						return;
 					}
 					if (AppDebugConfig.IS_DEBUG) {
@@ -110,7 +116,8 @@ public class GameTypeFragment extends BaseFragment {
 								(response.body() == null ? "解析失败" : response.body().error()));
 					}
 				}
-				refreshFailEnd();
+//				refreshFailEnd();
+				readCacheData();
 			}
 
 			@Override
@@ -121,9 +128,27 @@ public class GameTypeFragment extends BaseFragment {
 				if (AppDebugConfig.IS_DEBUG) {
 					KLog.d(AppDebugConfig.TAG_UTIL, t);
 				}
-				refreshFailEnd();
+//				refreshFailEnd();
+				readCacheData();
 			}
 		});
+	}
+
+	private void readCacheData() {
+		FileUtil.readCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_TYPE,
+				new CallbackListener<ArrayList<GameTypeMain>>() {
+
+					@Override
+					public void doCallBack(ArrayList<GameTypeMain> data) {
+						if (data != null) {
+							// 获取数据成功
+							updateData(data);
+							refreshSuccessEnd();
+						} else {
+							refreshFailEnd();
+						}
+					}
+				}, new TypeToken<ArrayList<GameTypeMain>>(){}.getType());
 	}
 
 	/**

@@ -104,13 +104,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		AssistantApp.getInstance().appInit();
 		if (savedInstanceState != null) {
 			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-			mGiftFragment.setRetainInstance(true);
 			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-			mGameFragment.setRetainInstance(true);
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
-			mPostFragment.setRetainInstance(true);
 			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
-			mDrawerFragment.setRetainInstance(true);
 		}
 		super.onCreate(savedInstanceState);
 		PermissionUtil.judgePermission(this);
@@ -330,10 +326,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mGameFragment = GameFragment.newInstance();
 				ft.add(R.id.fl_container, mGameFragment, TAG_GAME);
 			}
-			mGameFragment.setReenterTransition(true);
 		} else {
 			ft.show(mGameFragment);
 		}
+		mGameFragment.setRetainInstance(true);
 		ft.commit();
 		mCurSelectedItem = INDEX_GAME;
 	}
@@ -353,10 +349,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mGiftFragment = GiftFragment.newInstance();
 				ft.add(R.id.fl_container, mGiftFragment, TAG_GIFT);
 			}
-			mGiftFragment.setReenterTransition(true);
 		} else {
 			ft.show(mGiftFragment);
 		}
+		mGiftFragment.setReenterTransition(true);
 		ft.commit();
 		mCurSelectedItem = INDEX_GIFT;
 	}
@@ -378,10 +374,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mPostFragment = PostFragment.newInstance();
 				ft.add(R.id.fl_container, mPostFragment, TAG_POST);
 			}
-			mPostFragment.setRetainInstance(true);
 		} else {
 			ft.show(mPostFragment);
 		}
+		mPostFragment.setRetainInstance(true);
 		ft.commit();
 		mCurSelectedItem = INDEX_POST;
 	}

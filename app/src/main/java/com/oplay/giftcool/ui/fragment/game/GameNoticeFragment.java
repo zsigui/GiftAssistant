@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameNoticeAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
@@ -12,12 +13,14 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
@@ -161,10 +164,12 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 									OneTypeDataList<IndexGameNew> backObj = response.body().getData();
 									refreshLoadState(backObj.data, backObj.isEndPage);
 									updateData(backObj.data);
+									FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_NOTICE, backObj);
 									return;
 								}
 							}
-							refreshFailEnd();
+//							refreshFailEnd();
+							readCacheData();
 						}
 
 						@Override
@@ -176,14 +181,35 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 							if (AppDebugConfig.IS_DEBUG) {
 								KLog.e(AppDebugConfig.TAG_FRAG, t);
 							}
-							refreshFailEnd();
+//							refreshFailEnd();
+							readCacheData();
 						}
 					});
 				} else {
-					refreshFailEnd();
+//					refreshFailEnd();
+					readCacheData();
 				}
 			}
 		});
+	}
+
+	private void readCacheData() {
+		FileUtil.readCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_NOTICE,
+				new CallbackListener<OneTypeDataList<IndexGameNew>>() {
+
+					@Override
+					public void doCallBack(OneTypeDataList<IndexGameNew> data) {
+						if (data != null) {
+							// 获取数据成功
+							refreshSuccessEnd();
+							refreshLoadState(data.data, data.isEndPage);
+							updateData(data.data);
+						} else {
+							refreshFailEnd();
+						}
+					}
+				}, new TypeToken<OneTypeDataList<IndexGameNew>>() {
+				}.getType());
 	}
 
 	/**

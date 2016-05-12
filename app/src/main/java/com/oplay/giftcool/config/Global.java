@@ -12,7 +12,7 @@ import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
 import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.SystemUtil;
+import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_Executor;
 
@@ -135,12 +135,39 @@ public class Global {
 	 */
 	private static HashSet<String> sAppName = null;
 
+
 	/**
-	 * 获取已经安装的应用的Hash列表
+	 * 依着已安装应用列表,最好在线程中执行
+	 * @param appName
+	 */
+	public static void setInstalledAppNames(HashSet<String> appName) {
+		if (appName == null || appName.isEmpty()) {
+			return;
+		}
+		sAppName = appName;
+		final String s = AssistantApp.getInstance().getGson().toJson(sAppName);
+		SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
+				SPConfig.SP_APP_INFO_FILE,
+				SPConfig.KEY_INSTALL_APP_NAMES, s);
+	}
+	/**
+	 * 获取已经安装的应用的Hash列表,需要判空
 	 */
 	public static HashSet<String> getInstalledAppNames() {
-		if (sAppName == null) {
-			sAppName = SystemUtil.getInstalledAppName(AssistantApp.getInstance().getApplicationContext());
+		if (sAppName == null || sAppName.isEmpty()) {
+			try {
+				final String s = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
+						SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_INSTALL_APP_NAMES, null);
+				if (!TextUtils.isEmpty(s)) {
+					sAppName = AssistantApp.getInstance().getGson().fromJson(s, new TypeToken<HashSet<String>>() {
+					}.getType());
+				}
+			} catch (Throwable t) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_WARN, t);
+				}
+			}
+
 		}
 		return sAppName;
 	}

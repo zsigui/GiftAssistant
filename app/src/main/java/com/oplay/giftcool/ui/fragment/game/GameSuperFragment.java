@@ -10,10 +10,13 @@ import com.oplay.giftcool.adapter.GameSuperAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import retrofit2.Call;
@@ -170,13 +173,16 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 									if (response != null && response.isSuccessful()) {
 										if (response.body() != null && response.body().getCode() == NetStatusCode
 												.SUCCESS) {
-											updateData(response.body().getData());
+											IndexGameSuper data = response.body().getData();
+											updateData(data);
 											refreshSuccessEnd();
+											FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_SUPER, data);
 											return;
 										}
 									}
 									// 出错
-									refreshFailEnd();
+//									refreshFailEnd();
+									readCacheData();
 								}
 
 								@Override
@@ -184,7 +190,8 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 									if (!mCanShowUI || call.isCanceled()) {
 										return;
 									}
-									refreshFailEnd();
+//									refreshFailEnd();
+									readCacheData();
 								}
 							});
 				} else {
@@ -192,6 +199,23 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 				}
 			}
 		});
+	}
+
+	private void readCacheData() {
+		FileUtil.readCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_SUPER,
+				new CallbackListener<IndexGameSuper>() {
+
+					@Override
+					public void doCallBack(IndexGameSuper data) {
+						if (data != null) {
+							// 获取数据成功
+							updateData(data);
+							refreshSuccessEnd();
+						} else {
+							refreshFailEnd();
+						}
+					}
+				}, IndexGameSuper.class);
 	}
 
 	@Override

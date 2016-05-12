@@ -15,9 +15,11 @@ import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.util.BannerTypeUtil;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -31,6 +33,7 @@ import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.util.FileUtil;
 import com.socks.library.KLog;
 
 import java.io.IOException;
@@ -161,9 +164,14 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	 */
 	private Call<JsonRespBase<IndexGift>> mCallRefresh;
 
+	public static long sCurrentTime;
+	public static long sLastTime;
+
 	@Override
 	protected void lazyLoad() {
 
+		sLastTime = System.currentTimeMillis();
+		sCurrentTime = sLastTime;
 		Global.THREAD_POOL.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -176,6 +184,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 				if (mCallRefresh != null) {
 					mCallRefresh.cancel();
 				}
+
 				ReqIndexGift data = new ReqIndexGift();
 				data.appNames = Global.getInstalledAppNames();
 				JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
@@ -193,7 +202,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 							if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
 								// 获取数据成功
 								refreshSuccessEnd();
-								updateData(response.body().getData(), 0, -1);
+								IndexGift data = response.body().getData();
+								updateData(data, 0, -1);
+								FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
 								return;
 							}
 						}
@@ -202,7 +213,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 									response
 											.message()));
 						}
-						refreshFailEnd();
+//						refreshFailEnd();
+						readCacheData();
 					}
 
 					@Override
@@ -213,11 +225,29 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_FRAG, t);
 						}
-						refreshFailEnd();
+//						refreshFailEnd();
+						readCacheData();
 					}
 				});
 			}
 		});
+	}
+
+	private void readCacheData() {
+		FileUtil.readCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX,
+				new CallbackListener<IndexGift>() {
+
+					@Override
+					public void doCallBack(IndexGift data) {
+						if (data != null) {
+							// 获取数据成功
+							refreshSuccessEnd();
+							updateData(data, 0, -1);
+						} else {
+							refreshFailEnd();
+						}
+					}
+				}, IndexGift.class);
 	}
 
 	private void addMoreData(ArrayList<IndexGiftNew> moreData) {

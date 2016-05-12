@@ -19,6 +19,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGameListAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.KeyConfig;
@@ -34,6 +35,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
+import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -172,6 +174,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 	}
 
 	private void showDataView(ArrayList data, View v) {
+		KLog.d(AppDebugConfig.TAG_WARN, "view = " + v +  ", data = " + data);
 		if (data == null || data.size() == 0) {
 			v.setVisibility(View.GONE);
 		} else {

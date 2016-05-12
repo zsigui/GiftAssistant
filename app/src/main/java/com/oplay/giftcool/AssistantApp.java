@@ -38,7 +38,6 @@ import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.InputMethodUtil;
-import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
@@ -145,7 +144,7 @@ public class AssistantApp extends Application {
 		// 初始配置加载列表
 		initLoadingView();
 
-//        initPushAndStatics();
+        initPushAndStatics();
 //        appInit();
 	}
 
@@ -295,6 +294,7 @@ public class AssistantApp extends Application {
 						Request newRequest;
 						newRequest = chain.request().newBuilder()
 								.addHeader(headerName, getHeaderValue())
+								.cacheControl(CacheControl.FORCE_NETWORK)
 								.build();
 						if (AppDebugConfig.IS_DEBUG) {
 							KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
@@ -302,21 +302,22 @@ public class AssistantApp extends Application {
 						Response response = chain.proceed(newRequest);
 
 						CacheControl cacheControl;
-						if (NetworkUtil.isConnected(getApplicationContext())) {
+//						if (NetworkUtil.isConnected(getApplicationContext())) {
 							cacheControl = new CacheControl.Builder()
 									.noCache()
 									.build();
-						} else {
-							cacheControl = new CacheControl.Builder()
-									.onlyIfCached()
-									.maxStale(365, TimeUnit.DAYS)
-									.build();
-						}
+//						} else {
+//							cacheControl = new CacheControl.Builder()
+//									.onlyIfCached()
+//									.maxStale(365, TimeUnit.DAYS)
+//									.build();
+//						}
 						String cacheControlStr = cacheControl.toString();
 						return response.newBuilder()
 								.removeHeader("Pragma")
 								.header("Cache-Control", cacheControlStr)
 								.build();
+//						return response;
 					}
 				};
 

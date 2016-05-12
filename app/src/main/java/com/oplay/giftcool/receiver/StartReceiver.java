@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AlarmClockManager;
+import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.util.SystemUtil;
 import com.socks.library.KLog;
 
@@ -49,12 +50,12 @@ public class StartReceiver extends BroadcastReceiver {
 //				if (AppDebugConfig.IS_DEBUG) {
 //					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stop, re-started again");
 //				}
-//				PushMessageManager.getInstance().reInitPush(context);
 //			}
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
 			}
-			AssistantApp.getInstance().initPushAndStatics();
+			PushMessageManager.getInstance().initPush(context);
+//			AssistantApp.getInstance().initPushAndStatics();
 		} else {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");
