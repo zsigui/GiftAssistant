@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -71,7 +72,7 @@ public class PermissionUtil {
 
 	private static void resetPhoneState(Context context) {
 		CommonUtil.initMobileInfoModel(context);
-		StatisticsManager.getInstance().reInit(context);
+		StatisticsManager.getInstance().init(context, AssistantApp.getInstance().getChannelId());
 	}
 
 	private static void resetExternalStorage(Context context) {

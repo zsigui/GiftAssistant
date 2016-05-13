@@ -50,6 +50,7 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         try {
+            StatisticsManager.getInstance().onPause(this);
             if (AppDebugConfig.IS_DEBUG) {
                 AppDebugConfig.logMethodName(this);
             }
@@ -58,13 +59,13 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-        StatisticsManager.getInstance().onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         try {
+            StatisticsManager.getInstance().onResume(this);
             if (AppDebugConfig.IS_DEBUG) {
                 AppDebugConfig.logMethodName(this);
             }
@@ -73,7 +74,6 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
                 KLog.e(e);
             }
         }
-        StatisticsManager.getInstance().onResume(this);
     }
 
     @Override

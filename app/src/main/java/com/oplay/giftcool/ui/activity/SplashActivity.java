@@ -49,7 +49,6 @@ public class SplashActivity extends BaseAppCompatActivity {
 				judgeToMain();
 			} else {
 				mHandler.postDelayed(mInitRunnable, 100);
-				AssistantApp.getInstance().appInit();
 			}
 		}
 	};
@@ -104,7 +103,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 							SPConfig.SP_APP_DEVICE_FILE,
 							SPConfig.KEY_TEST_REQUEST_URI,
 							mDialog.getContent());
-					initAction();
+					mApp.appInit();
 					mDialog.dismissAllowingStateLoss();
 				}
 			});

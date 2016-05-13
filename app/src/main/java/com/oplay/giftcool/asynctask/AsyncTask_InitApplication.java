@@ -14,9 +14,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.manager.AccountManager;
-import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
-import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
@@ -24,7 +22,6 @@ import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
@@ -87,7 +84,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 			SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
 			// 清空今日登录状态
 			SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
-			MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen = true;
 		}
 	}
 
@@ -109,28 +105,26 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 	 */
 	private void doInit() {
 		final AssistantApp assistantApp = AssistantApp.getInstance();
-		if (assistantApp.isGlobalInit()) {
-			return;
-		}
+//		if (assistantApp.isGlobalInit()) {
+//			return;
+//		}
+        if (AppDebugConfig.IS_DEBUG) {
+            KLog.d(AppDebugConfig.TAG_WARN, "app has global initialed");
+        }
 
 		// 存储打开APP时间
 		SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
 				SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
 
-		// 初始化统计工具
-		assistantApp.initPushAndStatics();
 		// 初始化照片墙控件
 		assistantApp.initGalleryFinal();
-		AlarmClockManager.getInstance().initAndSetWakeAlarm(assistantApp);
 
 //        testDownload();
 
 		// 初始化设备配置
 		assistantApp.initAppConfig();
 		// 初始化设备状态
-		if (!MobileInfoModel.getInstance().isInit()) {
-			CommonUtil.initMobileInfoModel(mContext);
-		}
+        CommonUtil.initMobileInfoModel(mContext);
 
 		// 初始化网络下载模块
 		assistantApp.initRetrofit();

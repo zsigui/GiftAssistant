@@ -120,8 +120,6 @@ public class PushMessageManager {
 	private final int END_HOUR = 8;
 	private final int END_MINUTE = 30;
 
-	private boolean mIsInit = true;
-
 	public static PushMessageManager getInstance() {
 		if (sInstance == null) {
 			sInstance = new PushMessageManager();
@@ -143,7 +141,7 @@ public class PushMessageManager {
 	 * 初始化推送设置
 	 */
 	public void initPush(Context context) {
-		if (mIsInit && !JPushInterface.isPushStopped(context)) {
+		if (!JPushInterface.isPushStopped(context)) {
 			return;
 		}
 		JPushInterface.init(context);
@@ -159,7 +157,6 @@ public class PushMessageManager {
 		JPushInterface.setDefaultPushNotificationBuilder(builder);
 		// 设置保留最近通知条数 5
 		JPushInterface.setLatestNotificationNumber(context, 5);
-		mIsInit = true;
 	}
 
 //	/**
@@ -409,6 +406,5 @@ public class PushMessageManager {
 	public void exit(Context context) {
 		JPushInterface.clearLocalNotifications(context);
 		JPushInterface.onKillProcess(context);
-		mIsInit = false;
 	}
 }

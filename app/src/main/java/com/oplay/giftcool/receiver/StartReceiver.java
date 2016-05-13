@@ -52,10 +52,9 @@ public class StartReceiver extends BroadcastReceiver {
 //				}
 //			}
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
+				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stopped, re-initial again!");
 			}
 			PushMessageManager.getInstance().initPush(context);
-//			AssistantApp.getInstance().initPushAndStatics();
 		} else {
 			if (AppDebugConfig.IS_DEBUG) {
 				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");

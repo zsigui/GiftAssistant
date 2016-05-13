@@ -138,14 +138,7 @@ public class AssistantApp extends Application {
 		sInstance = this;
 		// 启动闹钟通知广播进程来唤醒服务
 		AlarmClockManager.getInstance().startWakeAlarm(this);
-
-		KLog.init(AppDebugConfig.IS_DEBUG);
-		initImageLoader();
-		// 初始配置加载列表
-		initLoadingView();
-
-        initPushAndStatics();
-//        appInit();
+        appInit();
 	}
 
 	@Override
@@ -154,27 +147,21 @@ public class AssistantApp extends Application {
 		sInstance = this;
 	}
 
-	// 标识是否处于初始化中
-	private boolean isInitialing = false;
-
-	/**
-	 * 执行推送和统计的初始化
-	 */
-	public void initPushAndStatics() {
-		// 初始化统计工具
-		StatisticsManager.getInstance().init(this, getChannelId());
-		// 初始化推送SDK
-		PushMessageManager.getInstance().initPush(this);
-	}
-
 	/**
 	 * 执行APP的初始化工作
 	 */
 	public void appInit() {
-		if (isInitialing || mIsGlobalInit) {
+		if (mIsGlobalInit) {
 			return;
 		}
-		isInitialing = true;
+        KLog.init(AppDebugConfig.IS_DEBUG);
+        initImageLoader();
+        // 初始配置加载列表
+        initLoadingView();
+        // 初始化统计工具
+        StatisticsManager.getInstance().init(this, getChannelId());
+        // 初始化推送SDK
+        PushMessageManager.getInstance().initPush(this);
 		Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 	}
 
@@ -231,12 +218,11 @@ public class AssistantApp extends Application {
 	 */
 	public void appExit() {
 		try {
-//			AlarmClockManager.getInstance().stopWakeAlarm(this);
+			AlarmClockManager.getInstance().setObserverGame(false);
 			ThreadUtil.destroy();
 			setGlobalInit(false);
 			PushMessageManager.getInstance().exit(this);
 			SilentDownloadManager.getInstance().stopAllDownload();
-			AlarmClockManager.getInstance().setObserverGame(false);
 			SocketIOManager.getInstance().close();
 			if (ImageLoader.getInstance().isInited()) {
 				ImageLoader.getInstance().clearMemoryCache();
@@ -276,8 +262,8 @@ public class AssistantApp extends Application {
 	public String getHeaderValue() {
 		if (TextUtils.isEmpty(mHeaderValue)) {
 			mHeaderValue = String.format(ConstString.TEXT_HEADER,
-					AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-					AppConfig.SDK_VER_NAME, getChannelId(), AppConfig.OUWAN_SDK_VER);
+                    AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
+                    AppConfig.SDK_VER_NAME, getChannelId(), AppConfig.OUWAN_SDK_VER);
 		}
 		return mHeaderValue;
 	}
@@ -545,7 +531,6 @@ public class AssistantApp extends Application {
 
 	public void setGlobalInit(boolean isGlobalInit) {
 		mIsGlobalInit = isGlobalInit;
-		isInitialing = false;
 	}
 
 	public Gson getGson() {

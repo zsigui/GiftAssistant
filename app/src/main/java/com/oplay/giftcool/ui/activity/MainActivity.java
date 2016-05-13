@@ -95,13 +95,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	private void initHandler() {
 		if (mHandler == null) {
-			mHandler = new Handler(Looper.getMainLooper());
+			mHandler = new Handler(Looper.myLooper());
 		}
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		AssistantApp.getInstance().appInit();
+//		AssistantApp.getInstance().appInit();
 		if (savedInstanceState != null) {
 			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
 			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
@@ -587,7 +587,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 		if (AccountManager.getInstance().isLogin()
 				&& AssistantApp.getInstance().getBroadcastBanner() != null
-				&& AccountManager.getInstance().getUserInfo().isFirstLogin) {
+				&& AccountManager.getInstance().getUserInfo().isFirstLogin
+				&& mHandler != null) {
 			// 首次登录显示弹窗
 //			DialogManager.getInstance().showSignInDialog(
 //					AccountManager.getInstance().getUserInfo().isFirstLogin,
