@@ -21,7 +21,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
-import com.oplay.giftcool.util.ImageLoaderUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.socks.library.KLog;
 
@@ -94,21 +93,21 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
 	@Override
 	protected void setListener() {
-		mDataView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				switch (newState) {
-					case RecyclerView.SCROLL_STATE_SETTLING:
-						ImageLoaderUtil.stop();
-						break;
-					case RecyclerView.SCROLL_STATE_IDLE:
-					case RecyclerView.SCROLL_STATE_DRAGGING:
-						ImageLoaderUtil.resume();
-						break;
-
-				}
-			}
-		});
+//		mDataView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//			@Override
+//			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//				switch (newState) {
+//					case RecyclerView.SCROLL_STATE_SETTLING:
+//						ImageLoaderUtil.stop();
+//						break;
+//					case RecyclerView.SCROLL_STATE_IDLE:
+//					case RecyclerView.SCROLL_STATE_DRAGGING:
+//						ImageLoaderUtil.resume();
+//						break;
+//
+//				}
+//			}
+//		});
 	}
 
 	@Override

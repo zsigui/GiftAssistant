@@ -12,6 +12,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -83,18 +84,22 @@ public class JPushReceiver extends BroadcastReceiver {
 					AccountManager.getInstance().obtainUnreadPushMessageCount();
 
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-
-						Map<String, String> kv = new HashMap<>();
-						String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
-						kv.put("消息ID", msgId);
-						kv.put("消息标题", msg.title);
-						kv.put("消息内容", msg.content);
-						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
-						StatisticsManager.getInstance().trace(
-								AssistantApp.getInstance().getApplicationContext(),
-								StatisticsManager.ID.PUSH_MESSAGE_OPENED,
-								StatisticsManager.ID.STR_PUSH_MESSAGE_OPENED,
-								kv, 1);
+						ThreadUtil.runInThread(new Runnable() {
+							@Override
+							public void run() {
+								Map<String, String> kv = new HashMap<>();
+								String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
+								kv.put("消息ID", msgId);
+								kv.put("消息标题", msg.title);
+								kv.put("消息内容", msg.content);
+								kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
+								StatisticsManager.getInstance().trace(
+										AssistantApp.getInstance().getApplicationContext(),
+										StatisticsManager.ID.PUSH_MESSAGE_OPENED,
+										StatisticsManager.ID.STR_PUSH_MESSAGE_OPENED,
+										kv, 1);
+							}
+						});
 					}
 				} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 					// 用户接收到通知
@@ -110,17 +115,22 @@ public class JPushReceiver extends BroadcastReceiver {
 					final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
 							.class);
 					if (AppDebugConfig.IS_STATISTICS_SHOW) {
-						Map<String, String> kv = new HashMap<>();
-						String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
-						kv.put("消息ID", msgId);
-						kv.put("消息标题", msg.title);
-						kv.put("消息内容", msg.content);
-						kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
-						StatisticsManager.getInstance().trace(
-								AssistantApp.getInstance().getApplicationContext(),
-								StatisticsManager.ID.PUSH_MESSAGE_RECEIVED,
-								StatisticsManager.ID.STR_PUSH_MESSAGE_RECEIVED,
-								kv, 1);
+						ThreadUtil.runInThread(new Runnable() {
+							@Override
+							public void run() {
+								Map<String, String> kv = new HashMap<>();
+								String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
+								kv.put("消息ID", msgId);
+								kv.put("消息标题", msg.title);
+								kv.put("消息内容", msg.content);
+								kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
+								StatisticsManager.getInstance().trace(
+										AssistantApp.getInstance().getApplicationContext(),
+										StatisticsManager.ID.PUSH_MESSAGE_RECEIVED,
+										StatisticsManager.ID.STR_PUSH_MESSAGE_RECEIVED,
+										kv, 1);
+							}
+						});
 					}
 				}
 			} catch (Throwable t) {

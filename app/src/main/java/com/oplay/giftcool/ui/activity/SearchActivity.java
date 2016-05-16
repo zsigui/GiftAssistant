@@ -171,9 +171,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	 * 先判断隐藏所有可见的Fragment
 	 */
 	private void hideAllFragment(FragmentTransaction ft, int id) {
-		KLog.d(AppDebugConfig.TAG_WARN, "hide id = " + id);
 		if (mResultFragment != null && id != PAGE_CONTENT) {
-			KLog.d(AppDebugConfig.TAG_WARN, "hide result");
 			ft.hide(mResultFragment);
 		}
 		if (mLoadingFragment != null && id != PAGE_LOADING) {

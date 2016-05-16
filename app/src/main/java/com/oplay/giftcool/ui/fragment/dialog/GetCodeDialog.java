@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Html;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -58,7 +59,9 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 	@Override
 	protected void processLogic() {
 		setGiftCode(mPayCode);
-		if (mAppInfo != null && AppStatus.OPENABLE.equals(mAppInfo.appStatus)) {
+		if (mAppInfo != null
+				&& !TextUtils.isEmpty(mAppInfo.packageName)
+				&& AppStatus.OPENABLE.equals(mAppInfo.appStatus)) {
 			setPositiveBtnText("打开游戏");
 		} else {
 			if (AssistantApp.getInstance().isAllowDownload()) {
@@ -76,8 +79,11 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 
 	@Override
 	public void onConfirm() {
-		if (mAppInfo != null  && AssistantApp.getInstance().isAllowDownload()) {
-			mAppInfo.handleOnClick(getChildFragmentManager());
+		if (mAppInfo != null) {
+			if (AppStatus.OPENABLE.equals(mAppInfo.appStatus)
+					|| AssistantApp.getInstance().isAllowDownload()) {
+				mAppInfo.handleOnClick(getChildFragmentManager());
+			}
 		}
 		dismissAllowingStateLoss();
 	}

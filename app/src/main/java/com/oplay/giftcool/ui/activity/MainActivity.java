@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -102,12 +103,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 //		AssistantApp.getInstance().appInit();
-		if (savedInstanceState != null) {
-			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
-			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
-		}
+		findFragmentByTag(savedInstanceState);
 		super.onCreate(savedInstanceState);
 		PermissionUtil.judgePermission(this);
 		sGlobalHolder = MainActivity.this;
@@ -115,6 +111,20 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		handleIntent(getIntent());
 		updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
 		SocketIOManager.getInstance().connectOrReConnect(false);
+	}
+
+	private void findFragmentByTag(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			Log.d("warn", "giftfragment = " + mGiftFragment + ", is add = " + (mGiftFragment != null ? mGiftFragment.isAdded(): "false"));
+			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+			Log.d("warn", "gamefragment = " + mGameFragment + ", is add = " + (mGameFragment != null ? mGameFragment.isAdded(): "false"));
+			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
+			Log.d("warn", "postfragment = " + mPostFragment + ", is add = " + (mPostFragment != null ? mPostFragment.isAdded(): "false"));
+			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
+			Log.d("warn", "drawerfragment = " + mDrawerFragment + ", is add = " + (mDrawerFragment != null ?
+					mDrawerFragment.isAdded() : "false"));
+		}
 	}
 
 	private void createDrawer() {
@@ -298,6 +308,25 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	 * 隐藏所有的Fragment
 	 */
 	private void hideAllFragment(FragmentTransaction ft) {
+		if (mGameFragment == null) {
+			// Activity被回收重建后查找
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+			if (f != null) {
+				mGameFragment = (GameFragment) f;
+			}
+		}
+		if (mGiftFragment == null) {
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			if (f != null) {
+				mGiftFragment = (GiftFragment) f;
+			}
+		}
+		if (mPostFragment == null) {
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_POST);
+			if (f != null) {
+				mPostFragment = (PostFragment) f;
+			}
+		}
 		if (mGiftFragment != null) {
 			ft.hide(mGiftFragment);
 		}
@@ -318,6 +347,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mGameFragment == null) {
 			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
+			Log.d("warn", "mGameFragment not show = " + mGameFragment);
 			if (f != null) {
 				mGameFragment = (GameFragment) f;
 				ft.show(mGameFragment);
@@ -327,6 +357,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mGameFragment, TAG_GAME);
 			}
 		} else {
+			Log.d("warn", "mGameFragment show");
 			ft.show(mGameFragment);
 		}
 		mGameFragment.setRetainInstance(true);
@@ -342,6 +373,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		hideAllFragment(ft);
 		if (mGiftFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			Log.d("warn", "mGiftFragment not show = " + mGiftFragment);
 			if (f != null) {
 				mGiftFragment = (GiftFragment) f;
 				ft.show(mGiftFragment);
@@ -350,6 +382,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mGiftFragment, TAG_GIFT);
 			}
 		} else {
+			Log.d("warn", "mGiftFragment show");
 			ft.show(mGiftFragment);
 		}
 		mGiftFragment.setReenterTransition(true);
@@ -366,6 +399,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mPostFragment == null) {
 			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_POST);
+			Log.d("warn", "mPostFragment not show = " + mPostFragment);
 			if (f != null) {
 				mPostFragment = (PostFragment) f;
 				ft.show(mPostFragment);
@@ -375,6 +409,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mPostFragment, TAG_POST);
 			}
 		} else {
+			Log.d("warn", "mPostFragment show");
 			ft.show(mPostFragment);
 		}
 		mPostFragment.setRetainInstance(true);
