@@ -1,6 +1,28 @@
 
 #版本变更日志:
 
+## V1.2.5 -> V1.2.6
+
+#### 目标:
+
+    1) 修复未捕捉的导致程序崩溃BUG
+
+    2) 更新友盟统计SDK版本
+
+#### 改动内容:
+
+    1) 修复 lint 检查后发现 third/youmilib 文件存在格式错误问题(换行符号不合适'\r\n'), 涉及改动整个第三方库
+    全部格式化页面
+
+    2) 修复 lint 检查后发现 third/youmilib 和 third/ouwansdk 存在 getSystemService 取值不符合规范问题, 以及未在
+    调用相关 location 定位服务前调用 checkPermission 方法进行权限验证的问题.
+
+    3) 修复数个空指针错误, 涉及 AssistantApp.java 的 getRetrofit(),
+    cn.finalteam.galleryfinal.adapter.ViewHolderRecyclingPagerAdapter 的 getCount()
+
+    4) 调整友盟统计升级为V6.0.0后的初始化设置逻辑变更, 涉及 manage/StatiscsManager.java
+
+
 ## V1.2.4 -> V1.2.5
 
 #### 目标:
