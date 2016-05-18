@@ -49,7 +49,6 @@ public class YoumiAdHttpRequesterCache {
 	 * 获取上一个请求
 	 *
 	 * @param identify
-	 *
 	 * @return
 	 */
 	public static AbsHttpRequester getLastRequest(String identify) {

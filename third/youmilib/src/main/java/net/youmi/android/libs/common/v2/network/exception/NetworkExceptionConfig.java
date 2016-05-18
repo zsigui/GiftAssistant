@@ -33,7 +33,7 @@ public class NetworkExceptionConfig {
 	 * 异常上报标签，例如i_user_pts
 	 */
 	private String tag;
-	
+
 	/*
 	 * 控制是否进行错误上报，比如像广点通那种特殊的链接就不进行上报，默认进行上报。
 	 */

@@ -33,7 +33,6 @@ public class Util_Package {
 	 * 获取当前在顶端运行的应用包名(适用于Andriod 5.0（不包括Android 5.0）之前的机器)
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getTopgPkgNameBelowAndroidL(Context context) {
@@ -57,7 +56,6 @@ public class Util_Package {
 	 * 在android m 上已经不能获取到除自身应用外的其他进程信息 除非添加了 REAL_GET_TASK 权限（系统权限）
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String[] getTopPkgNameAboveAndroidLThroughGetRunningAppProcesses(Context context) {
@@ -77,7 +75,8 @@ public class Util_Package {
 			for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
 				if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
 					if (Debug_SDK.isUtilLog) {
-						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端进程id:%d 进程名：%s", processInfo.pid,
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端进程id:%d 进程名：%s",
+								processInfo.pid,
 								processInfo.processName);
 						for (String pkgName : processInfo.pkgList) {
 							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "####当前顶端进程可能包名：%s", pkgName);
@@ -116,7 +115,6 @@ public class Util_Package {
 	 *
 	 * @param time_ms 从${time_ms}内找出最近显示在顶端的包名<p>
 	 *                这个时间不建议设置太短，假设设置为5秒的话，那么如果你在玩一个应用超过5s，那么之后的时间（如第6秒  第30秒 获取到的顶端包名会为空）
-	 *
 	 * @return
 	 */
 	public static String getTopPkgNameAboveAndroidLThroughUsageStatsManagerByReflect(Context context, long time_ms) {
@@ -131,8 +129,9 @@ public class Util_Package {
 
 			long time = System.currentTimeMillis();
 			Class UsageStatsManagerClass = Class.forName("android.app.usage.UsageStatsManager");
-			Object UsageStatsManagerObject = context.getSystemService("usagestats");
-			Method queryUsageStatsMethod = UsageStatsManagerClass.getMethod("queryUsageStats", int.class, long.class, long
+			Object UsageStatsManagerObject = context.getSystemService(Context.USAGE_STATS_SERVICE);
+			Method queryUsageStatsMethod = UsageStatsManagerClass.getMethod("queryUsageStats", int.class, long.class,
+					long
 					.class);
 			List list = (List) queryUsageStatsMethod.invoke(UsageStatsManagerObject, 4, time - time_ms, time);
 			if (Debug_SDK.isUtilLog) {
@@ -166,7 +165,8 @@ public class Util_Package {
 					Object temp = getPackageNameMethod.invoke(runningTask.get(runningTask.lastKey()));
 					topPackageName = temp == null ? null : temp.toString();
 					if (Debug_SDK.isUtilLog) {
-						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##(反射方法获取)当前顶端应用包名:%s", topPackageName);
+						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##(反射方法获取)当前顶端应用包名:%s",
+								topPackageName);
 					}
 				}
 			}
@@ -192,7 +192,8 @@ public class Util_Package {
 	//				// 根据最近5秒内的应用统计信息进行排序获取当前顶端的包名
 	//				long time = System.currentTimeMillis();
 	//				UsageStatsManager usage = (UsageStatsManager) context.getSystemService("usagestats");
-	//				List<UsageStats> usageStatsList = usage.queryUsageStats(UsageStatsManager.INTERVAL_BEST, time - time_ms,
+	//				List<UsageStats> usageStatsList = usage.queryUsageStats(UsageStatsManager.INTERVAL_BEST, time -
+	// time_ms,
 	// time);
 	//				if (usageStatsList != null && usageStatsList.size() > 0) {
 	//					SortedMap<Long, UsageStats> runningTask = new TreeMap<Long, UsageStats>();
@@ -204,7 +205,8 @@ public class Util_Package {
 	//					}
 	//					topPackageName = runningTask.get(runningTask.lastKey()).getPackageName();
 	//					if (Debug_SDK.isUtilLog) {
-	//						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s", topPackageName);
+	//						Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "##当前顶端应用包名:%s",
+	// topPackageName);
 	//					}
 	//				}
 	//
@@ -235,7 +237,6 @@ public class Util_Package {
 	 * 原理：通过Linux 内核中的OOM-Killer机制进行识别当前在顶端运行的第三方包名的应用，这个方法是不能识别在顶端云心的系统包名的）
 	 *
 	 * @param context
-	 *
 	 * @return 系统app : null <br> 第三方app : 包名
 	 */
 	public static String getTopPkgNameExcludeSystemAppThroughOOMKiller(Context context) {
@@ -422,7 +423,6 @@ public class Util_Package {
 	 * 获取系统应用的uid列表，用来做过滤
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static List<Integer> getSystemPackageName(Context context) {
@@ -430,7 +430,8 @@ public class Util_Package {
 			try {
 				PackageManager pm = context.getPackageManager();
 				// 查询所有已经安装的应用程序
-				List<ApplicationInfo> listAppcations = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+				List<ApplicationInfo> listAppcations = pm.getInstalledApplications(PackageManager
+						.GET_UNINSTALLED_PACKAGES);
 				Collections.sort(listAppcations, new ApplicationInfo.DisplayNameComparator(pm));// 排序
 				mSystemPackageUidList = new ArrayList<Integer>(); // 保存过滤查到的AppInfo
 				for (ApplicationInfo app : listAppcations) {

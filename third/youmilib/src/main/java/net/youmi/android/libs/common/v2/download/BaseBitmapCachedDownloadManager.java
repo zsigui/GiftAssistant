@@ -34,7 +34,8 @@ import java.util.Map;
  * @author zhitao
  * @since 2015-09-21 14:58
  */
-public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadManager implements IMaxPriorityDownloadListener {
+public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadManager implements
+		IMaxPriorityDownloadListener {
 
 	/**
 	 * 将bitmap保存在内存中
@@ -80,14 +81,16 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
 	 * @return
 	 */
 	@Override
-	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask
+			fileDownloadTask,
+	                                   AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker
+			                                       iFileAvailableChecker)
 			throws NullPointerException, IOException {
-		return new DefaultSDKDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
+		return new DefaultSDKDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier,
+				iFileAvailableChecker);
 	}
 
 	public void registerImageDownloadListener(ImageDownloadListener imageDownloadListener) {
@@ -112,7 +115,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 3. 从网络中异步获取该图片
 	 *
 	 * @param rawUrl 传入之前需要自己确保url是否为空，如果为空，那么是不会触发任何监听的
-	 *
 	 * @return 需要注册监听才知道结果
 	 */
 	public void loadBitmap(String rawUrl) {
@@ -182,7 +184,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 尝试从本地文件中解析出图片，解析可能会耗时，需要注意
 	 *
 	 * @param url
-	 *
 	 * @return 如果存在该文件，就会返回decode出来的bitmap对象，并且在返回之前，会将这个图片写入内存中，方便下一次更快获取
 	 */
 	public Bitmap getBitmapFromFile(String url) {
@@ -213,7 +214,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 如果之前从网络预下载过这个图片，那么就会缓存在内存中
 	 *
 	 * @param url 图片地址
-	 *
 	 * @return
 	 */
 	public Bitmap getBitmapFromMemoryCache(String url) {
@@ -258,7 +258,8 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 				// 先遍历所有bitmap 进行recycle
 				Iterator<Map.Entry<String, SoftReference<Bitmap>>> temp = mCacheTableBitmaps.entrySet().iterator();
 				while (temp.hasNext()) {
-					Map.Entry<String, SoftReference<Bitmap>> entry = (Map.Entry<String, SoftReference<Bitmap>>) temp.next();
+					Map.Entry<String, SoftReference<Bitmap>> entry = (Map.Entry<String, SoftReference<Bitmap>>) temp
+							.next();
 					SoftReference<Bitmap> srb = entry.getValue();
 					if (srb != null) {
 						Bitmap bm = srb.get();
@@ -286,7 +287,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 *
 	 * @param url
 	 * @param bm
-	 *
 	 * @return
 	 */
 	protected boolean putBitmap2MemoryCache(String url, Bitmap bm) {
@@ -327,7 +327,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 如果是的话，这里要通知一下
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
@@ -354,13 +353,13 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * @param percent          当前完成百分比
 	 * @param speedBytes       当前下载速度:每intervalTime_ms毫秒下载的长度(单位:bytes)
 	 * @param intervalTime_ms  当前下载速度时间单位:每intervalTime_ms毫秒回回调一次本方法(单位:bytes)
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
-	public boolean onDownloadProgressUpdate(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int
-			percent,
-			long speedBytes, long intervalTime_ms) {
+	public boolean onDownloadProgressUpdate(FileDownloadTask fileDownloadTask, long totalLength, long completeLength,
+	                                        int
+			                                        percent,
+	                                        long speedBytes, long intervalTime_ms) {
 		return true;
 	}
 
@@ -368,7 +367,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 下载成功
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
@@ -393,7 +391,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * 下载成功，文件本来就存在于本地
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
@@ -409,7 +406,6 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 *
 	 * @param fileDownloadTask    下载任务模型
 	 * @param finalDownloadStatus 下载任务失败数据模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
@@ -427,11 +423,11 @@ public abstract class BaseBitmapCachedDownloadManager extends AbsCachedDownloadM
 	 * @param totalLength      本次下载的总长度
 	 * @param completeLength   已下载的长度
 	 * @param percent          下载停止时，已经完成的百分比
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	@Override
-	public boolean onDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int percent) {
+	public boolean onDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int
+			percent) {
 
 		if (mImageDownloadNotifier != null) {
 			mImageDownloadNotifier.onNotifyImageDownloadStop(fileDownloadTask.getRawDownloadUrl());

@@ -82,7 +82,6 @@ public class HttpRequesterFactory {
 	 *
 	 * @param context
 	 * @param requestUrl 请求url，如果是带有中文字符的url 需要先转码，在传入
-	 *
 	 * @return
 	 */
 	public static HttpURLConnection newHttpURLConnection(Context context, String requestUrl) throws IOException {
@@ -95,12 +94,12 @@ public class HttpRequesterFactory {
 	 * @param context
 	 * @param requestUrl 请求url，如果是带有中文字符的url 需要先转码，在传入
 	 * @param userAgent  自定义的userAgent，可以不传，不传的话，会用sdk默认构造的userAgent
-	 *
 	 * @return
 	 */
 	public static HttpURLConnection newHttpURLConnection(Context context, String requestUrl, String userAgent)
 			throws IOException {
-		return newHttpURLConnection(context, requestUrl, userAgent, TCP_CONNECTION_TIME_OUT, SOCKET_CONNECTION_TIME_OUT);
+		return newHttpURLConnection(context, requestUrl, userAgent, TCP_CONNECTION_TIME_OUT,
+				SOCKET_CONNECTION_TIME_OUT);
 	}
 
 	/**
@@ -111,13 +110,12 @@ public class HttpRequesterFactory {
 	 * @param userAgent                  自定义的userAgent，可以不传，不传的话，会用sdk默认构造的userAgent
 	 * @param tcpConnectionTimeOut_ms    设置tcp连接超时，即通过网络与服务器建立连接的超时时间(毫秒)
 	 * @param socketConnectionTimeout_ms 设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
-	 *
 	 * @return
-	 *
 	 * @see http://blog.csdn.net/ccp1994/article/details/23190773
 	 */
 	public static HttpURLConnection newHttpURLConnection(Context context, String requestUrl, String userAgent,
-			int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms) throws IOException {
+	                                                     int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms)
+			throws IOException {
 		if (Basic_StringUtil.isNullOrEmpty(requestUrl)) {
 			return null;
 		}
@@ -130,7 +128,7 @@ public class HttpRequesterFactory {
 		Proxy proxy = null;
 		SocketAddress sa = null;
 		if (apn.equals(NetworkStatus.APN.APN_CMWAP) || apn.equals(NetworkStatus.APN.APN_3GWAP) ||
-		    apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
+				apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
 			sa = new InetSocketAddress("10.0.0.172", 80);
 		}
 		if (apn.equals(NetworkStatus.APN.APN_CTWAP)) {
@@ -197,7 +195,6 @@ public class HttpRequesterFactory {
 	 * 设置socket超时，即即从服务器获取响应数据需要等待的时间:5秒 (v2版本：30秒 -> 10秒)
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static DefaultHttpClient newHttpClient(Context context) {
@@ -213,7 +210,6 @@ public class HttpRequesterFactory {
 	 *
 	 * @param context
 	 * @param userAgent
-	 *
 	 * @return
 	 */
 	public static DefaultHttpClient newHttpClient(Context context, String userAgent) {
@@ -229,11 +225,10 @@ public class HttpRequesterFactory {
 	 * @param getFromConnManagerTimeOut_ms 从连接池中取连接的超时时间(毫秒)
 	 * @param tcpConnectionTimeOut_ms      设置tcp连接超时，即通过网络与服务器建立连接的超时时间(毫秒)
 	 * @param socketConnectionTimeout_ms   设置socket超时，即即从服务器获取响应数据需要等待的时间(毫秒)
-	 *
 	 * @return
 	 */
 	public static DefaultHttpClient newHttpClient(Context context, String userAgent, long getFromConnManagerTimeOut_ms,
-			int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms) {
+	                                              int tcpConnectionTimeOut_ms, int socketConnectionTimeout_ms) {
 
 		BasicHttpParams params = new BasicHttpParams();
 
@@ -269,7 +264,7 @@ public class HttpRequesterFactory {
 			Debug_SDK.td(Debug_SDK.mNetTag, HttpRequesterFactory.class, "构造HttpClient中：当前APN：%s", apn);
 		}
 		if (apn.equals(NetworkStatus.APN.APN_CMWAP) || apn.equals(NetworkStatus.APN.APN_3GWAP) ||
-		    apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
+				apn.equals(NetworkStatus.APN.APN_UNIWAP)) {
 
 			//			当我们使用的是中国移动的手机网络时，下面方法可以直接获取得到10.0.0.172，80端口
 			//			String hostName = Proxy.getDefaultHost();
@@ -314,8 +309,9 @@ public class HttpRequesterFactory {
 
 				if (//statusCode == HttpStatus.SC_MULTIPLE_CHOICES ||
 						statusCode == HttpStatus.SC_MOVED_PERMANENTLY ||
-						statusCode == HttpStatus.SC_MOVED_TEMPORARILY ||
-						statusCode == HttpStatus.SC_SEE_OTHER || statusCode == HttpStatus.SC_TEMPORARY_REDIRECT) {
+								statusCode == HttpStatus.SC_MOVED_TEMPORARILY ||
+								statusCode == HttpStatus.SC_SEE_OTHER || statusCode == HttpStatus
+								.SC_TEMPORARY_REDIRECT) {
 					// 此处重定向处理
 					return true;
 				}

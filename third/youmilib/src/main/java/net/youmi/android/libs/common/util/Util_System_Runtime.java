@@ -54,11 +54,9 @@ public class Util_System_Runtime {
 
 	/**
 	 * 延迟指定时间之后执行任务
-	 * 
-	 * @param runnable
-	 *            要执行的任务
-	 * @param delayTime_ms
-	 *            要延迟的毫秒数
+	 *
+	 * @param runnable     要执行的任务
+	 * @param delayTime_ms 要延迟的毫秒数
 	 * @return
 	 */
 	public boolean runInUiThreadDelayed_ms(Runnable runnable, long delayTime_ms) {

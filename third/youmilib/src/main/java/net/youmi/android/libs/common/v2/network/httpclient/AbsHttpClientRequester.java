@@ -50,10 +50,10 @@ public abstract class AbsHttpClientRequester extends AbsHttpRequester {
 	/**
 	 * @param context
 	 * @param baseHttpRequesterModel 本次请求的相关参数的自定义数据模型
-	 *
 	 * @throws NullPointerException
 	 */
-	public AbsHttpClientRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel) throws NullPointerException {
+	public AbsHttpClientRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel) throws
+			NullPointerException {
 		super(context, baseHttpRequesterModel);
 	}
 
@@ -137,20 +137,22 @@ public abstract class AbsHttpClientRequester extends AbsHttpRequester {
 			else if (BaseHttpRequesterModel.REQUEST_TYPE_POST.equals(mBaseHttpRequesterModel.getRequestType())) {
 
 				// 优先以NameValuePair的post请求
-				if (mBaseHttpRequesterModel.getPostDataMap() != null && !mBaseHttpRequesterModel.getPostDataMap().isEmpty()) {
+				if (mBaseHttpRequesterModel.getPostDataMap() != null && !mBaseHttpRequesterModel.getPostDataMap()
+						.isEmpty()) {
 					HttpPost post = new HttpPost(mBaseHttpRequesterModel.getRequestUrl());
 					List<NameValuePair> postData = new ArrayList<NameValuePair>();
 					for (Map.Entry<String, String> entry : mBaseHttpRequesterModel.getPostDataMap().entrySet()) {
 						postData.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 					}
-					HttpEntity httpEntity = new UrlEncodedFormEntity(postData, mBaseHttpRequesterModel.getEncodingCharset());
+					HttpEntity httpEntity = new UrlEncodedFormEntity(postData, mBaseHttpRequesterModel
+							.getEncodingCharset());
 					post.setEntity(httpEntity);
 					mHttpRequestBase = post;
 				}
 
 				// 然后才是二进制的post data
 				else if (mBaseHttpRequesterModel.getPostDataByteArray() != null &&
-				         mBaseHttpRequesterModel.getPostDataByteArray().length > 0) {
+						mBaseHttpRequesterModel.getPostDataByteArray().length > 0) {
 					HttpPost post = new HttpPost(mBaseHttpRequesterModel.getRequestUrl());
 					post.setEntity(new ByteArrayEntity(mBaseHttpRequesterModel.getPostDataByteArray()));
 					mHttpRequestBase = post;
@@ -228,17 +230,20 @@ public abstract class AbsHttpClientRequester extends AbsHttpRequester {
 			}
 
 			// getContent方法只能调用一次,因为流获取完之后不会在有
-			if (httpResponse.getStatusLine().getStatusCode() >= 200 && httpResponse.getStatusLine().getStatusCode() < 300) {
+			if (httpResponse.getStatusLine().getStatusCode() >= 200 && httpResponse.getStatusLine().getStatusCode() <
+					300) {
 
 				inputStream = entity.getContent();
 
 				try {
 					// 获取contentEncoding来获取inputStream
 					Header header = entity.getContentEncoding();
-					if (header != null && header.getValue().toLowerCase(Locale.US).contains("gzip") && inputStream != null) {
+					if (header != null && header.getValue().toLowerCase(Locale.US).contains("gzip") && inputStream !=
+							null) {
 						inputStream = new GZIPInputStream(inputStream);
 						if (Debug_SDK.isNetLog) {
-							Debug_SDK.td(Debug_SDK.mNetTag, this, "%s : %s，初始化inputStrrem为GZIPInputStream", header.getName(),
+							Debug_SDK.td(Debug_SDK.mNetTag, this, "%s : %s，初始化inputStrrem为GZIPInputStream", header
+											.getName(),
 									header.getValue());
 						}
 					}

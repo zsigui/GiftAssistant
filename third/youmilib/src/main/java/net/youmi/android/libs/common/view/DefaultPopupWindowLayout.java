@@ -15,7 +15,7 @@ import net.youmi.android.libs.common.util.Util_System_Service;
 /**
  * 一个System Alert类型的View, 可漂浮于任何窗口上方<br/>
  * need permission [android.permission.SYSTEM_ALERT_WINDOW] 用WindowManager需要管理addView和removeView
- * 
+ *
  * @author CsHeng
  * @author Jen
  * @date 2013-2-16
@@ -80,7 +80,7 @@ public class DefaultPopupWindowLayout implements AnimationListener {
 
 	/**
 	 * Play Animation, should call after addView()
-	 * 
+	 *
 	 * @param anim
 	 */
 	public void playAnimation(Animation anim) {

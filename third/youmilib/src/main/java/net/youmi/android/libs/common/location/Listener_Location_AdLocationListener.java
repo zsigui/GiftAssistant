@@ -1,6 +1,8 @@
 package net.youmi.android.libs.common.location;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -41,6 +43,10 @@ public class Listener_Location_AdLocationListener implements LocationListener {
 
 	private void removeUpdates() {
 		try {
+			if (mContext.checkCallingOrSelfPermission( Manifest.permission.ACCESS_FINE_LOCATION)
+					== PackageManager.PERMISSION_DENIED) {
+				return;
+			}
 			LocationManager manager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 			if (manager != null) {
 				manager.removeUpdates(this);

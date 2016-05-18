@@ -10,15 +10,14 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 组件检查类
- * 
+ *
  * @author zhitaocai edit on 2014-7-15
- * 
  */
 public class Util_System_Component {
 
 	/**
 	 * 判断Activity是否存在
-	 * 
+	 *
 	 * @param context
 	 * @param activityClass
 	 * @return
@@ -32,7 +31,7 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Activity是否存在。
-	 * 
+	 *
 	 * @param context
 	 * @param activityClassName
 	 * @return
@@ -51,7 +50,7 @@ public class Util_System_Component {
 
 	/**
 	 * 获取ActivityInfo。
-	 * 
+	 *
 	 * @param context
 	 * @param activityClassName
 	 * @return
@@ -93,7 +92,7 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Service是否存在
-	 * 
+	 *
 	 * @param context
 	 * @param serviceClass
 	 * @return
@@ -107,7 +106,7 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Service是否存在。
-	 * 
+	 *
 	 * @param context
 	 * @param serviceClassName
 	 * @return
@@ -126,7 +125,7 @@ public class Util_System_Component {
 
 	/**
 	 * 获取ServiceInfo。
-	 * 
+	 *
 	 * @param context
 	 * @param serviceClassName
 	 * @return
@@ -168,7 +167,7 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Receiver是否存在
-	 * 
+	 *
 	 * @param context
 	 * @param receiverClass
 	 * @return
@@ -182,7 +181,7 @@ public class Util_System_Component {
 
 	/**
 	 * 判断Receiver是否存在。
-	 * 
+	 *
 	 * @param context
 	 * @param receiverClassName
 	 * @return
@@ -194,7 +193,7 @@ public class Util_System_Component {
 
 	/**
 	 * 通过Recevier的类名获取Receiver
-	 * 
+	 *
 	 * @param context
 	 * @param receiverClassName
 	 * @return

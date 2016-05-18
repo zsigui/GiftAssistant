@@ -20,7 +20,8 @@ class LightSensorDBManager extends BaseSensorDBManager {
 
 	synchronized static LightSensorDBManager getInstance(Context context) throws NullPointerException {
 		if (instance == null) {
-			BaseSensorDBHelper dbHelper = new BaseSensorDBHelper(context, CommonConstant.get_DatabaseName_LightSensor());
+			BaseSensorDBHelper dbHelper = new BaseSensorDBHelper(context, CommonConstant.get_DatabaseName_LightSensor
+					());
 			instance = new LightSensorDBManager(context.getApplicationContext(), dbHelper);
 		}
 		return instance;

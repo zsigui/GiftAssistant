@@ -209,7 +209,8 @@ public class BaseHttpClientFileDownloader implements IDownloader {
 				if (mFileDownloadTask.getTempFile().renameTo(mFileDownloadTask.getStoreFile())) {
 					return new FinalDownloadStatus(FinalDownloadStatus.Code.SUCCESS);
 				} else {
-					return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_RENAME_TEMPFILE_TO_STOREFILE);
+					return new FinalDownloadStatus(FinalDownloadStatus.Code
+							.FAILED_EXCEPTION_RENAME_TEMPFILE_TO_STOREFILE);
 				}
 			}
 
@@ -243,7 +244,8 @@ public class BaseHttpClientFileDownloader implements IDownloader {
 			String hostIpArrayString = NetworkUtil.request4HostIp(mFileDownloadTask.getRawDownloadUrl());
 			if (!Basic_StringUtil.isNullOrEmpty(hostIpArrayString)) {
 				if (Debug_SDK.isOfferLog) {
-					Debug_SDK.te(Debug_SDK.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask.getRawDownloadUrl(),
+					Debug_SDK.te(Debug_SDK.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask
+									.getRawDownloadUrl(),
 							hostIpArrayString);
 				}
 

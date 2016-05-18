@@ -7,11 +7,11 @@ package net.youmi.android.libs.common.v2.download.base;
  * @since 2015-09-09 14:26
  */
 public class FinalDownloadStatus {
-	
+
 	private Throwable mThrowable;
-	
+
 	private int mDownloadStatusCode;
-	
+
 	/**
 	 * @param downloadStatusCode 下载最终状态码{@link net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus.Code}
 	 * @param throwable          下载失败时的异常信息，可以用于异常上报
@@ -20,7 +20,7 @@ public class FinalDownloadStatus {
 		mThrowable = throwable;
 		mDownloadStatusCode = downloadStatusCode;
 	}
-	
+
 	/**
 	 * @param downloadStatusCode 下载最终状态码{@link net.youmi.android.libs.common.v2.download.base.FinalDownloadStatus.Code}
 	 */
@@ -45,7 +45,7 @@ public class FinalDownloadStatus {
 	public Throwable getThrowable() {
 		return mThrowable;
 	}
-	
+
 	/**
 	 * 获取下载最终状态码
 	 *
@@ -54,7 +54,7 @@ public class FinalDownloadStatus {
 	public int getDownloadStatusCode() {
 		return mDownloadStatusCode;
 	}
-	
+
 	/**
 	 * 下载最终状态码
 	 * <p/>
@@ -65,56 +65,56 @@ public class FinalDownloadStatus {
 	 * 不可重试失败区间[150, 199]
 	 */
 	public static class Code {
-		
+
 		/**
 		 * 下载成功
 		 */
 		public final static int SUCCESS = 0;
-		
+
 		/**
 		 * 下载停止：用户终止下载流程，不可重试下载
 		 */
 		public final static int STOP = 1;
-		
+
 		// --------------- 可以重试的失败类型区间[100, 149] ---------------
-		
+
 		/**
 		 * 下载失败：其他已知不影响重要流程的异常，比如网络问题等，可以重试下载
 		 */
 		public final static int FAILED_EXCEPTION_UNKNOWN = 100;
-		
+
 		//		/**
 		//		 * 下载失败：网络异常
 		//		 */
 		//		public final static int FAILED_EXCEPTION_NETWORK = 101;
-		
+
 		/**
 		 * 下载失败：下载过程中，下载文件可能被改动了，可以重试下载，不过需要在重新下载的时候删除文件
 		 */
 		public final static int FAILED_EXCEPTION_DOWNLOADFLIE_CHANGE = 102;
-		
+
 		/**
 		 * 下载失败：下载的缓存文件重命名为最终文件失败，可以重试下载
 		 */
 		public final static int FAILED_EXCEPTION_RENAME_TEMPFILE_TO_STOREFILE = 103;
-		
+
 		// --------------- 不可以重试的失败类型区间[150, 199] ---------------
-		
+
 		/**
 		 * 下载失败，未知异常，不可重试下载
 		 */
 		public final static int FAILED_ERROR_UNKOWN = 150;
-		
+
 		/**
 		 * 下载失败：错误参数，不可重试下载
 		 */
 		public final static int FAILED_ERROR_PARAMS = 151;
-		
+
 		/**
 		 * 下载失败：遇到http错误码，不可重试下载
 		 */
 		public final static int FAILED_ERROR_HTTP_CODE = 152;
-		
+
 		/**
 		 * 下载失败：返回的http参数有误，如ContentLength 无法获取到，不可以重试下载
 		 */
@@ -124,7 +124,7 @@ public class FinalDownloadStatus {
 		//		 * 下载失败：下载的文件目录出现问题，不可重试下载
 		//		 */
 		//		public final static int FAILED_ERROR_DIR = 154;
-		
+
 		/**
 		 * 下载失败：重试几次之后还是下载失败就会回调这个，不可继续重试下载
 		 */

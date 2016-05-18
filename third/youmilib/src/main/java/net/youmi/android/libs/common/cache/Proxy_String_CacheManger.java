@@ -5,7 +5,7 @@ import net.youmi.android.libs.common.global.Global_Charsets;
 
 /**
  * 保存字符串的代理缓存类
- * 
+ *
  * @author zhitaocai edit on 2014-6-27
  */
 public class Proxy_String_CacheManger {
@@ -31,7 +31,7 @@ public class Proxy_String_CacheManger {
 
 	/**
 	 * 保存缓存
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @param validTime_ms
@@ -54,7 +54,7 @@ public class Proxy_String_CacheManger {
 
 	/**
 	 * 获取缓存
-	 * 
+	 *
 	 * @param key
 	 * @param defaultValue
 	 * @return

@@ -127,6 +127,9 @@ public class AssistantApp extends Application {
 	}
 
 	public Retrofit getRetrofit() {
+		if (mRetrofit == null) {
+			initRetrofit();
+		}
 		return mRetrofit;
 	}
 

@@ -19,7 +19,8 @@ import java.io.IOException;
  * @author zhitao
  * @since 2015-09-21 14:58
  */
-public abstract class BaseApkCachedDownloadManager extends AbsCachedDownloadManager implements IMaxPriorityDownloadListener {
+public abstract class BaseApkCachedDownloadManager extends AbsCachedDownloadManager implements
+		IMaxPriorityDownloadListener {
 
 	protected BaseApkCachedDownloadManager(Context context) throws NullPointerException, IOException {
 		super(context);
@@ -53,12 +54,13 @@ public abstract class BaseApkCachedDownloadManager extends AbsCachedDownloadMana
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
 	 * @return
 	 */
 	@Override
-	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask
+			fileDownloadTask,
+	                                   AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker
+			                                       iFileAvailableChecker)
 			throws NullPointerException, IOException {
 		return new DefaultSDKDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
 	}

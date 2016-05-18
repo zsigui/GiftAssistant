@@ -57,7 +57,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 					sb.append("\n  最小延迟时间：").append(sensor.getMinDelay());
 				}
 				Debug_SDK
-						.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "<------当前获取到%d个传感器\n%s\n------>",
+						.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+								"<------当前获取到%d个传感器\n%s\n------>",
 								size,
 								sb.toString());
 			}
@@ -108,7 +109,6 @@ public class Global_Runtime_SystemInfo_Sensor {
 	 * 获取加速度传感器的数据(最近30组)，并且获取成功之后，清楚数据库中的记录
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public final static List<SensorModel> pollAccelerometerSensorParams(Context context) {
@@ -119,7 +119,6 @@ public class Global_Runtime_SystemInfo_Sensor {
 	 * 获取光线传感器的数据(最近30组)，并且获取成功之后，清楚数据库中的记录
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static List<SensorModel> pollLightSensorParams(Context context) {
@@ -130,7 +129,6 @@ public class Global_Runtime_SystemInfo_Sensor {
 	 * 获取陀螺仪传感器的数据(最近30组)，并且获取成功之后，清楚数据库中的记录
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static List<SensorModel> pollGyroscopeSensorParams(Context context) {
@@ -141,7 +139,6 @@ public class Global_Runtime_SystemInfo_Sensor {
 	 * 获取光线传感器的数据(最近30组)，并且获取成功之后，清楚数据库中的记录
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static List<SensorModel> pollSensorParams(Context context, int sensorType) {
@@ -152,17 +149,17 @@ public class Global_Runtime_SystemInfo_Sensor {
 		}
 		List<SensorModel> list = null;
 		switch (sensorType) {
-		case Sensor.TYPE_ACCELEROMETER:
-			list = AccelerationSensorDBManager.getInstance(mContext).queryAll();
-			break;
-		case Sensor.TYPE_GYROSCOPE:
-			list = GyroscopeSensorDBManager.getInstance(mContext).queryAll();
-			break;
-		case Sensor.TYPE_LIGHT:
-			list = LightSensorDBManager.getInstance(mContext).queryAll();
-			break;
-		default:
-			break;
+			case Sensor.TYPE_ACCELEROMETER:
+				list = AccelerationSensorDBManager.getInstance(mContext).queryAll();
+				break;
+			case Sensor.TYPE_GYROSCOPE:
+				list = GyroscopeSensorDBManager.getInstance(mContext).queryAll();
+				break;
+			case Sensor.TYPE_LIGHT:
+				list = LightSensorDBManager.getInstance(mContext).queryAll();
+				break;
+			default:
+				break;
 		}
 		if (list == null || list.size() <= 0) {
 			return null;
@@ -170,24 +167,25 @@ public class Global_Runtime_SystemInfo_Sensor {
 		String sensorTips = "";
 		if (Debug_SDK.isGlobalLog) {
 			switch (sensorType) {
-			case Sensor.TYPE_ACCELEROMETER:
-				sensorTips = "加速度";
-				break;
-			case Sensor.TYPE_GYROSCOPE:
-				sensorTips = "陀螺仪";
-				break;
-			case Sensor.TYPE_LIGHT:
-				sensorTips = "光线";
-				break;
-			default:
-				break;
+				case Sensor.TYPE_ACCELEROMETER:
+					sensorTips = "加速度";
+					break;
+				case Sensor.TYPE_GYROSCOPE:
+					sensorTips = "陀螺仪";
+					break;
+				case Sensor.TYPE_LIGHT:
+					sensorTips = "光线";
+					break;
+				default:
+					break;
 			}
 		}
 		// 只获取最近30组数据
 		if (list.size() >= CAPACITY) {
 			try {
 				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器目前数据长度多于%d个，需要删减*****",
+					Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+							"*****%s传感器目前数据长度多于%d个，需要删减*****",
 							sensorTips, CAPACITY);
 				}
 				List<SensorModel> temp = new ArrayList<SensorModel>();
@@ -199,7 +197,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 			}
 		}
 		if (Debug_SDK.isGlobalLog) {
-			Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器最近%d组数据*****", sensorTips,
+			Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "*****%s传感器最近%d组数据*****",
+					sensorTips,
 					CAPACITY);
 			for (int i = 0; i < list.size(); ++i) {
 				SensorModel model = list.get(i);
@@ -212,17 +211,17 @@ public class Global_Runtime_SystemInfo_Sensor {
 		// ---------------
 		// 获取到数据之后，清空数据库，不要让开发者的应用越来越大
 		switch (sensorType) {
-		case Sensor.TYPE_ACCELEROMETER:
-			AccelerationSensorDBManager.getInstance(context).deleteAll();
-			break;
-		case Sensor.TYPE_GYROSCOPE:
-			GyroscopeSensorDBManager.getInstance(context).deleteAll();
-			break;
-		case Sensor.TYPE_LIGHT:
-			LightSensorDBManager.getInstance(context).deleteAll();
-			break;
-		default:
-			break;
+			case Sensor.TYPE_ACCELEROMETER:
+				AccelerationSensorDBManager.getInstance(context).deleteAll();
+				break;
+			case Sensor.TYPE_GYROSCOPE:
+				GyroscopeSensorDBManager.getInstance(context).deleteAll();
+				break;
+			case Sensor.TYPE_LIGHT:
+				LightSensorDBManager.getInstance(context).deleteAll();
+				break;
+			default:
+				break;
 		}
 
 		return list;
@@ -277,11 +276,13 @@ public class Global_Runtime_SystemInfo_Sensor {
 			// SENSOR_DELAY_FASTEST.：匹配所能达到的最快
 			sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
 			if (Debug_SDK.isGlobalLog) {
-				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功注册sensor : %d", sensorType);
+				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "成功注册sensor : %d",
+						sensorType);
 			}
 		} else {
 			if (Debug_SDK.isGlobalLog) {
-				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "不存在sensor ： %d", sensorType);
+				Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "不存在sensor ： %d",
+						sensorType);
 			}
 		}
 	}
@@ -349,7 +350,8 @@ public class Global_Runtime_SystemInfo_Sensor {
 
 					if (Debug_SDK.isGlobalLog) {
 						if (count % 2 == 0) {
-							Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "===== 第 %d 秒 =====",
+							Debug_SDK.ti(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "===== 第 %d 秒 " +
+											"=====",
 									count / 2);
 						}
 					}
@@ -455,175 +457,185 @@ public class Global_Runtime_SystemInfo_Sensor {
 			}
 
 			switch (event.sensor.getType()) {
-			// 光线感应器:只需要values[0]的值，其他两个都为0.而values[0]就是我们开发光线感应器所需要的，单位是：lux照度单位
-			case Sensor.TYPE_LIGHT:
-				if (mLightSensorFlag) {
-					return;
-				}
-				float lux = event.values[0];
-				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "光线感应器: lux -> %f", lux);
-				}
-				try {
-					SensorModel lightModel = new SensorModel();
-					lightModel.mGenerateTime = System.currentTimeMillis();
-					lightModel.v0 = new BigDecimal(event.values[0]).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-					LightSensorDBManager.getInstance(mContext).add(lightModel);
-				} catch (Throwable e) {
-					if (Debug_SDK.isGlobalLog) {
-						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+				// 光线感应器:只需要values[0]的值，其他两个都为0.而values[0]就是我们开发光线感应器所需要的，单位是：lux照度单位
+				case Sensor.TYPE_LIGHT:
+					if (mLightSensorFlag) {
+						return;
 					}
-				}
-				mLightSensorFlag = true;
-				break;
-			// // 线性加速感应器 : 线性加速度 = 加速度 - 重力加速度
-			// case Sensor.TYPE_LINEAR_ACCELERATION:
-			//
-			// float la_X = event.values[0];
-			// float la_Y = event.values[1];
-			// float la_Z = event.values[2];
-			// if (Debug_SDK.isGlobalLog) {
-			// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
-			// "线性加速感应器原始数据(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", la_X, la_Y, la_Z);
-			// }
-			// break;
-
-			// 加速度感应器
-			case Sensor.TYPE_ACCELEROMETER:
-				if (mAccelerateSensorFlag) {
-					return;
-				}
-				// 如果设备是平放在桌子上的（没有加速度），加速度计会读到g = 9.81 m/s2。
-				// 同理，设备在自由落体或以 9.81 m/s2 的加速度坠向地面时，加速度计会读到 g = 0 m/s2。
-				// 因此，要测出设备真实的加速度，必须排除加速计数据中的重力干扰。
-				// 这可以通过高通滤波器来实现。
-				// 反之，低通滤波器则可以用于分离出重力加速度值。
-				float a_X = event.values[0];
-				float a_Y = event.values[1];
-				float a_Z = event.values[2];
-				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
-							"加速度感应器原始数据(取小数点后三位)：X-> %.3f     Y-> %.3f     Z-> %.3f", a_X, a_Y, a_Z);
-				}
-				try {
-					SensorModel accelerateModel = new SensorModel();
-					accelerateModel.mGenerateTime = System.currentTimeMillis();
-					// 四舍五入后，保留3位小数位
-					accelerateModel.v0 = new BigDecimal(event.values[0]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					accelerateModel.v1 = new BigDecimal(event.values[1]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					accelerateModel.v2 = new BigDecimal(event.values[2]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					AccelerationSensorDBManager.getInstance(mContext).add(accelerateModel);
-
-				} catch (Throwable e) {
+					float lux = event.values[0];
 					if (Debug_SDK.isGlobalLog) {
-						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, "光线感应器: lux -> %f",
+								lux);
 					}
-				}
-				// final float alpha = 0.8f;
+					try {
+						SensorModel lightModel = new SensorModel();
+						lightModel.mGenerateTime = System.currentTimeMillis();
+						lightModel.v0 = new BigDecimal(event.values[0]).setScale(2, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						LightSensorDBManager.getInstance(mContext).add(lightModel);
+					} catch (Throwable e) {
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+						}
+					}
+					mLightSensorFlag = true;
+					break;
+				// // 线性加速感应器 : 线性加速度 = 加速度 - 重力加速度
+				// case Sensor.TYPE_LINEAR_ACCELERATION:
 				//
-				// // 用低通滤波器分离出重力加速度
-				// gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-				// gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-				// gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-				//
-				// // 用高通滤波器剔除重力干扰
-				// float linear_acceleration_X = event.values[0] - gravity[0];
-				// float linear_acceleration_Y = event.values[1] - gravity[1];
-				//
-				//
-				// if (Debug_SDK.isGlobalLog) {
-				// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_20150111.class,
-				// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", linear_acceleration_X,
-				// linear_acceleration_Y, linear_acceleration_Z);
-				// }
-				// a_X -= SensorManager.GRAVITY_EARTH;
-				// a_Y -= SensorManager.GRAVITY_EARTH;
+				// float la_X = event.values[0];
+				// float la_Y = event.values[1];
+				// float la_Z = event.values[2];
 				// if (Debug_SDK.isGlobalLog) {
 				// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
-				// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", a_X, a_X, a_Z);
+				// "线性加速感应器原始数据(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", la_X, la_Y, la_Z);
 				// }
+				// break;
 
-				mAccelerateSensorFlag = true;
-				break;
-
-			// 陀螺仪
-			case Sensor.TYPE_GYROSCOPE:
-				if (mGyroscopeSensorFlag) {
-					return;
-				}
-				float axisX = event.values[0];
-				float axisY = event.values[1];
-				float axisZ = event.values[2];
-				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
-							"陀螺仪原始数据(取小数点后三位)：axisX-> %.3f     axisY-> %.3f     axisZ-> %.3f", axisX, axisY, axisZ);
-				}
-				try {
-					SensorModel gyroscopeModel = new SensorModel();
-					gyroscopeModel.mGenerateTime = System.currentTimeMillis();
-					gyroscopeModel.v0 = new BigDecimal(event.values[0]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					gyroscopeModel.v1 = new BigDecimal(event.values[1]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					gyroscopeModel.v2 = new BigDecimal(event.values[2]).setScale(3, BigDecimal.ROUND_HALF_UP).floatValue();
-					GyroscopeSensorDBManager.getInstance(mContext).add(gyroscopeModel);
-
-				} catch (Throwable e) {
-					if (Debug_SDK.isGlobalLog) {
-						Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+				// 加速度感应器
+				case Sensor.TYPE_ACCELEROMETER:
+					if (mAccelerateSensorFlag) {
+						return;
 					}
-				}
-				// // 根据陀螺仪采样数据计算出此次事件间隔的偏移量后，它将与当前旋转向量相乘
-				// if (timestamp != 0) {
-				// final float dT = (event.timestamp - timestamp) * NS2S;
-				// // 未规格化的旋转向量坐标值
-				// float axisX = event.values[0];
-				// float axisY = event.values[1];
-				// float axisZ = event.values[2];
-				//
-				// // 计算角速度
-				// double omegaMagnitude = Math.sqrt((double) (axisX * axisX + axisY * axisY + axisZ * axisZ));
-				//
-				// // 如果旋转向量偏移值足够大，可以获得坐标值，则规格化旋转向量
-				// // (也就是说，EPSILON为计算偏移量的起步值。小于该值的偏移视为误差，不予计算)
-				// if (omegaMagnitude > 2000000000) {
-				// axisX /= omegaMagnitude;
-				// axisY /= omegaMagnitude;
-				// axisZ /= omegaMagnitude;
-				// }
-				//
-				// // 为了得到此次取样间隔的旋转偏移量，需要把围绕坐标轴旋转的角速度与时间间隔合并表示。
-				// // 在转换为旋转矩阵之前，我们要把围绕坐标轴旋转的角度表示为四元组
-				// double thetaOverTwo = omegaMagnitude * dT / 2.0f;
-				// double sinThetaOverTwo = Math.sin(thetaOverTwo);
-				// double cosThetaOverTwo = Math.cos(thetaOverTwo);
-				// deltaRotationVector[0] = (float) sinThetaOverTwo * axisX;
-				// deltaRotationVector[1] = (float) sinThetaOverTwo * axisY;
-				// deltaRotationVector[2] = (float) sinThetaOverTwo * axisZ;
-				// deltaRotationVector[3] = (float) cosThetaOverTwo;
-				// }
-				// timestamp = event.timestamp;
-				// float[] deltaRotationMatrix = new float[9];
-				// SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
-				//
-				// // 为了得到旋转后的向量，用户代码应该把我们计算出来的偏移量与当前向量叠加。
-				// // rotationCurrent = rotationCurrent * deltaRotationMatrix;
-				//
-				// // User code should concatenate the delta rotation we computed with the current rotation
-				// // in order to get the updated rotation.
-				// // rotationCurrent = rotationCurrent * deltaRotationMatrix;
-				//
-				// if (Debug_SDK.isGlobalLog) {
-				// Debug_SDK
-				// .ti(Debug_SDK.mGlobalTag,
-				// Global_Runtime_SystemInfo_20150111.class,
-				// "deltaRotationVector[0]-> %.2f     deltaRotationVector[1]-> %.2f     deltaRotationVector[2]-> %.2f
-				// deltaRotationVector[3]-> %.2f]",
-				// deltaRotationVector[0], deltaRotationVector[1], deltaRotationVector[2],
-				// deltaRotationVector[3]);
-				// }
-				mGyroscopeSensorFlag = true;
-				break;
-			default:
-				break;
+					// 如果设备是平放在桌子上的（没有加速度），加速度计会读到g = 9.81 m/s2。
+					// 同理，设备在自由落体或以 9.81 m/s2 的加速度坠向地面时，加速度计会读到 g = 0 m/s2。
+					// 因此，要测出设备真实的加速度，必须排除加速计数据中的重力干扰。
+					// 这可以通过高通滤波器来实现。
+					// 反之，低通滤波器则可以用于分离出重力加速度值。
+					float a_X = event.values[0];
+					float a_Y = event.values[1];
+					float a_Z = event.values[2];
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+								"加速度感应器原始数据(取小数点后三位)：X-> %.3f     Y-> %.3f     Z-> %.3f", a_X, a_Y, a_Z);
+					}
+					try {
+						SensorModel accelerateModel = new SensorModel();
+						accelerateModel.mGenerateTime = System.currentTimeMillis();
+						// 四舍五入后，保留3位小数位
+						accelerateModel.v0 = new BigDecimal(event.values[0]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						accelerateModel.v1 = new BigDecimal(event.values[1]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						accelerateModel.v2 = new BigDecimal(event.values[2]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						AccelerationSensorDBManager.getInstance(mContext).add(accelerateModel);
+
+					} catch (Throwable e) {
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+						}
+					}
+					// final float alpha = 0.8f;
+					//
+					// // 用低通滤波器分离出重力加速度
+					// gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+					// gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+					// gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+					//
+					// // 用高通滤波器剔除重力干扰
+					// float linear_acceleration_X = event.values[0] - gravity[0];
+					// float linear_acceleration_Y = event.values[1] - gravity[1];
+					//
+					//
+					// if (Debug_SDK.isGlobalLog) {
+					// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_20150111.class,
+					// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", linear_acceleration_X,
+					// linear_acceleration_Y, linear_acceleration_Z);
+					// }
+					// a_X -= SensorManager.GRAVITY_EARTH;
+					// a_Y -= SensorManager.GRAVITY_EARTH;
+					// if (Debug_SDK.isGlobalLog) {
+					// Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+					// "处理后加速度感应器(取小数点后两位)：X-> %.2f     Y-> %.2f     Z-> %.2f", a_X, a_X, a_Z);
+					// }
+
+					mAccelerateSensorFlag = true;
+					break;
+
+				// 陀螺仪
+				case Sensor.TYPE_GYROSCOPE:
+					if (mGyroscopeSensorFlag) {
+						return;
+					}
+					float axisX = event.values[0];
+					float axisY = event.values[1];
+					float axisZ = event.values[2];
+					if (Debug_SDK.isGlobalLog) {
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class,
+								"陀螺仪原始数据(取小数点后三位)：axisX-> %.3f     axisY-> %.3f     axisZ-> %.3f", axisX, axisY,
+								axisZ);
+					}
+					try {
+						SensorModel gyroscopeModel = new SensorModel();
+						gyroscopeModel.mGenerateTime = System.currentTimeMillis();
+						gyroscopeModel.v0 = new BigDecimal(event.values[0]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						gyroscopeModel.v1 = new BigDecimal(event.values[1]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						gyroscopeModel.v2 = new BigDecimal(event.values[2]).setScale(3, BigDecimal.ROUND_HALF_UP)
+								.floatValue();
+						GyroscopeSensorDBManager.getInstance(mContext).add(gyroscopeModel);
+
+					} catch (Throwable e) {
+						if (Debug_SDK.isGlobalLog) {
+							Debug_SDK.te(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Sensor.class, e);
+						}
+					}
+					// // 根据陀螺仪采样数据计算出此次事件间隔的偏移量后，它将与当前旋转向量相乘
+					// if (timestamp != 0) {
+					// final float dT = (event.timestamp - timestamp) * NS2S;
+					// // 未规格化的旋转向量坐标值
+					// float axisX = event.values[0];
+					// float axisY = event.values[1];
+					// float axisZ = event.values[2];
+					//
+					// // 计算角速度
+					// double omegaMagnitude = Math.sqrt((double) (axisX * axisX + axisY * axisY + axisZ * axisZ));
+					//
+					// // 如果旋转向量偏移值足够大，可以获得坐标值，则规格化旋转向量
+					// // (也就是说，EPSILON为计算偏移量的起步值。小于该值的偏移视为误差，不予计算)
+					// if (omegaMagnitude > 2000000000) {
+					// axisX /= omegaMagnitude;
+					// axisY /= omegaMagnitude;
+					// axisZ /= omegaMagnitude;
+					// }
+					//
+					// // 为了得到此次取样间隔的旋转偏移量，需要把围绕坐标轴旋转的角速度与时间间隔合并表示。
+					// // 在转换为旋转矩阵之前，我们要把围绕坐标轴旋转的角度表示为四元组
+					// double thetaOverTwo = omegaMagnitude * dT / 2.0f;
+					// double sinThetaOverTwo = Math.sin(thetaOverTwo);
+					// double cosThetaOverTwo = Math.cos(thetaOverTwo);
+					// deltaRotationVector[0] = (float) sinThetaOverTwo * axisX;
+					// deltaRotationVector[1] = (float) sinThetaOverTwo * axisY;
+					// deltaRotationVector[2] = (float) sinThetaOverTwo * axisZ;
+					// deltaRotationVector[3] = (float) cosThetaOverTwo;
+					// }
+					// timestamp = event.timestamp;
+					// float[] deltaRotationMatrix = new float[9];
+					// SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
+					//
+					// // 为了得到旋转后的向量，用户代码应该把我们计算出来的偏移量与当前向量叠加。
+					// // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+					//
+					// // User code should concatenate the delta rotation we computed with the current rotation
+					// // in order to get the updated rotation.
+					// // rotationCurrent = rotationCurrent * deltaRotationMatrix;
+					//
+					// if (Debug_SDK.isGlobalLog) {
+					// Debug_SDK
+					// .ti(Debug_SDK.mGlobalTag,
+					// Global_Runtime_SystemInfo_20150111.class,
+					// "deltaRotationVector[0]-> %.2f     deltaRotationVector[1]-> %.2f     deltaRotationVector[2]->
+					// %.2f
+					// deltaRotationVector[3]-> %.2f]",
+					// deltaRotationVector[0], deltaRotationVector[1], deltaRotationVector[2],
+					// deltaRotationVector[3]);
+					// }
+					mGyroscopeSensorFlag = true;
+					break;
+				default:
+					break;
 			}
 		}
 

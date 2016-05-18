@@ -25,7 +25,8 @@ public class Proxy_Common_CacheManager {
 		try {
 			if (mStringCacheManger == null) {
 				mStringCacheManger =
-						new Proxy_String_CacheManger(DEFAULT_PSW_COMMON, Proxy_DB_Cache_Helper.getCommonDBInstance(context));
+						new Proxy_String_CacheManger(DEFAULT_PSW_COMMON, Proxy_DB_Cache_Helper.getCommonDBInstance
+								(context));
 			}
 		} catch (Throwable e) {
 			if (Debug_SDK.isCacheLog) {
@@ -54,7 +55,6 @@ public class Proxy_Common_CacheManager {
 	 * @param key
 	 * @param value
 	 * @param validTime_ms 缓存时间（ -1 为永久缓存）
-	 *
 	 * @return
 	 */
 	public static boolean saveCache(Context context, String key, String value, long validTime_ms) {
@@ -76,7 +76,6 @@ public class Proxy_Common_CacheManager {
 	 * @param key
 	 * @param value
 	 * @param validTime_ms 缓存时间（ -1 为永久缓存）
-	 *
 	 * @return
 	 */
 	public static boolean saveCache(Context context, String key, boolean value, long validTime_ms) {
@@ -110,7 +109,6 @@ public class Proxy_Common_CacheManager {
 	 * @param context
 	 * @param key
 	 * @param defaultValue
-	 *
 	 * @return
 	 */
 	public static String getCache(Context context, String key, String defaultValue) {
@@ -130,7 +128,6 @@ public class Proxy_Common_CacheManager {
 	 *
 	 * @param context
 	 * @param serializable
-	 *
 	 * @return
 	 */
 	public static boolean getCache(Context context, Interface_Serializable serializable) {
@@ -151,7 +148,6 @@ public class Proxy_Common_CacheManager {
 	 * @param context
 	 * @param key
 	 * @param dfValue
-	 *
 	 * @return
 	 */
 	public static boolean getCache(Context context, String key, boolean dfValue) {

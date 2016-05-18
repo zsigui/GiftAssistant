@@ -38,7 +38,6 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 	/**
 	 * @param context
 	 * @param baseHttpRequesterModel 本次请求的相关参数的自定义数据模型
-	 *
 	 * @throws NullPointerException
 	 */
 	public AbsHttpURLConnectionRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel)
@@ -48,7 +47,6 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 
 	/**
 	 * 请求之前的钩子，如:子类可以为 httpRequestBase 添加额外的头部
-	 *
 	 */
 	protected abstract void beforeRequest(HttpURLConnection httpURLConnection);
 
@@ -79,7 +77,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 
 			// 创建默认的HttpURLConnection
 			mHttpURLConnection =
-					HttpRequesterFactory.newHttpURLConnection(mApplicationContext, mBaseHttpRequesterModel.getRequestUrl());
+					HttpRequesterFactory.newHttpURLConnection(mApplicationContext, mBaseHttpRequesterModel
+							.getRequestUrl());
 
 			if (mHttpURLConnection == null) {
 				throw new NullPointerException();
@@ -121,7 +120,8 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 				OutputStream os = mHttpURLConnection.getOutputStream();
 
 				// 优先以NameValuePair的post请求
-				if (mBaseHttpRequesterModel.getPostDataMap() != null && !mBaseHttpRequesterModel.getPostDataMap().isEmpty()) {
+				if (mBaseHttpRequesterModel.getPostDataMap() != null && !mBaseHttpRequesterModel.getPostDataMap()
+						.isEmpty()) {
 
 					StringBuilder sb = new StringBuilder();
 					for (Map.Entry<String, String> entry : mBaseHttpRequesterModel.getPostDataMap().entrySet()) {
@@ -139,7 +139,7 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 
 				// 然后才是二进制的post data
 				else if (mBaseHttpRequesterModel.getPostDataByteArray() != null &&
-				         mBaseHttpRequesterModel.getPostDataByteArray().length > 0) {
+						mBaseHttpRequesterModel.getPostDataByteArray().length > 0) {
 					os.write(mBaseHttpRequesterModel.getPostDataByteArray());
 					os.flush();
 				}
@@ -208,7 +208,7 @@ public abstract class AbsHttpURLConnectionRequester extends AbsHttpRequester {
 				// 获取contentEncoding来获取inputStream
 				String contentEncoding = mHttpURLConnection.getContentEncoding();
 				if (!Basic_StringUtil.isNullOrEmpty(contentEncoding) &&
-				    contentEncoding.toLowerCase(Locale.US).contains("gzip") && inputStream != null) {
+						contentEncoding.toLowerCase(Locale.US).contains("gzip") && inputStream != null) {
 					inputStream = new GZIPInputStream(inputStream);
 					if (Debug_SDK.isNetLog) {
 						Debug_SDK.td(Debug_SDK.mNetTag, this, "初始化inputStrrem为GZIPInputStream");

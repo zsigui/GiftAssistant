@@ -33,7 +33,8 @@ package net.youmi.android.libs.platform;//package net.youmi.android.net.youmi.an
 //		try {
 //			List<Runnable> list = ((ExecutorService) Global_Executor.getCachedThreadPool()).shutdownNow();
 //			if (Debug_SDK.isGlobalLog) {
-//				Debug_SDK.td(Debug_SDK.mGlobalTag, Default_SDK_Executor_Old.class, "尝试停止所有正在执行的线程，以及准备执行的线程，成功结束数量： %d", list.size
+//				Debug_SDK.td(Debug_SDK.mGlobalTag, Default_SDK_Executor_Old.class, "尝试停止所有正在执行的线程，以及准备执行的线程，成功结束数量：
+// %d", list.size
 //						());
 //			}
 //		} catch (Exception e) {

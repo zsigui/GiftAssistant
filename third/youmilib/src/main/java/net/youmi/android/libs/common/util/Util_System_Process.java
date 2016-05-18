@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 /**
  * 执行外部命令
- * 
+ *
  * @author zhitao
  * @date 2015-5-5 下午3:39:44
  */
@@ -29,9 +29,8 @@ public class Util_System_Process {
 
 	/**
 	 * ［sync］执行命令
-	 * 
-	 * @param params
-	 *            eg: "/system/bin/ping", "-c", "4", "-s", "100","www.qiujuer.net"
+	 *
+	 * @param params eg: "/system/bin/ping", "-c", "4", "-s", "100","www.qiujuer.net"
 	 * @return errstream重定向到inputstream的标准输入流的字符串
 	 */
 	public static String execute(String... params) {
@@ -145,20 +144,15 @@ public class Util_System_Process {
 
 	/**
 	 * 关闭所有流
-	 * 
-	 * @param out
-	 *            输出流
-	 * @param err
-	 *            错误流
-	 * @param in
-	 *            输入流
-	 * @param isReader
-	 *            输入流封装
-	 * @param bReader
-	 *            输入流封装
+	 *
+	 * @param out      输出流
+	 * @param err      错误流
+	 * @param in       输入流
+	 * @param isReader 输入流封装
+	 * @param bReader  输入流封装
 	 */
 	private static void closeAllStream(OutputStream out, InputStream err, InputStream in, InputStreamReader isReader,
-			BufferedReader bReader) {
+	                                   BufferedReader bReader) {
 		if (out != null)
 			try {
 				out.close();
@@ -203,9 +197,8 @@ public class Util_System_Process {
 
 	/**
 	 * 通过Android底层实现进程关闭
-	 * 
-	 * @param process
-	 *            进程
+	 *
+	 * @param process 进程
 	 */
 	private static void killProcess(Process process) {
 		int pid = getProcessId(process);
@@ -227,9 +220,8 @@ public class Util_System_Process {
 
 	/**
 	 * 获取进程的ID
-	 * 
-	 * @param process
-	 *            进程
+	 *
+	 * @param process 进程
 	 * @return
 	 */
 	private static int getProcessId(Process process) {
@@ -246,9 +238,8 @@ public class Util_System_Process {
 
 	/**
 	 * 销毁进程
-	 * 
-	 * @param process
-	 *            进程
+	 *
+	 * @param process 进程
 	 */
 	private static void processDestroy(Process process) {
 		if (process != null) {

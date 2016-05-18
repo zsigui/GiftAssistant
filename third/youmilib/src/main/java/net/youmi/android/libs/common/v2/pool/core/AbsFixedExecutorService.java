@@ -36,7 +36,8 @@ public abstract class AbsFixedExecutorService {
 	public AbsFixedExecutorService() {
 		mBaseThreadFactory = newBaseThreadFatory();
 		mAbsLinkedBlockingQueue = newAbsLinkedBlockingQueue();
-		mExecutorService = new AbsThreadPoolExecutor(getMaxThreadsNumber(), getMaxThreadsNumber(), 0L, TimeUnit.MILLISECONDS,
+		mExecutorService = new AbsThreadPoolExecutor(getMaxThreadsNumber(), getMaxThreadsNumber(), 0L, TimeUnit
+				.MILLISECONDS,
 				mAbsLinkedBlockingQueue, mBaseThreadFactory);
 	}
 
@@ -107,7 +108,8 @@ public abstract class AbsFixedExecutorService {
 			// 可以在调用 shutdown 或者 shutdownNow之后，通过方法isTermination来判断线程池中的任务是否都已经停止了
 
 			if (Debug_SDK.isPoolLog) {
-				Debug_SDK.tw(Debug_SDK.mPoolTag, AbsFixedExecutorService.class, "【%s线程池消息】:关闭线程池并返回还没有执行的任务，当前有%d个任务还没有被执行",
+				Debug_SDK.tw(Debug_SDK.mPoolTag, AbsFixedExecutorService.class,
+						"【%s线程池消息】:关闭线程池并返回还没有执行的任务，当前有%d个任务还没有被执行",
 						mBaseThreadFactory.getPoolName(), list.size());
 			}
 			return list;

@@ -13,10 +13,9 @@ import java.util.List;
 
 /**
  * 只记录墙上的广告的包名状态
- * 
+ *
  * @author zhitaocai
  * @author zhitaocai edit on 2014-7-8
- * 
  */
 abstract class BaseSensorDBManager {
 
@@ -33,7 +32,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 检查数据库是否可以使用。
-	 * 
+	 *
 	 * @param db
 	 * @return
 	 */
@@ -58,7 +57,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 关闭数据库
-	 * 
+	 *
 	 * @param db
 	 */
 	private void closeDb(SQLiteDatabase db) {
@@ -76,10 +75,10 @@ abstract class BaseSensorDBManager {
 	/**
 	 * 1、如果数据库没有记录就添加 <br>
 	 * 2、如果数据库有记录就返回失败
-	 * 
+	 *
 	 * @param model
 	 * @return true 成功添加到数据库 <br>
-	 *         false 没有成功添加到数据库
+	 * false 没有成功添加到数据库
 	 */
 	boolean add(SensorModel model) {
 		if (model == null) {
@@ -137,7 +136,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 根据指定包名删除记录
-	 * 
+	 *
 	 * @param pn
 	 */
 	boolean deleteAll() {
@@ -176,7 +175,7 @@ abstract class BaseSensorDBManager {
 
 	/**
 	 * 查询所有记录的所有数据
-	 * 
+	 *
 	 * @return List<PnModel>
 	 */
 	List<SensorModel> queryAll() {

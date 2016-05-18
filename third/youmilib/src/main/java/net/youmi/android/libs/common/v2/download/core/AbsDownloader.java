@@ -81,11 +81,10 @@ public abstract class AbsDownloader implements Runnable {
 	 * @param context
 	 * @param fileDownloadTask
 	 * @param iFileAvailableChecker
-	 *
 	 * @return
 	 */
 	protected abstract IDownloader newDownloadHandler(Context context, FileDownloadTask fileDownloadTask,
-			IFileAvailableChecker iFileAvailableChecker);
+	                                                  IFileAvailableChecker iFileAvailableChecker);
 
 	/**
 	 * 是否支持多进程下载
@@ -100,12 +99,11 @@ public abstract class AbsDownloader implements Runnable {
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
 	 * @throws NullPointerException
 	 * @throws java.io.IOException
 	 */
 	public AbsDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+	                     AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
 			throws NullPointerException, IOException {
 		mContext = context.getApplicationContext();
 
@@ -122,9 +120,11 @@ public abstract class AbsDownloader implements Runnable {
 		}
 		mFileDownloadTask = fileDownloadTask;
 		mFileDownloadTask.setTempFile(
-				mAbsDownloadDir.newDownloadTempFile(mFileDownloadTask.getRawDownloadUrl(), mFileDownloadTask.getIdentify()));
+				mAbsDownloadDir.newDownloadTempFile(mFileDownloadTask.getRawDownloadUrl(), mFileDownloadTask
+						.getIdentify()));
 		mFileDownloadTask.setStoreFile(
-				mAbsDownloadDir.newDownloadStoreFile(mFileDownloadTask.getRawDownloadUrl(), mFileDownloadTask.getIdentify()));
+				mAbsDownloadDir.newDownloadStoreFile(mFileDownloadTask.getRawDownloadUrl(), mFileDownloadTask
+						.getIdentify()));
 
 		mIDownloader = newDownloadHandler(mContext, mFileDownloadTask, iFileAvailableChecker);
 		if (mIDownloader == null) {
@@ -224,7 +224,8 @@ public abstract class AbsDownloader implements Runnable {
 
 				// 如果下载缓存文件路径是一个目录，返回失败
 				if (mFileDownloadTask.getTempFile().isDirectory()) {
-					change2DownloadFailed(new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_LOCAL_FILE_TYPE));
+					change2DownloadFailed(new FinalDownloadStatus(FinalDownloadStatus.Code
+							.FAILED_ERROR_LOCAL_FILE_TYPE));
 					return;
 				}
 
@@ -247,7 +248,7 @@ public abstract class AbsDownloader implements Runnable {
 			// 到这里基本处理好下载前的一些参数判断了
 
 			change2DownloadBeforeStart_FileLock();
-			
+
 		} catch (Throwable e) {
 			if (Debug_SDK.isDownloadLog) {
 				Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
@@ -255,7 +256,7 @@ public abstract class AbsDownloader implements Runnable {
 			change2DownloadFailed(new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_UNKOWN, e));
 		}
 	}
-	
+
 	protected void change2DestFileAlreadyExist() {
 
 		if (Debug_SDK.isDownloadLog) {
@@ -309,7 +310,8 @@ public abstract class AbsDownloader implements Runnable {
 				// 这里坐等一段时间，然后在检查文件是否还在被其他进程使用
 				// 主要是为了区分究竟是正的被其他进程使用，还是任务刚刚被停止
 				if (Debug_SDK.isDownloadLog) {
-					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "文件处于文件锁中 %d s 之后进行下载逻辑", DownloadUtil.LOCK_INTERVAL_ms / 1000);
+					Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "文件处于文件锁中 %d s 之后进行下载逻辑", DownloadUtil.LOCK_INTERVAL_ms
+							/ 1000);
 				}
 				try {
 					Thread.sleep(DownloadUtil.LOCK_INTERVAL_ms);
@@ -381,7 +383,8 @@ public abstract class AbsDownloader implements Runnable {
 							}
 
 							// 每隔指定的间隔时间之后就进行一次下载进度广播通知
-							if (System.currentTimeMillis() - mLastRecordNotifyTime_ms < mFileDownloadTask.getIntervalTime_ms()) {
+							if (System.currentTimeMillis() - mLastRecordNotifyTime_ms < mFileDownloadTask
+									.getIntervalTime_ms()) {
 								continue;
 							}
 
@@ -419,7 +422,8 @@ public abstract class AbsDownloader implements Runnable {
 
 							// 通知监听者下载进行中
 							mAbsDownloadNotifier
-									.onNotifyDownloadProgressUpdate(mFileDownloadTask, downloadFileFinalLength, completeLength,
+									.onNotifyDownloadProgressUpdate(mFileDownloadTask, downloadFileFinalLength,
+											completeLength,
 											percent, increase, mFileDownloadTask.getIntervalTime_ms());
 						} catch (Throwable e) {
 							if (Debug_SDK.isDownloadLog) {
@@ -447,12 +451,13 @@ public abstract class AbsDownloader implements Runnable {
 			change2DownloadSuccessed();
 		} else if (FinalDownloadStatus.Code.STOP == finalDownloadStatus.getDownloadStatusCode()) {
 			change2DownloadStop();
-		} else if (finalDownloadStatus.getDownloadStatusCode() >= 100 && finalDownloadStatus.getDownloadStatusCode() <= 199) {
+		} else if (finalDownloadStatus.getDownloadStatusCode() >= 100 && finalDownloadStatus.getDownloadStatusCode()
+				<= 199) {
 			// 下载失败的状态码在[100,199]之间
 			change2DownloadFailed(finalDownloadStatus);
 		}
 	}
-	
+
 	protected void change2DownloadSuccessed() {
 
 		if (Debug_SDK.isDownloadLog) {
@@ -478,7 +483,7 @@ public abstract class AbsDownloader implements Runnable {
 		change2DownloadFailed(new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_DEST_FILE_INVALID));
 
 	}
-	
+
 	protected void change2DownloadFailed(FinalDownloadStatus finalDownloadStatus) {
 
 		if (Debug_SDK.isDownloadLog) {
@@ -496,7 +501,7 @@ public abstract class AbsDownloader implements Runnable {
 			mAbsDownloadNotifier.onNotifyDownloadFailed(mFileDownloadTask, finalDownloadStatus);
 		}
 	}
-	
+
 	protected void change2DownloadStop() {
 
 		if (Debug_SDK.isDownloadLog) {
@@ -550,9 +555,11 @@ public abstract class AbsDownloader implements Runnable {
 					// 这里加计时器主要是为了不重复请求无限次ContentLength
 					++count;
 					if (count <= maxTimes) {
-						downloadFileFinalLength = NetworkUtil.getContentLength(mContext, mFileDownloadTask.getRawDownloadUrl());
+						downloadFileFinalLength = NetworkUtil.getContentLength(mContext, mFileDownloadTask
+								.getRawDownloadUrl());
 						if (Debug_SDK.isDownloadLog) {
-							Debug_SDK.td(Debug_SDK.mDownloadTag, this, "第%d次从网络中获取文件长度 = %d", count, downloadFileFinalLength);
+							Debug_SDK.td(Debug_SDK.mDownloadTag, this, "第%d次从网络中获取文件长度 = %d", count,
+									downloadFileFinalLength);
 						}
 						if (downloadFileFinalLength <= 0) {
 							continue;
@@ -561,14 +568,15 @@ public abstract class AbsDownloader implements Runnable {
 
 						// 如果超过最大请求次数都还没有能获取到 ContentLength的话就切换到下载失败
 						FinalDownloadStatus finalDownloadStatus = new FinalDownloadStatus(
-								FinalDownloadStatus.Code.FAILED_ERROR_REACH_MAX_GET_CONTENT_LENGTH_TIMES_INMULTPROCESSES);
+								FinalDownloadStatus.Code
+										.FAILED_ERROR_REACH_MAX_GET_CONTENT_LENGTH_TIMES_INMULTPROCESSES);
 						change2DownloadFailed(finalDownloadStatus);
 						return;
 					}
 				}
 
 				if (mAbsDownloadNotifier != null && mFileDownloadTask.getTempFile().exists() &&
-				    mFileDownloadTask.getTempFile().isFile()) {
+						mFileDownloadTask.getTempFile().isFile()) {
 
 					// 已经完成长度
 					long completeLength = mFileDownloadTask.getTempFile().length();
@@ -592,7 +600,8 @@ public abstract class AbsDownloader implements Runnable {
 
 					// 通知监听者下载进行中
 					mAbsDownloadNotifier
-							.onNotifyDownloadProgressUpdate(mFileDownloadTask, downloadFileFinalLength, completeLength, percent,
+							.onNotifyDownloadProgressUpdate(mFileDownloadTask, downloadFileFinalLength,
+									completeLength, percent,
 									increase, mFileDownloadTask.getIntervalTime_ms());
 
 				}
@@ -630,5 +639,5 @@ public abstract class AbsDownloader implements Runnable {
 		// 如果文件不再被锁着，就再重新跑一边流程，确认下，因为一些状态是不能从其他进程上回馈的，比如下载失败之类的，所以需要重新跑一遍流程
 		change2DownloadInit();
 	}
-	
+
 }

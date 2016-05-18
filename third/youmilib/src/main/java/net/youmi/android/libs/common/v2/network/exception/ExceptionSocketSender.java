@@ -64,7 +64,6 @@ public class ExceptionSocketSender {
 	 * 不是每个异常都上报，是随机上报的
 	 *
 	 * @param networkState
-	 *
 	 * @return
 	 */
 	boolean isNeedToSend() {
@@ -83,30 +82,30 @@ public class ExceptionSocketSender {
 
 		// 根据不同的网络来判断是否需要异常上报
 		switch (NetworkStatus.getNetworkType(mContext)) {
-		case NetworkStatus.Type.TYPE_2G:
-			mSendType = monitor_2g_type;
-			if (rdNum < monitor_2g_rate) {
-				return true;
-			}
-			break;
-		case NetworkStatus.Type.TYPE_3G:
-			mSendType = monitor_3g_type;
-			if (rdNum < monitor_3g_rate) {
-				return true;
-			}
-			break;
-		case NetworkStatus.Type.TYPE_4G:
-			mSendType = monitor_4g_type;
-			if (rdNum < monitor_4g_rate) {
-				return true;
-			}
-			break;
-		case NetworkStatus.Type.TYPE_WIFI:
-			mSendType = monitor_wifi_type;
-			if (rdNum < monitor_wifi_rate) {
-				return true;
-			}
-			break;
+			case NetworkStatus.Type.TYPE_2G:
+				mSendType = monitor_2g_type;
+				if (rdNum < monitor_2g_rate) {
+					return true;
+				}
+				break;
+			case NetworkStatus.Type.TYPE_3G:
+				mSendType = monitor_3g_type;
+				if (rdNum < monitor_3g_rate) {
+					return true;
+				}
+				break;
+			case NetworkStatus.Type.TYPE_4G:
+				mSendType = monitor_4g_type;
+				if (rdNum < monitor_4g_rate) {
+					return true;
+				}
+				break;
+			case NetworkStatus.Type.TYPE_WIFI:
+				mSendType = monitor_wifi_type;
+				if (rdNum < monitor_wifi_rate) {
+					return true;
+				}
+				break;
 		}
 		return false;
 	}

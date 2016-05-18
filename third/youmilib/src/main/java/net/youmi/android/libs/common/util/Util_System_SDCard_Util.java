@@ -10,7 +10,7 @@ public class Util_System_SDCard_Util {
 
 	/**
 	 * 判断sd卡是否可读
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean IsSdCardCanRead() {
@@ -24,7 +24,7 @@ public class Util_System_SDCard_Util {
 
 	/**
 	 * 判断sd卡是否可写
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean IsSdCardCanWrite(Context context) {
@@ -128,7 +128,7 @@ public class Util_System_SDCard_Util {
 
 	/**
 	 * 获取sdcard根目录
-	 * 
+	 *
 	 * @return
 	 */
 	public static String getSdcardRootPath() {

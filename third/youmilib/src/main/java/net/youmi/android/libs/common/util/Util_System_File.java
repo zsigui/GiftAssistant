@@ -22,7 +22,6 @@ public class Util_System_File {
 	 *
 	 * @param file
 	 * @param destFilePermission
-	 *
 	 * @return
 	 */
 	public static boolean chmod(File file, String destFilePermission) {
@@ -65,7 +64,6 @@ public class Util_System_File {
 	 *
 	 * @param srcFile
 	 * @param destFile
-	 *
 	 * @return
 	 */
 	public static boolean mv(File srcFile, File destFile) {
@@ -73,21 +71,24 @@ public class Util_System_File {
 
 			if (srcFile == null || destFile == null) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file or dest file is null");
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file or dest file " +
+							"is null");
 				}
 				return false;
 			}
 
 			if (!srcFile.exists()) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file is exists == false");
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file failed: src file is exists == " +
+							"false");
 				}
 				return false;
 			}
 
 			if (srcFile.renameTo(destFile)) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file success: srcFile.renameTo destFile");
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file success: srcFile.renameTo " +
+							"destFile");
 				}
 				return true;
 			}
@@ -101,11 +102,13 @@ public class Util_System_File {
 					// 删除原始文件
 					if (srcFile.delete()) {
 						if (Debug_SDK.isUtilLog) {
-							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file success");
+							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file " +
+									"success");
 						}
 					} else {
 						if (Debug_SDK.isUtilLog) {
-							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file failed");
+							Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class, "move file: delete src file " +
+									"failed");
 						}
 					}
 				} catch (Throwable e) {
@@ -129,7 +132,6 @@ public class Util_System_File {
 	 *
 	 * @param srcFile
 	 * @param destFile
-	 *
 	 * @return
 	 */
 	public static boolean cp(File srcFile, File destFile) {
@@ -209,7 +211,8 @@ public class Util_System_File {
 				long nt = System.currentTimeMillis();
 				long span = nt - startTime;
 				Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_File.class,
-						"copy file from [%s] to [%s] , length is [%d] B , cost [%d] ms", fileNameSrc, fileNameDest, fileLen,
+						"copy file from [%s] to [%s] , length is [%d] B , cost [%d] ms", fileNameSrc, fileNameDest,
+						fileLen,
 						span);
 			}
 		}
@@ -222,7 +225,6 @@ public class Util_System_File {
 	 * @param context
 	 * @param srcFileName
 	 * @param destFile
-	 *
 	 * @return
 	 */
 	public static boolean cpFromAssets(Context context, String srcFileName, File destFile) {
@@ -290,7 +292,6 @@ public class Util_System_File {
 	 * 使用时<strong>请注意启用线程</strong>
 	 *
 	 * @param file 要删除的文件或者目录
-	 *
 	 * @return true or false
 	 */
 	public final static boolean delete(final File file) {
@@ -303,9 +304,11 @@ public class Util_System_File {
 					boolean isSuccess = file.delete();
 					if (Debug_SDK.isUtilLog) {
 						if (isSuccess) {
-							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
+							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath
+									());
 						} else {
-							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath
+									());
 						}
 					}
 					return isSuccess;
@@ -318,9 +321,11 @@ public class Util_System_File {
 					boolean isSuccess = file.delete();
 					if (Debug_SDK.isUtilLog) {
 						if (isSuccess) {
-							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath());
+							Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "删除成功： %s", file.getAbsolutePath
+									());
 						} else {
-							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath());
+							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_File.class, "删除失败： %s", file.getAbsolutePath
+									());
 						}
 					}
 					return isSuccess;
@@ -358,7 +363,8 @@ public class Util_System_File {
 			// 如果不存在父目录的话, 自动补全所有的根目录,然后创建
 			if (!file.getParentFile().exists()) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.tw(Debug_SDK.mUtilTag, Util_System_File.class, "当前文件：%s不存在父目录，将补全", file.getAbsoluteFile());
+					Debug_SDK.tw(Debug_SDK.mUtilTag, Util_System_File.class, "当前文件：%s不存在父目录，将补全", file.getAbsoluteFile
+							());
 				}
 				String[] filePathParts = file.getPath().split(File.separator);
 				StringBuilder parentDirPath = new StringBuilder();
@@ -397,13 +403,15 @@ public class Util_System_File {
 				if (!parentDirFile.exists()) {
 					if (Debug_SDK.isUtilLog) {
 						Debug_SDK
-								.tw(Debug_SDK.mUtilTag, Util_System_File.class, "路径:%s,不存在任何内容", parentDirFile.getAbsoluteFile
+								.tw(Debug_SDK.mUtilTag, Util_System_File.class, "路径:%s,不存在任何内容", parentDirFile
+										.getAbsoluteFile
 										());
 					}
 				}
 				boolean result = parentDirFile.mkdirs();
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "补全父目录%s %s", parentDirFile.getAbsoluteFile(),
+					Debug_SDK.ti(Debug_SDK.mUtilTag, Util_System_File.class, "补全父目录%s %s", parentDirFile
+									.getAbsoluteFile(),
 							result ? "成功" : "失败");
 				}
 			}

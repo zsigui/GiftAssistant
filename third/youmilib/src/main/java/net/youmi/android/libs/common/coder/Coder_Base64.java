@@ -15,7 +15,8 @@ import java.io.UnsupportedEncodingException;
 public class Coder_Base64 {
 
 	/*
-	 * <p Encodes a string </p <p Before the string is encoded in Base64, it is converted in a binary sequence using the
+	 * <p Encodes a string </p <p Before the string is encoded in Base64, it is converted in a binary sequence using
+	  * the
 	 * system default charset </p
 	 * 
 	 * @param str The source string
@@ -64,7 +65,8 @@ public class Coder_Base64 {
 	}
 
 	/*
-	 * <p Decodes the supplied string </p <p The supplied string is decoded into a binary sequence, and then th sequence
+	 * <p Decodes the supplied string </p <p The supplied string is decoded into a binary sequence, and then th
+	 * sequence
 	 * is encoded with the system default charset and returned </p
 	 * 
 	 * @para st The encoded string
@@ -95,7 +97,8 @@ public class Coder_Base64 {
 	}
 
 	/*
-	 * <p Decodes the supplied string </p <p The supplied string is decoded into a binary sequence, and then th sequence
+	 * <p Decodes the supplied string </p <p The supplied string is decoded into a binary sequence, and then th
+	 * sequence
 	 * is encoded with the supplied charset and returned </p
 	 * 
 	 * @para st The encoded string

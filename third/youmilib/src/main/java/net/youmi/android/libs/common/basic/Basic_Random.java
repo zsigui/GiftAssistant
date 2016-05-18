@@ -24,9 +24,8 @@ public class Basic_Random {
 
 	/**
 	 * 创建一个随机数字组成的字符串
-	 * 
-	 * @param num
-	 *            字符串的长度
+	 *
+	 * @param num 字符串的长度
 	 * @return
 	 */
 	public final static String createRandom_Number_String(int num) {

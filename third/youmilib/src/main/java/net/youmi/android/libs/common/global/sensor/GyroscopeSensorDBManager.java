@@ -20,7 +20,8 @@ class GyroscopeSensorDBManager extends BaseSensorDBManager {
 
 	synchronized static GyroscopeSensorDBManager getInstance(Context context) throws NullPointerException {
 		if (instance == null) {
-			BaseSensorDBHelper dbHelper = new BaseSensorDBHelper(context, CommonConstant.get_DatabaseName_GyroscopeSensor());
+			BaseSensorDBHelper dbHelper = new BaseSensorDBHelper(context, CommonConstant
+					.get_DatabaseName_GyroscopeSensor());
 			instance = new GyroscopeSensorDBManager(context.getApplicationContext(), dbHelper);
 		}
 		return instance;

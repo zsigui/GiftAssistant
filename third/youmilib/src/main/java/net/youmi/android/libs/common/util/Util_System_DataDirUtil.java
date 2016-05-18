@@ -7,15 +7,14 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * App私有存储目录容量相关
- * 
+ *
  * @author zhitaocai edit on 2014-7-15
- * 
  */
 public class Util_System_DataDirUtil {
 
 	/**
 	 * 检查应用内data目录是否还有足够的空间
-	 * 
+	 *
 	 * @param limtSpace
 	 * @return
 	 */
@@ -89,7 +88,7 @@ public class Util_System_DataDirUtil {
 
 	/**
 	 * 获取私有app目录
-	 * 
+	 *
 	 * @return /data
 	 */
 	public static String getDataDirRootPath() {
@@ -105,7 +104,7 @@ public class Util_System_DataDirUtil {
 
 	/**
 	 * 返回当前应用内目录可用空间大小
-	 * 
+	 *
 	 * @return
 	 */
 	public static long getAvailableSize() {

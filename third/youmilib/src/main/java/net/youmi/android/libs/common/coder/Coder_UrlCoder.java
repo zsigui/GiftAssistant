@@ -9,7 +9,7 @@ public class Coder_UrlCoder {
 
 	/**
 	 * urldecode
-	 * 
+	 *
 	 * @param src
 	 * @return
 	 */
@@ -30,7 +30,7 @@ public class Coder_UrlCoder {
 
 	/**
 	 * urlencode
-	 * 
+	 *
 	 * @param src
 	 * @return
 	 */

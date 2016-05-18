@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 
 /**
  * 官方建议：2.3下使用httpclient
+ *
  * @author zhitao
  * @since 2015-09-10 23:31
  */
@@ -20,7 +21,6 @@ public class YoumiAdHttpClientRequester extends DefaultHttpClientRequester {
 	/**
 	 * @param context
 	 * @param baseHttpRequesterModel 本次请求的相关参数的自定义数据模型
-	 *
 	 * @throws NullPointerException
 	 */
 	public YoumiAdHttpClientRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel)

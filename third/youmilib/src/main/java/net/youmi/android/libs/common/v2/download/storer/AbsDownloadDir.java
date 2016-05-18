@@ -100,7 +100,6 @@ public abstract class AbsDownloadDir {
 	 *
 	 * @param url      原始下载url(每个下载任务的默认唯一标识)
 	 * @param identify 每个下载任务的指定标识，如果本参数不为空，那么需要优先用这个进行创建文件
-	 *
 	 * @return
 	 */
 	public abstract File newDownloadTempFile(String url, String identify);
@@ -110,7 +109,6 @@ public abstract class AbsDownloadDir {
 	 *
 	 * @param url      原始下载url(每个下载任务的默认唯一标识)
 	 * @param identify 每个下载任务的指定标识，如果本参数不为空，那么需要优先用这个进行创建文件
-	 *
 	 * @return
 	 */
 	public abstract File newDownloadStoreFile(String url, String identify);
@@ -172,7 +170,8 @@ public abstract class AbsDownloadDir {
 					// 文件超期就删除
 					boolean result = Util_System_File.delete(file);
 					if (Debug_SDK.isDownloadLog) {
-						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "文件[%s]删除%s", file.getAbsolutePath(), result ? "成功" : "失败");
+						Debug_SDK.td(Debug_SDK.mDownloadTag, this, "文件[%s]删除%s", file.getAbsolutePath(), result ? "成功"
+								: "失败");
 					}
 					continue;
 				}
@@ -237,7 +236,6 @@ public abstract class AbsDownloadDir {
 	 * 检查当前目录的指定文件是否已经超过缓存时间
 	 *
 	 * @param file
-	 *
 	 * @return
 	 */
 	private boolean isFileTimeOut(File file) {

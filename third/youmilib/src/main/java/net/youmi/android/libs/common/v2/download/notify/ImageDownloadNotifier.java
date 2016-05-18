@@ -27,7 +27,8 @@ public class ImageDownloadNotifier extends TListenersManager<ImageDownloadListen
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
 											());
 						}
 						list.get(i).onImageDownloadSuccess(url, bm);
@@ -55,7 +56,8 @@ public class ImageDownloadNotifier extends TListenersManager<ImageDownloadListen
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
 											());
 						}
 						list.get(i).onImageDownloadFailed(url);
@@ -82,7 +84,8 @@ public class ImageDownloadNotifier extends TListenersManager<ImageDownloadListen
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
 											());
 						}
 						list.get(i).onImageDownloadFailed(url);

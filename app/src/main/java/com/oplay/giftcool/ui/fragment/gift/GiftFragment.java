@@ -1,8 +1,6 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +32,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import java.io.IOException;
@@ -72,15 +71,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	private String mGameKey;
 	private JsonReqBase<ReqIndexGift> mReqPageObj;
 	// 每隔5分钟刷新一次
-	private Handler mHandler = new Handler(Looper.myLooper());
 	private Runnable mRefreshRunnable = new Runnable() {
 		@Override
 		public void run() {
 			mIsNotifyRefresh = true;
 			lazyLoad();
-			if (mHandler != null) {
-				mHandler.postDelayed(this, 5 * 60 * 1000);
-			}
+			ThreadUtil.runOnUiThread(this, 5 * 60 * 1000);
 		}
 	};
 
@@ -149,9 +145,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		mAdapter = new GiftAdapter(getContext());
 		rvContainer.setAdapter(mAdapter);
 		mIsPrepared = true;
-		if (mHandler != null) {
-			mHandler.postDelayed(mRefreshRunnable, 5 * 60 * 1000);
-		}
+		ThreadUtil.runOnUiThread(mRefreshRunnable, 5 * 60 * 1000);
 
 		ReqIndexGift data = new ReqIndexGift();
 		data.pageSize = 20;
@@ -441,8 +435,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 					try {
 						Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response = mCallRefreshCircle.execute();
 						if (response != null && response.isSuccessful() && mCanShowUI) {
-							if (response.body() != null && response.body().isSuccess()
-									&& mHandler != null) {
+							if (response.body() != null && response.body().isSuccess()) {
 								// 数据刷新成功，进行更新
 								HashMap<String, IndexGiftNew> respData = response.body().getData();
 								ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
@@ -454,10 +447,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 								waitDelIndexs.clear();
 								updateCircle(respData, waitDelIndexs, mGiftData.news);
 								delIndex(mGiftData.news, waitDelIndexs);
-								if (mHandler == null) {
-									mHandler = new Handler(Looper.myLooper());
-								}
-								mHandler.post(new Runnable() {
+								ThreadUtil.runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
 										int y = rvContainer.getScrollY();
@@ -484,10 +474,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	 * @param type
 	 */
 	public void scrollToPos(final int type) {
-		if (mHandler == null) {
-			return;
-		}
-		mHandler.post(new Runnable() {
+		ThreadUtil.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				switch (type) {
@@ -570,9 +557,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 	public void onDestroyView() {
 		super.onDestroyView();
 		ObserverManager.getInstance().removeGiftUpdateListener(this);
-		if (mHandler != null) {
-			mHandler.removeCallbacks(mRefreshRunnable);
-		}
 	}
 
 	@Override
@@ -583,10 +567,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 		}
 		mAdapter = null;
 		rvContainer = null;
-		if (mHandler != null) {
-			mHandler.removeCallbacksAndMessages(null);
-			mHandler = null;
-		}
 		if (mCallLoad != null) {
 			mCallLoad.cancel();
 			mCallLoad = null;

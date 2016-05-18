@@ -18,12 +18,11 @@ import java.io.File;
 import java.util.List;
 
 public class Util_System_Package {
-	
+
 	/**
 	 * 获取当前App的名字
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getAppNameforCurrentContext(Context context) {
@@ -36,7 +35,7 @@ public class Util_System_Package {
 		}
 		return "";
 	}
-	
+
 	public static boolean checkAppUpdate(Context context, String packageName, int versionCode_online) {
 		try {
 			if (packageName == null) {
@@ -46,7 +45,7 @@ public class Util_System_Package {
 			if (pi != null && pi.versionCode < versionCode_online) {
 				return true;
 			}
-			
+
 		} catch (Throwable e) {
 			if (Debug_SDK.isUtilLog) {
 				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
@@ -54,76 +53,75 @@ public class Util_System_Package {
 		}
 		return false;
 	}
-	
+
 	public static boolean isPakcageInstall(Context context, String packageName) {
 		try {
 			if (packageName == null) {
 				return false;
 			}
-			
+
 			PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, 0);
 			if (pi != null) {
 				return true;
 			}
-			
+
 		} catch (Throwable e) {
 //			if (Debug_SDK.isUtilLog) {
 //				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "包名检索结果：没有找到包名%s", packageName);
 //			}
 		}
 		return false;
-		
+
 	}
-	
+
 	/**
 	 * 获取指定包名的App的启动可用信息
 	 *
 	 * @param context
 	 * @param packageName
-	 *
 	 * @return
 	 */
 	public static Model_App_Launch_Info getAppLaunchInfo(Context context, String packageName) {
 		try {
-			
+
 			if (packageName == null) {
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "包名为空!");
 				}
 				return null;
 			}
-			
+
 			Intent intent = new Intent(Intent.ACTION_MAIN);
 			intent.addCategory(Intent.CATEGORY_LAUNCHER);
 			PackageManager pm = context.getPackageManager();
-			
+
 			List<ResolveInfo> list = pm.queryIntentActivities(intent, Intent.FILL_IN_ACTION);
-			
+
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
 					try {
-						
+
 						ResolveInfo item = list.get(i);
 						if (item != null) {
-							
+
 							if (!item.activityInfo.packageName.equals(packageName)) {
 								continue;
 							}
-							
+
 							String appName = item.loadLabel(pm).toString();
-							
+
 							int icon = item.activityInfo.applicationInfo.icon;
-							
+
 							String activityName = item.activityInfo.name;
 							if ((activityName == null) || ("".equals(activityName.trim()))) {
 								continue;
 							}
-							
+
 							Model_App_Launch_Info info = new Model_App_Launch_Info(appName, icon, activityName);
-							
+
 							return info;
 						}
-						
+
 					} catch (Throwable e) {
 						if (Debug_SDK.isUtilLog) {
 							Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
@@ -131,16 +129,16 @@ public class Util_System_Package {
 					}
 				}
 			}
-			
+
 		} catch (Throwable e) {
 			if (Debug_SDK.isUtilLog) {
 				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	static PackageInfo getPackageInfoFromFilePath(Context context, String filePath) {
 		try {
 			if (filePath == null) {
@@ -154,12 +152,12 @@ public class Util_System_Package {
 		}
 		return null;
 	}
-	
+
 	public static PackageInfo getPackageInfo(Context context, String packageName) {
 		try {
-			
+
 			if (packageName == null) {
-				
+
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,packagename is null");
 				}
@@ -168,19 +166,20 @@ public class Util_System_Package {
 			PackageManager pm = context.getPackageManager();
 			if (pm == null) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,getPackageManager is null");
+					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,getPackageManager is " +
+							"null");
 				}
 				return null;
 			}
-			
+
 			PackageInfo pi = pm.getPackageInfo(packageName, 0);
-			
+
 			if (pi == null) {
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK.td(Debug_SDK.mUtilTag, Util_System_Package.class, "getPackageInfo,PackageInfo is null");
 				}
 			}
-			
+
 			return pi;
 		} catch (Throwable e) {
 			if (Debug_SDK.isUtilLog) {
@@ -189,21 +188,21 @@ public class Util_System_Package {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 通过Key从meta中获取字符串
 	 *
 	 * @param context
 	 * @param key
 	 * @param dfValue
-	 *
 	 * @return
 	 */
 	public static String getStringFromMetaData(Context context, String key, String dfValue) {
 		try {
 			ApplicationInfo ai =
-					context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-			
+					context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager
+							.GET_META_DATA);
+
 			if (ai != null) {
 				Bundle metaDatas = ai.metaData;
 				if (metaDatas != null) {
@@ -235,7 +234,7 @@ public class Util_System_Package {
 					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "applicationInfo is null");
 				}
 			}
-			
+
 		} catch (Throwable e) {
 			if (Debug_SDK.isUtilLog) {
 				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
@@ -243,21 +242,21 @@ public class Util_System_Package {
 		}
 		return dfValue;
 	}
-	
+
 	/**
 	 * 通过Key从meta中获取整数
 	 *
 	 * @param context
 	 * @param key
 	 * @param dfValue
-	 *
 	 * @return
 	 */
 	public static int getIntFromMetaData(Context context, String key, int dfValue) {
 		try {
 			ApplicationInfo ai =
-					context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-			
+					context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager
+							.GET_META_DATA);
+
 			if (ai != null) {
 				Bundle metaDatas = ai.metaData;
 				if (metaDatas != null) {
@@ -288,7 +287,7 @@ public class Util_System_Package {
 					Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, "applicationInfo is null");
 				}
 			}
-			
+
 		} catch (Throwable e) {
 			if (Debug_SDK.isUtilLog) {
 				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
@@ -296,7 +295,7 @@ public class Util_System_Package {
 		}
 		return dfValue;
 	}
-	
+
 	public static Intent getInstallApkIntentByApkFilePath(Context context, String filePath) {
 		try {
 			if (filePath == null) {
@@ -306,7 +305,7 @@ public class Util_System_Package {
 			if (!file.exists()) {
 				return null;
 			}
-			
+
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -318,7 +317,7 @@ public class Util_System_Package {
 		}
 		return null;
 	}
-	
+
 	public static void InstallApkByFilePath(Context context, String filePath) {
 		if (filePath == null) {
 			return;
@@ -333,9 +332,9 @@ public class Util_System_Package {
 				Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Package.class, e);
 			}
 		}
-		
+
 	}
-	
+
 	public static void UnInstallApkByPackageName(Context context, String pkgName) {
 		try {
 			Uri packageURI = Uri.parse("package:" + pkgName);
@@ -347,13 +346,12 @@ public class Util_System_Package {
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取指定包名的签名信息
 	 *
 	 * @param context
 	 * @param pkgName
-	 *
 	 * @return
 	 */
 	public static String getPackageNameSignatureMd5(Context context, String pkgName) {
@@ -361,8 +359,9 @@ public class Util_System_Package {
 			if (Basic_StringUtil.isNullOrEmpty(pkgName)) {
 				return null;
 			}
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES);
-			
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(pkgName, PackageManager
+					.GET_SIGNATURES);
+
 			Signature[] signature = packageInfo.signatures;
 			if (signature != null && signature.length > 0) {
 				return Coder_Md5.md5(signature[0].toByteArray());
@@ -374,7 +373,6 @@ public class Util_System_Package {
 		}
 		return null;
 	}
-
 
 
 }

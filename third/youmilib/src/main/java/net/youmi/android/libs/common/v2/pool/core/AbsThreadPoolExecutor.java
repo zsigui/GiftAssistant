@@ -28,7 +28,6 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 	 *                        tasks submitted by the {@code execute} method.
 	 * @param threadFactory   the factory to use when the executor
 	 *                        creates a new thread
-	 *
 	 * @throws IllegalArgumentException if one of the following holds:<br>
 	 *                                  {@code corePoolSize < 0}<br>
 	 *                                  {@code keepAliveTime < 0}<br>
@@ -38,7 +37,7 @@ public class AbsThreadPoolExecutor extends ThreadPoolExecutor {
 	 *                                  or {@code threadFactory} is null
 	 */
 	public AbsThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
-			BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+	                             BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
 	}
 

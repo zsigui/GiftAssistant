@@ -38,13 +38,14 @@ public class Basic_Properties {
 
 	/**
 	 * 将properties保存到指定的文件中
-	 * 
+	 *
 	 * @param context
 	 * @param properties
 	 * @param storeFileName
 	 * @return
 	 */
-	public static synchronized boolean savePropertiesToFile(Context context, Properties properties, String storeFileName) {
+	public static synchronized boolean savePropertiesToFile(Context context, Properties properties, String
+			storeFileName) {
 		try {
 			OutputStream os = context.openFileOutput(storeFileName, Context.MODE_PRIVATE);
 			if (os != null) {

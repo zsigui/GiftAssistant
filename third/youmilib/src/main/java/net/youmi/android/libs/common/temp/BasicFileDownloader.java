@@ -16,7 +16,7 @@ import java.io.RandomAccessFile;
 
 /**
  * 单纯地对执行下载文件任务,不做逻辑,只返回本次下载的结果
- * 
+ *
  * @author zhitaocai edit on 2014-5-26
  * @author zhitaocai edit on 2014-7-16
  */
@@ -84,14 +84,10 @@ public class BasicFileDownloader {
 	private Context mContext;
 
 	/**
-	 * 
 	 * @param context
-	 * @param fileUrl
-	 *            文件下载地址
-	 * @param destFile
-	 *            保存的本地文件File
-	 * @param start
-	 *            下载起点
+	 * @param fileUrl  文件下载地址
+	 * @param destFile 保存的本地文件File
+	 * @param start    下载起点
 	 */
 	public BasicFileDownloader(Context context, String fileUrl, File destFile, long start) {
 		mContext = context.getApplicationContext();
@@ -108,11 +104,11 @@ public class BasicFileDownloader {
 
 	/**
 	 * 下载文件
-	 * 
+	 *
 	 * @return
 	 */
 	public int downloadToFile() {
-		
+
 		RandomAccessFile accessFile = null;
 		HttpGet get = null;
 		DefaultHttpClient client = null;
@@ -190,9 +186,11 @@ public class BasicFileDownloader {
 				// 如果是从0开始下载，并且文件存在，这时候如果文件已经存在的长度比服务器返回的文件总长度还大，并且没有指定结尾
 				// 则说明旧文件已经被写入内容，即使重新从0写入，最终得到的文件也不可能与原文件一致，
 				// 因此需要删除文件
-				if (start == 0 && mDestFile.exists() && mDestFile.isFile() && (mDestFile.length() > currentDestLength)) {
+				if (start == 0 && mDestFile.exists() && mDestFile.isFile() && (mDestFile.length() >
+						currentDestLength)) {
 					if (Debug_SDK.isDownloadLog) {
-						Debug_SDK.tw(Debug_SDK.mDownloadTag, this, "下载文件又被篡改的嫌疑，准备删除文件%s", mDestFile.getAbsolutePath());
+						Debug_SDK.tw(Debug_SDK.mDownloadTag, this, "下载文件又被篡改的嫌疑，准备删除文件%s", mDestFile.getAbsolutePath
+								());
 					}
 					if (mDestFile.delete()) {
 						if (Debug_SDK.isDownloadLog) {
@@ -291,7 +289,7 @@ public class BasicFileDownloader {
 
 	/**
 	 * 获取已经完成的长度
-	 * 
+	 *
 	 * @return
 	 */
 	public long getCompleteLength() {
@@ -300,7 +298,7 @@ public class BasicFileDownloader {
 
 	/**
 	 * 获取下载进度的百分比
-	 * 
+	 *
 	 * @return
 	 */
 	public int getPercent() {
@@ -314,7 +312,7 @@ public class BasicFileDownloader {
 
 	/**
 	 * 获取本次 加载的总长度
-	 * 
+	 *
 	 * @return
 	 */
 	public long getContentLength() {
@@ -330,7 +328,7 @@ public class BasicFileDownloader {
 
 	/**
 	 * 是否正在下载中
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isRunning() {

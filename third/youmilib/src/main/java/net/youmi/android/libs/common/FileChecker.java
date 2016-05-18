@@ -72,9 +72,9 @@ public class FileChecker {
 				} else {
 					Debug_SDK.te("test_", obj1, "false ━━ %s", methodName);
 				}
-					Debug_SDK.tv("test_", obj1, "     ┗━ src: %s : %s", methodName, methodContent);
-					Debug_SDK.tv("test_", obj1, "     ┗━ aft: %s : %s", methodName, map2.get(methodName));
-				if (!isPass){
+				Debug_SDK.tv("test_", obj1, "     ┗━ src: %s : %s", methodName, methodContent);
+				Debug_SDK.tv("test_", obj1, "     ┗━ aft: %s : %s", methodName, map2.get(methodName));
+				if (!isPass) {
 					Debug_SDK.te("test_", obj1, "校验失败");
 					return;
 				}

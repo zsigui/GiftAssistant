@@ -24,6 +24,7 @@ public class Model_Battery {
 	 * <li>{@link android.os.BatteryManager#BATTERY_PLUGGED_USB} USB充电</li>
 	 * <li>{@link android.os.BatteryManager#BATTERY_PLUGGED_WIRELESS} 无线充电</li>
 	 * </ul>
+	 *
 	 * @see
 	 */
 	public int inChargeType;
@@ -39,21 +40,21 @@ public class Model_Battery {
 			builder.append(" \n  inChargeType=");
 			builder.append(inChargeType);
 			switch (inChargeType) {
-			case 0:
-				builder.append(" --> 当前没有充电");
-				break;
-			case BatteryManager.BATTERY_PLUGGED_AC:
-				builder.append(" --> 充电器充电");
-				break;
-			case BatteryManager.BATTERY_PLUGGED_USB:
-				builder.append(" --> usb充电");
-				break;
-			case BatteryManager.BATTERY_PLUGGED_WIRELESS:
-				builder.append(" --> 充电");
-				break;
-			default:
-				builder.append(" --> 未知充电方式");
-				break;
+				case 0:
+					builder.append(" --> 当前没有充电");
+					break;
+				case BatteryManager.BATTERY_PLUGGED_AC:
+					builder.append(" --> 充电器充电");
+					break;
+				case BatteryManager.BATTERY_PLUGGED_USB:
+					builder.append(" --> usb充电");
+					break;
+				case BatteryManager.BATTERY_PLUGGED_WIRELESS:
+					builder.append(" --> 充电");
+					break;
+				default:
+					builder.append(" --> 未知充电方式");
+					break;
 			}
 			builder.append("\n]");
 			return builder.toString();

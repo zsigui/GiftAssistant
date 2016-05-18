@@ -40,7 +40,7 @@ public abstract class ViewHolderRecyclingPagerAdapter<VH extends ViewHolderRecyc
 
     @Override
     public int getCount() {
-        return this.mList.size();
+        return mList == null ? 0 : this.mList.size();
     }
 
     public abstract VH onCreateViewHolder(ViewGroup parent, int position);

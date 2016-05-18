@@ -118,7 +118,8 @@ final class UDPClient extends Client {
 		return data;
 	}
 
-	static byte[] sendrecv(SocketAddress local, SocketAddress remote, byte[] data, int max, long endTime) throws IOException {
+	static byte[] sendrecv(SocketAddress local, SocketAddress remote, byte[] data, int max, long endTime) throws
+			IOException {
 		UDPClient client = new UDPClient(endTime);
 		try {
 			client.bind(local);

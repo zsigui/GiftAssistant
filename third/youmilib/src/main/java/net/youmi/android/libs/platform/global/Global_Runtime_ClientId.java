@@ -151,9 +151,10 @@ public class Global_Runtime_ClientId {
 			if (cidStr == null) {
 
 				cidStr = Coder_Md5
-						.md5(Global_Runtime_SystemInfo.getManufacturerInfo() + Global_Runtime_SystemInfo.getDeviceModel() +
-						     Basic_Random.nextInt(Integer.MAX_VALUE) + System.currentTimeMillis() +
-						     Global_Runtime_SystemInfo.getDeviceOsRelease() + keyWord);
+						.md5(Global_Runtime_SystemInfo.getManufacturerInfo() + Global_Runtime_SystemInfo
+								.getDeviceModel() +
+								Basic_Random.nextInt(Integer.MAX_VALUE) + System.currentTimeMillis() +
+								Global_Runtime_SystemInfo.getDeviceOsRelease() + keyWord);
 				if (cidStr != null) {
 
 					try {
@@ -179,7 +180,6 @@ public class Global_Runtime_ClientId {
 	 * 校验码
 	 *
 	 * @param srcCid
-	 *
 	 * @return
 	 */
 	private static String toValidationCid(String srcCid) {

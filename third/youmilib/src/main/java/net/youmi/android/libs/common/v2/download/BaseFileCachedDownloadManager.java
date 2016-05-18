@@ -52,12 +52,13 @@ public abstract class BaseFileCachedDownloadManager extends AbsCachedDownloadMan
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
 	 * @return
 	 */
 	@Override
-	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+	public AbsDownloader newDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask
+			fileDownloadTask,
+	                                   AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker
+			                                       iFileAvailableChecker)
 			throws NullPointerException, IOException {
 		return new DefaultSDKDownloader(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
 	}

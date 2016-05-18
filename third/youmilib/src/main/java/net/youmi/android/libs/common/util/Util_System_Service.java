@@ -37,7 +37,7 @@ public class Util_System_Service {
 	public static AlarmManager getAlarmManager(Context context) {
 		return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 	}
-	
+
 	public static ActivityManager getActivityManager(Context context) {
 		return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	}

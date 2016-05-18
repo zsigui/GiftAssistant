@@ -32,7 +32,8 @@ public class Default_SDK_Executor {
 		try {
 			List<Runnable> list = GlobalCacheExecutor.getCachedThreadPool().shutdownNow();
 			if (Debug_SDK.isGlobalLog) {
-				Debug_SDK.td(Debug_SDK.mGlobalTag, Default_SDK_Executor.class, "尝试停止所有正在执行的线程，以及准备执行的线程，成功结束数量： %d", list.size
+				Debug_SDK.td(Debug_SDK.mGlobalTag, Default_SDK_Executor.class, "尝试停止所有正在执行的线程，以及准备执行的线程，成功结束数量： %d",
+						list.size
 						());
 			}
 		} catch (Exception e) {

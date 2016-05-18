@@ -22,7 +22,6 @@ public class Util_Zip {
 	 *
 	 * @param zipFile     zip文件
 	 * @param destDirPath 解压后存放的路径
-	 *
 	 * @return 解压是否成功
 	 */
 	public static boolean sync_unZip(File zipFile, String destDirPath) {
@@ -40,12 +39,12 @@ public class Util_Zip {
 	 *                             <li>true ： 是</li>
 	 *                             <li>false： 否</li>
 	 *                             </ul>
-	 *
 	 * @return
 	 */
 	public static void async_unZIp(File zipFile, String destDirPath, IUnZipListener unZiplistener, boolean
 			isCallBackInUiThread) {
-		Global_Executor.getCachedThreadPool().execute(new UnZip(zipFile, destDirPath, unZiplistener, isCallBackInUiThread));
+		Global_Executor.getCachedThreadPool().execute(new UnZip(zipFile, destDirPath, unZiplistener,
+				isCallBackInUiThread));
 	}
 
 }

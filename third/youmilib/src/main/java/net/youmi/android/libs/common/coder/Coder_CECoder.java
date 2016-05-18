@@ -22,7 +22,7 @@ public class Coder_CECoder {
 	/**
 	 * CE加密使用
 	 */
-	private static int primes[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 };
+	private static int primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31};
 
 	/**
 	 * 大写字符串
@@ -68,7 +68,6 @@ public class Coder_CECoder {
 	 * @param strBytes    待加密字符串
 	 * @param enkey       当前参与加密的密钥
 	 * @param primeNumber
-	 *
 	 * @return 加密后的字符串
 	 */
 	public final static String ceEncode(final byte[] strBytes, final String enkey, int primeNumber)
@@ -251,7 +250,6 @@ public class Coder_CECoder {
 	 * 将六十四进制的字符转换为十进制的数字
 	 *
 	 * @param c
-	 *
 	 * @return
 	 */
 	public final static int conver64ToDecimal(char c) {

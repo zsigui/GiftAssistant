@@ -9,9 +9,8 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 浏览器书签（未经测试）
- * 
+ *
  * @author zhitaocai edit on 2014-7-15
- * 
  */
 public class Util_System_ContentResolver_Browser_Bookmark {
 
@@ -22,7 +21,8 @@ public class Util_System_ContentResolver_Browser_Bookmark {
 			if (!Util_System_Permission.isWith_WRITE_HISTORY_BOOKMARKS(context)) {
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK
-							.te(Debug_SDK.mUtilTag, Util_System_ContentResolver_Browser_Bookmark.class, "不具有添加浏览器书签权限");
+							.te(Debug_SDK.mUtilTag, Util_System_ContentResolver_Browser_Bookmark.class,
+									"不具有添加浏览器书签权限");
 				}
 				return false;
 			}
@@ -38,7 +38,8 @@ public class Util_System_ContentResolver_Browser_Bookmark {
 			if (url == null) {
 				if (Debug_SDK.isUtilLog) {
 					Debug_SDK
-							.te(Debug_SDK.mUtilTag, Util_System_ContentResolver_Browser_Bookmark.class, "添加书签失败:url为空");
+							.te(Debug_SDK.mUtilTag, Util_System_ContentResolver_Browser_Bookmark.class,
+									"添加书签失败:url为空");
 				}
 				return false;
 			}
@@ -46,7 +47,7 @@ public class Util_System_ContentResolver_Browser_Bookmark {
 			ContentValues cv = null;
 			ContentResolver contentResolver = context.getContentResolver();
 			String where = "title=?";
-			String[] arrayOfString = { title };
+			String[] arrayOfString = {title};
 
 			contentResolver.delete(BOOKMARKS_URI, where, arrayOfString);
 			cv = new ContentValues();

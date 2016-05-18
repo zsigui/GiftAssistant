@@ -73,8 +73,9 @@ class BaseSensorDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String sql = String.format(
-				"create table if not exists %s (%s varchar primary key, %s varchar, %s varchar, %s varchar, %s varchar, %s " +
-				"varchar, %s varchar);",
+				"create table if not exists %s (%s varchar primary key, %s varchar, %s varchar, %s varchar, %s " +
+						"varchar, %s " +
+						"varchar, %s varchar);",
 				TABLE_NAME, GENERATE_TIME, SENSORVALUE_0, SENSORVALUE_1, SENSORVALUE_2, SENSORVALUE_3, SENSORVALUE_4,
 				SENSORVALUE_5);
 		db.execSQL(sql);

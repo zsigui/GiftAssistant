@@ -46,7 +46,7 @@ public class Name implements Serializable {
 	 */
 	private static final int MAXOFFSETS = 7;
 
-	private static final byte[] emptyLabel = new byte[] { (byte) 0 };
+	private static final byte[] emptyLabel = new byte[]{(byte) 0};
 
 	private static final byte lowercase[] = new byte[256];
 
@@ -83,34 +83,34 @@ public class Name implements Serializable {
 		while (!done) {
 			len = in.readU8();
 			switch (len & LABEL_MASK) {
-			case LABEL_NORMAL:
-				if (getlabels() >= MAXLABELS) {
-					throw new IOException("too many labels");
-				}
-				if (len == 0) {
-					append(emptyLabel, 0, 1);
-					done = true;
-				} else {
-					label[0] = (byte) len;
-					in.readByteArray(label, 1, len);
-					append(label, 0, 1);
-				}
-				break;
-			case LABEL_COMPRESSION:
-				pos = in.readU8();
-				pos += ((len & ~LABEL_MASK) << 8);
+				case LABEL_NORMAL:
+					if (getlabels() >= MAXLABELS) {
+						throw new IOException("too many labels");
+					}
+					if (len == 0) {
+						append(emptyLabel, 0, 1);
+						done = true;
+					} else {
+						label[0] = (byte) len;
+						in.readByteArray(label, 1, len);
+						append(label, 0, 1);
+					}
+					break;
+				case LABEL_COMPRESSION:
+					pos = in.readU8();
+					pos += ((len & ~LABEL_MASK) << 8);
 
-				if (pos >= in.current() - 2) {
-					throw new IOException("bad compression");
-				}
-				if (!savedState) {
-					in.save();
-					savedState = true;
-				}
-				in.jump(pos);
-				break;
-			default:
-				throw new IOException("bad label type");
+					if (pos >= in.current() - 2) {
+						throw new IOException("bad compression");
+					}
+					if (!savedState) {
+						in.save();
+						savedState = true;
+					}
+					in.jump(pos);
+					break;
+				default:
+					throw new IOException("bad label type");
 			}
 		}
 		if (savedState) {
@@ -293,7 +293,8 @@ public class Name implements Serializable {
 		return getlabels();
 	}
 
-	private final void appendFromString(String fullName, byte[] array, int start, int n) throws IllegalArgumentException {
+	private final void appendFromString(String fullName, byte[] array, int start, int n) throws
+			IllegalArgumentException {
 		try {
 			append(array, start, n);
 		} catch (Exception e) {

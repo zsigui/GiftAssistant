@@ -22,17 +22,15 @@ public class Util_System_Intent_Network {
 
 	/**
 	 * 获取打开url的Intent
-	 * 
+	 *
 	 * @param context
-	 * @param browserPackageName
-	 *            可为null
-	 * @param browserActivity
-	 *            可为null
+	 * @param browserPackageName 可为null
+	 * @param browserActivity    可为null
 	 * @param url
 	 * @return
 	 */
 	public static Intent getToWebUrlIntent(Context context, String browserPackageName, String browserActivity,
-			String url) {
+	                                       String url) {
 
 		Intent intent = null;
 		try {

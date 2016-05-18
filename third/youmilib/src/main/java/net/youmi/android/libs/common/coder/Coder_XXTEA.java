@@ -13,7 +13,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Encrypt data with key.
-	 * 
+	 *
 	 * @param data
 	 * @param key
 	 * @return
@@ -27,7 +27,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Decrypt data with key.
-	 * 
+	 *
 	 * @param data
 	 * @param key
 	 * @return
@@ -41,7 +41,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Encrypt data with key.
-	 * 
+	 *
 	 * @param v
 	 * @param k
 	 * @return
@@ -76,7 +76,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Decrypt data with key.
-	 * 
+	 *
 	 * @param v
 	 * @param k
 	 * @return
@@ -112,7 +112,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Convert byte array to int array.
-	 * 
+	 *
 	 * @param data
 	 * @param includeLength
 	 * @return
@@ -136,7 +136,7 @@ public final class Coder_XXTEA {
 
 	/**
 	 * Convert int array to byte array.
-	 * 
+	 *
 	 * @param data
 	 * @param includeLength
 	 * @return

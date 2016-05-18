@@ -18,17 +18,15 @@ public class DefaultAutoRetryFileDownloader extends AbsAutoRetryFileDownloader {
 	 * @param context
 	 * @param maxRetryTimes        最大重试次数
 	 * @param retryIntervalTime_ms 下一次重试的时间间隔(ms)
-	 *
 	 * @pamam fileDownloadTask 下载任务模型
 	 */
 	public DefaultAutoRetryFileDownloader(Context context, FileDownloadTask fileDownloadTask, int maxRetryTimes,
-			int retryIntervalTime_ms) {
+	                                      int retryIntervalTime_ms) {
 		super(context, fileDownloadTask, maxRetryTimes, retryIntervalTime_ms);
 	}
 
 	/**
 	 * @param context
-	 *
 	 * @pamam fileDownloadTask 下载任务模型
 	 */
 	public DefaultAutoRetryFileDownloader(Context context, FileDownloadTask fileDownloadTask) {
@@ -40,7 +38,6 @@ public class DefaultAutoRetryFileDownloader extends AbsAutoRetryFileDownloader {
 	 *
 	 * @param context
 	 * @param fileDownloadTask
-	 *
 	 * @return
 	 */
 	@Override

@@ -9,19 +9,16 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * 有米加密算法
- * 
+ *
  * @author zhitaocai
- * 
  */
 public class Coder_SDKPswCoder {
 
 	/**
 	 * 加密
-	 * 
-	 * @param string
-	 *            $str 原文
-	 * @param string
-	 *            $key 密钥
+	 *
+	 * @param string $str 原文
+	 * @param string $key 密钥
 	 * @return string
 	 */
 	public static String encode(String toEncode, String key) {

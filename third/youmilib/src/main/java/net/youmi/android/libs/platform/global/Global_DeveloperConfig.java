@@ -117,7 +117,8 @@ public class Global_DeveloperConfig {
 
 				if (mAppId == null) {
 					mAppId = Global_SharePreferences
-							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, KEY_SALT_APPID, null);
+							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, KEY_SALT_APPID,
+									null);
 					if (Debug_SDK.isGlobalLog) {
 						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
 								"get appid from sharedpreferences:" + mAppId);
@@ -125,7 +126,8 @@ public class Global_DeveloperConfig {
 				} else {
 					if (mAppId.length() <= 0) {
 						mAppId = Global_SharePreferences
-								.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID, KEY_SALT_APPID, null);
+								.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPID,
+										KEY_SALT_APPID, null);
 						if (Debug_SDK.isGlobalLog) {
 							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
 									"get appid from sharedpreferences:" + mAppId);
@@ -182,7 +184,6 @@ public class Global_DeveloperConfig {
 	 * 获取密钥
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getAppSecret(Context context) {
@@ -196,7 +197,8 @@ public class Global_DeveloperConfig {
 					return mAppSecret;
 				} else {
 					mAppSecret = Global_SharePreferences
-							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure, KEY_SALT_APPSecure,
+							.getStringFromSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure,
+									KEY_SALT_APPSecure,
 									null);
 					if (Debug_SDK.isGlobalLog) {
 						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class,
@@ -230,10 +232,12 @@ public class Global_DeveloperConfig {
 
 						// 保存到文件中
 						Global_SharePreferences
-								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure, secret,
+								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_APPSecure,
+										secret,
 										KEY_SALT_APPSecure);
 						if (Debug_SDK.isGlobalLog) {
-							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "设置AppSec:%s", mAppSecret);
+							Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "设置AppSec:%s",
+									mAppSecret);
 						}
 					}
 				}
@@ -248,7 +252,6 @@ public class Global_DeveloperConfig {
 	 * 自定义UserID用于服务器回调积分赚取订单时唯一地标识一个用户。
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getCustomUserId(Context context) {
@@ -319,7 +322,6 @@ public class Global_DeveloperConfig {
 	 * 获取App版本名
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getAppVersionName(Context context) {
@@ -340,7 +342,6 @@ public class Global_DeveloperConfig {
 	 * 获取App版本号
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static int getAppVersionCode(Context context) {
@@ -383,7 +384,8 @@ public class Global_DeveloperConfig {
 
 				// 2、保存到文件中
 				boolean isSuccess = Global_SharePreferences
-						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_CHN, mYoumiChannelId + "",
+						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_CHN, mYoumiChannelId +
+										"",
 								KEY_SALT_CHN);
 				if (Debug_SDK.isGlobalLog) {
 					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_DeveloperConfig.class, "set channel id:%d file save:%b",
@@ -421,7 +423,8 @@ public class Global_DeveloperConfig {
 
 				// 2、保存到文件中
 				boolean isSuccess = Global_SharePreferences
-						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_SCHN, mShieldChannelId + "",
+						.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_SCHN, mShieldChannelId
+										+ "",
 								KEY_SALT_SCHN);
 				if (Debug_SDK.isGlobalLog) {
 				}
@@ -515,7 +518,8 @@ public class Global_DeveloperConfig {
 					if (weixinAppid.length() > 0) {
 						mWeixinAppid = weixinAppid;
 						Global_SharePreferences
-								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_WEIXIN_APPID, weixinAppid,
+								.saveEncodeStringToSharedPreferences(context, APPCONFING_FILENAME, KEY_WEIXIN_APPID,
+										weixinAppid,
 										KEY_SALT_WEIXIN_APPID);
 					}
 				}

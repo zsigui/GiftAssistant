@@ -15,7 +15,6 @@ public class DefaultHttpURLConnectionRequester extends AbsHttpURLConnectionReque
 	/**
 	 * @param context
 	 * @param baseHttpRequesterModel 本次请求的相关参数的自定义数据模型
-	 *
 	 * @throws NullPointerException
 	 */
 	public DefaultHttpURLConnectionRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel)

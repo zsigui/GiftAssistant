@@ -24,7 +24,6 @@ public interface IFileAvailableChecker {
 	 * </ul>
 	 *
 	 * @param fileDownloadTask 下载任务
-	 *
 	 * @return
 	 */
 	boolean isStoreFileAvailable(FileDownloadTask fileDownloadTask);

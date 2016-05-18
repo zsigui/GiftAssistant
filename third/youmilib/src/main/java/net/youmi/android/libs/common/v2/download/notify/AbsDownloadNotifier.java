@@ -53,9 +53,10 @@ public abstract class AbsDownloadNotifier extends TListenersManager<IDownloadLis
 	 * @param speedBytesPerS  当前下载速度:每intervalTime_ms毫秒下载的长度(单位:bytes)
 	 * @param intervalTime_ms 当前下载速度时间单位:每intervalTime_ms毫秒回回调一次本方法(单位:bytes)
 	 */
-	public abstract void onNotifyDownloadProgressUpdate(FileDownloadTask task, long totalLength, long completeLength, int
+	public abstract void onNotifyDownloadProgressUpdate(FileDownloadTask task, long totalLength, long completeLength,
+	                                                    int
 			percent,
-			long speedBytes, long intervalTime_ms);
+	                                                    long speedBytes, long intervalTime_ms);
 
 	/**
 	 * 通知下载成功：子类需要实现具体业务逻辑
@@ -77,7 +78,8 @@ public abstract class AbsDownloadNotifier extends TListenersManager<IDownloadLis
 	 * @param fileDownloadTask
 	 * @param finalDownloadStatus 下载任务失败数据模型
 	 */
-	public abstract void onNotifyDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus finalDownloadStatus);
+	public abstract void onNotifyDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus
+			finalDownloadStatus);
 
 	/**
 	 * 通知下载停止：子类需要实现具体业务逻辑
@@ -88,6 +90,6 @@ public abstract class AbsDownloadNotifier extends TListenersManager<IDownloadLis
 	 * @param percent          下载停止时，已经完成的百分比
 	 */
 	public abstract void onNotifyDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength,
-			int percent);
+	                                          int percent);
 
 }

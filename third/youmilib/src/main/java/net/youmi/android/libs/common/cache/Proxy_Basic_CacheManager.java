@@ -5,9 +5,8 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 保存字节数组的代理缓存类
- * 
+ *
  * @author zhitaocai edit on 2014-6-27
- * 
  */
 public class Proxy_Basic_CacheManager {
 
@@ -21,14 +20,12 @@ public class Proxy_Basic_CacheManager {
 
 	/**
 	 * 保存缓存
-	 * 
+	 *
 	 * @param context
 	 * @param key
 	 * @param value
-	 * @param cacheValidTime
-	 *            缓存保存时间，单位为ms，-1表示永久保存.
-	 * @param encryptType
-	 *            使用的加密模式,详见 {@linkplain net.youmi.android.libs.common.cache.Cache_Security_Type}
+	 * @param cacheValidTime 缓存保存时间，单位为ms，-1表示永久保存.
+	 * @param encryptType    使用的加密模式,详见 {@linkplain net.youmi.android.libs.common.cache.Cache_Security_Type}
 	 * @return
 	 */
 	protected boolean saveCache(String key, byte[] value, long cacheValidTime, int encryptType) {
@@ -52,11 +49,10 @@ public class Proxy_Basic_CacheManager {
 
 	/**
 	 * 读取缓存
-	 * 
+	 *
 	 * @param context
 	 * @param key
-	 * @param encryptType
-	 *            使用的加密模式,详见 {@linkplain net.youmi.android.libs.common.cache.Cache_Security_Type}
+	 * @param encryptType 使用的加密模式,详见 {@linkplain net.youmi.android.libs.common.cache.Cache_Security_Type}
 	 * @return
 	 */
 	protected byte[] getCache(String key, int encryptType) {

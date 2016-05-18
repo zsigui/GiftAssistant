@@ -1,6 +1,8 @@
 package net.youmi.android.libs.common.location;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -41,7 +43,7 @@ public class Proxy_Manager_Location_AdLocationManager {
 
 	/**
 	 * 初始化Location 需要被调用
-	 * 
+	 *
 	 * @param context
 	 */
 	private void initLocation(Context context) {
@@ -73,6 +75,10 @@ public class Proxy_Manager_Location_AdLocationManager {
 			Location location = null;
 
 			try {
+				if (context.checkCallingOrSelfPermission( Manifest.permission.ACCESS_FINE_LOCATION)
+						== PackageManager.PERMISSION_DENIED) {
+					return;
+				}
 				location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 				if (location != null) {
@@ -83,7 +89,6 @@ public class Proxy_Manager_Location_AdLocationManager {
 							Debug_SDK.td(Debug_SDK.mLocationTag, Proxy_Manager_Location_AdLocationManager.class,
 									"从基站中获取location: %f - %f", location.getLatitude(), location.getLongitude());
 						}
-						return;
 					}
 				}
 			} catch (Throwable e) {
@@ -213,7 +218,7 @@ public class Proxy_Manager_Location_AdLocationManager {
 
 	/**
 	 * 当initLocation获取到结果时，进行设置，并且保存到缓存中
-	 * 
+	 *
 	 * @param location
 	 */
 	public void setLocation(Location location) {
@@ -239,7 +244,7 @@ public class Proxy_Manager_Location_AdLocationManager {
 
 	/**
 	 * 获取经纬度
-	 * 
+	 *
 	 * @return
 	 */
 	public Location getLocation() {

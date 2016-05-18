@@ -34,7 +34,7 @@ public class Global_Final_Common_Millisecond {
 	public static final long oneMonth_ms = 31 * oneDay_ms;
 
 	/**
-	 * @param @param time_ms
+	 * @param @param  time_ms
 	 * @param @return 传入参数名字
 	 * @return String 返回类型
 	 * @Title: getTimeString
@@ -76,7 +76,7 @@ public class Global_Final_Common_Millisecond {
 	}
 
 	/**
-	 * @param @param time_ms，time_ms小于0的时候，xxx时间前，大于o的时候是xxx时间后
+	 * @param @param  time_ms，time_ms小于0的时候，xxx时间前，大于o的时候是xxx时间后
 	 * @param @return 传入参数名字
 	 * @return String 返回类型
 	 * @Title: getRoughTime

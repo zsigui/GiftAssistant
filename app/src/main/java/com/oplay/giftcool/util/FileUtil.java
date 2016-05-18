@@ -209,7 +209,7 @@ public class FileUtil {
             FileChannel outChannel = null;
             try {
                 outChannel = ((FileOutputStream) out).getChannel();
-                outChannel.write(ByteBuffer.wrap(data));
+                outChannel.write(ByteBuffer.wrap(data == null? new byte[0] : data));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -262,6 +262,7 @@ public class FileUtil {
                 BufferedOutputStream(out);
         try {
             bout.write(data);
+            bout.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

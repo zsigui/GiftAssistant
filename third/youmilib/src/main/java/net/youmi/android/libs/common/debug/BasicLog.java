@@ -9,7 +9,7 @@ import java.util.Locale;
  * <hr>
  * 1、如果是测试时打印的log应该是调用这个类的方法<br>
  * 2、如果是给给开发者的log提示的话应该是继承这个类来实现跟更丰富的log
- * 
+ *
  * @author zhitaocai create on 2014-7-10
  */
 public class BasicLog {
@@ -33,21 +33,21 @@ public class BasicLog {
 					msg = String.format(Locale.getDefault(), msg, args);
 				}
 				switch (level) {
-				case Log.DEBUG:
-					Log.d(tag, msg, tr);
-					break;
-				case Log.ERROR:
-					Log.e(tag, msg, tr);
-					break;
-				case Log.INFO:
-					Log.i(tag, msg, tr);
-					break;
-				case Log.WARN:
-					Log.w(tag, msg, tr);
-					break;
-				default:
-					Log.v(tag, msg, tr);
-					break;
+					case Log.DEBUG:
+						Log.d(tag, msg, tr);
+						break;
+					case Log.ERROR:
+						Log.e(tag, msg, tr);
+						break;
+					case Log.INFO:
+						Log.i(tag, msg, tr);
+						break;
+					case Log.WARN:
+						Log.w(tag, msg, tr);
+						break;
+					default:
+						Log.v(tag, msg, tr);
+						break;
 				}
 			} catch (Throwable e) {
 				e.printStackTrace();
@@ -57,16 +57,15 @@ public class BasicLog {
 
 	/**
 	 * 打印log 调用时的详细信息
-	 * 
-	 * @param invokeInfoColor
-	 *            显示log详细信息的文字的颜色
-	 *            <ul>
-	 *            <li>{@code Log.DEBUG} : 蓝色</li>
-	 *            <li>{@code Log.ERROR} : 红色</li>
-	 *            <li>{@code Log.INFO} : 绿色</li>
-	 *            <li>{@code Log.VERBOSE} : 黑色</li>
-	 *            <li>{@code Log.WARN} : 黄色</li>
-	 *            </ul>
+	 *
+	 * @param invokeInfoColor 显示log详细信息的文字的颜色
+	 *                        <ul>
+	 *                        <li>{@code Log.DEBUG} : 蓝色</li>
+	 *                        <li>{@code Log.ERROR} : 红色</li>
+	 *                        <li>{@code Log.INFO} : 绿色</li>
+	 *                        <li>{@code Log.VERBOSE} : 黑色</li>
+	 *                        <li>{@code Log.WARN} : 黄色</li>
+	 *                        </ul>
 	 * @param tag
 	 */
 	protected synchronized static void printInvokeInfo(int invokeInfoColor, String tag) {
@@ -77,7 +76,8 @@ public class BasicLog {
 					StackTraceElement element = elements[5];
 					String txt = String.format("FileName:[ %s ] Method:( %s )  Line:( %d )", element.getFileName(),
 							element.getMethodName(), element.getLineNumber());
-					// String txt = String.format("Time:[ %d ] Thread:[ %d ] Method:( %s ) FileName:[ %s ] Line:( %d )",
+					// String txt = String.format("Time:[ %d ] Thread:[ %d ] Method:( %s ) FileName:[ %s ] Line:( %d
+					// )",
 					// System.currentTimeMillis(), Thread.currentThread().getId(), element.getMethodName(),
 					// element.getFileName(), element.getLineNumber());
 					printLog(invokeInfoColor, tag, null, txt);
@@ -101,11 +101,9 @@ public class BasicLog {
 
 	/**
 	 * 获取最后的tag
-	 * 
-	 * @param preTag
-	 *            模块的tag
-	 * @param object
-	 *            模块里面的某个类对象，传入可以是this指针，若是静态类，请传递静态类class
+	 *
+	 * @param preTag 模块的tag
+	 * @param object 模块里面的某个类对象，传入可以是this指针，若是静态类，请传递静态类class
 	 * @return
 	 */
 	protected synchronized static String getFinalTag(String preTag, Object object) {
@@ -118,7 +116,7 @@ public class BasicLog {
 
 	/**
 	 * 获取调用时的方法名
-	 * 
+	 *
 	 * @return
 	 */
 	protected synchronized static String getMethodName() {

@@ -56,8 +56,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onDownloadBeforeStart_FileLock(fileDownloadTask);
 					} catch (Throwable e) {
@@ -97,8 +98,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onDownloadStart(fileDownloadTask);
 					} catch (Throwable e) {
@@ -112,7 +114,7 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 			}
 		}
 	}
-	
+
 	/**
 	 * 通知下载进度回调：之类需要实现具体业务逻辑
 	 *
@@ -124,8 +126,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 	 * @param intervalTime_ms  当前下载速度时间单位:每intervalTime_ms毫秒回回调一次本方法(单位:bytes)
 	 */
 	@Override
-	public void onNotifyDownloadProgressUpdate(FileDownloadTask fileDownloadTask, long totalLength, long completeLength,
-			int percent, long speedBytes, long intervalTime_ms) {
+	public void onNotifyDownloadProgressUpdate(FileDownloadTask fileDownloadTask, long totalLength, long
+			completeLength,
+	                                           int percent, long speedBytes, long intervalTime_ms) {
 
 		// 如果有传入最高优先级的通知监听器，那么先处理他，如果返回false，则不会通知后面的监听者
 		if (mIMaxPriorityDownloadListener != null) {
@@ -146,10 +149,12 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
-						list.get(i).onDownloadProgressUpdate(fileDownloadTask, totalLength, completeLength, percent, speedBytes,
+						list.get(i).onDownloadProgressUpdate(fileDownloadTask, totalLength, completeLength, percent,
+								speedBytes,
 								intervalTime_ms);
 					} catch (Throwable e) {
 						Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
@@ -162,7 +167,7 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 			}
 		}
 	}
-	
+
 	/**
 	 * 通知下载成功：子类需要实现具体业务逻辑
 	 *
@@ -188,8 +193,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onDownloadSuccess(fileDownloadTask);
 					} catch (Throwable e) {
@@ -203,7 +209,7 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 			}
 		}
 	}
-	
+
 	/**
 	 * 通知下载成功（文件本来已经存在）：子类需要实现具体业务逻辑
 	 *
@@ -229,8 +235,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onFileAlreadyExist(fileDownloadTask);
 					} catch (Throwable e) {
@@ -244,7 +251,7 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 			}
 		}
 	}
-	
+
 	/**
 	 * 通知下载失败：子类需要实现具体业务逻辑
 	 *
@@ -271,8 +278,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onDownloadFailed(fileDownloadTask, finalDownloadStatus);
 					} catch (Throwable e) {
@@ -286,7 +294,7 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 			}
 		}
 	}
-	
+
 	/**
 	 * 通知下载停止：子类需要实现具体业务逻辑
 	 *
@@ -296,11 +304,13 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 	 * @param percent          下载停止时，已经完成的百分比
 	 */
 	@Override
-	public void onNotifyDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int percent) {
+	public void onNotifyDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int
+			percent) {
 
 		// 如果有传入最高优先级的通知监听器，那么先处理他，如果返回false，则不会通知后面的监听者
 		if (mIMaxPriorityDownloadListener != null) {
-			if (!mIMaxPriorityDownloadListener.onDownloadStop(fileDownloadTask, totalLength, completeLength, percent)) {
+			if (!mIMaxPriorityDownloadListener.onDownloadStop(fileDownloadTask, totalLength, completeLength,
+					percent)) {
 				return;
 			}
 		}
@@ -315,8 +325,9 @@ public class DefaultDownloadNotifier extends AbsDownloadNotifier {
 					try {
 						if (Debug_SDK.isDownloadLog) {
 							Debug_SDK
-									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass().getName
-											());
+									.ti(Debug_SDK.mDownloadTag, this, "处理第[%d]个监听者[%s]", i + 1, list.get(i).getClass()
+											.getName
+													());
 						}
 						list.get(i).onDownloadStop(fileDownloadTask, totalLength, completeLength, percent);
 					} catch (Throwable e) {

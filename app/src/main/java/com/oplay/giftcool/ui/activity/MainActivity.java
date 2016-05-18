@@ -11,7 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -93,6 +93,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	// 当前选项卡下标
 	private DrawerLayout mDrawerLayout;
 	private DrawerFragment mDrawerFragment;
+	private Handler mHandler = new Handler(Looper.myLooper());
 
 	private void initHandler() {
 		if (mHandler == null) {
@@ -116,14 +117,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private void findFragmentByTag(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-			Log.d("warn", "giftfragment = " + mGiftFragment + ", is add = " + (mGiftFragment != null ? mGiftFragment.isAdded(): "false"));
 			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-			Log.d("warn", "gamefragment = " + mGameFragment + ", is add = " + (mGameFragment != null ? mGameFragment.isAdded(): "false"));
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
-			Log.d("warn", "postfragment = " + mPostFragment + ", is add = " + (mPostFragment != null ? mPostFragment.isAdded(): "false"));
 			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
-			Log.d("warn", "drawerfragment = " + mDrawerFragment + ", is add = " + (mDrawerFragment != null ?
-					mDrawerFragment.isAdded() : "false"));
 		}
 	}
 
@@ -134,7 +130,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		// 考虑onSaveInstanceState造成的叠加问题
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		if (mDrawerFragment == null) {
-			Fragment f = getSupportFragmentManager().findFragmentByTag(DrawerFragment.class.getSimpleName());
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
 			if (f != null) {
 				mDrawerFragment = (DrawerFragment) f;
 			} else {
@@ -234,7 +230,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 			if (intent != null && intent.getAction() != null
 					&& intent.getAction().equals(AppConfig.PACKAGE_NAME + ".action.Main")) {
 				int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
-				int data = Integer.parseInt(intent.getStringExtra(KeyConfig.KEY_DATA));
+				String dStr = intent.getStringExtra(KeyConfig.KEY_DATA);
+				int data = Integer.parseInt(TextUtils.isEmpty(dStr) ? "0" : dStr);
 				switch (type) {
 					case KeyConfig.TYPE_ID_INDEX_GIFT:
 						jumpToIndexGift(data);
@@ -299,9 +296,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	private void showToolbarSearch(boolean showSearch) {
-		tvTitle.setVisibility(showSearch ? View.GONE : View.VISIBLE);
-		mSearchLayout.setVisibility(showSearch ? View.VISIBLE : View.GONE);
-		llGiftCount.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+		if (tvTitle != null) {
+			tvTitle.setVisibility(showSearch ? View.GONE : View.VISIBLE);
+		}
+		if (mSearchLayout != null) {
+			mSearchLayout.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+		}
+		if (llGiftCount != null) {
+			llGiftCount.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+		}
 	}
 
 	/**
@@ -347,7 +350,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mGameFragment == null) {
 			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GAME);
-			Log.d("warn", "mGameFragment not show = " + mGameFragment);
 			if (f != null) {
 				mGameFragment = (GameFragment) f;
 				ft.show(mGameFragment);
@@ -357,7 +359,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mGameFragment, TAG_GAME);
 			}
 		} else {
-			Log.d("warn", "mGameFragment show");
 			ft.show(mGameFragment);
 		}
 		mGameFragment.setRetainInstance(true);
@@ -373,7 +374,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		hideAllFragment(ft);
 		if (mGiftFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-			Log.d("warn", "mGiftFragment not show = " + mGiftFragment);
 			if (f != null) {
 				mGiftFragment = (GiftFragment) f;
 				ft.show(mGiftFragment);
@@ -382,7 +382,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mGiftFragment, TAG_GIFT);
 			}
 		} else {
-			Log.d("warn", "mGiftFragment show");
 			ft.show(mGiftFragment);
 		}
 		mGiftFragment.setReenterTransition(true);
@@ -399,7 +398,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		if (mPostFragment == null) {
 			// Activity被回收重建后查找
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_POST);
-			Log.d("warn", "mPostFragment not show = " + mPostFragment);
 			if (f != null) {
 				mPostFragment = (PostFragment) f;
 				ft.show(mPostFragment);
@@ -409,7 +407,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				ft.add(R.id.fl_container, mPostFragment, TAG_POST);
 			}
 		} else {
-			Log.d("warn", "mPostFragment show");
 			ft.show(mPostFragment);
 		}
 		mPostFragment.setRetainInstance(true);
@@ -456,7 +453,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		PermissionUtil.doAfterRequest(this, requestCode, grantResults);
 	}
@@ -563,7 +560,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	/**
 	 * 侧边栏提示数组
 	 */
-	private SparseIntArray mHintCount = new SparseIntArray();
+	private SparseIntArray mHintCount;
 
 	/**
 	 * 更新侧边栏和顶部导航栏信息
@@ -571,6 +568,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	public void updateHintState(final int key, final int count) {
 		if (mHandler == null) {
 			return;
+		}
+		if (mHintCount == null) {
+			mHintCount = new SparseIntArray();
 		}
 		mHandler.postDelayed(new Runnable() {
 			@Override

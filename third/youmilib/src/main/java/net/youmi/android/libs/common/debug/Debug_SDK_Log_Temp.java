@@ -4,9 +4,8 @@ import android.util.Log;
 
 /**
  * 不建议使用这个类的输出结构，后续可能会删除
- * 
+ *
  * @author zhitaocai
- * 
  */
 public class Debug_SDK_Log_Temp extends Debug_SDK_Log {
 

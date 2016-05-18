@@ -221,11 +221,11 @@ public class ResolverConfig {
 			Class SystemProperties = Class
 					.forName("android.os.SystemProperties");
 			Method method = SystemProperties.getMethod("get",
-					new Class[] { String.class });
-			final String[] netdns = new String[] { "net.dns1", "net.dns2",
-					"net.dns3", "net.dns4" };
+					new Class[]{String.class});
+			final String[] netdns = new String[]{"net.dns1", "net.dns2",
+					"net.dns3", "net.dns4"};
 			for (int i = 0; i < netdns.length; i++) {
-				Object[] args = new Object[] { netdns[i] };
+				Object[] args = new Object[]{netdns[i]};
 				String v = (String) method.invoke(null, args);
 				if (v != null && (v.matches(re1) || v.matches(re2))
 						&& !lserver.contains(v))
@@ -237,19 +237,25 @@ public class ResolverConfig {
 		configureFromLists(lserver, lsearch);
 	}
 
-	/** Returns all located servers */
+	/**
+	 * Returns all located servers
+	 */
 	public String[] servers() {
 		return servers;
 	}
 
-	/** Returns the first located server */
+	/**
+	 * Returns the first located server
+	 */
 	public String server() {
 		if (servers == null)
 			return null;
 		return servers[0];
 	}
 
-	/** Returns all entries in the located search path */
+	/**
+	 * Returns all entries in the located search path
+	 */
 	public Name[] searchPath() {
 		return searchlist;
 	}

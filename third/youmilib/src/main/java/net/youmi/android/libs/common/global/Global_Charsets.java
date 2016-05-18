@@ -37,7 +37,7 @@ public class Global_Charsets {
 
 	/**
 	 * 改变编码字符集
-	 * 
+	 *
 	 * @author zhitaocai
 	 * @since 2014-05-22
 	 */
@@ -101,11 +101,9 @@ public class Global_Charsets {
 
 		/**
 		 * 将字符串编码转换为指定的编码方式
-		 * 
-		 * @param str
-		 *            待转换编码的字符串
-		 * @param newCharset
-		 *            目标编码
+		 *
+		 * @param str        待转换编码的字符串
+		 * @param newCharset 目标编码
 		 * @return
 		 * @throws java.io.UnsupportedEncodingException
 		 */
@@ -115,13 +113,10 @@ public class Global_Charsets {
 
 		/**
 		 * 将字符串编码转换为指定的编码方式
-		 * 
-		 * @param str
-		 *            待转换编码的字符串
-		 * @param oldCharset
-		 *            原编码
-		 * @param newCharset
-		 *            目标编码
+		 *
+		 * @param str        待转换编码的字符串
+		 * @param oldCharset 原编码
+		 * @param newCharset 目标编码
 		 * @return 新编码后的字符串或者null
 		 * @throws java.io.UnsupportedEncodingException
 		 */
@@ -144,7 +139,7 @@ public class Global_Charsets {
 
 		/**
 		 * 将字节数组转换为指定编码的字符串
-		 * 
+		 *
 		 * @param data
 		 * @param newCharset
 		 * @return

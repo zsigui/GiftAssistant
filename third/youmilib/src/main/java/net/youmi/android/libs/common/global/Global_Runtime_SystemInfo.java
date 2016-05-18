@@ -121,7 +121,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取Android Id
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getAndroidId(Context context) {
@@ -149,7 +148,6 @@ public class Global_Runtime_SystemInfo {
 	 * 新增放射获取imei的方法
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getImei(Context context) {
@@ -171,7 +169,6 @@ public class Global_Runtime_SystemInfo {
 	 * 调用系统接口获取imei
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String getImeiFromSystemApi(Context context) {
@@ -218,7 +215,6 @@ public class Global_Runtime_SystemInfo {
 	 * 但是如果媒介A已经调用过{@link #getImei(android.content.Context)} 这个方法，那么在另一个媒介里面，就可以直接调用这个方法来获取文件中的imei
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getImeiFromFile(Context context) {
@@ -230,17 +226,17 @@ public class Global_Runtime_SystemInfo {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * 反射调用获取imei
 	 *
 	 * @param context
-	 *
 	 * @return 真实的imei或者是""
 	 */
 	public static String getImeiByReflect(Context context) {
 		try {
-			TelephonyManager tm = (TelephonyManager) context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+			TelephonyManager tm = (TelephonyManager) context.getApplicationContext().getSystemService(Context
+					.TELEPHONY_SERVICE);
 			// 这里用21标识anroid5.0，因为低版本sdk打包时时没有LOLLIPOP的
 			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			if (Build.VERSION.SDK_INT >= 21) {
@@ -268,7 +264,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取sim卡序列号iccid 不同于misi
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getIccid(Context context) {
@@ -289,7 +284,6 @@ public class Global_Runtime_SystemInfo {
 	 * 如果是双卡双待机，则先返回卡1的IMSI，如果卡1的获取失败，则返回卡2的IMSI，如果都拿不到就返回空串""
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getImsi(Context context) {
@@ -312,7 +306,6 @@ public class Global_Runtime_SystemInfo {
 	 * 但是如果媒介A已经调用过{@link #getImsi(android.content.Context)}这个方法，那么在另一个媒介里面，就可以直接调用这个方法来获取文件中的imsi
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getImsiFromFile(Context context) {
@@ -330,7 +323,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取卡1的IMSI 如果获取失败则返回空串
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getFirstImsi(Context context) {
@@ -341,7 +333,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取卡2的IMSI 如果获取失败则返回空串
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getSecondImsi(Context context) {
@@ -352,7 +343,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取mac地址 2012-11-15
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getMac(Context context) {
@@ -375,7 +365,6 @@ public class Global_Runtime_SystemInfo {
 	 * 调用系统接口获取mac地址，可能获取不了，如果没有开wifi的话
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	private static String getMacFromSystemApi(Context context) {
@@ -403,7 +392,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取Bssid
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getBssid(Context context) {
@@ -426,7 +414,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取ssid
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getSsid(Context context) {
@@ -578,7 +565,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取运营商名字
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getOperatorName(Context context) {
@@ -604,7 +590,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取手机类型 2012-11-15
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static int getPhoneType(Context context) {
@@ -625,7 +610,6 @@ public class Global_Runtime_SystemInfo {
 	 * 获取手机网络类型 2012-11-15
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static int getNetworkType(Context context) {
@@ -658,7 +642,6 @@ public class Global_Runtime_SystemInfo {
 	 * 前提：因为是反射获取的，所以需要开发者的app引入googleplay的库<br>
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static String getGoogleAdvertisingId(Context context) {
@@ -677,7 +660,6 @@ public class Global_Runtime_SystemInfo {
 	 * 前提：因为是反射获取的，所以需要开发者的app引入googleplay的库<br>
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static void async_loadGoogleAdvertisingId(final Context context) {
@@ -689,12 +671,13 @@ public class Global_Runtime_SystemInfo {
 					try {
 						Class<?> c = Class.forName(
 								"com.google.android.gms.a".trim() + "ds.".trim() + "identifier".trim() + ".A".trim() +
-								"dvertising".trim() + "IdClient");
+										"dvertising".trim() + "IdClient");
 						Method m = c.getDeclaredMethod("getA".trim() + "dvertising".trim() + "IdInfo", Context.class);
 						Object result = m.invoke(c, context);
 						Class<?> info =
-								Class.forName("com.google.android.gms.a".trim() + "ds.".trim() + "identifier" + ".A".trim() +
-								              "dvertising".trim() + "IdClient$Info");
+								Class.forName("com.google.android.gms.a".trim() + "ds.".trim() + "identifier" + ".A"
+										.trim() +
+										"dvertising".trim() + "IdClient$Info");
 						Method mid = info.getDeclaredMethod("getId");
 						Object aid = mid.invoke(result);
 						if (aid != null) {
@@ -722,12 +705,12 @@ public class Global_Runtime_SystemInfo {
 	 * @param fileName  文件名
 	 * @param toSaveStr 保存字符串
 	 * @param psw       密码
-	 *
 	 * @return
 	 */
-	private synchronized static boolean saveDataToFile(Context context, String fileName, String toSaveStr, String psw) {
+	private synchronized static boolean saveDataToFile(Context context, String fileName, String toSaveStr, String
+			psw) {
 		if (context == null || Basic_StringUtil.isNullOrEmpty(toSaveStr) || Basic_StringUtil.isNullOrEmpty(fileName) ||
-		    Basic_StringUtil.isNullOrEmpty(fileName)) {
+				Basic_StringUtil.isNullOrEmpty(fileName)) {
 			return false;
 		}
 		try {
@@ -741,8 +724,9 @@ public class Global_Runtime_SystemInfo {
 
 				// 先创建文件夹
 				File dir = new File(
-						Util_System_SDCard_Util.getSdcardRootPath() + "/Android/data/".trim() + ".data".trim() + "y".trim() +
-						"cache");
+						Util_System_SDCard_Util.getSdcardRootPath() + "/Android/data/".trim() + ".data".trim() + "y"
+								.trim() +
+								"cache");
 				dir.mkdirs();
 
 				// 然后创建文件
@@ -789,7 +773,8 @@ public class Global_Runtime_SystemInfo {
 				bw.write(encodeStr);
 				bw.flush();
 				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "字符串%s（加密后：%s）已经成功写入文件%s中", toSaveStr,
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo.class, "字符串%s（加密后：%s）已经成功写入文件%s中",
+							toSaveStr,
 							encodeStr, toSaveFile.getAbsolutePath());
 				}
 				return true;
@@ -832,7 +817,6 @@ public class Global_Runtime_SystemInfo {
 	 *
 	 * @param context
 	 * @param fileName
-	 *
 	 * @return 获取失败返回null，否则返回正确值
 	 */
 	private synchronized static String getDataFromFile(Context context, String fileName, String psw) {
@@ -845,9 +829,10 @@ public class Global_Runtime_SystemInfo {
 		// 如果sd卡可读，先看看sd卡中有没有这个文件
 		if (Util_System_SDCard_Util.IsSdCardCanRead()) {
 			toGetFile =
-					new File(Util_System_SDCard_Util.getSdcardRootPath() + "/Android/data/".trim() + ".data".trim() + "y".trim
-							() +
-					         "cache/".trim() + fileName);
+					new File(Util_System_SDCard_Util.getSdcardRootPath() + "/Android/data/".trim() + ".data".trim() +
+							"y".trim
+									() +
+							"cache/".trim() + fileName);
 			// 如果sd卡中获取不到这个文件
 			if (!toGetFile.exists()) {
 				if (Debug_SDK.isGlobalLog) {

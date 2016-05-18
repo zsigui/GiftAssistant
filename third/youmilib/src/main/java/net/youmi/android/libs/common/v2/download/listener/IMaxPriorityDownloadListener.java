@@ -26,7 +26,6 @@ public interface IMaxPriorityDownloadListener {
 	 * 如果是的话，这里要通知一下
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onDownloadBeforeStart_FileLock(FileDownloadTask fileDownloadTask);
@@ -47,7 +46,6 @@ public interface IMaxPriorityDownloadListener {
 	 * @param percent          当前完成百分比
 	 * @param speedBytes       当前下载速度:每intervalTime_ms毫秒下载的长度(单位:bytes)
 	 * @param intervalTime_ms  当前下载速度时间单位:每intervalTime_ms毫秒回回调一次本方法(单位:bytes)
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onDownloadProgressUpdate(FileDownloadTask fileDownloadTask, long totalLength, long completeLength,
@@ -58,7 +56,6 @@ public interface IMaxPriorityDownloadListener {
 	 * 下载成功
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onDownloadSuccess(FileDownloadTask fileDownloadTask);
@@ -67,7 +64,6 @@ public interface IMaxPriorityDownloadListener {
 	 * 下载成功，文件本来就存在于本地
 	 *
 	 * @param fileDownloadTask 下载任务模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onFileAlreadyExist(FileDownloadTask fileDownloadTask);
@@ -77,7 +73,6 @@ public interface IMaxPriorityDownloadListener {
 	 *
 	 * @param fileDownloadTask    下载任务模型
 	 * @param finalDownloadStatus 下载任务失败数据模型
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onDownloadFailed(FileDownloadTask fileDownloadTask, FinalDownloadStatus finalDownloadStatus);
@@ -89,7 +84,6 @@ public interface IMaxPriorityDownloadListener {
 	 * @param totalLength      本次下载的总长度
 	 * @param completeLength   已下载的长度
 	 * @param percent          下载停止时，已经完成的百分比
-	 *
 	 * @return false 不允许继续通知其他监听者
 	 */
 	boolean onDownloadStop(FileDownloadTask fileDownloadTask, long totalLength, long completeLength, int percent);

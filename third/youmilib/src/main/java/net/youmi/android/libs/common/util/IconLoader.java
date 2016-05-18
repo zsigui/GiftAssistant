@@ -30,7 +30,8 @@ public class IconLoader {
 	// 使用线程池，来重复利用线程，优化内存
 	private static final int DEFAULT_THREAD_POOL_SIZE = 1;
 
-	private static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
+	private static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool
+			(DEFAULT_THREAD_POOL_SIZE);
 
 	/*
 	 * @Paramter imgUrl格式:
@@ -38,7 +39,8 @@ public class IconLoader {
 	 * 从SD卡上加载图片，如果存在则使用该图片； 如果不存在，则从网络下载保存到SD卡，然后使用该图片。
 	 * 使用线程池对线程进行管理，优化内存使用和CPU效率
 	 */
-	public static Bitmap loadIcon(final Context mContext, final String url, final IconLoaderCallback iconDownloaderCallback) {
+	public static Bitmap loadIcon(final Context mContext, final String url, final IconLoaderCallback
+			iconDownloaderCallback) {
 
 		// 主线程处理回调函数
 		final Handler handler = new Handler() {
@@ -79,9 +81,7 @@ public class IconLoader {
 	 * @param @param  context
 	 * @param @param  url
 	 * @param @return 传入参数名字
-	 *
 	 * @return Bitmap 返回类型
-	 *
 	 * @Title: syncLoadBitmap
 	 * @Description:同步加载图片
 	 * @date 2013-3-27 下午4:12:01

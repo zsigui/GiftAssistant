@@ -11,16 +11,15 @@ import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 剪切板使用（暂时只支持文字剪切）
- * 
+ *
  * @author zhitaocai edit on 2014-7-15
- * 
  */
 @SuppressLint("NewApi")
 public class Util_System_ClipboardManager {
 
 	/**
 	 * 保存文字到剪切板中
-	 * 
+	 *
 	 * @param str
 	 * @return
 	 */
@@ -72,7 +71,7 @@ public class Util_System_ClipboardManager {
 
 	/**
 	 * 获取剪切版中的文字，如果有的话
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */

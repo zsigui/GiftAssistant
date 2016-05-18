@@ -20,11 +20,10 @@ public class Util_System_Permission {
 	 * <uses-permission
 	 *     android:name="android.permission.PACKAGE_USAGE_STATS"
 	 *     tools:ignore="ProtectedPermissions" />
-     * </pre>
+	 * </pre>
 	 * 因此就存在了这种一次性获取所有权限的，然后进行contains的方法来进行判断是否拥有某个权限的方法
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static List<String> getPkgNamePermissions(Context context, String pkgName) {
@@ -44,7 +43,6 @@ public class Util_System_Permission {
 	 *
 	 * @param context
 	 * @param permissionName
-	 *
 	 * @return
 	 */
 	public static boolean isWithPermission(Context context, String permissionName) {
@@ -64,7 +62,6 @@ public class Util_System_Permission {
 	 * 检查是否具有写入外部存储卡的权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_WRITE_EXTERNAL_STORAGE_Permission(Context context) {
@@ -91,7 +88,6 @@ public class Util_System_Permission {
 	 * 检查是否具有联网INTERNET权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_INTERNET_Permission(Context context) {
@@ -102,7 +98,6 @@ public class Util_System_Permission {
 	 * 检查是否具有获取手机信息READ_PHONE_STATE权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_READ_PHONE_STATE_Permission(Context context) {
@@ -113,7 +108,6 @@ public class Util_System_Permission {
 	 * 检查是否具有ACCESS_NETWORK_STATE权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_ACCESS_NETWORK_STATE_Permission(Context context) {
@@ -124,7 +118,6 @@ public class Util_System_Permission {
 	 * 检查是否具有ACCESS_FINE_LOCATION权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_ACCESS_FINE_LOCATION_Permission(Context context) {
@@ -135,7 +128,6 @@ public class Util_System_Permission {
 	 * 检查是否具有ACCESS_COARSE_LOCATION权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_ACCESS_COARSE_LOCATION_Permission(Context context) {
@@ -146,7 +138,6 @@ public class Util_System_Permission {
 	 * 检查是否具有ACCESS_WIFI_STATE权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_ACCESS_WIFI_STATE_Permission(Context context) {
@@ -157,7 +148,6 @@ public class Util_System_Permission {
 	 * 检查是否具有创建快捷方式的权限。
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_INSTALL_SHORTCUT_Permission(Context context) {
@@ -168,7 +158,6 @@ public class Util_System_Permission {
 	 * 检查是否具有添加系统浏览器书签的权限
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_WRITE_HISTORY_BOOKMARKS(Context context) {
@@ -179,7 +168,6 @@ public class Util_System_Permission {
 	 * 检查是否具有SYSTEM_ALERT_WINDOW方法
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_SYSTEM_ALERT_WINDOW_Permission(Context context) {
@@ -190,7 +178,6 @@ public class Util_System_Permission {
 	 * 检查是否具有GET_TASK方法
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public static boolean isWith_GET_TASK_Permission(Context context) {
@@ -252,15 +239,18 @@ public class Util_System_Permission {
 	//
 	//			// init param
 	//			Class appOpsManagerClass = Class.forName("android.app.AppOpsManager");
-	//			Method setModeMethod = appOpsManagerClass.getMethod("setMode", int.class, int.class, String.class, int.class);
+	//			Method setModeMethod = appOpsManagerClass.getMethod("setMode", int.class, int.class, String.class, int
+	// .class);
 	//			Object appOpsManagerInstance = context.getSystemService("appops");
 	//
 	//			// allow app get permission
-	//			setModeMethod.invoke(appOpsManagerInstance, opCode, Binder.getCallingUid(), context.getPackageName(), 0);
+	//			setModeMethod.invoke(appOpsManagerInstance, opCode, Binder.getCallingUid(), context.getPackageName(),
+	// 0);
 	//
 	//			//			// setMode 方法是@hide的，所以只能通过反射方法进行设置
 	////						AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService("appops");
-	////						appOpsManager.setMode(AppOpsManager.OP_GET_USAGE_STATS, applicationInfo.uid, applicationInfo
+	////						appOpsManager.setMode(AppOpsManager.OP_GET_USAGE_STATS, applicationInfo.uid,
+	// applicationInfo
 	// .packageName,
 	////								AppOpsManager.MODE_ALLOWED);
 	//			return true;

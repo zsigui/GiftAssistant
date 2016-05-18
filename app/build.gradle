@@ -74,6 +74,7 @@ dependencies {
 	compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
 	compile 'com.github.lawloretienne:quickreturn:0.0.3'
 	compile 'com.jaredrummler:android-processes:1.0.7@aar'
+	compile 'com.umeng.analytics:analytics:latest.integration'
 	compile ('io.socket:socket.io-client:0.7.0') {
 		// excluding org.json which is provided by Android
 		exclude group: 'org.json', module: 'json'
@@ -85,5 +86,4 @@ dependencies {
 	compile project(':third:convenientbanner')
 //    compile project(':third:galleryfinal')
 //	compile project(':third:viewserver')
-	compile 'com.umeng.analytics:analytics:latest.integration'
 }

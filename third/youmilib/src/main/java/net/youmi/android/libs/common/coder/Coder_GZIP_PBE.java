@@ -11,19 +11,18 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * 加密：先使用gzip压缩加密内容，然后使用PBE加密,最后的将盐放前面，密文放后面
- * <p>
+ * <p/>
  * 解密：加密反之
- * 
+ *
  * @author zhitaocai
- * 
  */
 public class Coder_GZIP_PBE {
 
 	/**
 	 * 先使用gzip压缩加密内容，然后使用PBE加密
-	 * <p>
+	 * <p/>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 * 
+	 *
 	 * @param valueToEncrypt
 	 * @param psw
 	 * @return
@@ -46,9 +45,9 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先使用gzip压缩加密内容，然后使用PBE加密
-	 * <p>
+	 * <p/>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 * 
+	 *
 	 * @param buffToEncrypt
 	 * @param psw
 	 * @return
@@ -135,9 +134,9 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先读取8位盐，然后使用PBE解密后面的内容最后使用GZIP解压缩
-	 * <p>
+	 * <p/>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 * 
+	 *
 	 * @param buffToDecrypt
 	 * @param psw
 	 * @return
@@ -159,9 +158,9 @@ public class Coder_GZIP_PBE {
 
 	/**
 	 * 先读取8位盐，然后使用PBE解密后面的内容最后使用GZIP解压缩
-	 * <p>
+	 * <p/>
 	 * 密文格式： 8位盐+GZIP压缩后经过PBE加密的内容
-	 * 
+	 *
 	 * @param buffToDecrypt
 	 * @param psw
 	 * @return

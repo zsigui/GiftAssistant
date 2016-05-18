@@ -165,7 +165,7 @@ public class Util_System_Intent {
 
 	/**
 	 * 发送广播事件
-	 * 
+	 *
 	 * @param context
 	 * @param uri
 	 * @param flags
@@ -199,7 +199,7 @@ public class Util_System_Intent {
 
 	/**
 	 * 根据包名创建App的快捷方式
-	 * 
+	 *
 	 * @param context
 	 * @param packageName
 	 * @return
@@ -245,7 +245,7 @@ public class Util_System_Intent {
 			} else {
 
 				try {
-					localContext = context.createPackageContext(packageName, 3);
+					localContext = context.createPackageContext(packageName, Context.CONTEXT_RESTRICTED);
 				} catch (Throwable e) {
 					if (Debug_SDK.isUtilLog) {
 						Debug_SDK.te(Debug_SDK.mUtilTag, Util_System_Intent.class, e);

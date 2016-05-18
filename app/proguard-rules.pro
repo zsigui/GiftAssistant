@@ -44,6 +44,11 @@
     public static ** valueOf(java.lang.String);
 }
 
+# 混淆后出现 NoSuchMethod 时设置
+#-keep public class com.oplay.giftcool.R$*{
+#    public static final int *;
+#}
+
 # Support v4
 -keep class android.support.v4.** { *; }
 -keep interface android.support.v4.** { *; }

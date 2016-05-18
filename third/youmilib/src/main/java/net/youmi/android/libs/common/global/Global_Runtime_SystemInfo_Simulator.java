@@ -42,14 +42,15 @@ public class Global_Runtime_SystemInfo_Simulator {
 	 * 这里不能用全局静态变量来缓存这个值，实时获取结果好点
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public final static boolean isEmulator(Context context) {
 		try {
-			if (("unknown".equals(Build.BOARD)) && ("generic".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND))) {
+			if (("unknown".equals(Build.BOARD)) && ("generic".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND)
+			)) {
 				if (Debug_SDK.isGlobalLog) {
-					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
+					Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is " +
+							"emulator");
 				}
 				mSimulatorType = 1;
 				return true;
@@ -62,7 +63,8 @@ public class Global_Runtime_SystemInfo_Simulator {
 				// 模拟器
 				if ("sdk".equals(deviceName)) {
 					if (Debug_SDK.isGlobalLog) {
-						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is emulator");
+						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is " +
+								"emulator");
 					}
 					mSimulatorType = 1;
 					return true;
@@ -115,20 +117,20 @@ public class Global_Runtime_SystemInfo_Simulator {
 	 * 判断是否为Genymotion模拟器
 	 *
 	 * @param context
-	 *
 	 * @return
-	 *
 	 * @author zhitaocai
 	 * @since 2015-03-17
 	 */
 	private final static boolean isGenymotionSimulator(Context context) {
 		try {
-			if (("unknown".equals(Build.BOARD)) && ("vbox86p".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND)) &&
-			    ("test-keys".equals(Build.TAGS))) {
+			if (("unknown".equals(Build.BOARD)) && ("vbox86p".equals(Build.DEVICE)) && ("generic".equals(Build.BRAND)
+			) &&
+					("test-keys".equals(Build.TAGS))) {
 				if (Debug_SDK.isGlobalLog) {
 					Debug_SDK
-							.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Genymotion " +
-							                                                                     "emulator");
+							.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class, "device is Genymotion" +
+									" " +
+									"emulator");
 				}
 				return true;
 			}
@@ -144,7 +146,6 @@ public class Global_Runtime_SystemInfo_Simulator {
 	 * 判断是否为天天模拟器
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	private final static boolean isTiantianSimulator(Context context) {
@@ -171,16 +172,15 @@ public class Global_Runtime_SystemInfo_Simulator {
 	 * 判断是否为Droid4X(海马玩模拟器)模拟器
 	 *
 	 * @param context
-	 *
 	 * @return
-	 *
 	 * @author zhitaocai
 	 * @since 2015-03-17
 	 */
 	private final static boolean isDroid4XSimulator(Context context) {
 		try {
 			if (Basic_StringUtil.isNullOrEmpty(Build.MODEL)) {
-				if (("Droid4X".equals(Build.DEVICE)) && ("test-keys".equals(Build.TAGS)) && (Build.MODEL.contains("Droid4X"))) {
+				if (("Droid4X".equals(Build.DEVICE)) && ("test-keys".equals(Build.TAGS)) && (Build.MODEL.contains
+						("Droid4X"))) {
 					if (Debug_SDK.isGlobalLog) {
 						Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Simulator.class,
 								"device is Droid4X emulator");

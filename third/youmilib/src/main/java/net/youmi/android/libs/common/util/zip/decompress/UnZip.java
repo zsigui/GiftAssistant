@@ -75,7 +75,8 @@ public class UnZip implements Runnable {
 		int failCount = 0; // 解压过程中解压失败的条目计数器
 		try {
 			if (Debug_SDK.isUtilLog) {
-				Debug_SDK.td(Debug_SDK.mUtilTag, this, "待解压zip文件: %s  name:%s", mZipFile.getPath(), mZipFile.getName());
+				Debug_SDK.td(Debug_SDK.mUtilTag, this, "待解压zip文件: %s  name:%s", mZipFile.getPath(), mZipFile.getName
+						());
 			}
 			File destDir = new File(mDestDirPath);
 			if (Debug_SDK.isUtilLog) {

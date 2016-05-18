@@ -14,6 +14,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -91,7 +92,7 @@ public class WeiboDialog extends Dialog{
 		this.mWebView.setWebViewClient(new WeiboWebViewClient());
 		this.mWebView.loadUrl(this.mUrl);
 		this.mWebView.setLayoutParams(FILL);
-		this.mWebView.setVisibility(4);
+		this.mWebView.setVisibility(View.INVISIBLE);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -1);
 		LinearLayout.LayoutParams lp0 = new LinearLayout.LayoutParams(-1, -1);
@@ -165,7 +166,7 @@ public class WeiboDialog extends Dialog{
 				WeiboDialog.this.mSpinner.dismiss();
 			}
 
-			WeiboDialog.this.mWebView.setVisibility(0);
+			WeiboDialog.this.mWebView.setVisibility(View.VISIBLE);
 		}
 
 		public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {

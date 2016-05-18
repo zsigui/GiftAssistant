@@ -30,10 +30,10 @@ public class YoumiAdHttpRequester {
 	 * @param url
 	 * @param identify 　请求标识
 	 * @param nec
-	 *
 	 * @return
 	 */
-	public static String requestGetIgnoreLastRequest(Context context, String url, String identify, NetworkExceptionConfig nec) {
+	public static String requestGetIgnoreLastRequest(Context context, String url, String identify,
+	                                                 NetworkExceptionConfig nec) {
 		return requestGet(context, url, identify, Global_Charsets.UTF_8, null, nec);
 	}
 
@@ -45,11 +45,11 @@ public class YoumiAdHttpRequester {
 	 * @param identify     　请求标识
 	 * @param extraHeaders
 	 * @param nec
-	 *
 	 * @return
 	 */
 	public static String requestGetIgnoreLastRequest(Context context, String url, String identify,
-			Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
+	                                                 Map<String, List<String>> extraHeaders, NetworkExceptionConfig
+			                                                 nec) {
 		return requestGet(context, url, identify, Global_Charsets.UTF_8, extraHeaders, nec);
 	}
 
@@ -62,7 +62,7 @@ public class YoumiAdHttpRequester {
 	}
 
 	public static String requestGet(Context context, String url, Map<String, List<String>> extraHeaders,
-			NetworkExceptionConfig nec) {
+	                                NetworkExceptionConfig nec) {
 		return requestGet(context, url, null, Global_Charsets.UTF_8, extraHeaders, nec);
 	}
 
@@ -76,11 +76,10 @@ public class YoumiAdHttpRequester {
 	 * @param charset      请求字符集
 	 * @param extraHeaders 额外的头部
 	 * @param nec          异常上报信息
-	 *
 	 * @return
 	 */
 	public static String requestGet(Context context, String url, String identify, String charset,
-			Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
+	                                Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
 		try {
 
 			// 如果有传入请求标识的话，
@@ -133,7 +132,7 @@ public class YoumiAdHttpRequester {
 				// 如果是127开头，并且能成功找到该域名所对应的真实IP就再次发起请求
 				String hostIp = NetworkUtil.request4HostIp(baseHttpRequesterModel.getRequestUrl());
 				if (!Basic_StringUtil.isNullOrEmpty(hostIp) && hostIp.trim().startsWith("127.") &&
-				    requester.getBaseHttpRequesterModel().replaceHostStringWithReallyIpAddress()) {
+						requester.getBaseHttpRequesterModel().replaceHostStringWithReallyIpAddress()) {
 
 					// 再次发起请求
 					requester.request();
@@ -155,7 +154,8 @@ public class YoumiAdHttpRequester {
 
 				// 异步发起异常上报
 				GlobalCacheExecutor.execute(
-						new YoumiAdExceptionReporter(context, baseHttpRequesterModel, requester.getBaseHttpResponseModel(),
+						new YoumiAdExceptionReporter(context, baseHttpRequesterModel, requester
+								.getBaseHttpResponseModel(),
 								nec));
 			}
 		} catch (Throwable e) {
@@ -167,21 +167,23 @@ public class YoumiAdHttpRequester {
 		return null;
 	}
 
-	public static String requestPost(Context context, String url, Map<String, String> postDataMap, NetworkExceptionConfig nec) {
+	public static String requestPost(Context context, String url, Map<String, String> postDataMap,
+	                                 NetworkExceptionConfig nec) {
 		return requestPost(context, url, postDataMap, null, Global_Charsets.UTF_8, null, nec);
 	}
 
 	public static String requestPost(Context context, String url, Map<String, String> postDataMap,
-			Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
+	                                 Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
 		return requestPost(context, url, postDataMap, null, Global_Charsets.UTF_8, extraHeaders, nec);
 	}
 
-	public static String requestPost(Context context, String url, byte[] postDataByteArray, NetworkExceptionConfig nec) {
+	public static String requestPost(Context context, String url, byte[] postDataByteArray, NetworkExceptionConfig
+			nec) {
 		return requestPost(context, url, null, postDataByteArray, Global_Charsets.UTF_8, null, nec);
 	}
 
 	public static String requestPost(Context context, String url, byte[] postDataByteArray,
-			Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
+	                                 Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
 		return requestPost(context, url, null, postDataByteArray, Global_Charsets.UTF_8, extraHeaders, nec);
 	}
 
@@ -196,11 +198,12 @@ public class YoumiAdHttpRequester {
 	 * @param charset           请求字符集
 	 * @param extraHeaders      额外的头部
 	 * @param nec               异常上报信息
-	 *
 	 * @return
 	 */
-	public static String requestPost(Context context, String url, Map<String, String> postDataMap, byte[] postDataByteArray,
-			String charset, Map<String, List<String>> extraHeaders, NetworkExceptionConfig nec) {
+	public static String requestPost(Context context, String url, Map<String, String> postDataMap, byte[]
+			postDataByteArray,
+	                                 String charset, Map<String, List<String>> extraHeaders, NetworkExceptionConfig
+			                                 nec) {
 
 		try {
 
@@ -244,7 +247,7 @@ public class YoumiAdHttpRequester {
 				// 如果是127开头，并且能成功找到该域名所对应的真实IP就再次发起请求
 				String hostIp = NetworkUtil.request4HostIp(baseHttpRequesterModel.getRequestUrl());
 				if (!Basic_StringUtil.isNullOrEmpty(hostIp) && hostIp.trim().startsWith("127.") &&
-				    requester.getBaseHttpRequesterModel().replaceHostStringWithReallyIpAddress()) {
+						requester.getBaseHttpRequesterModel().replaceHostStringWithReallyIpAddress()) {
 
 					// 再次发起请求
 					requester.request();
@@ -266,7 +269,8 @@ public class YoumiAdHttpRequester {
 
 				// 异步发起异常上报
 				GlobalCacheExecutor.execute(
-						new YoumiAdExceptionReporter(context, baseHttpRequesterModel, requester.getBaseHttpResponseModel(),
+						new YoumiAdExceptionReporter(context, baseHttpRequesterModel, requester
+								.getBaseHttpResponseModel(),
 								nec));
 
 			}

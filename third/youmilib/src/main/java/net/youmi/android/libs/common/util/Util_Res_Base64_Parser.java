@@ -18,7 +18,7 @@ import java.io.FileOutputStream;
 
 /**
  * base64 与 图片之间的转换 有些方法还待测试
- * 
+ *
  * @author zhitaocai edit on 2014-7-4
  */
 public class Util_Res_Base64_Parser {
@@ -63,7 +63,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 从bitmap中获取base64字符串 （待测试）
-	 * 
+	 *
 	 * @param bm
 	 * @return
 	 */
@@ -73,7 +73,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 保存位图到files目录 (测试用)
-	 * 
+	 *
 	 * @param context
 	 * @param bm
 	 * @param fileName
@@ -114,24 +114,25 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 从Resouces Id中获取base64字符串 （待测试）
-	 * 
+	 *
 	 * @param bm
 	 * @return
 	 */
 	public synchronized static String getBitmapBase64StringFromResId(Context context, int resId) {
-		return changeByteArrayToBase64String(Bitmap2Bytes(BitmapFactory.decodeResource(context.getResources(), resId)));
+		return changeByteArrayToBase64String(Bitmap2Bytes(BitmapFactory.decodeResource(context.getResources(),
+				resId)));
 	}
 
 	/**
 	 * 从base64 中获取.9png drawable
-	 * 
+	 *
 	 * @param bmBase64
 	 * @param chunkBase64
 	 * @return NinePatchDrawable
 	 */
 	@SuppressLint("NewApi")
 	public synchronized static NinePatchDrawable decodeNinePathchFromBase64(Context context, String bmBase64,
-			String chunkBase64) {
+	                                                                        String chunkBase64) {
 		try {
 			if (context == null || Basic_StringUtil.isNullOrEmpty(bmBase64)
 					|| Basic_StringUtil.isNullOrEmpty(chunkBase64)) {
@@ -180,9 +181,8 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 获取.9png的数据块信息
-	 * 
-	 * @param bmBase64
-	 *            bitmap base64String
+	 *
+	 * @param bmBase64 bitmap base64String
 	 * @return byte []
 	 */
 	private synchronized static byte[] getNinePathChunkByteArrayFromBase64(String bmBase64) {
@@ -191,9 +191,8 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 获取.9png的数据块信息(注意这里是有点坑的，要试试没有加.9png格式之前的base64 以及加了那4条线之后的 base64 貌似只有一个是可以的)
-	 * 
-	 * @param base64
-	 *            bitmap base64String
+	 *
+	 * @param base64 bitmap base64String
 	 * @return base64 String
 	 */
 	public synchronized static String getNinePathChunkBase64StringFromBase64(String bmBase64) {
@@ -202,7 +201,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 传入res的id来获取该.9png的chunk 亲测可以
-	 * 
+	 *
 	 * @param resId
 	 * @return byte[]
 	 */
@@ -212,7 +211,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 传入res的id来获取该.9png的chunk 亲测可以
-	 * 
+	 *
 	 * @param resId
 	 * @return byte[]
 	 */
@@ -222,7 +221,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 从bitmap中获取.9png的chunk
-	 * 
+	 *
 	 * @param bitmap
 	 * @return byte[]
 	 */
@@ -230,7 +229,8 @@ public class Util_Res_Base64_Parser {
 		try {
 			if (bitmap == null) {
 				if (Debug_SDK.isUtilLog) {
-					Debug_SDK.te(Debug_SDK.mUtilTag, Util_Res_Base64_Parser.class, "解析获取.9png的chunk时出错，bitmap == null");
+					Debug_SDK.te(Debug_SDK.mUtilTag, Util_Res_Base64_Parser.class, "解析获取.9png的chunk时出错，bitmap == " +
+							"null");
 				}
 				return null;
 			}
@@ -267,7 +267,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 从bitmap中获取.9png的chunk
-	 * 
+	 *
 	 * @param bitmap
 	 * @return String
 	 */
@@ -277,7 +277,7 @@ public class Util_Res_Base64_Parser {
 
 	/**
 	 * 将byte数组转换为base64String
-	 * 
+	 *
 	 * @param bytes
 	 * @return
 	 */

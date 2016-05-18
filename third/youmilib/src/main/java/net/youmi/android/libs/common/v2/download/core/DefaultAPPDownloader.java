@@ -29,12 +29,11 @@ public class DefaultAPPDownloader extends AbsDownloader {
 	 * @param fileDownloadTask      下载任务描述数据模型
 	 * @param absDownloadNotifier   下载状态监听观察者管理器
 	 * @param iFileAvailableChecker 任务下载完成后的检查器，主要用于检查下载完成的文件是否有效
-	 *
 	 * @throws NullPointerException
 	 * @throws java.io.IOException
 	 */
 	public DefaultAPPDownloader(Context context, AbsDownloadDir absDownloadDir, FileDownloadTask fileDownloadTask,
-			AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
+	                            AbsDownloadNotifier absDownloadNotifier, IFileAvailableChecker iFileAvailableChecker)
 			throws NullPointerException, IOException {
 		super(context, absDownloadDir, fileDownloadTask, absDownloadNotifier, iFileAvailableChecker);
 	}
@@ -45,12 +44,11 @@ public class DefaultAPPDownloader extends AbsDownloader {
 	 * @param context
 	 * @param fileDownloadTask
 	 * @param iFileAvailableChecker
-	 *
 	 * @return
 	 */
 	@Override
 	protected IDownloader newDownloadHandler(Context context, FileDownloadTask fileDownloadTask,
-			IFileAvailableChecker iFileAvailableChecker) {
+	                                         IFileAvailableChecker iFileAvailableChecker) {
 		return new DefaultAutoRetryFileDownloader(context, fileDownloadTask);
 	}
 

@@ -61,7 +61,6 @@ public class Basic_StringUtil {
 	 * 获取非null的字符串，如果为null，则返回空串
 	 *
 	 * @param str
-	 *
 	 * @return
 	 */
 	public static String getNotNullStringButEmpty(String str) {
@@ -83,7 +82,6 @@ public class Basic_StringUtil {
 	 * 获取字符串，如果为null，则返回null
 	 *
 	 * @param str
-	 *
 	 * @return
 	 */
 	public static String getNotNullString(String str) {
@@ -115,8 +113,9 @@ public class Basic_StringUtil {
 		try {
 			// 待验证
 			Pattern pattern = Pattern.compile(
-					"^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2," +
-					"4}|[0-9]{1,3})(\\]?)$");
+					"^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))" +
+							"([a-zA-Z]{2," +
+							"4}|[0-9]{1,3})(\\]?)$");
 
 			Matcher matcher = pattern.matcher(str);
 			return matcher.matches();
@@ -258,7 +257,6 @@ public class Basic_StringUtil {
 	 * 提取字符串中的数字并生成新的数字字符串
 	 *
 	 * @param str
-	 *
 	 * @return
 	 */
 	public static String getNumberStrFromString(String str) {

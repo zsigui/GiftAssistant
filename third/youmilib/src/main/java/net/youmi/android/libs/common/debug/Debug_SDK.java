@@ -3,25 +3,24 @@ package net.youmi.android.libs.common.debug;
 
 /**
  * 测试用log输出，全局开关在父类
- * 
+ * <p/>
  * 支持两套方案：
- * <p>
+ * <p/>
  * 1、di,de,dd,dv,dw 等的使用： <br>
  * 和常规的Log使用差不多，输入标签，输入信息，输出Throwable就可以了
- * <p>
+ * <p/>
  * 2、ti,te,td,tv,tw 等的使用：<br>
  * 和常规的Log区别在于标签的创建：<br>
  * 需要传入preTag(模块名称)， 以及Object（模块中的某个类）来创建一个标签
- * 
+ * <p/>
  * <hr>
  * 其他注意注意事项：
  * <ol>
  * <li>比较多，后面在说吧</li>
  * </ol>
  * <hr>
- * 
+ *
  * @author zhitaocai
- * 
  */
 public class Debug_SDK extends Debug_SDK_Log_Temp {
 
@@ -81,7 +80,7 @@ public class Debug_SDK extends Debug_SDK_Log_Temp {
 
 	public final static boolean isNtpLog = false;
 	public final static String mNtpTag = "ntp_";
-	
+
 	public final static boolean isPnLog = false;
 	public final static String mPnTag = "pn_";
 
@@ -96,11 +95,11 @@ public class Debug_SDK extends Debug_SDK_Log_Temp {
 
 	public final static boolean isOfferLog = false;
 	public final static String mOfferTag = "of_";
-	
+
 	public final static boolean isDiyOfferLog = false;
 	public final static String mDiyOfferTag = "dof_";
-	
+
 	public final static boolean isWxLog = false;
 	public final static String mWxTag = "wx_";
-	
+
 }

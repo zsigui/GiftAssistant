@@ -170,7 +170,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 当前屏幕分辨率 水平宽度
-	 * 
+	 *
 	 * @return
 	 */
 	public int getDisplayWidth() {
@@ -179,7 +179,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 当前屏幕分辨率 垂直高度
-	 * 
+	 *
 	 * @return
 	 */
 	public int getDisplayHeight() {
@@ -188,7 +188,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕分辨率密度级别【虚拟】 120、160、240、320
-	 * 
+	 *
 	 * @return
 	 */
 	public int getDisplay_DensityLevel() {
@@ -197,7 +197,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕分辨率密度级别【物理】 120、160、240、320
-	 * 
+	 *
 	 * @return
 	 */
 	public int getScreen_DensityLevel() {
@@ -206,7 +206,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕分辨率密度比
-	 * 
+	 *
 	 * @return
 	 */
 	public float getDensity() {
@@ -215,7 +215,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕宽高中最短的一边
-	 * 
+	 *
 	 * @return
 	 */
 	int getMinDisplayLength() {
@@ -227,7 +227,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕宽高中最长的一边
-	 * 
+	 *
 	 * @return
 	 */
 	int getMaxLength() {
@@ -239,7 +239,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕的宽度，规则是屏幕宽高中最短的一边
-	 * 
+	 *
 	 * @return
 	 */
 	public int getScreenWidth() {
@@ -248,7 +248,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 获取屏幕的高度，规则是屏幕宽高中最长的一边
-	 * 
+	 *
 	 * @return
 	 */
 	public int getScreenHeight() {
@@ -257,7 +257,7 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 将像素转换为dp
-	 * 
+	 *
 	 * @param pixels
 	 * @return
 	 */
@@ -273,9 +273,8 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 以320*480设计的合适像素值来计算在获取当前屏幕下，目标像素值。
-	 * 
-	 * @param oldPixelsIn_DENSITY_MEDIUM
-	 *            在160密度下最合适的分辨率
+	 *
+	 * @param oldPixelsIn_DENSITY_MEDIUM 在160密度下最合适的分辨率
 	 * @return
 	 */
 	public int fitPixels(int oldPixelsIn_DENSITY_MEDIUM) {
@@ -301,9 +300,8 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 以320*480设计的合适像素值来计算在获取当前屏幕下，目标像素值。
-	 * 
-	 * @param oldPixelsIn_DENSITY_MEDIUM
-	 *            在160密度下最合适的分辨率
+	 *
+	 * @param oldPixelsIn_DENSITY_MEDIUM 在160密度下最合适的分辨率
 	 * @return
 	 */
 	public float fitPixels(float oldPixelsIn_DENSITY_MEDIUM) {
@@ -329,9 +327,8 @@ public class Util_System_Display_DisplayInfo {
 
 	/**
 	 * 以320*480设计的合适像素值来计算在获取当前屏幕下，目标像素值。
-	 * 
-	 * @param oldPixelsIn_DENSITY_MEDIUM
-	 *            在160密度下最合适的分辨率
+	 *
+	 * @param oldPixelsIn_DENSITY_MEDIUM 在160密度下最合适的分辨率
 	 * @return
 	 */
 	public double fitPixels(double oldPixelsIn_DENSITY_MEDIUM) {

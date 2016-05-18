@@ -85,7 +85,7 @@ public class Util_ErrorReport {
 	 * @return
 	 */
 	public static String getInfoByName(Context paramContext, String paramString) {
-		TelephonyManager localTelephonyManager = (TelephonyManager) paramContext.getSystemService("phone");
+		TelephonyManager localTelephonyManager = (TelephonyManager) paramContext.getSystemService(Context.TELEPHONY_SERVICE);
 		if (localTelephonyManager != null) ;
 		try {
 			Object localObject = localTelephonyManager.getClass().getDeclaredMethod(paramString, new Class[0]).invoke

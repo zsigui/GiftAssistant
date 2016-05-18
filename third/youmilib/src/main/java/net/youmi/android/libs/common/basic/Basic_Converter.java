@@ -66,9 +66,8 @@ public class Basic_Converter {
 	 * </p>
 	 * java的byte是-127到128之间<br/>
 	 * 0~F十六进制字符表示的范围是0到15<br/>
-	 * 
-	 * @param c
-	 *            0~F 十六进制字符
+	 *
+	 * @param c 0~F 十六进制字符
 	 * @return 0~15
 	 */
 	public static byte hexCharToByte(char c) {
@@ -84,7 +83,7 @@ public class Basic_Converter {
 
 	/**
 	 * 将byte转换为hex String
-	 * 
+	 *
 	 * @param b
 	 * @return
 	 */

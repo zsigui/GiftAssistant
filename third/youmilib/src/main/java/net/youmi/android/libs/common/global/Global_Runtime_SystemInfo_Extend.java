@@ -70,7 +70,6 @@ public class Global_Runtime_SystemInfo_Extend {
 	 * 获取电池相关信息
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public final static Model_Battery getBatteryMsg(Context context) {
@@ -118,7 +117,6 @@ public class Global_Runtime_SystemInfo_Extend {
 	 * 获取操作系统描述
 	 *
 	 * @param context
-	 *
 	 * @return
 	 */
 	public final static String getSystemDescription(Context context) {
@@ -142,7 +140,6 @@ public class Global_Runtime_SystemInfo_Extend {
 	 * @param context
 	 * @param key
 	 * @param defValue
-	 *
 	 * @return
 	 */
 	public final static String getSystemProp(Context context, String key, String defValue) {
@@ -270,7 +267,8 @@ public class Global_Runtime_SystemInfo_Extend {
 			}
 			mMd5SyatemPkgPid = Coder_Md5.md5(sb.toString());
 			if (Debug_SDK.isGlobalLog) {
-				Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "排序后pid：%s md5：%s", sb.toString(),
+				Debug_SDK.td(Debug_SDK.mGlobalTag, Global_Runtime_SystemInfo_Extend.class, "排序后pid：%s md5：%s", sb
+								.toString(),
 						mMd5SyatemPkgPid);
 			}
 			return mMd5SyatemPkgPid;

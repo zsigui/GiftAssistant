@@ -26,7 +26,8 @@ class YoumiAdExceptionReporter extends AbsExceptionReporter {
 	 * @param networkExceptionConfig 异常上报信息
 	 */
 	public YoumiAdExceptionReporter(Context context, BaseHttpRequesterModel baseHttpRequesterModel,
-			BaseHttpResponseModel baseHttpResponseModel, NetworkExceptionConfig networkExceptionConfig) {
+	                                BaseHttpResponseModel baseHttpResponseModel, NetworkExceptionConfig
+			                                networkExceptionConfig) {
 		super(context, baseHttpRequesterModel, baseHttpResponseModel, networkExceptionConfig);
 	}
 

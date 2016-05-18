@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * RC4加解密
- * 
+ *
  * @author zhitaocai
  * @since 2014-5-20
  */

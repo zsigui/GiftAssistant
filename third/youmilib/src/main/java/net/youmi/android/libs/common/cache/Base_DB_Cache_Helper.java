@@ -55,8 +55,9 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * 创建数据库表SQL
 	 */
 	private static final String CREATE_TABLE_SQL =
-			"create table if not exists " + TB_NAME + "(_id integer primary key autoincrement," + LABEL_KEY + " text UNIQUE, " +
-			LABEL_VALUE + " blob, " + LABEL_LAST_MODIFY + " integer, " + LABEL_EXPIRES + " integer);";
+			"create table if not exists " + TB_NAME + "(_id integer primary key autoincrement," + LABEL_KEY + " text " +
+					"UNIQUE, " +
+					LABEL_VALUE + " blob, " + LABEL_LAST_MODIFY + " integer, " + LABEL_EXPIRES + " integer);";
 
 	/**
 	 * 删除数据库表SQL
@@ -96,9 +97,9 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 *
 	 * @param key
 	 * @param blob
-	 * @param valid_time 传进一个缓存有效时间，如果是 <=0：表示缓存永远有效， >0:表示使用缓存有效时间。 lastModeif+valid_time=expires,如果 expires<currenttime
+	 * @param valid_time 传进一个缓存有效时间，如果是 <=0：表示缓存永远有效， >0:表示使用缓存有效时间。 lastModeif+valid_time=expires,如果
+	 *                      expires<currenttime
 	 *                   则表示缓存失效
-	 *
 	 * @return
 	 */
 	public boolean saveCache(String key, byte[] blob, long valid_time) {
@@ -162,7 +163,6 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * 批量插入或更新多个缓存信息
 	 *
 	 * @param list
-	 *
 	 * @return
 	 */
 	public boolean saveCacheList(List<Cache_Model> list) {
@@ -251,7 +251,8 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				}
 				if (Debug_SDK.isCacheLog) {
 					int cost = (int) (System.currentTimeMillis() - start);
-					Debug_SDK.td(Debug_SDK.mCacheTag, this, "缓存写入数据库(多个),花费时间:%d毫秒，总长度:%d,总缓存个数：%d|%d，成功个数:%d", cost, countLen,
+					Debug_SDK.td(Debug_SDK.mCacheTag, this, "缓存写入数据库(多个),花费时间:%d毫秒，总长度:%d,总缓存个数：%d|%d，成功个数:%d", cost,
+							countLen,
 							list.size(), num, res);
 				}
 			}
@@ -276,7 +277,7 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 					}
 				}
 
-				cursor = db.query(TB_NAME, new String[] { LABEL_KEY }, null, null, null, null, null);
+				cursor = db.query(TB_NAME, new String[]{LABEL_KEY}, null, null, null, null, null);
 
 				ArrayList<String> keys = new ArrayList<String>();
 
@@ -307,7 +308,6 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * 根据指定的key获取value
 	 *
 	 * @param key
-	 *
 	 * @return byte[]
 	 */
 	public byte[] getCache(String key) {
@@ -323,7 +323,7 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 						Debug_SDK.te(Debug_SDK.mCacheTag, this, "保存失败, 当前数据库不可用");
 					}
 				}
-				cursor = db.query(TB_NAME, null, LABEL_KEY + "=?", new String[] { key }, null, null, null);
+				cursor = db.query(TB_NAME, null, LABEL_KEY + "=?", new String[]{key}, null, null, null);
 				if (cursor.moveToNext()) {
 					result = cursor.getBlob(cursor.getColumnIndex(LABEL_VALUE));
 					long expires = cursor.getLong(cursor.getColumnIndex(LABEL_EXPIRES));
@@ -404,7 +404,7 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 				}
 				long currentTime = System.currentTimeMillis();
 				int count = db.delete(TB_NAME, LABEL_EXPIRES + "<? and " + LABEL_EXPIRES + ">?",
-						new String[] { Long.toString(currentTime), "-1" });
+						new String[]{Long.toString(currentTime), "-1"});
 				if (Debug_SDK.isCacheLog) {
 					Debug_SDK.td(Debug_SDK.mCacheTag, this, "删除数据库超期的缓存，成功删除数量:%d", count);
 				}
@@ -422,7 +422,6 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * 根据指定的键删除缓存
 	 *
 	 * @param key
-	 *
 	 * @return
 	 */
 	public boolean deleteCacheByCacheKey(String key) {
@@ -437,7 +436,7 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 						Debug_SDK.td(Debug_SDK.mCacheTag, this, "移除指定的键值缓存失败, 当前数据库不可用");
 					}
 				}
-				ret = db.delete(TB_NAME, LABEL_KEY + " =? ", new String[] { key }) > 0;
+				ret = db.delete(TB_NAME, LABEL_KEY + " =? ", new String[]{key}) > 0;
 
 			} catch (Throwable e) {
 				if (Debug_SDK.isCacheLog) {
@@ -487,14 +486,13 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * @param tbName 表名
 	 * @param field  数据库中指定的字段
 	 * @param value  要查询的值
-	 *
 	 * @return
 	 */
 	private boolean isExisting(SQLiteDatabase db, String tbName, String field, String value) {
 		boolean res = false;
 		Cursor cursor = null;
 		try {
-			cursor = db.query(tbName, null, field + "=?", new String[] { value }, null, null, null);
+			cursor = db.query(tbName, null, field + "=?", new String[]{value}, null, null, null);
 			res = cursor.moveToFirst();
 		} catch (Throwable e) {
 			if (Debug_SDK.isCacheLog) {
@@ -514,12 +512,12 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * @param values      更新的值
 	 * @param whereClause 条件字段
 	 * @param whereArgs   条件
-	 *
 	 * @return
 	 */
-	private boolean update(SQLiteDatabase db, String tbName, ContentValues values, String whereClause, String whereArgs) {
+	private boolean update(SQLiteDatabase db, String tbName, ContentValues values, String whereClause, String
+			whereArgs) {
 		try {
-			long err = db.update(tbName, values, whereClause + "=?", new String[] { whereArgs });
+			long err = db.update(tbName, values, whereClause + "=?", new String[]{whereArgs});
 			if (Debug_SDK.isCacheLog) {
 				Debug_SDK.td(Debug_SDK.mCacheTag, this, "更新数量 ：%d", err);
 			}
@@ -540,7 +538,6 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * @param db     外部传入，外部关闭这个db，内部可以直接进行db操作，db不需要初始化，也不需要上锁
 	 * @param tbName
 	 * @param values
-	 *
 	 * @return
 	 */
 	private boolean insert(SQLiteDatabase db, String tbName, ContentValues values) {
@@ -559,7 +556,6 @@ class Base_DB_Cache_Helper extends SQLiteOpenHelper {
 	 * 检查数据库是否可以使用。
 	 *
 	 * @param db
-	 *
 	 * @return
 	 */
 	private boolean checkDb(SQLiteDatabase db) {

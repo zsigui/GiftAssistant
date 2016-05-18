@@ -12,9 +12,8 @@ import java.util.List;
 
 /**
  * 将序列化对象变成Json字符串保存到缓存中，已经反序列化字符串获取json对象
- * 
+ *
  * @author zhitaocai edit on 2014-6-27
- * 
  */
 public class Proxy_Serializable_CacheManager {
 

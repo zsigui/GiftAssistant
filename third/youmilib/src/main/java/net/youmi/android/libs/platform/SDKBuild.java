@@ -46,7 +46,7 @@ public class SDKBuild extends YmLibBuild {
 
 	/**
 	 * 获取较大的sdk版本号
-	 * 
+	 *
 	 * @return
 	 */
 	public final static int getLargeVersionCode() {

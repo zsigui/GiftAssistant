@@ -38,7 +38,8 @@ public abstract class AbsExceptionReporter implements Runnable {
 	 * @param networkExceptionConfig 异常上报信息
 	 */
 	public AbsExceptionReporter(Context context, BaseHttpRequesterModel baseHttpRequesterModel,
-			BaseHttpResponseModel baseHttpResponseModel, NetworkExceptionConfig networkExceptionConfig) {
+	                            BaseHttpResponseModel baseHttpResponseModel, NetworkExceptionConfig
+			                            networkExceptionConfig) {
 		mContext = context;
 		mBaseHttpRequesterModel = baseHttpRequesterModel;
 		mBaseHttpResponseModel = baseHttpResponseModel;
@@ -119,12 +120,14 @@ public abstract class AbsExceptionReporter implements Runnable {
 				Basic_JSONUtil.putString(jo, "tag", mNetworkExceptionConfig.getTag());
 				Basic_JSONUtil.putString(jo, "sysv", Global_Runtime_SystemInfo.getDeviceOsRelease());
 				Basic_JSONUtil.putString(jo, "pm",
-						Global_Runtime_SystemInfo.getManufacturerInfo() + " " + Global_Runtime_SystemInfo.getDeviceModel());
+						Global_Runtime_SystemInfo.getManufacturerInfo() + " " + Global_Runtime_SystemInfo
+								.getDeviceModel());
 				Basic_JSONUtil.putLong(jo, "bl", mBaseHttpResponseModel.getBodyLength());
 
 				// 协议中已经没有了所以不用在传
 				// post-data优先以NameValuePair 然后才是二进制数据
-				//				List<NameValuePair> postDataNameValuePair = mBaseHttpRequesterModel.getPostDataNameValuePair();
+				//				List<NameValuePair> postDataNameValuePair = mBaseHttpRequesterModel
+				// .getPostDataNameValuePair();
 				//				if (postDataNameValuePair != null && !postDataNameValuePair.isEmpty()) {
 				//					JSONObject postObj = new JSONObject();
 				//					for (int i = 0; i < postDataNameValuePair.size(); i++) {
@@ -135,7 +138,8 @@ public abstract class AbsExceptionReporter implements Runnable {
 				//				} else {
 				//					byte[] postDataByteArray = mBaseHttpRequesterModel.getPostDataByteArray();
 				//					if (postDataByteArray != null && postDataByteArray.length > 0) {
-				//						Basic_JSONUtil.putString(jo, "post-data", new String(postDataByteArray, Global_Charsets
+				//						Basic_JSONUtil.putString(jo, "post-data", new String(postDataByteArray,
+				// Global_Charsets
 				// .UTF_8));
 				//					}
 				//				}

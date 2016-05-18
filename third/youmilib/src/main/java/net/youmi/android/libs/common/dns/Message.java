@@ -112,15 +112,15 @@ public class Message {
 		byte[] addre = null;
 		// 目前无法全部遍历所有情况，只选发现会用到的几种
 		switch (type) {
-		case 1:
-			addre = in.readByteArray(4);
-			break;
-		case 2:
-		case 5:
-			new Name(in);
-			break;
-		default:
-			break;
+			case 1:
+				addre = in.readByteArray(4);
+				break;
+			case 2:
+			case 5:
+				new Name(in);
+				break;
+			default:
+				break;
 		}
 
 		return addre;

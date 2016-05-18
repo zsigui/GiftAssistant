@@ -193,7 +193,8 @@ final public class FileDownloadTask {
 	 *
 	 * @param iFileDownloadTaskExtendObject
 	 */
-	public void addIFileDownloadTaskExtendObject(int key, IFileDownloadTaskExtendObject iFileDownloadTaskExtendObject) {
+	public void addIFileDownloadTaskExtendObject(int key, IFileDownloadTaskExtendObject
+			iFileDownloadTaskExtendObject) {
 		if (iFileDownloadTaskExtendObject == null) {
 			return;
 		}
@@ -351,7 +352,8 @@ final public class FileDownloadTask {
 				sb.append("  mDownloadFileMd5sum=\"").append(mDownloadFileMd5sum).append('\"').append("\n");
 				sb.append("  mTotalLength=").append(mTotalLength).append("\n");
 				sb.append("  mIntervalTime_ms=").append(mIntervalTime_ms).append("\n");
-				sb.append("  mIFileDownloadTaskExtendObjectSparseArray=").append(mIFileDownloadTaskExtendObjectSparseArray)
+				sb.append("  mIFileDownloadTaskExtendObjectSparseArray=").append
+						(mIFileDownloadTaskExtendObjectSparseArray)
 						.append("\n");
 				sb.append('}');
 				return sb.toString();

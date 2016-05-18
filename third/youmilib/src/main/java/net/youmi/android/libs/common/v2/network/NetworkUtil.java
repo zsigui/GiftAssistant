@@ -43,7 +43,6 @@ public class NetworkUtil {
 	 * 获取最终的url地址(按照http 1.0协议，最大循环循环遍历5次，如果5次之后都没有获取到的话就返回原来的地址)
 	 *
 	 * @param rawUrl
-	 *
 	 * @return
 	 */
 	public static String getFinalDestUrl(Context context, String rawUrl) {
@@ -59,7 +58,6 @@ public class NetworkUtil {
 	 *
 	 * @param rawUrl
 	 * @param loopMaxTimes 最大遍历次数，不然坑爹一点的话会无限循环重定向 (A->B->A)
-	 *
 	 * @return
 	 */
 	public static String getFinalDestUrlByHttpClient(Context context, String rawUrl, int loopMaxTimes) {
@@ -129,7 +127,6 @@ public class NetworkUtil {
 	 *
 	 * @param rawUrl
 	 * @param loopMaxTimes 最大遍历次数，不然坑爹一点的话会无限循环重定向 (A->B->A)
-	 *
 	 * @return
 	 */
 	public static String getFinalDestUrlByHttpURLConnection(Context context, String rawUrl, int loopMaxTimes) {
@@ -154,22 +151,22 @@ public class NetworkUtil {
 				httpURLConnection.connect();
 
 				switch (httpURLConnection.getResponseCode()) {
-				case HttpURLConnection.HTTP_MULT_CHOICE://300
-				case HttpURLConnection.HTTP_MOVED_TEMP: //301
-				case HttpURLConnection.HTTP_MOVED_PERM: //302
-				case HttpURLConnection.HTTP_SEE_OTHER:  //303
-				case 307:                               //307
-					currentUrl = httpURLConnection.getHeaderField("Location");
-					if (Debug_SDK.isNetLog) {
-						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
-					}
-					break;
-				default:
-					httpURLConnection.disconnect();
-					if (Debug_SDK.isNetLog) {
-						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
-					}
-					return currentUrl;
+					case HttpURLConnection.HTTP_MULT_CHOICE://300
+					case HttpURLConnection.HTTP_MOVED_TEMP: //301
+					case HttpURLConnection.HTTP_MOVED_PERM: //302
+					case HttpURLConnection.HTTP_SEE_OTHER:  //303
+					case 307:                               //307
+						currentUrl = httpURLConnection.getHeaderField("Location");
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
+						}
+						break;
+					default:
+						httpURLConnection.disconnect();
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
+						}
+						return currentUrl;
 				}
 			} catch (Exception e) {
 				if (Debug_SDK.isNetLog) {
@@ -195,7 +192,6 @@ public class NetworkUtil {
 	 * 从描述中提取出文件名字
 	 *
 	 * @param contentDisposition
-	 *
 	 * @return
 	 */
 	public static String getFileNameFromContentDisposition(String contentDisposition) {
@@ -224,7 +220,6 @@ public class NetworkUtil {
 	 *
 	 * @param response
 	 * @param destUrl
-	 *
 	 * @return
 	 */
 	public static String getFileNameFromHttpResponse(HttpResponse response, String destUrl) {
@@ -263,7 +258,6 @@ public class NetworkUtil {
 	 * 从http请求url中获取文件名字(仅仅是截获最后一个'/'后的字符串)
 	 *
 	 * @param destUrl
-	 *
 	 * @return
 	 */
 	public static String getFileNameFromHttpUrl(String destUrl) {
@@ -290,7 +284,6 @@ public class NetworkUtil {
 	 * 从html页面中获取字符编码，用于对付顽固gb2312
 	 *
 	 * @param html
-	 *
 	 * @return
 	 */
 	public static String getCharsetFromHtml(String html) {
@@ -299,10 +292,12 @@ public class NetworkUtil {
 				return null;
 			}
 			// Pattern
-			// pattern=Pattern.compile("<meta.*http-equiv=.*Content-Type.*content=.*text/html;.*charset=(.*?)\"|'.*/>",Pattern
+			// pattern=Pattern.compile("<meta.*http-equiv=.*Content-Type.*content=.*text/html;.*charset=(.*?)\"|'
+			// .*/>",Pattern
 			// .CASE_INSENSITIVE);
 			Pattern pattern =
-					Pattern.compile("<meta.*content.*text/html;.*charset=(.*?)\"|'.*/>", Pattern.CASE_INSENSITIVE);// 保险一点的做法
+					Pattern.compile("<meta.*content.*text/html;.*charset=(.*?)\"|'.*/>", Pattern.CASE_INSENSITIVE);//
+					// 保险一点的做法
 			Matcher matcher = pattern.matcher(html);
 			if (matcher.find()) {
 				return matcher.group(matcher.groupCount());
@@ -340,7 +335,8 @@ public class NetworkUtil {
 	//
 	//			String hostA = uriA.getHost();
 	//			String hostB = uriB.getHost();
-	//			if ((hostA.equals(hostB)) && (uriA.getProtocol().equals(uriB.getProtocol())) && (uriA.getPort() == uriB.getPort
+	//			if ((hostA.equals(hostB)) && (uriA.getProtocol().equals(uriB.getProtocol())) && (uriA.getPort() ==
+	// uriB.getPort
 	// ())) {
 	//
 	//				String pathA = uriA.getPath();
@@ -426,7 +422,6 @@ public class NetworkUtil {
 	 *
 	 * @param context
 	 * @param url
-	 *
 	 * @return
 	 */
 	public static long getContentLengthByHttpClient(Context context, String url) {
@@ -477,7 +472,6 @@ public class NetworkUtil {
 	 *
 	 * @param rawUrl
 	 * @param loopMaxTimes 最大遍历次数，不然坑爹一点的话会无限循环重定向 (A->B->A)
-	 *
 	 * @return
 	 */
 	public static long getContentLengthByHttpURLConnection(Context context, String rawUrl, int loopMaxTimes) {
@@ -502,24 +496,24 @@ public class NetworkUtil {
 				httpURLConnection.connect();
 
 				switch (httpURLConnection.getResponseCode()) {
-				case HttpURLConnection.HTTP_MULT_CHOICE://300
-				case HttpURLConnection.HTTP_MOVED_TEMP: //301
-				case HttpURLConnection.HTTP_MOVED_PERM: //302
-				case HttpURLConnection.HTTP_SEE_OTHER:  //303
-				case 307:                               //307
-					currentUrl = httpURLConnection.getHeaderField("Location");
-					if (Debug_SDK.isNetLog) {
-						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
-					}
-					break;
-				default:
-					long contentLength = httpURLConnection.getContentLength();
-					httpURLConnection.disconnect();
-					if (Debug_SDK.isNetLog) {
-						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
-						Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终ContentLength:%d", contentLength);
-					}
-					return contentLength;
+					case HttpURLConnection.HTTP_MULT_CHOICE://300
+					case HttpURLConnection.HTTP_MOVED_TEMP: //301
+					case HttpURLConnection.HTTP_MOVED_PERM: //302
+					case HttpURLConnection.HTTP_SEE_OTHER:  //303
+					case 307:                               //307
+						currentUrl = httpURLConnection.getHeaderField("Location");
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "中途url:%s", currentUrl);
+						}
+						break;
+					default:
+						long contentLength = httpURLConnection.getContentLength();
+						httpURLConnection.disconnect();
+						if (Debug_SDK.isNetLog) {
+							Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终url:%s", currentUrl);
+							Debug_SDK.td(Debug_SDK.mNetTag, NetworkUtil.class, "最终ContentLength:%d", contentLength);
+						}
+						return contentLength;
 				}
 			} catch (Exception e) {
 				if (Debug_SDK.isNetLog) {
@@ -546,7 +540,6 @@ public class NetworkUtil {
 	 *
 	 * @param urls 多个url的字符串，用逗号分隔
 	 * @param url  指定的url，可带查询串，但最终判断时会去掉查询串
-	 *
 	 * @return
 	 */
 	public static boolean isUrlsContainsWithDestUrl(String urls, String url) {

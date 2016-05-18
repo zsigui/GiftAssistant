@@ -62,11 +62,10 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 	 * @param context
 	 * @param maxRetryTimes        最大重试次数
 	 * @param retryIntervalTime_ms 下一次重试的时间间隔(ms)
-	 *
 	 * @pamam fileDownloadTask 下载任务模型
 	 */
 	public AbsAutoRetryFileDownloader(Context context, FileDownloadTask fileDownloadTask, int maxRetryTimes,
-			int retryIntervalTime_ms) {
+	                                  int retryIntervalTime_ms) {
 		mContext = context.getApplicationContext();
 		mFileDownloadTask = fileDownloadTask;
 
@@ -108,7 +107,8 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 					if (!NetworkStatus.isNetworkAvailable(mContext)) {
 
 						if (Debug_SDK.isDownloadLog) {
-							Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "当前网络不可用，等待[%d]毫秒后再次检查网络状态", mRetryIntervalTime_ms);
+							Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "当前网络不可用，等待[%d]毫秒后再次检查网络状态",
+									mRetryIntervalTime_ms);
 						}
 						try {
 							Thread.sleep(mRetryIntervalTime_ms);
@@ -125,10 +125,12 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 							// 如果网络还是不行，则判断是否是否已经达到重试上限
 							if (mRunCounter >= mMaxRetryTimes) {
 								if (Debug_SDK.isDownloadLog) {
-									Debug_SDK.te(Debug_SDK.mDownloadTag, this, "当前网络不可用，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
+									Debug_SDK.te(Debug_SDK.mDownloadTag, this, "当前网络不可用，重试次数已经达到上限[%d]，结束下载",
+											mMaxRetryTimes);
 								}
 								// 由于网络不成功导致的重试，达到最大限定次数后取消，同时标记为下载失败
-								return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_REACH_MAX_DOWNLOAD_TIMES);
+								return new FinalDownloadStatus(FinalDownloadStatus.Code
+										.FAILED_ERROR_REACH_MAX_DOWNLOAD_TIMES);
 							}
 							if (Debug_SDK.isDownloadLog) {
 								Debug_SDK.ti(Debug_SDK.mDownloadTag, this, "当前网络不可用");
@@ -142,7 +144,8 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 
 				FinalDownloadStatus finalDownloadStatus = mDownloader.download();
 				if (finalDownloadStatus == null) {
-					return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_UNKOWN, new Exception("null status 1"));
+					return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_ERROR_UNKOWN, new Exception("null " +
+							"status 1"));
 				}
 
 				if (FinalDownloadStatus.Code.SUCCESS == finalDownloadStatus.getDownloadStatusCode()) {
@@ -152,7 +155,7 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 					return finalDownloadStatus;
 
 				} else if (finalDownloadStatus.getDownloadStatusCode() >= 150 &&
-				           finalDownloadStatus.getDownloadStatusCode() <= 199) {
+						finalDownloadStatus.getDownloadStatusCode() <= 199) {
 					// 不可重试的下载失败类型
 					if (Debug_SDK.isDownloadLog) {
 						Debug_SDK.te(Debug_SDK.mDownloadTag, this, "不可重试下载失败\n%s", finalDownloadStatus.toString());
@@ -160,7 +163,7 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 					return finalDownloadStatus;
 
 				} else if (finalDownloadStatus.getDownloadStatusCode() >= 100 &&
-				           finalDownloadStatus.getDownloadStatusCode() <= 149) {
+						finalDownloadStatus.getDownloadStatusCode() <= 149) {
 					// 可重试的下载失败类型
 					if (Debug_SDK.isDownloadLog) {
 						Debug_SDK.te(Debug_SDK.mDownloadTag, this, "可重试下载失败\n%s", finalDownloadStatus.toString());
@@ -169,7 +172,8 @@ public abstract class AbsAutoRetryFileDownloader implements IDownloader {
 					// 如果网络还是不行，则判断是否是否已经达到重试上限
 					if (mRunCounter >= mMaxRetryTimes) {
 						if (Debug_SDK.isDownloadLog) {
-							Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载失败，属于不可重试类型失败，重试次数已经达到上限[%d]，结束下载", mMaxRetryTimes);
+							Debug_SDK.te(Debug_SDK.mDownloadTag, this, "下载失败，属于不可重试类型失败，重试次数已经达到上限[%d]，结束下载",
+									mMaxRetryTimes);
 						}
 						return finalDownloadStatus;
 					}

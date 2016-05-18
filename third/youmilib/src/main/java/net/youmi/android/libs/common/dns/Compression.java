@@ -2,11 +2,10 @@ package net.youmi.android.libs.common.dns;
 
 /**
  * DNS Name Compression object.
- * 
+ *
+ * @author Brian Wellington
  * @see net.youmi.android.libs.common.dns.Message
  * @see net.youmi.android.libs.common.dns.Name
- * 
- * @author Brian Wellington
  */
 
 public class Compression {
@@ -30,11 +29,9 @@ public class Compression {
 
 	/**
 	 * Adds a compression entry mapping a name to a position in a message.
-	 * 
-	 * @param pos
-	 *            The position at which the name is added.
-	 * @param name
-	 *            The name being added to the message.
+	 *
+	 * @param pos  The position at which the name is added.
+	 * @param name The name being added to the message.
 	 */
 	public void add(int pos, Name name) {
 		if (pos > MAX_POINTER)
@@ -50,9 +47,8 @@ public class Compression {
 	/**
 	 * Retrieves the position of the given name, if it has been previously
 	 * included in the message.
-	 * 
-	 * @param name
-	 *            The name to find in the compression table.
+	 *
+	 * @param name The name to find in the compression table.
 	 * @return The position of the name, or -1 if not found.
 	 */
 	public int get(Name name) {

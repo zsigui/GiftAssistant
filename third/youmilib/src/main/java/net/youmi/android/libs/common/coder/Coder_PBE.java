@@ -17,7 +17,7 @@ public class Coder_PBE {
 	/**
 	 * 支持以下任意一种算法
 	 * <p/>
-	 * 
+	 * <p/>
 	 * <pre>
 	 * PBEWithMD5AndDES
 	 * PBEWithMD5AndTripleDES
@@ -29,7 +29,7 @@ public class Coder_PBE {
 
 	/**
 	 * 盐初始化
-	 * 
+	 *
 	 * @return
 	 * @throws Throwable
 	 */
@@ -42,7 +42,7 @@ public class Coder_PBE {
 
 	/**
 	 * 转换密钥<br>
-	 * 
+	 *
 	 * @param password
 	 * @return
 	 * @throws Throwable
@@ -57,13 +57,10 @@ public class Coder_PBE {
 
 	/**
 	 * 加密
-	 * 
-	 * @param data
-	 *            数据
-	 * @param password
-	 *            密码
-	 * @param salt
-	 *            盐
+	 *
+	 * @param data     数据
+	 * @param password 密码
+	 * @param salt     盐
 	 * @return
 	 * @throws Throwable
 	 */
@@ -80,18 +77,16 @@ public class Coder_PBE {
 	}
 
 	/**
-	 * @param toEncrypt
-	 *            加密原始串
-	 * @param password
-	 *            密码
-	 * @param salt
-	 *            盐
+	 * @param toEncrypt 加密原始串
+	 * @param password  密码
+	 * @param salt      盐
 	 * @return
 	 */
 	public static String encryptToBase64String(String toEncrypt, String password, byte[] salt) {
 
 		try {
-			return new String(Coder_Base64.encode(encrypt(toEncrypt.getBytes(), password, salt)), Global_Charsets.UTF_8);
+			return new String(Coder_Base64.encode(encrypt(toEncrypt.getBytes(), password, salt)), Global_Charsets
+					.UTF_8);
 		} catch (Throwable e) {
 			if (Debug_SDK.isCoderLog) {
 				Debug_SDK.te(Debug_SDK.mCoderTag, Coder_PBE.class, e);
@@ -101,12 +96,9 @@ public class Coder_PBE {
 	}
 
 	/**
-	 * @param toEncrypt
-	 *            加密原始串
-	 * @param password
-	 *            密码
-	 * @param salt
-	 *            盐
+	 * @param toEncrypt 加密原始串
+	 * @param password  密码
+	 * @param salt      盐
 	 * @return
 	 */
 	public static String encryptToBase64String(byte[] toEncrypt, String password, byte[] salt) {
@@ -123,13 +115,10 @@ public class Coder_PBE {
 
 	/**
 	 * 解密
-	 * 
-	 * @param data
-	 *            数据
-	 * @param password
-	 *            密码
-	 * @param salt
-	 *            盐
+	 *
+	 * @param data     数据
+	 * @param password 密码
+	 * @param salt     盐
 	 * @return
 	 * @throws Throwable
 	 */

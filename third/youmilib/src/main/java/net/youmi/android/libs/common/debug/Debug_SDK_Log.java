@@ -4,23 +4,23 @@ import android.util.Log;
 
 /**
  * sdk 测试用输出log类<br>
- * 
+ * <p/>
  * 支持两套方案：
- * <p>
+ * <p/>
  * 1、di,de,dd,dv,dw 等的使用： <br>
  * 和常规的Log使用差不多，输入标签，输入信息，输出Throwable就可以了
- * <p>
+ * <p/>
  * 2、ti,te,td,tv,tw 等的使用：<br>
  * 和常规的Log区别在于标签的创建：<br>
  * 需要传入preTag(模块名称)， 以及Object（模块中的某个类）来创建一个标签
- * 
+ * <p/>
  * <hr>
  * 其他注意注意事项：
  * <ol>
  * <li>比较多，后面在说吧</li>
  * </ol>
  * <hr>
- * 
+ *
  * @author zhitaocai create on 2014-7-10
  */
 class Debug_SDK_Log {
@@ -370,7 +370,7 @@ class Debug_SDK_Log {
 
 	/**
 	 * 输出log 标签不带模块前缀
-	 * 
+	 *
 	 * @param level
 	 * @param tag
 	 * @param tr
@@ -389,7 +389,7 @@ class Debug_SDK_Log {
 
 	/**
 	 * 输出log 标签带模块前缀， 如下载模块类A的输出为download_A
-	 * 
+	 *
 	 * @param level
 	 * @param preTag
 	 * @param object
@@ -398,7 +398,7 @@ class Debug_SDK_Log {
 	 * @param args
 	 */
 	protected static void printDebugInfo_WithPreTag(int level, String preTag, Object object, Throwable tr, String msg,
-			Object... args) {
+	                                                Object... args) {
 		if (isDebug) {
 			if (isEnableToPrintInvokeInfo) {
 				BasicLog.printInvokeInfo(level, BasicLog.getFinalTag(preTag, object));

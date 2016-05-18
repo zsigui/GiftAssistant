@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 
 /**
  * 官方建议：2.3之后使用HttpURLConnection
+ *
  * @author zhitao
  * @since 2015-09-10 23:31
  */
@@ -20,7 +21,6 @@ public class YoumiAdHttpURLConnectionRequester extends DefaultHttpURLConnectionR
 	/**
 	 * @param context
 	 * @param baseHttpRequesterModel 本次请求的相关参数的自定义数据模型
-	 *
 	 * @throws NullPointerException
 	 */
 	public YoumiAdHttpURLConnectionRequester(Context context, BaseHttpRequesterModel baseHttpRequesterModel)

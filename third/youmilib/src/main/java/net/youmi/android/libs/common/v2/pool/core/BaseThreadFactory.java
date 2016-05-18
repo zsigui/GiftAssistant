@@ -60,10 +60,12 @@ public class BaseThreadFactory implements ThreadFactory {
 		} finally {
 			if (Debug_SDK.isPoolLog) {
 				if (thread == null) {
-					Debug_SDK.tw(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程失败 线程名字:%s", mPoolCounter.get(), mPoolName,
+					Debug_SDK.tw(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程失败 线程名字:%s", mPoolCounter.get(),
+							mPoolName,
 							mThreadCounter.get(), threadName);
 				} else {
-					Debug_SDK.ti(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程成功 线程名字:%s", mPoolCounter.get(), mPoolName,
+					Debug_SDK.ti(Debug_SDK.mPoolTag, this, "【id:%d】【%s线程工厂消息】:创建第%d个线程成功 线程名字:%s", mPoolCounter.get(),
+							mPoolName,
 							mThreadCounter.get(), threadName);
 				}
 			}

@@ -165,7 +165,8 @@ public class BaseHttpRequesterModel {
 			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getQuery() : %s", uri.getQuery());
 			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getRawQuery() : %s", uri.getRawQuery());
 			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getScheme() : %s", uri.getScheme());
-			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getSchemeSpecificPart() : %s", uri.getSchemeSpecificPart());
+			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getSchemeSpecificPart() : %s", uri
+			// .getSchemeSpecificPart());
 			//				Debug_SDK.te(Debug_SDK.mNetTag, this, "getRawSchemeSpecificPart() : %s", uri
 			// .getRawSchemeSpecificPart());
 			//			}

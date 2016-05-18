@@ -119,12 +119,14 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 			// 2. 在同一个实例下，第二次调用download方法就会触发这个判断
 			if (isNeedToAnalysRealIpFromHTTPDNS) {
 				String host = new URI(mFileDownloadTask.getRawDownloadUrl()).getHost();
-				httpURLConnection = HttpRequesterFactory.newHttpURLConnection(mContext, mFileDownloadTask.getDestDownloadUrl());
+				httpURLConnection = HttpRequesterFactory.newHttpURLConnection(mContext, mFileDownloadTask
+						.getDestDownloadUrl());
 				httpURLConnection.addRequestProperty("HOST", host);
 			}
 			// 创建默认的HttpURLConnection
 			else {
-				httpURLConnection = HttpRequesterFactory.newHttpURLConnection(mContext, mFileDownloadTask.getRawDownloadUrl());
+				httpURLConnection = HttpRequesterFactory.newHttpURLConnection(mContext, mFileDownloadTask
+						.getRawDownloadUrl());
 			}
 
 			if (httpURLConnection == null) {
@@ -198,7 +200,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 				if (mFileDownloadTask.getTempFile().renameTo(mFileDownloadTask.getStoreFile())) {
 					return new FinalDownloadStatus(FinalDownloadStatus.Code.SUCCESS);
 				} else {
-					return new FinalDownloadStatus(FinalDownloadStatus.Code.FAILED_EXCEPTION_RENAME_TEMPFILE_TO_STOREFILE);
+					return new FinalDownloadStatus(FinalDownloadStatus.Code
+							.FAILED_EXCEPTION_RENAME_TEMPFILE_TO_STOREFILE);
 				}
 			}
 
@@ -232,7 +235,8 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 			String hostIpArrayString = NetworkUtil.request4HostIp(mFileDownloadTask.getRawDownloadUrl());
 			if (!Basic_StringUtil.isNullOrEmpty(hostIpArrayString)) {
 				if (Debug_SDK.isOfferLog) {
-					Debug_SDK.te(Debug_SDK.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask.getRawDownloadUrl(),
+					Debug_SDK.te(Debug_SDK.mOfferTag, this, "连接异常：\n原始url: %s\n对应ip: %s", mFileDownloadTask
+									.getRawDownloadUrl(),
 							hostIpArrayString);
 				}
 
@@ -334,7 +338,7 @@ public class BaseHttpURLConnectionFileDownloader implements IDownloader {
 					Debug_SDK.te(Debug_SDK.mDownloadTag, this, e);
 				}
 			}
-			
+
 		}
 	}
 
