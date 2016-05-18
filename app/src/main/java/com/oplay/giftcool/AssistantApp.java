@@ -113,6 +113,7 @@ public class AssistantApp extends Application {
 	private String mHeaderValue;
 
 	private OkHttpClient mHttpClient;
+	private long mLastLaunchTime;
 
 	// LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -659,5 +660,11 @@ public class AssistantApp extends Application {
 		}
 	}
 
+	public void setLastLaunchTime(long lastLaunchTime) {
+		mLastLaunchTime = lastLaunchTime;
+	}
 
+	public long getLastLaunchTime() {
+		return mLastLaunchTime;
+	}
 }

@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
@@ -44,6 +46,12 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 		} else {
 			itemHolder.tvGift.setText(o.giftName);
 		}
+
+		if (o.hasNew && DateUtil.getTime(o.newestCreateTime) > AssistantApp.getInstance().getLastLaunchTime()) {
+			itemHolder.ivHint.setVisibility(View.VISIBLE);
+		} else {
+			itemHolder.ivHint.setVisibility(View.GONE);
+		}
 		itemHolder.tvCount.setText(String.format("%d款礼包", o.totalCount));
 		ViewUtil.showImage(itemHolder.ivIcon, o.img);
 		itemHolder.itemView.setOnClickListener(this);
@@ -56,7 +64,10 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 			return;
 		}
 		Integer pos = (Integer)v.getTag(TAG_POSITION);
-		IntentUtil.jumpGameDetail(mContext, getItem(pos).id, GameTypeUtil.JUMP_STATUS_GIFT);
+		IndexGiftLike o = getItem(pos);
+		o.hasNew = false;
+		notifyItemChanged(pos);
+		IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
 	}
 
 	static class ViewHolder extends BaseRVHolder{
@@ -64,6 +75,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 		TextView tvGift;
 		TextView tvCount;
 		ImageView ivIcon;
+		ImageView ivHint;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -71,6 +83,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 			tvName = getViewById(R.id.tv_game_name);
 			tvGift = getViewById(R.id.tv_gift);
 			tvCount = getViewById(R.id.tv_count);
+			ivHint = getViewById(R.id.iv_hint);
 		}
 	}
 
