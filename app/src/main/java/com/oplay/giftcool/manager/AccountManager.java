@@ -494,7 +494,6 @@ public class AccountManager implements OnFinishListener {
     public void updateJPushTagAndAlias() {
         if (!isLogin()) {
             // 用户不处于登录状态，不进行别名标记
-            JPushInterface.setAlias(mContext, "", new JPushTagsAliasCallback(mContext));
             mHasSetAliasSuccess = false;
             return;
         }

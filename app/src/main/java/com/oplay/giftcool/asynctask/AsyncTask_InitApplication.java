@@ -95,6 +95,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
 		// 首次打开APP 或者 今日首次登录
 		// 写入当前时间
+		AssistantApp.getInstance().setLastLaunchTime(lastOpenTime);
 		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
 				.currentTimeMillis());
 		return (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));

@@ -31,6 +31,15 @@
 				android:background = "@drawable/shape_rect_icon_tap"
 				android:textColor = "@color/co_white"
 				android:textSize = "10sp" />
+
+		<ImageView
+				android:id = "@+id/iv_hint"
+				style = "@style/DefaultImageView"
+				android:src = "@drawable/ic_toolbar_hint"
+				android:layout_alignParentTop = "true"
+				android:layout_alignParentRight = "true"
+				android:visibility = "gone"
+				android:contentDescription = "@null" />
 	</RelativeLayout >
 
 	<TextView

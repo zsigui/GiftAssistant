@@ -76,12 +76,14 @@ public class DateUtil {
 	public static long getTime(String dateStr) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 		long curTimeMillisecond = 0;
-		try {
-			Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
-			curTimeMillisecond = date.getTime();
-		} catch (ParseException e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_UTIL, e);
+		if (!TextUtils.isEmpty(dateStr)) {
+			try {
+				Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
+				curTimeMillisecond = date.getTime();
+			} catch (ParseException e) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_UTIL, e);
+				}
 			}
 		}
 		return curTimeMillisecond;

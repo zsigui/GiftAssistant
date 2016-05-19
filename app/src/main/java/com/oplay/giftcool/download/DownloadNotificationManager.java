@@ -12,7 +12,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.text.TextUtils;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -44,13 +43,18 @@ public class DownloadNotificationManager {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent != null) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + intent.getAction());
+			try {
+				if (intent != null) {
+					if (AppDebugConfig.IS_DEBUG) {
+						KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + intent.getAction());
+					}
+					if (ACTION_OPEN_DOWNLOAD_FRAGMENT.equals(intent.getAction())) {
+						IntentUtil.jumpDownloadManager(context, true);
+					}
 				}
-				context = (context == null ? AssistantApp.getInstance().getApplicationContext() : context);
-				if (ACTION_OPEN_DOWNLOAD_FRAGMENT.equals(intent.getAction())) {
-					IntentUtil.jumpDownloadManager(context, true);
+			} catch (Throwable t) {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.w(AppDebugConfig.TAG_RECEIVER, t);
 				}
 			}
 		}

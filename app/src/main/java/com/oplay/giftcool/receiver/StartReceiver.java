@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
@@ -27,20 +26,15 @@ public class StartReceiver extends BroadcastReceiver {
 			}
 			return;
 		}
-		if (AssistantApp.getInstance() == null) {
-			return;
-		}
-		if (context == null) {
-			context = AssistantApp.getInstance().getApplicationContext();
-		}
-		String action = intent.getAction();
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + action);
-			KLog.d(AppDebugConfig.TAG_RECEIVER, "category = " + intent.getCategories());
-		}
+		try {
+			String action = intent.getAction();
+			if (AppDebugConfig.IS_DEBUG) {
+				KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + action);
+				KLog.d(AppDebugConfig.TAG_RECEIVER, "category = " + intent.getCategories());
+			}
 //			PushMessageManager.getInstance().reInitPush(context);
-		if (!SystemUtil.isServiceRunning(context, PushService.class.getName())) {
-			// 服务不处于运行中，重启该服务
+			if (!SystemUtil.isServiceRunning(context, PushService.class.getName())) {
+				// 服务不处于运行中，重启该服务
 //			if (!AssistantApp.getInstance().isGlobalInit()) {
 //				if (AppDebugConfig.IS_DEBUG) {
 //					KLog.d(AppDebugConfig.TAG_RECEIVER, "app is exit, re-initial again!");
@@ -51,15 +45,20 @@ public class StartReceiver extends BroadcastReceiver {
 //					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stop, re-started again");
 //				}
 //			}
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stopped, re-initial again!");
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is stopped, re-initial again!");
+				}
+				PushMessageManager.getInstance().initPush(context);
+			} else {
+				if (AppDebugConfig.IS_DEBUG) {
+					KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");
+				}
 			}
-			PushMessageManager.getInstance().initPush(context);
-		} else {
+			AlarmClockManager.getInstance().startWakeAlarm(context.getApplicationContext());
+		} catch (Throwable t) {
 			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_RECEIVER, "push service is running");
+				KLog.w(AppDebugConfig.TAG_RECEIVER, t);
 			}
 		}
-		AlarmClockManager.getInstance().startWakeAlarm(context.getApplicationContext());
 	}
 }
