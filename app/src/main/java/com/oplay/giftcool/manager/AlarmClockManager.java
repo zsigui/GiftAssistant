@@ -25,7 +25,6 @@ public class AlarmClockManager {
     private static final int NOTIFY_GIFT_UPDATE_ELAPSED_COUNT = 2;
 
     public static AlarmClockManager sInstance;
-    private boolean mNeedBindJpushTag;
 
     public static AlarmClockManager getInstance() {
         if (sInstance == null) {
@@ -92,39 +91,35 @@ public class AlarmClockManager {
      */
     public void startWakeAlarm(final Context context) {
 
-        mWakeCount++;
-        if (mAllowNotifyGiftUpdate && mBackgroundWakeCount == 0
-                && mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0) {
-            // 允许的情况下，每唤醒2次通知一次更新
-            notifyGiftUpdate(context);
-        }
-
-        if (mObserverGame
-                && mActiveActivityCount <= 0
-                && mBackgroundWakeCount < 4) {
-            // 处理观察试玩游戏
-            ThreadUtil.runInThread(new Runnable() {
-                @Override
-                public void run() {
-                    ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
-                }
-            });
-        }
-
-        if (mNeedBindJpushTag) {
-            if (AccountManager.getInstance().isLogin()
-                    && !AccountManager.getInstance().isHasSetAliasSuccess()) {
-                AccountManager.getInstance().updateJPushTagAndAlias();
-            }
-            setNeedBindJPushTag(false);
-        }
-
         ThreadUtil.runInThread(new Runnable() {
             @Override
             public void run() {
-                initAndSetWakeAlarm(context);
+                try {
+                    initAndSetWakeAlarm(context);
+
+                    if (mObserverGame
+                            && mBackgroundWakeCount > 0
+                            && mBackgroundWakeCount < 4) {
+                        // 处理观察试玩游戏
+                        ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
+                    }
+
+                    mWakeCount++;
+                    if (mAllowNotifyGiftUpdate && mBackgroundWakeCount == 0
+                            && mWakeCount % NOTIFY_GIFT_UPDATE_ELAPSED_COUNT == 0
+                            && NetworkUtil.isWifiConnected(context)) {
+                        // 允许的情况下，且程序位于前台,每唤醒2次通知一次更新
+                        ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
+                        SilentDownloadManager.getInstance().startDownload();
+                    }
+                } catch (Throwable t) {
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.w(AppDebugConfig.TAG_MANAGER, t);
+                    }
+                }
             }
         });
+
     }
 
     private void resetWakeElapsed() {
@@ -136,15 +131,12 @@ public class AlarmClockManager {
                                 + ", background count = " + mBackgroundWakeCount);
             }
             mBackgroundWakeCount++;
-            setNeedBindJPushTag(true);
             if (mBackgroundWakeCount > 9) {
                 // 20分钟
                 mElapsedTime = 40 * ALARM_WAKE_ELAPSED_TIME;
-                AccountManager.getInstance().setHasSetAliasSuccess(false);
             } else if (mBackgroundWakeCount > 5) {
                 // 5分钟
                 mElapsedTime = 10 * ALARM_WAKE_ELAPSED_TIME;
-                AccountManager.getInstance().setHasSetAliasSuccess(false);
             } else if (mBackgroundWakeCount > 2) {
                 // 1分钟
                 mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
@@ -172,43 +164,13 @@ public class AlarmClockManager {
         }
         AlarmManager am = getAlarmManager(context);
         am.cancel(alarmSender);
-        am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
+        if (mBackgroundWakeCount < 5) {
+            // 超过5次,不再设置轮询
+            am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
+        }
         if (AppDebugConfig.IS_DEBUG) {
             KLog.d(AppDebugConfig.TAG_WARN, "initAndSetWakeAlarm is exec success");
         }
-    }
-
-    // 用于统计活动的Activity数量,以重置轮询间隔
-    private int mActiveActivityCount = 0;
-
-    public void onResume(Context context) {
-        if (mActiveActivityCount == 0) {
-            mElapsedTime = ALARM_WAKE_ELAPSED_TIME;
-        }
-        mActiveActivityCount++;
-    }
-
-    public void onPause(Context context) {
-        mActiveActivityCount--;
-    }
-
-    private void notifyGiftUpdate(final Context context) {
-        if (context == null) {
-            return;
-        }
-        ThreadUtil.runInThread(new Runnable() {
-            @Override
-            public void run() {
-                ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
-                if (NetworkUtil.isWifiConnected(context)) {
-                    SilentDownloadManager.getInstance().startDownload();
-                }
-            }
-        });
-    }
-
-    public void setNeedBindJPushTag(boolean needBindJpushTag) {
-        mNeedBindJpushTag = needBindJpushTag;
     }
 
 //	/**
