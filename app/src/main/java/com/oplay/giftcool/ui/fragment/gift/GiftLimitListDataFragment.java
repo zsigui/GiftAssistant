@@ -44,12 +44,12 @@ import retrofit2.Response;
 public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew>> implements
 		OnItemClickListener<IndexGiftNew> {
 
-	private static final String KEY_DATA = "key_limmit_data";
+	private static final String KEY_DATA = "key_limit_data";
 	private static final String KEY_PAGE_SIZE = "key_page_size";
 
 	private int mPageSize = 10;
 	private StickyListHeadersListView mDataView;
-	private View mLodingView;
+	private View mLoadingView;
 
 	private LimitGiftListAdapter mAdapter;
 
@@ -74,9 +74,9 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		mDataView = getViewById(R.id.lv_content);
 
-		mLodingView = inflater.inflate(R.layout.view_item_footer, mDataView, false);
-		mLodingView.setVisibility(View.GONE);
-		mDataView.addFooterView(mLodingView);
+		mLoadingView = inflater.inflate(R.layout.view_item_footer, mDataView, false);
+		mLoadingView.setVisibility(View.GONE);
+		mDataView.addFooterView(mLoadingView);
 	}
 
 	@Override
@@ -175,8 +175,8 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 	public void loadMoreData() {
 		if (!mNoMoreLoad && !mIsLoadMore) {
 			mIsLoadMore = true;
-			if (mLodingView != null) {
-				mLodingView.setVisibility(View.VISIBLE);
+			if (mLoadingView != null) {
+				mLoadingView.setVisibility(View.VISIBLE);
 			}
 			Global.THREAD_POOL.execute(new LoadDataByPageRunnable(++mLastPage, mPageSize));
 		}
@@ -185,24 +185,21 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 	@Override
 	protected void moreLoadSuccessEnd() {
 		super.moreLoadSuccessEnd();
-		if (mLodingView != null) {
-			mLodingView.setVisibility(View.GONE);
+		if (mLoadingView != null) {
+			mLoadingView.setVisibility(View.GONE);
 		}
 	}
 
 	@Override
 	protected void moreLoadFailEnd() {
 		super.moreLoadFailEnd();
-		if (mLodingView != null) {
-			mLodingView.setVisibility(View.GONE);
+		if (mLoadingView != null) {
+			mLoadingView.setVisibility(View.GONE);
 		}
 	}
 
 	//刷新重置页面
 	public void refreshData(ArrayList<TimeData<IndexGiftNew>> data) {
-		if (data == null) {
-			return;
-		}
 		if (data == null) {
 			return;
 		}
@@ -222,11 +219,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 			return;
 		}
 		mData.addAll(data);
-		if (data.size() < mPageSize) {
-			mHasData = false;
-		} else {
-			mHasData = true;
-		}
+		mHasData = data.size() >= mPageSize;
 		mAdapter.updateData(mData);
 	}
 

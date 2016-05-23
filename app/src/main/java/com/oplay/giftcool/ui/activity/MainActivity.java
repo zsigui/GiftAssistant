@@ -36,6 +36,7 @@ import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
@@ -52,16 +53,18 @@ import com.socks.library.KLog;
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
 	final String TAG_GIFT = GiftFragment.class.getSimpleName();
+	final String TAG_FREE = GiftFreeFragment.class.getSimpleName();
 	final String TAG_GAME = GameFragment.class.getSimpleName();
 	final String TAG_POST = PostFragment.class.getSimpleName();
 	final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
 
-	final int INDEX_COUNT = 3;
+	final int INDEX_COUNT = 4;
 	final int INDEX_DEFAULT = -1;
 	// 需要按顺序 0...n
 	final int INDEX_GIFT = 0;
-	final int INDEX_GAME = 1;
-	final int INDEX_POST = 2;
+	final int INDEX_FREE = 1;
+	final int INDEX_GAME = 2;
+	final int INDEX_POST = 3;
 
 	// 保持一个Activity的全局对象
 	public static MainActivity sGlobalHolder;
@@ -76,7 +79,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private boolean mHasShowUpdate = false;
 	private boolean mActive = false;
 	// 底部Tabs
-	private LinearLayout llTab;
+//	private LinearLayout llTab;
 	private CheckedTextView[] mCtvs;
 
 	// 顶部导航栏
@@ -88,6 +91,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private TextView tvTitle;
 	// 礼物Fragment
 	private GiftFragment mGiftFragment;
+	private GiftFreeFragment mFreeFragment;
 	private GameFragment mGameFragment;
 	private PostFragment mPostFragment;
 	// 当前选项卡下标
@@ -117,6 +121,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private void findFragmentByTag(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
+			mFreeFragment = (GiftFreeFragment) getSupportFragmentManager().findFragmentByTag(TAG_FREE);
 			mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
 			mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
 			mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
@@ -152,12 +157,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	protected void initView() {
 		setContentView(R.layout.activity_main);
-		llTab = getViewById(R.id.ll_tabs);
+//		llTab = getViewById(R.id.ll_tabs);
 		CheckedTextView ctvGame = getViewById(R.id.ctv_game);
 		CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
 		CheckedTextView ctvEssay = getViewById(R.id.ctv_post);
+		CheckedTextView ctvFree = getViewById(R.id.ctv_free);
 		mCtvs = new CheckedTextView[INDEX_COUNT];
 		mCtvs[INDEX_GIFT] = ctvGift;
+		mCtvs[INDEX_FREE] = ctvFree;
 		mCtvs[INDEX_GAME] = ctvGame;
 		mCtvs[INDEX_POST] = ctvEssay;
 		if (!AssistantApp.getInstance().isAllowDownload()) {
@@ -241,6 +248,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 						break;
 					case KeyConfig.TYPE_ID_INDEX_POST:
 						jumpToIndexPost(data);
+						break;
+					case KeyConfig.TYPE_ID_INDEX_FREE:
+						jumpToIndexFree(data);
 						break;
 				}
 			}
@@ -330,6 +340,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mPostFragment = (PostFragment) f;
 			}
 		}
+		if (mFreeFragment == null) {
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_FREE);
+			if (f != null) {
+				mFreeFragment = (GiftFreeFragment) f;
+			}
+		}
 		if (mGiftFragment != null) {
 			ft.hide(mGiftFragment);
 		}
@@ -338,6 +354,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		if (mPostFragment != null) {
 			ft.hide(mPostFragment);
+		}
+		if (mFreeFragment != null) {
+			ft.hide(mFreeFragment);
 		}
 	}
 
@@ -387,6 +406,29 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		mGiftFragment.setReenterTransition(true);
 		ft.commit();
 		mCurSelectedItem = INDEX_GIFT;
+	}
+
+	/**
+	 * 显示限时免费界面
+	 */
+	private void displayFreeUI() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		hideAllFragment(ft);
+		if (mFreeFragment == null) {
+			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_FREE);
+			if (f != null) {
+				mFreeFragment = (GiftFreeFragment) f;
+				ft.show(mFreeFragment);
+			} else {
+				mFreeFragment = GiftFreeFragment.newInstance();
+				ft.add(R.id.fl_container, mFreeFragment, TAG_FREE);
+			}
+		} else {
+			ft.show(mFreeFragment);
+		}
+		mFreeFragment.setReenterTransition(true);
+		ft.commit();
+		mCurSelectedItem = INDEX_FREE;
 	}
 
 	/**
@@ -449,6 +491,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 				mPostFragment.setPagePosition(mJumpPostPos);
 			}
 			mJumpPostPos = -1;
+		} else if (mJumpFreePos != -1) {
+			setCurSelected(INDEX_FREE);
 		}
 	}
 
@@ -517,10 +561,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 	private int mJumpGamePos = -1;
 	private int mJumpGiftPos = -1;
 	private int mJumpPostPos = -1;
+	private int mJumpFreePos = -1;
 
 	public void jumpToIndexGame(int gamePosition) {
 		mJumpGamePos = gamePosition;
-		mJumpPostPos = mJumpGiftPos = -1;
+		mJumpFreePos = mJumpPostPos = mJumpGiftPos = -1;
 		if (mActive) {
 			jumpFragment();
 		}
@@ -528,7 +573,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	public void jumpToIndexGift(final int giftPosition) {
 		mJumpGiftPos = giftPosition;
-		mJumpPostPos = mJumpGamePos = -1;
+		mJumpFreePos = mJumpPostPos = mJumpGamePos = -1;
 		if (mActive) {
 			jumpFragment();
 		}
@@ -536,7 +581,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 	public void jumpToIndexPost(final int postPosition) {
 		mJumpPostPos = postPosition;
-		mJumpGiftPos = mJumpGamePos = -1;
+		mJumpFreePos = mJumpGiftPos = mJumpGamePos = -1;
+		if (mActive) {
+			jumpFragment();
+		}
+	}
+
+	public void jumpToIndexFree(final int freePosition) {
+		mJumpFreePos = freePosition;
+		mJumpPostPos = mJumpGiftPos = mJumpGamePos = -1;
 		if (mActive) {
 			jumpFragment();
 		}
@@ -687,7 +740,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		// 保持一个Activity的全局对象
 		sGlobalHolder = null;
 		// 底部Tabs
-		llTab = null;
+//		llTab = null;
 		mCtvs = null;
 		ivProfile = null;
 		tvGiftCount = null;

@@ -6,18 +6,19 @@
 		android:layout_width = "match_parent"
 		android:layout_height = "@dimen/di_limit_item_height"
 		android:background = "@drawable/selector_opacity_05"
-		android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
+		android:paddingLeft = "4dp" >
 
 	<View
-			android:layout_width = "@dimen/di_divider_height"
+			android:layout_width = "@dimen/di_timeline_thickness"
 			android:layout_height = "match_parent"
 			android:background = "@color/co_divider_bg" />
 
 	<View
 			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_divider_height"
+			android:layout_height = "@dimen/di_timeline_thickness"
 			android:layout_alignParentBottom = "true"
 			android:background = "@color/co_divider_bg" />
+
 
 	<RelativeLayout
 			style = "@style/IndexListItemLayout"
@@ -40,16 +41,6 @@
 					app:riv_corner_radius = "@dimen/di_icon_radius"
 					app:riv_oval = "false" />
 
-			<!--<ImageView-->
-					<!--android:id = "@+id/iv_limit"-->
-					<!--android:layout_width = "wrap_content"-->
-					<!--android:layout_height = "wrap_content"-->
-					<!--android:layout_alignParentBottom = "true"-->
-					<!--android:layout_alignParentRight = "true"-->
-					<!--android:layout_marginRight = "@dimen/di_icon_border_size"-->
-					<!--android:layout_marginBottom = "@dimen/di_icon_border_size"-->
-					<!--android:contentDescription = "@null"-->
-					<!--android:src = "@drawable/ic_tag_limit" />-->
 		</RelativeLayout >
 
 		<TextView
@@ -66,15 +57,6 @@
 				android:gravity = "center_vertical"
 				android:text = "[暴打魏蜀吴]新手礼包" />
 
-		<TextView
-				android:id = "@+id/tv_content"
-				style = "@style/DefaultTextView.Text"
-				android:layout_width = "match_parent"
-				android:layout_below = "@+id/tv_name"
-				android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-				android:layout_marginTop = "28dp"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:gravity = "center_vertical" />
 
 		<LinearLayout
 				android:id = "@+id/ll_money"
@@ -108,37 +90,47 @@
 					android:text = "100" />
 		</LinearLayout >
 
+
 		<TextView
-				android:id = "@+id/tv_count"
+				android:id = "@+id/tv_content"
 				style = "@style/DefaultTextView.Text"
+				android:layout_width = "match_parent"
+				android:layout_toLeftOf = "@+id/ll_percent"
 				android:layout_below = "@+id/tv_name"
 				android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-				android:layout_marginTop = "6dp"
+				android:layout_marginTop = "28dp"
 				android:layout_toRightOf = "@+id/rl_icon"
-				android:text = "@null"
-				android:visibility = "visible" />
+				android:gravity = "center_vertical" />
 
-		<TextView
-				android:id = "@+id/tv_percent"
-				style = "@style/DefaultTextView.Text"
-				android:layout_below = "@+id/tv_name"
-				android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
-				android:layout_marginTop = "6dp"
-				android:layout_toRightOf = "@+id/ll_money" />
+		<LinearLayout
+				android:id = "@+id/ll_percent"
+				android:layout_width = "100dp"
+				android:layout_height = "wrap_content"
+				android:layout_alignParentRight = "true"
+				android:layout_alignTop = "@+id/tv_content"
+				android:orientation = "horizontal" >
 
-		<ProgressBar
-				android:id = "@+id/pb_percent"
-				style = "?android:attr/progressBarStyleHorizontal"
-				android:layout_width = "72dp"
-				android:layout_height = "@dimen/di_gift_common_pb_diameter"
-				android:layout_alignTop = "@+id/tv_percent"
-				android:layout_marginLeft = "4dp"
-				android:layout_marginTop = "6dp"
-				android:layout_marginRight = "@dimen/di_index_list_item_progress_padding_right"
-				android:layout_toLeftOf = "@+id/btn_send"
-				android:layout_toRightOf = "@+id/tv_percent"
-				android:max = "100"
-				android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+			<TextView
+					android:id = "@+id/tv_percent"
+					style = "@style/DefaultTextView.Text"
+					android:layout_below = "@+id/tv_name"
+					android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
+					android:text = "剩余50%" />
+
+			<ProgressBar
+					android:id = "@+id/pb_percent"
+					style = "?android:attr/progressBarStyleHorizontal"
+					android:layout_width = "match_parent"
+					android:layout_height = "@dimen/di_gift_common_pb_diameter"
+					android:layout_alignTop = "@+id/tv_percent"
+					android:layout_marginLeft = "4dp"
+					android:layout_gravity = "center_vertical"
+					android:layout_toLeftOf = "@+id/btn_send"
+					android:layout_toRightOf = "@+id/tv_percent"
+					android:max = "100"
+					android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
+		</LinearLayout >
 
 		<com.oplay.giftcool.ui.widget.button.GiftButton
 				android:id = "@+id/btn_send"
@@ -148,6 +140,22 @@
 				android:layout_alignTop = "@+id/tv_name"
 				android:background = "@drawable/selector_btn_orange"
 				android:text = "抢号"
+				android:visibility = "gone"
 				android:textColor = "@color/co_white" />
+
+
 	</RelativeLayout >
+
+	<TextView
+			android:id = "@+id/tv_seize"
+			style = "@style/DefaultTextView.Header"
+			android:text = "正在疯抢"
+			android:layout_alignParentRight = "true"
+			android:layout_centerVertical = "true"
+
+			android:textColor = "@color/co_btn_red"
+			android:drawablePadding = "@dimen/di_line_space_extra_big"
+			android:paddingRight = "@dimen/di_index_list_item_margin_right"
+			android:drawableRight = "@drawable/ic_arrow_red_right" />
+
 </RelativeLayout >

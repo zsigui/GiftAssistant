@@ -23,6 +23,13 @@
 				android:text = "@string/st_tabs_home_gift" />
 
 		<CheckedTextView
+				android:id = "@+id/ctv_free"
+				style = "@style/CheckedTextNormal.Index"
+				android:drawableTop = "@drawable/selector_tab_index_free"
+				android:gravity="center_horizontal"
+				android:text = "@string/st_tabs_home_free" />
+
+		<CheckedTextView
 				android:id = "@+id/ctv_game"
 				android:gravity="center_horizontal"
 				style = "@style/CheckedTextNormal.Index"

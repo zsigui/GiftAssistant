@@ -75,6 +75,7 @@
 	<string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
 	<!-- 游戏状态 -->
 	<string name = "st_tabs_home_gift" >礼包</string >
+	<string name = "st_tabs_home_free" >限时免费</string >
 	<string name = "st_tabs_index_game" >游戏</string >
 	<string name = "st_tabs_index_post" >活动</string >
 

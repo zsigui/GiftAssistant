@@ -8,7 +8,7 @@
         <View
         android:layout_width="@dimen/di_timeline_thickness"
         android:layout_height = "match_parent"
-        android:layout_marginLeft="@dimen/di_limit_margin_left"
+        android:layout_marginLeft="@dimen/di_list_item_gap_very_small"
         android:background="@color/co_divider_bg" />
 
         <View

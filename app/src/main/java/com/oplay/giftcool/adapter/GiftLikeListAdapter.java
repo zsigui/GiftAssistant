@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.util.GameTypeUtil;
@@ -53,6 +54,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 			holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
 			holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 			holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_add);
+			holder.ivHint = ViewUtil.getViewById(convertView, R.id.iv_hint);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -66,6 +68,11 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 		} else {
 			holder.tvContent.setText(Html.fromHtml(
 					String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
+		}
+		if (o.hasNew && o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime()) {
+			holder.ivHint.setVisibility(View.VISIBLE);
+		} else {
+			holder.ivHint.setVisibility(View.GONE);
 		}
 		holder.tvSize.setText(o.size);
 		holder.tvCount.setText(Html.fromHtml(String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
@@ -86,6 +93,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 	}
 
 	static class ViewHolder {
+		ImageView ivHint;
 		TextView tvName;
 		TextView tvContent;
 		TextView tvSize;

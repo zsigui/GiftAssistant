@@ -10,18 +10,17 @@
 
 	<RelativeLayout
 			android:id = "@+id/rl_icon"
-			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_icon_diameter"
+			android:layout_width = "86dp"
+			android:layout_height = "wrap_content"
 			android:layout_centerHorizontal = "true"
-			android:paddingLeft = "3dp"
-			android:paddingRight = "3dp"
+			android:paddingLeft = "7dp"
 			android:background = "@color/co_transparent" >
 
 		<com.makeramen.roundedimageview.RoundedImageView
 				android:id = "@+id/iv_icon"
 				android:layout_width = "@dimen/di_icon_diameter"
 				android:layout_height = "@dimen/di_icon_diameter"
-				android:paddingTop = "2dp"
+				android:paddingTop = "3dp"
 				android:scaleType = "centerCrop"
 				app:riv_border_color = "@color/co_stroke_bg"
 				app:riv_border_width = "@dimen/di_icon_border_size"

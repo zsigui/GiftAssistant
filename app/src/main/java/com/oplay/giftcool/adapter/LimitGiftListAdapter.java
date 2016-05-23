@@ -21,7 +21,6 @@ import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeData;
-import com.oplay.giftcool.model.data.resp.TimeDataList;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
 import com.oplay.giftcool.util.ViewUtil;
@@ -31,14 +30,10 @@ import net.ouwan.umipay.android.debug.Debug_Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by mink on 16-03-04.
@@ -48,7 +43,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 	private static final int TAG_POS = 0xFF331234;
 
-	private List<TimeData<IndexGiftNew>> mTimeData;
+	private List<TimeData<IndexGiftNew>> mData;
 	private Context mContext;
 	private OnItemClickListener<IndexGiftNew> mListener;
 	private HashMap<String, String> calendar;
@@ -61,11 +56,11 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	public LimitGiftListAdapter(Context context, List<TimeData<IndexGiftNew>> data) {
 		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext()
 				: context.getApplicationContext());
-		this.mTimeData = data;
+		this.mData = data;
 	}
 
 	public void updateData(List<TimeData<IndexGiftNew>> data) {
-		this.mTimeData = data;
+		this.mData = data;
 		notifyDataSetChanged();
 	}
 
@@ -79,23 +74,23 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 
 	public List<TimeData<IndexGiftNew>> getData() {
-		return mTimeData;
+		return mData;
 	}
 
 
 	public void setData(List<TimeData<IndexGiftNew>> data) {
-		this.mTimeData = data;
+		this.mData = data;
 	}
 
 
 	@Override
 	public int getCount() {
-		return mTimeData == null ? 0 : mTimeData.size();
+		return mData == null ? 0 : mData.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return getCount() == 0 ? null : mTimeData.get(position);
+		return getCount() == 0 ? null : mData.get(position);
 	}
 
 	@Override
@@ -114,7 +109,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 */
 	@Override
 	public int getItemViewType(int position) {
-		return GiftTypeUtil.getItemViewType(mTimeData.get(position).data);
+		return GiftTypeUtil.getItemViewType(mData.get(position).data);
 	}
 
 	@Override
@@ -135,7 +130,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		}
 
 
-		final IndexGiftNew gift = mTimeData.get(position).data;
+		final IndexGiftNew gift = mData.get(position).data;
 		setData(position, convertView, viewHolder, type, gift);
 
 		return convertView;
@@ -247,11 +242,11 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	private void setCommonField(final ViewHolder itemHolder, final IndexGiftNew gift) {
 		ViewUtil.showImage(itemHolder.ivIcon, gift.img);
 		itemHolder.tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
-		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-			itemHolder.ivLimit.setVisibility(View.VISIBLE);
-		} else {
-			itemHolder.ivLimit.setVisibility(View.GONE);
-		}
+//		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+//			itemHolder.ivLimit.setVisibility(View.VISIBLE);
+//		} else {
+//			itemHolder.ivLimit.setVisibility(View.GONE);
+//		}
 		if (gift.exclusive == 1) {
 			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
 		} else {
@@ -279,7 +274,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		convertView = inflater.inflate(R.layout.item_index_gift_limit_list, parent, false);
 		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
+//		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
 		viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
 		viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
@@ -299,8 +294,8 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		try {
 			if (v.getTag(TAG_POS) != null) {
 				Integer pos = (Integer) v.getTag(TAG_POS);
-				if (mTimeData != null && pos < mTimeData.size()) {
-					IndexGiftNew gift = mTimeData.get(pos).data;
+				if (mData != null && pos < mData.size()) {
+					IndexGiftNew gift = mData.get(pos).data;
 					if (mListener != null) {
 						mListener.onItemClick(gift, v, pos);
 					}
@@ -317,7 +312,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	public void release() {
 		mContext = null;
 		mListener = null;
-		mTimeData = null;
+		mData = null;
 	}
 
 	@Override
@@ -336,16 +331,16 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		} else {
 			headerViewHolder = (HeaderViewHolder) convertView.getTag();
 		}
-		headerViewHolder.tv_date.setText(formatDateTime(mTimeData.get(position).date));
+		headerViewHolder.tv_date.setText(formatDateTime(mData.get(position).date));
 		return convertView;
 	}
 
 	@Override
 	public long getHeaderId(int position) {
 		//用item数据的日期首次在列表中出现位置作为id
-		String date = formatDateTime(mTimeData.get(position).date);
-		for (int i = 0; i < mTimeData.size(); i++) {
-			String d = formatDateTime(mTimeData.get(i).date);
+		String date = formatDateTime(mData.get(position).date);
+		for (int i = 0; i < mData.size(); i++) {
+			String d = formatDateTime(mData.get(i).date);
 			if (d.equals(date)) {
 				return i;
 			}
@@ -358,7 +353,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 */
 	static class ViewHolder {
 		ImageView ivIcon;
-		ImageView ivLimit;
+//		ImageView ivLimit;
 		TextView tvName;
 		TextView tvContent;
 		GiftButton btnSend;
@@ -371,45 +366,45 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		ProgressBar pbPercent;
 	}
 
-	static class HeaderViewHolder {
+	private static class HeaderViewHolder {
 		public TextView tv_date;
 
 	}
-
-	private static ArrayList<IndexGiftNew> praseDateFromTimeDataList(ArrayList<TimeDataList<IndexGiftNew>> data) {
-		ArrayList list = new ArrayList<IndexGiftNew>();
-		try {
-			Collections.sort(data, new Comparator<TimeDataList<IndexGiftNew>>() {
-				@Override
-				public int compare(TimeDataList<IndexGiftNew> lhs, TimeDataList<IndexGiftNew> rhs) {
-
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-					//将字符串形式的时间转化为Date类型的时间
-					try {
-						Date a = sdf.parse(lhs.date);
-						Date b = sdf.parse(rhs.date);
-
-						//Date类的一个方法，如果a早于b返回true，否则返回false
-						if (a.before(b))
-							return 1;
-						else
-							return -1;
-					} catch (Throwable e) {
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.e(AppDebugConfig.TAG_FRAG, e);
-						}
-					}
-					return -1;
-				}
-			});
-			for (TimeDataList<IndexGiftNew> d : data) {
-				list.addAll(d.data);
-			}
-		} catch (Throwable e) {
-			Debug_Log.e(e);
-		}
-		return list;
-	}
+//
+//	private static ArrayList<IndexGiftNew> praseDateFromTimeDataList(ArrayList<TimeDataList<IndexGiftNew>> data) {
+//		ArrayList list = new ArrayList<IndexGiftNew>();
+//		try {
+//			Collections.sort(data, new Comparator<TimeDataList<IndexGiftNew>>() {
+//				@Override
+//				public int compare(TimeDataList<IndexGiftNew> lhs, TimeDataList<IndexGiftNew> rhs) {
+//
+//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+//					//将字符串形式的时间转化为Date类型的时间
+//					try {
+//						Date a = sdf.parse(lhs.date);
+//						Date b = sdf.parse(rhs.date);
+//
+//						//Date类的一个方法，如果a早于b返回true，否则返回false
+//						if (a.before(b))
+//							return 1;
+//						else
+//							return -1;
+//					} catch (Throwable e) {
+//						if (AppDebugConfig.IS_DEBUG) {
+//							KLog.e(AppDebugConfig.TAG_FRAG, e);
+//						}
+//					}
+//					return -1;
+//				}
+//			});
+//			for (TimeDataList<IndexGiftNew> d : data) {
+//				list.addAll(d.data);
+//			}
+//		} catch (Throwable e) {
+//			Debug_Log.e(e);
+//		}
+//		return list;
+//	}
 
 	public String formatDateTime(String time) {
 		String date = "";

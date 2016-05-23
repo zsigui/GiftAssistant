@@ -25,6 +25,7 @@ public class KeyConfig {
 	public static final int TYPE_ID_INDEX_GIFT = 1;
 	public static final int TYPE_ID_INDEX_GAME = 2;
 	public static final int TYPE_ID_INDEX_POST = 3;
+	public static final int TYPE_ID_INDEX_FREE = 4;
 
 	/* setting activity  */
 	public static final int TYPE_ID_MY_GIFT_CODE = 101;
