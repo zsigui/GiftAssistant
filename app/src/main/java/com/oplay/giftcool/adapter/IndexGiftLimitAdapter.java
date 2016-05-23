@@ -2,11 +2,13 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
@@ -49,11 +51,21 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		ViewUtil.showImage(itemHolder.ivIcon, item.img);
 		itemHolder.tvGameName.setText(item.gameName);
 		itemHolder.tvName.setText(item.name);
-		int percent = item.remainCount * 100 / item.totalCount;
-		itemHolder.pbPercent.setProgress(percent);
-		itemHolder.tvPercent.setText(String.format("%d%%", percent));
 		itemHolder.itemView.setTag(TAG_POS, item.id);
 		itemHolder.itemView.setOnClickListener(this);
+		final int originSize = 7;
+		final String s = String.format("价值:￥%d.00", item.originPrice);
+		final int moneyLength = s.length() - originSize;
+		SpannableString ss = new SpannableString(s);
+		ss.setSpan(new TextAppearanceSpan(mContext, R.style.DefaultTextView_ItemSubTitle_S1),
+				0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		ss.setSpan(new TextAppearanceSpan(mContext, R.style.DefaultTextView_ItemSubTitle_S2),
+				3, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		ss.setSpan(new TextAppearanceSpan(mContext, R.style.DefaultTextView_ItemSubTitle_S2_S3),
+				4, 5 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		ss.setSpan(new TextAppearanceSpan(mContext, R.style.DefaultTextView_ItemSubTitle_S2_S4),
+				5 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		itemHolder.tvPrice.setText(ss, TextView.BufferType.SPANNABLE);
 	}
 
 	@Override
@@ -82,15 +94,13 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		ImageView ivIcon;
 		TextView tvGameName;
 		TextView tvName;
-		ProgressBar pbPercent;
-		TextView tvPercent;
+		TextView tvPrice;
 
 		public ItemHolder(View itemView) {
 			super(itemView);
 			tvName = getViewById(R.id.tv_name);
 			tvGameName = getViewById(R.id.tv_game_name);
-			tvPercent = getViewById(R.id.tv_percent);
-			pbPercent = getViewById(R.id.pb_percent);
+			tvPrice = getViewById(R.id.tv_price);
 			ivIcon = getViewById(R.id.iv_icon);
 		}
 	}

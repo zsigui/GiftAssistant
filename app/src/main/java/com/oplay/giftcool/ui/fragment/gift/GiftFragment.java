@@ -45,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * 主页-礼包页面主要内容页，不承担网络请求任务
+ * 主页-礼包页面主要内容页
  *
  * @author micle
  * @email zsigui@foxmail.com

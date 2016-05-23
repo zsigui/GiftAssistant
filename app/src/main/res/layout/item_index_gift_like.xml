@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+		xmlns:android = "http://schemas.android.com/apk/res/android"
+		xmlns:app = "http://schemas.android.com/apk/res-auto"
 		android:id = "@+id/rl_recommend"
 		style = "@style/IndexListItemLayout.Horizontal"
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto" >
+		android:paddingRight = "0dp"
+		android:paddingLeft = "0dp"
+		android:paddingTop = "10dp" >
 
 	<RelativeLayout
 			android:id = "@+id/rl_icon"
-			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_width = "match_parent"
 			android:layout_height = "@dimen/di_icon_diameter"
 			android:layout_centerHorizontal = "true"
+			android:paddingLeft = "3dp"
+			android:paddingRight = "3dp"
 			android:background = "@color/co_transparent" >
 
 		<com.makeramen.roundedimageview.RoundedImageView
 				android:id = "@+id/iv_icon"
-				android:layout_width = "match_parent"
-				android:layout_height = "match_parent"
+				android:layout_width = "@dimen/di_icon_diameter"
+				android:layout_height = "@dimen/di_icon_diameter"
+				android:paddingTop = "2dp"
 				android:scaleType = "centerCrop"
 				app:riv_border_color = "@color/co_stroke_bg"
 				app:riv_border_width = "@dimen/di_icon_border_size"
 				app:riv_corner_radius = "@dimen/di_icon_radius"
+				android:layout_centerHorizontal = "true"
 				app:riv_oval = "false" />
 
-		<TextView
-				android:id = "@+id/tv_count"
-				style = "@style/DefaultTextView"
-				android:layout_alignParentBottom = "true"
-				android:layout_marginBottom = "5dp"
-				android:layout_marginLeft = "@dimen/di_icon_border_size"
-				android:background = "@drawable/shape_rect_icon_tap"
-				android:textColor = "@color/co_white"
-				android:textSize = "10sp" />
+		<!--<TextView-->
+		<!--android:id = "@+id/tv_count"-->
+		<!--style = "@style/DefaultTextView"-->
+		<!--android:layout_alignParentBottom = "true"-->
+		<!--android:layout_marginBottom = "5dp"-->
+		<!--android:layout_marginLeft = "@dimen/di_icon_border_size"-->
+		<!--android:background = "@drawable/shape_rect_icon_tap"-->
+		<!--android:textColor = "@color/co_white"-->
+		<!--android:textSize = "10sp" />-->
 
 		<ImageView
 				android:id = "@+id/iv_hint"
 				style = "@style/DefaultImageView"
-				android:src = "@drawable/ic_toolbar_hint"
+				android:src = "@drawable/ic_index_gift_like_new"
 				android:layout_alignParentTop = "true"
 				android:layout_alignParentRight = "true"
 				android:visibility = "gone"
@@ -45,11 +52,13 @@
 	<TextView
 			android:id = "@+id/tv_game_name"
 			style = "@style/DefaultTextView.ItemTitle"
+			android:layout_width = "@dimen/di_icon_diameter"
 			android:layout_below = "@+id/rl_icon" />
 
 	<TextView
-			android:id = "@+id/tv_gift"
+			android:id = "@+id/tv_total"
 			style = "@style/DefaultTextView.ItemSubTitle"
+			android:layout_width = "@dimen/di_icon_diameter"
 			android:layout_below = "@+id/tv_game_name"
 			android:paddingBottom = "10dp"
 			android:layout_marginBottom = "0dp" />

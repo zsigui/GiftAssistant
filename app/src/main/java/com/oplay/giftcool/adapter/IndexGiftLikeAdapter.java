@@ -2,7 +2,7 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
-import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
@@ -41,18 +40,12 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 		ViewHolder itemHolder = (ViewHolder) holder;
 		IndexGiftLike o = getItem(position);
 		itemHolder.tvName.setText(o.name);
-		if (TextUtils.isEmpty(o.giftName)) {
-			itemHolder.tvGift.setText("暂无新礼包");
-		} else {
-			itemHolder.tvGift.setText(o.giftName);
-		}
-
-		if (o.hasNew && DateUtil.getTime(o.newestCreateTime) > AssistantApp.getInstance().getLastLaunchTime()) {
+		if (o.hasNew && o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime()) {
 			itemHolder.ivHint.setVisibility(View.VISIBLE);
 		} else {
 			itemHolder.ivHint.setVisibility(View.GONE);
 		}
-		itemHolder.tvCount.setText(String.format("%d款礼包", o.totalCount));
+		itemHolder.tvTotal.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
 		ViewUtil.showImage(itemHolder.ivIcon, o.img);
 		itemHolder.itemView.setOnClickListener(this);
 		itemHolder.itemView.setTag(TAG_POSITION, position);
@@ -72,8 +65,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 
 	static class ViewHolder extends BaseRVHolder{
 		TextView tvName;
-		TextView tvGift;
-		TextView tvCount;
+		TextView tvTotal;
 		ImageView ivIcon;
 		ImageView ivHint;
 
@@ -81,8 +73,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
 			super(itemView);
 			ivIcon = getViewById(R.id.iv_icon);
 			tvName = getViewById(R.id.tv_game_name);
-			tvGift = getViewById(R.id.tv_gift);
-			tvCount = getViewById(R.id.tv_count);
+			tvTotal = getViewById(R.id.tv_total);
 			ivHint = getViewById(R.id.iv_hint);
 		}
 	}

@@ -405,18 +405,24 @@ public class WebViewInterface extends Observable {
 	/**
 	 * 执行Js操作
 	 */
-	private void execJs(String callbackJsName, String returnData) {
+	private void execJs(final String callbackJsName, final String returnData) {
 		if (mWebView == null) {
 			ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
 			return;
 		}
 		if (callbackJsName != null) {
-			String js = String.format("%s('%s')", callbackJsName, returnData);
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-				mWebView.loadUrl("javascript:" + js);
-			} else {
-				mWebView.evaluateJavascript(js, null);
-			}
+			// WebView执行需要在主线程中
+			ThreadUtil.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					String js = String.format("%s('%s')", callbackJsName, returnData);
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+						mWebView.loadUrl("javascript:" + js);
+					} else {
+						mWebView.evaluateJavascript(js, null);
+					}
+				}
+			});
 		}
 		if (mCall != null) {
 			mCall.cancel();

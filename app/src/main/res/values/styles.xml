@@ -433,4 +433,18 @@
 		<item name = "android:textStyle" >bold</item >
 		<item name = "android:layout_marginLeft" >11dp</item >
 	</style >
+
+	<!-- 礼包首页-猜你喜欢 -->
+	<style name = "DefaultTextView.ItemSubTitle.S1">
+		<item name = "android:textSize">12sp</item>
+	</style>
+	<style name = "DefaultTextView.ItemSubTitle.S2">
+		<item name = "android:textColor">@color/co_common_app_second_bg_orange</item>
+	</style>
+	<style name = "DefaultTextView.ItemSubTitle.S2.S3">
+		<item name = "android:textSize">16sp</item>
+	</style>
+	<style name = "DefaultTextView.ItemSubTitle.S2.S4">
+		<item name = "android:textSize">10sp</item>
+	</style>
 </resources >

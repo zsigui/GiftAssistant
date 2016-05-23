@@ -19,9 +19,10 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
 import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.PayManager;
@@ -32,6 +33,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -47,18 +49,12 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	private static final int TAG_POS = 0x1234FFFF;
 	private static final int TYPE_DEFAULT = 110;
 	private static final int TYPE_BANNER = TYPE_DEFAULT;
-	private static final int TYPE_ZERO = TYPE_DEFAULT + 1;
-	private static final int TYPE_LIKE = TYPE_DEFAULT + 2;
-	private static final int TYPE_LIMIT = TYPE_DEFAULT + 3;
-	private static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 4;
-	private static final int TYPE_NEW_ITEM = TYPE_DEFAULT + 5;
+	private static final int TYPE_LIKE = TYPE_DEFAULT + 1;
+	private static final int TYPE_LIMIT = TYPE_DEFAULT + 2;
+	private static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 3;
+	private static final int TYPE_NEW_ITEM = TYPE_DEFAULT + 4;
 	private static final int TYPE_FOOTER = TYPE_DEFAULT + 11;
-	private static final int COUNT_HEADER = 5;
-
-
-	// default data
-	private final Spanned TITLE_ZERO = Html.fromHtml("(每天<font color='#f85454'>20:00</font>开抢3款)");
-	private final Spanned TITLE_LIMIT = Html.fromHtml("(每天<font color='#f85454'>20:00</font>开抢10款)");
+	private static final int COUNT_HEADER = 4;
 
 	private IndexGift mData;
 	private Context mContext;
@@ -112,15 +108,15 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 						Global.getBannerHeight(mContext));
 				banner.setLayoutParams(lp);
 				return bannerVH;
-			case TYPE_ZERO:
-				ZeroVH zeroVH = new ZeroVH(mInflater.inflate(R.layout.view_gift_index_zero, parent, false));
-				LinearLayoutManager llmZero = new LinearLayoutManager(mContext);
-				llmZero.setOrientation(LinearLayoutManager.HORIZONTAL);
-				zeroVH.rvContainer.setLayoutManager(llmZero);
-				zeroVH.rvAdapter = new IndexGiftZeroAdapter(mContext);
-				// 加载数据
-				zeroVH.rvContainer.setAdapter(zeroVH.rvAdapter);
-				return zeroVH;
+//			case TYPE_ZERO:
+//				ZeroVH zeroVH = new ZeroVH(mInflater.inflate(R.layout.view_gift_index_zero, parent, false));
+//				LinearLayoutManager llmZero = new LinearLayoutManager(mContext);
+//				llmZero.setOrientation(LinearLayoutManager.HORIZONTAL);
+//				zeroVH.rvContainer.setLayoutManager(llmZero);
+//				zeroVH.rvAdapter = new IndexGiftZeroAdapter(mContext);
+//				// 加载数据
+//				zeroVH.rvContainer.setAdapter(zeroVH.rvAdapter);
+//				return zeroVH;
 			case TYPE_LIKE:
 				LikeVH likeVH = new LikeVH(mInflater.inflate(R.layout.view_gift_index_like, parent, false));
 				LinearLayoutManager llmLike = new LinearLayoutManager(mContext);
@@ -179,6 +175,10 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
 	}
 
+	private int getHeaderCount() {
+		return mData == null ? 0 : (mData.like == null || mData.like.isEmpty()? COUNT_HEADER - 1 : COUNT_HEADER);
+	}
+
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		if (getItemCount() == 0 || holder == null) {
@@ -191,11 +191,11 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_BANNER:
 				updateBanners((BannerVH) holder);
 				break;
-			case TYPE_ZERO:
-				ZeroVH zeroVH = ((ZeroVH) holder);
-				zeroVH.rvAdapter.updateData(mData.zero);
-				zeroVH.tvSubTitle.setText(TITLE_ZERO);
-				break;
+//			case TYPE_ZERO:
+//				ZeroVH zeroVH = ((ZeroVH) holder);
+//				zeroVH.rvAdapter.updateData(mData.zero);
+//				zeroVH.tvSubTitle.setText(TITLE_ZERO);
+//				break;
 			case TYPE_LIKE:
 				LikeVH likeVH = ((LikeVH) holder);
 				likeVH.rlTitle.setOnClickListener(this);
@@ -204,17 +204,17 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case TYPE_LIMIT:
 				LimitVH limitVH = ((LimitVH) holder);
 				limitVH.rvAdapter.updateData(mData.limit);
-				limitVH.tvSubTitle.setText(TITLE_LIMIT);
+//				limitVH.tvSubTitle.setText(TITLE_LIMIT);
 				limitVH.rlTitle.setOnClickListener(this);
 				break;
 			case TYPE_NEW_HEAD:
 				break;
 			default:
 				if (mData.news == null || mData.news.size() == 0
-						|| mData.news.size() <= position - COUNT_HEADER) {
+						|| mData.news.size() <= position - getHeaderCount()) {
 					return;
 				}
-				final IndexGiftNew gift = mData.news.get(position - COUNT_HEADER);
+				final IndexGiftNew gift = mData.news.get(position - getHeaderCount());
 				type = GiftTypeUtil.getItemViewType(gift);
 				ItemHolder viewHolder = (ItemHolder) holder;
 				setData(position, type, gift, viewHolder);
@@ -371,6 +371,19 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		// 由于线程间会造成 RV 的 Inconsistency detected 问题，忽略
 //		notifyItemRangeChanged(start, end - start);
 		mData = data;
+		if (AppConfig.TEST_MODE) {
+			if (Math.random() * 2 > 1) {
+				if (mData.like != null && !mData.like.isEmpty()) {
+					KLog.d(AppDebugConfig.TAG_WARN, "need to be deleted when not in debug!");
+					mData.like.get(0).hasNew = true;
+					mData.like.get(0).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
+					mData.like.get(3).hasNew = true;
+					mData.like.get(3).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
+				}
+			} else {
+				mData.like = null;
+			}
+		}
 		notifyDataSetChanged();
 		return true;
 	}
@@ -396,23 +409,29 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		if (mData == null) {
 			count = 0;
 		} else if (mData.news == null) {
-			count = COUNT_HEADER;
+			count = getHeaderCount();
 		} else {
-			count = COUNT_HEADER + mData.news.size();
+			count = getHeaderCount() + mData.news.size();
 		}
 		return mShowFooter && count != 0 ? count + 1 : count;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		if (position >= COUNT_HEADER) {
+		if (position >= getHeaderCount()) {
 			if (mShowFooter && position == getItemCount() - 1) {
 				return TYPE_FOOTER;
 			} else {
 				return TYPE_NEW_ITEM;
 			}
 		} else {
-			return TYPE_DEFAULT + position;
+			if (position == 0) {
+				return TYPE_BANNER;
+			} else if (getHeaderCount() == COUNT_HEADER) {
+				return TYPE_DEFAULT + position;
+			} else {
+				return TYPE_DEFAULT + position + 1;
+			}
 		}
 	}
 
@@ -435,10 +454,10 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		if (v.getId() == R.id.rl_recommend
 				|| v.getId() == R.id.btn_send) {
 			Integer pos = (Integer) v.getTag(TAG_POS);
-			if (pos == null || pos < COUNT_HEADER || pos - COUNT_HEADER >= mData.news.size()) {
+			if (pos == null || pos < getHeaderCount() || pos - getHeaderCount() >= mData.news.size()) {
 				return;
 			}
-			gift = mData.news.get(pos - COUNT_HEADER);
+			gift = mData.news.get(pos - getHeaderCount());
 		}
 		switch (v.getId()) {
 			case R.id.rl_like_all:
@@ -485,18 +504,18 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		}
 	}
 
-	static class ZeroVH extends BaseRVHolder {
-
-		TextView tvSubTitle;
-		RecyclerView rvContainer;
-		IndexGiftZeroAdapter rvAdapter;
-
-		public ZeroVH(View itemView) {
-			super(itemView);
-			tvSubTitle = getViewById(R.id.tv_zero_limit);
-			rvContainer = getViewById(R.id.rv_zero_content);
-		}
-	}
+//	static class ZeroVH extends BaseRVHolder {
+//
+//		TextView tvSubTitle;
+//		RecyclerView rvContainer;
+//		IndexGiftZeroAdapter rvAdapter;
+//
+//		public ZeroVH(View itemView) {
+//			super(itemView);
+//			tvSubTitle = getViewById(R.id.tv_zero_limit);
+//			rvContainer = getViewById(R.id.rv_zero_content);
+//		}
+//	}
 
 	static class LikeVH extends BaseRVHolder {
 
@@ -514,14 +533,14 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	static class LimitVH extends BaseRVHolder {
 
 		RelativeLayout rlTitle;
-		TextView tvSubTitle;
+//		TextView tvSubTitle;
 		RecyclerView rvContainer;
 		IndexGiftLimitAdapter rvAdapter;
 
 		public LimitVH(View itemView) {
 			super(itemView);
 			rlTitle = getViewById(R.id.rl_limit_all);
-			tvSubTitle = getViewById(R.id.tv_limit_hint);
+//			tvSubTitle = getViewById(R.id.tv_limit_hint);
 			rvContainer = getViewById(R.id.rv_limit_content);
 
 		}

@@ -20,7 +20,7 @@
 			android:orientation = "horizontal" >
 
 		<RelativeLayout
-				android:layout_width = "43dp"
+				android:layout_width = "47dp"
 				android:layout_height = "wrap_content"
 				android:layout_marginRight = "@dimen/di_tool_bar_profile_margin_right" >
 

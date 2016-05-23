@@ -24,11 +24,11 @@
 				style = "@style/DefaultTextView.Header"
 				android:text = "@string/st_index_gift_limit" />
 
-		<TextView
-				android:id = "@+id/tv_limit_hint"
-				style = "@style/DefaultTextView.Text"
-				android:layout_toRightOf = "@+id/tv_limit"
-				android:paddingLeft = "8dp" />
+		<!--<TextView-->
+				<!--android:id = "@+id/tv_limit_hint"-->
+				<!--style = "@style/DefaultTextView.Text"-->
+				<!--android:layout_toRightOf = "@+id/tv_limit"-->
+				<!--android:paddingLeft = "8dp" />-->
 
 		<TextView style = "@style/DefaultTextView.More" />
 

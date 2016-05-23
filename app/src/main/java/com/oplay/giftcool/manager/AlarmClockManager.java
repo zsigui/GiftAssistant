@@ -131,13 +131,10 @@ public class AlarmClockManager {
                                 + ", background count = " + mBackgroundWakeCount);
             }
             mBackgroundWakeCount++;
-            if (mBackgroundWakeCount > 9) {
+            if (mBackgroundWakeCount > 5) {
                 // 20分钟
                 mElapsedTime = 40 * ALARM_WAKE_ELAPSED_TIME;
-            } else if (mBackgroundWakeCount > 5) {
-                // 5分钟
-                mElapsedTime = 10 * ALARM_WAKE_ELAPSED_TIME;
-            } else if (mBackgroundWakeCount > 2) {
+            } else if (mBackgroundWakeCount > 3) {
                 // 1分钟
                 mElapsedTime = 2 * ALARM_WAKE_ELAPSED_TIME;
             }
@@ -164,10 +161,7 @@ public class AlarmClockManager {
         }
         AlarmManager am = getAlarmManager(context);
         am.cancel(alarmSender);
-        if (mBackgroundWakeCount < 5) {
-            // 超过5次,不再设置轮询
-            am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
-        }
+        am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
         if (AppDebugConfig.IS_DEBUG) {
             KLog.d(AppDebugConfig.TAG_WARN, "initAndSetWakeAlarm is exec success");
         }
