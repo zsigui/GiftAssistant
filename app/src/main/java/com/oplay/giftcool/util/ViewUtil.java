@@ -74,7 +74,7 @@ public class ViewUtil {
 		final String s = String.format("价值:￥%d.00", value);
 		final int moneyLength = s.length() - originSize;
 		SpannableString ss = new SpannableString(s);
-		if (delete) {
+		if (!delete) {
 			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1),
 					0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S2),

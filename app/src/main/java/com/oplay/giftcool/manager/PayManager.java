@@ -423,7 +423,7 @@ public class PayManager {
 			case GiftTypeUtil.GIFT_TYPE_LIMIT:
 				giftType = "限量";
 				break;
-			case GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE:
+			case GiftTypeUtil.GIFT_TYPE_ZERO:
 				giftType = "0元抢";
 				break;
 			default:

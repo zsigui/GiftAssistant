@@ -277,7 +277,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	 */
 	private void setMoneyState(ItemHolder viewHolder, IndexGiftNew gift) {
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
 			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -474,7 +474,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case R.id.btn_send:
 				if (gift == null)
 					return;
-				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
 					// 对于0元抢，先跳转到游戏详情
 					IntentUtil.jumpGiftDetail(mContext, gift.id);
 				} else {

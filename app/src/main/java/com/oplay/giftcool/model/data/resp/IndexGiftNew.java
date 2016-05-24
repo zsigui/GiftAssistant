@@ -84,4 +84,10 @@ public class IndexGiftNew implements Serializable{
 	// 支持平台
 	@SerializedName("platform")
 	public String platform;
+    // 总分类型，暂时0：礼包 1：首充券
+    @SerializedName("total_type")
+    public int totalType;
+    // 免费开抢时间
+    @SerializedName("free_start_time")
+    public String freeStartTime;
 }

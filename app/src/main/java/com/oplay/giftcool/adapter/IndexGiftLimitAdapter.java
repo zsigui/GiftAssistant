@@ -50,7 +50,7 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		itemHolder.tvName.setText(item.name);
 		itemHolder.itemView.setTag(TAG_POS, item.id);
 		itemHolder.itemView.setOnClickListener(this);
-		ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, true);
+		ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, false);
 	}
 
 	@Override

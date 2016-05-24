@@ -268,7 +268,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				IntentUtil.jumpGiftDetail(getContext(), gift.id);
 				break;
 			case R.id.btn_send:
-				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
 					// 对于0元抢，先跳转到游戏详情
 					IntentUtil.jumpGiftDetail(getContext(), gift.id);
 				} else {

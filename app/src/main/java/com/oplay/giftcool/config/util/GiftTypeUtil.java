@@ -36,16 +36,22 @@ public class GiftTypeUtil {
 	public static final int TYPE_NORMAL_SEIZED = 11;
 	// 0元疯抢类型，可抢 disabled，其他状态同限量礼包类型相同
 	public static final int TYPE_ZERO_SEIZE = 12;
+    // 限量免费类型，无量，等待免费或者免费已空
+    public static final int TYPE_LIMIT_FREE_EMPTY = 13;
+    // 限量免费类型，可抢
+    public static final int TYPE_LIMIT_FREE_SEIZE = 14;
+    // 限量免费类型，已抢号
+    public static final int TYPE_LIMIT_FREE_SEIZED = 15;
 	// 首充券类型,可抢
-	public static final int TYPE_CHARGE_SEIZE = 13;
+	public static final int TYPE_CHARGE_SEIZE = 16;
 	// 首充券类型,可预约
-	public static final int TYPE_CHARGE_UN_RESERVE = 14;
+	public static final int TYPE_CHARGE_UN_RESERVE = 17;
 	// 首充券类型,已预约
-	public static final int TYPE_CHARGE_RESERVED = 15;
+	public static final int TYPE_CHARGE_RESERVED = 18;
 	// 首充券类型,可领号
-	public static final int TYPE_CHARGE_TAKE = 16;
+	public static final int TYPE_CHARGE_TAKE = 19;
 	// 首充券类型,已抢号
-	public static final int TYPE_CHARGE_SEIZED = 17;
+	public static final int TYPE_CHARGE_SEIZED = 20;
 	// 首充券类型,已抢完
 	public static final int TYPE_CHARGE_EMPTY = 18;
 	// 首充券类型,预约完
@@ -71,13 +77,19 @@ public class GiftTypeUtil {
 	public static final int SEIZE_TYPE_SEARCHED = 2;
 	public static final int SEIZE_TYPE_UN_RESERVE = 3;
 	public static final int SEIZE_TYPE_RESERVED = 4;
-	// 1 普通免费 2 普通 3 限量 4 0元抢 5 首充券
+	// 1 普通免费 2 普通 3 限量 4 0元抢（已废弃） 5 限量免费
 	public static final int GIFT_TYPE_NORMAL_FREE = 1;
 	public static final int GIFT_TYPE_NORMAL = 2;
 	public static final int GIFT_TYPE_LIMIT = 3;
-	public static final int GIFT_TYPE_ZERO_SEIZE = 4;
-	public static final int GIFT_TYPE_FIRST_CHARGE = 5;
+	public static final int GIFT_TYPE_ZERO = 4;
+    public static final int GIFT_TYPE_LIMIT_FREE = 5;
+    // 总类型值 0 礼包 1 首充券
+    public static final int TOTAL_TYPE_GIFT = 0;
+    public static final int TOTAL_TYPE_FIRST_CHARGE = 1;
 
+    /**
+     * 只针对无免费抢的新鲜出炉类型判断
+     */
 	public static int getItemViewType(IndexGiftNew gift) {
 		//KLog.e("gift_data : status = " + gift.status + ", gifttype = " + gift.giftType + ", giftstatus = " + gift
 		// .seizeStatus);
@@ -89,7 +101,7 @@ public class GiftTypeUtil {
 							|| gift.giftType == GIFT_TYPE_NORMAL_FREE)) {
 						return TYPE_NORMAL_SEARCH;
 					}
-					if (gift.giftType == GIFT_TYPE_ZERO_SEIZE
+					if (gift.giftType == GIFT_TYPE_ZERO
 							|| gift.giftType == GIFT_TYPE_LIMIT) {
 						return TYPE_LIMIT_SEIZED;
 					} else {
@@ -97,13 +109,13 @@ public class GiftTypeUtil {
 					}
 				case SEIZE_TYPE_SEARCHED:
 					if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT
-							|| gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+							|| gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
 						return TYPE_LIMIT_SEIZED;
 					}
 					return TYPE_NORMAL_SEARCHED;
 			}
 		} else {
-			if (gift.giftType == GIFT_TYPE_ZERO_SEIZE) {
+			if (gift.giftType == GIFT_TYPE_ZERO) {
 				// 0元抢
 				switch (gift.status) {
 					case STATUS_WAIT_SEIZE:
@@ -150,59 +162,279 @@ public class GiftTypeUtil {
 	/**
 	 * 获取类型,包含首充券的类型
 	 */
-	public static int getItemViewTypeWithChargeCode(IndexGiftNew gift) {
-		if (gift.giftType == GIFT_TYPE_FIRST_CHARGE) {
+    public static int getItemViewTypeWithChargeCode(IndexGiftNew gift) {
+        switch (gift.giftType) {
+            case GIFT_TYPE_NORMAL:
+            case GIFT_TYPE_NORMAL_FREE:
+                // 针对普通免费礼包，该处不判断是否为首充券
+                return handleNormalType(gift);
+            case GIFT_TYPE_LIMIT:
+                return handleLimitType(gift);
+            case GIFT_TYPE_LIMIT_FREE:
+                switch (gift.totalType) {
+                    case TOTAL_TYPE_GIFT:
+                        return handleFreeLimitGift(gift);
+                    case TOTAL_TYPE_FIRST_CHARGE:
+                        return handleFreeFirstCharge(gift);
 
-			switch (gift.status) {
-				case STATUS_RESERVE:
-					switch (gift.seizeStatus) {
-						case SEIZE_TYPE_NEVER:
-						case SEIZE_TYPE_UN_RESERVE:
-							// 首充券可预约
-							return TYPE_CHARGE_UN_RESERVE;
-						case SEIZE_TYPE_RESERVED:
-							// 首充券已预约
-							return TYPE_CHARGE_RESERVED;
-					}
-					break;
-				case STATUS_RESERVE_FINISHED:
-					switch (gift.seizeStatus) {
-						case SEIZE_TYPE_NEVER:
-						case SEIZE_TYPE_UN_RESERVE:
-							// 首充券预约已结束
-							return TYPE_CHARGE_RESERVE_EMPTY;
-						case SEIZE_TYPE_RESERVED:
-							// 首充券已预约
-							return TYPE_CHARGE_RESERVED;
-					}
-					break;
-				case STATUS_SEIZE:
-					switch (gift.seizeStatus) {
-						case SEIZE_TYPE_NEVER:
-						case SEIZE_TYPE_UN_RESERVE:
-							// 未预约首充券可以抢号
-							return TYPE_CHARGE_SEIZE;
-						case SEIZE_TYPE_RESERVED:
-							// 已预约首充券可以领取
-							return TYPE_CHARGE_TAKE;
-					}
-					break;
-				case STATUS_FINISHED:
-					switch (gift.seizeStatus) {
-						case SEIZE_TYPE_NEVER:
-						case SEIZE_TYPE_UN_RESERVE:
-							// 首充券的预约已经结束
-							return TYPE_CHARGE_EMPTY;
-						case SEIZE_TYPE_RESERVED:
-							// 首充券已抢
-							return TYPE_CHARGE_SEIZED;
-					}
-					break;
-			}
-			// 礼包状态和抢号状态异常
-			return TYPE_ERROR;
-		} else {
-			return getItemViewType(gift);
-		}
-	}
+                }
+                break;
+        }
+        return TYPE_ERROR;
+    }
+
+    /**
+     * 处理限时免费的限量礼包类型
+     */
+    private static int handleFreeLimitGift(IndexGiftNew gift) {
+        switch (gift.status) {
+            case STATUS_WAIT_SEIZE:
+                return TYPE_LIMIT_FREE_EMPTY;
+            case STATUS_SEIZE:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_FREE_SEIZE;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_FREE_SEIZED;
+                }
+                break;
+            case STATUS_WAIT_SEARCH:
+                // 对珍贵礼包来说表示号已抢完
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_FREE_SEIZE;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_FREE_SEIZED;
+                }
+                break;
+            case STATUS_FINISHED:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_FREE_EMPTY;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_FREE_SEIZED;
+                }
+                break;
+        }
+        return TYPE_ERROR;
+    }
+
+    /**
+     * 处理限时免费的首充券类型
+     */
+    private static int handleFreeFirstCharge(IndexGiftNew gift) {
+        // 处理限时免费的首充券类型
+        switch (gift.status) {
+            case STATUS_RESERVE:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                    case SEIZE_TYPE_UN_RESERVE:
+                        // 首充券可预约
+                        return TYPE_CHARGE_UN_RESERVE;
+                    case SEIZE_TYPE_RESERVED:
+                        // 首充券已预约
+                        return TYPE_CHARGE_RESERVED;
+                }
+                break;
+            case STATUS_RESERVE_FINISHED:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                    case SEIZE_TYPE_UN_RESERVE:
+                        // 首充券预约已结束
+                        return TYPE_CHARGE_RESERVE_EMPTY;
+                    case SEIZE_TYPE_RESERVED:
+                        // 首充券已预约
+                        return TYPE_CHARGE_RESERVED;
+                }
+                break;
+            case STATUS_SEIZE:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                    case SEIZE_TYPE_UN_RESERVE:
+                        // 未预约首充券可以抢号
+                        return TYPE_CHARGE_SEIZE;
+                    case SEIZE_TYPE_RESERVED:
+                        // 已预约首充券可以领取
+                        return TYPE_CHARGE_TAKE;
+                }
+                break;
+            case STATUS_FINISHED:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                    case SEIZE_TYPE_UN_RESERVE:
+                        // 首充券的预约已经结束
+                        return TYPE_CHARGE_EMPTY;
+                    case SEIZE_TYPE_RESERVED:
+                        // 首充券已抢
+                        return TYPE_CHARGE_SEIZED;
+                }
+                break;
+        }
+        return TYPE_ERROR;
+    }
+
+    /**
+     * 处理非免费的限量礼包类型
+     */
+    private static int handleLimitType(IndexGiftNew gift) {
+        switch (gift.status) {
+            case STATUS_WAIT_SEIZE:
+                return TYPE_LIMIT_WAIT_SEIZE;
+            case STATUS_SEIZE:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_SEIZE;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_SEIZED;
+                }
+                break;
+            case STATUS_WAIT_SEARCH:
+                // 对珍贵礼包来说表示号已抢完
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_EMPTY;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_SEIZED;
+                }
+                break;
+            case STATUS_FINISHED:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_LIMIT_FINISHED;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_LIMIT_SEIZED;
+                }
+                break;
+        }
+        return TYPE_ERROR;
+    }
+
+    /**
+     * 处理普通礼包类型
+     */
+    private static int handleNormalType(IndexGiftNew gift) {
+        switch (gift.status) {
+            case STATUS_WAIT_SEIZE:
+                return TYPE_NORMAL_WAIT_SEIZE;
+            case STATUS_SEIZE:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_NORMAL_SEIZE;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_NORMAL_SEIZED;
+                }
+                break;
+            case STATUS_WAIT_SEARCH:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_NORMAL_WAIT_SEARCH;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_NORMAL_SEIZED;
+                }
+                break;
+            case STATUS_SEARCH:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_NORMAL_WAIT_SEARCH;
+                    case SEIZE_TYPE_SEIZED:
+                        // 已抢号
+                        return TYPE_NORMAL_SEIZED;
+                    case SEIZE_TYPE_SEARCHED:
+                        return TYPE_NORMAL_SEARCHED;
+                }
+                break;
+            case STATUS_FINISHED:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                        // 未抢号
+                        return TYPE_NORMAL_FINISHED;
+                    case SEIZE_TYPE_SEIZED:
+                    case SEIZE_TYPE_SEARCHED:
+                        // 已抢号
+                        return TYPE_NORMAL_SEIZED;
+                }
+                break;
+        }
+        return TYPE_ERROR;
+    }
+//	public static int getItemViewTypeWithChargeCode(IndexGiftNew gift) {
+//		if (gift.giftType == GIFT_TYPE_FIRST_CHARGE) {
+//
+//			switch (gift.status) {
+//				case STATUS_RESERVE:
+//					switch (gift.seizeStatus) {
+//						case SEIZE_TYPE_NEVER:
+//						case SEIZE_TYPE_UN_RESERVE:
+//							// 首充券可预约
+//							return TYPE_CHARGE_UN_RESERVE;
+//						case SEIZE_TYPE_RESERVED:
+//							// 首充券已预约
+//							return TYPE_CHARGE_RESERVED;
+//					}
+//					break;
+//				case STATUS_RESERVE_FINISHED:
+//					switch (gift.seizeStatus) {
+//						case SEIZE_TYPE_NEVER:
+//						case SEIZE_TYPE_UN_RESERVE:
+//							// 首充券预约已结束
+//							return TYPE_CHARGE_RESERVE_EMPTY;
+//						case SEIZE_TYPE_RESERVED:
+//							// 首充券已预约
+//							return TYPE_CHARGE_RESERVED;
+//					}
+//					break;
+//				case STATUS_SEIZE:
+//					switch (gift.seizeStatus) {
+//						case SEIZE_TYPE_NEVER:
+//						case SEIZE_TYPE_UN_RESERVE:
+//							// 未预约首充券可以抢号
+//							return TYPE_CHARGE_SEIZE;
+//						case SEIZE_TYPE_RESERVED:
+//							// 已预约首充券可以领取
+//							return TYPE_CHARGE_TAKE;
+//					}
+//					break;
+//				case STATUS_FINISHED:
+//					switch (gift.seizeStatus) {
+//						case SEIZE_TYPE_NEVER:
+//						case SEIZE_TYPE_UN_RESERVE:
+//							// 首充券的预约已经结束
+//							return TYPE_CHARGE_EMPTY;
+//						case SEIZE_TYPE_RESERVED:
+//							// 首充券已抢
+//							return TYPE_CHARGE_SEIZED;
+//					}
+//					break;
+//			}
+//			// 礼包状态和抢号状态异常
+//			return TYPE_ERROR;
+//		} else {
+//			return getItemViewType(gift);
+//		}
+//	}
 }

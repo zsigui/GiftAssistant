@@ -195,7 +195,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 */
 	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO_SEIZE) {
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
 			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			viewHolder.tvScore.setVisibility(View.VISIBLE);
