@@ -81,4 +81,7 @@ public class IndexGiftNew implements Serializable{
 	// 专享礼包类型, 1: 礼包酷专享
 	@SerializedName("exclusive")
 	public int exclusive;
+	// 支持平台
+	@SerializedName("platform")
+	public String platform;
 }

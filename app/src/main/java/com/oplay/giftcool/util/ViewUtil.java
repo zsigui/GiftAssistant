@@ -1,7 +1,14 @@
 package com.oplay.giftcool.util;
 
+import android.content.Context;
+import android.os.Build;
 import android.support.annotation.IdRes;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,6 +64,39 @@ public class ViewUtil {
 		}
 	}
 
+
+	/**
+	 * 设置礼包'价值:￥5.00'的显示方式
+	 */
+	public static void siteValueUI(TextView tv, int value, boolean delete) {
+		Context context = tv.getContext();
+		final int originSize = 7;
+		final String s = String.format("价值:￥%d.00", value);
+		final int moneyLength = s.length() - originSize;
+		SpannableString ss = new SpannableString(s);
+		if (delete) {
+			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1),
+					0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S2),
+					3, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S2_S3),
+					4, 5 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S2_S4),
+					5 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		} else {
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+				ss.setSpan(new ForegroundColorSpan(
+								context.getResources().getColor(R.color.co_common_app_second_bg_orange)),
+						3, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+			} else {
+				ss.setSpan(new ForegroundColorSpan(
+								context.getResources().getColor(R.color.co_common_app_second_bg_orange, null)),
+						3, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+			}
+			ss.setSpan(new StrikethroughSpan(), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		}
+		tv.setText(ss, TextView.BufferType.SPANNABLE);
+	}
 
 	public static void showImage(ImageView iv, String img) {
 		try {

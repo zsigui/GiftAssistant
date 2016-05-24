@@ -150,7 +150,7 @@
 					android:layout_marginTop = "@dimen/di_list_item_gap_small"
 					android:layout_alignParentRight = "true"
 					android:checked = "true"
-					android:textColor="@color/view_btn_focus"
+					android:textColor="@color/color_btn_green_border"
 					android:text = "关注" />
 
 		</RelativeLayout >

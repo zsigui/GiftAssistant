@@ -55,40 +55,18 @@
 				android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
 				android:drawablePadding = "4dp"
 				android:gravity = "center_vertical"
+				android:drawableLeft = "@drawable/ic_tag_first_charge"
 				android:text = "[暴打魏蜀吴]新手礼包" />
 
-
-		<LinearLayout
-				android:id = "@+id/ll_money"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:minWidth = "70dp"
+		<TextView
+				android:id = "@+id/tv_platform"
+				style = "@style/DefaultTextView.Text"
 				android:layout_below = "@+id/tv_name"
+				android:layout_toRightOf = "@+id/rl_icon"
 				android:layout_marginLeft = "7dp"
 				android:layout_marginTop = "6dp"
-				android:layout_toRightOf = "@+id/rl_icon" >
-
-			<TextView
-					android:id = "@+id/tv_score"
-					style = "@style/DefaultTextView.Text"
-					android:drawableLeft = "@drawable/ic_score"
-					android:drawablePadding = "4dp"
-					android:text = "100" />
-
-			<TextView
-					android:id = "@+id/tv_or"
-					style = "@style/DefaultTextView.Text"
-					android:layout_marginLeft = "5dp"
-					android:layout_marginRight = "5dp"
-					android:text = "@string/st_gift_or" />
-
-			<TextView
-					android:id = "@+id/tv_bean"
-					style = "@style/DefaultTextView.Text"
-					android:drawableLeft = "@drawable/ic_bean"
-					android:drawablePadding = "4dp"
-					android:text = "100" />
-		</LinearLayout >
+				android:textColor = "@color/co_common_app_second_bg_green"
+				android:text = "偶玩版" />
 
 
 		<TextView
@@ -108,14 +86,14 @@
 				android:layout_height = "wrap_content"
 				android:layout_alignParentRight = "true"
 				android:layout_alignTop = "@+id/tv_content"
+				android:visibility = "gone"
 				android:orientation = "horizontal" >
 
 			<TextView
 					android:id = "@+id/tv_percent"
 					style = "@style/DefaultTextView.Text"
 					android:layout_below = "@+id/tv_name"
-					android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
-					android:text = "剩余50%" />
+					android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 			<ProgressBar
 					android:id = "@+id/pb_percent"
@@ -138,10 +116,26 @@
 				android:layout_height = "@dimen/di_btn_height"
 				android:layout_alignParentRight = "true"
 				android:layout_alignTop = "@+id/tv_name"
-				android:background = "@drawable/selector_btn_orange"
+				android:background = "@drawable/selector_btn_green"
 				android:text = "抢号"
-				android:visibility = "gone"
 				android:textColor = "@color/co_white" />
+
+
+		<TextView
+				android:id = "@+id/tv_reserve_deadline"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:layout_alignTop = "@+id/tv_content"
+				android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
+
+		<TextView
+				android:id = "@+id/tv_seize_hint"
+				style = "@style/DefaultTextView.Text"
+				android:layout_alignParentRight = "true"
+				android:layout_below = "@+id/btn_send"
+				android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+				android:textSize = "13sp"
+				android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 
 	</RelativeLayout >
@@ -155,6 +149,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/co_btn_red"
 			android:drawablePadding = "@dimen/di_line_space_extra_big"
+			android:visibility = "gone"
 			android:paddingRight = "@dimen/di_index_list_item_margin_right"
 			android:drawableRight = "@drawable/ic_arrow_red_right" />
 

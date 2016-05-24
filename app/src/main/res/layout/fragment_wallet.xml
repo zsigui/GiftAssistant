@@ -113,12 +113,13 @@
 				android:layout_marginRight="20dp"
 				android:background = "@drawable/selector_btn_bigger_green_border"
 				android:text = "@string/st_wallet_get_score"
-				android:textColor = "@color/co_btn_green" />
+				android:textColor = "@color/color_btn_green_border" />
 		<TextView
 				android:id = "@+id/btn_get_bean"
 				style = "@style/DefaultTextView.BiggerBtn"
 				android:layout_width = "135dp"
 				android:background = "@drawable/selector_btn_bigger_green"
+				android:textColor="@color/color_btn_white_border"
 				android:text = "@string/st_wallet_get_bean" />
 
 	</LinearLayout >

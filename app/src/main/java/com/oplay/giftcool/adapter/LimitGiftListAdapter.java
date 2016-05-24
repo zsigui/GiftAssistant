@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -32,7 +33,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,7 +46,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	private List<TimeData<IndexGiftNew>> mData;
 	private Context mContext;
 	private OnItemClickListener<IndexGiftNew> mListener;
-	private HashMap<String, String> calendar;
+	private ArrayMap<String, String> calendar;
 
 
 	public LimitGiftListAdapter(Context context) {
@@ -312,7 +312,14 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	public void release() {
 		mContext = null;
 		mListener = null;
-		mData = null;
+		if (mData != null) {
+			mData.clear();
+			mData = null;
+		}
+		if (calendar != null) {
+			calendar.clear();
+			calendar = null;
+		}
 	}
 
 	@Override
@@ -410,7 +417,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		String date = "";
 		try {
 			if (calendar == null) {
-				calendar = new HashMap<String, String>();
+				calendar = new ArrayMap<String, String>();
 			}
 			date = calendar.get(time);
 			if (date == null) {
