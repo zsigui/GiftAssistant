@@ -89,7 +89,7 @@ public class WebViewInterface extends Observable {
 				KLog.d(AppDebugConfig.TAG_WEBVIEW, "json = " + giftJson);
 			}
 			IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
-			if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+			if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 				IntentUtil.jumpGiftDetail(mHostActivity, gift.id);
 				return RET_SUCCESS;
 			}

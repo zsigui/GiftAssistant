@@ -232,7 +232,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
@@ -277,7 +276,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 	 */
 	private void setMoneyState(ItemHolder viewHolder, IndexGiftNew gift) {
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -308,7 +307,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 				viewHolder.tvPercent.setVisibility(View.VISIBLE);
 				viewHolder.pbPercent.setVisibility(View.VISIBLE);
 				int percent = gift.remainCount * 100 / gift.totalCount;
@@ -474,7 +472,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 			case R.id.btn_send:
 				if (gift == null)
 					return;
-				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 					// 对于0元抢，先跳转到游戏详情
 					IntentUtil.jumpGiftDetail(mContext, gift.id);
 				} else {

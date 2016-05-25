@@ -59,6 +59,11 @@ public class NetUrl {
 	public static final String GIFT_GET_INDEX = "gift_index";
 
 	/**
+	 * 限时免费页面
+	 */
+	public static final String GIFT_GET_FREE_BY_PAGE = "zero_gift_list";
+
+	/**
 	 * 猜你喜欢
 	 */
 	public static final String GIFT_GET_ALL_LIKE = "guess_you_like_list";

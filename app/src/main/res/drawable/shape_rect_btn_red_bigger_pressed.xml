@@ -10,8 +10,5 @@
 			android:left = "@dimen/di_btn_bigger_padding_left_right"
 			android:right = "@dimen/di_btn_bigger_padding_left_right"
 			android:top = "@dimen/di_btn_bigger_padding_top_bottom" />
-	<solid android:color = "@color/co_transparent" />
-	<stroke
-			android:color = "@color/co_btn_red"
-			android:width = "1dp" />
+	<solid android:color = "@color/co_btn_red_pressed" />
 </shape >

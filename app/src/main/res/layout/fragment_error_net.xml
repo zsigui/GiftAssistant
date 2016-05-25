@@ -24,7 +24,7 @@
 			android:paddingRight="@dimen/di_common_text_padding_left_right"
 			android:paddingTop="@dimen/di_common_text_padding_top_bottom"
 			android:paddingBottom="@dimen/di_common_text_padding_top_bottom"
-			android:textColor="@color/co_white"
+			android:textColor="@color/color_btn_orange_border"
 			android:layout_below="@+id/v_err"/>
 
 </RelativeLayout>

@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by mink on 16-03-04.
@@ -150,7 +151,6 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
@@ -195,7 +195,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 */
 	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -226,7 +226,6 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 				viewHolder.tvPercent.setVisibility(View.VISIBLE);
 				viewHolder.pbPercent.setVisibility(View.VISIBLE);
 				int percent = gift.remainCount * 100 / gift.totalCount;
@@ -437,7 +436,7 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 * @return
 	 */
 	private static String formatDateTimeHelper(String time) {
-		SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 		if (TextUtils.isEmpty(time)) {
 			return "";
 		}

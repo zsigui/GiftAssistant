@@ -34,6 +34,7 @@
 			android:id = "@+id/btn_todo"
 			style = "@style/DefaultTextView.NormalBtn"
 			android:background = "@drawable/selector_btn_red"
+			android:textColor="@color/color_btn_red_border"
 			android:layout_alignParentRight = "true"
 			android:layout_marginTop = "@dimen/di_list_item_gap_normal"
 			android:layout_marginRight = "@dimen/di_index_hoz_module_margin_left"

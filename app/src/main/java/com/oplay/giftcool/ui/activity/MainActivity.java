@@ -287,7 +287,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 		}
 		mCtvs[position].setChecked(true);
 		mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
-		showToolbarSearch(position == INDEX_POST);
+		showToolbarSearch(position != INDEX_POST);
 		switch (position) {
 			case INDEX_POST:
 				displayEssayUI();

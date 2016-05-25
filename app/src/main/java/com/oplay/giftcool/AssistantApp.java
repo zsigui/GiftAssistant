@@ -665,6 +665,6 @@ public class AssistantApp extends Application {
 	}
 
 	public long getLastLaunchTime() {
-		return mLastLaunchTime + Global.sServerTimeDiffLocal;
+		return mLastLaunchTime - Global.sServerTimeDiffLocal;
 	}
 }

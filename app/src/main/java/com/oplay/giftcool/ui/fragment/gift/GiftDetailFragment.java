@@ -199,7 +199,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (getActivity() instanceof GiftDetailActivity) {
 			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
 				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_limit);
-			} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+			} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_0_seize);
 			} else {
 				((GiftDetailActivity) getActivity()).showLimitTag(false, 0);
@@ -228,7 +228,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
 			tvConsume.setVisibility(View.VISIBLE);
 			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-					&& giftData.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
+					&& giftData.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 				tvScore.setVisibility(View.VISIBLE);
 				tvScore.setText(String.valueOf(giftData.score));
 			} else if (giftData.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
@@ -242,7 +242,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				tvBean.setText(String.valueOf(giftData.bean));
 			}
 			tvRemain.setVisibility(View.VISIBLE);
-			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 				tvScore.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
 				tvBean.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
 				tvOriginPrice.setText(
@@ -343,7 +343,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 		if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
 			ivLimit.setVisibility(View.VISIBLE);
 			ivLimit.setImageResource(R.drawable.ic_tag_limit);
-		} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+		} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 			ivLimit.setVisibility(View.VISIBLE);
 			ivLimit.setImageResource(R.drawable.ic_tag_0_seize);
 		} else {
@@ -406,7 +406,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 				}
 				// 取消强制要求下载的模块
 //				if (AssistantApp.getInstance().isAllowDownload()
-//						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+//						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 //					return;
 //				}
 				PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);

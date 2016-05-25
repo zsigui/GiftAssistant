@@ -139,4 +139,33 @@ public class DateUtil {
 		Date date = new Date(System.currentTimeMillis() + 3600 * 1000 * hours);
 		return sdf.format(date);
 	}
+
+	public static String formatUserReadDate(long time) {
+		if (time == 0) {
+			return "";
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+		Date date = null;
+
+			date = new Date(time);
+			Calendar current = Calendar.getInstance();
+			current.setTime(date);
+
+			Calendar today = Calendar.getInstance();    //今天
+			today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+			today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+			today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
+			//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE, 0);
+			today.set(Calendar.SECOND, 0);
+
+			if (current.before(today)) {
+				return "昨天/以前";
+			} else if (current.after(today)) {
+				return "明天/以后";
+			} else {
+				return "今天";
+			}
+	}
 }

@@ -136,7 +136,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
 			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
 			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
@@ -181,7 +180,7 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 	 */
 	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
 		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_ZERO) {
+				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 			// 只用积分
 			viewHolder.tvScore.setText(String.valueOf(gift.score));
 			viewHolder.tvScore.setVisibility(View.VISIBLE);
@@ -212,7 +211,6 @@ public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickLi
 		switch (type) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 				viewHolder.tvPercent.setVisibility(View.VISIBLE);
 				viewHolder.pbPercent.setVisibility(View.VISIBLE);
 				int percent = gift.remainCount * 100 / gift.totalCount;

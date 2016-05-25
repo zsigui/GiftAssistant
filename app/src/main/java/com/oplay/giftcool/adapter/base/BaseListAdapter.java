@@ -59,8 +59,12 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 	}
 
 	public void updateData(List<T> newData) {
-		mData.clear();
-		mData.addAll(newData);
+		if (mData == null) {
+			mData = newData;
+		} else {
+			mData.clear();
+			mData.addAll(newData);
+		}
 	}
 
 	@Override

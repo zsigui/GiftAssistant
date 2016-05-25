@@ -87,7 +87,10 @@ public class IndexGiftNew implements Serializable{
     // 总分类型，暂时0：礼包 1：首充券
     @SerializedName("total_type")
     public int totalType;
-    // 免费开抢时间
+    // 免费开抢时间, 0代表无免费礼包
     @SerializedName("free_start_time")
-    public String freeStartTime;
+    public int freeStartTime;
+	// 首充券预留时间
+	@SerializedName("reserve_deadline")
+	public String reserveDeadline;
 }

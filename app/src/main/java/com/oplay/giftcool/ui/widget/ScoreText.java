@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -32,10 +33,18 @@ public class ScoreText extends TextView{
 
 	public void setStateEnable(boolean enable) {
 		setEnabled(enable);
-		if (enable) {
-			setTextColor(getResources().getColor(R.color.co_btn_green));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if (enable) {
+				setTextColor(getResources().getColor(R.color.co_btn_green, null));
+			} else {
+				setTextColor(getResources().getColor(R.color.co_btn_grey, null));
+			}
 		} else {
-			setTextColor(getResources().getColor(R.color.co_btn_grey));
+			if (enable) {
+				setTextColor(getResources().getColor(R.color.co_btn_green));
+			} else {
+				setTextColor(getResources().getColor(R.color.co_btn_grey));
+			}
 		}
 	}
 }

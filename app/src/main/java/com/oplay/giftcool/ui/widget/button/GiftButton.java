@@ -78,11 +78,6 @@ public class GiftButton extends TextView{
 				setRedBg();
 				setEnabled(true);
 				break;
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
-				setText(R.string.st_0_gift_seize);
-				setRedBg();
-				setEnabled(true);
-				break;
 			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
 			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
 				setText(R.string.st_gift_seized);
@@ -130,6 +125,9 @@ public class GiftButton extends TextView{
 				break;
 			case GiftTypeUtil.TYPE_CHARGE_SEIZED:
 				setText(R.string.st_gift_seized);
+				break;
+			case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
+				setText(R.string.st_gift_reserve_disabled);
 				break;
 		}
 	}

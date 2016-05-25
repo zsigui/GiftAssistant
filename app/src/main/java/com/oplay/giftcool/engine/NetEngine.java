@@ -122,6 +122,12 @@ public interface NetEngine {
 	Call<JsonRespBase<IndexGift>> obtainIndexGift(@Body JsonReqBase<ReqIndexGift> reqData);
 
 	/**
+	 * 获取 首页-限时免费 页面的数据
+	 */
+	@POST(NetUrl.GIFT_GET_FREE_BY_PAGE)
+	Call<JsonRespLimitGiftList> obtainGiftFreeByPage(@Body JsonReqBase<ReqPageData> reqData);
+
+	/**
 	 * 获取 首页-新鲜出炉礼包列表 页面的数据
 	 */
 	@POST(NetUrl.GIFT_GET_INDEX_NEW)

@@ -6,7 +6,7 @@
 		android:layout_width = "match_parent"
 		android:layout_height = "@dimen/di_limit_item_height"
 		android:background = "@drawable/selector_opacity_05"
-		android:paddingLeft = "4dp" >
+		android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
 
 	<View
 			android:layout_width = "@dimen/di_timeline_thickness"
@@ -68,7 +68,7 @@
 				android:layout_marginTop = "6dp"
 				android:layout_toRightOf = "@+id/rl_icon" >
 
-			<TextView
+			<!--<TextView
 					android:id = "@+id/tv_score"
 					style = "@style/DefaultTextView.Text"
 					android:drawableLeft = "@drawable/ic_score"
@@ -87,7 +87,11 @@
 					style = "@style/DefaultTextView.Text"
 					android:drawableLeft = "@drawable/ic_bean"
 					android:drawablePadding = "4dp"
-					android:text = "100" />
+					android:text = "100" />-->
+			<com.oplay.giftcool.ui.widget.DeletedTextView
+					android:id = "@+id/tv_money"
+					android:gravity = "center_vertical"
+					style = "@style/DefaultTextView.Text" />
 		</LinearLayout >
 
 
@@ -132,24 +136,21 @@
 
 		</LinearLayout >
 
-		<com.oplay.giftcool.ui.widget.button.GiftButton
-				android:id = "@+id/btn_send"
-				style = "@style/DefaultTextView"
-				android:layout_height = "@dimen/di_btn_height"
+		<TextView
+				android:id = "@+id/tv_seize_hint"
+				style = "@style/DefaultTextView.Text"
 				android:layout_alignParentRight = "true"
-				android:layout_alignTop = "@+id/tv_name"
-				android:background = "@drawable/selector_btn_orange"
-				android:text = "抢号"
-				android:visibility = "gone"
-				android:textColor = "@color/co_white" />
-
+				android:text = "@string/st_gift_normal_seize_hint"
+				android:textColor = "@color/co_btn_red"
+				android:layout_below = "@+id/ll_money"
+				android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 	</RelativeLayout >
 
 	<TextView
 			android:id = "@+id/tv_seize"
 			style = "@style/DefaultTextView.Header"
-			android:text = "正在疯抢"
+			android:text = "@string/st_gift_free_seize"
 			android:layout_alignParentRight = "true"
 			android:layout_centerVertical = "true"
 			android:textStyle = "bold"

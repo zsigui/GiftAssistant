@@ -81,7 +81,6 @@ public class PayManager {
 		switch (GiftTypeUtil.getItemViewType(gift)) {
 			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_ZERO_SEIZE:
 				chargeGift(context, gift, button);
 				return WebViewInterface.RET_SUCCESS;
 			case GiftTypeUtil.TYPE_NORMAL_SEARCH:
@@ -423,7 +422,7 @@ public class PayManager {
 			case GiftTypeUtil.GIFT_TYPE_LIMIT:
 				giftType = "限量";
 				break;
-			case GiftTypeUtil.GIFT_TYPE_ZERO:
+			case GiftTypeUtil.GIFT_TYPE_LIMIT_FREE:
 				giftType = "0元抢";
 				break;
 			default:

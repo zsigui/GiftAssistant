@@ -110,7 +110,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 						IntentUtil.jumpGiftDetail(getContext(), gift.id);
 						break;
 					case R.id.btn_send:
-						if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+						if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 							// 对于0元抢，先跳转到游戏详情
 							IntentUtil.jumpGiftDetail(getContext(), gift.id);
 						} else {

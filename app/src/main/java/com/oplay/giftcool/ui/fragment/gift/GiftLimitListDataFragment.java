@@ -6,10 +6,9 @@ import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.LimitGiftListAdapter;
-import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
-import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -117,25 +116,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(true);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		AlarmClockManager.getInstance().setAllowNotifyGiftUpdate(false);
+		ObserverManager.getInstance().removeGiftUpdateListener(this);
 	}
 
 	@Override
@@ -200,10 +181,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 
 	//刷新重置页面
 	public void refreshData(ArrayList<TimeData<IndexGiftNew>> data) {
-		if (data == null) {
-			return;
-		}
-		if (data.size() == 0) {
+		if (data == null || data.size() == 0) {
 			mViewManager.showEmpty();
 		} else {
 			mViewManager.showContent();
@@ -268,7 +246,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 				IntentUtil.jumpGiftDetail(getContext(), gift.id);
 				break;
 			case R.id.btn_send:
-				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_ZERO) {
+				if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 					// 对于0元抢，先跳转到游戏详情
 					IntentUtil.jumpGiftDetail(getContext(), gift.id);
 				} else {
@@ -283,6 +261,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 		super.release();
 		if (mUpdateGiftRunnable != null) {
 			mUpdateGiftRunnable.clear();
+			mUpdateGiftRunnable = null;
 		}
 	}
 
