@@ -73,6 +73,7 @@
 	<string name = "st_gift_free_seize" >正在疯抢</string >
 
 	<string name = "st_gift_normal_seize_hint" >进行普通抢号></string >
+	<string name = "st_gift_code_copy" >复制</string >
 	<!-- 礼包详情 -->
 	<string name = "st_gift_consume" >消耗</string >
 	<string name = "st_gift_content" >▌礼包内容</string >

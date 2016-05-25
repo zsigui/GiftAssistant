@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="260dp"
+                  android:layout_height="wrap_content"
+                  android:background="@color/co_white"
+                  android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/di_dialog_title_padding_top_bottom"
+            android:paddingLeft="@dimen/di_dialog_title_padding_left"
+            android:paddingTop="@dimen/di_dialog_title_padding_top_bottom"
+            android:text="@string/st_dialog_pay_title_get_code"
+            android:textColor="@color/co_common_app_second_bg_green"/>
+
+        <View style="@style/HDividerView"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/di_dialog_content_padding"
+            android:singleLine="false"
+            android:text="礼包码已保存至 我的礼包"
+            android:textColor="@color/co_black"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_gift_code"
+                style="@style/DefaultTextView.Text"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_marginLeft="@dimen/di_dialog_content_padding"
+                android:layout_marginRight="@dimen/di_list_item_gap_small"
+                android:layout_weight="1"
+                android:background="@color/co_gift_code_bg"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="礼包码：123456789KKKKKKKK"/>
+
+            <TextView
+                android:id="@+id/tv_copy"
+                style="@style/DefaultTextView.NormalBtn"
+                android:layout_width="wrap_content"
+                android:text="@string/st_gift_code_copy"
+                android:layout_marginRight="@dimen/di_dialog_content_padding"
+                android:background="@drawable/selector_btn_green"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_hint"
+            style="@style/DefaultTextView.Text"
+            android:layout_width="match_parent"
+            android:gravity="left|center_vertical"
+            android:padding="@dimen/di_dialog_content_padding"
+            android:singleLine="false"
+            android:text="请尽快打开游戏兑换"/>
+
+        <View style="@style/HDividerView"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btn_cancel"
+                style="@style/NewButtonText"
+                android:text="@string/st_dialog_btn_cancel"
+                android:textColor="@color/co_common_text_main"/>
+
+            <View style="@style/VDividerView"/>
+
+            <TextView
+                android:id="@+id/btn_confirm"
+                style="@style/NewButtonText"
+                android:text="@string/st_dialog_btn_confirm"
+                android:textColor="@color/co_common_app_second_bg_green"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

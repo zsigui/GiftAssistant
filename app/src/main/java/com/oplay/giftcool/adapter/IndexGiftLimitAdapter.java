@@ -14,6 +14,7 @@ import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -79,7 +80,7 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		ImageView ivIcon;
 		TextView tvGameName;
 		TextView tvName;
-		TextView tvPrice;
+		DeletedTextView tvPrice;
 
 		public ItemHolder(View itemView) {
 			super(itemView);

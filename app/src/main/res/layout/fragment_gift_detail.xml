@@ -143,7 +143,7 @@
 				android:background = "@drawable/selector_btn_red"
 				android:text = "复制"
 				android:visibility = "gone"
-				android:textColor = "@color/co_white" />
+				android:textColor = "@color/color_btn_red_border" />
 
 		<!-- 0元抢 -->
 		<com.oplay.giftcool.ui.widget.DeletedTextView
@@ -168,7 +168,7 @@
 				android:layout_alignTop = "@+id/tv_name"
 				android:text = "等抢号"
 				android:background = "@drawable/selector_btn_red"
-				android:textColor = "@color/co_white" />
+				android:textColor = "@color/color_btn_red_border" />
 	</RelativeLayout >
 
 	<ScrollView

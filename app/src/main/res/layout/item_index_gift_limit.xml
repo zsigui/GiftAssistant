@@ -50,7 +50,7 @@
 			android:layout_marginBottom = "3dp"
 			android:layout_below = "@+id/tv_game_name" />
 
-	<TextView
+	<com.oplay.giftcool.ui.widget.DeletedTextView
 			android:id = "@+id/tv_price"
 			style = "@style/DefaultTextView.ItemSubTitle"
 			android:layout_centerHorizontal = "true"

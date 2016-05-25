@@ -9,13 +9,13 @@
 		android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
 
 	<View
-			android:layout_width = "@dimen/di_timeline_thickness"
+			android:layout_width = "@dimen/di_divider_height"
 			android:layout_height = "match_parent"
 			android:background = "@color/co_divider_bg" />
 
 	<View
 			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_timeline_thickness"
+			android:layout_height = "@dimen/di_divider_height"
 			android:layout_alignParentBottom = "true"
 			android:background = "@color/co_divider_bg" />
 
@@ -58,41 +58,16 @@
 				android:text = "[暴打魏蜀吴]新手礼包" />
 
 
-		<LinearLayout
-				android:id = "@+id/ll_money"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:minWidth = "70dp"
-				android:layout_below = "@+id/tv_name"
-				android:layout_marginLeft = "7dp"
-				android:layout_marginTop = "6dp"
-				android:layout_toRightOf = "@+id/rl_icon" >
 
-			<!--<TextView
-					android:id = "@+id/tv_score"
-					style = "@style/DefaultTextView.Text"
-					android:drawableLeft = "@drawable/ic_score"
-					android:drawablePadding = "4dp"
-					android:text = "100" />
-
-			<TextView
-					android:id = "@+id/tv_or"
-					style = "@style/DefaultTextView.Text"
-					android:layout_marginLeft = "5dp"
-					android:layout_marginRight = "5dp"
-					android:text = "@string/st_gift_or" />
-
-			<TextView
-					android:id = "@+id/tv_bean"
-					style = "@style/DefaultTextView.Text"
-					android:drawableLeft = "@drawable/ic_bean"
-					android:drawablePadding = "4dp"
-					android:text = "100" />-->
 			<com.oplay.giftcool.ui.widget.DeletedTextView
 					android:id = "@+id/tv_money"
 					android:gravity = "center_vertical"
+                    android:minWidth = "70dp"
+                    android:layout_below = "@+id/tv_name"
+                    android:layout_marginLeft = "7dp"
+                    android:layout_marginTop = "6dp"
+                    android:layout_toRightOf = "@+id/rl_icon"
 					style = "@style/DefaultTextView.Text" />
-		</LinearLayout >
 
 
 		<TextView
@@ -142,7 +117,7 @@
 				android:layout_alignParentRight = "true"
 				android:text = "@string/st_gift_normal_seize_hint"
 				android:textColor = "@color/co_btn_red"
-				android:layout_below = "@+id/ll_money"
+				android:layout_below = "@+id/tv_money"
 				android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 	</RelativeLayout >

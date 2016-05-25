@@ -45,18 +45,23 @@ public class DeletedTextView extends TextView {
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
-		if (showDeletedLine) {
-			//TextView布局的高度和宽度
-			float x = this.getWidth();
-			float y = this.getHeight();
-			//根据Textview的高度和宽度设置删除线的位置
-			//四个参数的意思：起始x的位置，起始y的位置，终点x的位置，终点y的位置
-			//super最后调用表示删除线在位于文字的上边
-			//super方法先调用删除线不显示
-			canvas.drawLine(0f, y / 2f, x, y / 2f, paint);
-		}
+        if (showDeletedLine) {
+            //TextView布局的高度和宽度
+            float x = this.getWidth();
+            float y = this.getHeight();
+            //根据Textview的高度和宽度设置删除线的位置
+            //四个参数的意思：起始x的位置，起始y的位置，终点x的位置，终点y的位置
+            //super最后调用表示删除线在位于文字的上边
+            //super方法先调用删除线不显示
+            canvas.drawLine(0f, y / 2f, x, y / 2f, paint);
+        }
 		super.dispatchDraw(canvas);
-
 	}
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
+
 
 }

@@ -96,6 +96,6 @@
             android:layout_centerVertical="true"
             android:background="@drawable/selector_btn_red"
             android:text="复制"
-            android:textColor="@color/co_white"/>
+            android:textColor="@color/color_btn_red_border"/>
     </RelativeLayout>
 </RelativeLayout>

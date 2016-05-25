@@ -9,7 +9,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 	final int COLOR_RED;
 	final ImageSpan DRAWER_GOLD;
 	final ImageSpan DRAWER_BEAN;
+    final int W_DIVIDER;
 
 	public FreeAdapter(Context context, List<TimeData<IndexGiftNew>> objects) {
 		super(context, objects);
@@ -61,13 +61,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 			COLOR_GREY = context.getResources().getColor(R.color.co_common_text_second);
 			COLOR_RED = context.getResources().getColor(R.color.co_common_app_main_bg);
 		}
-//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//			DRAWER_GOLD = new ImageSpan()context.getDrawable(R.drawable.ic_score);
-//			DRAWER_BEAN = context.getDrawable(R.drawable.ic_bean);
-//		} else {
-//			DRAWER_GOLD = context.getResources().getDrawable(R.drawable.ic_score);
-//			DRAWER_BEAN = context.getResources().getDrawable(R.drawable.ic_bean);
-//		}
+        W_DIVIDER = context.getResources().getDimensionPixelSize(R.dimen.di_divider_height);
 		DRAWER_GOLD = new ImageSpan(context, R.drawable.ic_score);
 		DRAWER_BEAN = new ImageSpan(context, R.drawable.ic_bean);
 	}
@@ -149,14 +143,14 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 				}
 				break;
 			case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-				ss.setSpan(new StrikethroughSpan(), 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
 				gHolder.pbPercent.setVisibility(View.VISIBLE);
 				gHolder.tvPercent.setVisibility(View.VISIBLE);
 				gHolder.tvSeizeHint.setVisibility(View.GONE);
 				setSeizeTextUI(gHolder.tvSeize, 0);
 				break;
 			case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
-				ss.setSpan(new StrikethroughSpan(), 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
 				gHolder.pbPercent.setVisibility(View.GONE);
 				gHolder.tvPercent.setVisibility(View.GONE);
 				gHolder.tvSeizeHint.setVisibility(View.GONE);
@@ -504,7 +498,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 	private static class ChargeHolder {
 		ImageView ivIcon;
 		TextView tvName;
-		TextView tvPrice;
+		DeletedTextView tvPrice;
 		TextView tvPlatform;
 		GiftButton btnSend;
 		TextView tvSeize;

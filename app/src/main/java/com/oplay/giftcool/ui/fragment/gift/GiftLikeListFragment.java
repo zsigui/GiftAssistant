@@ -101,30 +101,32 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 		mReqPageObj.data.page = 1;
 		mCallRefresh = Global.getNetEngine().obtainGiftLike(mReqPageObj);
 		mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
-			@Override
-			public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
-			                       Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
-				if (!mCanShowUI || call.isCanceled()) {
-					return;
-				}
-				if (response != null && response.isSuccessful()) {
-					refreshSuccessEnd();
-					OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
-					refreshLoadState(backObj.data, backObj.isEndPage);
-					updateData(backObj.data);
-					return;
-				}
-				refreshFailEnd();
-			}
+            @Override
+            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
+                                   Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null && response.body().isSuccess()) {
+                        refreshSuccessEnd();
+                        OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+                        refreshLoadState(backObj.data, backObj.isEndPage);
+                        updateData(backObj.data);
+                        return;
+                    }
+                }
+                refreshFailEnd();
+            }
 
-			@Override
-			public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
-				if (!mCanShowUI || call.isCanceled()) {
-					return;
-				}
-				refreshFailEnd();
-			}
-		});
+            @Override
+            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                refreshFailEnd();
+            }
+        });
 	}
 
 	/**
@@ -156,11 +158,13 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 						return;
 					}
 					if (response != null && response.isSuccessful()) {
-						moreLoadSuccessEnd();
-						OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
-						setLoadState(backObj.data, backObj.isEndPage);
-						addMoreData(backObj.data);
-						return;
+                        if(response.body() != null && response.body().isSuccess()) {
+                            moreLoadSuccessEnd();
+                            OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+                            setLoadState(backObj.data, backObj.isEndPage);
+                            addMoreData(backObj.data);
+                            return;
+                        }
 					}
 					moreLoadFailEnd();
 				}
