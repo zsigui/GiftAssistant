@@ -40,21 +40,37 @@
 	<TextView
 			android:id = "@+id/tv_game_name"
 			style = "@style/DefaultTextView.ItemTitle"
-			android:layout_width="@dimen/di_icon_diameter"
+			android:layout_width = "@dimen/di_icon_diameter"
 			android:layout_below = "@+id/rl_icon" />
 
 	<TextView
 			android:id = "@+id/tv_name"
 			style = "@style/DefaultTextView.ItemSubTitle"
-			android:layout_width="@dimen/di_icon_diameter"
-			android:layout_marginBottom = "3dp"
+			android:layout_width = "@dimen/di_icon_diameter"
+			android:layout_marginBottom = "2dp"
 			android:layout_below = "@+id/tv_game_name" />
 
-	<com.oplay.giftcool.ui.widget.DeletedTextView
-			android:id = "@+id/tv_price"
-			style = "@style/DefaultTextView.ItemSubTitle"
+	<FrameLayout
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
 			android:layout_centerHorizontal = "true"
-			android:layout_marginTop = "0dp"
-			android:layout_below = "@+id/tv_name" />
+			android:layout_marginLeft="@dimen/di_list_item_gap_very_small"
+			android:layout_marginRight="@dimen/di_list_item_gap_very_small"
+			android:layout_below = "@+id/tv_name" >
 
+		<TextView
+				android:id = "@+id/tv_price"
+				style = "@style/DefaultTextView.ItemSubTitle"
+				android:layout_width = "match_parent"
+				android:padding = "0dp"
+				android:layout_marginTop = "0dp" />
+
+		<View
+				android:id="@+id/v_delete"
+				android:layout_width = "wrap_content"
+				android:layout_height = "@dimen/di_divider_height"
+				android:layout_gravity = "center"
+				android:layout_marginBottom="2dp"
+				android:background = "@color/co_btn_grey_pressed" />
+	</FrameLayout >
 </RelativeLayout >

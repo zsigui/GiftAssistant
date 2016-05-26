@@ -68,7 +68,7 @@
 	<string name = "st_gift_reserve" >预约</string >
 	<string name = "st_gift_reserved" >已预约</string >
 	<string name = "st_gift_reserve_empty" >预约完</string >
-	<string name = "st_gift_reserve_disabled" >无预约</string >
+	<string name = "st_gift_reserve_disabled" >不可预约</string >
 	<string name = "st_gift_take" >领号</string >
 	<string name = "st_gift_free_seize" >正在疯抢</string >
 

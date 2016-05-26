@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * 限量免费模块Adapter
@@ -95,6 +96,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 				convertView.setTag(TAG_POSITION, position);
 				convertView.setOnClickListener(this);
 				cHolder.btnSend.setTag(TAG_POSITION, position);
+				cHolder.btnSend.setOnClickListener(this);
 				handleFirstCharge(type, o, cHolder);
 				break;
 			// 首充券一类结束
@@ -120,7 +122,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 	 */
 	private void handleGiftFree(int type, IndexGiftNew o, GiftHolder gHolder) {
 		ViewUtil.showImage(gHolder.ivIcon, o.img);
-		gHolder.tvName.setText(o.name);
+		gHolder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
+		gHolder.tvContent.setText(o.content);
 		SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
 		final int startPos = String.valueOf(o.score).length() + 10;
 		ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -146,6 +149,10 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
 				gHolder.pbPercent.setVisibility(View.VISIBLE);
 				gHolder.tvPercent.setVisibility(View.VISIBLE);
+				final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+				gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+				gHolder.pbPercent.setProgress(percent);
+				gHolder.pbPercent.setMax(100);
 				gHolder.tvSeizeHint.setVisibility(View.GONE);
 				setSeizeTextUI(gHolder.tvSeize, 0);
 				break;
@@ -184,9 +191,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 	 */
 	private void handleFirstCharge(int type, IndexGiftNew o, ChargeHolder cHolder) {
 		ViewUtil.showImage(cHolder.ivIcon, o.img);
-		cHolder.tvName.setText(o.name);
+		cHolder.tvName.setText(o.gameName);
 		cHolder.tvPlatform.setText(o.platform);
-		ViewUtil.siteValueUI(cHolder.tvPrice, o.originPrice, true);
 		cHolder.btnSend.setState(type);
 		switch (type) {
 			case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
@@ -244,6 +250,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 				setSeizeTextUI(cHolder.tvSeize, 1);
 				break;
 		}
+		ViewUtil.siteValueUI(cHolder.tvPrice, o.originPrice, true);
 	}
 
 	/**
@@ -275,7 +282,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 		cHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
 		cHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
 		cHolder.tvPlatform = ViewUtil.getViewById(convertView, R.id.tv_platform);
-		cHolder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_content);
+		cHolder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
 		cHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
 		cHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
 		cHolder.tvSeize = ViewUtil.getViewById(convertView, R.id.tv_seize);
@@ -343,6 +350,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 				break;
 			case R.id.btn_send:
 				// 进行预约
+				o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
+				notifyDataChanged();
 				break;
 		}
 	}
@@ -430,7 +439,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 	 * @return
 	 */
 	private static String formatDateTimeHelper(String time) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 		if (TextUtils.isEmpty(time)) {
 			return "";
 		}
@@ -485,9 +495,6 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 		ImageView ivIcon;
 		TextView tvName;
 		TextView tvContent;
-		TextView tvScore;
-		TextView tvOr;
-		TextView tvBean;
 		DeletedTextView tvMoney;
 		TextView tvPercent;
 		ProgressBar pbPercent;

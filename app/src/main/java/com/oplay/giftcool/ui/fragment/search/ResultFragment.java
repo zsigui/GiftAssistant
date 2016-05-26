@@ -11,7 +11,6 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -47,8 +46,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 
 	private static final Spanned TEXT_SEARCH_GAME = Html.fromHtml("搜到的 <font color='#f85454'>游戏</font>");
 	private static final Spanned TEXT_SEARCH_GIFT = Html.fromHtml("搜到的 <font color='#f85454'>礼包</font>");
-	private static final Spanned TEXT_SEARCH_LIKE = Html.fromHtml("猜你喜欢的 <font color='#f85454'>礼包</font>");
-	private RelativeLayout rlContainer;
+	private static final Spanned TEXT_SEARCH_LIKE = Html.fromHtml("搜到的 <font color='#f85454'>首充券</font>");
 	private ScrollView mContainer;
 	private NestedListView mGameView;
 	private NestedListView mGiftView;
@@ -81,7 +79,6 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		if (!AssistantApp.getInstance().isAllowDownload()) {
 			getViewById(R.id.ll_game).setVisibility(View.GONE);
 		}
-		rlContainer = getViewById(R.id.rl_container);
 		mContainer = getViewById(R.id.sv_container);
 		mGameView = getViewById(R.id.lv_game);
 		mGiftView = getViewById(R.id.lv_gift);
@@ -158,16 +155,16 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
 		}
 		mGameAdapter.setData(data.games);
 		mGiftAdapter.setData(data.gifts);
-		mGuessGiftAdapter.setData(data.guessGift);
+		mGuessGiftAdapter.setData(data.firstCharges);
 		if (!AssistantApp.getInstance().isAllowDownload()) {
 			data.games = null;
 		}
 		showDataView(data.games, llGame);
 		showDataView(data.gifts, llGift);
-		showDataView(data.guessGift, llGuessGift);
+		showDataView(data.firstCharges, llGuessGift);
 		mGameAdapter.updateData(data.games);
 		mGiftAdapter.updateData(data.gifts);
-		mGuessGiftAdapter.updateData(data.guessGift);
+		mGuessGiftAdapter.updateData(data.firstCharges);
 		mContainer.smoothScrollTo(0, 0);
 	}
 

@@ -110,15 +110,15 @@ public class GiftButton extends TextView{
 				setRedBg();
 				setEnabled(true);
 				break;
+			case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
+//				setText(R.string.st_gift_reserve_empty);
+//				break;
 			case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
 				setText(R.string.st_gift_reserve);
 				setEnabled(true);
 				break;
 			case GiftTypeUtil.TYPE_CHARGE_EMPTY:
 				setText(R.string.st_gift_finished);
-				break;
-			case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
-				setText(R.string.st_gift_reserve_empty);
 				break;
 			case GiftTypeUtil.TYPE_CHARGE_RESERVED:
 				setText(R.string.st_gift_reserved);

@@ -375,8 +375,10 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 					KLog.d(AppDebugConfig.TAG_WARN, "need to be deleted when not in debug!");
 					mData.like.get(0).hasNew = true;
 					mData.like.get(0).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
-					mData.like.get(3).hasNew = true;
-					mData.like.get(3).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
+					if (mData.like.size() >= 3) {
+						mData.like.get(3).hasNew = true;
+						mData.like.get(3).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
+					}
 				}
 			} else {
 				mData.like = null;

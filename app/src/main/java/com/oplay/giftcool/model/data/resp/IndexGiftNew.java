@@ -24,13 +24,19 @@ public class IndexGiftNew implements Serializable{
     // 游戏图标
     @SerializedName("icon")
 	public String img;
-	// 礼包获取类型 0 未抢 1 抢号 2 淘号
+	/**
+	 * 礼包获取类型 0 未抢 1 已抢 2 已淘 3 未预约 4 已预约待抢
+ 	 */
 	@SerializedName("code_type")
 	public int seizeStatus;
-	// 礼包状态 0 删除， 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束， 6 下架 (0, 6状态不关注)
+	/**
+	 * 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 不可预约 9 预约完
+	 */
 	@SerializedName("status")
 	public int status;
-	// 支付类型 0 未知， 1 金币， 2 偶玩豆， 3 金币或偶玩豆
+	/**
+	 * 支付类型 0 未知， 1 金币， 2 偶玩豆， 3 金币或偶玩豆
+ 	 */
 	@SerializedName("price_type")
 	public int priceType;
     // 抢号需要换取金币
@@ -69,7 +75,9 @@ public class IndexGiftNew implements Serializable{
 	// 礼包码
 	@SerializedName("gift_key")
 	public String code;
-	// 礼包类型 1 普通免费 2 普通 3 限量 4 0元抢
+	/**
+	 * 礼包类型 1 普通免费 2 普通 3 限量 4 0元抢
+ 	 */
 	@SerializedName("plan_type")
 	public int giftType;
 	// 原价
@@ -78,18 +86,22 @@ public class IndexGiftNew implements Serializable{
 	// 剩余开抢时间，单位:s
 	@SerializedName("remain_time")
 	public int remainStartTime;
-	// 专享礼包类型, 1: 礼包酷专享
+	/**
+	 * 专享礼包类型, 1: 礼包酷专享
+ 	 */
 	@SerializedName("exclusive")
 	public int exclusive;
 	// 支持平台
-	@SerializedName("platform")
+	@SerializedName("platform_label")
 	public String platform;
-    // 总分类型，暂时0：礼包 1：首充券
-    @SerializedName("total_type")
+	/**
+	 * 总分类型，0：礼包 1 免费 2 珍贵 3：首充券
+	 */
+    @SerializedName("type")
     public int totalType;
     // 免费开抢时间, 0代表无免费礼包
     @SerializedName("free_start_time")
-    public int freeStartTime;
+    public long freeStartTime;
 	// 首充券预留时间
 	@SerializedName("reserve_deadline")
 	public String reserveDeadline;

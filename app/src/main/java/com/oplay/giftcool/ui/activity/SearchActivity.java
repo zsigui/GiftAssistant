@@ -246,14 +246,10 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
 	private void displayDataUI(SearchDataResult data, String name, int id) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		hideAllFragment(ft, PAGE_CONTENT);
-		KLog.d(AppDebugConfig.TAG_WARN, "result = " + mResultFragment);
 		if (mResultFragment == null) {
 			Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
 			if (f != null) {
 				mResultFragment = (ResultFragment) f;
-				KLog.d(AppDebugConfig.TAG_WARN, "is not null : show Result = " + mResultFragment.isResumed() + ", " +
-						mResultFragment.isVisible()
-						+ ", " + mResultFragment.isAdded() + ", " + mResultFragment.isDetached());
 				ft.show(f);
 			} else {
 				mResultFragment = ResultFragment.newInstance(data);

@@ -25,7 +25,6 @@ import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersListView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,10 +42,7 @@ import retrofit2.Response;
 public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew>> implements
 		OnItemClickListener<IndexGiftNew> {
 
-	private static final String KEY_DATA = "key_limit_data";
-	private static final String KEY_PAGE_SIZE = "key_page_size";
-
-	private int mPageSize = 10;
+	private int mPageSize = 20;
 	private StickyListHeadersListView mDataView;
 	private View mLoadingView;
 
@@ -56,15 +52,6 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 
 	public static GiftLimitListDataFragment newInstance() {
 		return new GiftLimitListDataFragment();
-	}
-
-	public static GiftLimitListDataFragment newInstance(LimitGiftListData<TimeData<IndexGiftNew>> data, int pageSize) {
-		GiftLimitListDataFragment fragment = new GiftLimitListDataFragment();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(KEY_DATA, data);
-		bundle.putInt(KEY_PAGE_SIZE, pageSize);
-		fragment.setArguments(bundle);
-		return fragment;
 	}
 
 	@Override
@@ -86,30 +73,9 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void processLogic(Bundle savedInstanceState) {
-		mAdapter = new LimitGiftListAdapter(getContext());
-		if (getArguments() != null) {
-			Serializable pagesize = getArguments().getSerializable(KEY_PAGE_SIZE);
-			{
-				if (pagesize != null) {
-					mPageSize = (int) pagesize;
-				}
-			}
-			Serializable data = getArguments().getSerializable(KEY_DATA);
-			if (data != null) {
-				LimitGiftListData<TimeData<IndexGiftNew>> timeData = (LimitGiftListData<TimeData<IndexGiftNew>>) data;
-				mData = timeData.data;
-				mAdapter.setData(mData);
-				mHasData = true;
-				mLastPage = 1;
-			}
-		}
+		mAdapter = new LimitGiftListAdapter(getContext(), null);
 		mAdapter.setListener(this);
 		mDataView.setAdapter(mAdapter);
-		if (mData != null) {
-			mNoMoreLoad = mData.size() < mPageSize;
-			mRefreshLayout.setCanShowLoad(mData.size() >= 6);
-			refreshData(mData);
-		}
 		mUpdateGiftRunnable = new UpdateGiftRunnable();
 	}
 
@@ -196,9 +162,8 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 		if (data == null) {
 			return;
 		}
-		mData.addAll(data);
 		mHasData = data.size() >= mPageSize;
-		mAdapter.updateData(mData);
+		mAdapter.addMoreData(data);
 	}
 
 	private void delIndex(ArrayList<TimeData<IndexGiftNew>> data, ArrayList<Integer> waitDelIndexs) {

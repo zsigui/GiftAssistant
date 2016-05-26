@@ -12,9 +12,9 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
-import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -51,7 +51,13 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		itemHolder.tvName.setText(item.name);
 		itemHolder.itemView.setTag(TAG_POS, item.id);
 		itemHolder.itemView.setOnClickListener(this);
-		ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, false);
+		if (GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE == GiftTypeUtil.getItemViewType(item)) {
+			ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, true);
+			itemHolder.vDelete.setVisibility(View.VISIBLE);
+		} else {
+			ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, false);
+			itemHolder.vDelete.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -80,7 +86,8 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 		ImageView ivIcon;
 		TextView tvGameName;
 		TextView tvName;
-		DeletedTextView tvPrice;
+		TextView tvPrice;
+		View vDelete;
 
 		public ItemHolder(View itemView) {
 			super(itemView);
@@ -88,6 +95,7 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
 			tvGameName = getViewById(R.id.tv_game_name);
 			tvPrice = getViewById(R.id.tv_price);
 			ivIcon = getViewById(R.id.iv_icon);
+			vDelete = getViewById(R.id.v_delete);
 		}
 	}
 }

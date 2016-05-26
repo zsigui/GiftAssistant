@@ -1,29 +1,31 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.util.ArrayMap;
-import android.text.Html;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeData;
+import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -31,6 +33,7 @@ import net.ouwan.umipay.android.debug.Debug_Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,31 +42,29 @@ import java.util.Locale;
 /**
  * Created by mink on 16-03-04.
  */
-public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener,
+public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> implements View.OnClickListener, OnFinishListener,
 		StickyListHeadersAdapter {
 
-	private static final int TAG_POS = 0xFF331234;
+	final int COLOR_GREY;
+	final ImageSpan DRAWER_GOLD;
+	final ImageSpan DRAWER_BEAN;
+	final int W_DIVIDER;
 
-	private List<TimeData<IndexGiftNew>> mData;
-	private Context mContext;
 	private OnItemClickListener<IndexGiftNew> mListener;
-	private ArrayMap<String, String> calendar;
+	private ArrayMap<String, String> mCalendar;
 
-
-	public LimitGiftListAdapter(Context context) {
-		this(context, null);
+	public LimitGiftListAdapter(Context context, List<TimeData<IndexGiftNew>> objects) {
+		super(context, objects);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			COLOR_GREY = context.getColor(R.color.co_common_text_second);
+		} else {
+			COLOR_GREY = context.getResources().getColor(R.color.co_common_text_second);
+		}
+		W_DIVIDER = context.getResources().getDimensionPixelSize(R.dimen.di_divider_height);
+		DRAWER_GOLD = new ImageSpan(context, R.drawable.ic_score);
+		DRAWER_BEAN = new ImageSpan(context, R.drawable.ic_bean);
 	}
 
-	public LimitGiftListAdapter(Context context, List<TimeData<IndexGiftNew>> data) {
-		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext()
-				: context.getApplicationContext());
-		this.mData = data;
-	}
-
-	public void updateData(List<TimeData<IndexGiftNew>> data) {
-		this.mData = data;
-		notifyDataSetChanged();
-	}
 
 	public OnItemClickListener<IndexGiftNew> getListener() {
 		return mListener;
@@ -71,27 +72,6 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 
 	public void setListener(OnItemClickListener<IndexGiftNew> listener) {
 		mListener = listener;
-	}
-
-
-	public List<TimeData<IndexGiftNew>> getData() {
-		return mData;
-	}
-
-
-	public void setData(List<TimeData<IndexGiftNew>> data) {
-		this.mData = data;
-	}
-
-
-	@Override
-	public int getCount() {
-		return mData == null ? 0 : mData.size();
-	}
-
-	@Override
-	public Object getItem(int position) {
-		return getCount() == 0 ? null : mData.get(position);
 	}
 
 	@Override
@@ -119,150 +99,91 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 			return null;
 		}
 
-		ViewHolder viewHolder;
 		int type = getItemViewType(position);
 
-		// inflate 页面，设置 holder
+		IndexGiftNew o = getItem(position).data;
+
+		ViewHolder holder;
 		if (convertView == null) {
-			viewHolder = new ViewHolder();
-			convertView = inflateView(parent, viewHolder);
+			holder = new ViewHolder();
+			convertView = inflateView(parent, holder);
 		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
-
-
-		final IndexGiftNew gift = mData.get(position).data;
-		setData(position, convertView, viewHolder, type, gift);
-
+		convertView.setTag(TAG_POSITION, position);
+		convertView.setOnClickListener(this);
+		holder.btnSend.setTag(TAG_POSITION, position);
+		holder.btnSend.setOnClickListener(this);
+		handleGiftLimit(type, o, holder);
 		return convertView;
 	}
 
 	/**
-	 * 设置列表数据
+	 * 处理免费礼包样式设置逻辑
 	 */
-	private void setData(int position, View convertView, ViewHolder viewHolder, int type, IndexGiftNew gift) {
-		setCommonField(viewHolder, gift);
-		viewHolder.btnSend.setTag(TAG_POS, position);
-		convertView.setTag(TAG_POS, position);
-		viewHolder.btnSend.setState(type);
-		viewHolder.btnSend.setOnClickListener(this);
-		convertView.setOnClickListener(this);
-		// 设置数据和按键状态
+	private void handleGiftLimit(int type, IndexGiftNew o, ViewHolder holder) {
+		ViewUtil.showImage(holder.ivIcon, o.img);
+		holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
+		SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
+		final int startPos = String.valueOf(o.score).length() + 10;
+		ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+		ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, false);
+		holder.btnSend.setState(type);
 		switch (type) {
-			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-				viewHolder.llMoney.setVisibility(View.VISIBLE);
-				viewHolder.tvCount.setVisibility(View.GONE);
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				setPercentState(viewHolder, type, gift);
-				setMoneyState(viewHolder, gift);
-				break;
-			default:
-				switch (type) {
-					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-										.seizeTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-										.seizeTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
-										.searchTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-					case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
-										.searchCount)));
-						break;
+				if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime) {
+					// 限量抢状态,表示当前不处于免费抢
+					holder.tvSeizeHint.setVisibility(View.VISIBLE);
+					holder.tvSeizeHint.setText(String.format("%s免费抢",
+							DateUtil.formatUserReadDate(o.freeStartTime)));
+				} else {
+					// 无免费
+					holder.tvSeizeHint.setVisibility(View.GONE);
 				}
-
+				setProgressBarData(o, holder);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
+				holder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
+				holder.tvSeizeHint.setVisibility(View.VISIBLE);
+				holder.tvSeizeHint.setText("正在免费抢");
+				setProgressBarData(o, holder);
+				break;
+			case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
+			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+			case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+			case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+				holder.pbPercent.setVisibility(View.GONE);
+				holder.tvPercent.setVisibility(View.GONE);
+				holder.tvSeizeHint.setVisibility(View.GONE);
+				break;
 		}
+		holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
 	}
 
-	/**
-	 * 设置消耗额度状态
-	 */
-	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
-		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-			// 只用积分
-			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			viewHolder.tvScore.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.GONE);
-			viewHolder.tvBean.setVisibility(View.GONE);
-		} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
-			// 只用偶玩豆
-			viewHolder.tvBean.setText(String.valueOf(gift.bean));
-			viewHolder.tvBean.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.GONE);
-			viewHolder.tvScore.setVisibility(View.GONE);
-		} else {
-			// 积分 或 偶玩豆
-			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			viewHolder.tvBean.setText(String.valueOf(gift.bean));
-			viewHolder.tvScore.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.VISIBLE);
-			viewHolder.tvBean.setVisibility(View.VISIBLE);
-		}
+	private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {
+		gHolder.tvPercent.setVisibility(View.VISIBLE);
+		gHolder.pbPercent.setVisibility(View.VISIBLE);
+		final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+		gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+		gHolder.pbPercent.setProgress(percent);
+		gHolder.pbPercent.setMax(100);
 	}
 
-	/**
-	 * 设置显示百分比的显示状态
-	 */
-	private void setPercentState(ViewHolder viewHolder, int type, IndexGiftNew gift) {
-		viewHolder.tvPercent.setVisibility(View.GONE);
-		viewHolder.pbPercent.setVisibility(View.GONE);
-		switch (type) {
-			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-				viewHolder.tvPercent.setVisibility(View.VISIBLE);
-				viewHolder.pbPercent.setVisibility(View.VISIBLE);
-				int percent = gift.remainCount * 100 / gift.totalCount;
-				viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
-				viewHolder.pbPercent.setProgress(percent);
-
-		}
+	@Override
+	public void updateData(List<TimeData<IndexGiftNew>> data) {
+		mData = data;
+		notifyDataSetChanged();
 	}
 
-	/**
-	 * 设置几个类型下的通用配置
-	 */
-	private void setCommonField(final ViewHolder itemHolder, final IndexGiftNew gift) {
-		ViewUtil.showImage(itemHolder.ivIcon, gift.img);
-		itemHolder.tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
-//		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-//			itemHolder.ivLimit.setVisibility(View.VISIBLE);
-//		} else {
-//			itemHolder.ivLimit.setVisibility(View.GONE);
-//		}
-		if (gift.exclusive == 1) {
-			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
-		} else {
-			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+	public void addMoreData(ArrayList<TimeData<IndexGiftNew>> data) {
+		if (data == null || mData == null) {
+			return;
 		}
-		itemHolder.tvContent.setText(String.format("%s", gift.content));
-	}
-
-	/**
-	 * 设置等待等几个项的显示状态
-	 */
-	public void setDisabledField(ViewHolder itemHolder, int tvVisibility, Spanned tvText) {
-		itemHolder.llMoney.setVisibility(View.GONE);
-		itemHolder.pbPercent.setVisibility(View.GONE);
-		itemHolder.tvPercent.setVisibility(View.GONE);
-		itemHolder.tvCount.setVisibility(tvVisibility);
-		itemHolder.tvCount.setText(tvText);
+		mData.addAll(data);
+		notifyDataSetChanged();
 	}
 
 	/**
@@ -273,17 +194,13 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		convertView = inflater.inflate(R.layout.item_index_gift_limit_list, parent, false);
 		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-//		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
 		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
-		viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+		viewHolder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
 		viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-		viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
-		viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
-		viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
-		viewHolder.llMoney = ViewUtil.getViewById(convertView, R.id.ll_money);
-		viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
 		viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
 		viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
+		viewHolder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_money);
+		viewHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
 		convertView.setTag(viewHolder);
 		return convertView;
 	}
@@ -291,8 +208,8 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	@Override
 	public void onClick(View v) {
 		try {
-			if (v.getTag(TAG_POS) != null) {
-				Integer pos = (Integer) v.getTag(TAG_POS);
+			if (v.getTag(TAG_POSITION) != null) {
+				Integer pos = (Integer) v.getTag(TAG_POSITION);
 				if (mData != null && pos < mData.size()) {
 					IndexGiftNew gift = mData.get(pos).data;
 					if (mListener != null) {
@@ -315,9 +232,9 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 			mData.clear();
 			mData = null;
 		}
-		if (calendar != null) {
-			calendar.clear();
-			calendar = null;
+		if (mCalendar != null) {
+			mCalendar.clear();
+			mCalendar = null;
 		}
 	}
 
@@ -359,17 +276,13 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	 */
 	static class ViewHolder {
 		ImageView ivIcon;
-//		ImageView ivLimit;
 		TextView tvName;
-		TextView tvContent;
+		TextView tvPrice;
 		GiftButton btnSend;
-		TextView tvScore;
-		TextView tvOr;
-		TextView tvBean;
-		TextView tvCount;
+		DeletedTextView tvMoney;
 		TextView tvPercent;
-		LinearLayout llMoney;
 		ProgressBar pbPercent;
+		TextView tvSeizeHint;
 	}
 
 	private static class HeaderViewHolder {
@@ -415,13 +328,13 @@ public class LimitGiftListAdapter extends BaseAdapter implements View.OnClickLis
 	public String formatDateTime(String time) {
 		String date = "";
 		try {
-			if (calendar == null) {
-				calendar = new ArrayMap<String, String>();
+			if (mCalendar == null) {
+				mCalendar = new ArrayMap<String, String>();
 			}
-			date = calendar.get(time);
+			date = mCalendar.get(time);
 			if (date == null) {
 				date = formatDateTimeHelper(time);
-				calendar.put(time, date);
+				mCalendar.put(time, date);
 			}
 		} catch (Throwable e) {
 			Debug_Log.e(e);

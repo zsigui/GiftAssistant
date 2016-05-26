@@ -59,15 +59,15 @@ public class GiftTypeUtil {
 
 	public static final int TYPE_ERROR = 233;
 
-	// 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 可预约 , 7 不可预约 8 预约完
+	// 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 不可预约 9 预约完
 	public static final int STATUS_WAIT_SEIZE = 1;
 	public static final int STATUS_SEIZE = 2;
 	public static final int STATUS_WAIT_SEARCH = 3;
 	public static final int STATUS_SEARCH = 4;
 	public static final int STATUS_FINISHED = 5;
-	public static final int STATUS_RESERVE = 6;
-    public static final int STATUS_DISABLED_RESERVE = 7;
-	public static final int STATUS_RESERVE_FINISHED = 8;
+	public static final int STATUS_RESERVE = 7;
+    public static final int STATUS_DISABLED_RESERVE = 8;
+	public static final int STATUS_RESERVE_FINISHED = 9;
 	// 1 金币， 2 偶玩豆， 3 金币或偶玩豆
 	public static final int PAY_TYPE_NONE = 0;
 	public static final int PAY_TYPE_SCORE = 1;
@@ -84,9 +84,11 @@ public class GiftTypeUtil {
 	public static final int GIFT_TYPE_NORMAL = 2;
 	public static final int GIFT_TYPE_LIMIT = 3;
 	public static final int GIFT_TYPE_LIMIT_FREE = 4;
-    // 总类型值 0 礼包 1 首充券
-    public static final int TOTAL_TYPE_GIFT = 0;
-    public static final int TOTAL_TYPE_FIRST_CHARGE = 1;
+    // 总类型值 0：未知(默认礼包) 1 免费 2 珍贵 3：首充券
+    public static final int TOTAL_TYPE_UNKNOWN = 0;
+    public static final int TOTAL_TYPE_GIFT = 1;
+    public static final int TOTAL_TYPE_GIFT_LIMIT = 2;
+    public static final int TOTAL_TYPE_FIRST_CHARGE = 3;
 
     /**
      * 只针对无免费抢的新鲜出炉类型判断
@@ -103,7 +105,9 @@ public class GiftTypeUtil {
                 return handleLimitType(gift);
             case GIFT_TYPE_LIMIT_FREE:
                 switch (gift.totalType) {
+                    case TOTAL_TYPE_UNKNOWN:
                     case TOTAL_TYPE_GIFT:
+                    case TOTAL_TYPE_GIFT_LIMIT:
                         return handleFreeLimitGift(gift);
                     case TOTAL_TYPE_FIRST_CHARGE:
                         return handleFreeFirstCharge(gift);

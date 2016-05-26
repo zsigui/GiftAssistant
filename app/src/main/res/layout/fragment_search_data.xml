@@ -33,48 +33,17 @@
 
 				</RelativeLayout >
 
-				<View
-						android:layout_width = "match_parent"
-						android:layout_height = "1dp"
-						android:background = "@color/co_divider_bg" />
+				<View style="@style/HDividerView" />
 
 				<com.oplay.giftcool.ui.widget.NestedListView
 						android:id = "@+id/lv_game"
 						style = "@style/DefaultListView" />
 			</LinearLayout >
 
-			<!-- 搜到的礼包 -->
-			<LinearLayout
-					android:id = "@+id/ll_gift"
-					style = "@style/IndexModuleLayout"
-					android:layout_below = "@+id/ll_game"
-					android:background = "@color/co_transparent"
-					android:layout_marginTop = "7dp" >
-
-				<RelativeLayout
-						android:id = "@+id/rl_gift"
-						style = "@style/IndexModuleTitleLayout" >
-
-					<TextView
-							android:id = "@+id/tv_gift_title"
-							style = "@style/DefaultTextView.Header" />
-
-				</RelativeLayout >
-
-				<View
-						android:layout_width = "match_parent"
-						android:layout_height = "1dp"
-						android:background = "@color/co_divider_bg" />
-
-				<com.oplay.giftcool.ui.widget.NestedListView
-						android:id = "@+id/lv_gift"
-						style = "@style/DefaultListView" />
-			</LinearLayout >
-
-			<!-- 猜你喜欢 -->
+			<!-- 首充券 -->
 			<LinearLayout
 					android:id = "@+id/ll_item"
-					android:layout_below = "@id/ll_gift"
+					android:layout_below = "@id/ll_game"
 					style = "@style/IndexModuleLayout"
 					android:layout_marginTop = "7dp" >
 
@@ -88,16 +57,36 @@
 
 				</RelativeLayout >
 
-				<View
-						android:layout_width = "match_parent"
-						android:layout_height = "1dp"
-						android:background = "@color/co_divider_bg" />
+				<View style="@style/HDividerView" />
 
 				<com.oplay.giftcool.ui.widget.NestedListView
 						android:id = "@+id/lv_like"
 						style = "@style/DefaultListView" />
 			</LinearLayout >
 
+			<!-- 搜到的礼包 -->
+			<LinearLayout
+					android:id = "@+id/ll_gift"
+					style = "@style/IndexModuleLayout"
+					android:layout_below = "@+id/ll_item"
+					android:layout_marginTop = "7dp" >
+
+				<RelativeLayout
+						android:id = "@+id/rl_gift"
+						style = "@style/IndexModuleTitleLayout" >
+
+					<TextView
+							android:id = "@+id/tv_gift_title"
+							style = "@style/DefaultTextView.Header" />
+
+				</RelativeLayout >
+
+				<View style="@style/HDividerView" />
+
+				<com.oplay.giftcool.ui.widget.NestedListView
+						android:id = "@+id/lv_gift"
+						style = "@style/DefaultListView" />
+			</LinearLayout >
 
 		</RelativeLayout >
 	</ScrollView >

@@ -1,25 +1,29 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
-import android.text.Html;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
@@ -28,292 +32,362 @@ import java.util.List;
 /**
  * Created by zsigui on 15-12-24.
  */
-public class NestedGiftListAdapter extends BaseAdapter implements View.OnClickListener, OnFinishListener {
+public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener,
+        OnFinishListener {
 
-	private static final int TAG_POS = 0xFF331234;
+    final int COLOR_GREY;
+    final int COLOR_RED;
+    final ImageSpan DRAWER_GOLD;
+    final ImageSpan DRAWER_BEAN;
+    final int W_DIVIDER;
 
-	private List<IndexGiftNew> mData;
-	private Context mContext;
-	private OnItemClickListener<IndexGiftNew> mListener;
-
-
-	public NestedGiftListAdapter(Context context) {
-		this(context, null);
-	}
-
-	public NestedGiftListAdapter(Context context, List<IndexGiftNew> data) {
-		mContext = (context == null ? AssistantApp.getInstance().getApplicationContext()
-				: context.getApplicationContext());
-		this.mData = data;
-	}
-
-	public void updateData(List<IndexGiftNew> data) {
-		this.mData = data;
-		notifyDataSetChanged();
-	}
-
-	public OnItemClickListener<IndexGiftNew> getListener() {
-		return mListener;
-	}
-
-	public void setListener(OnItemClickListener<IndexGiftNew> listener) {
-		mListener = listener;
-	}
-
-	public List<IndexGiftNew> getData() {
-		return mData;
-	}
-
-	public void setData(List<IndexGiftNew> data) {
-		mData = data;
-	}
-
-	@Override
-	public int getCount() {
-		return mData == null ? 0 : mData.size();
-	}
-
-	@Override
-	public Object getItem(int position) {
-		return getCount() == 0 ? null : mData.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return getItem(position).hashCode();
-	}
-
-	@Override
-	public int getViewTypeCount() {
-		return GiftTypeUtil.TYPE_COUNT;
-	}
-
-	/**
-	 * 获取ListItem类型<br/>
-	 * 注意: 返回的 int 需要范围为 0 ~ getViewTypeCount() - 1, 否则会出现ArrayIndexOutOfBoundsException
-	 */
-	@Override
-	public int getItemViewType(int position) {
-		return GiftTypeUtil.getItemViewType(mData.get(position));
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (getCount() == 0) {
-			return null;
-		}
-
-		ViewHolder viewHolder;
-		int type = getItemViewType(position);
-
-		// inflate 页面，设置 holder
-		if (convertView == null) {
-			viewHolder = new ViewHolder();
-			convertView = inflateView(parent, viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
+    private OnItemClickListener<IndexGiftNew> mListener;
 
 
-		final IndexGiftNew gift = mData.get(position);
+    public NestedGiftListAdapter(Context context) {
+        this(context, null);
+    }
 
-		setData(position, convertView, viewHolder, type, gift);
+    public NestedGiftListAdapter(Context context, List<IndexGiftNew> objects) {
+        super(context, objects);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            COLOR_GREY = context.getColor(R.color.co_common_text_second);
+            COLOR_RED = context.getColor(R.color.co_common_app_main_bg);
+        } else {
+            COLOR_GREY = context.getResources().getColor(R.color.co_common_text_second);
+            COLOR_RED = context.getResources().getColor(R.color.co_common_app_main_bg);
+        }
+        W_DIVIDER = context.getResources().getDimensionPixelSize(R.dimen.di_divider_height);
+        DRAWER_GOLD = new ImageSpan(context, R.drawable.ic_score);
+        DRAWER_BEAN = new ImageSpan(context, R.drawable.ic_bean);
+    }
 
-		return convertView;
-	}
+    public void updateData(List<IndexGiftNew> data) {
+        this.mData = data;
+        notifyDataSetChanged();
+    }
 
-	/**
-	 * 设置列表数据
-	 */
-	private void setData(int position, View convertView, ViewHolder viewHolder, int type, IndexGiftNew gift) {
-		setCommonField(viewHolder, gift);
-		viewHolder.btnSend.setTag(TAG_POS, position);
-		convertView.setTag(TAG_POS, position);
-		viewHolder.btnSend.setState(type);
-		viewHolder.btnSend.setOnClickListener(this);
-		convertView.setOnClickListener(this);
-		// 设置数据和按键状态
-		switch (type) {
-			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-			case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-			case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-			case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-			case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-			case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-				viewHolder.llMoney.setVisibility(View.VISIBLE);
-				viewHolder.tvCount.setVisibility(View.GONE);
-				viewHolder.tvScore.setText(String.valueOf(gift.score));
-				setPercentState(viewHolder, type, gift);
-				setMoneyState(viewHolder, gift);
-				break;
-			default:
-				switch (type) {
-					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-										.seizeTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>", gift
-										.seizeTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>", gift
-										.searchTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-					case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-						setDisabledField(viewHolder, View.VISIBLE,
-								Html.fromHtml(String.format("已淘号：<font color='#ffaa17'>%d</font>次", gift
-										.searchCount)));
-						break;
-				}
+    public OnItemClickListener<IndexGiftNew> getListener() {
+        return mListener;
+    }
 
-		}
-	}
+    public void setListener(OnItemClickListener<IndexGiftNew> listener) {
+        mListener = listener;
+    }
 
-	/**
-	 * 设置消耗额度状态
-	 */
-	private void setMoneyState(ViewHolder viewHolder, IndexGiftNew gift) {
-		if (gift.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-				&& gift.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-			// 只用积分
-			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			viewHolder.tvScore.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.GONE);
-			viewHolder.tvBean.setVisibility(View.GONE);
-		} else if (gift.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
-			// 只用偶玩豆
-			viewHolder.tvBean.setText(String.valueOf(gift.bean));
-			viewHolder.tvBean.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.GONE);
-			viewHolder.tvScore.setVisibility(View.GONE);
-		} else {
-			// 积分 或 偶玩豆
-			viewHolder.tvScore.setText(String.valueOf(gift.score));
-			viewHolder.tvBean.setText(String.valueOf(gift.bean));
-			viewHolder.tvScore.setVisibility(View.VISIBLE);
-			viewHolder.tvOr.setVisibility(View.VISIBLE);
-			viewHolder.tvBean.setVisibility(View.VISIBLE);
-		}
-	}
+    public List<IndexGiftNew> getData() {
+        return mData;
+    }
 
-	/**
-	 * 设置显示百分比的显示状态
-	 */
-	private void setPercentState(ViewHolder viewHolder, int type, IndexGiftNew gift) {
-		viewHolder.tvPercent.setVisibility(View.GONE);
-		viewHolder.pbPercent.setVisibility(View.GONE);
-		switch (type) {
-			case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-				viewHolder.tvPercent.setVisibility(View.VISIBLE);
-				viewHolder.pbPercent.setVisibility(View.VISIBLE);
-				int percent = gift.remainCount * 100 / gift.totalCount;
-				viewHolder.tvPercent.setText(String.format("剩%d%%", percent));
-				viewHolder.pbPercent.setProgress(percent);
+    public void setData(List<IndexGiftNew> data) {
+        mData = data;
+    }
 
-		}
-	}
+    @Override
+    public int getViewTypeCount() {
+        return GiftTypeUtil.TYPE_COUNT;
+    }
 
-	/**
-	 * 设置几个类型下的通用配置
-	 */
-	private void setCommonField(final ViewHolder itemHolder, final IndexGiftNew gift) {
-		ViewUtil.showImage(itemHolder.ivIcon, gift.img);
-		itemHolder.tvName.setText(String.format("[%s]%s", gift.gameName, gift.name));
-		if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-			itemHolder.ivLimit.setVisibility(View.VISIBLE);
-		} else {
-			itemHolder.ivLimit.setVisibility(View.GONE);
-		}
-		if (gift.exclusive == 1) {
-			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
-		} else {
-			itemHolder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		}
-		itemHolder.tvContent.setText(String.format("%s", gift.content));
-	}
+    /**
+     * 获取ListItem类型<br/>
+     * 注意: 返回的 int 需要范围为 0 ~ getViewTypeCount() - 1, 否则会出现ArrayIndexOutOfBoundsException
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return GiftTypeUtil.getItemViewType(mData.get(position));
+    }
 
-	/**
-	 * 设置等待等几个项的显示状态
-	 */
-	public void setDisabledField(ViewHolder itemHolder, int tvVisibility, Spanned tvText) {
-		itemHolder.llMoney.setVisibility(View.GONE);
-		itemHolder.pbPercent.setVisibility(View.GONE);
-		itemHolder.tvPercent.setVisibility(View.GONE);
-		itemHolder.tvCount.setVisibility(tvVisibility);
-		itemHolder.tvCount.setText(tvText);
-	}
 
-	/**
-	 * 根据XML填充convertView
-	 */
-	private View inflateView(ViewGroup parent, ViewHolder viewHolder) {
-		View convertView;
-		LayoutInflater inflater = LayoutInflater.from(mContext);
-		convertView = inflater.inflate(R.layout.item_index_gift_new_list, parent, false);
-		viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-		viewHolder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
-		viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
-		viewHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
-		viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
-		viewHolder.tvScore = ViewUtil.getViewById(convertView, R.id.tv_score);
-		viewHolder.tvOr = ViewUtil.getViewById(convertView, R.id.tv_or);
-		viewHolder.tvBean = ViewUtil.getViewById(convertView, R.id.tv_bean);
-		viewHolder.llMoney = ViewUtil.getViewById(convertView, R.id.ll_money);
-		viewHolder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
-		viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
-		viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-		convertView.setTag(viewHolder);
-		return convertView;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (getCount() == 0) {
+            return null;
+        }
 
-	@Override
-	public void onClick(View v) {
-		try {
-			if (v.getTag(TAG_POS) != null) {
-				Integer pos = (Integer) v.getTag(TAG_POS);
-				if (mData != null && pos < mData.size()) {
-					IndexGiftNew gift = mData.get(pos);
-					if (mListener != null) {
-						mListener.onItemClick(gift, v, pos);
-					}
-				}
-			}
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_ADAPTER, e);
-			}
-		}
-	}
+        int type = getItemViewType(position);
 
-	@Override
-	public void release() {
-		mContext = null;
-		mListener = null;
-		mData = null;
-	}
+        IndexGiftNew o = getItem(position);
 
-	/**
-	 * ViewHolder缓存，由于大体结构相似，统一一个ViewHolder类型
-	 */
-	static class ViewHolder {
-		ImageView ivIcon;
-		ImageView ivLimit;
-		TextView tvName;
-		TextView tvContent;
-		GiftButton btnSend;
-		TextView tvScore;
-		TextView tvOr;
-		TextView tvBean;
-		TextView tvCount;
-		TextView tvPercent;
-		LinearLayout llMoney;
-		ProgressBar pbPercent;
-	}
+        switch (type) {
+            case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
+            case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
+            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+            case GiftTypeUtil.TYPE_CHARGE_RESERVED:
+            case GiftTypeUtil.TYPE_CHARGE_TAKE:
+            case GiftTypeUtil.TYPE_CHARGE_SEIZED:
+            case GiftTypeUtil.TYPE_CHARGE_EMPTY:
+            case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
+                ChargeHolder cHolder;
+                if (convertView == null) {
+                    cHolder = new ChargeHolder();
+                    convertView = inflateChargeHolder(parent, cHolder);
+                } else {
+                    cHolder = (ChargeHolder) convertView.getTag();
+                }
+                convertView.setTag(TAG_POSITION, position);
+                convertView.setOnClickListener(this);
+                cHolder.btnSend.setTag(TAG_POSITION, position);
+                cHolder.btnSend.setOnClickListener(this);
+                handleFirstCharge(type, o, cHolder);
+                break;
+            // 首充券一类结束
+            default:
+                ViewHolder gHolder;
+                if (convertView == null) {
+                    gHolder = new ViewHolder();
+                    convertView = inflateGiftHolder(parent, gHolder);
+                } else {
+                    gHolder = (ViewHolder) convertView.getTag();
+                }
+                convertView.setTag(TAG_POSITION, position);
+                convertView.setOnClickListener(this);
+                handleGift(type, o, gHolder);
+                break;
+        }
+
+        return convertView;
+    }
+
+    /**
+     * 处理免费礼包样式设置逻辑
+     */
+    private void handleGift(int type, IndexGiftNew o, ViewHolder holder) {
+        ViewUtil.showImage(holder.ivIcon, o.img);
+        holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
+        SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
+        final int startPos = String.valueOf(o.score).length() + 10;
+        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        holder.tvPrice.setText(o.content);
+        holder.btnSend.setState(type);
+        switch (type) {
+            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime) {
+                    // 限量抢状态,表示当前不处于免费抢
+                    holder.tvSeizeHint.setVisibility(View.VISIBLE);
+                    holder.tvSeizeHint.setText(String.format("%s免费抢",
+                            DateUtil.formatUserReadDate(o.freeStartTime)));
+                } else {
+                    // 无免费
+                    holder.tvSeizeHint.setVisibility(View.GONE);
+                }
+                setProgressBarData(o, holder);
+                break;
+            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
+                holder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
+                holder.tvSeizeHint.setVisibility(View.VISIBLE);
+                holder.tvSeizeHint.setText("正在免费抢");
+                setProgressBarData(o, holder);
+                break;
+            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
+            case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+            case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+            case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+                holder.pbPercent.setVisibility(View.GONE);
+                holder.tvPercent.setVisibility(View.GONE);
+                holder.tvSeizeHint.setVisibility(View.GONE);
+                break;
+        }
+        holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
+    }
+
+    private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {
+        gHolder.tvPercent.setVisibility(View.VISIBLE);
+        gHolder.pbPercent.setVisibility(View.VISIBLE);
+        final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+        gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+        gHolder.pbPercent.setProgress(percent);
+        gHolder.pbPercent.setMax(100);
+    }
+
+    /**
+     * 处理首充券样式设置逻辑
+     */
+    private void handleFirstCharge(int type, IndexGiftNew o, ChargeHolder cHolder) {
+        ViewUtil.showImage(cHolder.ivIcon, o.img);
+        cHolder.tvName.setText(o.gameName);
+        cHolder.tvPlatform.setText(o.platform);
+        cHolder.btnSend.setState(type);
+        switch (type) {
+            case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
+            case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
+            case GiftTypeUtil.TYPE_CHARGE_RESERVED:
+            case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
+                cHolder.tvSeizeHint.setText(String.format("%s免费抢",
+                        DateUtil.formatUserReadDate(o.freeStartTime)));
+                cHolder.tvSeizeHint.setVisibility(View.VISIBLE);
+                cHolder.btnSend.setVisibility(View.VISIBLE);
+                cHolder.tvSeize.setVisibility(View.GONE);
+                cHolder.pbPercent.setVisibility(View.GONE);
+                cHolder.tvPercent.setVisibility(View.GONE);
+                cHolder.tvReserveDeadline.setVisibility(View.GONE);
+                break;
+            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+                cHolder.tvSeizeHint.setVisibility(View.GONE);
+                cHolder.btnSend.setVisibility(View.GONE);
+                cHolder.tvReserveDeadline.setVisibility(View.GONE);
+                cHolder.pbPercent.setVisibility(View.VISIBLE);
+                cHolder.tvPercent.setVisibility(View.VISIBLE);
+                setSeizeTextUI(cHolder.tvSeize, 0);
+                final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+                cHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+                cHolder.pbPercent.setProgress(percent);
+                cHolder.pbPercent.setMax(100);
+                break;
+            case GiftTypeUtil.TYPE_CHARGE_TAKE:
+                cHolder.tvSeizeHint.setVisibility(View.GONE);
+                cHolder.btnSend.setVisibility(View.GONE);
+                cHolder.pbPercent.setVisibility(View.GONE);
+                cHolder.tvPercent.setVisibility(View.GONE);
+                cHolder.tvSeize.setVisibility(View.VISIBLE);
+                setSeizeTextUI(cHolder.tvSeize, 0);
+                cHolder.tvReserveDeadline.setVisibility(View.VISIBLE);
+                cHolder.tvReserveDeadline.setText(
+                        String.format("已预留一张首充券到%s", o.reserveDeadline));
+                break;
+            case GiftTypeUtil.TYPE_CHARGE_SEIZED:
+                cHolder.tvSeizeHint.setVisibility(View.GONE);
+                cHolder.btnSend.setVisibility(View.GONE);
+                cHolder.pbPercent.setVisibility(View.GONE);
+                cHolder.tvPercent.setVisibility(View.GONE);
+                cHolder.tvReserveDeadline.setVisibility(View.GONE);
+                cHolder.tvSeize.setVisibility(View.VISIBLE);
+                setSeizeTextUI(cHolder.tvSeize, 2);
+                break;
+            case GiftTypeUtil.TYPE_CHARGE_EMPTY:
+                cHolder.tvSeizeHint.setVisibility(View.GONE);
+                cHolder.btnSend.setVisibility(View.GONE);
+                cHolder.pbPercent.setVisibility(View.GONE);
+                cHolder.tvPercent.setVisibility(View.GONE);
+                cHolder.tvReserveDeadline.setVisibility(View.GONE);
+                cHolder.tvSeize.setVisibility(View.VISIBLE);
+                setSeizeTextUI(cHolder.tvSeize, 1);
+                break;
+        }
+        ViewUtil.siteValueUI(cHolder.tvPrice, o.originPrice, true);
+    }
+
+    /**
+     * 根据XML填充ConvertView并设置礼包Holder内容
+     */
+    @NonNull
+    private View inflateGiftHolder(ViewGroup parent, ViewHolder viewHolder) {
+        View convertView;
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        convertView = inflater.inflate(R.layout.item_list_gift_with_free, parent, false);
+        viewHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+        viewHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+        viewHolder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
+        viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
+        viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
+        viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
+        viewHolder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_money);
+        viewHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
+        convertView.setTag(viewHolder);
+        return convertView;
+    }
+
+    /**
+     * 根据XML填充ConvertView并设置首充券Holder内容
+     */
+    @NonNull
+    private View inflateChargeHolder(ViewGroup parent, ChargeHolder cHolder) {
+        View convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_first_charge_with_free,
+                parent, false);
+        cHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+        cHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+        cHolder.tvPlatform = ViewUtil.getViewById(convertView, R.id.tv_platform);
+        cHolder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
+        cHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
+        cHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
+        cHolder.tvSeize = ViewUtil.getViewById(convertView, R.id.tv_seize);
+        cHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
+        cHolder.tvReserveDeadline = ViewUtil.getViewById(convertView, R.id.tv_reserve_deadline);
+        cHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
+        convertView.setTag(cHolder);
+        return convertView;
+    }
+
+    /**
+     * 设置抢号Text的样式
+     *
+     * @param tv
+     * @param state 0 正在疯抢 1 已抢完 2 已抢号 3 免费已抢完 4 灰色不填
+     */
+    private void setSeizeTextUI(TextView tv, int state) {
+        tv.setVisibility(View.VISIBLE);
+        if (state == 0) {
+            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_red_right, 0);
+            tv.setTextColor(COLOR_RED);
+            tv.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+            tv.setText("正在疯抢");
+        } else {
+            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            tv.setTextColor(COLOR_GREY);
+            tv.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
+            switch (state) {
+                case 1:
+                    tv.setText("已抢完");
+                    break;
+                case 2:
+                    tv.setText("已抢号");
+                    break;
+                case 3:
+                    tv.setText("免费已抢完");
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        try {
+            if (v.getTag(TAG_POSITION) != null) {
+                Integer pos = (Integer) v.getTag(TAG_POSITION);
+                if (mData != null && pos < mData.size()) {
+                    IndexGiftNew gift = mData.get(pos);
+                    if (mListener != null) {
+                        mListener.onItemClick(gift, v, pos);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.d(AppDebugConfig.TAG_ADAPTER, e);
+            }
+        }
+    }
+
+    @Override
+    public void release() {
+        mContext = null;
+        mListener = null;
+        mData = null;
+    }
+
+    private static class ViewHolder {
+        ImageView ivIcon;
+        TextView tvName;
+        TextView tvPrice;
+        GiftButton btnSend;
+        DeletedTextView tvMoney;
+        TextView tvPercent;
+        ProgressBar pbPercent;
+        TextView tvSeizeHint;
+    }
+
+    private static class ChargeHolder {
+        ImageView ivIcon;
+        TextView tvName;
+        DeletedTextView tvPrice;
+        TextView tvPlatform;
+        GiftButton btnSend;
+        TextView tvSeize;
+        TextView tvPercent;
+        ProgressBar pbPercent;
+        TextView tvReserveDeadline;
+        TextView tvSeizeHint;
+    }
 }

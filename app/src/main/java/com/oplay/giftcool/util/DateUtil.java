@@ -111,7 +111,7 @@ public class DateUtil {
 				// 日期异常
 				return false;
 			}
-            TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+			TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 			String before = sdf.format(sdf.parse(date));
 			return before.equals(sdf.format(new Date(System.currentTimeMillis())));
@@ -144,28 +144,42 @@ public class DateUtil {
 		if (time == 0) {
 			return "";
 		}
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 		Date date = null;
 
-			date = new Date(time);
-			Calendar current = Calendar.getInstance();
-			current.setTime(date);
+		date = new Date(time);
+		Calendar current = Calendar.getInstance();
 
-			Calendar today = Calendar.getInstance();    //今天
-			today.set(Calendar.YEAR, current.get(Calendar.YEAR));
-			today.set(Calendar.MONTH, current.get(Calendar.MONTH));
-			today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
-			//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
-			today.set(Calendar.HOUR_OF_DAY, 0);
-			today.set(Calendar.MINUTE, 0);
-			today.set(Calendar.SECOND, 0);
+		Calendar today = Calendar.getInstance();    //今天
+		today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+		today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+		today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
+		//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
 
-			if (current.before(today)) {
-				return "昨天/以前";
-			} else if (current.after(today)) {
-				return "明天/以后";
-			} else {
-				return "今天";
-			}
+		Calendar tomorrow = Calendar.getInstance();    //明天
+		tomorrow.set(Calendar.YEAR, current.get(Calendar.YEAR));
+		tomorrow.set(Calendar.MONTH, current.get(Calendar.MONTH));
+		tomorrow.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH) + 2);
+		//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+		tomorrow.set(Calendar.HOUR_OF_DAY, 0);
+		tomorrow.set(Calendar.MINUTE, 0);
+		tomorrow.set(Calendar.SECOND, 0);
+
+		current.setTime(date);
+
+
+		if (current.after(today) && current.before(tomorrow)) {
+			return "明天";
+		} else if (current.after(tomorrow)){
+			TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+			SimpleDateFormat format = new SimpleDateFormat("MM-dd", Locale.getDefault());
+			return format.format(date);
+		} else {
+			TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+			SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+			return format.format(date);
+		}
 	}
 }

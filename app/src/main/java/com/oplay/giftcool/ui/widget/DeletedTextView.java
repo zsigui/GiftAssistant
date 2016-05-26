@@ -58,10 +58,4 @@ public class DeletedTextView extends TextView {
 		super.dispatchDraw(canvas);
 	}
 
-    @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-    }
-
-
 }

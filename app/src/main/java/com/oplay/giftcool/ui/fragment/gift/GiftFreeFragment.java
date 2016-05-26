@@ -7,6 +7,7 @@ import android.view.View;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.FreeAdapter;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
@@ -231,14 +232,15 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 			if (mCallLoad != null) {
 				mCallLoad.cancel();
 			}
-			mCallLoad = Global.getNetEngine().obtainGiftLimitByPage(mReqPageObj);
+			mCallLoad = Global.getNetEngine().obtainGiftFreeByPage(mReqPageObj);
 			mCallLoad.enqueue(new Callback<JsonRespLimitGiftList>() {
 				@Override
 				public void onResponse(Call<JsonRespLimitGiftList> call, Response<JsonRespLimitGiftList> response) {
 					if (!mCanShowUI || call.isCanceled()) {
 						return;
 					}
-					if (response != null && response.isSuccessful()) {
+					if (response != null && response.isSuccessful()
+							&& response.body() != null && response.body().isSuccess()) {
 						LimitGiftListData<TimeData<IndexGiftNew>> data = response.body().getData();
 						if (data.page == 1) {
 							//初始化成功
@@ -256,12 +258,24 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 						}
 						return;
 					}
-					if (mReqPageObj.data.page == 1) {
-						//刷新失败
-						refreshFailEnd();
+//					if (mReqPageObj.data.page == 1) {
+//						//刷新失败
+//						refreshFailEnd();
+//					} else {
+//						//加载更多失败
+//						moreLoadFailEnd();
+//					}
+					if (mLastPage == 1) {
+						//初始化成功
+						refreshSuccessEnd();
+						mLastPage = 1;
+						refreshData(initTestData());
 					} else {
-						//加载更多失败
-						moreLoadFailEnd();
+						//加载更多成功
+						ArrayList<TimeData<IndexGiftNew>> d  = initTestData();
+						setLoadState(d, false);
+						addMoreData(d);
+						moreLoadSuccessEnd();
 					}
 				}
 
@@ -270,12 +284,24 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 					if (!mCanShowUI || call.isCanceled()) {
 						return;
 					}
-					if (mReqPageObj.data.page == 1) {
-						//刷新失败
-						refreshFailEnd();
+//					if (mReqPageObj.data.page == 1) {
+//						//刷新失败
+//						refreshFailEnd();
+//					} else {
+//						//加载更多失败
+//						moreLoadFailEnd();
+//					}
+					if (mLastPage == 1) {
+						//初始化成功
+						refreshSuccessEnd();
+						mLastPage = 1;
+						refreshData(initTestData());
 					} else {
-						//加载更多失败
-						moreLoadFailEnd();
+						//加载更多成功
+						ArrayList<TimeData<IndexGiftNew>> d  = initTestData();
+						setLoadState(d, false);
+						addMoreData(d);
+						moreLoadSuccessEnd();
 					}
 				}
 			});
@@ -347,5 +373,119 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 	@Override
 	public String getPageName() {
 		return "限时免费";
+	}
+
+	public ArrayList<TimeData<IndexGiftNew>> initTestData() {
+		ArrayList<TimeData<IndexGiftNew>> result = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			TimeData<IndexGiftNew> data = new TimeData<>();
+			data.date = "2016-05-26";
+			IndexGiftNew o = new IndexGiftNew();
+			data.data = o;
+			o.status = GiftTypeUtil.STATUS_SEIZE;
+			o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+			o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+			o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_UN_RESERVE;
+			o.remainCount = 10;
+			o.totalCount = 10;
+			o.platform = "偶玩版";
+			o.bean = (int)(Math.random() * 100);
+			o.score = 500;
+			o.content = "测试首充的今日显示";
+			o.gameName = "今日测试" + i * 10;
+			o.freeStartTime = (int)System.currentTimeMillis() - 3600;
+			o.id = 135;
+			o.img = "http://owan-img.ymapp.com/app/10792/icon/icon_1451902693.png_128_128_70.png";
+			result.add(data);
+		}
+		for (int i = 0; i < 5; i++) {
+			TimeData<IndexGiftNew> data = new TimeData<>();
+			data.date = "2016-05-26";
+			IndexGiftNew o = new IndexGiftNew();
+			data.data = o;
+			o.status = GiftTypeUtil.STATUS_SEIZE;
+			o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+			o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+			o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
+			o.remainCount = 10;
+			o.totalCount = 10;
+			o.platform = "偶玩版";
+			o.bean = (int)(Math.random() * 100);
+			o.score = 500;
+			o.content = "测试首充的今日显示";
+			o.gameName = "今日测试" + i * 10;
+			o.freeStartTime = (int)System.currentTimeMillis() - 3600;
+			o.id = 135;
+			o.reserveDeadline = "12:00";
+			o.img = "http://owan-img.ymapp.com/app/10792/icon/icon_1451902693.png_128_128_70.png";
+			result.add(data);
+		}
+		for (int i = 0; i < 5; i++) {
+			TimeData<IndexGiftNew> data = new TimeData<>();
+			data.date = "2016-05-26";
+			IndexGiftNew o = new IndexGiftNew();
+			data.data = o;
+			o.status = GiftTypeUtil.STATUS_SEIZE;
+			o.totalType = GiftTypeUtil.TOTAL_TYPE_GIFT_LIMIT;
+			o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+			o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
+			o.remainCount = 10;
+			o.totalCount = 10;
+			o.platform = "偶玩版";
+			o.bean = (int)(Math.random() * 100);
+			o.score = 500;
+			o.content = "元宝*188，真气*5000，橙色神秘碎片*5，高级丹药包*20，三级宝石袋*5";
+			o.gameName = "功夫少林" + i;
+			o.name = "独家至尊礼包";
+			o.freeStartTime = (int)System.currentTimeMillis() - 3600;
+			o.id = 135;
+			o.img = "http://owan-img.ymapp.com/app/10792/icon/icon_1451902693.png_128_128_70.png";
+			result.add(data);
+		}
+		for (int i = 0; i < 10; i++) {
+			TimeData<IndexGiftNew> data = new TimeData<>();
+			int time = (int)(Math.random() * 4) + 27;
+			data.date = String.format("2016-05-%d", time);
+			IndexGiftNew o = new IndexGiftNew();
+			data.data = o;
+			o.status = (int)(Math.random() * 3) + 7;
+			o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+			o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+			o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_UN_RESERVE;
+			o.remainCount = 10;
+			o.totalCount = 10;
+			o.bean = (int)(Math.random() * 100);
+			o.score = 500;
+			o.content = "测试首充的明日显示";
+			o.gameName = "明日测试" + i;
+			o.platform = "偶玩版";
+			o.freeStartTime = System.currentTimeMillis() + (time - 26) * 3600 * 24 * 1000;
+			o.id = 136;
+			o.img = "http://owan-img.ymapp.com/app/31/b5/10976/icon/icon_1442199434.png_128_128_70.png";
+			result.add(data);
+		}
+		for (int i = 0; i < 10; i++) {
+			TimeData<IndexGiftNew> data = new TimeData<>();
+			int time = (int)(Math.random() * 25) + 1;
+			data.date = String.format("2016-05-%d", time);
+			IndexGiftNew o = new IndexGiftNew();
+			data.data = o;
+			o.status = GiftTypeUtil.STATUS_FINISHED;
+			o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+			o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+			o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
+			o.remainCount = 0;
+			o.totalCount = 10;
+			o.bean = (int)(Math.random() * 100);
+			o.score = 500;
+			o.content = "测试首充的昨日显示";
+			o.gameName = "昨日测试" + i;
+			o.platform = "偶玩版";
+			o.freeStartTime = System.currentTimeMillis() - (26 - time) * 3600 * 24 * 1000;
+			o.id = 136;
+			o.img = "http://owan-img.ymapp.com/app/11004/icon/icon_1460627334.png_128_128_70.png";
+			result.add(data);
+		}
+		return result;
 	}
 }

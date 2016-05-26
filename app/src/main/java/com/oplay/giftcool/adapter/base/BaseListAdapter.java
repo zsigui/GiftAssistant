@@ -89,6 +89,6 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 
 	@Override
 	public long getItemId(int position) {
-		return position;
+		return getItem(position).hashCode();
 	}
 }
