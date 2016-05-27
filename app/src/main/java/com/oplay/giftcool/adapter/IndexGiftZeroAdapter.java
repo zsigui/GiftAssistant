@@ -180,7 +180,7 @@ public class IndexGiftZeroAdapter extends BaseRVAdapter<IndexGiftNew> implements
 		public ContentHolder(View itemView) {
 			super(itemView);
 			ivIcon = getViewById(R.id.iv_icon);
-			tvSrc = getViewById(R.id.tv_src);
+			tvSrc = getViewById(R.id.tv_price);
 			tvGameName = getViewById(R.id.tv_game_name);
 			tvName = getViewById(R.id.tv_name);
 			tvTagSeize = getViewById(R.id.tv_tag_seize);

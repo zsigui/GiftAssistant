@@ -5,8 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -60,371 +62,402 @@ import retrofit2.Response;
  * Created by zsigui on 15-12-29.
  */
 public class GiftDetailFragment extends BaseFragment implements OnDownloadStatusChangeListener,
-		OnProgressUpdateListener {
+        OnProgressUpdateListener {
 
-	private final static String PAGE_NAME = "礼包详情";
-	private ImageView ivIcon;
-	private TextView tvName;
-	private TextView tvConsume;
-	private TextView tvScore;
-	private TextView tvOr;
-	private TextView tvBean;
-	private TextView tvRemain;
-	private TextView tvContent;
-	private TextView tvDeadline;
-	private TextView tvUsage;
-	private GiftButton btnSend;
-	private ProgressBar pbPercent;
-	private TextView tvCode;
-	private TextView btnCopy;
-	private ImageView ivLimit;
-	private TextView tvQQ;
-	private DownloadButtonView btnDownload;
-	private LinearLayout downloadLayout;
-	private DeletedTextView tvOriginPrice;
+    private final static String PAGE_NAME = "礼包详情";
+    private ImageView ivIcon;
+    private TextView tvName;
+    private TextView tvConsume;
+    private TextView tvScore;
+    private TextView tvOr;
+    private TextView tvBean;
+    private TextView tvRemain;
+    private TextView tvSeizeHint;
+    private TextView tvContent;
+    private TextView tvDeadline;
+    private TextView tvUsage;
+    private RecyclerView rvUsage;
+    private GiftButton btnSend;
+    private ProgressBar pbPercent;
+    private TextView tvCode;
+    private TextView btnCopy;
+    private TextView tvQQ;
+    private DownloadButtonView btnDownload;
+    private LinearLayout downloadLayout;
+    private DeletedTextView tvOriginPrice;
 
-	private GiftDetail mData;
-	private IndexGameNew mAppInfo;
-	private CountTimer mTimer;
-	private int mId;
-	private String QQ_TEXT;
-
-
-	public static GiftDetailFragment newInstance(int id) {
-		GiftDetailFragment fragment = new GiftDetailFragment();
-		Bundle bundle = new Bundle();
-		bundle.putInt(KeyConfig.KEY_DATA, id);
-		fragment.setArguments(bundle);
-		fragment.mDataRunnable = new DataRunnable(fragment);
-		return fragment;
-	}
-
-	@Override
-	protected void initView(Bundle savedInstanceState) {
-		initViewManger(R.layout.fragment_gift_detail);
-		ivIcon = getViewById(R.id.iv_icon);
-		tvName = getViewById(R.id.tv_name);
-		tvConsume = getViewById(R.id.tv_consume);
-		tvScore = getViewById(R.id.tv_score);
-		tvOr = getViewById(R.id.tv_or);
-		tvBean = getViewById(R.id.tv_bean);
-		tvRemain = getViewById(R.id.tv_new_add);
-		tvContent = getViewById(R.id.et_content);
-		tvDeadline = getViewById(R.id.tv_deadline);
-		tvUsage = getViewById(R.id.tv_usage);
-		btnSend = getViewById(R.id.btn_send);
-		pbPercent = getViewById(R.id.pb_percent);
-		tvCode = getViewById(R.id.tv_gift_code);
-		btnCopy = getViewById(R.id.btn_copy);
-		ivLimit = getViewById(R.id.iv_limit);
-		btnDownload = getViewById(R.id.btn_download);
-		downloadLayout = getViewById(R.id.ll_download);
-		tvOriginPrice = getViewById(R.id.tv_src);
-		tvQQ = getViewById(R.id.tv_qq);
-	}
-
-	@Override
-	protected void setListener() {
-		btnCopy.setOnClickListener(this);
-		btnSend.setOnClickListener(this);
-		btnDownload.setOnClickListener(this);
-        tvQQ.setOnClickListener(this);
-		ivIcon.setOnClickListener(this);
-		ObserverManager.getInstance().addGiftUpdateListener(this);
-		ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
-		ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
-		if (getActivity() instanceof GiftDetailActivity) {
-			((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
-				@Override
-				public void share() {
-					if (mData == null || mData.giftData == null || mData.gameData == null) {
-						ToastUtil.showShort("页面出错，请重新进入");
-						return;
-					}
-					mData.giftData.gameName = mData.gameData.name;
-					mData.giftData.img = mData.gameData.img;
-					ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
-
-				}
-			});
-		}
-	}
-
-	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-		if (getArguments() == null) {
-			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
-			return;
-		}
-		mId = getArguments().getInt(KeyConfig.KEY_DATA);
-		if (AppDebugConfig.IS_FRAG_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
-		}
-		if (!AssistantApp.getInstance().isAllowDownload()) {
-			downloadLayout.setVisibility(View.GONE);
-		} else {
-			downloadLayout.setVisibility(View.VISIBLE);
-		}
-		mViewManager.showLoading();
-		QQ_TEXT = getResources().getString(R.string.st_gift_qq);
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		ObserverManager.getInstance().removeGiftUpdateListener(this);
-		ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
-		ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
-	}
-
-	public void updateData(int id) {
-		if (id <= 0) {
-			return;
-		}
-		mId = id;
-		lazyLoad();
-	}
-
-	private void updateData(GiftDetail data) {
-		if (data == null || data.giftData == null) {
-			ToastUtil.showShort("该请求数据可能已经过期");
-			mViewManager.showEmpty();
-			return;
-		}
-		mHasData = true;
-		mViewManager.showContent();
-		mData = data;
-		final IndexGiftNew giftData = data.giftData;
-		tvName.setText(giftData.name);
-		if (getActivity() instanceof GiftDetailActivity) {
-			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_limit);
-			} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-				((GiftDetailActivity) getActivity()).showLimitTag(true, R.drawable.ic_tool_0_seize);
-			} else {
-				((GiftDetailActivity) getActivity()).showLimitTag(false, 0);
-			}
-			int type = GiftTypeUtil.getItemViewType(mData.giftData);
-			if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
-					|| type == GiftTypeUtil.TYPE_LIMIT_EMPTY
-					|| type == GiftTypeUtil.TYPE_NORMAL_FINISHED) {
-				((GiftDetailActivity) getActivity()).showShareButton(false);
-			} else {
-				((GiftDetailActivity) getActivity()).showShareButton(true);
-			}
-		}
-		setLimitTag(giftData);
-		int state = GiftTypeUtil.getItemViewType(giftData);
-		btnSend.setState(state);
-		tvOr.setVisibility(View.GONE);
-		tvRemain.setVisibility(View.GONE);
-		pbPercent.setVisibility(View.GONE);
-		tvBean.setVisibility(View.GONE);
-		tvCode.setVisibility(View.GONE);
-		btnCopy.setVisibility(View.GONE);
-		tvScore.setVisibility(View.GONE);
-		btnSend.setVisibility(View.VISIBLE);
-		tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
-		if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
-			tvConsume.setVisibility(View.VISIBLE);
-			if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-					&& giftData.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-				tvScore.setVisibility(View.VISIBLE);
-				tvScore.setText(String.valueOf(giftData.score));
-			} else if (giftData.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
-				tvBean.setVisibility(View.VISIBLE);
-				tvBean.setText(String.valueOf(giftData.bean));
-			} else {
-				tvScore.setVisibility(View.VISIBLE);
-				tvBean.setVisibility(View.VISIBLE);
-				tvOr.setVisibility(View.VISIBLE);
-				tvScore.setText(String.valueOf(giftData.score));
-				tvBean.setText(String.valueOf(giftData.bean));
-			}
-			tvRemain.setVisibility(View.VISIBLE);
-			if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-				tvScore.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
-				tvBean.setTextColor(mApp.getResources().getColor(R.color.co_common_app_main_bg));
-				tvOriginPrice.setText(
-						Html.fromHtml(String.format("<line-through>价值 <font color='#f85454'>¥%d</font>",
-								giftData.originPrice)));
-				tvOriginPrice.setPaint(mApp.getResources().getColor(R.color.co_common_app_main_bg), 3);
-				tvOriginPrice.setVisibility(View.VISIBLE);
-				setRemainProgress(giftData);
-			} else {
-				switch (state) {
-					case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCHED,
-								giftData.searchCount)));
-						break;
-					case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-					case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-						setRemainProgress(giftData);
-						break;
-					case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-						tvRemain.setVisibility(View.VISIBLE);
-						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
-								giftData.seizeTime)));
-						break;
-					case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-						tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
-								giftData.searchTime)));
-						break;
-				}
-			}
-
-		} else {
-			tvConsume.setVisibility(View.GONE);
-			tvCode.setVisibility(View.VISIBLE);
-			btnCopy.setVisibility(View.VISIBLE);
-			tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
-		}
-		setDeadCount();
-
-		if (!mIsNotifyRefresh) {
-			tvContent.setText(giftData.content);
-			tvDeadline.setText(String.format("%s ~ %s" , DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
-					DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm")));
-			tvUsage.setText(giftData.usage);
-			initDownload(mData.gameData);
-		}
+    private GiftDetail mData;
+    private IndexGameNew mAppInfo;
+    private CountTimer mTimer;
+    private int mId;
+    private String QQ_TEXT;
 
 
-	}
+    public static GiftDetailFragment newInstance(int id) {
+        GiftDetailFragment fragment = new GiftDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(KeyConfig.KEY_DATA, id);
+        fragment.setArguments(bundle);
+        fragment.mDataRunnable = new DataRunnable(fragment);
+        return fragment;
+    }
 
-	private void setRemainProgress(IndexGiftNew giftData) {
-		int progress = giftData.remainCount * 100 / giftData.totalCount;
-		tvRemain.setText(Html.fromHtml(String.format("剩%d%%", progress)));
-		pbPercent.setVisibility(View.VISIBLE);
-		pbPercent.setProgress(progress);
-	}
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        initViewManger(R.layout.fragment_gift_detail);
+        ivIcon = getViewById(R.id.iv_icon);
+        tvName = getViewById(R.id.tv_name);
+        tvConsume = getViewById(R.id.tv_consume);
+        tvScore = getViewById(R.id.tv_score);
+        tvOr = getViewById(R.id.tv_or);
+        tvBean = getViewById(R.id.tv_bean);
+        tvRemain = getViewById(R.id.tv_new_add);
+        tvSeizeHint = getViewById(R.id.tv_seize_hint);
+        tvOriginPrice = getViewById(R.id.tv_price);
+        pbPercent = getViewById(R.id.pb_percent);
+        btnCopy = getViewById(R.id.btn_copy);
+        tvCode = getViewById(R.id.tv_gift_code);
+        btnSend = getViewById(R.id.btn_send);
+        btnDownload = getViewById(R.id.btn_download);
+        downloadLayout = getViewById(R.id.ll_download);
 
-	private void setDeadCount() {
-		if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
-				|| mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
-			return;
-		}
-		if (mTimer != null) {
-			mTimer.cancel();
-		}
-		btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-		final long remainTime = DateUtil.getTime(mData.giftData.seizeTime)
-				- System.currentTimeMillis() + Global.sServerTimeDiffLocal;
-		mTimer = new CountTimer(remainTime, Global.COUNTDOWN_INTERVAL) {
-			@Override
-			public void onTick(long millisUntilFinished) {
-				btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
-			}
+    }
 
-			@Override
-			public void onFinish() {
-				mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
-				if (getActivity() != null) {
-					((BaseAppCompatActivity)getActivity()).getHandler().postDelayed(new Runnable() {
+    @Override
+    protected void setListener() {
+        btnCopy.setOnClickListener(this);
+        btnSend.setOnClickListener(this);
+        btnDownload.setOnClickListener(this);
+        ivIcon.setOnClickListener(this);
+        ObserverManager.getInstance().addGiftUpdateListener(this);
+        ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
+        ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
+        if (getActivity() instanceof GiftDetailActivity) {
+            ((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
+                @Override
+                public void share() {
+                    if (mData == null || mData.giftData == null || mData.gameData == null) {
+                        ToastUtil.showShort("页面出错，请重新进入");
+                        return;
+                    }
+                    mData.giftData.gameName = mData.gameData.name;
+                    mData.giftData.img = mData.gameData.img;
+                    ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
 
-						@Override
-						public void run() {
-							ToastUtil.showShort("自动刷新抢ing");
-							if (!mIsNotifyRefresh) {
-								mIsNotifyRefresh = true;
-								lazyLoad();
-							}
-						}
-					}, 2500);
-				}
-			}
-		};
-		mTimer.start();
-	}
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        if (getArguments() == null) {
+            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            return;
+        }
+        mId = getArguments().getInt(KeyConfig.KEY_DATA);
+        if (AppDebugConfig.IS_FRAG_DEBUG) {
+            KLog.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
+        }
+        if (!AssistantApp.getInstance().isAllowDownload()) {
+            downloadLayout.setVisibility(View.GONE);
+        } else {
+            downloadLayout.setVisibility(View.VISIBLE);
+        }
+        mViewManager.showLoading();
+        QQ_TEXT = getResources().getString(R.string.st_gift_qq);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ObserverManager.getInstance().removeGiftUpdateListener(this);
+        ApkDownloadManager.getInstance(getActivity()).removeDownloadStatusListener(this);
+        ApkDownloadManager.getInstance(getActivity()).removeProgressUpdateListener(this);
+    }
+
+    public void updateData(int id) {
+        if (id <= 0) {
+            return;
+        }
+        mId = id;
+        lazyLoad();
+    }
+
+    private void updateData(GiftDetail data) {
+        if (data == null || data.giftData == null) {
+            ToastUtil.showShort("该请求数据可能已经过期");
+            mViewManager.showEmpty();
+            return;
+        }
+        mHasData = true;
+        mViewManager.showContent();
+        mData = data;
+        final IndexGiftNew giftData = data.giftData;
+        setTag(giftData);
+
+        int type = GiftTypeUtil.getItemViewType(giftData);
+        inflateVsView(giftData);
+
+        tvName.setText(giftData.name);
+        btnSend.setState(type);
+        tvOr.setVisibility(View.GONE);
+        tvRemain.setVisibility(View.GONE);
+        pbPercent.setVisibility(View.GONE);
+        tvBean.setVisibility(View.GONE);
+        tvCode.setVisibility(View.GONE);
+        btnCopy.setVisibility(View.GONE);
+        tvScore.setVisibility(View.GONE);
+        btnSend.setVisibility(View.VISIBLE);
+
+        tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
+        if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
+            tvConsume.setVisibility(View.VISIBLE);
+            setMoneyConsume(giftData);
+            tvRemain.setVisibility(View.VISIBLE);
+            if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
+                tvOriginPrice.setVisibility(View.VISIBLE);
+                setRemainProgress(giftData);
+            } else {
+                switch (type) {
+                    case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCHED,
+                                giftData.searchCount)));
+                        break;
+                    case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+                    case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+                        setRemainProgress(giftData);
+                        break;
+                    case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+                    case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+                        tvRemain.setVisibility(View.VISIBLE);
+                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
+                                giftData.seizeTime)));
+                        break;
+                    case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
+                                giftData.searchTime)));
+                        break;
+                }
+            }
+
+        } else {
+            tvConsume.setVisibility(View.GONE);
+            tvCode.setVisibility(View.VISIBLE);
+            btnCopy.setVisibility(View.VISIBLE);
+            tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+        }
+        setDeadCount();
+
+        if (!mIsNotifyRefresh) {
+            tvContent.setText(giftData.content);
+            tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
+                    DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm")));
+            tvUsage.setText(giftData.usage);
+            initDownload(mData.gameData);
+        }
 
 
-	private void setLimitTag(IndexGiftNew giftData) {
-		if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-			ivLimit.setVisibility(View.VISIBLE);
-			ivLimit.setImageResource(R.drawable.ic_tag_limit);
-		} else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-			ivLimit.setVisibility(View.VISIBLE);
-			ivLimit.setImageResource(R.drawable.ic_tag_0_seize);
-		} else {
-			ivLimit.setVisibility(View.GONE);
-		}
-		if (giftData.exclusive == 1) {
-			tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
-		} else {
-			tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		}
-	}
+    }
 
-	public void initDownload(IndexGameNew game) {
-		if (getActivity() == null || game == null || btnDownload == null) {
-			return;
-		}
-		mAppInfo = game;
-		((BaseAppCompatActivity) getActivity()).setBarTitle(mAppInfo.name);
-		ViewUtil.showImage(ivIcon, mAppInfo.img);
-		if (AssistantApp.getInstance().isAllowDownload()) {
-			mAppInfo.initAppInfoStatus(getActivity());
-			int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
-					.downloadUrl);
-			btnDownload.setStatus(mAppInfo.appStatus, "");
-			btnDownload.setProgress(progress);
-		}
-	}
+    /**
+     * 设置消费金币提示
+     */
+    private void setMoneyConsume(IndexGiftNew giftData) {
+        if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
+                && giftData.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+            tvScore.setVisibility(View.VISIBLE);
+            tvScore.setText(String.valueOf(giftData.score));
+        } else if (giftData.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
+            tvBean.setVisibility(View.VISIBLE);
+            tvBean.setText(String.valueOf(giftData.bean));
+        } else {
+            tvScore.setVisibility(View.VISIBLE);
+            tvBean.setVisibility(View.VISIBLE);
+            tvOr.setVisibility(View.VISIBLE);
+            tvScore.setText(String.valueOf(giftData.score));
+            tvBean.setText(String.valueOf(giftData.bean));
+        }
+    }
 
-	/**
-	 * 异步请求获取网络数据线程执行体
-	 */
-	private DataRunnable mDataRunnable;
+    /**
+     * 填充详情的ViewStub内容
+     */
+    private void inflateVsView(IndexGiftNew o) {
+        if (tvContent == null) {
+            if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
+                    && o.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
+                // 首充券
+                View vsCharge = ((ViewStub)getViewById(R.id.vs_first_charge)).inflate();
+                tvContent = getViewById(vsCharge, R.id.tv_content);
+                tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
+                tvUsage = getViewById(vsCharge, R.id.tv_usage);
+                tvQQ = getViewById(R.id.tv_qq);
+            } else {
+                // 礼包
+                View vsGift = ((ViewStub)getViewById(R.id.vs_gift)).inflate();
+                tvContent = getViewById(vsGift, R.id.tv_content);
+                tvDeadline = getViewById(vsGift, R.id.tv_deadline);
+                rvUsage = getViewById(vsGift, R.id.rv_usage);
+                tvQQ = getViewById(R.id.tv_qq);
+            }
+            tvQQ.setOnClickListener(this);
+        }
+    }
 
-	@Override
-	protected void lazyLoad() {
-		refreshInitConfig();
-		if (mDataRunnable != null) {
-			Global.THREAD_POOL.execute(mDataRunnable);
-		}
+    /**
+     * 设置进度条信息
+     */
+    private void setRemainProgress(IndexGiftNew giftData) {
+        int progress = giftData.remainCount * 100 / giftData.totalCount;
+        tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
+        tvRemain.setVisibility(View.VISIBLE);
+        pbPercent.setVisibility(View.VISIBLE);
+        pbPercent.setMax(100);
+        pbPercent.setProgress(progress);
+    }
 
-	}
+    /**
+     * 设置0元抢的倒计时
+     */
+    private void setDeadCount() {
+        if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
+                || mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
+            return;
+        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
+        final long remainTime = DateUtil.getTime(mData.giftData.seizeTime)
+                - System.currentTimeMillis() + Global.sServerTimeDiffLocal;
+        mTimer = new CountTimer(remainTime, Global.COUNTDOWN_INTERVAL) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
+            }
 
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-		switch (v.getId()) {
-			case R.id.btn_download:
-				if (mAppInfo != null) {
-					mAppInfo.handleOnClick(getChildFragmentManager());
-				}
-				break;
-			case R.id.btn_copy:
-				ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-				cmb.setPrimaryClip(ClipData.newPlainText("礼包码", mData.giftData.code));
-				ToastUtil.showShort("已复制");
-				break;
-			case R.id.btn_send:
-				if (mData == null) {
-					return;
-				}
-				// 取消强制要求下载的模块
+            @Override
+            public void onFinish() {
+                mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
+                if (getActivity() != null) {
+                    ((BaseAppCompatActivity) getActivity()).getHandler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            ToastUtil.showShort("自动刷新抢ing");
+                            if (!mIsNotifyRefresh) {
+                                mIsNotifyRefresh = true;
+                                lazyLoad();
+                            }
+                        }
+                    }, 2500);
+                }
+            }
+        };
+        mTimer.start();
+    }
+
+
+    /**
+     * 设置礼包标识
+     */
+    private void setTag(IndexGiftNew giftData) {
+        if (giftData.exclusive == 1) {
+            tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
+        } else {
+            tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
+
+        if (getActivity() instanceof GiftDetailActivity) {
+            if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+                ((GiftDetailActivity) getActivity()).showLimitTag(true, R.string.st_gift_tag_limit);
+            } else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                ((GiftDetailActivity) getActivity()).showLimitTag(true, R.string.st_gift_tag_free);
+            } else {
+                ((GiftDetailActivity) getActivity()).showLimitTag(false, 0);
+            }
+            int type = GiftTypeUtil.getItemViewType(mData.giftData);
+            if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
+                    || type == GiftTypeUtil.TYPE_LIMIT_EMPTY
+                    || type == GiftTypeUtil.TYPE_NORMAL_FINISHED) {
+                ((GiftDetailActivity) getActivity()).showShareButton(false);
+            } else {
+                ((GiftDetailActivity) getActivity()).showShareButton(true);
+            }
+        }
+    }
+
+    public void initDownload(IndexGameNew game) {
+        if (getActivity() == null || game == null || btnDownload == null) {
+            return;
+        }
+        mAppInfo = game;
+        ((BaseAppCompatActivity) getActivity()).setBarTitle(mAppInfo.name);
+        ViewUtil.showImage(ivIcon, mAppInfo.img);
+        if (AssistantApp.getInstance().isAllowDownload()) {
+            mAppInfo.initAppInfoStatus(getActivity());
+            int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
+                    .downloadUrl);
+            btnDownload.setStatus(mAppInfo.appStatus, "");
+            btnDownload.setProgress(progress);
+        }
+    }
+
+    /**
+     * 异步请求获取网络数据线程执行体
+     */
+    private DataRunnable mDataRunnable;
+
+    @Override
+    protected void lazyLoad() {
+        refreshInitConfig();
+        if (mDataRunnable != null) {
+            Global.THREAD_POOL.execute(mDataRunnable);
+        }
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.btn_download:
+                if (mAppInfo != null) {
+                    mAppInfo.handleOnClick(getChildFragmentManager());
+                }
+                break;
+            case R.id.btn_copy:
+                ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                cmb.setPrimaryClip(ClipData.newPlainText("礼包码", mData.giftData.code));
+                ToastUtil.showShort("已复制");
+                break;
+            case R.id.btn_send:
+                if (mData == null) {
+                    return;
+                }
+                // 取消强制要求下载的模块
 //				if (AssistantApp.getInstance().isAllowDownload()
 //						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 //					return;
 //				}
-				PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);
-				break;
+                PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);
+                break;
             case R.id.tv_qq:
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
                 break;
-			case R.id.iv_icon:
-				if (mData != null && mData.gameData != null) {
-					IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
-				}
-				break;
-		}
-	}
+            case R.id.iv_icon:
+                if (mData != null && mData.gameData != null) {
+                    IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
+                }
+                break;
+        }
+    }
 
-	/**
-	 * 判断是否安装了游戏，如果没有，弹窗提示下载安装
-	 */
+    /**
+     * 判断是否安装了游戏，如果没有，弹窗提示下载安装
+     */
 //	private boolean isInstalledGame() {
 //		HashSet<String> appNames = Global.getInstalledAppNames();
 //		for (String name : appNames) {
@@ -474,151 +507,151 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //		return false;
 //	}
 
-	private Runnable mProgressRunnable;
+    private Runnable mProgressRunnable;
 
-	@Override
-	public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
-		if (mProgressRunnable != null && getActivity() != null) {
-			((BaseAppCompatActivity) getActivity()).getHandler().removeCallbacks(mProgressRunnable);
-		}
-		mProgressRunnable = new Runnable() {
-			@Override
-			public void run() {
+    @Override
+    public void onDownloadStatusChanged(final GameDownloadInfo appInfo) {
+        if (mProgressRunnable != null && getActivity() != null) {
+            ((BaseAppCompatActivity) getActivity()).getHandler().removeCallbacks(mProgressRunnable);
+        }
+        mProgressRunnable = new Runnable() {
+            @Override
+            public void run() {
 
-				if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
-					mAppInfo.downloadStatus = appInfo.downloadStatus;
-					mAppInfo.initAppInfoStatus(getContext());
-					btnDownload.setStatus(mAppInfo.appStatus, "");
-				}
-				mProgressRunnable = null;
-			}
-		};
-		if (getActivity() != null) {
-			((BaseAppCompatActivity) getActivity()).getHandler().post(mProgressRunnable);
-		}
-	}
+                if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+                    mAppInfo.downloadStatus = appInfo.downloadStatus;
+                    mAppInfo.initAppInfoStatus(getContext());
+                    btnDownload.setStatus(mAppInfo.appStatus, "");
+                }
+                mProgressRunnable = null;
+            }
+        };
+        if (getActivity() != null) {
+            ((BaseAppCompatActivity) getActivity()).getHandler().post(mProgressRunnable);
+        }
+    }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-	}
+    }
 
-	@Override
-	public void onProgressUpdate(String url, final int percent, long speedBytesPers) {
-		if (getActivity() != null) {
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
-						btnDownload.setProgress(percent);
-					}
-				}
-			});
-		}
-	}
+    @Override
+    public void onProgressUpdate(String url, final int percent, long speedBytesPers) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+                        btnDownload.setProgress(percent);
+                    }
+                }
+            });
+        }
+    }
 
-	@Override
-	public void release() {
-		super.release();
-		if (mTimer != null) {
-			mTimer.cancel();
-			mTimer = null;
-		}
-		ivIcon = null;
-		tvName = null;
-		tvConsume = null;
-		tvScore = null;
-		tvOr = null;
-		tvBean = null;
-		tvRemain = null;
-		tvContent = null;
-		tvDeadline = null;
-		tvUsage = null;
-		btnSend = null;
-		pbPercent = null;
-		tvCode = null;
-		btnCopy = null;
-		ivLimit = null;
-		btnDownload = null;
-		downloadLayout = null;
-		tvOriginPrice = null;
-		mData = null;
-		mAppInfo = null;
-		if (mDataRunnable != null && mDataRunnable.mCall != null) {
-			mDataRunnable.mCall.cancel();
-			mDataRunnable.mWeakFragment.clear();
-		}
-	}
+    @Override
+    public void release() {
+        super.release();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        ivIcon = null;
+        tvName = null;
+        tvConsume = null;
+        tvScore = null;
+        tvOr = null;
+        tvBean = null;
+        tvRemain = null;
+        tvContent = null;
+        tvDeadline = null;
+        tvUsage = null;
+        btnSend = null;
+        pbPercent = null;
+        tvCode = null;
+        btnCopy = null;
+        btnDownload = null;
+        downloadLayout = null;
+        tvOriginPrice = null;
+        rvUsage = null;
+        mData = null;
+        mAppInfo = null;
+        if (mDataRunnable != null && mDataRunnable.mCall != null) {
+            mDataRunnable.mCall.cancel();
+            mDataRunnable.mWeakFragment.clear();
+        }
+    }
 
-	@Override
-	public String getPageName() {
-		return PAGE_NAME;
-	}
+    @Override
+    public String getPageName() {
+        return PAGE_NAME;
+    }
 
-	/**
-	 * 执行网络请求的异步请求任务
-	 */
-	private static class DataRunnable implements Runnable {
+    /**
+     * 执行网络请求的异步请求任务
+     */
+    private static class DataRunnable implements Runnable {
 
-		private WeakReference<GiftDetailFragment> mWeakFragment;
+        private WeakReference<GiftDetailFragment> mWeakFragment;
 
-		public DataRunnable(GiftDetailFragment fragment) {
-			mWeakFragment = new WeakReference<GiftDetailFragment>(fragment);
-		}
+        public DataRunnable(GiftDetailFragment fragment) {
+            mWeakFragment = new WeakReference<GiftDetailFragment>(fragment);
+        }
 
-		private Call<JsonRespBase<GiftDetail>> mCall;
+        private Call<JsonRespBase<GiftDetail>> mCall;
 
-		@Override
-		public void run() {
-			if (mWeakFragment == null || mWeakFragment.get() == null) {
-				return;
-			}
-			final GiftDetailFragment f = mWeakFragment.get();
-			if (!NetworkUtil.isConnected(f.getContext())) {
-				f.refreshFailEnd();
-				return;
-			}
-			if (mCall != null) {
-				mCall.cancel();
-			}
-			ReqGiftDetail data = new ReqGiftDetail();
-			data.id = f.mId;
-			mCall = Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data));
-			mCall.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
-				@Override
-				public void onResponse(Call<JsonRespBase<GiftDetail>> call, Response<JsonRespBase<GiftDetail>>
-						response) {
-					if (call.isCanceled() || !f.mCanShowUI) {
-						return;
-					}
-					if (response != null && response.code() == 200) {
-						Global.sServerTimeDiffLocal =
-								System.currentTimeMillis() - response.headers().getDate("Date").getTime();
-						if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-							f.refreshSuccessEnd();
-							f.updateData(response.body().getData());
-							return;
-						}
-						if (AppDebugConfig.IS_DEBUG) {
-							KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
-						}
-					}
-					// 加载错误页面也行
-					f.refreshFailEnd();
-				}
+        @Override
+        public void run() {
+            if (mWeakFragment == null || mWeakFragment.get() == null) {
+                return;
+            }
+            final GiftDetailFragment f = mWeakFragment.get();
+            if (!NetworkUtil.isConnected(f.getContext())) {
+                f.refreshFailEnd();
+                return;
+            }
+            if (mCall != null) {
+                mCall.cancel();
+            }
+            ReqGiftDetail data = new ReqGiftDetail();
+            data.id = f.mId;
+            mCall = Global.getNetEngine().obtainGiftDetail(new JsonReqBase<ReqGiftDetail>(data));
+            mCall.enqueue(new Callback<JsonRespBase<GiftDetail>>() {
+                @Override
+                public void onResponse(Call<JsonRespBase<GiftDetail>> call, Response<JsonRespBase<GiftDetail>>
+                        response) {
+                    if (call.isCanceled() || !f.mCanShowUI) {
+                        return;
+                    }
+                    if (response != null && response.code() == 200) {
+                        Global.sServerTimeDiffLocal =
+                                System.currentTimeMillis() - response.headers().getDate("Date").getTime();
+                        if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+                            f.refreshSuccessEnd();
+                            f.updateData(response.body().getData());
+                            return;
+                        }
+                        if (AppDebugConfig.IS_DEBUG) {
+                            KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
+                        }
+                    }
+                    // 加载错误页面也行
+                    f.refreshFailEnd();
+                }
 
-				@Override
-				public void onFailure(Call<JsonRespBase<GiftDetail>> call, Throwable t) {
-					if (call.isCanceled() || !f.mCanShowUI) {
-						return;
-					}
-					if (AppDebugConfig.IS_DEBUG) {
-						KLog.e(t);
-					}
-					f.refreshFailEnd();
-				}
-			});
-		}
-	}
+                @Override
+                public void onFailure(Call<JsonRespBase<GiftDetail>> call, Throwable t) {
+                    if (call.isCanceled() || !f.mCanShowUI) {
+                        return;
+                    }
+                    if (AppDebugConfig.IS_DEBUG) {
+                        KLog.e(t);
+                    }
+                    f.refreshFailEnd();
+                }
+            });
+        }
+    }
 }

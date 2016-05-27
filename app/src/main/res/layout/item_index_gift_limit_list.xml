@@ -70,7 +70,7 @@
 		<com.oplay.giftcool.ui.widget.DeletedTextView
 				android:id = "@+id/tv_money"
 				android:gravity = "center_vertical"
-				android:minWidth = "70dp"
+				android:minWidth = "100dp"
 				android:layout_below = "@+id/tv_name"
 				android:layout_marginLeft = "7dp"
 				android:layout_marginTop = "6dp"

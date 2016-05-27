@@ -8,7 +8,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-	public static final int TYPE_COUNT = 23;
+	public static final int TYPE_COUNT = 24;
 
 	// 限量礼包类型，可抢，limit
 	public static final int TYPE_LIMIT_SEIZE = 0;
@@ -57,7 +57,7 @@ public class GiftTypeUtil {
     // 首充券类型,不可预约
     public static final int TYPE_CHARGE_DISABLE_RESERVE = 22;
 
-	public static final int TYPE_ERROR = 233;
+	public static final int TYPE_ERROR = 23;
 
 	// 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 不可预约 9 预约完
 	public static final int STATUS_WAIT_SEIZE = 1;
@@ -143,7 +143,7 @@ public class GiftTypeUtil {
                     case SEIZE_TYPE_NEVER:
                         // 未抢号
                         // 表示免费号已经被抢完
-                        return TYPE_LIMIT_FREE_SEIZE;
+                        return TYPE_LIMIT_FREE_EMPTY;
                     case SEIZE_TYPE_SEIZED:
                     case SEIZE_TYPE_SEARCHED:
                         // 已抢号
@@ -181,6 +181,7 @@ public class GiftTypeUtil {
                         // 首充券可预约
                         return TYPE_CHARGE_UN_RESERVE;
                     case SEIZE_TYPE_RESERVED:
+                    case SEIZE_TYPE_SEIZED:
                         // 首充券已预约
                         return TYPE_CHARGE_RESERVED;
                 }
@@ -189,6 +190,7 @@ public class GiftTypeUtil {
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                     case SEIZE_TYPE_UN_RESERVE:
+                    case SEIZE_TYPE_SEIZED:
                         // 首充券预约已结束
                         return TYPE_CHARGE_RESERVE_EMPTY;
                     case SEIZE_TYPE_RESERVED:
@@ -205,6 +207,9 @@ public class GiftTypeUtil {
                     case SEIZE_TYPE_RESERVED:
                         // 已预约首充券可以领取
                         return TYPE_CHARGE_TAKE;
+                    case SEIZE_TYPE_SEIZED:
+                        // 首充券已抢或已领取
+                        return TYPE_CHARGE_SEIZED;
                 }
                 break;
             case STATUS_FINISHED:
@@ -214,6 +219,7 @@ public class GiftTypeUtil {
                         // 首充券的预约已经结束
                         return TYPE_CHARGE_EMPTY;
                     case SEIZE_TYPE_RESERVED:
+                    case SEIZE_TYPE_SEIZED:
                         // 首充券已抢
                         return TYPE_CHARGE_SEIZED;
                 }
@@ -300,7 +306,7 @@ public class GiftTypeUtil {
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                         // 未抢号
-                        return TYPE_NORMAL_WAIT_SEARCH;
+                        return TYPE_NORMAL_SEARCH;
                     case SEIZE_TYPE_SEIZED:
                         // 已抢号
                         return TYPE_NORMAL_SEIZED;

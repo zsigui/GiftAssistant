@@ -1,52 +1,61 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content"
-		android:paddingTop = "@dimen/di_dialog_content_padding"
-		android:orientation = "vertical" >
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content"
+              android:orientation = "vertical" >
 
-	<View style = "@style/HDividerView" />
+    <View style = "@style/HDividerView" />
 
-	<LinearLayout
-			android:id="@+id/ll_pay_score"
-			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
-			android:orientation = "horizontal" >
+    <LinearLayout
+            android:id = "@+id/ll_pay_score"
+            style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:paddingTop = "@dimen/di_list_item_gap_s_normal"
+            android:orientation = "horizontal" >
 
-		<CheckedTextView
-				android:id="@+id/ctv_check_score"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
-				android:drawableLeft = "@drawable/selector_item_circle_check" />
+        <CheckedTextView
+                android:id = "@+id/ctv_check_score"
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                android:layout_height = "wrap_content"
+                android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
+                android:drawableLeft = "@drawable/selector_item_circle_check"
+                android:drawablePadding = "@dimen/di_list_item_gap_s_normal"
+                android:textColor = "@color/color_consume_choice_text"
+                android:text = "@string/st_dialog_pay_score" />
 
-		<TextView
-				android:id="@+id/tv_pay_score"
-				style = "@style/DefaultTextView.Header"
-				android:drawableLeft = "@drawable/selector_score"
-				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
-				android:text = "@string/st_dialog_pay_score" />
-	</LinearLayout >
+        <TextView
+                android:id = "@+id/tv_pay_score"
+                style = "@style/DefaultTextView.Header"
+                android:drawableLeft = "@drawable/selector_score"
+                android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
+                android:minWidth = "50dp"
+                android:textColor = "@color/co_common_app_main_bg" />
+    </LinearLayout >
 
-	<View style = "@style/HDividerView" />
+    <LinearLayout
+            android:id = "@+id/ll_pay_bean"
+            style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:paddingBottom = "@dimen/di_list_item_gap_s_normal"
+            android:orientation = "horizontal" >
 
-	<LinearLayout
-			android:id="@+id/ll_pay_bean"
-			style = "@style/IndexModuleTitleLayout.Bigger.LoginInput"
-			android:orientation = "horizontal" >
+        <CheckedTextView
+                android:id = "@+id/ctv_check_bean"
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                android:layout_height = "wrap_content"
+                android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
+                android:drawableLeft = "@drawable/selector_item_circle_check"
+                android:drawablePadding = "@dimen/di_list_item_gap_s_normal"
+                android:textColor = "@color/color_consume_choice_text"
+                android:text = "@string/st_dialog_pay_bean" />
 
-		<CheckedTextView
-				android:id="@+id/ctv_check_bean"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:paddingRight = "@dimen/di_dialog_content_item_padding_right"
-				android:drawableLeft = "@drawable/selector_item_circle_check" />
-
-		<TextView
-				android:id="@+id/tv_pay_bean"
-				style = "@style/DefaultTextView.Header"
-				android:drawableLeft = "@drawable/selector_bean"
-				android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
-				android:text = "@string/st_dialog_pay_bean" />
-	</LinearLayout >
-
-	<View style = "@style/HDividerView" />
+        <TextView
+                android:id = "@+id/tv_pay_bean"
+                style = "@style/DefaultTextView.Header"
+                android:drawableLeft = "@drawable/selector_bean"
+                android:minWidth = "50dp"
+                android:drawablePadding = "@dimen/di_dialog_content_item_drawable_gap"
+                android:textColor = "@color/co_common_app_main_bg" />
+    </LinearLayout >
 </LinearLayout >

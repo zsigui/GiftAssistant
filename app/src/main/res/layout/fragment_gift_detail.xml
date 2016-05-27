@@ -1,274 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto"
-		android:layout_width = "match_parent"
-		android:layout_height = "match_parent"
-		android:orientation = "vertical" >
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:orientation = "vertical" >
 
-	<RelativeLayout
-			style = "@style/DefaultRelativeLayout"
-			android:paddingBottom = "20dp"
-			android:paddingLeft = "15dp"
-			android:paddingRight = "18dp"
-			android:paddingTop = "15dp" >
+    <RelativeLayout
+            style = "@style/DefaultRelativeLayout"
+            android:paddingBottom = "20dp"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:paddingTop = "15dp" >
 
-		<RelativeLayout
-				android:id = "@+id/rl_icon"
-				android:layout_width = "@dimen/di_icon_diameter"
-				android:layout_height = "@dimen/di_icon_diameter"
-				android:background = "@color/co_transparent" >
+        <RelativeLayout
+                android:id = "@+id/rl_icon"
+                android:layout_width = "@dimen/di_icon_diameter"
+                android:layout_height = "@dimen/di_icon_diameter"
+                android:background = "@color/co_transparent" >
 
-			<com.makeramen.roundedimageview.RoundedImageView
-					android:id = "@+id/iv_icon"
-					android:layout_width = "match_parent"
-					android:layout_height = "match_parent"
-					android:scaleType = "centerCrop"
-					app:riv_border_color = "@color/co_stroke_bg"
-					app:riv_border_width = "@dimen/di_icon_border_size"
-					app:riv_corner_radius = "@dimen/di_icon_radius"
-					app:riv_oval = "false" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                    android:id = "@+id/iv_icon"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:scaleType = "centerCrop"
+                    app:riv_border_color = "@color/co_stroke_bg"
+                    app:riv_border_width = "@dimen/di_icon_border_size"
+                    app:riv_corner_radius = "@dimen/di_icon_radius"
+                    app:riv_oval = "false" />
 
-			<ImageView
-					android:id = "@+id/iv_limit"
-					android:layout_width = "wrap_content"
-					android:layout_height = "wrap_content"
-					android:layout_alignParentBottom = "true"
-					android:layout_alignParentRight = "true"
-					android:layout_marginRight = "@dimen/di_icon_border_size"
-					android:layout_marginBottom = "@dimen/di_icon_border_size"
-					android:contentDescription = "@null"
-					android:visibility = "gone" />
-		</RelativeLayout >
+            <!--<ImageView-->
+            <!--android:id = "@+id/iv_limit"-->
+            <!--android:layout_width = "wrap_content"-->
+            <!--android:layout_height = "wrap_content"-->
+            <!--android:layout_alignParentBottom = "true"-->
+            <!--android:layout_alignParentRight = "true"-->
+            <!--android:layout_marginRight = "@dimen/di_icon_border_size"-->
+            <!--android:layout_marginBottom = "@dimen/di_icon_border_size"-->
+            <!--android:contentDescription = "@null"-->
+            <!--android:visibility = "gone" />-->
+        </RelativeLayout >
 
-		<TextView
-				android:id = "@+id/tv_name"
-				style = "@style/DefaultTextView.Header"
-				android:layout_width = "match_parent"
-				android:layout_alignTop = "@+id/rl_icon"
-				android:paddingLeft = "14dp"
-				android:layout_marginTop = "4dp"
-				android:layout_toLeftOf = "@+id/btn_send"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:drawablePadding = "6dp"
-				android:gravity = "center_vertical"
-				android:text = "圣诞礼包" />
+        <TextView
+                android:id = "@+id/tv_name"
+                style = "@style/DefaultTextView.Header"
+                android:layout_width = "match_parent"
+                android:layout_alignTop = "@+id/rl_icon"
+                android:paddingLeft = "14dp"
+                android:layout_marginTop = "4dp"
+                android:layout_toLeftOf = "@+id/btn_send"
+                android:layout_toRightOf = "@+id/rl_icon"
+                android:drawablePadding = "6dp"
+                android:gravity = "center_vertical" />
 
-		<TextView
-				android:id = "@+id/tv_consume"
-				style = "@style/DefaultTextView.Text"
-				android:layout_below = "@+id/tv_name"
-				android:layout_marginLeft = "14dp"
-				android:layout_marginRight = "5dp"
-				android:layout_marginTop = "8dp"
-				android:visibility = "gone"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:text = "@string/st_gift_consume" />
+        <TextView
+                android:id = "@+id/tv_consume"
+                style = "@style/DefaultTextView.Text"
+                android:layout_below = "@+id/tv_name"
+                android:layout_marginLeft = "14dp"
+                android:layout_marginRight = "5dp"
+                android:layout_marginTop = "8dp"
+                android:visibility = "gone"
+                android:layout_toRightOf = "@+id/rl_icon"
+                android:text = "@string/st_gift_consume" />
 
-		<TextView
-				android:id = "@+id/tv_score"
-				style = "@style/DefaultTextView.Text"
-				android:layout_alignTop = "@+id/tv_consume"
-				android:layout_toRightOf = "@id/tv_consume"
-				android:drawableLeft = "@drawable/ic_score"
-				android:visibility = "gone"
-				android:drawablePadding = "4dp" />
+        <TextView
+                android:id = "@+id/tv_score"
+                style = "@style/DefaultTextView.Text"
+                android:layout_alignTop = "@+id/tv_consume"
+                android:layout_toRightOf = "@id/tv_consume"
+                android:drawableLeft = "@drawable/ic_score"
+                android:visibility = "gone"
+                android:textColor = "@color/co_common_app_main_bg"
+                android:drawablePadding = "@dimen/di_line_space_extra_big" />
 
-		<TextView
-				android:id = "@+id/tv_or"
-				style = "@style/DefaultTextView.Text"
-				android:layout_alignTop = "@+id/tv_consume"
-				android:layout_marginLeft = "5dp"
-				android:layout_marginRight = "5dp"
-				android:layout_toRightOf = "@id/tv_score"
-				android:visibility = "gone"
-				android:text = "@string/st_gift_or" />
+        <TextView
+                android:id = "@+id/tv_or"
+                style = "@style/DefaultTextView.Text"
+                android:layout_alignTop = "@+id/tv_consume"
+                android:layout_marginLeft = "5dp"
+                android:layout_marginRight = "5dp"
+                android:layout_toRightOf = "@id/tv_score"
+                android:visibility = "gone"
+                android:text = "@string/st_gift_or" />
 
-		<TextView
-				android:id = "@+id/tv_bean"
-				style = "@style/DefaultTextView.Text"
-				android:layout_alignTop = "@+id/tv_consume"
-				android:layout_toRightOf = "@id/tv_or"
-				android:drawableLeft = "@drawable/ic_bean"
-				android:visibility = "gone"
-				android:drawablePadding = "4dp" />
+        <TextView
+                android:id = "@+id/tv_bean"
+                style = "@style/DefaultTextView.Text"
+                android:layout_alignTop = "@+id/tv_consume"
+                android:layout_toRightOf = "@id/tv_or"
+                android:drawableLeft = "@drawable/ic_bean"
+                android:visibility = "gone"
+                android:textColor = "@color/co_common_app_main_bg"
+                android:drawablePadding = "@dimen/di_line_space_extra_big" />
 
-		<TextView
-				android:id = "@+id/tv_new_add"
-				style = "@style/DefaultTextView.Text"
-				android:layout_below = "@+id/tv_consume"
-				android:layout_marginLeft = "14dp"
-				android:layout_marginTop = "7dp"
-				android:visibility = "gone"
-				android:layout_toRightOf = "@+id/tv_src" />
+        <TextView
+                android:id = "@+id/tv_seize_hint"
+                style = "@style/DefaultTextView.Text"
+                android:layout_below = "@+id/btn_send"
+                android:layout_alignParentRight = "true"
+                android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                android:visibility = "gone" />
 
-		<ProgressBar
-				android:id = "@+id/pb_percent"
-				style = "?android:attr/progressBarStyleHorizontal"
-				android:layout_width = "120dp"
-				android:layout_height = "@dimen/di_gift_common_pb_diameter"
-				android:layout_alignTop = "@+id/tv_new_add"
-				android:layout_marginLeft = "4dp"
-				android:layout_marginTop = "5dp"
-				android:layout_toLeftOf = "@+id/btn_send"
-				android:layout_toRightOf = "@+id/tv_new_add"
-				android:max = "100"
-				android:visibility = "gone"
-				android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+        <TextView
+                android:id = "@+id/tv_new_add"
+                style = "@style/DefaultTextView.Text"
+                android:layout_below = "@+id/tv_consume"
+                android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
+                android:layout_marginTop = "7dp"
+                android:visibility = "gone"
+                android:layout_toRightOf = "@+id/tv_price" />
 
-		<TextView
-				android:id = "@+id/tv_gift_code"
-				style = "@style/DefaultTextView.Text"
-				android:layout_height = "33dp"
-				android:layout_width = "244dp"
-				android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
-				android:layout_marginRight = "5dp"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:layout_toLeftOf = "@+id/btn_copy"
-				android:layout_alignBottom = "@+id/rl_icon"
-				android:background = "@color/co_gift_code_bg"
-				android:gravity = "left|center_vertical"
-				android:visibility = "gone"
-				android:paddingLeft = "10dp"
-				android:paddingRight = "10dp" />
+        <ProgressBar
+                android:id = "@+id/pb_percent"
+                style = "?android:attr/progressBarStyleHorizontal"
+                android:layout_width = "120dp"
+                android:layout_height = "@dimen/di_gift_common_pb_diameter"
+                android:layout_alignTop = "@+id/tv_new_add"
+                android:layout_marginLeft = "4dp"
+                android:layout_marginTop = "5dp"
+                android:layout_marginRight = "@dimen/di_list_item_gap_big"
+                android:layout_toLeftOf = "@+id/btn_send"
+                android:layout_toRightOf = "@+id/tv_new_add"
+                android:max = "100"
+                android:visibility = "gone"
+                android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
-		<TextView
-				android:id = "@+id/btn_copy"
-				style = "@style/DefaultTextView"
-				android:layout_height = "@dimen/di_btn_height"
-				android:layout_alignParentRight = "true"
-				android:layout_alignTop = "@+id/tv_gift_code"
-				android:layout_marginLeft = "10dp"
-				android:layout_marginTop = "1dp"
-				android:background = "@drawable/selector_btn_red"
-				android:text = "复制"
-				android:visibility = "gone"
-				android:textColor = "@color/color_btn_red_border" />
+        <TextView
+                android:id = "@+id/tv_gift_code"
+                style = "@style/DefaultTextView.Text"
+                android:layout_height = "33dp"
+                android:layout_width = "244dp"
+                android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
+                android:layout_marginRight = "5dp"
+                android:layout_toRightOf = "@+id/rl_icon"
+                android:layout_toLeftOf = "@+id/btn_copy"
+                android:layout_alignBottom = "@+id/rl_icon"
+                android:background = "@color/co_gift_code_bg"
+                android:gravity = "left|center_vertical"
+                android:visibility = "gone"
+                android:paddingLeft = "10dp"
+                android:paddingRight = "10dp" />
 
-		<!-- 0元抢 -->
-		<com.oplay.giftcool.ui.widget.DeletedTextView
-				android:id = "@+id/tv_src"
-				style = "@style/DefaultTextView.Text"
-				android:layout_width = "wrap_content"
-				android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
-				android:layout_marginRight = "5dp"
-				android:layout_marginTop = "7dp"
-				android:layout_below = "@+id/tv_consume"
-				android:layout_toRightOf = "@+id/rl_icon"
-				android:maxWidth = "80dp"
-				android:visibility = "gone"
-				android:gravity = "left|center_vertical" />
+        <TextView
+                android:id = "@+id/btn_copy"
+                style = "@style/DefaultTextView"
+                android:layout_height = "@dimen/di_btn_height"
+                android:layout_alignParentRight = "true"
+                android:layout_alignTop = "@+id/tv_gift_code"
+                android:layout_marginLeft = "10dp"
+                android:layout_marginTop = "1dp"
+                android:background = "@drawable/selector_btn_red"
+                android:text = "复制"
+                android:visibility = "gone"
+                android:textColor = "@color/color_btn_red_border" />
 
-		<com.oplay.giftcool.ui.widget.button.GiftButton
-				android:id = "@+id/btn_send"
-				style = "@style/DefaultTextView"
-				android:layout_height = "@dimen/di_btn_height"
-				android:layout_alignParentRight = "true"
-				android:layout_marginLeft = "10dp"
-				android:layout_alignTop = "@+id/tv_name"
-				android:text = "等抢号"
-				android:background = "@drawable/selector_btn_red"
-				android:textColor = "@color/color_btn_red_border" />
-	</RelativeLayout >
+        <!-- 0元抢 -->
+        <com.oplay.giftcool.ui.widget.DeletedTextView
+                android:id = "@+id/tv_price"
+                style = "@style/DefaultTextView.Text"
+                android:layout_width = "wrap_content"
+                android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
+                android:layout_marginTop = "7dp"
+                android:layout_below = "@+id/tv_consume"
+                android:layout_toRightOf = "@+id/rl_icon"
+                android:maxWidth = "80dp"
+                android:visibility = "gone"
+                android:gravity = "left|center_vertical" />
 
-	<ScrollView
-			android:layout_width = "match_parent"
-			android:background = "@color/co_white"
-			android:layout_height = "0dp"
-			android:layout_weight = "1" >
+        <com.oplay.giftcool.ui.widget.button.GiftButton
+                android:id = "@+id/btn_send"
+                style = "@style/DefaultTextView"
+                android:layout_height = "@dimen/di_btn_height"
+                android:layout_alignParentRight = "true"
+                android:layout_marginLeft = "10dp"
+                android:layout_alignTop = "@+id/tv_name"
+                android:text = "@string/st_gift_seize"
+                android:background = "@drawable/selector_btn_red"
+                android:textColor = "@color/color_btn_red_border" />
 
-		<LinearLayout
-				style = "@style/IndexModuleLayout"
-				android:layout_height = "wrap_content"
-				android:paddingBottom = "30dp"
-				android:background = "@color/co_transparent" >
+    </RelativeLayout >
 
-			<View
-					android:background = "@color/co_common_content_bg"
-					android:layout_width = "match_parent"
-					android:layout_height = "6dp" />
+    <ViewStub
+            android:id = "@+id/vs_gift"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout = "@layout/view_gift_detail_for_gift" />
 
-			<TextView
-					style = "@style/DefaultTextView.DetailTitle"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:text = "@string/st_gift_content" />
+    <ViewStub
+            android:id = "@+id/vs_first_charge"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout = "@layout/view_gift_detail_for_first_charge" />
 
-			<TextView
-					android:id = "@+id/et_content"
-					style = "@style/DefaultTextView.Detail"
-					android:singleLine = "false"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp" />
+    <LinearLayout
+            android:id = "@+id/ll_download"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation = "vertical"
+            android:background = "@color/co_common_content_bg"
+            android:gravity = "center" >
 
-			<TextView
-					style = "@style/DefaultTextView.DetailTitle"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:text = "@string/st_gift_deadline" />
-
-			<TextView
-					android:id = "@+id/tv_deadline"
-					style = "@style/DefaultTextView.Detail"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp" />
-
-			<TextView
-					style = "@style/DefaultTextView.DetailTitle"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:text = "@string/st_gift_usage" />
-
-			<TextView
-					android:id = "@+id/tv_usage"
-					style = "@style/DefaultTextView.Detail"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:singleLine = "false" />
-
-			<TextView
-					style = "@style/DefaultTextView.DetailTitle"
-					android:text = "@string/st_gift_remark"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:textColor = "@color/co_btn_orange" />
-
-			<TextView
-					android:id = "@+id/tv_remark"
-					style = "@style/DefaultTextView.Detail"
-					android:singleLine = "false"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:text = "@string/st_gift_hint_content" />
-
-			<TextView
-					android:id = "@+id/tv_qq"
-					style = "@style/DefaultTextView.Detail"
-					android:singleLine = "false"
-					android:paddingLeft = "15dp"
-					android:paddingRight = "18dp"
-					android:paddingTop = "15dp"
-					android:textColor = "@color/co_common_app_second_bg_orange"
-					android:text = "@string/st_gift_qq" />
-
-		</LinearLayout >
-
-	</ScrollView >
-
-	<LinearLayout
-			android:id = "@+id/ll_download"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:orientation = "vertical"
-			android:background = "@color/co_common_content_bg"
-			android:gravity = "center" >
-
-		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
-				android:id = "@+id/btn_download"
-				android:layout_marginTop = "10dp"
-				android:layout_marginBottom = "10dp"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content" />
-	</LinearLayout >
+        <com.oplay.giftcool.ui.widget.button.DownloadButtonView
+                android:id = "@+id/btn_download"
+                android:layout_marginTop = "10dp"
+                android:layout_marginBottom = "10dp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content" />
+    </LinearLayout >
 
 </LinearLayout >

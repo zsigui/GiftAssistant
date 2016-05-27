@@ -1,168 +1,172 @@
 <resources >
-	<!-- Default screen margins, per the Android Design guidelines. -->
-	<dimen name = "activity_horizontal_margin" >16dp</dimen >
-	<dimen name = "activity_vertical_margin" >16dp</dimen >
-	<dimen name = "fab_margin" >16dp</dimen >
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name = "activity_horizontal_margin" >16dp</dimen >
+    <dimen name = "activity_vertical_margin" >16dp</dimen >
+    <dimen name = "fab_margin" >16dp</dimen >
 
-	<dimen name = "di_tabs_common_bg_height" >45dp</dimen >
-	<dimen name = "di_tabs_indicator_length" >8dp</dimen >
-	<dimen name = "di_tabs_indicator_margin_left_right" >2dp</dimen >
-	<!-- 通用样式 -->
-	<dimen name = "di_common_btn_radius" >5sp</dimen >
-	<dimen name = "di_common_text" >14sp</dimen >
-	<dimen name = "di_common_text_padding_left_right" >18dp</dimen >
-	<dimen name = "di_common_text_padding_top_bottom" >5dp</dimen >
+    <dimen name = "di_tabs_common_bg_height" >45dp</dimen >
+    <dimen name = "di_tabs_indicator_length" >8dp</dimen >
+    <dimen name = "di_tabs_indicator_margin_left_right" >2dp</dimen >
+    <!-- 通用样式 -->
+    <dimen name = "di_common_btn_radius" >5sp</dimen >
+    <dimen name = "di_common_text" >14sp</dimen >
+    <dimen name = "di_common_text_padding_left_right" >18dp</dimen >
+    <dimen name = "di_common_text_padding_top_bottom" >5dp</dimen >
 
-	<dimen name = "di_divider_height" >1dp</dimen >
+    <dimen name = "di_divider_height" >1dp</dimen >
 
-	<dimen name = "di_icon_diameter_smaller" >60dp</dimen >
-	<dimen name = "di_icon_diameter" >70dp</dimen >
-	<dimen name = "di_icon_radius" >12dp</dimen >
-	<dimen name = "di_icon_radius_smaller" >8dp</dimen >
-	<dimen name = "di_icon_border_size" >1dp</dimen >
-	<dimen name = "di_icon_bigger_radius" >15dp</dimen >
-	<dimen name = "di_icon_bigger_diameter" >80dp</dimen >
+    <dimen name = "di_icon_diameter_smaller" >60dp</dimen >
+    <dimen name = "di_icon_diameter" >70dp</dimen >
+    <dimen name = "di_icon_radius" >12dp</dimen >
+    <dimen name = "di_icon_radius_smaller" >8dp</dimen >
+    <dimen name = "di_icon_border_size" >1dp</dimen >
+    <dimen name = "di_icon_bigger_radius" >15dp</dimen >
+    <dimen name = "di_icon_bigger_diameter" >80dp</dimen >
 
-	<dimen name = "di_web_progress_height">4dp</dimen>
+    <dimen name = "di_web_progress_height" >4dp</dimen >
 
-	<!-- 列表四周间隔 -->
-	<dimen name = "di_line_space_extra_normal" >2dp</dimen >
-	<dimen name = "di_line_space_extra_big" >4dp</dimen >
-	<dimen name = "di_list_item_gap_very_small" >6dp</dimen >
-	<dimen name = "di_list_item_gap_small" >8dp</dimen >
-	<dimen name = "di_list_item_gap_normal" >12dp</dimen >
-	<dimen name = "di_list_item_gap_big" >16dp</dimen >
-	<dimen name = "di_list_item_gap_aw" >24dp</dimen >
+    <dimen name = "di_item_money_min_width" >85dp</dimen >
 
-	<!-- 字体 -->
-	<dimen name = "di_text_size_very_small" >10sp</dimen >
-	<dimen name = "di_text_size_small" >12sp</dimen >
-	<dimen name = "di_text_size_normal" >14sp</dimen >
-	<dimen name = "di_text_size_big" >16sp</dimen >
+    <!-- 列表四周间隔 -->
+    <dimen name = "di_line_space_extra_normal" >2dp</dimen >
+    <dimen name = "di_line_space_extra_big" >4dp</dimen >
+    <dimen name = "di_list_item_gap_very_small" >6dp</dimen >
+    <dimen name = "di_list_item_gap_small" >8dp</dimen >
+    <dimen name = "di_list_item_gap_s_normal" >10dp</dimen >
+    <dimen name = "di_list_item_gap_normal" >12dp</dimen >
+    <dimen name = "di_list_item_gap_b_normal" >14dp</dimen >
+    <dimen name = "di_list_item_gap_big" >16dp</dimen >
+    <dimen name = "di_list_item_gap_aw" >24dp</dimen >
 
-	<!-- 游戏icon大小, 有2dp -->
-	<dimen name = "di_game_icon_layout_diameter" >74dp</dimen >
-	<dimen name = "di_game_icon_margin" >2dp</dimen >
+    <!-- 字体 -->
+    <dimen name = "di_text_size_very_small" >10sp</dimen >
+    <dimen name = "di_text_size_small" >12sp</dimen >
+    <dimen name = "di_text_size_normal" >14sp</dimen >
+    <dimen name = "di_text_size_big" >16sp</dimen >
 
-	<!-- 侧边栏 -->
-	<dimen name = "di_drawer_width" >270dp</dimen >
-	<dimen name = "di_drawer_header_height" >150dp</dimen >
-	<dimen name = "di_drawer_header_icon_diameter" >65dp</dimen >
-	<dimen name = "di_drawer_header_icon_border_size" >3dp</dimen >
-	<dimen name = "di_drawer_item_height" >45dp</dimen >
+    <!-- 游戏icon大小, 有2dp -->
+    <dimen name = "di_game_icon_layout_diameter" >74dp</dimen >
+    <dimen name = "di_game_icon_margin" >2dp</dimen >
 
-	<dimen name = "di_hint_red_padding_left_right">4dp</dimen>
+    <!-- 侧边栏 -->
+    <dimen name = "di_drawer_width" >270dp</dimen >
+    <dimen name = "di_drawer_header_height" >150dp</dimen >
+    <dimen name = "di_drawer_header_icon_diameter" >65dp</dimen >
+    <dimen name = "di_drawer_header_icon_border_size" >3dp</dimen >
+    <dimen name = "di_drawer_item_height" >45dp</dimen >
 
-	<!-- 主页 -->
-	<dimen name = "di_tab_index_bg_height" >55dp</dimen >
-	<dimen name = "di_title_light_width" >6dp</dimen >
-	<dimen name = "di_title_light_padding" >6dp</dimen >
+    <dimen name = "di_hint_red_padding_left_right" >4dp</dimen >
 
-	<dimen name = "di_tool_bar_profile_diameter" >40dp</dimen >
-	<dimen name = "di_tool_bar_padding_left" >16dp</dimen >
-	<dimen name = "di_tool_bar_profile_margin_right" >9dp</dimen >
-	<dimen name = "di_tool_bar_title_size" >18sp</dimen >
-	<dimen name = "di_tool_bar_bg_height" >56dp</dimen >
+    <!-- 主页 -->
+    <dimen name = "di_tab_index_bg_height" >55dp</dimen >
+    <dimen name = "di_title_light_width" >6dp</dimen >
+    <dimen name = "di_title_light_padding" >6dp</dimen >
 
-	<dimen name = "di_search_bar_text_size" >14sp</dimen >
-	<dimen name = "di_search_bar_radius" >20dp</dimen >
-	<dimen name = "di_search_bar_height" >40dp</dimen >
+    <dimen name = "di_tool_bar_profile_diameter" >40dp</dimen >
+    <dimen name = "di_tool_bar_padding_left" >16dp</dimen >
+    <dimen name = "di_tool_bar_profile_margin_right" >9dp</dimen >
+    <dimen name = "di_tool_bar_title_size" >18sp</dimen >
+    <dimen name = "di_tool_bar_bg_height" >56dp</dimen >
 
-	<dimen name = "di_banner_height" >160dp</dimen >
-	<dimen name = "di_banner_padding_bottom_top" >6dp</dimen >
+    <dimen name = "di_search_bar_text_size" >14sp</dimen >
+    <dimen name = "di_search_bar_radius" >20dp</dimen >
+    <dimen name = "di_search_bar_height" >40dp</dimen >
 
-	<dimen name = "di_index_module_gap" >7dp</dimen >
+    <dimen name = "di_banner_height" >160dp</dimen >
+    <dimen name = "di_banner_padding_bottom_top" >6dp</dimen >
 
-	<dimen name = "di_btn_small_radius" >10dp</dimen >
-	<dimen name = "di_btn_small_padding_top_bottom" >0dp</dimen >
-	<dimen name = "di_btn_small_padding_left_right" >10dp</dimen >
-	<dimen name = "di_btn_small_height" >20dp</dimen >
+    <dimen name = "di_index_module_gap" >7dp</dimen >
 
-	<dimen name = "di_btn_radius" >14dp</dimen >
-	<dimen name = "di_btn_padding_top_bottom" >0dp</dimen >
-	<dimen name = "di_btn_padding_left_right" >14dp</dimen >
-	<dimen name = "di_btn_height" >28dp</dimen >
+    <dimen name = "di_btn_small_radius" >10dp</dimen >
+    <dimen name = "di_btn_small_padding_top_bottom" >0dp</dimen >
+    <dimen name = "di_btn_small_padding_left_right" >10dp</dimen >
+    <dimen name = "di_btn_small_height" >20dp</dimen >
 
-	<dimen name = "di_btn_bigger_radius" >20dp</dimen >
-	<dimen name = "di_btn_bigger_padding_top_bottom" >0dp</dimen >
-	<dimen name = "di_btn_bigger_padding_left_right" >20dp</dimen >
-	<dimen name = "di_btn_bigger_height" >40dp</dimen >
+    <dimen name = "di_btn_radius" >14dp</dimen >
+    <dimen name = "di_btn_padding_top_bottom" >0dp</dimen >
+    <dimen name = "di_btn_padding_left_right" >14dp</dimen >
+    <dimen name = "di_btn_height" >28dp</dimen >
 
-
-	<dimen name = "di_module_bigger_height" >48dp</dimen >
-
-	<dimen name = "di_gift_common_pb_radius" >3dp</dimen >
-	<dimen name = "di_gift_common_pb_diameter" >6dp</dimen >
+    <dimen name = "di_btn_bigger_radius" >20dp</dimen >
+    <dimen name = "di_btn_bigger_padding_top_bottom" >0dp</dimen >
+    <dimen name = "di_btn_bigger_padding_left_right" >20dp</dimen >
+    <dimen name = "di_btn_bigger_height" >40dp</dimen >
 
 
-	<!-- 主页-礼包页面 -->
+    <dimen name = "di_module_bigger_height" >48dp</dimen >
 
-	<dimen name = "di_index_hoz_module_title_height" >38dp</dimen >
-	<dimen name = "di_index_hoz_module_margin_left" >16dp</dimen >
-	<dimen name = "di_index_hoz_module_icon_gap" >14dp</dimen >
-	<dimen name = "di_index_hoz_module_top_bottom" >12dp</dimen >
-	<dimen name = "di_index_item_margin_left" >7dp</dimen >
-	<dimen name = "di_index_list_item_gap" >12dp</dimen >
-	<dimen name = "di_index_list_item_width" >94dp</dimen >
+    <dimen name = "di_gift_common_pb_radius" >3dp</dimen >
+    <dimen name = "di_gift_common_pb_diameter" >6dp</dimen >
 
 
-	<dimen name = "di_index_list_item_margin_right" >12dp</dimen >
-	<dimen name = "di_index_list_item_progress_padding_right" >10dp</dimen >
+    <!-- 主页-礼包页面 -->
 
-	<dimen name = "di_gift_percent_margin_left" >5dp</dimen >
+    <dimen name = "di_index_hoz_module_title_height" >38dp</dimen >
+    <dimen name = "di_index_hoz_module_margin_left" >16dp</dimen >
+    <dimen name = "di_index_hoz_module_icon_gap" >14dp</dimen >
+    <dimen name = "di_index_hoz_module_top_bottom" >12dp</dimen >
+    <dimen name = "di_index_item_margin_left" >7dp</dimen >
+    <dimen name = "di_index_list_item_gap" >12dp</dimen >
+    <dimen name = "di_index_list_item_width" >94dp</dimen >
 
-	<!-- 主页-礼包页面-限抢礼包-->
-	<dimen name = "di_limit_item_height" >94dp</dimen >
-	<dimen name = "di_limit_margin_left" >4dp</dimen >
-	<dimen name = "di_timeline_point_diameter" >8dp</dimen >
-	<dimen name = "di_timeline_thickness" >0.5dp</dimen >
-	<dimen name = "di_gift_limit_padding" >4dp</dimen >
 
-	<!-- 主页-游戏-精品 -->
-	<dimen name = "di_index_game_recommend_iv_height" >176dp</dimen >
-	<dimen name = "di_index_game_recommend_height" >48dp</dimen >
+    <dimen name = "di_index_list_item_margin_right" >12dp</dimen >
+    <dimen name = "di_index_list_item_progress_padding_right" >10dp</dimen >
 
-	<!-- 主页-游戏-分类 -->
-	<dimen name = "di_game_tag_radius" >2dp</dimen >
-	<dimen name = "di_game_tag_padding_top_bottom" >3dp</dimen >
-	<dimen name = "di_game_tag_padding_left_right" >0dp</dimen >
-	<dimen name = "di_game_tag_header_height" >180dp</dimen >
+    <dimen name = "di_gift_percent_margin_left" >5dp</dimen >
 
-	<!-- 主页-活动 -->
-	<dimen name = "di_index_post_gap_vertical">6dp</dimen>
-	<dimen name = "di_index_post_item_official_width">120dp</dimen>
-	<dimen name = "di_index_post_item_official_height">70dp</dimen>
-	<dimen name = "di_index_post_item_radius">8dp</dimen>
-	<dimen name = "di_index_post_toolbar_margin">68dp</dimen>
-	<dimen name = "di_index_post_toggle_width">30dp</dimen>
-	<dimen name = "di_index_post_toggle_height">16dp</dimen>
+    <!-- 主页-礼包页面-限抢礼包-->
+    <dimen name = "di_limit_item_height" >94dp</dimen >
+    <dimen name = "di_limit_margin_left" >4dp</dimen >
+    <dimen name = "di_timeline_point_diameter" >8dp</dimen >
+    <dimen name = "di_timeline_thickness" >0.5dp</dimen >
+    <dimen name = "di_gift_limit_padding" >4dp</dimen >
 
-	<!-- 礼包详情 页面 -->
-	<dimen name = "di_detail_header_margin_left" >14dp</dimen >
-	<!-- 个人设置 页面 -->
-	<!-- 我的钱包 -->
-	<dimen name = "di_wallet_header_height" >113dp</dimen >
+    <!-- 主页-游戏-精品 -->
+    <dimen name = "di_index_game_recommend_iv_height" >176dp</dimen >
+    <dimen name = "di_index_game_recommend_height" >48dp</dimen >
 
-	<!-- ToolBar -->
-	<dimen name = "di_search_item_history" >45dp</dimen >
+    <!-- 主页-游戏-分类 -->
+    <dimen name = "di_game_tag_radius" >2dp</dimen >
+    <dimen name = "di_game_tag_padding_top_bottom" >3dp</dimen >
+    <dimen name = "di_game_tag_padding_left_right" >0dp</dimen >
+    <dimen name = "di_game_tag_header_height" >180dp</dimen >
 
-	<!-- 登录 -->
-	<dimen name = "di_login_padding_top" >20dp</dimen >
-	<dimen name = "di_login_padding_gap" >10dp</dimen >
-	<dimen name = "di_login_padding_left_right" >15dp</dimen >
+    <!-- 主页-活动 -->
+    <dimen name = "di_index_post_gap_vertical" >6dp</dimen >
+    <dimen name = "di_index_post_item_official_width" >120dp</dimen >
+    <dimen name = "di_index_post_item_official_height" >70dp</dimen >
+    <dimen name = "di_index_post_item_radius" >8dp</dimen >
+    <dimen name = "di_index_post_toolbar_margin" >68dp</dimen >
+    <dimen name = "di_index_post_toggle_width" >30dp</dimen >
+    <dimen name = "di_index_post_toggle_height" >16dp</dimen >
 
-	<!-- 弹窗 -->
-	<dimen name = "di_dialog_title_padding_left" >20dp</dimen >
-	<dimen name = "di_dialog_title_padding_top_bottom" >10dp</dimen >
-	<dimen name = "di_dialog_content_padding" >16dp</dimen >
-	<dimen name = "di_dialog_margin_left_right" >16dp</dimen >
-	<dimen name = "di_dialog_content_item_padding_right" >10dp</dimen >
-	<dimen name = "di_dialog_content_item_drawable_gap" >4dp</dimen >
+    <!-- 礼包详情 页面 -->
+    <dimen name = "di_detail_header_margin_left" >14dp</dimen >
+    <!-- 个人设置 页面 -->
+    <!-- 我的钱包 -->
+    <dimen name = "di_wallet_header_height" >113dp</dimen >
 
-	<dimen name = "di_dialog_welcome_content_width" >220dp</dimen >
+    <!-- ToolBar -->
+    <dimen name = "di_search_item_history" >45dp</dimen >
 
-	<dimen name = "di_toast_bg_radius" >6dp</dimen >
-	<dimen name = "di_toast_bg_width" >280dp</dimen >
-	<!-- default size of loading circle -->
-	<dimen name = "default_circle_view_size" >200dp</dimen >
+    <!-- 登录 -->
+    <dimen name = "di_login_padding_top" >20dp</dimen >
+    <dimen name = "di_login_padding_gap" >10dp</dimen >
+    <dimen name = "di_login_padding_left_right" >15dp</dimen >
+
+    <!-- 弹窗 -->
+    <dimen name = "di_dialog_title_padding_left" >20dp</dimen >
+    <dimen name = "di_dialog_title_padding_top_bottom" >10dp</dimen >
+    <dimen name = "di_dialog_content_padding" >16dp</dimen >
+    <dimen name = "di_dialog_margin_left_right" >16dp</dimen >
+    <dimen name = "di_dialog_content_item_padding_right" >10dp</dimen >
+    <dimen name = "di_dialog_content_item_drawable_gap" >4dp</dimen >
+
+    <dimen name = "di_dialog_welcome_content_width" >220dp</dimen >
+
+    <dimen name = "di_toast_bg_radius" >6dp</dimen >
+    <dimen name = "di_toast_bg_width" >280dp</dimen >
+    <!-- default size of loading circle -->
+    <dimen name = "default_circle_view_size" >200dp</dimen >
 </resources >

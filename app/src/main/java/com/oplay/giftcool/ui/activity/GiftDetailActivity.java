@@ -3,12 +3,13 @@ package com.oplay.giftcool.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -27,7 +28,7 @@ import com.socks.library.KLog;
  */
 public class GiftDetailActivity extends BaseAppCompatActivity {
 
-	private ImageView ivLimitTag;
+	private TextView tvTag;
 	private ImageView ivShare;
 	private OnShareListener mOnShareListener;
 	private int mId;
@@ -47,7 +48,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	@Override
 	protected void initMenu(@NonNull Toolbar toolbar) {
 		super.initMenu(toolbar);
-		ivLimitTag = getViewById(toolbar, R.id.iv_tool_limit);
+		tvTag = getViewById(toolbar, R.id.tv_tool_tag);
 		ivShare = getViewById(toolbar, R.id.iv_bar_share);
 		if (ivShare != null) {
 			ivShare.setOnClickListener(this);
@@ -93,13 +94,13 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 		mOnShareListener = shareClickListener;
 	}
 
-	public void showLimitTag(boolean isShow, @DrawableRes int bgId){
-		if (ivLimitTag != null) {
-			ivLimitTag.setBackgroundResource(bgId);
+	public void showLimitTag(boolean isShow, @StringRes int textId){
+		if (tvTag != null) {
 			if (isShow) {
-				ivLimitTag.setVisibility(View.VISIBLE);
+				tvTag.setVisibility(View.VISIBLE);
+				tvTag.setText(textId);
 			} else {
-				ivLimitTag.setVisibility(View.GONE);
+				tvTag.setVisibility(View.GONE);
 			}
 		}
 	}
@@ -135,10 +136,10 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 	public void release() {
 		super.release();
 		mOnShareListener = null;
-		if (ivLimitTag != null && ivLimitTag.getBackground() != null) {
-			ivLimitTag.getBackground().setCallback(null);
+		if (tvTag != null && tvTag.getBackground() != null) {
+			tvTag.getBackground().setCallback(null);
 		}
-		ivLimitTag = null;
+		tvTag = null;
 		ivShare = null;
 	}
 

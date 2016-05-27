@@ -26,7 +26,10 @@
                 android:id = "@+id/tv_content"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:padding = "@dimen/di_dialog_content_padding"
+                android:paddingTop = "@dimen/di_dialog_content_padding"
+                android:paddingBottom = "@dimen/di_dialog_content_padding"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingRight = "@dimen/di_dialog_title_padding_left"
                 android:singleLine = "false"
                 android:text = "礼包码已保存至 我的礼包"
                 android:textColor = "@color/co_black" />
@@ -34,10 +37,10 @@
         <TextView
                 android:id = "@+id/tv_gift_code"
                 style = "@style/DefaultTextView.Text"
-                android:layout_width = "wrap_content"
+                android:layout_width = "match_parent"
                 android:layout_height = "33dp"
-                android:layout_marginLeft = "@dimen/di_dialog_content_padding"
-                android:layout_marginRight = "@dimen/di_dialog_content_padding"
+                android:layout_marginLeft = "@dimen/di_dialog_title_padding_left"
+                android:layout_marginRight = "@dimen/di_dialog_title_padding_left"
                 android:layout_weight = "1"
                 android:background = "@color/co_gift_code_bg"
                 android:gravity = "left|center_vertical"
@@ -50,9 +53,11 @@
                 style = "@style/DefaultTextView.Text"
                 android:layout_width = "match_parent"
                 android:gravity = "left|center_vertical"
-                android:padding = "@dimen/di_dialog_content_padding"
+                android:paddingTop = "@dimen/di_dialog_content_padding"
+                android:paddingBottom = "@dimen/di_dialog_content_padding"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingRight = "@dimen/di_dialog_title_padding_left"
                 android:singleLine = "false"
-                android:textSize = "@dimen/di_text_size_very_small"
                 android:text = "礼包码已复制到粘贴板，请尽快打开游戏兑换" />
 
         <View style = "@style/HDividerView" />

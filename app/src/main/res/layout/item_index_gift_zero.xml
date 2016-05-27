@@ -24,7 +24,7 @@
 				app:riv_oval = "false" />
 
 		<TextView
-				android:id = "@+id/tv_src"
+				android:id = "@+id/tv_price"
 				style = "@style/DefaultTextView"
 				android:layout_alignParentBottom = "true"
 				android:layout_marginBottom = "5dp"

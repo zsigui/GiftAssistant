@@ -51,24 +51,31 @@
             android:text = "[暴打魏蜀吴]新手礼包" />
 
 
-    <com.oplay.giftcool.ui.widget.DeletedTextView
-            android:id = "@+id/tv_money"
-            android:gravity = "center_vertical"
-            android:minWidth = "70dp"
+    <LinearLayout
+            android:id = "@+id/ll_money"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
             android:layout_below = "@+id/tv_name"
+            android:layout_toRightOf = "@+id/rl_icon"
             android:layout_marginLeft = "7dp"
             android:layout_marginTop = "6dp"
-            android:layout_toRightOf = "@+id/rl_icon"
-            style = "@style/DefaultTextView.Text" />
+            android:minWidth = "@dimen/di_item_money_min_width" >
+
+        <com.oplay.giftcool.ui.widget.DeletedTextView
+                android:id = "@+id/tv_money"
+                android:gravity = "center_vertical"
+                style = "@style/DefaultTextView.Text" />
+    </LinearLayout >
 
     <com.oplay.giftcool.ui.widget.DeletedTextView
             android:id = "@+id/tv_price"
             style = "@style/DefaultTextView.Text"
             android:padding = "0dp"
-            android:layout_toLeftOf = "@+id/ll_percent"
-            android:layout_below = "@+id/tv_money"
+            android:layout_below = "@+id/ll_money"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_toRightOf = "@+id/rl_icon"
+            android:layout_toLeftOf = "@+id/btn_send"
+            android:layout_marginRight = "@dimen/di_list_item_gap_big"
             android:layout_marginTop = "@dimen/di_line_space_extra_normal"
             android:gravity = "center_vertical" />
 
@@ -78,7 +85,7 @@
             android:layout_below = "@+id/tv_name"
             android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
             android:layout_marginTop = "@dimen/di_list_item_gap_small"
-            android:layout_toRightOf = "@+id/tv_money" />
+            android:layout_toRightOf = "@+id/ll_money" />
 
     <ProgressBar
             android:id = "@+id/pb_percent"

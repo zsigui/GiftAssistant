@@ -31,7 +31,7 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
 
 	@Override
 	protected void initView() {
-		setContentView(R.layout.dialog_show_code);
+		setContentView(R.layout.dialog_show_code_new);
 		TextView tvContent = getViewById(R.id.tv_content);
 		tvGiftCode = getViewById(R.id.tv_gift_code);
 		tvContent.setText(Html.fromHtml("礼包码已保存至 <font color='#ffaa17'>我的礼包</font>"));

@@ -1,323 +1,331 @@
 <resources >
-	<string name = "app_name" >礼包酷</string >
+    <string name = "app_name" >礼包酷</string >
 
 
-	<!-- refresh view -->
-	<string name = "st_view_loading_more" >加载中&#8230;</string >
-	<string name = "st_view_seize_loading" >抢号中，请稍后&#8230;</string >
-	<!-- ToolBar -->
-	<string name = "toolbar_title" >默认</string >
-	<!-- -->
-	<string name = "err_setting" >去设置</string >
+    <!-- refresh view -->
+    <string name = "st_view_loading_more" >加载中&#8230;</string >
+    <string name = "st_view_seize_loading" >抢号中，请稍后&#8230;</string >
+    <!-- ToolBar -->
+    <string name = "toolbar_title" >默认</string >
+    <!-- -->
+    <string name = "err_setting" >去设置</string >
 
-	<string name = "st_title_stress" >▌</string >
-	<!-- 侧边栏 -->
-	<string name = "st_drawer_text_open" >打开</string >
-	<string name = "st_drawer_text_close" >关闭</string >
-	<string name = "st_drawer_tag_sign_in" >签到</string>
-	<string name = "st_drawer_tag_has_signed" >已签</string>
+    <string name = "st_title_stress" >▌</string >
+    <!-- 侧边栏 -->
+    <string name = "st_drawer_text_open" >打开</string >
+    <string name = "st_drawer_text_close" >关闭</string >
+    <string name = "st_drawer_tag_sign_in" >签到</string >
+    <string name = "st_drawer_tag_has_signed" >已签</string >
 
-	<string name = "st_drawer_header_un_login" >点击注册/登录</string>
+    <string name = "st_drawer_header_un_login" >点击注册/登录</string >
 
-	<string name = "st_drawer_my_gift" >我的礼包</string>
-	<string name = "st_drawer_my_wallet" >我的钱包</string>
-	<string name = "st_drawer_my_attention" >我的关注</string>
-	<string name = "st_drawer_sign_in_everyday" >每日签到</string>
-	<string name = "st_drawer_msg" >消息中心</string>
-	<string name = "st_drawer_download" >下载管理</string>
-	<string name = "st_drawer_setting" >设置</string>
+    <string name = "st_drawer_my_gift" >我的礼包</string >
+    <string name = "st_drawer_my_wallet" >我的钱包</string >
+    <string name = "st_drawer_my_attention" >我的关注</string >
+    <string name = "st_drawer_sign_in_everyday" >每日签到</string >
+    <string name = "st_drawer_msg" >消息中心</string >
+    <string name = "st_drawer_download" >下载管理</string >
+    <string name = "st_drawer_setting" >设置</string >
 
-	<!--礼包 -->
-	<string name = "st_search_hint" >搜索游戏和礼包</string >
-	<string name = "st_search_history_clear_title" >搜索记录</string >
-	<string name = "st_search_history_clear_sub" >清空搜索记录</string >
-	<string name = "st_search_history_hot_title" >热门搜索</string >
-	<string name = "st_search_history_empty" >暂无搜索记录</string >
-	<string name = "st_search_history_hot_sub" >换一批</string >
-	<string name = "st_search_empty_hope" >求礼包</string >
+    <!--礼包 -->
+    <string name = "st_search_hint" >搜索游戏和礼包</string >
+    <string name = "st_search_history_clear_title" >搜索记录</string >
+    <string name = "st_search_history_clear_sub" >清空搜索记录</string >
+    <string name = "st_search_history_hot_title" >热门搜索</string >
+    <string name = "st_search_history_empty" >暂无搜索记录</string >
+    <string name = "st_search_history_hot_sub" >换一批</string >
+    <string name = "st_search_empty_hope" >求礼包</string >
 
-	<!-- 活动 -->
-	<string name = "st_index_post_text_working">进行中</string>
-	<string name = "st_index_post_text_wait">未开始</string>
-	<string name = "st_index_post_text_finished">已结束</string>
-	<string name = "st_index_post_toolbar_title">活动</string>
-	<string name = "st_index_post_official">最新官方活动</string>
-	<string name = "st_index_post_notify">游戏活动快讯</string>
-	<string name = "st_index_post_read_attention">只看我关注的</string>
+    <!-- 活动 -->
+    <string name = "st_index_post_text_working" >进行中</string >
+    <string name = "st_index_post_text_wait" >未开始</string >
+    <string name = "st_index_post_text_finished" >已结束</string >
+    <string name = "st_index_post_toolbar_title" >活动</string >
+    <string name = "st_index_post_official" >最新官方活动</string >
+    <string name = "st_index_post_notify" >游戏活动快讯</string >
+    <string name = "st_index_post_read_attention" >只看我关注的</string >
 
-	<string name = "st_post_lottery" >每日抽奖</string >
-	<string name = "st_post_task" >每日任务</string >
-	<string name = "st_post_sign_in" >每日签到</string >
+    <string name = "st_post_lottery" >每日抽奖</string >
+    <string name = "st_post_task" >每日任务</string >
+    <string name = "st_post_sign_in" >每日签到</string >
 
-	<!-- 活动-详情 -->
-	<string name = "st_post_replay_text_hint">我也说一句</string>
-	<string name = "st_post_replay_btn_send">发表</string>
+    <!-- 活动-详情 -->
+    <string name = "st_post_replay_text_hint" >我也说一句</string >
+    <string name = "st_post_replay_btn_send" >发表</string >
 
-	<!-- 礼包状态 -->
-	<string name = "st_gift_or" >或</string >
+    <!-- 礼包状态 -->
+    <string name = "st_gift_or" >或</string >
 
-	<string name = "st_0_gift_seize" >0元抢</string >
-	<string name = "st_0_gift_wait_seize" >下一波</string >
-	<string name = "st_gift_finished" >已结束</string >
-	<string name = "st_gift_seized" >已抢号</string >
-	<string name = "st_gift_empty" >已抢完</string >
-	<string name = "st_gift_wait_search" >等淘号</string >
-	<string name = "st_gift_search" >淘号</string >
-	<string name = "st_gift_wait_seize" >等抢号</string >
-	<string name = "st_gift_seize" >抢号</string >
-	<string name = "st_gift_reserve" >预约</string >
-	<string name = "st_gift_reserved" >已预约</string >
-	<string name = "st_gift_reserve_empty" >预约完</string >
-	<string name = "st_gift_reserve_disabled" >不可预约</string >
-	<string name = "st_gift_take" >领号</string >
-	<string name = "st_gift_free_seize" >正在疯抢</string >
+    <string name = "st_0_gift_seize" >0元抢</string >
+    <string name = "st_0_gift_wait_seize" >下一波</string >
+    <string name = "st_gift_finished" >已结束</string >
+    <string name = "st_gift_seized" >已抢号</string >
+    <string name = "st_gift_empty" >已抢完</string >
+    <string name = "st_gift_wait_search" >等淘号</string >
+    <string name = "st_gift_search" >淘号</string >
+    <string name = "st_gift_wait_seize" >等抢号</string >
+    <string name = "st_gift_seize" >抢号</string >
+    <string name = "st_gift_reserve" >预约</string >
+    <string name = "st_gift_reserved" >已预约</string >
+    <string name = "st_gift_reserve_empty" >预约完</string >
+    <string name = "st_gift_reserve_disabled" >不可预约</string >
+    <string name = "st_gift_take" >领号</string >
+    <string name = "st_gift_free_seize" >正在疯抢</string >
 
-	<string name = "st_gift_normal_seize_hint" >进行普通抢号></string >
-	<string name = "st_gift_code_copy" >复制</string >
-	<!-- 礼包详情 -->
-	<string name = "st_gift_consume" >消耗</string >
-	<string name = "st_gift_content" >▌礼包内容</string >
-	<string name = "st_gift_deadline" >▌礼包使用期限</string >
-	<string name = "st_gift_usage" >▌礼包兑换方式</string >
-	<string name = "st_gift_remark" >▌特别说明</string >
-	<string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
-	<string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
-	<!-- 游戏状态 -->
-	<string name = "st_tabs_home_gift" >礼包</string >
-	<string name = "st_tabs_home_free" >限时免费</string >
-	<string name = "st_tabs_index_game" >游戏</string >
-	<string name = "st_tabs_index_post" >活动</string >
+    <string name = "st_gift_normal_seize_hint" >进行普通抢号></string >
+    <string name = "st_gift_code_copy" >复制</string >
+    <!-- 礼包详情 -->
+    <string name = "st_gift_tag_limit" >珍贵限量</string >
+    <string name = "st_gift_tag_free" >限时免费</string >
+    <string name = "st_gift_consume" >消耗</string >
+    <string name = "st_gift_content" >▌礼包内容</string >
+    <string name = "st_gift_deadline" >▌礼包使用期限</string >
+    <string name = "st_gift_usage" >▌礼包兑换方式</string >
+    <string name = "st_gift_remark" >▌特别说明</string >
+    <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
+    <string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
+    <!-- 首充券详情 -->
+    <string name = "st_first_charge_content">▌首充券价值</string>
+    <string name = "st_first_charge_deadline">▌使用期限</string>
+    <string name = "st_first_charge_usage">▌兑换步骤</string>
+    <string name = "st_first_charge_usage_hint">点击下方查看图文步骤</string>
+    <string name = "st_first_charge_hint_content" >1、首充券只能使用同一个偶玩账号兑换1次，多次兑换无效。\n2、首充券的有效时间较短，抢号后请马上使用。</string >
+    <!-- 游戏状态 -->
+    <string name = "st_tabs_home_gift" >礼包</string >
+    <string name = "st_tabs_home_free" >限时免费</string >
+    <string name = "st_tabs_index_game" >游戏</string >
+    <string name = "st_tabs_index_post" >活动</string >
 
-	<string name = "st_index_gift_all" >全部</string >
-	<string name = "st_index_gift_like" >猜你喜欢</string >
-	<string name = "st_index_gift_like_new_add" >今日新增</string >
-	<string name = "st_index_gift_limit" >珍贵限量</string >
-	<string name = "st_index_gift_limit_remain" >剩余</string >
-	<string name = "st_index_gift_new" >新鲜出炉</string >
+    <string name = "st_index_gift_all" >全部</string >
+    <string name = "st_index_gift_like" >猜你喜欢</string >
+    <string name = "st_index_gift_like_new_add" >今日新增</string >
+    <string name = "st_index_gift_limit" >珍贵限量</string >
+    <string name = "st_index_gift_limit_remain" >剩余</string >
+    <string name = "st_index_gift_new" >新鲜出炉</string >
 
-	<string name = "st_tabs_game_hot" >热门游戏</string >
-	<string name = "st_tabs_game_week" >本周热榜</string >
-	<string name = "st_tabs_game_feature" >期待榜</string >
+    <string name = "st_tabs_game_hot" >热门游戏</string >
+    <string name = "st_tabs_game_week" >本周热榜</string >
+    <string name = "st_tabs_game_feature" >期待榜</string >
 
-	<!-- 游戏详情主题颜色表 -->
-	<string name = "st_rainbow_color_1" >343754</string >
-	<string name = "st_rainbow_color_2" >1d404b</string >
-	<string name = "st_rainbow_color_3" >422f25</string >
-	<string name = "st_rainbow_color_4" >533341</string >
-	<string name = "st_rainbow_color_5" >f85454</string >
+    <!-- 游戏详情主题颜色表 -->
+    <string name = "st_rainbow_color_1" >343754</string >
+    <string name = "st_rainbow_color_2" >1d404b</string >
+    <string name = "st_rainbow_color_3" >422f25</string >
+    <string name = "st_rainbow_color_4" >533341</string >
+    <string name = "st_rainbow_color_5" >f85454</string >
 
-	<!-- 设置 -->
-	<string name = "st_setting_title" >设置</string >
-	<string name = "st_setting_accept_push" >接受推送消息</string >
-	<string name = "st_setting_auto_delete_package" >安装完成后自动删除安装包</string >
-	<string name = "st_setting_auto_focus" >抢礼包后自动关注所属游戏</string >
-	<string name = "st_setting_auto_update" >自动检查版本更新</string >
-	<string name = "st_setting_auto_clear_cache" >清除缓存</string >
-	<string name = "st_setting_auto_clear_cache_hint" >清除缓存成功，总共释放 %s 空间</string >
-	<string name = "st_setting_auto_feedback" >意见反馈</string >
-	<string name = "st_setting_cur_version" >当前版本号</string >
+    <!-- 设置 -->
+    <string name = "st_setting_title" >设置</string >
+    <string name = "st_setting_accept_push" >接受推送消息</string >
+    <string name = "st_setting_auto_delete_package" >安装完成后自动删除安装包</string >
+    <string name = "st_setting_auto_focus" >抢礼包后自动关注所属游戏</string >
+    <string name = "st_setting_auto_update" >自动检查版本更新</string >
+    <string name = "st_setting_auto_clear_cache" >清除缓存</string >
+    <string name = "st_setting_auto_clear_cache_hint" >清除缓存成功，总共释放 %s 空间</string >
+    <string name = "st_setting_auto_feedback" >意见反馈</string >
+    <string name = "st_setting_cur_version" >当前版本号</string >
 
-	<string name = "st_setting_about" >关于礼包酷</string >
-	<string name = "st_setting_logout" >退出当前账号</string >
+    <string name = "st_setting_about" >关于礼包酷</string >
+    <string name = "st_setting_logout" >退出当前账号</string >
 
-	<!-- 设置 - 消息中心 -->
-	<string name = "st_msg_central_title">消息中心</string>
-	<string name = "st_msg_central_new_gift_notify">新礼包上线通知</string>
-	<string name = "st_msg_central_admire">收到的点赞</string>
-	<string name = "st_msg_central_system">系统消息</string>
-	<string name = "st_msg_central_comment">收到的回复</string>
-	<string name = "st_msg_central_hint_no_notify">暂时还没有收到通知哦</string>
-	<string name = "st_msg_central_hint_no_reply">暂时还没有收到回复哦</string>
-	<string name = "st_msg_central_get_a_admire">%1$s 给了您一个赞</string>
+    <!-- 设置 - 消息中心 -->
+    <string name = "st_msg_central_title" >消息中心</string >
+    <string name = "st_msg_central_new_gift_notify" >新礼包上线通知</string >
+    <string name = "st_msg_central_admire" >收到的点赞</string >
+    <string name = "st_msg_central_system" >系统消息</string >
+    <string name = "st_msg_central_comment" >收到的回复</string >
+    <string name = "st_msg_central_hint_no_notify" >暂时还没有收到通知哦</string >
+    <string name = "st_msg_central_hint_no_reply" >暂时还没有收到回复哦</string >
+    <string name = "st_msg_central_get_a_admire" >%1$s 给了您一个赞</string >
 
-	<!-- 消息中心 - 推送列表 -->
-	<string name = "st_msg_push_list_get" >马上领取</string >
-	<string name = "st_msg_push_list_title" >[%s]上线了一个新礼包</string >
-	<string name = "st_msg_push_list_content" >礼包内容：%s</string >
+    <!-- 消息中心 - 推送列表 -->
+    <string name = "st_msg_push_list_get" >马上领取</string >
+    <string name = "st_msg_push_list_title" >[%s]上线了一个新礼包</string >
+    <string name = "st_msg_push_list_content" >礼包内容：%s</string >
 
-	<!-- 设置 - 意见反馈 -->
-	<string name = "st_feedback_title" >意见反馈</string >
-	<string name = "st_feedback_type_title" >「礼包酷」官方交流Q群:</string >
-	<string name = "st_feedback_type_function" >功能/礼包问题</string >
-	<string name = "st_feedback_type_pay" >充值/消费问题</string >
-	<string name = "st_feedback_type_other" >其他问题</string >
-	<string name = "st_feedback_content_title" >反馈内容(必填)</string >
-	<string name = "st_feedback_content_hint" >您反馈的内容对我们很重要噢！（500字以内并不少于10个字）</string >
-	<string name = "st_feedback_phone_title" >联系方式</string >
-	<string name = "st_feedback_phone_hint" >您的QQ号/手机号</string >
-	<string name = "st_feedback_btn" >提交</string >
+    <!-- 设置 - 意见反馈 -->
+    <string name = "st_feedback_title" >意见反馈</string >
+    <string name = "st_feedback_type_title" >「礼包酷」官方交流Q群:</string >
+    <string name = "st_feedback_type_function" >功能/礼包问题</string >
+    <string name = "st_feedback_type_pay" >充值/消费问题</string >
+    <string name = "st_feedback_type_other" >其他问题</string >
+    <string name = "st_feedback_content_title" >反馈内容(必填)</string >
+    <string name = "st_feedback_content_hint" >您反馈的内容对我们很重要噢！（500字以内并不少于10个字）</string >
+    <string name = "st_feedback_phone_title" >联系方式</string >
+    <string name = "st_feedback_phone_hint" >您的QQ号/手机号</string >
+    <string name = "st_feedback_btn" >提交</string >
 
-	<!-- 设置 - 关于 -->
-	<string name = "st_about_title" >关于礼包酷</string >
-	<string name = "st_about_update" >检查更新</string >
-	<string name = "st_about_checking_update" >检查中…</string >
-	<string name = "st_about_update_text" >当前已是最新版本</string >
-	<string name = "st_about_wait_update_text" >待更新版本: %s</string >
-	<string name = "st_about_check_update_failed" >检查更新失败！</string >
-	<string name = "st_about_qq" >官方QQ群</string >
+    <!-- 设置 - 关于 -->
+    <string name = "st_about_title" >关于礼包酷</string >
+    <string name = "st_about_update" >检查更新</string >
+    <string name = "st_about_checking_update" >检查中…</string >
+    <string name = "st_about_update_text" >当前已是最新版本</string >
+    <string name = "st_about_wait_update_text" >待更新版本: %s</string >
+    <string name = "st_about_check_update_failed" >检查更新失败！</string >
+    <string name = "st_about_qq" >官方QQ群</string >
 
-	<!-- 设置 - 我的钱包 -->
-	<string name = "st_wallet_title" >我的钱包</string >
-	<string name = "st_score_title" >金币余额</string >
-	<string name = "st_bean_title" >偶玩豆余额</string >
-	<string name = "st_score_detail" >金币明细</string >
-	<string name = "st_bean_detail" >偶玩豆明细</string >
-	<string name = "st_wallet_get_score" >免费赚金币</string >
-	<string name = "st_wallet_get_bean" >充值偶玩豆</string >
-	<string name = "st_wallet_bean_note" >偶玩豆说明</string >
-	<string name = "st_wallet_score_note" >金币说明</string >
+    <!-- 设置 - 我的钱包 -->
+    <string name = "st_wallet_title" >我的钱包</string >
+    <string name = "st_score_title" >金币余额</string >
+    <string name = "st_bean_title" >偶玩豆余额</string >
+    <string name = "st_score_detail" >金币明细</string >
+    <string name = "st_bean_detail" >偶玩豆明细</string >
+    <string name = "st_wallet_get_score" >免费赚金币</string >
+    <string name = "st_wallet_get_bean" >充值偶玩豆</string >
+    <string name = "st_wallet_bean_note" >偶玩豆说明</string >
+    <string name = "st_wallet_score_note" >金币说明</string >
 
-	<!-- 设置 - 金币任务 -->
-	<string name = "st_task_title" >金币任务</string >
-	<string name = "st_task_btn_to_do" >去完成</string >
-	<string name = "st_task_btn_finished" >已完成</string >
-	<string name = "st_task_lottery_btn" >我要抽奖</string >
-	<string name = "st_task_reward" >任务奖励:</string >
+    <!-- 设置 - 金币任务 -->
+    <string name = "st_task_title" >金币任务</string >
+    <string name = "st_task_btn_to_do" >去完成</string >
+    <string name = "st_task_btn_finished" >已完成</string >
+    <string name = "st_task_lottery_btn" >我要抽奖</string >
+    <string name = "st_task_reward" >任务奖励:</string >
 
-	<!-- 设置 - 下载状态 -->
-	<string name = "st_download_title" >下载管理</string >
-	<string name = "st_game_download" >下载</string >
-	<string name = "st_game_pause" >暂停</string >
-	<string name = "st_game_continue" >继续</string >
-	<string name = "st_game_retry" >重试</string >
-	<string name = "st_game_install" >安装</string >
-	<string name = "st_game_open" >打开</string >
-	<string name = "st_game_update" >更新</string >
-	<string name = "st_game_title" >游戏专区</string >
+    <!-- 设置 - 下载状态 -->
+    <string name = "st_download_title" >下载管理</string >
+    <string name = "st_game_download" >下载</string >
+    <string name = "st_game_pause" >暂停</string >
+    <string name = "st_game_continue" >继续</string >
+    <string name = "st_game_retry" >重试</string >
+    <string name = "st_game_install" >安装</string >
+    <string name = "st_game_open" >打开</string >
+    <string name = "st_game_update" >更新</string >
+    <string name = "st_game_title" >游戏专区</string >
 
-	<!-- 设置 - 我的礼包 -->
-	<string name = "st_my_gift_title" >我的礼包</string >
-	<string name = "st_wallet_money_note" >说明</string >
+    <!-- 设置 - 我的礼包 -->
+    <string name = "st_my_gift_title" >我的礼包</string >
+    <string name = "st_wallet_money_note" >说明</string >
 
-	<!-- 设置 - 我的关注 -->
-	<string name = "st_my_attention_title" >我的关注</string >
-	<string name = "st_my_attention_btn_quick">取消关注</string>
-	<string name = "st_my_attention_msg_hint">已关注游戏新礼包上线会第一时间提醒您，请留意通知栏消息</string>
-	<string name = "st_my_attention_empty_btn">去逛逛</string>
+    <!-- 设置 - 我的关注 -->
+    <string name = "st_my_attention_title" >我的关注</string >
+    <string name = "st_my_attention_btn_quick" >取消关注</string >
+    <string name = "st_my_attention_msg_hint" >已关注游戏新礼包上线会第一时间提醒您，请留意通知栏消息</string >
+    <string name = "st_my_attention_empty_btn" >去逛逛</string >
 
-	<!-- 登录 -->
-	<string name = "st_login_user" >点击登录</string >
-	<string name = "st_login_phone_title" >登录礼包酷</string >
-	<string name = "st_login_ouwan_title" >偶玩账号登录</string >
-	<string name = "st_login_phone_hint" >请输入手机号直接登录，无须注册</string >
-	<string name = "st_login_phone_code_hint" >请输入短信验证码</string >
-	<string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
-	<string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
-	<string name = "st_login_phone_send_code" >发送验证码</string >
-	<string name = "st_login_phone_resend_code" >重新发送(%ds)</string >
-	<string name = "st_login_remember_pwd" >记住密码</string >
-	<string name = "st_login_has_ouwan_a" >已有偶玩账号? 用</string >
-	<string name = "st_login_has_ouwan_b" >偶玩账号登录</string >
-	<string name = "st_login_no_ouwan_a" >没有偶玩账号? 用</string >
-	<string name = "st_login_no_ouwan_b" >手机账号登录</string >
-	<string name = "st_login_forget_pwd" >忘记密码</string >
-	<string name = "st_login_btn_text" >登 录</string >
-
-
-	<!-- 弹窗 -->
-	<string name = "st_dialog_hint_title" >提示</string >
-	<string name = "st_dialog_btn_confirm" >确认</string >
-	<string name = "st_dialog_btn_cancel" >取消</string >
-	<string name = "st_content_clear_cache" >确认要清除缓存吗？</string >
-	<string name = "st_content_logout" >确认退出当前账号吗？</string >
-
-	<string name = "st_dialog_pay_title_get_code" >恭喜您！抢号成功！</string >
-	<string name = "st_dialog_pay_score" >金币支付</string >
-	<string name = "st_dialog_pay_bean" >偶玩豆支付</string >
-	<string name = "st_dialog_seize_success" >恭喜，抢号成功！</string >
-	<string name = "st_dialog_seize_failed" >很遗憾，抢号失败！</string >
-	<string name = "st_dialog_search_success" >恭喜，淘号成功！</string >
-	<string name = "st_dialog_search_failed" >很遗憾，淘号失败</string >
-	<string name = "st_dialog_btn_ok" >我知道了</string >
-
-	<string name = "st_dialog_gift_share_title" >礼包分享</string >
-	<string name = "st_share_gift_title_limit" >[%1$s]%2$s(限今天)</string >
-	<string name = "st_share_gift_desc_limit" >[%1$s]%2$s，价值珍贵，限量领取</string >
-	<string name = "st_share_gift_title_normal" >[%1$s]%2$s</string >
-	<string name = "st_share_gift_desc_normal" >[%1$s]%2$s，快抢呀</string >
-	<string name = "st_dialog_gcool_share_title" >礼包酷分享</string >
-	<string name = "st_dialog_invite_title" >没时间解释了，快来抢礼包</string >
-	<string name = "st_share_gcool_description_1" >价值888元的礼包，居然可以「0元抢」，手快有，手慢无</string >
-
-	<string name = "st_dialog_btn_download" >马上下载</string >
-	<string name = "st_dialog_btn_install" >安装</string >
-
-	<string name = "st_welcome_login_hint" >金币可以兑换各种豪华礼包\n金币存放在“我的钱包”里面</string >
-	<string name = "st_welcome_login_hint_lottery1" >金币可以兑换各种豪华礼包</string >
-	<string name = "st_welcome_login_hint_lottery2" >奖励3次免费抽奖的机会，100%中奖</string >
-	<string name = "st_welcome_unlogin_hint" >马上登录，获取大量金币。\n金币可以兑换各种礼包噢~</string >
-	<string name = "st_welcome_login_btn" >更多金币</string >
-	<string name = "st_welcome_unlogin_btn" >马上登录</string >
-	<string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
-	<string name = "st_welcome_update_title" >新版特性：</string >
-	<string name = "st_welcome_update_people_hint" >的玩家选择了更新</string >
-	<string name = "st_welcome_update_cancel" >狠狠拒绝</string >
-	<string name = "st_welcome_update_confirm" >马上更新</string >
-
-	<string name = "st_web_default_title_name" >活动页面</string >
+    <!-- 登录 -->
+    <string name = "st_login_user" >点击登录</string >
+    <string name = "st_login_phone_title" >登录礼包酷</string >
+    <string name = "st_login_ouwan_title" >偶玩账号登录</string >
+    <string name = "st_login_phone_hint" >请输入手机号直接登录，无须注册</string >
+    <string name = "st_login_phone_code_hint" >请输入短信验证码</string >
+    <string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
+    <string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
+    <string name = "st_login_phone_send_code" >发送验证码</string >
+    <string name = "st_login_phone_resend_code" >重新发送(%ds)</string >
+    <string name = "st_login_remember_pwd" >记住密码</string >
+    <string name = "st_login_has_ouwan_a" >已有偶玩账号? 用</string >
+    <string name = "st_login_has_ouwan_b" >偶玩账号登录</string >
+    <string name = "st_login_no_ouwan_a" >没有偶玩账号? 用</string >
+    <string name = "st_login_no_ouwan_b" >手机账号登录</string >
+    <string name = "st_login_forget_pwd" >忘记密码</string >
+    <string name = "st_login_btn_text" >登 录</string >
 
 
-	<!-- 弹窗 - 求礼包 -->
-	<string name = "st_dialog_hope_gift_title" >向小编求礼包</string>
-	<string name = "st_dialog_hope_gift_name_hint">游戏名</string>
-	<string name = "st_dialog_hope_gift_note_hint">补充说明（可不填写）</string>
-	<string name = "st_dialog_hope_gift_btn_confirm" >提交</string >
+    <!-- 弹窗 -->
+    <string name = "st_dialog_hint_title" >提示</string >
+    <string name = "st_dialog_btn_confirm" >确认</string >
+    <string name = "st_dialog_btn_cancel" >取消</string >
+    <string name = "st_content_clear_cache" >确认要清除缓存吗？</string >
+    <string name = "st_content_logout" >确认退出当前账号吗？</string >
 
-	<string name = "st_dialog_btn_success_confirm">我知道了</string>
-	<string name = "st_dialog_hope_gift_success_title">求礼包成功</string>
-	<string name = "st_dialog_hope_gift_success_content">该游戏新礼包上线会第一时间提醒您，请留意通知栏消息！</string>
-	<string name = "st_dialog_hope_gift_fail_title">求礼包失败</string>
-	<string name = "st_dialog_hope_gift_fail_game_limit_content">我们正努力为您准备礼包，请留意通知栏消息哦！</string>
-	<string name = "st_dialog_hope_gift_fail_total_limit_content">今天求礼包次数达到上限了哦，我们正努力为您准备礼包，请留意通知栏消息哦！</string>
+    <string name = "st_dialog_pay_title_get_code" >恭喜您！抢号成功！</string >
+    <string name = "st_dialog_pay_score" >金币支付</string >
+    <string name = "st_dialog_pay_bean" >偶玩豆支付</string >
+    <string name = "st_dialog_seize_success" >恭喜，抢号成功！</string >
+    <string name = "st_dialog_seize_failed" >很遗憾，抢号失败！</string >
+    <string name = "st_dialog_search_success" >恭喜，淘号成功！</string >
+    <string name = "st_dialog_search_failed" >很遗憾，淘号失败</string >
+    <string name = "st_dialog_btn_ok" >我知道了</string >
 
-	<!-- 弹窗 - 取消关注 -->
-	<string name = "st_quick_focus_title">取消关注</string>
-	<string name = "st_quick_focus_content">取消关注后您将无法及时受到新礼包上线的提醒哦，确定取消吗？</string>
+    <string name = "st_dialog_gift_share_title" >礼包分享</string >
+    <string name = "st_share_gift_title_limit" >[%1$s]%2$s(限今天)</string >
+    <string name = "st_share_gift_desc_limit" >[%1$s]%2$s，价值珍贵，限量领取</string >
+    <string name = "st_share_gift_title_normal" >[%1$s]%2$s</string >
+    <string name = "st_share_gift_desc_normal" >[%1$s]%2$s，快抢呀</string >
+    <string name = "st_dialog_gcool_share_title" >礼包酷分享</string >
+    <string name = "st_dialog_invite_title" >没时间解释了，快来抢礼包</string >
+    <string name = "st_share_gcool_description_1" >价值888元的礼包，居然可以「0元抢」，手快有，手慢无</string >
+
+    <string name = "st_dialog_btn_download" >马上下载</string >
+    <string name = "st_dialog_btn_install" >安装</string >
+
+    <string name = "st_welcome_login_hint" >金币可以兑换各种豪华礼包\n金币存放在“我的钱包”里面</string >
+    <string name = "st_welcome_login_hint_lottery1" >金币可以兑换各种豪华礼包</string >
+    <string name = "st_welcome_login_hint_lottery2" >奖励3次免费抽奖的机会，100%中奖</string >
+    <string name = "st_welcome_unlogin_hint" >马上登录，获取大量金币。\n金币可以兑换各种礼包噢~</string >
+    <string name = "st_welcome_login_btn" >更多金币</string >
+    <string name = "st_welcome_unlogin_btn" >马上登录</string >
+    <string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
+    <string name = "st_welcome_update_title" >新版特性：</string >
+    <string name = "st_welcome_update_people_hint" >的玩家选择了更新</string >
+    <string name = "st_welcome_update_cancel" >狠狠拒绝</string >
+    <string name = "st_welcome_update_confirm" >马上更新</string >
+
+    <string name = "st_web_default_title_name" >活动页面</string >
 
 
-	<!-- 账户信息 -->
-	<string name = "st_user_info_title" >账户信息</string >
-	<string name = "st_user_avator" >头像</string >
-	<string name = "st_user_nick" >昵称</string >
-	<string name = "st_user_ouwan_login" >登录偶玩号</string >
-	<string name = "st_user_phone_login" >登录手机号</string >
-	<string name = "st_user_ouwan_bind" >设置「新」偶玩账号</string >
-	<string name = "st_user_phone_bind" >绑定手机号</string >
-	<string name = "st_user_unbind" >未绑定</string >
-	<string name = "st_user_modify_pwd" >修改登录密码</string >
-	<string name = "st_user_ouwan_hint" >小提示： 绑定手机号码可以找回登录密码，有效保障账号安全</string >
-	<string name = "st_user_phone_hint" >小提示： 登陆手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string >
-	<string name = "st_login_notice" >手机号直接登录，无须注册</string >
+    <!-- 弹窗 - 求礼包 -->
+    <string name = "st_dialog_hope_gift_title" >向小编求礼包</string >
+    <string name = "st_dialog_hope_gift_name_hint" >游戏名</string >
+    <string name = "st_dialog_hope_gift_note_hint" >补充说明（可不填写）</string >
+    <string name = "st_dialog_hope_gift_btn_confirm" >提交</string >
 
-	<!-- 设置头像 -->
-	<string name = "st_user_set_avatar_title" >设置头像</string >
-	<string name = "st_user_set_avator_gallery" >从相册中选一张</string >
-	<string name = "st_user_set_avator_photo" >拍一张照</string >
-	<string name = "st_user_set_avatar_loading" >上传图片中…</string >
+    <string name = "st_dialog_btn_success_confirm" >我知道了</string >
+    <string name = "st_dialog_hope_gift_success_title" >求礼包成功</string >
+    <string name = "st_dialog_hope_gift_success_content" >该游戏新礼包上线会第一时间提醒您，请留意通知栏消息！</string >
+    <string name = "st_dialog_hope_gift_fail_title" >求礼包失败</string >
+    <string name = "st_dialog_hope_gift_fail_game_limit_content" >我们正努力为您准备礼包，请留意通知栏消息哦！</string >
+    <string name = "st_dialog_hope_gift_fail_total_limit_content" >今天求礼包次数达到上限了哦，我们正努力为您准备礼包，请留意通知栏消息哦！</string >
 
-	<!-- 设置昵称 -->
-	<string name = "st_user_set_nick_title" >设置昵称</string >
-	<string name = "st_user_set_nick_save" >保存</string >
-	<string name = "st_user_set_nick_loading" >修改昵称中…</string >
+    <!-- 弹窗 - 取消关注 -->
+    <string name = "st_quick_focus_title" >取消关注</string >
+    <string name = "st_quick_focus_content" >取消关注后您将无法及时受到新礼包上线的提醒哦，确定取消吗？</string >
 
-	<!-- 分享 -->
-	<string name = "st_share_title" >礼包分享</string >
-	<string name = "st_share_limit_pattern" >%s(限今天)</string >
-	<string name = "st_share_limit_sms_pattern" >%s，价值珍贵，限量领取</string >
-	<string name = "st_share_normal_sms_pattern" >%s，快抢呀</string >
-	<string name = "st_share_result_success" >分享成功</string >
-	<string name = "st_share_result_quick" >取消分享</string >
-	<string name = "st_share_result_failed" >分享失败</string >
-	<string name = "share_key_mm_id" >wx-share-key</string >
-	<string name = "st_share_mm_friends" >微信好友</string >
-	<string name = "st_share_mm_moments" >朋友圈</string >
-	<string name = "st_share_qq_zone" >QQ空间</string >
-	<string name = "st_share_qq_friends" >QQ好友</string >
-	<string name = "st_share_more" >更多</string >
 
-	<!-- -->
-	<string name = "st_hint_un_login" >用户登录态失效，请重新登录</string >
-	<string name = "st_hint_dialog_login_title" >请先登录</string >
-	<string name = "st_hint_dialog_login_content" >是否跳转登录界面？</string >
-	<string name = "st_hint_dialog_login_tag" >login</string >
+    <!-- 账户信息 -->
+    <string name = "st_user_info_title" >账户信息</string >
+    <string name = "st_user_avator" >头像</string >
+    <string name = "st_user_nick" >昵称</string >
+    <string name = "st_user_ouwan_login" >登录偶玩号</string >
+    <string name = "st_user_phone_login" >登录手机号</string >
+    <string name = "st_user_ouwan_bind" >设置「新」偶玩账号</string >
+    <string name = "st_user_phone_bind" >绑定手机号</string >
+    <string name = "st_user_unbind" >未绑定</string >
+    <string name = "st_user_modify_pwd" >修改登录密码</string >
+    <string name = "st_user_ouwan_hint" >小提示： 绑定手机号码可以找回登录密码，有效保障账号安全</string >
+    <string name = "st_user_phone_hint" >小提示： 登陆手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string >
+    <string name = "st_login_notice" >手机号直接登录，无须注册</string >
+
+    <!-- 设置头像 -->
+    <string name = "st_user_set_avatar_title" >设置头像</string >
+    <string name = "st_user_set_avator_gallery" >从相册中选一张</string >
+    <string name = "st_user_set_avator_photo" >拍一张照</string >
+    <string name = "st_user_set_avatar_loading" >上传图片中…</string >
+
+    <!-- 设置昵称 -->
+    <string name = "st_user_set_nick_title" >设置昵称</string >
+    <string name = "st_user_set_nick_save" >保存</string >
+    <string name = "st_user_set_nick_loading" >修改昵称中…</string >
+
+    <!-- 分享 -->
+    <string name = "st_share_title" >礼包分享</string >
+    <string name = "st_share_limit_pattern" >%s(限今天)</string >
+    <string name = "st_share_limit_sms_pattern" >%s，价值珍贵，限量领取</string >
+    <string name = "st_share_normal_sms_pattern" >%s，快抢呀</string >
+    <string name = "st_share_result_success" >分享成功</string >
+    <string name = "st_share_result_quick" >取消分享</string >
+    <string name = "st_share_result_failed" >分享失败</string >
+    <string name = "share_key_mm_id" >wx-share-key</string >
+    <string name = "st_share_mm_friends" >微信好友</string >
+    <string name = "st_share_mm_moments" >朋友圈</string >
+    <string name = "st_share_qq_zone" >QQ空间</string >
+    <string name = "st_share_qq_friends" >QQ好友</string >
+    <string name = "st_share_more" >更多</string >
+
+    <!-- -->
+    <string name = "st_hint_un_login" >用户登录态失效，请重新登录</string >
+    <string name = "st_hint_dialog_login_title" >请先登录</string >
+    <string name = "st_hint_dialog_login_content" >是否跳转登录界面？</string >
+    <string name = "st_hint_dialog_login_tag" >login</string >
 </resources >
