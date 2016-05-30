@@ -11,18 +11,18 @@ import android.widget.ScrollView;
  */
 public class GCScrollView extends ScrollView {
 
-//	private GestureDetector mGestureDetector;
+	private GestureDetector mGestureDetector;
 
 	public GCScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-//		mGestureDetector = new GestureDetector(context, new YScrollDetector());
+		mGestureDetector = new GestureDetector(context, new YScrollDetector());
 //		setFadingEdgeLength(0);
 	}
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-//		return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
-		return super.onInterceptTouchEvent(ev);
+		return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
+//		return super.onInterceptTouchEvent(ev);
 	}
 
 	// Return false if we're scrolling in the x direction

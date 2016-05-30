@@ -1,84 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
         xmlns:android = "http://schemas.android.com/apk/res/android"
-        android:layout_width = "match_parent"
-        android:background = "@color/co_white"
-        android:layout_height = "0dp"
-        android:layout_weight = "1" >
+        style = "@style/IndexModuleLayout"
+        android:layout_height = "wrap_content"
+        android:paddingBottom = "30dp"
+        android:background = "@color/co_transparent" >
 
-    <LinearLayout
-            style = "@style/IndexModuleLayout"
-            android:layout_height = "wrap_content"
-            android:paddingBottom = "30dp"
-            android:background = "@color/co_transparent" >
+    <View
+            android:background = "@color/co_common_content_bg"
+            android:layout_width = "match_parent"
+            android:layout_height = "6dp" />
 
-        <View
-                android:background = "@color/co_common_content_bg"
-                android:layout_width = "match_parent"
-                android:layout_height = "6dp" />
+    <TextView
+            style = "@style/DefaultTextView.DetailTitle"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:text = "@string/st_gift_content" />
 
-        <TextView
-                style = "@style/DefaultTextView.DetailTitle"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:text = "@string/st_gift_content" />
+    <TextView
+            android:id = "@+id/tv_content"
+            style = "@style/DefaultTextView.Detail"
+            android:singleLine = "false"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big" />
 
-        <TextView
-                android:id = "@+id/tv_content"
-                style = "@style/DefaultTextView.Detail"
-                android:singleLine = "false"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big" />
+    <TextView
+            style = "@style/DefaultTextView.DetailTitle"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:text = "@string/st_gift_deadline" />
 
-        <TextView
-                style = "@style/DefaultTextView.DetailTitle"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:text = "@string/st_gift_deadline" />
+    <TextView
+            android:id = "@+id/tv_deadline"
+            style = "@style/DefaultTextView.Detail"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big" />
 
-        <TextView
-                android:id = "@+id/tv_deadline"
-                style = "@style/DefaultTextView.Detail"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big" />
+    <TextView
+            style = "@style/DefaultTextView.DetailTitle"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:text = "@string/st_gift_usage" />
 
-        <TextView
-                style = "@style/DefaultTextView.DetailTitle"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:text = "@string/st_gift_usage" />
+    <TextView
+            android:id = "@+id/tv_usage"
+            style = "@style/DefaultTextView.Detail"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:singleLine = "false" />
 
-        <TextView
-                android:id = "@+id/tv_usage"
-                style = "@style/DefaultTextView.Detail"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:singleLine = "false" />
+    <TextView
+            style = "@style/DefaultTextView.DetailTitle"
+            android:text = "@string/st_gift_remark"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:textColor = "@color/co_btn_orange" />
 
-        <TextView
-                style = "@style/DefaultTextView.DetailTitle"
-                android:text = "@string/st_gift_remark"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:textColor = "@color/co_btn_orange" />
+    <TextView
+            android:id = "@+id/tv_remark"
+            style = "@style/DefaultTextView.Detail"
+            android:singleLine = "false"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:text = "@string/st_gift_hint_content" />
 
-        <TextView
-                android:id = "@+id/tv_remark"
-                style = "@style/DefaultTextView.Detail"
-                android:singleLine = "false"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:text = "@string/st_gift_hint_content" />
+    <TextView
+            android:id = "@+id/tv_qq"
+            style = "@style/DefaultTextView.Detail"
+            android:singleLine = "false"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:paddingTop = "@dimen/di_list_item_gap_normal"
+            android:textColor = "@color/co_common_app_second_bg_orange"
+            android:text = "@string/st_gift_qq" />
 
-        <TextView
-                android:id = "@+id/tv_qq"
-                style = "@style/DefaultTextView.Detail"
-                android:singleLine = "false"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:paddingRight = "@dimen/di_list_item_gap_big"
-                android:paddingTop = "@dimen/di_list_item_gap_normal"
-                android:textColor = "@color/co_common_app_second_bg_orange"
-                android:text = "@string/st_gift_qq" />
-
-    </LinearLayout >
-</ScrollView >
+</LinearLayout >

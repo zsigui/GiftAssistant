@@ -13,6 +13,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
 
 import java.util.List;
+import java.util.Locale;
 
 import cn.finalteam.galleryfinal.adapter.PhotoPreviewAdapter;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
@@ -42,7 +43,7 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
     protected void onCreate(Bundle savedInstanceState) {
         final boolean showTitle = getIntent().getBooleanExtra(GalleryFinal.PHOTO_SHOW_TITLE, false);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (showTitle) {
+        if (!showTitle) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         super.onCreate(savedInstanceState);
@@ -56,6 +57,11 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
             setListener();
             setTheme();
 
+            if (showTitle) {
+                mTitleBar.setVisibility(View.VISIBLE);
+            } else {
+                mTitleBar.setVisibility(View.GONE);
+            }
             mPhotoList = (List<PhotoInfo>) getIntent().getSerializableExtra(GalleryFinal.PHOTO_LIST);
             final int index = getIntent().getIntExtra(GalleryFinal.PHOTO_INDEX, 0);
             mPhotoPreviewAdapter = new PhotoPreviewAdapter(this, mPhotoList);
@@ -109,7 +115,7 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mTvTitle.setText(String.format("%d/%d", (position + 1), mPhotoList.size()));
+        mTvTitle.setText(String.format(Locale.CHINA, "%d/%d", (position + 1), mPhotoList.size()));
     }
 
     @Override

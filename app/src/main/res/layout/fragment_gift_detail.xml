@@ -47,7 +47,7 @@
                 android:layout_width = "match_parent"
                 android:layout_alignTop = "@+id/rl_icon"
                 android:paddingLeft = "14dp"
-                android:layout_marginTop = "4dp"
+                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
                 android:layout_toLeftOf = "@+id/btn_send"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:drawablePadding = "6dp"
@@ -59,7 +59,7 @@
                 android:layout_below = "@+id/tv_name"
                 android:layout_marginLeft = "14dp"
                 android:layout_marginRight = "5dp"
-                android:layout_marginTop = "8dp"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:visibility = "gone"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:text = "@string/st_gift_consume" />
@@ -107,20 +107,20 @@
                 style = "@style/DefaultTextView.Text"
                 android:layout_below = "@+id/tv_consume"
                 android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
-                android:layout_marginTop = "7dp"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:visibility = "gone"
                 android:layout_toRightOf = "@+id/tv_price" />
 
         <ProgressBar
                 android:id = "@+id/pb_percent"
                 style = "?android:attr/progressBarStyleHorizontal"
-                android:layout_width = "120dp"
+                android:layout_width = "50dp"
                 android:layout_height = "@dimen/di_gift_common_pb_diameter"
                 android:layout_alignTop = "@+id/tv_new_add"
-                android:layout_marginLeft = "4dp"
-                android:layout_marginTop = "5dp"
-                android:layout_marginRight = "@dimen/di_list_item_gap_big"
-                android:layout_toLeftOf = "@+id/btn_send"
+                android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginRight="@dimen/di_line_space_extra_big"
+                android:layout_toLeftOf = "@+id/tv_seize_hint"
                 android:layout_toRightOf = "@+id/tv_new_add"
                 android:max = "100"
                 android:visibility = "gone"
@@ -135,6 +135,7 @@
                 android:layout_marginRight = "5dp"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:layout_toLeftOf = "@+id/btn_copy"
+                android:layout_marginBottom = "@dimen/di_line_space_extra_big"
                 android:layout_alignBottom = "@+id/rl_icon"
                 android:background = "@color/co_gift_code_bg"
                 android:gravity = "left|center_vertical"
@@ -151,7 +152,7 @@
                 android:layout_marginLeft = "10dp"
                 android:layout_marginTop = "1dp"
                 android:background = "@drawable/selector_btn_red"
-                android:text = "复制"
+                android:text = "@string/st_gift_code_copy"
                 android:visibility = "gone"
                 android:textColor = "@color/color_btn_red_border" />
 
@@ -161,10 +162,10 @@
                 style = "@style/DefaultTextView.Text"
                 android:layout_width = "wrap_content"
                 android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
-                android:layout_marginTop = "7dp"
+                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
                 android:layout_below = "@+id/tv_consume"
                 android:layout_toRightOf = "@+id/rl_icon"
-                android:maxWidth = "80dp"
+                android:maxWidth = "@dimen/di_item_money_min_width"
                 android:visibility = "gone"
                 android:gravity = "left|center_vertical" />
 
@@ -181,17 +182,32 @@
 
     </RelativeLayout >
 
-    <ViewStub
-            android:id = "@+id/vs_gift"
+    <ScrollView
+            xmlns:android = "http://schemas.android.com/apk/res/android"
             android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:layout = "@layout/view_gift_detail_for_gift" />
+            android:background = "@color/co_white"
+            android:layout_height = "0dp"
+            android:layout_weight = "1" >
 
-    <ViewStub
-            android:id = "@+id/vs_first_charge"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:layout = "@layout/view_gift_detail_for_first_charge" />
+        <LinearLayout
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content" >
+
+            <ViewStub
+                    android:id = "@+id/vs_gift"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout = "@layout/view_gift_detail_for_gift" />
+
+            <ViewStub
+                    android:id = "@+id/vs_first_charge"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "0dp"
+                    android:layout_weight = "1"
+                    android:layout = "@layout/view_gift_detail_for_first_charge" />
+        </LinearLayout >
+    </ScrollView >
 
     <LinearLayout
             android:id = "@+id/ll_download"

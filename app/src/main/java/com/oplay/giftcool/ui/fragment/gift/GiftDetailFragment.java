@@ -1,10 +1,12 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.GiftDetailPicsAdapter;
+import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
@@ -53,6 +57,8 @@ import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,7 +82,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvContent;
     private TextView tvDeadline;
     private TextView tvUsage;
+    private TextView tvUsageTitle;
     private RecyclerView rvUsage;
+    private GiftDetailPicsAdapter mAdapter;
     private GiftButton btnSend;
     private ProgressBar pbPercent;
     private TextView tvCode;
@@ -190,75 +198,108 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             mViewManager.showEmpty();
             return;
         }
-        mHasData = true;
-        mViewManager.showContent();
-        mData = data;
-        final IndexGiftNew giftData = data.giftData;
-        setTag(giftData);
+        try {
+            mHasData = true;
+            mViewManager.showContent();
+            mData = data;
+            final IndexGiftNew giftData = data.giftData;
+            setTag(giftData);
 
-        int type = GiftTypeUtil.getItemViewType(giftData);
-        inflateVsView(giftData);
+            int type = GiftTypeUtil.getItemViewType(giftData);
+            inflateVsView(giftData);
 
-        tvName.setText(giftData.name);
-        btnSend.setState(type);
-        tvOr.setVisibility(View.GONE);
-        tvRemain.setVisibility(View.GONE);
-        pbPercent.setVisibility(View.GONE);
-        tvBean.setVisibility(View.GONE);
-        tvCode.setVisibility(View.GONE);
-        btnCopy.setVisibility(View.GONE);
-        tvScore.setVisibility(View.GONE);
-        btnSend.setVisibility(View.VISIBLE);
+            btnSend.setState(type);
+            tvOr.setVisibility(View.GONE);
+            pbPercent.setVisibility(View.GONE);
+            tvBean.setVisibility(View.GONE);
+            tvCode.setVisibility(View.GONE);
+            btnCopy.setVisibility(View.GONE);
+            tvScore.setVisibility(View.GONE);
+            btnSend.setVisibility(View.VISIBLE);
+            tvSeizeHint.setVisibility(View.GONE);
 
-        tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
-        if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
-            tvConsume.setVisibility(View.VISIBLE);
-            setMoneyConsume(giftData);
-            tvRemain.setVisibility(View.VISIBLE);
-            if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
-                tvOriginPrice.setVisibility(View.VISIBLE);
-                setRemainProgress(giftData);
-            } else {
-                switch (type) {
-                    case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCHED,
-                                giftData.searchCount)));
-                        break;
-                    case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                    case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-                        setRemainProgress(giftData);
-                        break;
-                    case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-                    case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-                        tvRemain.setVisibility(View.VISIBLE);
-                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
-                                giftData.seizeTime)));
-                        break;
-                    case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
-                                giftData.searchTime)));
-                        break;
+            tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
+            if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
+                    || (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
+                    && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE
+                    && (giftData.status == GiftTypeUtil.STATUS_DISABLED_RESERVE
+                    || giftData.status == GiftTypeUtil.STATUS_RESERVE
+                    || giftData.status == GiftTypeUtil.STATUS_RESERVE_FINISHED))) {
+                tvConsume.setVisibility(View.VISIBLE);
+                tvRemain.setVisibility(View.VISIBLE);
+                setMoneyConsume(giftData);
+                if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                    ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
+                    tvOriginPrice.setVisibility(View.VISIBLE);
+                    setRemainProgress(giftData);
+                    if (giftData.freeStartTime > System.currentTimeMillis()) {
+                        tvSeizeHint.setVisibility(View.VISIBLE);
+                        tvSeizeHint.setText(String.format(Locale.CHINA,
+                                "%s免费抢", DateUtil.formatUserReadDate(giftData.freeStartTime)));
+                    }
+                } else {
+                    tvUsage.setText(giftData.usage);
+                    switch (type) {
+                        case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+                            tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCHED,
+                                    giftData.searchCount)));
+                            break;
+                        case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+                            if (giftData.freeStartTime > System.currentTimeMillis()) {
+                                tvSeizeHint.setVisibility(View.VISIBLE);
+                                tvSeizeHint.setText(String.format(Locale.CHINA,
+                                        "%s免费抢", DateUtil.formatUserReadDate(giftData.freeStartTime)));
+                            }
+                            break;
+                        case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+                            setRemainProgress(giftData);
+                            break;
+                        case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+                        case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+                            tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
+                                    giftData.seizeTime)));
+                            break;
+                        case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+                            tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
+                                    giftData.searchTime)));
+                            break;
+                    }
                 }
+
+            } else {
+                tvConsume.setVisibility(View.GONE);
+                tvRemain.setVisibility(View.GONE);
+                tvCode.setVisibility(View.VISIBLE);
+                btnCopy.setVisibility(View.VISIBLE);
+                tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+            }
+            setDeadCount();
+
+            if (!mIsNotifyRefresh) {
+                if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
+                        && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
+                    tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
+                    mAdapter.updateData(giftData.usagePics);
+                } else {
+                    tvName.setText(giftData.name);
+                    tvUsage.setText(giftData.usage);
+                }
+                tvContent.setText(giftData.content);
+                tvDeadline.setText(String.format("%s ~ %s",
+                        DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
+                        DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm")));
+                initDownload(mData.gameData);
             }
 
-        } else {
-            tvConsume.setVisibility(View.GONE);
-            tvCode.setVisibility(View.VISIBLE);
-            btnCopy.setVisibility(View.VISIBLE);
-            tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+            if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE
+                    && giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                showGuidePage();
+            }
+        } catch (Throwable t) {
+            if (AppDebugConfig.IS_DEBUG) {
+                AppDebugConfig.warn(AppDebugConfig.TAG_FRAG, t);
+            }
         }
-        setDeadCount();
-
-        if (!mIsNotifyRefresh) {
-            tvContent.setText(giftData.content);
-            tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
-                    DateUtil.formatTime(giftData.useEndTime, "yyyy-MM-dd HH:mm")));
-            tvUsage.setText(giftData.usage);
-            initDownload(mData.gameData);
-        }
-
-
     }
 
     /**
@@ -289,17 +330,27 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
                     && o.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
                 // 首充券
-                View vsCharge = ((ViewStub)getViewById(R.id.vs_first_charge)).inflate();
+                View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
-                tvUsage = getViewById(vsCharge, R.id.tv_usage);
+                tvUsageTitle = getViewById(vsCharge, R.id.tv_usage_title);
+                LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
+                        llm.getOrientation(),
+                        ViewUtil.getColor(getContext(), R.color.co_transparent),
+                        getContext().getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small));
+                rvUsage = getViewById(vsCharge, R.id.rv_usage);
+                rvUsage.setLayoutManager(llm);
+                rvUsage.addItemDecoration(decoration);
+                mAdapter = new GiftDetailPicsAdapter(getContext());
+                rvUsage.setAdapter(mAdapter);
                 tvQQ = getViewById(R.id.tv_qq);
             } else {
                 // 礼包
-                View vsGift = ((ViewStub)getViewById(R.id.vs_gift)).inflate();
+                View vsGift = ((ViewStub) getViewById(R.id.vs_gift)).inflate();
                 tvContent = getViewById(vsGift, R.id.tv_content);
                 tvDeadline = getViewById(vsGift, R.id.tv_deadline);
-                rvUsage = getViewById(vsGift, R.id.rv_usage);
+                tvUsage = getViewById(vsGift, R.id.tv_usage);
                 tvQQ = getViewById(R.id.tv_qq);
             }
             tvQQ.setOnClickListener(this);
@@ -311,7 +362,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      */
     private void setRemainProgress(IndexGiftNew giftData) {
         int progress = giftData.remainCount * 100 / giftData.totalCount;
-        tvRemain.setText(Html.fromHtml(String.format("剩余%d%%", progress)));
+        tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, "剩余%d%%", progress)));
         tvRemain.setVisibility(View.VISIBLE);
         pbPercent.setVisibility(View.VISIBLE);
         pbPercent.setMax(100);
@@ -630,7 +681,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                                 System.currentTimeMillis() - response.headers().getDate("Date").getTime();
                         if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
                             f.refreshSuccessEnd();
-                            f.updateData(response.body().getData());
+//                            f.updateData(response.body().getData());
+                            f.updateData(f.initTestData());
                             return;
                         }
                         if (AppDebugConfig.IS_DEBUG) {
@@ -653,5 +705,67 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 }
             });
         }
+    }
+
+    private boolean mIsShowGuide = true;
+
+    /**
+     * 显示首充券使用的指引页面
+     */
+    public void showGuidePage() {
+        if (mIsShowGuide) {
+            Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
+            dialog.setContentView(R.layout.overlay_hint_focus);
+//            Window window = dialog.getWindow();
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.gravity = Gravity.CENTER;
+//            lp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+//            window.setAttributes(lp);
+//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.show();
+//            GuideDialog dialog = new GuideDialog();
+//            dialog.show(getChildFragmentManager(), "guide");
+        }
+    }
+
+    private GiftDetail initTestData() {
+        GiftDetail result = new GiftDetail();
+        IndexGiftNew gift = new IndexGiftNew();
+        result.giftData = gift;
+        gift.status = (int) (Math.random() * 3) + 7;
+        gift.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+        gift.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+        int[] seize = new int[]{GiftTypeUtil.SEIZE_TYPE_RESERVED, GiftTypeUtil.SEIZE_TYPE_SEIZED, GiftTypeUtil
+                .SEIZE_TYPE_NEVER,
+                GiftTypeUtil.SEIZE_TYPE_UN_RESERVE};
+        gift.seizeStatus = seize[(int) (Math.random() * 4)];
+        gift.remainCount = 10;
+        gift.totalCount = 10;
+        gift.bean = (int) (Math.random() * 100);
+        gift.score = 500;
+        gift.content = "充值减少6元人民币";
+        gift.platform = "偶玩版";
+        gift.name = "6元首充券";
+        gift.useStartTime = "2016-06-01 12:00:00";
+        gift.useEndTime = "2016-00-05 12:00:00";
+        gift.originPrice = 32;
+        gift.code = "sdkkk3431qercx341iZX";
+        gift.freeStartTime = System.currentTimeMillis() + 3600 * 24 * 1000;
+        gift.usagePics = new ArrayList<>();
+        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/24/b6ed8a61b59586478705589a2ed5f5da" +
+                ".jpg_512_512_95.jpg");
+        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/04/27/96a7d5d0beebdcd2d7a33bd036bf8efa" +
+                ".jpg_512_512_95.jpg");
+        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/13/33fa2d7bebb68d2abc8c1d56e8dd4119" +
+                ".jpg_512_512_95.jpg");
+        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/18/a6227d33c7d59f024d384964a99bd6d1" +
+                ".jpg_512_512_95.jpg");
+        gift.id = 136;
+        IndexGameNew game = new IndexGameNew();
+        game.id = 133;
+        game.name = "宠物小精灵";
+        game.img = "http://owan-img.ymapp.com/app/11004/icon/icon_1460627334.png_128_128_70.png";
+        result.gameData = game;
+        return result;
     }
 }

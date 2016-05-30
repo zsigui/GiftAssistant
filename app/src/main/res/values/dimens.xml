@@ -143,6 +143,7 @@
 
     <!-- 礼包详情 页面 -->
     <dimen name = "di_detail_header_margin_left" >14dp</dimen >
+    <dimen name = "di_detail_usage_pic_length">100dp</dimen>
     <!-- 个人设置 页面 -->
     <!-- 我的钱包 -->
     <dimen name = "di_wallet_header_height" >113dp</dimen >

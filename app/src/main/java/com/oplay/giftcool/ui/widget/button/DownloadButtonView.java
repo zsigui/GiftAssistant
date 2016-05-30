@@ -55,7 +55,9 @@ public class DownloadButtonView extends RelativeLayout {
 		super.onFinishInflate();
 		mProgressBar = (ProgressBar) findViewById(R.id.pb_download);
 		mDownloadTextView = (TextView) findViewById(R.id.btn_download_text);
-		mProgressBar.setMax(100);
+		if (mProgressBar != null) {
+			mProgressBar.setMax(100);
+		}
 		mProgressText = "%d%%";
 		setProgressVisible(true);
 	}

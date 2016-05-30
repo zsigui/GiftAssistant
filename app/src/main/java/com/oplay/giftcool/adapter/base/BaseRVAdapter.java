@@ -54,9 +54,9 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements O
 	 * 更新数据并通知界面刷新，需要传入数据非null和非空
 	 */
 	public void updateData(ArrayList<T> data) {
-		if (data == null || data.size() == 0) {
-			return;
-		}
+//		if (data == null || data.size() == 0) {
+//			return;
+//		}
 		this.mData = data;
 		notifyDataSetChanged();
 	}

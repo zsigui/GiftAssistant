@@ -28,10 +28,8 @@ public class GameDetailPicsAdapter extends BaseRVAdapter<String> implements View
 
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		ImageHolder holder = new ImageHolder(LayoutInflater.from(mContext).inflate(R.layout.view_banner, parent, false));
+		ImageHolder holder = new ImageHolder(LayoutInflater.from(mContext).inflate(R.layout.view_banner_img, parent, false));
 		ViewGroup.LayoutParams lp = holder.ivBanner.getLayoutParams();
-		lp.height = mContext.getResources().getDimensionPixelSize(R.dimen.di_banner_height);
-		lp.width = (int)(lp.height * 0.45);
 		holder.ivBanner.setLayoutParams(lp);
 		return holder;
 	}

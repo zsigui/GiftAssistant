@@ -3,6 +3,7 @@ package com.oplay.giftcool.model.data.resp;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by zsigui on 15-12-24.
@@ -105,4 +106,7 @@ public class IndexGiftNew implements Serializable{
 	// 首充券预留时间
 	@SerializedName("reserve_deadline")
 	public String reserveDeadline;
+
+	@SerializedName("usage_imgs")
+	public ArrayList<String> usagePics;
 }

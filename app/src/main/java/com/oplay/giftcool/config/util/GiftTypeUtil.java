@@ -212,11 +212,23 @@ public class GiftTypeUtil {
                         return TYPE_CHARGE_SEIZED;
                 }
                 break;
+            case STATUS_WAIT_SEARCH:
+                switch (gift.seizeStatus) {
+                    case SEIZE_TYPE_NEVER:
+                    case SEIZE_TYPE_UN_RESERVE:
+                        // 首充券已经抢完
+                        return TYPE_CHARGE_EMPTY;
+                    case SEIZE_TYPE_RESERVED:
+                    case SEIZE_TYPE_SEIZED:
+                        // 首充券已抢
+                        return TYPE_CHARGE_SEIZED;
+                }
+                break;
             case STATUS_FINISHED:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                     case SEIZE_TYPE_UN_RESERVE:
-                        // 首充券的预约已经结束
+                        // 首充券活动已经结束
                         return TYPE_CHARGE_EMPTY;
                     case SEIZE_TYPE_RESERVED:
                     case SEIZE_TYPE_SEIZED:
