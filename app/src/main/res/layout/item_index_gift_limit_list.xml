@@ -70,7 +70,7 @@
 		<com.oplay.giftcool.ui.widget.DeletedTextView
 				android:id = "@+id/tv_money"
 				android:gravity = "center_vertical"
-				android:minWidth = "100dp"
+				android:minWidth = "@dimen/di_item_money_min_width"
 				android:layout_below = "@+id/tv_name"
 				android:layout_marginLeft = "7dp"
 				android:layout_marginTop = "6dp"
@@ -104,7 +104,7 @@
 				android:layout_alignTop = "@+id/tv_percent"
 				android:layout_marginLeft = "4dp"
 				android:layout_marginTop = "6dp"
-				android:layout_marginRight = "@dimen/di_list_item_gap_big"
+				android:layout_marginRight = "@dimen/di_list_item_gap_normal"
 				android:layout_toLeftOf = "@+id/btn_send"
 				android:layout_toRightOf = "@+id/tv_percent"
 				android:max = "100"

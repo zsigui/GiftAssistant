@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,6 +54,7 @@ import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -714,17 +717,28 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      */
     public void showGuidePage() {
         if (mIsShowGuide) {
-            Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
-            dialog.setContentView(R.layout.overlay_hint_focus);
-//            Window window = dialog.getWindow();
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.gravity = Gravity.CENTER;
-//            lp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
-//            window.setAttributes(lp);
-//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            dialog.show();
-//            GuideDialog dialog = new GuideDialog();
-//            dialog.show(getChildFragmentManager(), "guide");
+            ThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
+                    View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                            .inflate(R.layout.overlay_hint_focus, null);
+                    ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
+                    if (ivConfirm != null) {
+                        ivConfirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.cancel();
+                            }
+                        });
+                    }
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setContentView(v);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    dialog.show();
+                }
+            }, 500);
         }
     }
 
