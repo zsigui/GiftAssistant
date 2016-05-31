@@ -48,64 +48,65 @@ import retrofit2.Response;
  *         description
  */
 public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> {
-	private Context mContext;
+    private Context mContext;
 
-	public AsyncTask_InitApplication(Context context) {
-		mContext = context.getApplicationContext();
-	}
+    public AsyncTask_InitApplication(Context context) {
+        mContext = context.getApplicationContext();
+    }
 
-	@Override
-	protected Void doInBackground(Object... params) {
-		try {
-			//TODO异步初始化操作
-			doInit();
-			// 初始化下载列表
-			ApkDownloadManager.getInstance(mContext).initDownloadList();
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				AppDebugConfig.warn(e);
-			}
-		}
-		return null;
-	}
+    @Override
+    protected Void doInBackground(Object... params) {
+        try {
+            //TODO异步初始化操作
+            doInit();
+            // 初始化下载列表
+            ApkDownloadManager.getInstance(mContext).initDownloadList();
+        } catch (Throwable e) {
+            if (AppDebugConfig.IS_DEBUG) {
+                AppDebugConfig.warn(e);
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * 在此处进行对旧版的处理操作
-	 */
-	public void doClearWorkForOldVer() {
-		int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
-		if (oldVer != AppConfig.SDK_VER) {
-			if (oldVer < 3) {
-				// 清除旧版的账号存储信息
-				SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
-				SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
-			}
-			// 写入最新版本信息
-			SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
-			// 清空今日登录状态
-			SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
-		}
-	}
+    /**
+     * 在此处进行对旧版的处理操作
+     */
+    public void doClearWorkForOldVer() {
+        int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, 0);
+        if (oldVer != AppConfig.SDK_VER) {
+            if (oldVer < 3) {
+                // 清除旧版的账号存储信息
+                SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
+                SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
+            }
+            // 写入最新版本信息
+            SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
+            // 清空今日登录状态
+            SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+            AssistantApp.getInstance().setFirstOpenInThisVersion(true);
+        }
+    }
 
 
-	/**
-	 * 判断是否今日首次登录
-	 */
-	public boolean judgeFirstOpenToday() {
-		long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
-		// 首次打开APP 或者 今日首次登录
-		// 写入当前时间
-		AssistantApp.getInstance().setLastLaunchTime(lastOpenTime);
-		SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
-				.currentTimeMillis());
-		return (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
-	}
+    /**
+     * 判断是否今日首次登录
+     */
+    public boolean judgeFirstOpenToday() {
+        long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+        // 首次打开APP 或者 今日首次登录
+        // 写入当前时间
+        AssistantApp.getInstance().setLastLaunchTime(lastOpenTime);
+        SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
+                .currentTimeMillis());
+        return (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
+    }
 
-	/**
-	 * 需要在此完成一些APP全局常量初始化的获取工作
-	 */
-	private void doInit() {
-		final AssistantApp assistantApp = AssistantApp.getInstance();
+    /**
+     * 需要在此完成一些APP全局常量初始化的获取工作
+     */
+    private void doInit() {
+        final AssistantApp assistantApp = AssistantApp.getInstance();
 //		if (assistantApp.isGlobalInit()) {
 //			return;
 //		}
@@ -113,197 +114,198 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             KLog.d(AppDebugConfig.TAG_WARN, "app has global initialed");
         }
 
-		// 存储打开APP时间
-		SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
-				SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
+        // 存储打开APP时间
+        SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
+                SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
 
-		// 初始化照片墙控件
-		assistantApp.initGalleryFinal();
+        // 初始化照片墙控件
+        assistantApp.initGalleryFinal();
 
 //        testDownload();
 
-		// 初始化设备配置
-		assistantApp.initAppConfig();
-		// 初始化设备状态
+        // 初始化设备配置
+        assistantApp.initAppConfig();
+        // 初始化设备状态
         CommonUtil.initMobileInfoModel(mContext);
 
-		// 初始化网络下载模块
-		assistantApp.initRetrofit();
-		Global.resetNetEngine();
-		// 初始化配置，获取更新信息
-		if (!initAndCheckUpdate()) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e("initAndCheckUpdate failed!");
-			}
-		}
+        // 初始化网络下载模块
+        assistantApp.initRetrofit();
+        Global.resetNetEngine();
+        // 初始化配置，获取更新信息
+        if (!initAndCheckUpdate()) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.e("initAndCheckUpdate failed!");
+            }
+        }
 
-		doClearWorkForOldVer();
-		Global.getInstalledAppNames();
-		// 判断是否今日首次打开APP
-		ThreadUtil.runInThread(new Runnable() {
-			@Override
-			public void run() {
-				ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
-				if (judgeFirstOpenToday()) {
-					// 进行应用信息上报
-					reportedAppInfo(infos);
-				}
+        doClearWorkForOldVer();
+        Global.getInstalledAppNames();
+        // 判断是否今日首次打开APP
+        ThreadUtil.runInThread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
+                if (judgeFirstOpenToday()) {
+                    // 进行应用信息上报
+                    reportedAppInfo(infos);
+                }
 
-			}
-		});
+            }
+        });
 
-		try {
-			OuwanSDKManager.getInstance().init();
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_APP, e);
-			}
-		}
-		// 获取用户信息
-		// 该信息使用salt加密存储再SharedPreference中
-		UserModel user = null;
-		try {
-			String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
-					SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
-			}
-			user = assistantApp.getGson().fromJson(userJson, UserModel.class);
-			if (user != null && user.userInfo != null) {
-				// 将首次登录状态清掉，再次获取已经不属于首次登录
-				user.userInfo.isFirstLogin = false;
-			}
-		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(AppDebugConfig.TAG_APP, e);
-			}
-		}
-		AccountManager.getInstance().notifyUserAll(user);
-		// 每次登录请求一次更新用户状态和数据
-		AccountManager.getInstance().updateUserSession();
+        try {
+            OuwanSDKManager.getInstance().init();
+        } catch (Exception e) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.e(AppDebugConfig.TAG_APP, e);
+            }
+        }
+        // 获取用户信息
+        // 该信息使用salt加密存储再SharedPreference中
+        UserModel user = null;
+        try {
+            String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
+                    SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
+            }
+            user = assistantApp.getGson().fromJson(userJson, UserModel.class);
+            if (user != null && user.userInfo != null) {
+                // 将首次登录状态清掉，再次获取已经不属于首次登录
+                user.userInfo.isFirstLogin = false;
+            }
+        } catch (Exception e) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.e(AppDebugConfig.TAG_APP, e);
+            }
+        }
+        AccountManager.getInstance().notifyUserAll(user);
+        // 每次登录请求一次更新用户状态和数据
+        AccountManager.getInstance().updateUserSession();
 
 
-		assistantApp.setGlobalInit(true);
-	}
+        assistantApp.setGlobalInit(true);
+    }
 
-	private void testDownload() {
-		DownloadInfo info = new DownloadInfo();
-		info.setTotalSize(95827865);
-		info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
-		info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5.0_250_chn_1856000_92efbb4bde7721b1" +
-				".owk");
-		info.setIsDownload(true);
-		SilentDownloadManager.getInstance().startDownload(info);
-	}
+    private void testDownload() {
+        DownloadInfo info = new DownloadInfo();
+        info.setTotalSize(95827865);
+        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
+        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5" +
+                ".0_250_chn_1856000_92efbb4bde7721b1" +
+                ".owk");
+        info.setIsDownload(true);
+        SilentDownloadManager.getInstance().startDownload(info);
+    }
 
-	private boolean initAndCheckUpdate() {
-		ReqInitApp data = new ReqInitApp();
-		data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
-		JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
-		try {
-			Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
-			if (response != null && response.isSuccessful()) {
-				if (response.body() != null && response.body().isSuccess()) {
-					InitAppResult initData = response.body().getData();
-					if (initData != null) {
-						if (initData.initAppConfig != null) {
-							AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
-									.isShowDownload);
-							AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);
-							AssistantApp.getInstance().setStartImg(initData.initAppConfig
-									.startImgUrl);
-							AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
-									.broadcastBanner);
-						}
-						if (initData.updateInfo != null) {
-							AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
-						}
-						return true;
-					}
-				}
-				AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response.body());
-				return false;
-			}
-			AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response);
-		} catch (Throwable e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
+    private boolean initAndCheckUpdate() {
+        ReqInitApp data = new ReqInitApp();
+        data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
+        JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
+        try {
+            Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
+            if (response != null && response.isSuccessful()) {
+                if (response.body() != null && response.body().isSuccess()) {
+                    InitAppResult initData = response.body().getData();
+                    if (initData != null) {
+                        if (initData.initAppConfig != null) {
+                            AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
+                                    .isShowDownload);
+                            AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);
+                            AssistantApp.getInstance().setStartImg(initData.initAppConfig
+                                    .startImgUrl);
+                            AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
+                                    .broadcastBanner);
+                        }
+                        if (initData.updateInfo != null) {
+                            AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
+                        }
+                        return true;
+                    }
+                }
+                AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response.body());
+                return false;
+            }
+            AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response);
+        } catch (Throwable e) {
+            if (AppDebugConfig.IS_DEBUG) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * 上报应用信息
-	 */
-	private void reportedAppInfo(ArrayList<AppBaseInfo> appBaseInfos) {
-		ReqReportedInfo info = new ReqReportedInfo();
-		info.brand = Build.MODEL;
-		info.osVersion = Build.VERSION.RELEASE;
-		info.sdkVersion = String.valueOf(Build.VERSION.SDK_INT);
-		info.appInfos = appBaseInfos;
-		final JsonReqBase<ReqReportedInfo> reqData = new JsonReqBase<ReqReportedInfo>(info);
-		Global.getNetEngine().reportedAppInfo(reqData)
-				.enqueue(new Callback<JsonRespBase<Void>>() {
-					@Override
-					public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
-							response) {
-						if (response != null && response.isSuccessful()
-								&& response.body() != null && response.body().isSuccess()) {
-							// 执行上报成功
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
-							}
-						}
-						AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
+    /**
+     * 上报应用信息
+     */
+    private void reportedAppInfo(ArrayList<AppBaseInfo> appBaseInfos) {
+        ReqReportedInfo info = new ReqReportedInfo();
+        info.brand = Build.MODEL;
+        info.osVersion = Build.VERSION.RELEASE;
+        info.sdkVersion = String.valueOf(Build.VERSION.SDK_INT);
+        info.appInfos = appBaseInfos;
+        final JsonReqBase<ReqReportedInfo> reqData = new JsonReqBase<ReqReportedInfo>(info);
+        Global.getNetEngine().reportedAppInfo(reqData)
+                .enqueue(new Callback<JsonRespBase<Void>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
+                            response) {
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            // 执行上报成功
+                            if (AppDebugConfig.IS_DEBUG) {
+                                KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
+                            }
+                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
 //									public void run() {
 //										reportedAppInfo();
 //									}
 //								}, 30 * 1000);
-					}
+                    }
 
-					@Override
-					public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-						AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
-						// 上报失败，等待30秒后继续执行
+                    @Override
+                    public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+                        AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
+                        // 上报失败，等待30秒后继续执行
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
 //									public void run() {
 //										reportedAppInfo();
 //									}
 //								}, 30 * 1000);
-					}
-				});
-	}
+                    }
+                });
+    }
 
-	/**
-	 * 获取已安装应用信息
-	 */
-	private ArrayList<AppBaseInfo> getAppInfos(Context context) {
-		HashSet<String> appNames = new HashSet<>();
+    /**
+     * 获取已安装应用信息
+     */
+    private ArrayList<AppBaseInfo> getAppInfos(Context context) {
+        HashSet<String> appNames = new HashSet<>();
 
-		final ArrayList<AppBaseInfo> result = new ArrayList<>();
-		List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
-		for (int i = 0; i < packages.size(); i++) {
-			try {
-				final PackageInfo packageInfo = packages.get(i);
-				final AppBaseInfo info = new AppBaseInfo();
-				info.name = packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
-				appNames.add(info.name);
-				info.pkg = packageInfo.packageName;
-				info.vc = String.valueOf(packageInfo.versionCode);
-				info.vn = packageInfo.versionName;
-				result.add(info);
-			} catch (Exception e) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_UTIL, e);
-				}
-			}
-		}
+        final ArrayList<AppBaseInfo> result = new ArrayList<>();
+        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            try {
+                final PackageInfo packageInfo = packages.get(i);
+                final AppBaseInfo info = new AppBaseInfo();
+                info.name = packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
+                appNames.add(info.name);
+                info.pkg = packageInfo.packageName;
+                info.vc = String.valueOf(packageInfo.versionCode);
+                info.vn = packageInfo.versionName;
+                result.add(info);
+            } catch (Exception e) {
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_UTIL, e);
+                }
+            }
+        }
 
-		Global.setInstalledAppNames(appNames);
-		return result;
-	}
+        Global.setInstalledAppNames(appNames);
+        return result;
+    }
 }

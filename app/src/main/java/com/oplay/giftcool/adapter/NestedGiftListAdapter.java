@@ -29,6 +29,7 @@ import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by zsigui on 15-12-24.
@@ -192,7 +193,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void handleGiftFee(int type, IndexGiftNew o, GiftLimitFeeHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
+        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
         final int startPos = String.valueOf(o.score).length() + 10;
         ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -201,7 +202,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         holder.btnSend.setState(type);
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime) {
+                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     // 限量抢状态,表示当前不处于免费抢
                     holder.tvSeizeHint.setVisibility(View.VISIBLE);
                     holder.tvSeizeHint.setText(String.format("%s免费抢",
@@ -236,7 +237,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         gHolder.tvPercent.setVisibility(View.VISIBLE);
         gHolder.pbPercent.setVisibility(View.VISIBLE);
         final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-        gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+        gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         gHolder.pbPercent.setProgress(percent);
         gHolder.pbPercent.setMax(100);
     }
@@ -282,7 +283,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     }
 
     private void setMoneyData(IndexGiftNew o, GiftNormalHolder holder) {
-        SpannableString ss = new SpannableString(String.format("[gold] %d", o.score));
+        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d", o.score));
         ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
         holder.tvMoney.setVisibility(View.VISIBLE);
@@ -297,7 +298,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         holder.tvPercent.setVisibility(View.VISIBLE);
         holder.pbPercent.setVisibility(View.VISIBLE);
         final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-        holder.tvPercent.setText(String.format("剩余%d%%", percent));
+        holder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         holder.pbPercent.setProgress(percent);
         holder.pbPercent.setMax(100);
     }
@@ -332,7 +333,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.tvSeize, 0);
                 final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-                cHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+                cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
                 cHolder.pbPercent.setMax(100);
                 break;
@@ -392,7 +393,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
      */
     @NonNull
     private View inflateChargeHolder(ViewGroup parent, ChargeHolder cHolder) {
-        View convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_first_charge_with_free,
+        View convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_coupon_with_free,
                 parent, false);
         cHolder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
         cHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
@@ -411,7 +412,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     /**
      * 设置抢号Text的样式
      *
-     * @param tv
      * @param state 0 正在疯抢 1 已抢完 2 已抢号 3 免费已抢完 4 灰色不填
      */
     private void setSeizeTextUI(TextView tv, int state) {

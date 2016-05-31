@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 我的首充券列表内容适配器
+ *
  * Created by zsigui on 16-1-7.
  */
-public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener {
+public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener {
 
 	private int mType;
 
-    public MyGiftListAdapter(Context context, List<IndexGiftNew> objects, int type) {
+    public MyCouponListAdapter(Context context, List<IndexGiftNew> objects, int type) {
         super(context, objects);
         this.mType = type;
     }
@@ -53,9 +55,9 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
             holder = new ViewHolder();
             convertView = mLayoutInflater.inflate(R.layout.item_list_my_gift, parent, false);
             holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-//            holder.ivLimit = ViewUtil.getViewById(convertView, R.id.iv_limit);
             holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
-            holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+            holder.tvPlatform = ViewUtil.getViewById(convertView, R.id.tv_platform);
+            holder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
             holder.tvDeadline = ViewUtil.getViewById(convertView, R.id.tv_deadline);
             holder.tvGiftCode = ViewUtil.getViewById(convertView, R.id.tv_gift_code);
             holder.btnCopy = ViewUtil.getViewById(convertView, R.id.btn_copy);
@@ -66,18 +68,9 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
 
         IndexGiftNew o = getItem(position);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        if (o.exclusive == 1) {
-            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
-        } else {
-            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        }
-//        if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-//            holder.ivLimit.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.ivLimit.setVisibility(View.GONE);
-//        }
         ViewUtil.showImage(holder.ivIcon, o.img);
-        holder.tvContent.setText(o.content);
+        holder.tvPlatform.setText(o.platform);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
                 DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
         holder.tvGiftCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, o.code)));
@@ -116,8 +109,8 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
     static class ViewHolder {
         TextView tvName;
         ImageView ivIcon;
-//        ImageView ivLimit;
-        TextView tvContent;
+        TextView tvPlatform;
+        TextView tvPrice;
         TextView tvDeadline;
         TextView tvGiftCode;
         TextView btnCopy;

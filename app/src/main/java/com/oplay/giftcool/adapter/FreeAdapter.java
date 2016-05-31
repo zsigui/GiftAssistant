@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
@@ -126,7 +127,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ViewUtil.showImage(gHolder.ivIcon, o.img);
         gHolder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         gHolder.tvContent.setText(o.content);
-        SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
+        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
         final int startPos = String.valueOf(o.score).length() + 10;
         ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -152,7 +153,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.pbPercent.setVisibility(View.VISIBLE);
                 gHolder.tvPercent.setVisibility(View.VISIBLE);
                 final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-                gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+                gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 gHolder.pbPercent.setProgress(percent);
                 gHolder.pbPercent.setMax(100);
                 gHolder.tvSeizeHint.setVisibility(View.GONE);
@@ -176,7 +177,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.pbPercent.setVisibility(View.GONE);
                 gHolder.tvPercent.setVisibility(View.GONE);
                 gHolder.tvSeizeHint.setVisibility(View.VISIBLE);
-                if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
+                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     setSeizeTextUI(gHolder.tvSeize, 4);
                     gHolder.tvSeize.setText(String.format("%s免费抢",
                             DateUtil.formatUserReadDate(o.freeStartTime)));
@@ -218,7 +219,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.tvSeize, 0);
                 final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-                cHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+                cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
                 cHolder.pbPercent.setMax(100);
                 break;
@@ -352,8 +353,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
             case R.id.btn_send:
                 // 进行预约
-                o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
-                notifyDataChanged();
+                PayManager.getInstance().seizeGift(mContext, o, (GiftButton) v);
                 break;
         }
     }

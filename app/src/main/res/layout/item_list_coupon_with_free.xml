@@ -42,7 +42,7 @@
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
-                android:drawableLeft = "@drawable/ic_tag_first_charge"
+                android:drawableLeft = "@drawable/ic_tag_coupon"
                 android:text = "[暴打魏蜀吴]新手礼包" />
 
         <TextView

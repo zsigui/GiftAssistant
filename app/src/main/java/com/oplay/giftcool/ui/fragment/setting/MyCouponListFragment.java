@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.MyGiftListAdapter;
+import com.oplay.giftcool.adapter.MyCouponListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -27,12 +27,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by zsigui on 16-1-7.
+ * 我的首充券‘已抢’‘已过期’页面
+ * <p/>
+ * Created by zsigui on 16-5-31.
  */
-public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     private ListView mDataView;
-    private MyGiftListAdapter mAdapter;
+    private MyCouponListAdapter mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
     private int mType;
 
@@ -58,13 +60,13 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     @SuppressWarnings("unchecked")
     protected void processLogic(Bundle savedInstanceState) {
         ReqPageData data = new ReqPageData();
-        data.giftType = KeyConfig.GIFT_TYPE_GIFT;
+        data.giftType = KeyConfig.GIFT_TYPE_COUPON;
         mReqPageObj = new JsonReqBase<ReqPageData>(data);
 
         if (getArguments() != null) {
             mType = getArguments().getInt(KeyConfig.KEY_DATA);
         }
-        mAdapter = new MyGiftListAdapter(getContext(), null, mType);
+        mAdapter = new MyCouponListAdapter(getContext(), null, mType);
         mDataView.setAdapter(mAdapter);
     }
 
@@ -220,7 +222,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     @Override
     public String getPageName() {
-        return "我的礼包";
+        return null;
     }
 
     @Override

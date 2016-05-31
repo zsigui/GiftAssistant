@@ -124,7 +124,7 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download {
 		public NormalVH(View itemView) {
 			super(itemView);
 			tvName = getViewById(R.id.tv_name);
-			ivGift = getViewById(R.id.iv_gift);
+			ivGift = getViewById(R.id.iv_gift_hint);
 			ivIcon = getViewById(R.id.iv_icon);
 			tvPlay = getViewById(R.id.tv_content);
 			tvSize = getViewById(R.id.tv_size);

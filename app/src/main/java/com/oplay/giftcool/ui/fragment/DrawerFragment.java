@@ -201,7 +201,7 @@ public class DrawerFragment extends BaseFragment {
         result.add(temp);
 
         temp = new DrawerModel(KeyConfig.TYPE_ID_MY_COUPON, R.drawable
-                .ic_drawer_my_coupon, getResources().getString(R.string.st_drawer_my_attention), this);
+                .ic_drawer_my_coupon, getResources().getString(R.string.st_drawer_my_coupon), this);
 //		modelArray.put(KeyConfig.TYPE_ID_MY_ATTENTION, temp);
         result.add(temp);
 

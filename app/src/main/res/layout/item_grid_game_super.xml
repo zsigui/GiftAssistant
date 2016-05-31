@@ -25,7 +25,7 @@
 				app:riv_oval="false"/>
 
 		<ImageView
-				android:id = "@+id/iv_gift"
+				android:id = "@+id/iv_gift_hint"
 				android:layout_alignParentRight = "true"
 				android:contentDescription="@null"
 				android:layout_width = "wrap_content"

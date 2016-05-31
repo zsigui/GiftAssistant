@@ -1,49 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:id="@+id/ll_tabs"
-		android:layout_width = "match_parent"
-		android:orientation = "vertical"
-		android:layout_height = "@dimen/di_tab_index_bg_height" >
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/ll_tabs"
+        android:layout_width = "match_parent"
+        android:orientation = "vertical"
+        android:layout_height = "@dimen/di_tab_index_bg_height" >
 
-	<View style = "@style/HDividerView" />
+    <View style = "@style/HDividerView" />
 
-	<LinearLayout
-			android:id = "@+id/ll_tabs_home"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent"
-			android:background = "@color/co_tab_index_bg"
-			android:orientation = "horizontal" >
+    <LinearLayout
+            android:id = "@+id/ll_tabs_home"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:background = "@color/co_tab_index_bg"
+            android:orientation = "horizontal" >
 
-		<CheckedTextView
-				android:id = "@+id/ctv_gift"
-				style = "@style/CheckedTextNormal.Index"
-				android:drawableTop = "@drawable/selector_tab_index_gift"
-				android:gravity="center_horizontal"
-				android:text = "@string/st_tabs_home_gift" />
+        <FrameLayout
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                android:layout_height = "wrap_content" >
 
-		<CheckedTextView
-				android:id = "@+id/ctv_free"
-				style = "@style/CheckedTextNormal.Index"
-				android:drawableTop = "@drawable/selector_tab_index_free"
-				android:gravity="center_horizontal"
-				android:text = "@string/st_tabs_home_free" />
+            <CheckedTextView
+                    android:id = "@+id/ctv_gift"
+                    style = "@style/CheckedTextNormal.Index"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:drawableTop = "@drawable/selector_tab_index_gift"
+                    android:gravity = "center_horizontal"
+                    android:text = "@string/st_tabs_home_gift" />
 
-		<CheckedTextView
-				android:id = "@+id/ctv_game"
-				android:gravity="center_horizontal"
-				style = "@style/CheckedTextNormal.Index"
-				android:drawableTop = "@drawable/selector_tab_index_game"
-				android:text = "@string/st_tabs_index_game"
-				android:checked = "false" />
+            <ImageView
+                    android:id = "@+id/iv_gift_hint"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_gravity = "center_horizontal"
+                    android:layout_marginLeft = "@dimen/di_list_item_gap_big"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                    android:visibility = "gone"
+                    android:src = "@drawable/ic_toolbar_hint" />
+        </FrameLayout >
 
-		<CheckedTextView
-				android:id = "@+id/ctv_post"
-				android:gravity="center_horizontal"
-				style = "@style/CheckedTextNormal.Index"
-				android:drawableTop = "@drawable/selector_tab_index_post"
-				android:text = "@string/st_tabs_index_post"
-				android:checked = "false" />
+        <CheckedTextView
+                android:id = "@+id/ctv_free"
+                style = "@style/CheckedTextNormal.Index"
+                android:drawableTop = "@drawable/selector_tab_index_free"
+                android:gravity = "center_horizontal"
+                android:text = "@string/st_tabs_home_free" />
 
-	</LinearLayout >
+        <CheckedTextView
+                android:id = "@+id/ctv_game"
+                android:gravity = "center_horizontal"
+                style = "@style/CheckedTextNormal.Index"
+                android:drawableTop = "@drawable/selector_tab_index_game"
+                android:text = "@string/st_tabs_index_game"
+                android:checked = "false" />
+
+
+        <FrameLayout
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                android:layout_height = "wrap_content" >
+
+            <CheckedTextView
+                    android:id = "@+id/ctv_post"
+                    android:gravity = "center_horizontal"
+                    style = "@style/CheckedTextNormal.Index"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:drawableTop = "@drawable/selector_tab_index_post"
+                    android:text = "@string/st_tabs_index_post"
+                    android:checked = "false" />
+
+            <ImageView
+                    android:id = "@+id/iv_post_hint"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_gravity = "center_horizontal"
+                    android:layout_marginLeft = "@dimen/di_list_item_gap_big"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                    android:visibility = "gone"
+                    android:src = "@drawable/ic_toolbar_hint" />
+        </FrameLayout >
+
+    </LinearLayout >
 </LinearLayout >

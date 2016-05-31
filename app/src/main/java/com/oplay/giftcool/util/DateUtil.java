@@ -146,7 +146,7 @@ public class DateUtil {
         }
         Date date = null;
 
-        date = new Date(time);
+        date = new Date(time * 1000);
         Calendar current = Calendar.getInstance();
 
         Calendar today = Calendar.getInstance();    //今天
@@ -168,7 +168,9 @@ public class DateUtil {
         tomorrow.set(Calendar.SECOND, 0);
 
         current.setTime(date);
-
+//        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+//        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//        KLog.d(AppDebugConfig.TAG_WARN, "date = " + format1.format(date) + ", time = " + format1.format(time));
         if (current.after(today) && current.before(tomorrow)) {
             return "明天";
         } else if (current.after(tomorrow)) {

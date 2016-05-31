@@ -21,7 +21,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
@@ -35,10 +34,10 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * 礼包首页的 Adapter, 实现多种布局配置
@@ -270,7 +269,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     }
 
     private void setMoneyData(IndexGiftNew o, ItemHolder holder) {
-        SpannableString ss = new SpannableString(String.format("[gold] %d", o.score));
+        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d", o.score));
         ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
         holder.tvMoney.setVisibility(View.VISIBLE);
@@ -285,7 +284,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         holder.tvPercent.setVisibility(View.VISIBLE);
         holder.pbPercent.setVisibility(View.VISIBLE);
         final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-        holder.tvPercent.setText(String.format("剩余%d%%", percent));
+        holder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         holder.pbPercent.setProgress(percent);
         holder.pbPercent.setMax(100);
     }
@@ -316,21 +315,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         // 由于线程间会造成 RV 的 Inconsistency detected 问题，忽略
 //		notifyItemRangeChanged(start, end - start);
         mData = data;
-        if (AppConfig.TEST_MODE) {
-            if (Math.random() * 2 > 1) {
-                if (mData.like != null && !mData.like.isEmpty()) {
-                    KLog.d(AppDebugConfig.TAG_WARN, "need to be deleted when not in debug!");
-                    mData.like.get(0).hasNew = true;
-                    mData.like.get(0).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
-                    if (mData.like.size() >= 3) {
-                        mData.like.get(3).hasNew = true;
-                        mData.like.get(3).newestCreateTime = System.currentTimeMillis() + 1000 * 1000 * 500;
-                    }
-                }
-            } else {
-                mData.like = null;
-            }
-        }
         notifyDataSetChanged();
         return true;
     }
@@ -391,7 +375,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         StatisticsManager.getInstance().trace(mContext,
                 StatisticsManager.ID.GIFT_BANNER,
                 StatisticsManager.ID.STR_GIFT_BANNER,
-                String.format("第%d推广位，标题：%s", position, banner.title));
+                String.format(Locale.CHINA, "第%d推广位，标题：%s", position, banner.title));
         BannerTypeUtil.handleBanner(mContext, banner);
     }
 

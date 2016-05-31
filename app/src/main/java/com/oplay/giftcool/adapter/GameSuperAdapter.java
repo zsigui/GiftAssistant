@@ -455,7 +455,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         public NormalVH(View itemView) {
             super(itemView);
             tvName = getViewById(R.id.tv_name);
-            ivGift = getViewById(R.id.iv_gift);
+            ivGift = getViewById(R.id.iv_gift_hint);
             ivIcon = getViewById(R.id.iv_icon);
             tvPlay = getViewById(R.id.tv_content);
             tvSize = getViewById(R.id.tv_size);

@@ -15,7 +15,7 @@
             style = "@style/DefaultTextView.DetailTitle"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:text = "@string/st_first_charge_content" />
+            android:text = "@string/st_coupon_content" />
 
     <TextView
             android:id = "@+id/tv_content"
@@ -28,7 +28,7 @@
             style = "@style/DefaultTextView.DetailTitle"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:text = "@string/st_first_charge_deadline" />
+            android:text = "@string/st_coupon_deadline" />
 
     <TextView
             android:id = "@+id/tv_deadline"
@@ -41,7 +41,7 @@
             style = "@style/DefaultTextView.DetailTitle"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:text = "@string/st_first_charge_usage" />
+            android:text = "@string/st_coupon_usage" />
 
     <com.oplay.giftcool.ui.widget.layout.GCRecyclerView
             android:id = "@+id/rv_usage"
@@ -63,7 +63,7 @@
             android:singleLine = "false"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:text = "@string/st_first_charge_hint_content" />
+            android:text = "@string/st_coupon_hint_content" />
 
     <TextView
             android:id = "@+id/tv_qq"

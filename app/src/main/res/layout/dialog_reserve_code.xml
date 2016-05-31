@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent"
+              android:orientation = "vertical" >
+
+    <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                  android:layout_width = "260dp"
+                  android:layout_height = "wrap_content"
+                  android:background = "@color/co_white"
+                  android:orientation = "vertical" >
+
+        <TextView
+                android:id = "@+id/tv_title"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:paddingBottom = "@dimen/di_dialog_title_padding_top_bottom"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingTop = "@dimen/di_dialog_title_padding_top_bottom"
+                android:textColor = "@color/co_common_app_second_bg_green" />
+
+        <View style = "@style/HDividerView" />
+
+        <TextView
+                android:id = "@+id/tv_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:paddingTop = "@dimen/di_dialog_content_padding"
+                android:paddingBottom = "@dimen/di_dialog_content_padding"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingRight = "@dimen/di_dialog_title_padding_left"
+                android:singleLine = "false"
+                android:textColor = "@color/co_black" />
+
+        <TextView
+                android:id = "@+id/tv_hint"
+                style = "@style/DefaultTextView.Text"
+                android:layout_width = "match_parent"
+                android:layout_height = "33dp"
+                android:layout_marginLeft = "@dimen/di_dialog_title_padding_left"
+                android:layout_marginRight = "@dimen/di_dialog_title_padding_left"
+                android:layout_marginBottom = "@dimen/di_dialog_title_padding_left"
+                android:layout_weight = "1"
+                android:background = "@color/co_gift_code_bg"
+                android:gravity = "center"
+                android:paddingLeft = "10dp"
+                android:paddingRight = "10dp" />
+
+        <View style = "@style/HDividerView" />
+
+        <TextView
+                android:id = "@+id/btn_confirm"
+                style = "@style/NewButtonText"
+                android:layout_width = "match_parent"
+                android:text = "@string/st_dialog_btn_confirm"
+                android:textColor = "@color/co_common_app_second_bg_green" />
+
+    </LinearLayout >
+</LinearLayout >

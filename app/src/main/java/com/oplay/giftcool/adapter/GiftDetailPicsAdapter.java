@@ -60,15 +60,15 @@ public class GiftDetailPicsAdapter extends BaseRVAdapter<String> implements View
         GalleryFinal.openMultiPhoto(pos, mPics);
     }
 
-    @Override
-    public void updateData(ArrayList<String> data) {
-        super.updateData(data);
+    public void updateData(ArrayList<String> thumbData, ArrayList<String> originData) {
+        this.mData = thumbData;
+        notifyDataSetChanged();
         if (getItemCount() != 0) {
             if (mPics == null) {
                 mPics = new ArrayList<>();
             }
             mPics.clear();
-            for (String s : data) {
+            for (String s : originData) {
                 PhotoInfo p = new PhotoInfo();
                 p.setPhotoId(s.hashCode());
                 p.setPhotoPath(s);

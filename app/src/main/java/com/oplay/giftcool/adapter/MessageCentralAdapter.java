@@ -23,67 +23,67 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public class MessageCentralAdapter extends BaseRVAdapter<CentralHintMessage> implements View.OnClickListener {
 
-	public MessageCentralAdapter(Context context) {
-		super(context);
-	}
+    public MessageCentralAdapter(Context context) {
+        super(context);
+    }
 
-	@Override
-	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new MessageHolder(LayoutInflater.from(mContext)
-				.inflate(R.layout.item_list_message_central, parent, false));
-	}
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MessageHolder(LayoutInflater.from(mContext)
+                .inflate(R.layout.item_list_message_central, parent, false));
+    }
 
-	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
-		CentralHintMessage item = getItem(position);
-		MessageHolder holder = (MessageHolder) h;
-		ViewUtil.showImage(holder.ivIcon, item.icon);
-		holder.tvTitle.setText(item.title);
-		holder.tvContent.setText(item.content);
-		holder.itemView.setOnClickListener(this);
-		holder.itemView.setTag(TAG_POSITION, position);
-		if (item.showCount && item.count > 0) {
-			holder.tvCount.setVisibility(View.VISIBLE);
-			holder.tvCount.setText(String.valueOf(item.count));
-		} else {
-			holder.tvCount.setVisibility(View.GONE);
-		}
-	}
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
+        CentralHintMessage item = getItem(position);
+        MessageHolder holder = (MessageHolder) h;
+        ViewUtil.showImage(holder.ivIcon, item.icon);
+        holder.tvTitle.setText(item.title);
+        holder.tvContent.setText(item.content);
+        holder.itemView.setOnClickListener(this);
+        holder.itemView.setTag(TAG_POSITION, position);
+        if (item.showCount && item.count > 0) {
+            holder.tvCount.setVisibility(View.VISIBLE);
+            holder.tvCount.setText(String.valueOf(item.count));
+        } else {
+            holder.tvCount.setVisibility(View.GONE);
+        }
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (v.getTag(TAG_POSITION) == null) {
-			return;
-		}
-		CentralHintMessage item = getItem((Integer) v.getTag(TAG_POSITION));
-		handleItemClick(item);
-	}
+    @Override
+    public void onClick(View v) {
+        if (v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        CentralHintMessage item = getItem((Integer) v.getTag(TAG_POSITION));
+        handleItemClick(item);
+    }
 
-	private void handleItemClick(CentralHintMessage item) {
-		if (KeyConfig.CODE_MSG_COMMENT.equals(item.code)) {
-			IntentUtil.jumpCommentMessage(mContext);
-		} else if (KeyConfig.CODE_MSG_ADMIRE.equals(item.code)) {
-			IntentUtil.jumpAdmireMessage(mContext);
-		} else if (KeyConfig.CODE_MSG_SYSTEM.equals(item.code)) {
-			IntentUtil.jumpSystemMessage(mContext);
-		} else if (KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY.equals(item.code)) {
-			IntentUtil.jumpNewGiftNotify(mContext);
-		}
-	}
+    private void handleItemClick(CentralHintMessage item) {
+        if (KeyConfig.CODE_MSG_COMMENT.equals(item.code)) {
+            IntentUtil.jumpCommentMessage(mContext);
+        } else if (KeyConfig.CODE_MSG_ADMIRE.equals(item.code)) {
+            IntentUtil.jumpAdmireMessage(mContext);
+        } else if (KeyConfig.CODE_MSG_SYSTEM.equals(item.code)) {
+            IntentUtil.jumpSystemMessage(mContext);
+        } else if (KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY.equals(item.code)) {
+            IntentUtil.jumpNewGiftNotify(mContext);
+        }
+    }
 
-	private static class MessageHolder extends BaseRVHolder {
+    private static class MessageHolder extends BaseRVHolder {
 
-		private ImageView ivIcon;
-		private TextView tvTitle;
-		private TextView tvContent;
-		private TextView tvCount;
+        private ImageView ivIcon;
+        private TextView tvTitle;
+        private TextView tvContent;
+        private TextView tvCount;
 
-		public MessageHolder(View itemView) {
-			super(itemView);
-			ivIcon = getViewById(R.id.iv_icon);
-			tvTitle = getViewById(R.id.tv_title);
-			tvContent = getViewById(R.id.tv_content);
-			tvCount = getViewById(R.id.tv_item_count);
-		}
-	}
+        public MessageHolder(View itemView) {
+            super(itemView);
+            ivIcon = getViewById(R.id.iv_icon);
+            tvTitle = getViewById(R.id.tv_title);
+            tvContent = getViewById(R.id.tv_content);
+            tvCount = getViewById(R.id.tv_item_count);
+        }
+    }
 }

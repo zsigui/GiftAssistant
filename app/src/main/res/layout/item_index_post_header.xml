@@ -10,30 +10,78 @@
               android:layout_gravity = "center_horizontal"
               android:background = "@color/co_white" >
 
-	<ImageView
-			android:id = "@+id/iv_sign_in_everyday"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:clickable = "true"
-			android:scaleType="fitXY"
-			android:src = "@drawable/pic_sign_in_everyday"
-			android:contentDescription = "@null" />
+    <FrameLayout
+            android:id = "@+id/fl_sign_in"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content" >
 
-	<ImageView
-			android:id = "@+id/iv_lottery_everyday"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:src = "@drawable/pic_lottery_everyday"
-			android:scaleType="fitXY"
-			android:clickable = "true"
-			android:contentDescription = "@null" />
+        <ImageView
+                android:id = "@+id/iv_sign_in_everyday"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:clickable = "true"
+                android:scaleType = "fitXY"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                android:src = "@drawable/pic_sign_in_everyday"
+                android:contentDescription = "@null" />
 
-	<ImageView
-			android:id = "@+id/iv_task_everyday"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:src = "@drawable/pic_task_everyday"
-			android:scaleType="fitXY"
-			android:clickable = "true"
-			android:contentDescription = "@null" />
+        <ImageView
+                android:id = "@+id/iv_sign_in_hint"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_gravity = "right"
+                android:visibility = "gone"
+                android:src = "@drawable/ic_index_gift_like_new" />
+    </FrameLayout >
+
+    <FrameLayout
+            android:id = "@+id/fl_lottery"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content" >
+
+        <ImageView
+                android:id = "@+id/iv_lottery_everyday"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/pic_lottery_everyday"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                android:scaleType = "fitXY"
+                android:clickable = "true"
+                android:contentDescription = "@null" />
+
+        <ImageView
+                android:id = "@+id/iv_lottery_hint"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_gravity = "right"
+                android:visibility = "gone"
+                android:src = "@drawable/ic_index_gift_like_new" />
+    </FrameLayout >
+
+    <FrameLayout
+            android:id = "@+id/fl_task"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content" >
+
+        <ImageView
+                android:id = "@+id/iv_task_everyday"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/pic_task_everyday"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                android:scaleType = "fitXY"
+                android:clickable = "true"
+                android:contentDescription = "@null" />
+
+        <ImageView
+                android:id = "@+id/iv_task_hint"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_gravity = "right"
+                android:visibility = "gone"
+                android:src = "@drawable/ic_index_gift_like_new" />
+    </FrameLayout >
 </LinearLayout >

@@ -15,11 +15,11 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 /**
- * Created by zsigui on 16-1-6.
+ * Created by zsigui on 16-5-31.
  */
-public class MyGiftFragment extends BaseFragment {
+public class MyCouponFragment extends BaseFragment {
 
-    private final static String PAGE_NAME = "我的礼包";
+    private final static String PAGE_NAME = "我的首充券";
     private ViewPager mPager;
     private SmartTabLayout mTabLayout;
 
@@ -49,12 +49,13 @@ public class MyGiftFragment extends BaseFragment {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         mFragments = new Fragment[3];
-        mFragmentType = new int[]{KeyConfig.TYPE_KEY_SEIZED, KeyConfig.TYPE_KEY_SEARCH, KeyConfig.TYPE_KEY_OVERTIME};
         mTitles = new String[3];
         mTitles[0] = "已抢";
-        mTitles[1] = "已淘";
+        mTitles[1] = "我的预约";
         mTitles[2] = "已过期";
-        mPager.setAdapter(new MyGiftPagerAdapter(getChildFragmentManager()));
+        mFragmentType = new int[]{KeyConfig.TYPE_KEY_COUPON_SEIZED,
+                KeyConfig.TYPE_KEY_COUPON_RESERVED, KeyConfig.TYPE_KEY_COUPON_OVERTIME};
+        mPager.setAdapter(new MyCouponPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);
     }
 
@@ -62,8 +63,8 @@ public class MyGiftFragment extends BaseFragment {
     protected void lazyLoad() {
     }
 
-    public static MyGiftFragment newInstance() {
-        return new MyGiftFragment();
+    public static MyCouponFragment newInstance() {
+        return new MyCouponFragment();
     }
 
     @Override
@@ -71,16 +72,20 @@ public class MyGiftFragment extends BaseFragment {
         return PAGE_NAME;
     }
 
-    public class MyGiftPagerAdapter extends FragmentPagerAdapter {
+    public class MyCouponPagerAdapter extends FragmentPagerAdapter {
 
-        public MyGiftPagerAdapter(FragmentManager fm) {
+        public MyCouponPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
             if (mFragments[position] == null) {
-                mFragments[position] = MyGiftListFragment.newInstance(mFragmentType[position]);
+                if (mFragmentType[position] == KeyConfig.TYPE_KEY_COUPON_RESERVED) {
+                    mFragments[position] = MyCouponReservedFragment.newInstance();
+                } else {
+                    mFragments[position] = MyCouponListFragment.newInstance(mFragmentType[position]);
+                }
             }
             return mFragments[position];
         }
@@ -94,7 +99,6 @@ public class MyGiftFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             return mTitles[position];
         }
-
 
     }
 }

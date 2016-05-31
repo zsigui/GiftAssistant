@@ -60,7 +60,6 @@ import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -74,6 +73,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         OnProgressUpdateListener {
 
     private final static String PAGE_NAME = "礼包详情";
+
+    // 用于防止重复打开指引
+    static boolean mIsFirstOpenPage = true;
+
     private ImageView ivIcon;
     private TextView tvName;
     private TextView tvConsume;
@@ -85,7 +88,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvContent;
     private TextView tvDeadline;
     private TextView tvUsage;
-    private TextView tvUsageTitle;
     private RecyclerView rvUsage;
     private GiftDetailPicsAdapter mAdapter;
     private GiftButton btnSend;
@@ -276,13 +278,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 btnCopy.setVisibility(View.VISIBLE);
                 tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
             }
-            setDeadCount();
+//            setDeadCount();
 
             if (!mIsNotifyRefresh) {
                 if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
                         && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
                     tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
-                    mAdapter.updateData(giftData.usagePics);
+                    mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
                     tvName.setText(giftData.name);
                     tvUsage.setText(giftData.usage);
@@ -336,7 +338,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
-                tvUsageTitle = getViewById(vsCharge, R.id.tv_usage_title);
                 LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
                         llm.getOrientation(),
@@ -684,8 +685,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                                 System.currentTimeMillis() - response.headers().getDate("Date").getTime();
                         if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
                             f.refreshSuccessEnd();
-//                            f.updateData(response.body().getData());
-                            f.updateData(f.initTestData());
+                            f.updateData(response.body().getData());
                             return;
                         }
                         if (AppDebugConfig.IS_DEBUG) {
@@ -710,19 +710,19 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         }
     }
 
-    private boolean mIsShowGuide = true;
 
     /**
      * 显示首充券使用的指引页面
      */
     public void showGuidePage() {
-        if (mIsShowGuide) {
+        if (AssistantApp.getInstance().isFirstOpenInThisVersion()
+                && mIsFirstOpenPage) {
             ThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
                     View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                            .inflate(R.layout.overlay_hint_focus, null);
+                            .inflate(R.layout.overlay_hint_focus, (ViewGroup) mContentView.getParent(), false);
                     ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
                     if (ivConfirm != null) {
                         ivConfirm.setOnClickListener(new View.OnClickListener() {
@@ -735,51 +735,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     dialog.setCancelable(true);
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setContentView(v);
-                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                            .MATCH_PARENT);
                     dialog.show();
+                    mIsFirstOpenPage = false;
                 }
-            }, 500);
+            }, 300);
         }
-    }
-
-    private GiftDetail initTestData() {
-        GiftDetail result = new GiftDetail();
-        IndexGiftNew gift = new IndexGiftNew();
-        result.giftData = gift;
-        gift.status = (int) (Math.random() * 3) + 7;
-        gift.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
-        gift.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
-        int[] seize = new int[]{GiftTypeUtil.SEIZE_TYPE_RESERVED, GiftTypeUtil.SEIZE_TYPE_SEIZED, GiftTypeUtil
-                .SEIZE_TYPE_NEVER,
-                GiftTypeUtil.SEIZE_TYPE_UN_RESERVE};
-        gift.seizeStatus = seize[(int) (Math.random() * 4)];
-        gift.remainCount = 10;
-        gift.totalCount = 10;
-        gift.bean = (int) (Math.random() * 100);
-        gift.score = 500;
-        gift.content = "充值减少6元人民币";
-        gift.platform = "偶玩版";
-        gift.name = "6元首充券";
-        gift.useStartTime = "2016-06-01 12:00:00";
-        gift.useEndTime = "2016-00-05 12:00:00";
-        gift.originPrice = 32;
-        gift.code = "sdkkk3431qercx341iZX";
-        gift.freeStartTime = System.currentTimeMillis() + 3600 * 24 * 1000;
-        gift.usagePics = new ArrayList<>();
-        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/24/b6ed8a61b59586478705589a2ed5f5da" +
-                ".jpg_512_512_95.jpg");
-        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/04/27/96a7d5d0beebdcd2d7a33bd036bf8efa" +
-                ".jpg_512_512_95.jpg");
-        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/13/33fa2d7bebb68d2abc8c1d56e8dd4119" +
-                ".jpg_512_512_95.jpg");
-        gift.usagePics.add("http://owan-img.ymapp.com/giftcool/slider/2016/05/18/a6227d33c7d59f024d384964a99bd6d1" +
-                ".jpg_512_512_95.jpg");
-        gift.id = 136;
-        IndexGameNew game = new IndexGameNew();
-        game.id = 133;
-        game.name = "宠物小精灵";
-        game.img = "http://owan-img.ymapp.com/app/11004/icon/icon_1460627334.png_128_128_70.png";
-        result.gameData = game;
-        return result;
     }
 }

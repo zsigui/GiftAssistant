@@ -120,7 +120,7 @@ public class IndexGameHotWithTitleAdapter extends BaseRVAdapter_Download impleme
 		public NormalVH(View itemView) {
 			super(itemView);
 			tvName = getViewById(R.id.tv_name);
-			ivGift = getViewById(R.id.iv_gift);
+			ivGift = getViewById(R.id.iv_gift_hint);
 			ivIcon = getViewById(R.id.iv_icon);
 			btnDownload = getViewById(R.id.tv_download);
 		}

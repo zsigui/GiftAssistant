@@ -1,10 +1,14 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.MyGiftListAdapter;
+import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -27,26 +31,28 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by zsigui on 16-1-7.
+ * Created by zsigui on 16-5-31.
  */
-public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     private ListView mDataView;
-    private MyGiftListAdapter mAdapter;
+    private NestedGiftListAdapter mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
-    private int mType;
 
-    public static MyGiftListFragment newInstance(int type) {
-        MyGiftListFragment fragment = new MyGiftListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(KeyConfig.KEY_DATA, type);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static MyCouponReservedFragment newInstance() {
+        return new MyCouponReservedFragment();
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_refresh_lv_container);
+        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty,
+                (ViewGroup) mContentView.getParent(), false);
+        TextView tv = getViewById(emptyView, R.id.tv_hint);
+        if (tv != null) {
+            tv.setText(getContext().getString(R.string.st_my_coupon_reserved_msg_hint));
+        }
+        mViewManager.setEmptyView(emptyView);
         mDataView = getViewById(R.id.lv_content);
     }
 
@@ -58,13 +64,10 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     @SuppressWarnings("unchecked")
     protected void processLogic(Bundle savedInstanceState) {
         ReqPageData data = new ReqPageData();
-        data.giftType = KeyConfig.GIFT_TYPE_GIFT;
+        data.giftType = KeyConfig.GIFT_TYPE_COUPON;
+        data.type = KeyConfig.TYPE_KEY_COUPON_RESERVED;
         mReqPageObj = new JsonReqBase<ReqPageData>(data);
-
-        if (getArguments() != null) {
-            mType = getArguments().getInt(KeyConfig.KEY_DATA);
-        }
-        mAdapter = new MyGiftListAdapter(getContext(), null, mType);
+        mAdapter = new NestedGiftListAdapter(getContext());
         mDataView.setAdapter(mAdapter);
     }
 
@@ -88,7 +91,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     mCallRefresh.cancel();
                 }
                 mReqPageObj.data.page = 1;
-                mReqPageObj.data.type = mType;
                 mCallRefresh = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -158,7 +160,6 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     mCallLoad.cancel();
                 }
                 mReqPageObj.data.page = mLastPage + 1;
-                mReqPageObj.data.type = mType;
                 mCallLoad = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -220,7 +221,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     @Override
     public String getPageName() {
-        return "我的礼包";
+        return null;
     }
 
     @Override

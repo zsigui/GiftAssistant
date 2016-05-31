@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "wrap_content" >
+
+	<TextView
+			android:id = "@+id/tv_hint"
+			android:layout_width = "match_parent"
+			style = "@style/DefaultTextView.Text"
+			android:singleLine = "false"
+			android:gravity = "left|top"
+			android:textSize = "14sp"
+			android:background = "@color/co_common_hint_bg"
+			android:drawablePadding = "15dp"
+			android:padding = "15dp"
+			android:layout_alignParentTop = "true"
+			android:drawableLeft = "@drawable/ic_msg_hint"
+			android:text = "@string/st_my_coupon_reserved_msg_hint" />
+
+	<com.oplay.giftcool.ui.widget.layout.RefreshLayout
+			xmlns:android = "http://schemas.android.com/apk/res/android"
+			android:id = "@+id/srl_layout"
+			android:orientation = "vertical"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:background = "@color/co_white" >
+
+		<ListView
+				android:id = "@+id/lv_content"
+				android:layout_width = "match_parent"
+				android:layout_height = "match_parent"
+				android:dividerHeight = "@dimen/di_divider_height"
+				style = "@style/ListScrollBar"
+				android:divider = "@color/co_divider_bg" />
+	</com.oplay.giftcool.ui.widget.layout.RefreshLayout >
+</LinearLayout >

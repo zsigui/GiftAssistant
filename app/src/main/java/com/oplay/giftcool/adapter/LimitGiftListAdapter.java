@@ -124,7 +124,7 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
 	private void handleGiftLimit(int type, IndexGiftNew o, ViewHolder holder) {
 		ViewUtil.showImage(holder.ivIcon, o.img);
 		holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-		SpannableString ss = new SpannableString(String.format("[gold] %d 或 [bean] %d", o.score, o.bean));
+		SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
 		final int startPos = String.valueOf(o.score).length() + 10;
 		ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 		ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -132,7 +132,7 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
 		holder.btnSend.setState(type);
 		switch (type) {
 			case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-				if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime) {
+				if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
 					// 限量抢状态,表示当前不处于免费抢
 					holder.tvSeizeHint.setVisibility(View.VISIBLE);
 					holder.tvSeizeHint.setText(String.format("%s免费抢",
@@ -167,7 +167,7 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
 		gHolder.tvPercent.setVisibility(View.VISIBLE);
 		gHolder.pbPercent.setVisibility(View.VISIBLE);
 		final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
-		gHolder.tvPercent.setText(String.format("剩余%d%%", percent));
+		gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
 		gHolder.pbPercent.setProgress(percent);
 		gHolder.pbPercent.setMax(100);
 	}

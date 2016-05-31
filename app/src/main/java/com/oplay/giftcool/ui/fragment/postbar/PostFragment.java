@@ -38,7 +38,7 @@ import retrofit2.Response;
  * <p/>
  * Created by zsigui on 16-4-5.
  */
-public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements CallbackListener {
+public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements CallbackListener<Boolean> {
 
 	private final String TAG_NAME = "首页活动";
 	private final String PREFIX_POST = "获取数据";
@@ -414,8 +414,8 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 	}
 
 	@Override
-	public void doCallBack(Object data) {
-		if (data != null && data instanceof Boolean) {
+	public void doCallBack(Boolean data) {
+		if (data != null) {
 			if (!mIsSwipeRefresh) {
 				if (mCallRefresh != null) {
 					mCallRefresh.cancel();

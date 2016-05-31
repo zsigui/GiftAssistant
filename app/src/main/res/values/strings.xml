@@ -20,6 +20,7 @@
     <string name = "st_drawer_header_un_login" >点击注册/登录</string >
 
     <string name = "st_drawer_my_gift" >我的礼包</string >
+    <string name = "st_drawer_my_coupon" >我的首充券</string >
     <string name = "st_drawer_my_wallet" >我的钱包</string >
     <string name = "st_drawer_my_attention" >我的关注</string >
     <string name = "st_drawer_sign_in_everyday" >每日签到</string >
@@ -85,11 +86,11 @@
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
     <string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
     <!-- 首充券详情 -->
-    <string name = "st_first_charge_content">▌首充券价值</string>
-    <string name = "st_first_charge_deadline">▌使用期限</string>
-    <string name = "st_first_charge_usage">▌兑换步骤</string>
-    <string name = "st_first_charge_usage_hint">点击下方查看图文步骤</string>
-    <string name = "st_first_charge_hint_content" >1、首充券只能使用同一个偶玩账号兑换1次，多次兑换无效。\n2、首充券的有效时间较短，抢号后请马上使用。</string >
+    <string name = "st_coupon_content">▌首充券价值</string>
+    <string name = "st_coupon_deadline">▌使用期限</string>
+    <string name = "st_coupon_usage">▌兑换步骤</string>
+    <string name = "st_coupon_usage_hint">点击下方查看图文步骤</string>
+    <string name = "st_coupon_hint_content" >1、首充券只能使用同一个偶玩账号兑换1次，多次兑换无效。\n2、首充券的有效时间较短，抢号后请马上使用。</string >
     <!-- 游戏状态 -->
     <string name = "st_tabs_home_gift" >礼包</string >
     <string name = "st_tabs_home_free" >限时免费</string >
@@ -174,6 +175,9 @@
     <string name = "st_wallet_get_bean" >充值偶玩豆</string >
     <string name = "st_wallet_bean_note" >偶玩豆说明</string >
     <string name = "st_wallet_score_note" >金币说明</string >
+
+    <!-- 设置 - 我的首充券 -->
+    <string name = "st_my_coupon_reserved_msg_hint">已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。首充券为您预留到开抢当天12点</string>
 
     <!-- 设置 - 金币任务 -->
     <string name = "st_task_title" >金币任务</string >
