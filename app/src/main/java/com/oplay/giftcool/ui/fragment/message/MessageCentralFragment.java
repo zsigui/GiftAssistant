@@ -8,8 +8,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MessageCentralAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 
 /**
@@ -61,9 +59,6 @@ public class MessageCentralFragment extends BaseFragment {
 	public void onResume() {
 		super.onResume();
 		if (Global.mMsgCentralTobeRefresh) {
-			if (MainActivity.sGlobalHolder != null) {
-				MainActivity.sGlobalHolder.updateHintState(KeyConfig.TYPE_ID_MSG, 0);
-			}
 			mAdapter.notifyDataSetChanged();
 		}
 	}

@@ -179,6 +179,7 @@ public class NewNotifyMessageFragment extends BaseFragment_Refresh<PushMessage> 
     public void updateData(ArrayList<PushMessage> data) {
         if (data == null || data.size() == 0) {
             mViewManager.showEmpty();
+            Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, 0, null);
             return;
         }
         Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY, 0,
