@@ -1,6 +1,6 @@
 package com.oplay.giftcool.adapter;
 
-import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -60,7 +60,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     final ImageSpan DRAWER_GOLD;
 
     private IndexGift mData;
-    private Context mContext;
+    private FragmentActivity mContext;
     private LayoutInflater mInflater;
     private boolean mShowFooter = false;
 
@@ -72,7 +72,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     private ArrayList<String> mBannerData;
 
 
-    public GiftAdapter(Context context) {
+    public GiftAdapter(FragmentActivity context) {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         initDefaultBannerConfig();

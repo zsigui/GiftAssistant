@@ -54,135 +54,135 @@ import retrofit2.Response;
  * Created by zsigui on 16-1-11.
  */
 public class OuwanLoginFragment extends BaseFragment implements TextView.OnEditorActionListener,
-		OnItemClickListener<String>, View.OnFocusChangeListener, OnBackPressListener {
+        OnItemClickListener<String>, View.OnFocusChangeListener, OnBackPressListener {
 
-	private final static String PAGE_NAME = "偶玩登录页";
-	private final static String ERR_PREFIX = "登录失败";
-	private AutoCompleteTextView etUser;
-	private TextView tvUserClear;
-	private TextView tvPwdClear;
-	private EditText etPwd;
-	private EditText etClearFocus;
-	//使用条款先注释掉，估计后面还要改回来
+    private final static String PAGE_NAME = "偶玩登录页";
+    private final static String ERR_PREFIX = "登录失败";
+    private AutoCompleteTextView etUser;
+    private TextView tvUserClear;
+    private TextView tvPwdClear;
+    private EditText etPwd;
+    private EditText etClearFocus;
+    //使用条款先注释掉，估计后面还要改回来
 //	private CheckedTextView ctvRememberPwd;
 //	private TextView tvLaw;
-	private TextView btnLogin;
-	private TextView tvAnotherLogin;
-	private TextView tvForgetPwd;
-	private ImageView ivMore;
-	private PopupWindow mAccountPopup;
-	private AccountAdapter mAccountAdapter;
-	private AccountAdapter mCompleteAdapter;
-	private ArrayList<String> mData;
-	private LinearLayout llUser;
-	public static boolean sNeedEncrypt = true;
+    private TextView btnLogin;
+    private TextView tvAnotherLogin;
+    private TextView tvForgetPwd;
+    private ImageView ivMore;
+    private PopupWindow mAccountPopup;
+    private AccountAdapter mAccountAdapter;
+    private AccountAdapter mCompleteAdapter;
+    private ArrayList<String> mData;
+    private LinearLayout llUser;
+    public static boolean sNeedEncrypt = true;
 
-	public static OuwanLoginFragment newInstance() {
-		return new OuwanLoginFragment();
-	}
+    public static OuwanLoginFragment newInstance() {
+        return new OuwanLoginFragment();
+    }
 
-	@Override
-	protected void initView(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_login_ouwan);
-		etUser = getViewById(R.id.et_input);
-		etClearFocus = getViewById(R.id.et_clear_focus);
-		tvUserClear = getViewById(R.id.tv_user_clear);
-		tvPwdClear = getViewById(R.id.tv_pwd_clear);
-		etPwd = getViewById(R.id.et_pwd);
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        setContentView(R.layout.fragment_login_ouwan);
+        etUser = getViewById(R.id.et_input);
+        etClearFocus = getViewById(R.id.et_clear_focus);
+        tvUserClear = getViewById(R.id.tv_user_clear);
+        tvPwdClear = getViewById(R.id.tv_pwd_clear);
+        etPwd = getViewById(R.id.et_pwd);
 //		ctvRememberPwd = getViewById(R.id.ctv_remember_pwd);
 //		tvLaw = getViewById(R.id.tv_law);
-		btnLogin = getViewById(R.id.btn_send);
-		tvAnotherLogin = getViewById(R.id.tv_another_login);
-		tvForgetPwd = getViewById(R.id.tv_forget_pwd);
-		ivMore = getViewById(R.id.iv_more);
-		llUser = getViewById(R.id.ll_input);
-	}
+        btnLogin = getViewById(R.id.btn_send);
+        tvAnotherLogin = getViewById(R.id.tv_another_login);
+        tvForgetPwd = getViewById(R.id.tv_forget_pwd);
+        ivMore = getViewById(R.id.iv_more);
+        llUser = getViewById(R.id.ll_input);
+    }
 
-	@Override
-	protected void setListener() {
-		getViewById(R.id.ll_pwd).setOnClickListener(this);
-		llUser.setOnClickListener(this);
-		btnLogin.setOnClickListener(this);
+    @Override
+    protected void setListener() {
+        getViewById(R.id.ll_pwd).setOnClickListener(this);
+        llUser.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
 //		tvLaw.setOnClickListener(this);
 //		ctvRememberPwd.setOnClickListener(this);
-		tvAnotherLogin.setOnClickListener(this);
-		tvUserClear.setOnClickListener(this);
-		tvPwdClear.setOnClickListener(this);
-		tvForgetPwd.setOnClickListener(this);
-		etUser.setOnEditorActionListener(this);
-		etPwd.setOnEditorActionListener(this);
-		ivMore.setOnClickListener(this);
-		etUser.setOnFocusChangeListener(this);
-		etPwd.setOnFocusChangeListener(this);
-	}
+        tvAnotherLogin.setOnClickListener(this);
+        tvUserClear.setOnClickListener(this);
+        tvPwdClear.setOnClickListener(this);
+        tvForgetPwd.setOnClickListener(this);
+        etUser.setOnEditorActionListener(this);
+        etPwd.setOnEditorActionListener(this);
+        ivMore.setOnClickListener(this);
+        etUser.setOnFocusChangeListener(this);
+        etPwd.setOnFocusChangeListener(this);
+    }
 
-	@Override
-	protected void processLogic(Bundle savedInstanceState) {
-		InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, null, true);
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        InputTextUtil.initPswFilter(etUser, etPwd, tvUserClear, tvPwdClear, btnLogin, null, true);
 //		ctvRememberPwd.setChecked(AssistantApp.getInstance().isRememberPwd());
-		btnLogin.setEnabled(false);
-		initHint();
-	}
+        btnLogin.setEnabled(false);
+        initHint();
+    }
 
-	private void initHint() {
-		mData = AccountManager.getInstance().readOuwanAccount();
-		if (mData != null && mData.size() > 0) {
-			String[] s = mData.get(0).split(",");
-			etUser.setText(s[0]);
-			if (AssistantApp.getInstance().isRememberPwd() && (s.length == 2 && !TextUtils.isEmpty(s[1]))) {
-				etPwd.setText(s[1]);
-				sNeedEncrypt = false;
-				etClearFocus.requestFocus();
-			} else {
-				etPwd.requestFocus();
-				InputMethodUtil.showSoftInput(getActivity());
-			}
-			ivMore.setVisibility(View.VISIBLE);
-		} else {
-			etUser.requestFocus();
-			InputMethodUtil.showSoftInput(getActivity());
-			ivMore.setVisibility(View.GONE);
-		}
-		mAccountAdapter = new AccountAdapter(getContext(), mData, true);
-		mCompleteAdapter = new AccountAdapter(getContext(), mData, true);
-		View popup = View.inflate(getContext(), R.layout.listview_account_popup, null);
-		MaxRowListView popupListView = getViewById(popup, R.id.lv_popup_list_content);
-		popupListView.setAdapter(mAccountAdapter);
-		etUser.setAdapter(mCompleteAdapter);
-		mAccountPopup = new PopupWindow(popup, LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.MATCH_PARENT, true);
-		mAccountAdapter.setListener(this);
-		mCompleteAdapter.setListener(this);
-		mAccountPopup.setOutsideTouchable(true);
-		mAccountPopup.setBackgroundDrawable(new BitmapDrawable());
-		etUser.setDropDownBackgroundDrawable(null);
-	}
+    private void initHint() {
+        mData = AccountManager.getInstance().readOuwanAccount();
+        if (mData != null && mData.size() > 0) {
+            String[] s = mData.get(0).split(",");
+            etUser.setText(s[0]);
+            if (AssistantApp.getInstance().isRememberPwd() && (s.length == 2 && !TextUtils.isEmpty(s[1]))) {
+                etPwd.setText(s[1]);
+                sNeedEncrypt = false;
+                etClearFocus.requestFocus();
+            } else {
+                etPwd.requestFocus();
+                InputMethodUtil.showSoftInput(getActivity());
+            }
+            ivMore.setVisibility(View.VISIBLE);
+        } else {
+            etUser.requestFocus();
+            InputMethodUtil.showSoftInput(getActivity());
+            ivMore.setVisibility(View.GONE);
+        }
+        mAccountAdapter = new AccountAdapter(getContext(), mData, true);
+        mCompleteAdapter = new AccountAdapter(getContext(), mData, true);
+        View popup = View.inflate(getContext(), R.layout.listview_account_popup, null);
+        MaxRowListView popupListView = getViewById(popup, R.id.lv_popup_list_content);
+        popupListView.setAdapter(mAccountAdapter);
+        etUser.setAdapter(mCompleteAdapter);
+        mAccountPopup = new PopupWindow(popup, LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, true);
+        mAccountAdapter.setListener(this);
+        mCompleteAdapter.setListener(this);
+        mAccountPopup.setOutsideTouchable(true);
+        mAccountPopup.setBackgroundDrawable(new BitmapDrawable());
+        etUser.setDropDownBackgroundDrawable(null);
+    }
 
-	@Override
-	protected void lazyLoad() {
+    @Override
+    protected void lazyLoad() {
 
-	}
+    }
 
-	private long mLastClickTime = 0;
+    private long mLastClickTime = 0;
 
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-		switch (v.getId()) {
-			case R.id.btn_send:
-				long curTime = System.currentTimeMillis();
-				if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
-					mLastClickTime = curTime;
-					return;
-				}
-				handleLogin();
-				break;
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.btn_send:
+                long curTime = System.currentTimeMillis();
+                if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+                    mLastClickTime = curTime;
+                    return;
+                }
+                handleLogin();
+                break;
 //			case R.id.tv_law:
 //				 显示条款弹窗
 //				break;
-			case R.id.tv_forget_pwd:
-				OuwanSDKManager.getInstance().showForgetPswView(getContext());
-				break;
+            case R.id.tv_forget_pwd:
+                OuwanSDKManager.getInstance().showForgetPswView(getContext());
+                break;
 //			case R.id.ctv_remember_pwd:
 //				if (ctvRememberPwd.isChecked()) {
 //					ctvRememberPwd.setChecked(false);
@@ -192,248 +192,250 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
 //					AssistantApp.getInstance().setIsRememberPwd(true);
 //				}
 //				break;
-			case R.id.iv_more:
-				etClearFocus.requestFocus();
-				InputMethodUtil.hideSoftInput(getActivity());
-				if (mData == null || mData.size() == 0) {
-					return;
-				}
-				if (mAccountPopup.isShowing()) {
-					mAccountPopup.dismiss();
-				} else {
-					mAccountPopup.showAsDropDown(llUser);
-				}
-				break;
-			case R.id.tv_another_login:
-				if (getActivity() != null) {
-					((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-							PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
-							false);
-				}
-				break;
-			case R.id.tv_user_clear:
-				clearText(etUser);
-				break;
-			case R.id.tv_pwd_clear:
-				clearText(etPwd);
-				break;
-			case R.id.ll_input:
-				etUser.setSelection(etUser.getText().length());
-				etUser.requestFocus();
-				break;
-			case R.id.ll_pwd:
-				etPwd.setSelection(etPwd.getText().length());
-				etPwd.requestFocus();
-				break;
-			default:
-				if (mAccountPopup != null && mAccountPopup.isShowing()) {
-					mAccountPopup.dismiss();
-				}
-				if (etUser.isPopupShowing()) {
-					etUser.dismissDropDown();
-				}
-		}
-	}
+            case R.id.iv_more:
+                etClearFocus.requestFocus();
+                InputMethodUtil.hideSoftInput(getActivity());
+                if (mData == null || mData.size() == 0) {
+                    return;
+                }
+                if (mAccountPopup.isShowing()) {
+                    mAccountPopup.dismiss();
+                } else {
+                    mAccountPopup.showAsDropDown(llUser);
+                }
+                break;
+            case R.id.tv_another_login:
+                if (getActivity() != null) {
+                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                            PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
+                            false);
+                }
+                break;
+            case R.id.tv_user_clear:
+                clearText(etUser);
+                break;
+            case R.id.tv_pwd_clear:
+                clearText(etPwd);
+                break;
+            case R.id.ll_input:
+                etUser.setSelection(etUser.getText().length());
+                etUser.requestFocus();
+                break;
+            case R.id.ll_pwd:
+                etPwd.setSelection(etPwd.getText().length());
+                etPwd.requestFocus();
+                break;
+            default:
+                if (mAccountPopup != null && mAccountPopup.isShowing()) {
+                    mAccountPopup.dismiss();
+                }
+                if (etUser.isPopupShowing()) {
+                    etUser.dismissDropDown();
+                }
+        }
+    }
 
-	private void clearText(EditText et) {
-		et.setText("");
-		et.requestFocus();
-		et.setSelection(0);
-		sNeedEncrypt = true;
-	}
+    private void clearText(EditText et) {
+        et.setText("");
+        et.requestFocus();
+        et.setSelection(0);
+        sNeedEncrypt = true;
+    }
 
-	/**
-	 * 偶玩登录的网络请求声明
-	 */
-	private Call<JsonRespBase<UserModel>> mCall;
+    /**
+     * 偶玩登录的网络请求声明
+     */
+    private Call<JsonRespBase<UserModel>> mCall;
 
-	private void handleLogin() {
-		showLoading();
-		final ReqLogin login = new ReqLogin();
-		if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
-			hideLoading();
-			showToast("账号密码格式不符合要求");
-			return;
-		}
-		Global.THREAD_POOL.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (!NetworkUtil.isConnected(getContext())) {
-					hideLoading();
-					showToast("网络连接失败");
-					return;
-				}
+    private void handleLogin() {
+        showLoading();
+        final ReqLogin login = new ReqLogin();
+        if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
+            hideLoading();
+            showToast("账号密码格式不符合要求");
+            return;
+        }
+        Global.THREAD_POOL.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (!NetworkUtil.isConnected(getContext())) {
+                    hideLoading();
+                    showToast("网络连接失败");
+                    return;
+                }
 
-				if (mCall != null) {
-					mCall.cancel();
-				}
-				mCall = Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login));
-				mCall.enqueue(new Callback<JsonRespBase<UserModel>>() {
-							@Override
-							public void onResponse(Call<JsonRespBase<UserModel>> call,
-							                       Response<JsonRespBase<UserModel>> response) {
-								if (!mCanShowUI || call.isCanceled()) {
-									return;
-								}
-								hideLoading();
-								if (response != null && response.isSuccessful()) {
-									if (response.body() != null
-											&& response.body().getCode() == NetStatusCode.SUCCESS) {
-										doAfterSuccess(response, login);
-										return;
-									}
-									ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
-									return;
+                if (mCall != null) {
+                    mCall.cancel();
+                }
+                mCall = Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login));
+                mCall.enqueue(new Callback<JsonRespBase<UserModel>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<UserModel>> call,
+                                           Response<JsonRespBase<UserModel>> response) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+                        hideLoading();
+                        if (response != null && response.isSuccessful()) {
+                            if (response.body() != null
+                                    && response.body().getCode() == NetStatusCode.SUCCESS) {
+                                doAfterSuccess(response, login);
+                                return;
+                            }
+                            ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
+                            return;
 
-								}
-								ToastUtil.blurErrorResp(ERR_PREFIX, response);
-							}
+                        }
+                        ToastUtil.blurErrorResp(ERR_PREFIX, response);
+                    }
 
-							@Override
-							public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-								if (!mCanShowUI || call.isCanceled()) {
-									return;
-								}
-								hideLoading();
-								if (AppDebugConfig.IS_DEBUG) {
-									KLog.e(t);
-								}
-								ToastUtil.blurThrow(ERR_PREFIX);
-							}
-						});
-			}
-		});
-	}
+                    @Override
+                    public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+                        hideLoading();
+                        if (AppDebugConfig.IS_DEBUG) {
+                            KLog.e(t);
+                        }
+                        ToastUtil.blurThrow(ERR_PREFIX);
+                    }
+                });
+            }
+        });
+    }
 
-	/**
-	 * 登录成功后的处理事件
-	 */
-	private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
-		UserModel userModel = response.body().getData();
-		userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
-		MainActivity.sIsTodayFirstOpen = true;
-		if (AssistantApp.getInstance().isRememberPwd()) {
-			AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
-					+ login.getPassword(), mData, false);
-		} else {
-			AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
-					mData, false);
-		}
-		SocketIOManager.getInstance().connectOrReConnect(true);
-		AccountManager.getInstance().notifyUserAll(userModel);
-		ScoreManager.getInstance().initSignInState(getContext());
-		StatisticsManager.getInstance().trace(getContext(),
-				StatisticsManager.ID.USER_OUWAN_LOGIN,
-				StatisticsManager.ID.STR_USER_OUWAN_LOGIN,
-				"用户名:" + userModel.userInfo.username);
-		((BaseAppCompatActivity) getActivity()).onBack();
-	}
+    /**
+     * 登录成功后的处理事件
+     */
+    private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
+        UserModel userModel = response.body().getData();
+        userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
+        MainActivity.sIsTodayFirstOpen = true;
+        if (AssistantApp.getInstance().isRememberPwd()) {
+            AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
+                    + login.getPassword(), mData, false);
+        } else {
+            AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ",",
+                    mData, false);
+        }
+        SocketIOManager.getInstance().connectOrReConnect(true);
+        AccountManager.getInstance().notifyUserAll(userModel);
+        ScoreManager.getInstance().initSignInState(getContext());
+        StatisticsManager.getInstance().trace(getContext(),
+                StatisticsManager.ID.USER_OUWAN_LOGIN,
+                StatisticsManager.ID.STR_USER_OUWAN_LOGIN,
+                "用户名:" + userModel.userInfo.username);
 
-	public void hideLoading() {
-		DialogManager.getInstance().hideLoadingDialog();
-	}
+        Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
+        ((BaseAppCompatActivity) getActivity()).onBack();
+    }
 
-	public void showLoading() {
-		if (getChildFragmentManager() != null) {
-			DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
-		}
-	}
+    public void hideLoading() {
+        DialogManager.getInstance().hideLoadingDialog();
+    }
 
-	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		switch (actionId) {
-			case EditorInfo.IME_ACTION_NEXT:
-				etPwd.requestFocus();
-				etPwd.setSelection(etPwd.getText().toString().length());
-				break;
-			case EditorInfo.IME_ACTION_DONE:
-				handleLogin();
-				break;
-		}
-		return false;
-	}
+    public void showLoading() {
+        if (getChildFragmentManager() != null) {
+            DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
+        }
+    }
 
-	@Override
-	public String getPageName() {
-		return PAGE_NAME;
-	}
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch (actionId) {
+            case EditorInfo.IME_ACTION_NEXT:
+                etPwd.requestFocus();
+                etPwd.setSelection(etPwd.getText().toString().length());
+                break;
+            case EditorInfo.IME_ACTION_DONE:
+                handleLogin();
+                break;
+        }
+        return false;
+    }
 
-	@Override
-	public void onItemClick(String item, View view, int position) {
-		String[] s = item.split(",");
-		switch (view.getId()) {
-			case R.id.ll_header_item:
-				if (s.length == 2) {
-					etUser.setText(s[0]);
-					etPwd.setText(s[1]);
-					etClearFocus.requestFocus();
-					sNeedEncrypt = false;
-				} else {
-					etUser.setText(s[0]);
-					etPwd.requestFocus();
-				}
-				break;
-			case R.id.iv_account_list_delete:
-				if (s[0].equals(etUser.getText().toString().trim())) {
-					etUser.setText("");
-					etPwd.setText("");
-					etUser.requestFocus();
-				}
-				AccountManager.getInstance().writeOuwanAccount(item, mData, true);
-				if (mData == null || mData.size() == 0) {
-					ivMore.setVisibility(View.GONE);
-				}
-				mCompleteAdapter.notifyDataChanged();
-				mAccountAdapter.notifyDataChanged();
-				break;
-		}
-		etUser.dismissDropDown();
-		if (mAccountPopup != null && mAccountPopup.isShowing()) {
-			mAccountPopup.dismiss();
-		}
-	}
+    @Override
+    public String getPageName() {
+        return PAGE_NAME;
+    }
 
-	@Override
-	public void onFocusChange(View v, boolean hasFocus) {
-		switch (v.getId()) {
-			case R.id.et_input:
-				tvPwdClear.setVisibility(View.GONE);
-				if (hasFocus && !TextUtils.isEmpty(etUser.getText().toString().trim())) {
-					tvUserClear.setVisibility(View.VISIBLE);
-				} else {
-					tvUserClear.setVisibility(View.GONE);
-				}
-				break;
-			case R.id.et_pwd:
-				tvUserClear.setVisibility(View.GONE);
-				if (hasFocus && !TextUtils.isEmpty(etPwd.getText().toString().trim())) {
-					tvPwdClear.setVisibility(View.VISIBLE);
-				} else {
-					tvPwdClear.setVisibility(View.GONE);
-				}
-				break;
-		}
-	}
+    @Override
+    public void onItemClick(String item, View view, int position) {
+        String[] s = item.split(",");
+        switch (view.getId()) {
+            case R.id.ll_header_item:
+                if (s.length == 2) {
+                    etUser.setText(s[0]);
+                    etPwd.setText(s[1]);
+                    etClearFocus.requestFocus();
+                    sNeedEncrypt = false;
+                } else {
+                    etUser.setText(s[0]);
+                    etPwd.requestFocus();
+                }
+                break;
+            case R.id.iv_account_list_delete:
+                if (s[0].equals(etUser.getText().toString().trim())) {
+                    etUser.setText("");
+                    etPwd.setText("");
+                    etUser.requestFocus();
+                }
+                AccountManager.getInstance().writeOuwanAccount(item, mData, true);
+                if (mData == null || mData.size() == 0) {
+                    ivMore.setVisibility(View.GONE);
+                }
+                mCompleteAdapter.notifyDataChanged();
+                mAccountAdapter.notifyDataChanged();
+                break;
+        }
+        etUser.dismissDropDown();
+        if (mAccountPopup != null && mAccountPopup.isShowing()) {
+            mAccountPopup.dismiss();
+        }
+    }
 
-	@Override
-	public boolean onBack() {
-		if (mAccountPopup != null && mAccountPopup.isShowing()) {
-			mAccountPopup.dismiss();
-			return true;
-		}
-		if (etUser.isPopupShowing()) {
-			etUser.dismissDropDown();
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.et_input:
+                tvPwdClear.setVisibility(View.GONE);
+                if (hasFocus && !TextUtils.isEmpty(etUser.getText().toString().trim())) {
+                    tvUserClear.setVisibility(View.VISIBLE);
+                } else {
+                    tvUserClear.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.et_pwd:
+                tvUserClear.setVisibility(View.GONE);
+                if (hasFocus && !TextUtils.isEmpty(etPwd.getText().toString().trim())) {
+                    tvPwdClear.setVisibility(View.VISIBLE);
+                } else {
+                    tvPwdClear.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
 
-	@Override
-	public void release() {
-		super.release();
-		if (mCall != null) {
-			mCall.cancel();
-			mCall = null;
-		}
-	}
+    @Override
+    public boolean onBack() {
+        if (mAccountPopup != null && mAccountPopup.isShowing()) {
+            mAccountPopup.dismiss();
+            return true;
+        }
+        if (etUser.isPopupShowing()) {
+            etUser.dismissDropDown();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (mCall != null) {
+            mCall.cancel();
+            mCall = null;
+        }
+    }
 }

@@ -1,9 +1,9 @@
 package com.oplay.giftcool.adapter;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.ArrayMap;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -53,9 +53,11 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
     final ImageSpan DRAWER_GOLD;
     final ImageSpan DRAWER_BEAN;
     final int W_DIVIDER;
+    private FragmentActivity mActivity;
 
-    public FreeAdapter(Context context, List<TimeData<IndexGiftNew>> objects) {
+    public FreeAdapter(FragmentActivity context, List<TimeData<IndexGiftNew>> objects) {
         super(context, objects);
+        mActivity = context;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             COLOR_GREY = context.getColor(R.color.co_common_text_second);
             COLOR_RED = context.getColor(R.color.co_common_app_main_bg);
@@ -353,7 +355,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
             case R.id.btn_send:
                 // 进行预约
-                PayManager.getInstance().seizeGift(mContext, o, (GiftButton) v);
+                PayManager.getInstance().seizeGift(mActivity, o, (GiftButton) v);
                 break;
         }
     }
@@ -404,7 +406,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 
     @Override
     public void release() {
-        mContext = null;
+        mActivity = null;
         if (mData != null) {
             mData.clear();
             mData = null;

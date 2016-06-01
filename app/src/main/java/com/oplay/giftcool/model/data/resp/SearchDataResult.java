@@ -33,6 +33,6 @@ public class SearchDataResult implements Serializable{
 	/**
 	 * 搜到的首充券
 	 */
-	@SerializedName("charge_data")
-	public ArrayList<IndexGiftNew> firstCharges;
+	@SerializedName("coupon_data")
+	public ArrayList<IndexGiftNew> coupons;
 }

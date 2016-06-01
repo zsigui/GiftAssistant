@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,8 @@ import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -54,7 +55,6 @@ import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
@@ -88,6 +88,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvContent;
     private TextView tvDeadline;
     private TextView tvUsage;
+    private TextView tvUsageTitle;
     private RecyclerView rvUsage;
     private GiftDetailPicsAdapter mAdapter;
     private GiftButton btnSend;
@@ -98,6 +99,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private DownloadButtonView btnDownload;
     private LinearLayout downloadLayout;
     private DeletedTextView tvOriginPrice;
+
+    private RelativeLayout rlHeader;
+    private ScrollView svContent;
 
     private GiftDetail mData;
     private IndexGameNew mAppInfo;
@@ -133,6 +137,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         btnSend = getViewById(R.id.btn_send);
         btnDownload = getViewById(R.id.btn_download);
         downloadLayout = getViewById(R.id.ll_download);
+
+        rlHeader = getViewById(R.id.rl_header);
+        svContent = getViewById(R.id.sv_content);
 
     }
 
@@ -222,11 +229,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             tvScore.setVisibility(View.GONE);
             btnSend.setVisibility(View.VISIBLE);
             tvSeizeHint.setVisibility(View.GONE);
+            tvOriginPrice.setVisibility(View.GONE);
 
             tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
             if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
                     || (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                    && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE
+                    && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
                     && (giftData.status == GiftTypeUtil.STATUS_DISABLED_RESERVE
                     || giftData.status == GiftTypeUtil.STATUS_RESERVE
                     || giftData.status == GiftTypeUtil.STATUS_RESERVE_FINISHED))) {
@@ -282,7 +290,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
             if (!mIsNotifyRefresh) {
                 if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                        && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
+                        && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                     tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
                     mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
@@ -296,10 +304,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 initDownload(mData.gameData);
             }
 
-            if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE
-                    && giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                showGuidePage();
-            }
         } catch (Throwable t) {
             if (AppDebugConfig.IS_DEBUG) {
                 AppDebugConfig.warn(AppDebugConfig.TAG_FRAG, t);
@@ -333,11 +337,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private void inflateVsView(IndexGiftNew o) {
         if (tvContent == null) {
             if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                    && o.totalType == GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE) {
+                    && o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                 // 首充券
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
+                tvUsageTitle = getViewById(R.id.tv_usage_title);
                 LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
                         llm.getOrientation(),
@@ -376,43 +381,43 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     /**
      * 设置0元抢的倒计时
      */
-    private void setDeadCount() {
-        if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
-                || mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
-            return;
-        }
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-        final long remainTime = DateUtil.getTime(mData.giftData.seizeTime)
-                - System.currentTimeMillis() + Global.sServerTimeDiffLocal;
-        mTimer = new CountTimer(remainTime, Global.COUNTDOWN_INTERVAL) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
-            }
-
-            @Override
-            public void onFinish() {
-                mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
-                if (getActivity() != null) {
-                    ((BaseAppCompatActivity) getActivity()).getHandler().postDelayed(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            ToastUtil.showShort("自动刷新抢ing");
-                            if (!mIsNotifyRefresh) {
-                                mIsNotifyRefresh = true;
-                                lazyLoad();
-                            }
-                        }
-                    }, 2500);
-                }
-            }
-        };
-        mTimer.start();
-    }
+//    private void setDeadCount() {
+//        if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
+//                || mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
+//            return;
+//        }
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//        }
+//        btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
+//        final long remainTime = DateUtil.getTime(mData.giftData.seizeTime)
+//                - System.currentTimeMillis() + Global.sServerTimeDiffLocal;
+//        mTimer = new CountTimer(remainTime, Global.COUNTDOWN_INTERVAL) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
+//                if (getActivity() != null) {
+//                    ((BaseAppCompatActivity) getActivity()).getHandler().postDelayed(new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+//                            ToastUtil.showShort("自动刷新抢ing");
+//                            if (!mIsNotifyRefresh) {
+//                                mIsNotifyRefresh = true;
+//                                lazyLoad();
+//                            }
+//                        }
+//                    }, 2500);
+//                }
+//            }
+//        };
+//        mTimer.start();
+//    }
 
 
     /**
@@ -497,7 +502,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 //					return;
 //				}
-                PayManager.getInstance().seizeGift(getContext(), mData.giftData, btnSend);
+                PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend, this);
                 break;
             case R.id.tv_qq:
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
@@ -584,12 +589,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         if (getActivity() != null) {
             ((BaseAppCompatActivity) getActivity()).getHandler().post(mProgressRunnable);
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
     }
 
     @Override
@@ -715,32 +714,39 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      * 显示首充券使用的指引页面
      */
     public void showGuidePage() {
-        if (AssistantApp.getInstance().isFirstOpenInThisVersion()
-                && mIsFirstOpenPage) {
-            ThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
-                    View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                            .inflate(R.layout.overlay_hint_focus, (ViewGroup) mContentView.getParent(), false);
-                    ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
-                    if (ivConfirm != null) {
-                        ivConfirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.cancel();
-                            }
-                        });
-                    }
-                    dialog.setCancelable(true);
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setContentView(v);
-                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                            .MATCH_PARENT);
-                    dialog.show();
-                    mIsFirstOpenPage = false;
-                }
-            }, 300);
+        final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
+        View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.overlay_hint_focus, (ViewGroup) mContentView.getParent(), false);
+        View llTop = getViewById(v, R.id.ll_top);
+        View llContent = getViewById(v, R.id.ll_content);
+        final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()
+                - svContent.getScrollY();
+        final int padding = getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
+        if (llTop != null) {
+            ViewGroup.LayoutParams lp = llTop.getLayoutParams();
+            lp.height = top + tvUsageTitle.getTop() - padding;
+            llTop.setLayoutParams(lp);
         }
+        if (llContent != null) {
+            ViewGroup.LayoutParams lp = llContent.getLayoutParams();
+            lp.height = rvUsage.getBottom() - tvUsageTitle.getTop() + 2 * padding;
+            llContent.setLayoutParams(lp);
+        }
+        ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
+        if (ivConfirm != null) {
+            ivConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+        }
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(v);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                .MATCH_PARENT);
+        dialog.show();
+        mIsFirstOpenPage = false;
     }
 }

@@ -19,6 +19,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.fragment.dialog.HintDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HopeGiftDialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftcool.ui.fragment.dialog.PicDialog;
@@ -41,286 +42,300 @@ import retrofit2.Response;
 public class DialogManager {
 
 
-	private static DialogManager sInstance;
-	private LoadingDialog mLoadingDialog = null;
+    private static DialogManager sInstance;
+    private LoadingDialog mLoadingDialog = null;
 
-	public static DialogManager getInstance() {
-		if (sInstance == null) {
-			sInstance = new DialogManager();
-		}
-		return sInstance;
-	}
+    public static DialogManager getInstance() {
+        if (sInstance == null) {
+            sInstance = new DialogManager();
+        }
+        return sInstance;
+    }
 
-	private Context mContext;
+    private Context mContext;
 
-	private DialogManager() {
-		mContext = AssistantApp.getInstance();
-	}
+    private DialogManager() {
+        mContext = AssistantApp.getInstance();
+    }
 
-	long mLastClickTime = 0;
-	/**
-	 * 显示求礼包界面
-	 */
-	public void showHopeGift(final FragmentManager fm, final int id, final String name, boolean canEdit) {
-		final HopeGiftDialog dialog = HopeGiftDialog.newInstance(id, name, canEdit);
-		BaseFragment_Dialog.OnDialogClickListener dialogClickListener = new BaseFragment_Dialog.OnDialogClickListener
-				() {
+    long mLastClickTime = 0;
 
-
-			@Override
-			public void onCancel() {
-				if (dialog != null) {
-					dialog.dismissAllowingStateLoss();
-				}
-				StatisticsManager.getInstance().trace(mContext,
-						StatisticsManager.ID.USER_HOPE_GIFT_QUICK,
-						StatisticsManager.ID.STR_USER_HOPE_GIFT,
-						StatisticsManager.ID.STR_USER_HOPE_GIFT_QUICK);
-			}
-
-			@Override
-			public void onConfirm() {
-				long curTime = System.currentTimeMillis();
-				if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
-					mLastClickTime = curTime;
-					return;
-				}
-				handleHopeGiftRequest(fm, dialog, dialog.getGameId(), dialog.getName(), dialog.getNote());
-				StatisticsManager.getInstance().trace(mContext,
-						StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS,
-						StatisticsManager.ID.STR_USER_HOPE_GIFT,
-						StatisticsManager.ID.STR_USER_HOPE_GIFT_SUCCESS);
-			}
-		};
-		dialog.setListener(dialogClickListener);
-		dialog.show(fm, "hope_gift");
-	}
-
-	/**
-	 * 求礼包的网络请求声明
-	 */
-	private Call<JsonRespBase<Void>> mCallHopeGift;
-
-	/**
-	 * 执行求礼包的请求
-	 */
-	private void handleHopeGiftRequest(final FragmentManager fm, final HopeGiftDialog dialog,
-	                                   int id, String name, String note) {
-		if (!NetworkUtil.isConnected(mContext)) {
-			ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
-			return;
-		}
-		if (mCallHopeGift != null) {
-			mCallHopeGift.cancel();
-		}
-		ReqHopeGift reqHopeGift = new ReqHopeGift();
-		reqHopeGift.gameId = id;
-		reqHopeGift.gameName = name;
-		reqHopeGift.note = note;
-		mCallHopeGift = Global.getNetEngine().commitHopeGift(new JsonReqBase<ReqHopeGift>(reqHopeGift));
-		showLoadingDialog(fm);
-		mCallHopeGift.enqueue(new Callback<JsonRespBase<Void>>() {
-			@Override
-			public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-				hideLoadingDialog();
-				if (call.isCanceled()) {
-					return;
-				}
-				if (response != null && response.isSuccessful()) {
-					JsonRespBase<Void> resp = response.body();
-					if (resp != null) {
-
-						if (resp.isSuccess()
-								|| resp.getCode() == NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT
-								|| resp.getCode() == NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT) {
-							// 构建确定弹窗
-							final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-							confirmDialog.setNegativeVisibility(View.GONE);
-							confirmDialog.setPositiveBtnText(mContext.getString(R.string
-									.st_dialog_btn_success_confirm));
-							dialog.dismissAllowingStateLoss();
-							String title;
-							String content;
-							switch (resp.getCode()) {
-								case NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT:
-									title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
-									content = mContext.getString(R.string
-											.st_dialog_hope_gift_fail_game_limit_content);
-									break;
-								case NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT:
-									title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
-									content = mContext.getString(R.string
-											.st_dialog_hope_gift_fail_total_limit_content);
-									break;
-								default:
-									ScoreManager.getInstance().setTaskFinished(true);
-									title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
-									content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
-							}
-							confirmDialog.setTitle(title);
-							confirmDialog.setContent(content);
-							confirmDialog.show(fm, "confirm");
-						} else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
-								|| resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
-							// 登录状态失效
-							ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
-							AccountManager.getInstance().notifyUserAll(null);
-						} else {
-							if (AppDebugConfig.IS_DEBUG) {
-								KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
-										response.body().error()));
-							}
-						}
-
-						return;
-					}
-					return;
-				}
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));
-				}
-				ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
-			}
-
-			@Override
-			public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-				hideLoadingDialog();
-				if (call.isCanceled()) {
-					return;
-				}
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_MANAGER, t);
-				}
-				ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
-			}
-		});
-	}
+    /**
+     * 显示求礼包界面
+     */
+    public void showHopeGift(final FragmentManager fm, final int id, final String name, boolean canEdit) {
+        final HopeGiftDialog dialog = HopeGiftDialog.newInstance(id, name, canEdit);
+        BaseFragment_Dialog.OnDialogClickListener dialogClickListener = new BaseFragment_Dialog.OnDialogClickListener
+                () {
 
 
-	/**
-	 * 显示默认的加载中弹窗
-	 */
-	public void showLoadingDialog(FragmentManager fm) {
-		showLoadingDialog(fm, mContext.getResources().getString(R.string.st_view_loading_more));
-	}
+            @Override
+            public void onCancel() {
+                if (dialog != null) {
+                    dialog.dismissAllowingStateLoss();
+                }
+                StatisticsManager.getInstance().trace(mContext,
+                        StatisticsManager.ID.USER_HOPE_GIFT_QUICK,
+                        StatisticsManager.ID.STR_USER_HOPE_GIFT,
+                        StatisticsManager.ID.STR_USER_HOPE_GIFT_QUICK);
+            }
 
-	/**
-	 * 显示加载弹窗，指定显示内容
-	 */
-	public void showLoadingDialog(final FragmentManager fm, final String loadText) {
-		if (fm == null) {
-			return;
-		}
-		ThreadUtil.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				final String tag = LoadingDialog.class.getSimpleName();
-				if (fm.findFragmentByTag(tag) != null) {
-					return;
-				}
-				if (mLoadingDialog == null) {
-					mLoadingDialog = LoadingDialog.newInstance();
-				}
-				mLoadingDialog.setCancelable(false);
-				mLoadingDialog.setLoadText(loadText);
-				mLoadingDialog.show(fm, tag);
-			}
-		});
-	}
+            @Override
+            public void onConfirm() {
+                long curTime = System.currentTimeMillis();
+                if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+                    mLastClickTime = curTime;
+                    return;
+                }
+                handleHopeGiftRequest(fm, dialog, dialog.getGameId(), dialog.getName(), dialog.getNote());
+                StatisticsManager.getInstance().trace(mContext,
+                        StatisticsManager.ID.USER_HOPE_GIFT_SUCCESS,
+                        StatisticsManager.ID.STR_USER_HOPE_GIFT,
+                        StatisticsManager.ID.STR_USER_HOPE_GIFT_SUCCESS);
+            }
+        };
+        dialog.setListener(dialogClickListener);
+        dialog.show(fm, "hope_gift");
+    }
 
-	/**
-	 * 隐藏加载弹窗，避免出错
-	 */
-	public void hideLoadingDialog() {
-		if (mLoadingDialog != null) {
-			mLoadingDialog.dismissAllowingStateLoss();
-			mLoadingDialog = null;
-		}
-	}
+    /**
+     * 求礼包的网络请求声明
+     */
+    private Call<JsonRespBase<Void>> mCallHopeGift;
 
-	/**
-	 * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
-	 */
-	public boolean showUpdateDialog(final Context context, final FragmentManager fm) {
-		final UpdateInfo updateInfo = AssistantApp.getInstance().getUpdateInfo();
-		if (updateInfo != null && updateInfo.checkoutUpdateInfo(context)) {
-			final IndexGameNew appInfo = new IndexGameNew();
-			appInfo.id = Global.GIFTCOOL_GAME_ID;
-			appInfo.name = context.getString(R.string.app_name);
-			appInfo.apkFileSize = updateInfo.apkFileSize;
-			//没icon地址，随便填个
-			appInfo.img = updateInfo.downloadUrl;
-			appInfo.downloadUrl = updateInfo.downloadUrl;
-			appInfo.destUrl = updateInfo.downloadUrl;
-			appInfo.packageName = updateInfo.packageName;
-			appInfo.versionName = updateInfo.versionName;
-			appInfo.size = appInfo.getApkFileSizeStr();
-			appInfo.initAppInfoStatus(context);
-			BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
-					updateInfo.updatePercent);
-			confirmDialog.show(fm, "update");
-			return true;
-		}
-		return false;
-	}
+    /**
+     * 执行求礼包的请求
+     */
+    private void handleHopeGiftRequest(final FragmentManager fm, final HopeGiftDialog dialog,
+                                       int id, String name, String note) {
+        if (!NetworkUtil.isConnected(mContext)) {
+            ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+            return;
+        }
+        if (mCallHopeGift != null) {
+            mCallHopeGift.cancel();
+        }
+        ReqHopeGift reqHopeGift = new ReqHopeGift();
+        reqHopeGift.gameId = id;
+        reqHopeGift.gameName = name;
+        reqHopeGift.note = note;
+        mCallHopeGift = Global.getNetEngine().commitHopeGift(new JsonReqBase<ReqHopeGift>(reqHopeGift));
+        showLoadingDialog(fm);
+        mCallHopeGift.enqueue(new Callback<JsonRespBase<Void>>() {
+            @Override
+            public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+                hideLoadingDialog();
+                if (call.isCanceled()) {
+                    return;
+                }
+                if (response != null && response.isSuccessful()) {
+                    JsonRespBase<Void> resp = response.body();
+                    if (resp != null) {
 
-	/**
-	 * 根据传入内容获取更新弹窗
-	 */
-	private WelcomeDialog getUpdateDialog(final Context context, final IndexGameNew appInfo,
-	                                      final String content, int updatePercent) {
-		final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
-		confirmDialog.setTitle(content);
-		confirmDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_update_confirm));
-		confirmDialog.setNegativeBtnText(context.getResources().getString(R.string.st_welcome_update_cancel));
-		confirmDialog.setPercent(updatePercent);
-		confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-			@Override
-			public void onCancel() {
-				if (appInfo.isSilent) {
-					// 允许默认先下载
-					DownloadInfo info = new DownloadInfo();
-					info.setDestUrl(appInfo.destUrl);
-					info.setDownloadUrl(appInfo.downloadUrl);
-					info.setTotalSize(appInfo.apkFileSize);
-					info.setMd5Sum(appInfo.apkMd5);
-					info.setIsDownload(true);
-					SilentDownloadManager.getInstance().startDownload(info);
-				}
-				confirmDialog.dismiss();
-			}
+                        if (resp.isSuccess()
+                                || resp.getCode() == NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT
+                                || resp.getCode() == NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT) {
+                            // 构建确定弹窗
+                            final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+                            confirmDialog.setNegativeVisibility(View.GONE);
+                            confirmDialog.setPositiveBtnText(mContext.getString(R.string
+                                    .st_dialog_btn_success_confirm));
+                            dialog.dismissAllowingStateLoss();
+                            String title;
+                            String content;
+                            switch (resp.getCode()) {
+                                case NetStatusCode.ERR_GAME_HOPE_GIFT_LIMIT:
+                                    title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+                                    content = mContext.getString(R.string
+                                            .st_dialog_hope_gift_fail_game_limit_content);
+                                    break;
+                                case NetStatusCode.ERR_TOTAL_HOPE_GIFT_LIMIT:
+                                    title = mContext.getString(R.string.st_dialog_hope_gift_fail_title);
+                                    content = mContext.getString(R.string
+                                            .st_dialog_hope_gift_fail_total_limit_content);
+                                    break;
+                                default:
+                                    ScoreManager.getInstance().setTaskFinished(true);
+                                    title = mContext.getString(R.string.st_dialog_hope_gift_success_title);
+                                    content = mContext.getString(R.string.st_dialog_hope_gift_success_content);
+                            }
+                            confirmDialog.setTitle(title);
+                            confirmDialog.setContent(content);
+                            confirmDialog.show(fm, "confirm");
+                        } else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
+                                || resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
+                            // 登录状态失效
+                            ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+                            AccountManager.getInstance().notifyUserAll(null);
+                        } else {
+                            if (AppDebugConfig.IS_DEBUG) {
+                                KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
+                                        response.body().error()));
+                            }
+                        }
 
-			@Override
-			public void onConfirm() {
-				StatisticsManager.getInstance().trace(context,
-						StatisticsManager.ID.UPGRADE,
-						StatisticsManager.ID.STR_UPGRADE);
-				appInfo.startDownload();
-				confirmDialog.dismiss();
-			}
-		});
-		return confirmDialog;
-	}
+                        return;
+                    }
+                    return;
+                }
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));
+                }
+                ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+            }
 
-	/**
-	 * 显示签到弹窗
-	 */
-	public void showSignInDialog(final boolean canShow, final Context context, final FragmentManager fm) {
-		if (canShow) {
-			final PicDialog dialog = PicDialog.newInstance("drawable://" + R.drawable.pic_lottery_everyday);
-			dialog.setDialogClickListener(new BaseFragment_Dialog.OnDialogClickListener() {
-				@Override
-				public void onCancel() {
-					dialog.dismissAllowingStateLoss();
-				}
+            @Override
+            public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+                hideLoadingDialog();
+                if (call.isCanceled()) {
+                    return;
+                }
+                if (AppDebugConfig.IS_DEBUG) {
+                    KLog.d(AppDebugConfig.TAG_MANAGER, t);
+                }
+                ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+            }
+        });
+    }
 
-				@Override
-				public void onConfirm() {
-					IntentUtil.jumpSignIn(context);
-					dialog.dismissAllowingStateLoss();
-				}
-			});
-			dialog.show(fm, "signin");
-		}
-	}
+    /**
+     * @Hint 显示重点内容
+     *
+     * 显示重点提示窗
+     */
+    public void showHintDialog(FragmentManager fm, String title, String content, String hint, String tag) {
+        final HintDialog dialog = HintDialog.newInstance();
+        dialog.setHint(hint);
+        dialog.setContent(content);
+        dialog.setTitle(title);
+        dialog.show(fm, tag);
+    }
+
+
+    /**
+     * 显示默认的加载中弹窗
+     */
+    public void showLoadingDialog(FragmentManager fm) {
+        showLoadingDialog(fm, mContext.getResources().getString(R.string.st_view_loading_more));
+    }
+
+    /**
+     * 显示加载弹窗，指定显示内容
+     */
+    public void showLoadingDialog(final FragmentManager fm, final String loadText) {
+        if (fm == null) {
+            return;
+        }
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final String tag = LoadingDialog.class.getSimpleName();
+                if (fm.findFragmentByTag(tag) != null) {
+                    return;
+                }
+                if (mLoadingDialog == null) {
+                    mLoadingDialog = LoadingDialog.newInstance();
+                }
+                mLoadingDialog.setCancelable(false);
+                mLoadingDialog.setLoadText(loadText);
+                mLoadingDialog.show(fm, tag);
+            }
+        });
+    }
+
+    /**
+     * 隐藏加载弹窗，避免出错
+     */
+    public void hideLoadingDialog() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismissAllowingStateLoss();
+            mLoadingDialog = null;
+        }
+    }
+
+    /**
+     * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
+     */
+    public boolean showUpdateDialog(final Context context, final FragmentManager fm) {
+        final UpdateInfo updateInfo = AssistantApp.getInstance().getUpdateInfo();
+        if (updateInfo != null && updateInfo.checkoutUpdateInfo(context)) {
+            final IndexGameNew appInfo = new IndexGameNew();
+            appInfo.id = Global.GIFTCOOL_GAME_ID;
+            appInfo.name = context.getString(R.string.app_name);
+            appInfo.apkFileSize = updateInfo.apkFileSize;
+            //没icon地址，随便填个
+            appInfo.img = updateInfo.downloadUrl;
+            appInfo.downloadUrl = updateInfo.downloadUrl;
+            appInfo.destUrl = updateInfo.downloadUrl;
+            appInfo.packageName = updateInfo.packageName;
+            appInfo.versionName = updateInfo.versionName;
+            appInfo.size = appInfo.getApkFileSizeStr();
+            appInfo.initAppInfoStatus(context);
+            BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
+                    updateInfo.updatePercent);
+            confirmDialog.show(fm, "update");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 根据传入内容获取更新弹窗
+     */
+    private WelcomeDialog getUpdateDialog(final Context context, final IndexGameNew appInfo,
+                                          final String content, int updatePercent) {
+        final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
+        confirmDialog.setTitle(content);
+        confirmDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_update_confirm));
+        confirmDialog.setNegativeBtnText(context.getResources().getString(R.string.st_welcome_update_cancel));
+        confirmDialog.setPercent(updatePercent);
+        confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+            @Override
+            public void onCancel() {
+                if (appInfo.isSilent) {
+                    // 允许默认先下载
+                    DownloadInfo info = new DownloadInfo();
+                    info.setDestUrl(appInfo.destUrl);
+                    info.setDownloadUrl(appInfo.downloadUrl);
+                    info.setTotalSize(appInfo.apkFileSize);
+                    info.setMd5Sum(appInfo.apkMd5);
+                    info.setIsDownload(true);
+                    SilentDownloadManager.getInstance().startDownload(info);
+                }
+                confirmDialog.dismiss();
+            }
+
+            @Override
+            public void onConfirm() {
+                StatisticsManager.getInstance().trace(context,
+                        StatisticsManager.ID.UPGRADE,
+                        StatisticsManager.ID.STR_UPGRADE);
+                appInfo.startDownload();
+                confirmDialog.dismiss();
+            }
+        });
+        return confirmDialog;
+    }
+
+    /**
+     * 显示签到弹窗
+     */
+    public void showSignInDialog(final boolean canShow, final Context context, final FragmentManager fm) {
+        if (canShow) {
+            final PicDialog dialog = PicDialog.newInstance("drawable://" + R.drawable.pic_lottery_everyday);
+            dialog.setDialogClickListener(new BaseFragment_Dialog.OnDialogClickListener() {
+                @Override
+                public void onCancel() {
+                    dialog.dismissAllowingStateLoss();
+                }
+
+                @Override
+                public void onConfirm() {
+                    IntentUtil.jumpSignIn(context);
+                    dialog.dismissAllowingStateLoss();
+                }
+            });
+            dialog.show(fm, "signin");
+        }
+    }
 }

@@ -215,7 +215,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
 					// 对于0元抢，先跳转到游戏详情
 					IntentUtil.jumpGiftDetail(getContext(), gift.id);
 				} else {
-					PayManager.getInstance().seizeGift(getContext(), gift, (GiftButton) v);
+					PayManager.getInstance().seizeGift(getActivity(), gift, (GiftButton) v);
 				}
 				break;
 		}

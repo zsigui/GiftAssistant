@@ -18,64 +18,67 @@ import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
+import java.util.Locale;
+
 /**
  * Created by zsigui on 15-12-24.
  */
-public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implements View.OnClickListener{
+public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implements View.OnClickListener {
 
 
-	private static final int TAG_POSITION = 0x1234FFFF;
+    private static final int TAG_POSITION = 0x1234FFFF;
 
-	public IndexGiftLikeAdapter(Context context) {
-		super(context);
-	}
+    public IndexGiftLikeAdapter(Context context) {
+        super(context);
+    }
 
-	@Override
-	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_index_gift_like, parent, false));
-	}
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_index_gift_like, parent, false));
+    }
 
-	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		ViewHolder itemHolder = (ViewHolder) holder;
-		IndexGiftLike o = getItem(position);
-		itemHolder.tvName.setText(o.name);
-		if (o.hasNew && o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime()) {
-			itemHolder.ivHint.setVisibility(View.VISIBLE);
-		} else {
-			itemHolder.ivHint.setVisibility(View.GONE);
-		}
-		itemHolder.tvTotal.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
-		ViewUtil.showImage(itemHolder.ivIcon, o.img);
-		itemHolder.itemView.setOnClickListener(this);
-		itemHolder.itemView.setTag(TAG_POSITION, position);
-	}
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        ViewHolder itemHolder = (ViewHolder) holder;
+        IndexGiftLike o = getItem(position);
+        itemHolder.tvName.setText(o.name);
+        if (o.hasNew && o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime()) {
+            itemHolder.ivHint.setVisibility(View.VISIBLE);
+        } else {
+            itemHolder.ivHint.setVisibility(View.GONE);
+        }
+        itemHolder.tvTotal.setText(Html.fromHtml(String.format(Locale.CHINA,
+                "<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
+        ViewUtil.showImage(itemHolder.ivIcon, o.img);
+        itemHolder.itemView.setOnClickListener(this);
+        itemHolder.itemView.setTag(TAG_POSITION, position);
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (mData == null || v.getTag(TAG_POSITION) == null) {
-			return;
-		}
-		Integer pos = (Integer)v.getTag(TAG_POSITION);
-		IndexGiftLike o = getItem(pos);
-		o.hasNew = false;
-		notifyItemChanged(pos);
-		IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
-	}
+    @Override
+    public void onClick(View v) {
+        if (mData == null || v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        Integer pos = (Integer) v.getTag(TAG_POSITION);
+        IndexGiftLike o = getItem(pos);
+        o.hasNew = false;
+        notifyItemChanged(pos);
+        IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
+    }
 
-	static class ViewHolder extends BaseRVHolder{
-		TextView tvName;
-		TextView tvTotal;
-		ImageView ivIcon;
-		ImageView ivHint;
+    static class ViewHolder extends BaseRVHolder {
+        TextView tvName;
+        TextView tvTotal;
+        ImageView ivIcon;
+        ImageView ivHint;
 
-		public ViewHolder(View itemView) {
-			super(itemView);
-			ivIcon = getViewById(R.id.iv_icon);
-			tvName = getViewById(R.id.tv_game_name);
-			tvTotal = getViewById(R.id.tv_total);
-			ivHint = getViewById(R.id.iv_hint);
-		}
-	}
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ivIcon = getViewById(R.id.iv_icon);
+            tvName = getViewById(R.id.tv_game_name);
+            tvTotal = getViewById(R.id.tv_total);
+            ivHint = getViewById(R.id.iv_hint);
+        }
+    }
 
 }

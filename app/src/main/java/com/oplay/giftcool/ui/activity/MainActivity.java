@@ -81,8 +81,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     // 底部Tabs
 //	private LinearLayout llTab;
     private CheckedTextView[] mCtvs;
-    private ImageView ivGiftHint;
-    private ImageView ivPostHint;
+    private ImageView[] ivTabHints;
 
     // 顶部导航栏
     private SearchLayout mSearchLayout;
@@ -161,8 +160,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     protected void initView() {
         setContentView(R.layout.activity_main);
 //		llTab = getViewById(R.id.ll_tabs);
-        ivGiftHint = getViewById(R.id.iv_gift_hint);
-        ivPostHint = getViewById(R.id.iv_post_hint);
+        ivTabHints = new ImageView[INDEX_COUNT];
+        ivTabHints[INDEX_GIFT] = getViewById(R.id.iv_gift_hint);
+        ivTabHints[INDEX_POST] = getViewById(R.id.iv_post_hint);
         CheckedTextView ctvGame = getViewById(R.id.ctv_game);
         CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
         CheckedTextView ctvEssay = getViewById(R.id.ctv_post);
@@ -200,8 +200,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 if (AccountManager.getInstance().isLogin()) {
                     if (ScoreManager.getInstance().isSignInTaskFinished()) {
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 0);
+                        showTabHint(INDEX_POST, View.GONE);
                     } else {
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
+                        showTabHint(INDEX_POST, View.VISIBLE);
                     }
                     updateHintState(KeyConfig.TYPE_ID_MSG, AccountManager.getInstance().getUnreadMessageCount());
                     UserInfo user = AccountManager.getInstance().getUserInfo();
@@ -210,12 +212,21 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 } else {
                     updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
                     updateHintState(KeyConfig.TYPE_ID_MSG, 0);
+                    showTabHint(INDEX_POST, View.VISIBLE);
                     ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
                     ivProfile.setTag("");
                     tvGiftCount.setText("0");
                 }
             }
         });
+    }
+
+    /**
+     * 显示下端标签栏红点提示
+     */
+    @SuppressWarnings("ResourceType")
+    public void showTabHint(int pos, int visibility) {
+        ivTabHints[pos].setVisibility(visibility);
     }
 
     @Override
@@ -459,6 +470,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         mPostFragment.setRetainInstance(true);
         ft.commit();
         mCurSelectedItem = INDEX_POST;
+        if (AccountManager.getInstance().isLogin()) {
+            showTabHint(INDEX_POST, View.GONE);
+        }
     }
 
     /**
@@ -605,6 +619,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     public void onUserUpdate(int action) {
         switch (action) {
             case ObserverManager.STATUS.USER_UPDATE_ALL:
+                if (!AccountManager.getInstance().isLogin()
+                        || !ScoreManager.getInstance().isSignInTaskFinished()) {
+                    showTabHint(INDEX_POST, View.VISIBLE);
+                } else {
+                    showTabHint(INDEX_POST, View.GONE);
+                }
             case ObserverManager.STATUS.USER_UPDATE_TASK:
                 updateToolBar();
                 break;

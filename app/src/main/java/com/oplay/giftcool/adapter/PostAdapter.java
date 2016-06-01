@@ -17,16 +17,21 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.FooterListener;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+import com.socks.library.KLog;
 
 /**
  * 首页活动页面的适配器
@@ -141,6 +146,13 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
                 headerHolder.ivSignIn.setOnClickListener(this);
                 headerHolder.ivLottery.setOnClickListener(this);
                 headerHolder.ivTask.setOnClickListener(this);
+                KLog.d(AppDebugConfig.TAG_WARN, "onBindViewHolder update Header");
+                if (AccountManager.getInstance().isLogin()
+                        && (ScoreManager.getInstance().isSignInTaskFinished() || Global.sHasShowedSignInHint)) {
+                    headerHolder.ivSignInHint.setVisibility(View.GONE);
+                } else {
+                    headerHolder.ivSignInHint.setVisibility(View.VISIBLE);
+                }
                 break;
             case PostTypeUtil.TYPE_FOOTER:
                 break;
@@ -238,6 +250,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
             case R.id.iv_sign_in_everyday:
                 // 跳转签到页面
                 IntentUtil.jumpSignIn(mContext);
+                if (AccountManager.getInstance().isLogin()) {
+                    Global.sHasShowedSignInHint = true;
+                    notifyItemChanged(0);
+                }
                 StatisticsManager.getInstance().trace(mContext,
                         StatisticsManager.ID.SIGN_IN_FROM_ACTIVITY,
                         StatisticsManager.ID.STR_SIGN_IN_FROM_ACTIVITY);
@@ -245,6 +261,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
             case R.id.iv_lottery_everyday:
                 // 跳转每日抽奖页面
                 IntentUtil.jumpLottery(mContext);
+                if (AccountManager.getInstance().isLogin()) {
+                    Global.sHasShowedLotteryHint = true;
+                    notifyItemChanged(0);
+                }
                 StatisticsManager.getInstance().trace(mContext,
                         StatisticsManager.ID.LOTTERY_FROM_ACTIVITY,
                         StatisticsManager.ID.STR_LOTTERY_FROM_ACTIVITY);

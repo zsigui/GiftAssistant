@@ -72,14 +72,9 @@ public class GiftButton extends TextView {
                 setText(R.string.st_gift_search);
                 setEnabled(true);
                 break;
-            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                setText(R.string.st_gift_seize);
-                setRedBg();
-                setEnabled(true);
-                break;
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
             case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
                 setText(R.string.st_gift_seized);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
@@ -92,6 +87,14 @@ public class GiftButton extends TextView {
             case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
                 setText(R.string.st_gift_wait_seize);
                 break;
+            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
+            default:
+                setText(R.string.st_gift_seize);
+                setRedBg();
+                setEnabled(true);
+                break;
         }
     }
 
@@ -101,11 +104,6 @@ public class GiftButton extends TextView {
     private void setChargeCodeState(int state) {
         setGreenBg();
         switch (state) {
-            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
-                setText(R.string.st_gift_seize);
-                setRedBg();
-                setEnabled(true);
-                break;
             case GiftTypeUtil.TYPE_CHARGE_TAKE:
                 setText(R.string.st_gift_take);
                 setRedBg();
@@ -130,6 +128,11 @@ public class GiftButton extends TextView {
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
                 setText(R.string.st_gift_reserve_disabled);
                 break;
+            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+            default:
+                setText(R.string.st_gift_seize);
+                setRedBg();
+                setEnabled(true);
         }
     }
 

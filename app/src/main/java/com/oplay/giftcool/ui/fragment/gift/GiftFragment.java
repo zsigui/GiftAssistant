@@ -142,7 +142,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 				llm.getOrientation());
 		rvContainer.setLayoutManager(llm);
 		rvContainer.addItemDecoration(dividerItemDecoration);
-		mAdapter = new GiftAdapter(getContext());
+		mAdapter = new GiftAdapter(getActivity());
 		rvContainer.setAdapter(mAdapter);
 		mIsPrepared = true;
 		ThreadUtil.runOnUiThread(mRefreshRunnable, 5 * 60 * 1000);

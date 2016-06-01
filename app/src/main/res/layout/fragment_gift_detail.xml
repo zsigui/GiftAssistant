@@ -7,6 +7,7 @@
         android:orientation = "vertical" >
 
     <RelativeLayout
+            android:id="@+id/rl_header"
             style = "@style/DefaultRelativeLayout"
             android:paddingBottom = "20dp"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
@@ -119,7 +120,7 @@
                 android:layout_alignTop = "@+id/tv_new_add"
                 android:layout_marginLeft = "@dimen/di_line_space_extra_big"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
-                android:layout_marginRight="@dimen/di_line_space_extra_big"
+                android:layout_marginRight = "@dimen/di_line_space_extra_big"
                 android:layout_toLeftOf = "@+id/tv_seize_hint"
                 android:layout_toRightOf = "@+id/tv_new_add"
                 android:max = "100"
@@ -184,6 +185,7 @@
 
     <ScrollView
             xmlns:android = "http://schemas.android.com/apk/res/android"
+            android:id = "@+id/sv_content"
             android:layout_width = "match_parent"
             android:background = "@color/co_white"
             android:layout_height = "0dp"

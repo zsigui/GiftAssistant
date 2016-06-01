@@ -64,7 +64,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mAdapter = new FreeAdapter(getContext(), mData);
+        mAdapter = new FreeAdapter(getActivity(), mData);
         mDataView.setAdapter(mAdapter);
         mUpdateGiftRunnable = new UpdateGiftRunnable();
     }
@@ -358,7 +358,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            IndexGiftNew o = new IndexGiftNew();
 //            data.data = o;
 //            o.status = GiftTypeUtil.STATUS_SEIZE;
-//            o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+//            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
 //            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
 //            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_UN_RESERVE;
 //            o.remainCount = 10;
@@ -467,7 +467,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            IndexGiftNew o = new IndexGiftNew();
 //            data.data = o;
 //            o.status = (int)(Math.random() * 2) + 7;
-//            o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+//            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
 //            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
 //            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
 //            o.remainCount = 10;
@@ -489,7 +489,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            IndexGiftNew o = new IndexGiftNew();
 //            data.data = o;
 //            o.status = (int) (Math.random() * 2) + 2;
-//            o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+//            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
 //            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
 //            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_SEIZED;
 //            o.remainCount = 10;
@@ -534,7 +534,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            IndexGiftNew o = new IndexGiftNew();
 //            data.data = o;
 //            o.status = (int) (Math.random() * 3) + 7;
-//            o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+//            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
 //            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
 //            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_UN_RESERVE;
 //            o.remainCount = 10;
@@ -556,7 +556,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            IndexGiftNew o = new IndexGiftNew();
 //            data.data = o;
 //            o.status = GiftTypeUtil.STATUS_FINISHED;
-//            o.totalType = GiftTypeUtil.TOTAL_TYPE_FIRST_CHARGE;
+//            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
 //            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
 //            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
 //            o.remainCount = 0;
