@@ -106,6 +106,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                             return;
                         }
                         refreshFailEnd();
+                        if (response != null && response.isSuccessful()) {
+                            KLog.d(response.body());
+                        }
                     }
 
                     @Override

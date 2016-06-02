@@ -262,7 +262,7 @@ public class NetUrl {
     /**
      * 签到初始化接口，获取签到状态
      */
-    public static final String SCORE_SIGNIN_INIT = "v1/mission/daily_signin_info";
+    public static final String SCORE_TASK_STATE_INIT = "v1/mission/status";
 
 	/* 应用接口 */
 

@@ -162,6 +162,7 @@ public class DrawerFragment extends BaseFragment {
                 break;
             case KeyConfig.TYPE_ID_MSG:
                 IntentUtil.jumpMessageCentral(context);
+                AccountManager.getInstance().setUnreadMessageCount(0);
                 updateCount(KeyConfig.TYPE_ID_MSG, 0);
                 break;
             case KeyConfig.TYPE_ID_MY_ATTENTION:

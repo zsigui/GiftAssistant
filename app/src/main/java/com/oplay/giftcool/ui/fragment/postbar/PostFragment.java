@@ -446,11 +446,9 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
 
     @Override
     public void onUserUpdate(int action) {
-        KLog.d(AppDebugConfig.TAG_WARN, "action = " + action);
         switch (action) {
             case ObserverManager.STATUS.USER_UPDATE_ALL:
                 if (mAdapter != null && mAdapter.getItemCount() > 0) {
-                    KLog.d(AppDebugConfig.TAG_WARN, "action");
                     mAdapter.notifyItemChanged(0);
                 }
                 break;

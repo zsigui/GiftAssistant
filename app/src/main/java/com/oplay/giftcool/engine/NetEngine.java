@@ -20,7 +20,6 @@ import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
-import com.oplay.giftcool.model.data.req.ReqSignInInit;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
@@ -50,7 +49,7 @@ import com.oplay.giftcool.model.data.resp.message.PushMessage;
 import com.oplay.giftcool.model.data.resp.message.ReplyMessage;
 import com.oplay.giftcool.model.data.resp.message.SystemMessage;
 import com.oplay.giftcool.model.data.resp.task.ScoreMissionGroup;
-import com.oplay.giftcool.model.data.resp.task.TaskSignInfo;
+import com.oplay.giftcool.model.data.resp.task.TaskStateInfo;
 import com.oplay.giftcool.model.json.JsonRespGiftList;
 import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -304,8 +303,8 @@ public interface NetEngine {
 	/**
 	 * 进行签到信息初始化
 	 */
-	@POST(NetUrl.SCORE_SIGNIN_INIT)
-	Call<JsonRespBase<TaskSignInfo>> obtainDailySignInInfo(@Body JsonReqBase<ReqSignInInit> reqData);
+	@POST(NetUrl.SCORE_TASK_STATE_INIT)
+	Call<JsonRespBase<TaskStateInfo>> obtainDailyTaskStateInfo(@Body JsonReqBase<Void> reqData);
 
 	/* ---------------- 应用接口  ---------------- */
 	@POST(NetUrl.APP_POST_FEEDBACK)

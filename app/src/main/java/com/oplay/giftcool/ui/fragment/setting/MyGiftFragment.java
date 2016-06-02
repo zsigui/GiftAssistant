@@ -54,6 +54,7 @@ public class MyGiftFragment extends BaseFragment {
         mTitles[0] = "已抢";
         mTitles[1] = "已淘";
         mTitles[2] = "已过期";
+        mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(new MyGiftPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);
     }

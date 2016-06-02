@@ -1,8 +1,12 @@
 package com.oplay.giftcool.manager;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -28,6 +32,7 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 import com.socks.library.KLog;
 
 import retrofit2.Call;
@@ -337,5 +342,30 @@ public class DialogManager {
             });
             dialog.show(fm, "signin");
         }
+    }
+
+
+    /**
+     * 显示首充券使用的指引页面
+     */
+    public void showGuidePage(Context context) {
+        final Dialog dialog = new Dialog(context, R.style.DefaultCustomDialog_NoDim);
+        View v = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.overlay_hint_focus_game, null);
+        ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
+        if (ivConfirm != null) {
+            ivConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+        }
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(v);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                .MATCH_PARENT);
+        dialog.show();
     }
 }

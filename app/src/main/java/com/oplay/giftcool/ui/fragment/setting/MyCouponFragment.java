@@ -55,6 +55,7 @@ public class MyCouponFragment extends BaseFragment {
         mTitles[2] = "已过期";
         mFragmentType = new int[]{KeyConfig.TYPE_KEY_COUPON_SEIZED,
                 KeyConfig.TYPE_KEY_COUPON_RESERVED, KeyConfig.TYPE_KEY_COUPON_OVERTIME};
+        mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(new MyCouponPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);
     }

@@ -38,8 +38,8 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     private JsonReqBase<ReqPageData> mReqPageObj;
     private int mType;
 
-    public static MyGiftListFragment newInstance(int type) {
-        MyGiftListFragment fragment = new MyGiftListFragment();
+    public static MyCouponListFragment newInstance(int type) {
+        MyCouponListFragment fragment = new MyCouponListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(KeyConfig.KEY_DATA, type);
         fragment.setArguments(bundle);
@@ -91,6 +91,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                 }
                 mReqPageObj.data.page = 1;
                 mReqPageObj.data.type = mType;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
                 mCallRefresh = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -161,6 +162,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                 }
                 mReqPageObj.data.page = mLastPage + 1;
                 mReqPageObj.data.type = mType;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
                 mCallLoad = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override

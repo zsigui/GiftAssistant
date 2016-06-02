@@ -204,8 +204,9 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
             case GiftTypeUtil.TYPE_CHARGE_RESERVED:
             case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
-                cHolder.tvSeizeHint.setText(String.format("%s免费抢",
-                        DateUtil.formatUserReadDate(o.freeStartTime)));
+                cHolder.tvSeizeHint.setText(String.format("%s%s免费抢",
+                        DateUtil.formatUserReadDate(o.freeStartTime),
+                        DateUtil.formatTime(o.freeStartTime * 1000, "HH:mm")));
                 cHolder.tvSeizeHint.setVisibility(View.VISIBLE);
                 cHolder.btnSend.setVisibility(View.VISIBLE);
                 cHolder.tvSeize.setVisibility(View.GONE);

@@ -59,15 +59,14 @@ public class GiftTypeUtil {
 
 	public static final int TYPE_ERROR = 23;
 
-	// 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 不可预约 9 预约完
+	// 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 预约完
 	public static final int STATUS_WAIT_SEIZE = 1;
 	public static final int STATUS_SEIZE = 2;
 	public static final int STATUS_WAIT_SEARCH = 3;
 	public static final int STATUS_SEARCH = 4;
 	public static final int STATUS_FINISHED = 5;
 	public static final int STATUS_RESERVE = 7;
-    public static final int STATUS_DISABLED_RESERVE = 8;
-	public static final int STATUS_RESERVE_FINISHED = 9;
+    public static final int STATUS_RESERVE_FINISHED = 8;
 	// 1 金币， 2 偶玩豆， 3 金币或偶玩豆
 	public static final int PAY_TYPE_NONE = 0;
 	public static final int PAY_TYPE_SCORE = 1;
@@ -171,7 +170,7 @@ public class GiftTypeUtil {
     private static int handleFreeFirstCharge(IndexGiftNew gift) {
         // 处理限时免费的首充券类型
         switch (gift.status) {
-            case STATUS_DISABLED_RESERVE:
+            case STATUS_WAIT_SEIZE:
                 return TYPE_CHARGE_DISABLE_RESERVE;
             case STATUS_RESERVE:
                 switch (gift.seizeStatus) {
@@ -214,6 +213,8 @@ public class GiftTypeUtil {
                         // 首充券已经抢完
                         return TYPE_CHARGE_EMPTY;
                     case SEIZE_TYPE_RESERVED:
+                        // 已预约首充券可以领取
+                        return TYPE_CHARGE_TAKE;
                     case SEIZE_TYPE_SEIZED:
                         // 首充券已抢
                         return TYPE_CHARGE_SEIZED;
@@ -224,7 +225,6 @@ public class GiftTypeUtil {
                     case SEIZE_TYPE_NEVER:
                         // 首充券活动已经结束
                         return TYPE_CHARGE_EMPTY;
-                    case SEIZE_TYPE_RESERVED:
                     case SEIZE_TYPE_SEIZED:
                         // 首充券已抢
                         return TYPE_CHARGE_SEIZED;

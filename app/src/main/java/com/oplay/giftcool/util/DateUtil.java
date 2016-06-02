@@ -60,7 +60,7 @@ public class DateUtil {
     }
 
     public static String formatTime(long time, String format) {
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         return sdf.format(new Date(time));
     }
@@ -140,6 +140,9 @@ public class DateUtil {
         return sdf.format(date);
     }
 
+    /**
+     * @time 单位: s 秒
+     */
     public static String formatUserReadDate(long time) {
         if (time == 0) {
             return "";

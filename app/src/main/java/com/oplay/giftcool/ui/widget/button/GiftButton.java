@@ -117,7 +117,7 @@ public class GiftButton extends TextView {
                 setEnabled(true);
                 break;
             case GiftTypeUtil.TYPE_CHARGE_EMPTY:
-                setText(R.string.st_gift_finished);
+                setText(R.string.st_gift_empty);
                 break;
             case GiftTypeUtil.TYPE_CHARGE_RESERVED:
                 setText(R.string.st_gift_reserved);

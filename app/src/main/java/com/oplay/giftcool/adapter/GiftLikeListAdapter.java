@@ -17,88 +17,94 @@ import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 猜你喜欢礼包列表适配器
- *
+ * <p/>
  * Created by zsigui on 15-12-30.
  */
 public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implements View.OnClickListener {
 
 
-	public GiftLikeListAdapter(Context context, List<IndexGiftLike> objects) {
-		super(context, objects);
-	}
+    public GiftLikeListAdapter(Context context, List<IndexGiftLike> objects) {
+        super(context, objects);
+    }
 
-	public void updateData(ArrayList<IndexGiftLike> data) {
-		if (data == null) {
-			return;
-		}
-		mData = data;
-		notifyDataSetChanged();
-	}
+    public void updateData(ArrayList<IndexGiftLike> data) {
+        if (data == null) {
+            return;
+        }
+        mData = data;
+        notifyDataSetChanged();
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (getCount() == 0) {
-			return null;
-		}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (getCount() == 0) {
+            return null;
+        }
 
-		ViewHolder holder;
-		if (convertView == null) {
-			holder = new ViewHolder();
-			convertView = mLayoutInflater.inflate(R.layout.item_list_gift_like, parent, false);
-			holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
-			holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
-			holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
-			holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
-			holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
-			holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_add);
-			holder.ivHint = ViewUtil.getViewById(convertView, R.id.iv_hint);
-			convertView.setTag(holder);
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = mLayoutInflater.inflate(R.layout.item_list_gift_like, parent, false);
+            holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
+            holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
+            holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+            holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
+            holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
+            holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_add);
+            holder.ivHint = ViewUtil.getViewById(convertView, R.id.iv_hint);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-		IndexGiftLike o = getItem(position);
-		holder.tvName.setText(o.name);
-		if (o.playCount > 10000) {
-			holder.tvContent.setText(Html.fromHtml(
-					String.format("<font color='#ffaa17'>%.1f万人</font>在玩", (float) o.playCount / 10000)));
-		} else {
-			holder.tvContent.setText(Html.fromHtml(
-					String.format("<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
-		}
-		if (o.hasNew && o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime()) {
-			holder.ivHint.setVisibility(View.VISIBLE);
-		} else {
-			holder.ivHint.setVisibility(View.GONE);
-		}
-		holder.tvSize.setText(o.size);
-		holder.tvCount.setText(Html.fromHtml(String.format("共<font color='#ffaa17'>%d</font>款礼包", o.totalCount)));
-		holder.tvRemain.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%s</font>", o.giftName)));
-		ViewUtil.showImage(holder.ivIcon, o.img);
-		convertView.setOnClickListener(this);
-		convertView.setTag(TAG_POSITION, position);
-		return convertView;
-	}
+        IndexGiftLike o = getItem(position);
+        holder.tvName.setText(o.name);
+        if (o.playCount > 10000) {
+            holder.tvContent.setText(Html.fromHtml(
+                    String.format(Locale.CHINA, "<font color='#ffaa17'>%.1f万人</font>在玩", (float) o.playCount / 10000)));
+        } else {
+            holder.tvContent.setText(Html.fromHtml(
+                    String.format(Locale.CHINA, "<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
+        }
+        if (o.hasNew && o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+            holder.ivHint.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivHint.setVisibility(View.GONE);
+        }
+        holder.tvSize.setText(o.size);
+        holder.tvCount.setText(Html.fromHtml(String.format(Locale.CHINA, "共<font color='#ffaa17'>%d</font>款礼包", o
+                .totalCount)));
+        holder.tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%s</font>", o
+		        .giftName)));
+        ViewUtil.showImage(holder.ivIcon, o.img);
+        convertView.setOnClickListener(this);
+        convertView.setTag(TAG_POSITION, position);
+        return convertView;
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (mData == null || v.getTag(TAG_POSITION) == null) {
-			return;
-		}
-		Integer pos = (Integer) v.getTag(TAG_POSITION);
-		IntentUtil.jumpGameDetail(mContext, getItem(pos).id, GameTypeUtil.JUMP_STATUS_GIFT);
-	}
+    @Override
+    public void onClick(View v) {
+        if (mData == null || v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        Integer pos = (Integer) v.getTag(TAG_POSITION);
+        IndexGiftLike o = getItem(pos);
+        IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
+        o.hasNew = false;
+        notifyDataSetChanged();
+    }
 
-	static class ViewHolder {
-		ImageView ivHint;
-		TextView tvName;
-		TextView tvContent;
-		TextView tvSize;
-		TextView tvCount;
-		TextView tvRemain;
-		ImageView ivIcon;
-	}
+    static class ViewHolder {
+        ImageView ivHint;
+        TextView tvName;
+        TextView tvContent;
+        TextView tvSize;
+        TextView tvCount;
+        TextView tvRemain;
+        ImageView ivIcon;
+    }
 }

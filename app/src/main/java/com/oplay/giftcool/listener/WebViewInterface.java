@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -313,6 +314,18 @@ public class WebViewInterface extends Observable {
     @JavascriptInterface
     public long getLastLaunchTimeInMilli() {
         return AssistantApp.getInstance().getLastLaunchTime();
+    }
+
+    /**
+     * 显示关注游戏的引导页
+     */
+    @JavascriptInterface
+    public int showFocusGameGuidePage() {
+        if (mHostActivity != null) {
+            DialogManager.getInstance().showGuidePage(mHostActivity);
+            return RET_SUCCESS;
+        }
+        return RET_INTERNAL_ERR;
     }
 
     private Call<Object> mCall;

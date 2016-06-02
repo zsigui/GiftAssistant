@@ -182,7 +182,7 @@ public class AccountManager implements OnFinishListener {
                     if (!NetworkUtil.isConnected(mContext)) {
                         return;
                     }
-                    ScoreManager.getInstance().initSignInState(mContext);
+                    ScoreManager.getInstance().initTaskState(mContext);
                     if (mCallGetUserInfo != null) {
                         mCallGetUserInfo.cancel();
                         mCallGetUserInfo = mCallGetUserInfo.clone();

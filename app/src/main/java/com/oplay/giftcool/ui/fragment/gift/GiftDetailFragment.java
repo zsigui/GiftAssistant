@@ -233,11 +233,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
             tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
             if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
-                    || (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                    && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
-                    && (giftData.status == GiftTypeUtil.STATUS_DISABLED_RESERVE
-                    || giftData.status == GiftTypeUtil.STATUS_RESERVE
-                    || giftData.status == GiftTypeUtil.STATUS_RESERVE_FINISHED))) {
+                    || type == GiftTypeUtil.TYPE_CHARGE_TAKE
+                    || type == GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE
+                    || type == GiftTypeUtil.TYPE_CHARGE_EMPTY
+                    || type == GiftTypeUtil.TYPE_CHARGE_SEIZE
+                    || type == GiftTypeUtil.TYPE_CHARGE_UN_RESERVE
+                    || type == GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY) {
                 tvConsume.setVisibility(View.VISIBLE);
                 tvRemain.setVisibility(View.VISIBLE);
                 setMoneyConsume(giftData);
@@ -716,7 +717,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     public void showGuidePage() {
         final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
         View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.overlay_hint_focus, (ViewGroup) mContentView.getParent(), false);
+                .inflate(R.layout.overlay_hint_gift_detail_usage, (ViewGroup) mContentView.getParent(), false);
         View llTop = getViewById(v, R.id.ll_top);
         View llContent = getViewById(v, R.id.ll_content);
         final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()

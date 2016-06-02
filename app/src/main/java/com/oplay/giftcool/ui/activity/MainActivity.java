@@ -200,9 +200,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 if (AccountManager.getInstance().isLogin()) {
                     if (ScoreManager.getInstance().isSignInTaskFinished()) {
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 0);
-                        showTabHint(INDEX_POST, View.GONE);
                     } else {
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
+                    }
+                    if (ScoreManager.getInstance().isFreeLotteryEmpty()
+                            || ScoreManager.getInstance().isSignInTaskFinished()) {
+                        showTabHint(INDEX_POST, View.GONE);
+                    } else {
                         showTabHint(INDEX_POST, View.VISIBLE);
                     }
                     updateHintState(KeyConfig.TYPE_ID_MSG, AccountManager.getInstance().getUnreadMessageCount());

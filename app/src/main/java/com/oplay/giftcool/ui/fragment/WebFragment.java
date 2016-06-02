@@ -69,7 +69,7 @@ public class WebFragment extends BaseFragment_WebView {
 	public void onDestroyView() {
 		super.onDestroyView();
 		if (isInSignInView) {
-			ScoreManager.getInstance().initSignInState(getContext());
+			ScoreManager.getInstance().initTaskState(getContext());
 			ScoreManager.getInstance().setTaskFinished(true);
 		}
 	}

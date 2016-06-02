@@ -91,6 +91,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                     mCallRefresh.cancel();
                 }
                 mReqPageObj.data.page = 1;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
                 mCallRefresh = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -160,6 +161,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                     mCallLoad.cancel();
                 }
                 mReqPageObj.data.page = mLastPage + 1;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
                 mCallLoad = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override

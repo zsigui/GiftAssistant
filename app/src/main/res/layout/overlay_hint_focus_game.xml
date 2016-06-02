@@ -2,29 +2,45 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
               android:orientation = "vertical"
               android:layout_width = "match_parent"
-              android:layout_height = "match_parent"
-              android:background = "@color/co_transparent" >
+              android:layout_height = "match_parent" >
+
+    <View
+            android:layout_width = "match_parent"
+            android:layout_height = "65dp"
+            android:background = "@color/co_opacity_80" />
+
+    <LinearLayout
+            android:orientation = "horizontal"
+            android:layout_width = "match_parent"
+            android:layout_height = "40dp" >
+
+        <View
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:background = "@color/co_opacity_80" />
+
+        <View
+                android:layout_width = "95dp"
+                android:layout_height = "match_parent"
+                android:background = "@color/co_transparent" />
+
+    </LinearLayout >
 
     <LinearLayout
             android:id = "@+id/ll_top"
             android:layout_width = "match_parent"
-            android:layout_height = "316dp"
+            android:layout_height = "wrap_content"
             android:gravity = "center_horizontal|bottom"
             android:paddingBottom = "@dimen/di_list_item_gap_normal"
-            android:background = "@color/co_opacity_70" >
+            android:paddingTop = "10dp"
+            android:background = "@color/co_opacity_80" >
 
         <ImageView
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
-                android:src = "@drawable/pic_toast_first_charge_1" />
+                android:src = "@drawable/pic_toast_game_focus" />
     </LinearLayout >
-
-    <View
-            android:id = "@+id/ll_content"
-            android:layout_width = "match_parent"
-            android:layout_height = "125dp"
-            android:background = "@color/co_transparent" >
-    </View >
 
     <LinearLayout
             android:id = "@+id/ll_bottom"
@@ -33,7 +49,7 @@
             android:paddingTop = "30dp"
             android:layout_height = "0dp"
             android:layout_weight = "1"
-            android:background = "@color/co_opacity_70" >
+            android:background = "@color/co_opacity_80" >
 
         <ImageView
                 android:id = "@+id/iv_confirm"
@@ -42,4 +58,5 @@
                 android:clickable = "true"
                 android:src = "@drawable/pic_toast_first_charge_2" />
     </LinearLayout >
+
 </LinearLayout >

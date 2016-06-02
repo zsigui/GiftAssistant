@@ -53,7 +53,7 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.item_list_my_gift, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.item_list_my_coupon, parent, false);
             holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
             holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
             holder.tvPlatform = ViewUtil.getViewById(convertView, R.id.tv_platform);

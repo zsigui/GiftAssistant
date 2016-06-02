@@ -31,7 +31,7 @@ public class IndexGiftNew implements Serializable {
     @SerializedName("code_type")
     public int seizeStatus;
     /**
-     * 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 不可预约 9 预约完
+     * 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 预约完
      */
     @SerializedName("status")
     public int status;
@@ -104,7 +104,7 @@ public class IndexGiftNew implements Serializable {
     @SerializedName("free_start_time")
     public long freeStartTime;
     // 首充券预留时间
-    @SerializedName("reserve_deadline")
+    @SerializedName("order_until_time")
     public String reserveDeadline;
 
     @SerializedName("img_urls")

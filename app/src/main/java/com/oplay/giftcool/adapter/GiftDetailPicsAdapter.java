@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
@@ -22,25 +23,16 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
  */
 public class GiftDetailPicsAdapter extends BaseRVAdapter<String> implements View.OnClickListener {
 
-    final int LENGTH;
-
     private ArrayList<PhotoInfo> mPics;
 
     public GiftDetailPicsAdapter(Context context) {
         super(context);
-        LENGTH = context.getResources().getDimensionPixelSize(R.dimen.di_detail_usage_pic_length);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ImageHolder holder = new ImageHolder(LayoutInflater.from(mContext).inflate(R.layout.view_banner_img, parent,
-                false));
-        ViewGroup.LayoutParams lp = holder.ivPic.getLayoutParams();
-        lp.width = LENGTH;
-        lp.height = LENGTH;
-        holder.ivPic.setLayoutParams(lp);
-        holder.ivPic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        return holder;
+        return new ImageHolder(LayoutInflater.from(mContext).inflate(
+                R.layout.item_list_gift_detail_usage, parent, false));
     }
 
     @Override
@@ -48,6 +40,7 @@ public class GiftDetailPicsAdapter extends BaseRVAdapter<String> implements View
         ImageHolder imageHolder = (ImageHolder) holder;
         imageHolder.ivPic.setTag(TAG_POSITION, position);
         imageHolder.ivPic.setOnClickListener(this);
+        imageHolder.tvNumber.setText(String.valueOf(position + 1));
         ViewUtil.showImage(imageHolder.ivPic, getItem(position));
     }
 
@@ -86,10 +79,12 @@ public class GiftDetailPicsAdapter extends BaseRVAdapter<String> implements View
     private static class ImageHolder extends BaseRVHolder {
 
         private ImageView ivPic;
+        private TextView tvNumber;
 
         public ImageHolder(View itemView) {
             super(itemView);
-            ivPic = getViewById(R.id.iv_image_view);
+            ivPic = getViewById(R.id.iv_thumb);
+            tvNumber = getViewById(R.id.tv_number);
         }
     }
 }

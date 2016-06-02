@@ -70,11 +70,18 @@ public class MixUtil {
                 last_index = url.length();
             }
             final String val = url.substring(index, last_index);
-            if(("true".equalsIgnoreCase(val) || "1".equals(val))) {
+            if (("true".equalsIgnoreCase(val) || "1".equals(val))) {
                 return MixUtil.needLoginFirst(context);
             }
         }
         return false;
+    }
+
+    /**
+     * a异或b
+     */
+    public static boolean xor(boolean a, boolean b) {
+        return (a && !b) || (b && !a);
     }
 
     /**
@@ -102,7 +109,8 @@ public class MixUtil {
         Intent shortcutIntent = new Intent(context, SplashActivity.class);
         shortcutIntent.setAction(Intent.ACTION_MAIN);
         shortcutIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(context, R.drawable.ic_launcher);
+        Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(context, R.drawable
+                .ic_launcher);
         // 快捷方式名称
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, iconResource);

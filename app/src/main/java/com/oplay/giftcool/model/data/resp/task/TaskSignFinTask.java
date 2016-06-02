@@ -11,21 +11,6 @@ import java.io.Serializable;
  */
 public class TaskSignFinTask implements Serializable{
 
-	@SerializedName("sign_month")
-	public boolean signMonth;
-
-	@SerializedName("sign_21_days")
-	public boolean sign21Day;
-
-	@SerializedName("sign_14_days")
-	public boolean sign14Day;
-
-	@SerializedName("sign_7_days")
-	public boolean sign7Day;
-
-	@SerializedName("sign_3_days")
-	public boolean sign3Day;
-
 	@SerializedName("sign_today")
 	public boolean signToday;
 }

@@ -17,7 +17,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
@@ -31,7 +30,6 @@ import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * 首页活动页面的适配器
@@ -146,12 +144,17 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
                 headerHolder.ivSignIn.setOnClickListener(this);
                 headerHolder.ivLottery.setOnClickListener(this);
                 headerHolder.ivTask.setOnClickListener(this);
-                KLog.d(AppDebugConfig.TAG_WARN, "onBindViewHolder update Header");
                 if (AccountManager.getInstance().isLogin()
                         && (ScoreManager.getInstance().isSignInTaskFinished() || Global.sHasShowedSignInHint)) {
                     headerHolder.ivSignInHint.setVisibility(View.GONE);
                 } else {
                     headerHolder.ivSignInHint.setVisibility(View.VISIBLE);
+                }
+                if (AccountManager.getInstance().isLogin()
+                        && (ScoreManager.getInstance().isFreeLotteryEmpty() || Global.sHasShowedLotteryHint)) {
+                    headerHolder.ivLotteryHint.setVisibility(View.GONE);
+                } else {
+                    headerHolder.ivLotteryHint.setVisibility(View.VISIBLE);
                 }
                 break;
             case PostTypeUtil.TYPE_FOOTER:
