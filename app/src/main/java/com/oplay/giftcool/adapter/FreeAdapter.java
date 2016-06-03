@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -144,8 +145,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.tvSeizeHint.setVisibility(View.GONE);
                 if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
                     setSeizeTextUI(gHolder.tvSeize, 4);
-                    gHolder.tvSeize.setText(String.format("%s免费抢",
-                            DateUtil.formatUserReadDate(o.freeStartTime)));
+                    gHolder.tvSeize.setText(String.format(Locale.CHINA,
+                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 } else {
                     setSeizeTextUI(gHolder.tvSeize, 3);
                 }
@@ -181,8 +182,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.tvSeizeHint.setVisibility(View.VISIBLE);
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     setSeizeTextUI(gHolder.tvSeize, 4);
-                    gHolder.tvSeize.setText(String.format("%s免费抢",
-                            DateUtil.formatUserReadDate(o.freeStartTime)));
+                    gHolder.tvSeize.setText(String.format(Locale.CHINA,
+                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 } else {
                     setSeizeTextUI(gHolder.tvSeize, 3);
                 }
@@ -204,9 +205,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
             case GiftTypeUtil.TYPE_CHARGE_RESERVED:
             case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
-                cHolder.tvSeizeHint.setText(String.format("%s%s免费抢",
-                        DateUtil.formatUserReadDate(o.freeStartTime),
-                        DateUtil.formatTime(o.freeStartTime * 1000, "HH:mm")));
+                cHolder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 cHolder.tvSeizeHint.setVisibility(View.VISIBLE);
                 cHolder.btnSend.setVisibility(View.VISIBLE);
                 cHolder.tvSeize.setVisibility(View.GONE);

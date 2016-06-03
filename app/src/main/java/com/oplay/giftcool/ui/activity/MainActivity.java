@@ -203,7 +203,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                     } else {
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
                     }
-                    if (ScoreManager.getInstance().isFreeLotteryEmpty()
+                    if (mCurSelectedItem == INDEX_POST
+                            || ScoreManager.getInstance().isFreeLotteryEmpty()
                             || ScoreManager.getInstance().isSignInTaskFinished()) {
                         showTabHint(INDEX_POST, View.GONE);
                     } else {

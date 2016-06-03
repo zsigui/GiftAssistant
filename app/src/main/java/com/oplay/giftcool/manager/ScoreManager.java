@@ -129,15 +129,15 @@ public class ScoreManager {
                                         && response.body() != null && response.body().isSuccess()) {
                                     final TaskStateInfo info = response.body().getData();
                                     final boolean isSignIn = info.signInState.signToday;
-                                    final boolean isLottery = (info.lotteryState.remainFreeCount > 0);
+                                    final boolean isLotteryEmpty = (info.lotteryState.remainFreeCount == 0);
                                     if (MixUtil.xor(mIsSignInTaskFinished, isSignIn)) {
                                         // 在状态不同的时候进行通知
                                         mIsSignInTaskFinished = isSignIn;
                                         ObserverManager.getInstance()
                                                 .notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
                                     }
-                                    if (MixUtil.xor(mIsFreeLotteryEmpty, isLottery)) {
-                                        mIsFreeLotteryEmpty = isLottery;
+                                    if (MixUtil.xor(mIsFreeLotteryEmpty, isLotteryEmpty)) {
+                                        mIsFreeLotteryEmpty = isLotteryEmpty;
                                     }
                                 }
                             }

@@ -94,27 +94,60 @@ public class GiftTypeUtil {
 	public static int getItemViewType(IndexGiftNew gift) {
 		//KLog.e("gift_data : status = " + gift.status + ", gifttype = " + gift.giftType + ", giftstatus = " + gift
 		// .seizeStatus);
-        switch (gift.giftType) {
-            case GIFT_TYPE_NORMAL:
-            case GIFT_TYPE_NORMAL_FREE:
-                // 针对普通免费礼包，该处不判断是否为首充券
-                return handleNormalType(gift);
-            case GIFT_TYPE_LIMIT:
-                return handleLimitType(gift);
-            case GIFT_TYPE_LIMIT_FREE:
-                switch (gift.totalType) {
-                    case TOTAL_TYPE_UNKNOWN:
-                    case TOTAL_TYPE_GIFT:
-                    case TOTAL_TYPE_GIFT_LIMIT:
-                        return handleFreeLimitGift(gift);
-                    case TOTAL_TYPE_COUPON:
-                        return handleFreeFirstCharge(gift);
+        if (gift.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
+            switch (gift.totalType) {
+                case TOTAL_TYPE_COUPON:
+                    return GiftTypeUtil.TYPE_CHARGE_SEIZED;
+                case TOTAL_TYPE_GIFT:
+                    return GiftTypeUtil.TYPE_NORMAL_SEIZED;
+                case TOTAL_TYPE_GIFT_LIMIT:
+                default:
+                    return GiftTypeUtil.TYPE_LIMIT_SEIZED;
+            }
+        } else {
+            switch (gift.giftType) {
+                case GIFT_TYPE_NORMAL:
+                case GIFT_TYPE_NORMAL_FREE:
+                    // 针对普通免费礼包，该处不判断是否为首充券
+                    return handleNormalType(gift);
+                case GIFT_TYPE_LIMIT:
+                    return handleLimitType(gift);
+                case GIFT_TYPE_LIMIT_FREE:
+                    switch (gift.totalType) {
+                        case TOTAL_TYPE_UNKNOWN:
+                        case TOTAL_TYPE_GIFT:
+                        case TOTAL_TYPE_GIFT_LIMIT:
+                            return handleFreeLimitGift(gift);
+                        case TOTAL_TYPE_COUPON:
+                            return handleFreeFirstCharge(gift);
 
-                }
-                break;
+                    }
+                    break;
+            }
         }
         return TYPE_ERROR;
 	}
+
+//    public static int getItemViewTypeNew(IndexGiftNew gift) {
+//        switch (gift.seizeStatus) {
+//            case SEIZE_TYPE_NEVER:
+//                break;
+//            case SEIZE_TYPE_SEIZED:
+//                switch (gift.totalType) {
+//                    case TOTAL_TYPE_GIFT:
+//                        break;
+//                    case TOTAL_TYPE_COUPON:
+//                        break;
+//                    case TOTAL_TYPE_GIFT_LIMIT:
+//                        default:
+//                }
+//                break;
+//            case SEIZE_TYPE_SEARCHED:
+//                break;
+//            case SEIZE_TYPE_RESERVED:
+//                break;
+//        }
+//    }
 
     /**
      * 处理限时免费的限量礼包类型

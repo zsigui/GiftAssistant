@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -205,8 +206,8 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     // 限量抢状态,表示当前不处于免费抢
                     holder.tvSeizeHint.setVisibility(View.VISIBLE);
-                    holder.tvSeizeHint.setText(String.format("%s免费抢",
-                            DateUtil.formatUserReadDate(o.freeStartTime)));
+                    holder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 } else {
                     // 无免费
                     holder.tvSeizeHint.setVisibility(View.GONE);
@@ -316,9 +317,8 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
             case GiftTypeUtil.TYPE_CHARGE_RESERVED:
             case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
-                cHolder.tvSeizeHint.setText(String.format("%s%s免费抢",
-                        DateUtil.formatUserReadDate(o.freeStartTime),
-                        DateUtil.formatTime(o.freeStartTime * 1000, "HH:mm")));
+                cHolder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 cHolder.tvSeizeHint.setVisibility(View.VISIBLE);
                 cHolder.btnSend.setVisibility(View.VISIBLE);
                 cHolder.tvSeize.setVisibility(View.GONE);

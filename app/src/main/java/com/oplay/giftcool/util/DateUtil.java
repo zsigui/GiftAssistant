@@ -174,16 +174,18 @@ public class DateUtil {
 //        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 //        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 //        KLog.d(AppDebugConfig.TAG_WARN, "date = " + format1.format(date) + ", time = " + format1.format(time));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
         if (current.after(today) && current.before(tomorrow)) {
-            return "明天";
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            return "明天" + format.format(date);
         } else if (current.after(tomorrow)) {
-            TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-            SimpleDateFormat format = new SimpleDateFormat("MM-dd", Locale.getDefault());
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
             return format.format(date);
         } else {
-            TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+//            TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+//            return format.format(date);
             SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return format.format(date);
+            return "今天" + format.format(date);
         }
     }
 }

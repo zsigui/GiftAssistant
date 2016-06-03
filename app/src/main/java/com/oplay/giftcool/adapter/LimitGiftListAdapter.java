@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -136,9 +137,8 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     // 限量抢状态,表示当前不处于免费抢
                     holder.tvSeizeHint.setVisibility(View.VISIBLE);
-                    holder.tvSeizeHint.setText(String.format("%s%s免费抢",
-                            DateUtil.formatUserReadDate(o.freeStartTime),
-                            DateUtil.formatTime(o.freeStartTime * 1000, "HH:mm")));
+                    holder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
                 } else {
                     // 无免费
                     holder.tvSeizeHint.setVisibility(View.GONE);

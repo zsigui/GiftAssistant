@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
@@ -70,7 +71,8 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
             holder.tvContent.setText(Html.fromHtml(
                     String.format(Locale.CHINA, "<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
         }
-        if (o.hasNew && o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+        if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
+                o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
             holder.ivHint.setVisibility(View.VISIBLE);
         } else {
             holder.ivHint.setVisibility(View.GONE);
@@ -94,7 +96,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
         Integer pos = (Integer) v.getTag(TAG_POSITION);
         IndexGiftLike o = getItem(pos);
         IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
-        o.hasNew = false;
+        Global.getLikeNewTimeArray().put(o.id, (int) o.newestCreateTime);
         notifyDataSetChanged();
     }
 

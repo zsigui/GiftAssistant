@@ -20,7 +20,6 @@ import com.oplay.giftcool.adapter.NestedGameListAdapter;
 import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.util.GameTypeUtil;
-import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -107,12 +106,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
                         IntentUtil.jumpGiftDetail(getContext(), gift.id);
                         break;
                     case R.id.btn_send:
-                        if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                            // 对于0元抢，先跳转到游戏详情
-                            IntentUtil.jumpGiftDetail(getContext(), gift.id);
-                        } else {
-                            PayManager.getInstance().seizeGift(getActivity(), gift, (GiftButton) v);
-                        }
+                        PayManager.getInstance().seizeGift(getActivity(), gift, (GiftButton) v);
                         break;
                 }
             }

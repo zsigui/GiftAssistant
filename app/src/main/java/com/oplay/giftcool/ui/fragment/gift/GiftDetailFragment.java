@@ -233,12 +233,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
             tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
             if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
-                    || type == GiftTypeUtil.TYPE_CHARGE_TAKE
-                    || type == GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE
-                    || type == GiftTypeUtil.TYPE_CHARGE_EMPTY
-                    || type == GiftTypeUtil.TYPE_CHARGE_SEIZE
-                    || type == GiftTypeUtil.TYPE_CHARGE_UN_RESERVE
-                    || type == GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY) {
+                    || (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
+                    && type != GiftTypeUtil.TYPE_CHARGE_SEIZED)) {
                 tvConsume.setVisibility(View.VISIBLE);
                 tvRemain.setVisibility(View.VISIBLE);
                 setMoneyConsume(giftData);
@@ -249,7 +245,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     if (giftData.freeStartTime > System.currentTimeMillis()) {
                         tvSeizeHint.setVisibility(View.VISIBLE);
                         tvSeizeHint.setText(String.format(Locale.CHINA,
-                                "%s免费抢", DateUtil.formatUserReadDate(giftData.freeStartTime)));
+                                ConstString.TEXT_GIFT_FREE_SEIZE,
+                                DateUtil.formatUserReadDate(giftData.freeStartTime)));
                     }
                 } else {
                     tvUsage.setText(giftData.usage);
@@ -262,7 +259,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                             if (giftData.freeStartTime > System.currentTimeMillis()) {
                                 tvSeizeHint.setVisibility(View.VISIBLE);
                                 tvSeizeHint.setText(String.format(Locale.CHINA,
-                                        "%s免费抢", DateUtil.formatUserReadDate(giftData.freeStartTime)));
+                                        ConstString.TEXT_GIFT_FREE_SEIZE,
+                                        DateUtil.formatUserReadDate(giftData.freeStartTime)));
                             }
                             break;
                         case GiftTypeUtil.TYPE_NORMAL_SEIZE:

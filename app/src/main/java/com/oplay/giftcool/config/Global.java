@@ -3,6 +3,7 @@ package com.oplay.giftcool.config;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
 
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -114,6 +115,15 @@ public class Global {
      * 指示本轮活动页面签到红点是否已经展示过，防止刷新重新显示
      */
     public static boolean sHasShowedSignInHint = false;
+
+    private static SparseIntArray sLikeNewTime;
+
+    public static SparseIntArray getLikeNewTimeArray() {
+        if (sLikeNewTime == null) {
+            sLikeNewTime = new SparseIntArray(10);
+        }
+        return sLikeNewTime;
+    }
 
     /**
      * 获取网络请求引擎

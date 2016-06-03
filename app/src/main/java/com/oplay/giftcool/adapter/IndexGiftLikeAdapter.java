@@ -13,6 +13,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.util.IntentUtil;
@@ -42,7 +43,8 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
         ViewHolder itemHolder = (ViewHolder) holder;
         IndexGiftLike o = getItem(position);
         itemHolder.tvName.setText(o.name);
-        if (o.hasNew && o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+        if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
+                o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
             itemHolder.ivHint.setVisibility(View.VISIBLE);
         } else {
             itemHolder.ivHint.setVisibility(View.GONE);
@@ -61,7 +63,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
         }
         Integer pos = (Integer) v.getTag(TAG_POSITION);
         IndexGiftLike o = getItem(pos);
-        o.hasNew = false;
+        Global.getLikeNewTimeArray().put(o.id, (int) o.newestCreateTime);
         notifyItemChanged(pos);
         IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
     }

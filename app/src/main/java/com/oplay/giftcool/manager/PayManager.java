@@ -7,6 +7,7 @@ import android.view.View;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
@@ -407,7 +408,8 @@ public class PayManager {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "恭喜，预约成功！",
                 String.format(Locale.CHINA, "已为您预留一枚礼包码到开抢日%s", gift.reserveDeadline),
-                String.format(Locale.CHINA, "%s免费开抢", DateUtil.formatUserReadDate(gift.freeStartTime)),
+                String.format(Locale.CHINA,
+                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
                 "reserve_hint");
         gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
         if (button != null) {
@@ -423,7 +425,8 @@ public class PayManager {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "天啦，预约号被抢光了！",
                 "预约号已满，免费开抢时间再来抢吧！",
-                String.format(Locale.CHINA, "%s免费开抢", DateUtil.formatUserReadDate(gift.freeStartTime)),
+                String.format(Locale.CHINA,
+                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
                 "reserve_hint");
     }
 
@@ -495,7 +498,7 @@ public class PayManager {
                 giftType = "限量";
                 break;
             case GiftTypeUtil.GIFT_TYPE_LIMIT_FREE:
-                giftType = "0元抢";
+                giftType = "限时免费";
                 break;
             default:
                 giftType = "未知:" + gift.giftType;

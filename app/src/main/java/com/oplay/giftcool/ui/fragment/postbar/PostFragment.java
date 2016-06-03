@@ -448,6 +448,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
     public void onUserUpdate(int action) {
         switch (action) {
             case ObserverManager.STATUS.USER_UPDATE_ALL:
+            case ObserverManager.STATUS.USER_UPDATE_TASK:
                 if (mAdapter != null && mAdapter.getItemCount() > 0) {
                     mAdapter.notifyItemChanged(0);
                 }
@@ -484,57 +485,4 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
         return TAG_NAME;
     }
 
-	/* 测试数据 */
-
-    private IndexPost initTestData() {
-        IndexPost post = new IndexPost();
-        post.officialData = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            IndexPostNew data = new IndexPostNew();
-            data.id = i * (int) (Math.random() * 103);
-            data.title = "[天剑传说]盖楼拿代金卷了" + data.id;
-            data.content = "洗刷刷西三环阿迪开房间阿里开始的加法考虑到将很快垃圾sdk了好久阿喀琉斯大家伙可垃圾sdk你就爱看市领导和金卡的就好了";
-            data.state = (int) (Math.random() * 2);
-            data.img = "http://owan-img.ymapp.com/app/76/d4/7705/icon/icon_1440398275.png_128_128_70.png";
-            data.showType = PostTypeUtil.TYPE_CONTENT_OFFICIAL;
-            post.officialData.add(data);
-        }
-        post.notifyData = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            IndexPostNew data = new IndexPostNew();
-            data.id = i * (int) (Math.random() * 1002 + 1002);
-            data.title = "[神三国]清明充值送大礼" + data.id;
-            data.content = "洗刷刷西三环阿迪开房间阿里开始的加法考虑到将很快垃圾sdk了好久阿喀琉斯大家伙可垃圾sdk你就爱看市领导和金卡的就好了";
-            data.state = (int) (Math.random() * 2);
-            data.img = "http://owan-img.ymapp.com/app/76/d4/7705/icon/icon_1440398275.png_128_128_70.png";
-            data.startTime = "4月31日";
-            data.showType = PostTypeUtil.TYPE_CONTENT_GAME;
-            post.notifyData.add(data);
-        }
-        return post;
-    }
-
-    private OneTypeDataList<IndexPostNew> getLoadData() {
-        OneTypeDataList<IndexPostNew> data = new OneTypeDataList<>();
-        data.data = getRefreshData();
-        data.pageSize = PAGE_SIZE;
-        data.isEndPage = (int) (Math.random() * 2) == 0 ? false : true;
-        return data;
-    }
-
-    private ArrayList<IndexPostNew> getRefreshData() {
-        ArrayList<IndexPostNew> datas = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            IndexPostNew data = new IndexPostNew();
-            data.id = i * (int) (Math.random() * 1002 + 1002);
-            data.title = "[战国时代]刷新数据" + data.id;
-            data.content = "从赶紧来开始好几个开始了就发给你考试后点击开公司好可能根据首付款工具框架飞黄金矿工";
-            data.state = (int) (Math.random() * 2);
-            data.img = "http://owan-img.ymapp.com/app/10946/icon/icon_1439432439.png_128_128_70.png";
-            data.startTime = "3月12日";
-            data.showType = PostTypeUtil.TYPE_CONTENT_GAME;
-            datas.add(data);
-        }
-        return datas;
-    }
 }
