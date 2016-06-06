@@ -10,6 +10,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -106,6 +107,7 @@ public class AboutFragment extends BaseFragment {
                         setUpdate(mContext.getResources().getString(R.string.st_about_update_text));
                         return;
                     }
+                    AccountManager.getInstance().judgeIsSessionFailed(response.body());
                 }
                 setUpdate(mContext.getResources().getString(R.string.st_about_check_update_failed));
                 AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);

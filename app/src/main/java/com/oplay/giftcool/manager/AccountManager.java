@@ -213,20 +213,15 @@ public class AccountManager implements OnFinishListener {
 //                                    updateJPushTagAndAlias();
                                     return;
                                 }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.e(AppDebugConfig.TAG_MANAGER,
-                                            response.body() == null ? "解析失败" : response.body().error());
-                                }
                                 // 登录状态失效，原因包括: 已在其他地方登录，更新失败
                                 sessionFailed(response.body());
                             }
+                            AppDebugConfig.warn(response);
                         }
 
                         @Override
                         public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(AppDebugConfig.TAG_MANAGER, t);
-                            }
+                            AppDebugConfig.warn(t);
                         }
                     });
                 }
@@ -238,10 +233,19 @@ public class AccountManager implements OnFinishListener {
      * 登录态失效
      */
     private void sessionFailed(JsonRespBase response) {
-        if (response != null && response.getCode() == NetStatusCode.ERR_UN_LOGIN) {
-            notifyUserAll(null);
+        if (judgeIsSessionFailed(response)) {
             ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
         }
+    }
+
+    public boolean judgeIsSessionFailed(JsonRespBase response) {
+        if (response != null
+                && (response.getCode() == NetStatusCode.ERR_UN_LOGIN
+                || response.getCode() == NetStatusCode.ERR_BAD_SERVER)) {
+            notifyUserAll(null);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -292,19 +296,14 @@ public class AccountManager implements OnFinishListener {
                                     notifyUserPart(user);
                                     return;
                                 }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.e(AppDebugConfig.TAG_MANAGER,
-                                            response.body() == null ? "解析失败" : response.body().error());
-                                }
                                 sessionFailed(response.body());
                             }
+                            AppDebugConfig.warn(response);
                         }
 
                         @Override
                         public void onFailure(Call<JsonRespBase<UserInfo>> call, Throwable t) {
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(AppDebugConfig.TAG_MANAGER, t);
-                            }
+                            AppDebugConfig.warn(t);
                         }
                     });
                 }
@@ -451,28 +450,15 @@ public class AccountManager implements OnFinishListener {
                                         StatisticsManager.ID.STR_USER_LOGIN_WITH_SESSION);
                                 return;
                             }
-                            if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-                                // 更新session不同步
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.d("session is not sync, err msg = " + response.body().getMsg());
-                                }
-                                // 重置登录信息，表示未登录
-                                notifyUserAll(null);
-                                return;
-                            }
+                            judgeIsSessionFailed(response.body());
                         }
                     }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
-                    }
+                    AppDebugConfig.warn(response);
                 }
 
                 @Override
                 public void onFailure(Call<JsonRespBase<UpdateSession>> call, Throwable t) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.e(AppDebugConfig.TAG_MANAGER, t);
-                        KLog.e(AppDebugConfig.TAG_MANAGER, "failed to update session");
-                    }
+                    AppDebugConfig.warn(t);
                 }
             });
         }
@@ -604,23 +590,13 @@ public class AccountManager implements OnFinishListener {
                             return;
                         }
                     }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-                                + (response.body() == null ? "解析出错" : response.body().error()));
-                    }
-                    return;
                 }
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, "获取未读消息数量-"
-                            + (response == null ? "返回出错" : response.code()));
-                }
+                AppDebugConfig.warn(response);
             }
 
             @Override
             public void onFailure(Call<JsonRespBase<MessageCentralUnread>> call, Throwable t) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, t);
-                }
+                AppDebugConfig.warn(t);
             }
         });
     }

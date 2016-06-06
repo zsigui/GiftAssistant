@@ -59,9 +59,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	protected void refreshFailEnd() {
 		if (mIsSwipeRefresh) {
 			if (NetworkUtil.isConnected(getContext())) {
-				ToastUtil.showShort("刷新请求出错-服务器获取数据异常");
+				ToastUtil.showShort("刷新失败-呜，异常了%>_<%");
 			} else {
-				ToastUtil.showShort("刷新请求出错-网络异常");
+				ToastUtil.showShort("刷新失败-网络连接好像有问题哦");
 			}
 		}
 		super.refreshFailEnd();

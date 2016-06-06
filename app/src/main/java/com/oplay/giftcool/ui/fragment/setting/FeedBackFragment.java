@@ -42,6 +42,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         OnBackPressListener {
 
     private final static String PAGE_NAME = "意见反馈";
+    final String TOAST_FEEDBACK = "提交反馈";
     //	private RadioButton rbFunction;
 //	private RadioButton rbPay;
 //	private RadioButton rbOther;
@@ -223,11 +224,11 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                                 }
                                 return;
                             }
-                            ToastUtil.showShort("提交失败-" + (response.body() == null ?
-                                    "解析出错" : response.body().getMsg()));
+                            AccountManager.getInstance().judgeIsSessionFailed(response.body());
+                            ToastUtil.blurErrorMsg(TOAST_FEEDBACK, response.body());
                             return;
                         }
-                        ToastUtil.showShort("提交失败-" + (response == null ? "网络错误" : response.message()));
+                        ToastUtil.blurErrorResp(TOAST_FEEDBACK, response);
                     }
 
                     @Override
@@ -239,7 +240,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                         if (AppDebugConfig.IS_DEBUG) {
                             KLog.e(t);
                         }
-                        ToastUtil.showShort("提交失败-网络异常");
+                        ToastUtil.blurThrow(TOAST_FEEDBACK);
                     }
                 });
             }

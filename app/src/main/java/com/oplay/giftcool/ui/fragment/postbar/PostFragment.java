@@ -16,6 +16,7 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqIndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPost;
@@ -149,11 +150,9 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                                 FileUtil.writeCacheByKey(getContext(), NetUrl.POST_GET_INDEX, data);
                                 return;
                             }
+                            AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, (response == null ?
-                                    "返回出错" : response.code() + ", " + response.message()));
-                        }
+                        AppDebugConfig.warn(response);
 //						refreshFailEnd();
                         readCacheData();
                     }
@@ -163,9 +162,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, t);
-                        }
+                        AppDebugConfig.warn(t);
 //						refreshFailEnd();
                         readCacheData();
                     }

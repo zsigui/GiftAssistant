@@ -140,16 +140,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
             case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
-                gHolder.pbPercent.setVisibility(View.GONE);
-                gHolder.tvPercent.setVisibility(View.GONE);
-                gHolder.tvSeizeHint.setVisibility(View.GONE);
-                if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
-                    setSeizeTextUI(gHolder.tvSeize, 4);
-                    gHolder.tvSeize.setText(String.format(Locale.CHINA,
-                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
-                } else {
-                    setSeizeTextUI(gHolder.tvSeize, 3);
-                }
+                finishState(o, gHolder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
                 gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
@@ -164,32 +155,60 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
                 gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
-                gHolder.pbPercent.setVisibility(View.GONE);
-                gHolder.tvPercent.setVisibility(View.GONE);
-                gHolder.tvSeizeHint.setVisibility(View.GONE);
-                setSeizeTextUI(gHolder.tvSeize, 2);
-                break;
-            case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-                // 效果同 TYPE_LIMIT_FREE_SEIZED , 不过没有删除线
-                gHolder.pbPercent.setVisibility(View.GONE);
-                gHolder.tvPercent.setVisibility(View.GONE);
-                gHolder.tvSeizeHint.setVisibility(View.GONE);
-                setSeizeTextUI(gHolder.tvSeize, 2);
+                seizedState(gHolder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                gHolder.pbPercent.setVisibility(View.GONE);
-                gHolder.tvPercent.setVisibility(View.GONE);
-                gHolder.tvSeizeHint.setVisibility(View.VISIBLE);
-                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
-                    setSeizeTextUI(gHolder.tvSeize, 4);
-                    gHolder.tvSeize.setText(String.format(Locale.CHINA,
-                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
+                seizeLimitState(o, gHolder);
+                break;
+            case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+            default:
+                if (o.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
+                    // 效果同 TYPE_LIMIT_FREE_SEIZED , 不过没有删除线
+                    seizedState(gHolder);
+                } else if (o.status == GiftTypeUtil.STATUS_FINISHED
+                        || o.status == GiftTypeUtil.STATUS_WAIT_SEIZE
+                        || o.status == GiftTypeUtil.STATUS_WAIT_SEARCH) {
+                    finishState(o, gHolder);
                 } else {
-                    setSeizeTextUI(gHolder.tvSeize, 3);
+                    seizeLimitState(o, gHolder);
                 }
                 break;
+
         }
         gHolder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
+    }
+
+    private void seizeLimitState(IndexGiftNew o, GiftHolder gHolder) {
+        gHolder.pbPercent.setVisibility(View.GONE);
+        gHolder.tvPercent.setVisibility(View.GONE);
+        gHolder.tvSeizeHint.setVisibility(View.VISIBLE);
+        if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
+            setSeizeTextUI(gHolder.tvSeize, 4);
+            gHolder.tvSeize.setText(String.format(Locale.CHINA,
+                    ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
+        } else {
+            setSeizeTextUI(gHolder.tvSeize, 3);
+        }
+    }
+
+    private void seizedState(GiftHolder gHolder) {
+        gHolder.pbPercent.setVisibility(View.GONE);
+        gHolder.tvPercent.setVisibility(View.GONE);
+        gHolder.tvSeizeHint.setVisibility(View.GONE);
+        setSeizeTextUI(gHolder.tvSeize, 2);
+    }
+
+    private void finishState(IndexGiftNew o, GiftHolder gHolder) {
+        gHolder.pbPercent.setVisibility(View.GONE);
+        gHolder.tvPercent.setVisibility(View.GONE);
+        gHolder.tvSeizeHint.setVisibility(View.GONE);
+        if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
+            setSeizeTextUI(gHolder.tvSeize, 4);
+            gHolder.tvSeize.setText(String.format(Locale.CHINA,
+                    ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
+        } else {
+            setSeizeTextUI(gHolder.tvSeize, 3);
+        }
     }
 
     /**

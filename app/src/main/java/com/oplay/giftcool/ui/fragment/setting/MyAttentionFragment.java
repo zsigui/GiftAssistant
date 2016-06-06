@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
@@ -128,6 +129,10 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                             updateData(backObj.data);
                             return;
                         }
+                        if (response != null) {
+                            AccountManager.getInstance().judgeIsSessionFailed(response.body());
+                        }
+                        AppDebugConfig.warnResp(response);
                         refreshFailEnd();
 
                     }

@@ -199,7 +199,7 @@ public class AppDebugConfig {
     }
 
     public static void warn(Response response) {
-        warn(AppDebugConfig.TAG_APP, response);
+        warn(AppDebugConfig.TAG_DEBUG_INFO, response);
     }
 
     public static <T> void warn(String tag, JsonRespBase<T> respBase) {
@@ -209,7 +209,7 @@ public class AppDebugConfig {
     }
 
     public static <T> void warn(JsonRespBase<T> respBase) {
-        warn(AppDebugConfig.TAG_APP, respBase);
+        warn(AppDebugConfig.TAG_DEBUG_INFO, respBase);
     }
 
     public static void warn(String tag, Throwable t) {
@@ -220,6 +220,6 @@ public class AppDebugConfig {
     }
 
     public static void warn(Throwable t) {
-        warn(AppDebugConfig.TAG_APP, t);
+        warn(AppDebugConfig.TAG_DEBUG_INFO, t);
     }
 }

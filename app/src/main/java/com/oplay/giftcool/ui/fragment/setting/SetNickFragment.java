@@ -27,7 +27,6 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -157,13 +156,12 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         }
                         return;
                     }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null ?
-                                "解析异常" : response.body().error()));
-                    }
+                    AppDebugConfig.warn(response.body());
                     ToastUtil.blurErrorMsg(TOAST_FAILED, response.body());
+                    AccountManager.getInstance().judgeIsSessionFailed(response.body());
                     return;
                 }
+                AppDebugConfig.warn(response);
                 ToastUtil.blurErrorResp(TOAST_FAILED, response);
             }
 
@@ -174,9 +172,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                 }
                 hideLoading();
                 mIsLoading = false;
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_FRAG, t);
-                }
+                AppDebugConfig.warn(t);
                 ToastUtil.blurThrow(TOAST_FAILED);
             }
         });

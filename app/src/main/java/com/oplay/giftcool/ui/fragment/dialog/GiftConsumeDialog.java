@@ -26,7 +26,7 @@ public class GiftConsumeDialog extends BaseFragment_Dialog implements ObserverMa
     private final String TITLE_BEAN_SCORE = "选择支付方式";
     private final String TITLE_SCORE = "金币抢礼包";
     private final String TITLE_BEAN = "偶玩豆抢礼包";
-    private final String REMAIN_BOTH = "余额：<img src='ic_score'/> %d 和 <img src='ic_bean'> %d";
+    private final String REMAIN_BOTH = "余额：<img src='ic_score'/> %d　<img src='ic_bean'> %d";
     private final String REMAIN_SCORE = "余额：<img src='ic_score'/> %d";
     private final String REMAIN_BEAN = "余额：<img src='ic_bean'> %d";
     private final String BEAN_SCORE_BOTH_BASE = "抢该礼包将消耗：<img src='ic_score'/> "

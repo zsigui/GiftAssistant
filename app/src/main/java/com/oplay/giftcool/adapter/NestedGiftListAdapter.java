@@ -247,7 +247,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
 
     private void handleGiftNormalCharge(int type, IndexGiftNew o, GiftNormalHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
-        holder.tvName.setText(o.gameName);
+        holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         holder.btnSend.setState(type);
         holder.tvContent.setText(o.content);
         if (type != GiftTypeUtil.TYPE_NORMAL_SEIZE) {

@@ -20,7 +20,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -140,11 +139,15 @@ public class ScoreManager {
                                                 .notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
                                     }
                                 }
+                                if (response != null) {
+                                    AccountManager.getInstance().judgeIsSessionFailed(response.body());
+                                }
+                                AppDebugConfig.warn(response);
                             }
 
                             @Override
                             public void onFailure(Call<JsonRespBase<TaskStateInfo>> call, Throwable t) {
-
+                                AppDebugConfig.warn(t);
                             }
                         });
             }
@@ -256,18 +259,14 @@ public class ScoreManager {
                                             return;
                                         }
                                     }
-                                    if (AppDebugConfig.IS_DEBUG) {
-                                        KLog.d(AppDebugConfig.TAG_MANAGER, "金币获取-" +
-                                                (response.body() == null ? "解析失败" : response.body().error()));
-                                    }
+                                    AccountManager.getInstance().judgeIsSessionFailed(response.body());
                                 }
+                                AppDebugConfig.warn(response);
                             }
 
                             @Override
                             public void onFailure(Call<JsonRespBase<MissionReward>> call, Throwable t) {
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.e(t);
-                                }
+                                AppDebugConfig.warn(t);
                             }
                         });
             }
@@ -371,9 +370,7 @@ public class ScoreManager {
             // 进行一次写入
             setCurDownloadTaskSet(context);
         } catch (Throwable t) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(AppDebugConfig.TAG_MANAGER, t);
-            }
+            AppDebugConfig.warn(AppDebugConfig.TAG_MANAGER, t);
         }
     }
 

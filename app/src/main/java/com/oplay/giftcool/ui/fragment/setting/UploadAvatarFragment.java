@@ -293,13 +293,11 @@ public class UploadAvatarFragment extends BaseFragment {
                                 AccountManager.getInstance().notifyUserAll(model);
                                 return;
                             }
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(AppDebugConfig.TAG_FRAG,
-                                        response.body() == null ? "解析失败" : response.body().error());
-                            }
+                            AppDebugConfig.warn(response.body());
                             ToastUtil.blurErrorMsg(TOAST_FAILED, response.body());
                             return;
                         }
+                        AppDebugConfig.warn(response);
                         ToastUtil.blurErrorResp(TOAST_FAILED, response);
                     }
 
@@ -309,9 +307,7 @@ public class UploadAvatarFragment extends BaseFragment {
                             return;
                         }
                         hideLoading();
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(AppDebugConfig.TAG_FRAG, t);
-                        }
+                        AppDebugConfig.warn(t);
                         ToastUtil.blurThrow(TOAST_FAILED);
                     }
                 });

@@ -14,6 +14,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
@@ -21,7 +22,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +108,10 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                             updateData(backObj.data);
                             return;
                         }
+                        if (response != null) {
+                            AccountManager.getInstance().judgeIsSessionFailed(response.body());
+                        }
+                        AppDebugConfig.warnResp(response);
                         refreshFailEnd();
                     }
 
@@ -116,9 +120,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(AppDebugConfig.TAG_FRAG, t);
-                        }
+                        AppDebugConfig.warn(AppDebugConfig.TAG_DEBUG_INFO, t);
                         refreshFailEnd();
                     }
                 });
