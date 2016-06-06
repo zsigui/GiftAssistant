@@ -161,6 +161,8 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 } else {
                     gHolder = (GiftLimitFeeHolder) convertView.getTag();
                 }
+                gHolder.btnSend.setTag(TAG_POSITION, position);
+                gHolder.btnSend.setOnClickListener(this);
                 handleGiftFee(type, o, gHolder);
                 break;
         }

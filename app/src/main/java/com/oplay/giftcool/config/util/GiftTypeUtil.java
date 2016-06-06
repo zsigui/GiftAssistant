@@ -8,7 +8,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-    public static final int TYPE_COUNT = 25;
+    public static final int TYPE_COUNT = 26;
 
     // 限量礼包类型，可抢，limit
     public static final int TYPE_LIMIT_SEIZE = 0;
@@ -58,8 +58,10 @@ public class GiftTypeUtil {
     public static final int TYPE_CHARGE_RESERVE_EMPTY = 22;
     // 首充券类型,不可预约
     public static final int TYPE_CHARGE_DISABLE_RESERVE = 23;
+    // 已下架
+    public static final int TYPE_TAKE_OFF = 24;
 
-    public static final int TYPE_ERROR = 24;
+    public static final int TYPE_ERROR = 25;
 
     // 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 预约完
     public static final int STATUS_WAIT_SEIZE = 1;
@@ -67,6 +69,7 @@ public class GiftTypeUtil {
     public static final int STATUS_WAIT_SEARCH = 3;
     public static final int STATUS_SEARCH = 4;
     public static final int STATUS_FINISHED = 5;
+    public static final int STATUS_TAKE_OFF = 6;
     public static final int STATUS_RESERVE = 7;
     public static final int STATUS_RESERVE_FINISHED = 8;
     // 1 金币， 2 偶玩豆， 3 金币或偶玩豆
@@ -192,6 +195,7 @@ public class GiftTypeUtil {
                 }
                 break;
             case STATUS_FINISHED:
+            case STATUS_TAKE_OFF:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                         // 未抢号
@@ -264,6 +268,7 @@ public class GiftTypeUtil {
                 }
                 break;
             case STATUS_FINISHED:
+            case STATUS_TAKE_OFF:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                         // 首充券活动已经结束
@@ -308,6 +313,7 @@ public class GiftTypeUtil {
                 }
                 break;
             case STATUS_FINISHED:
+            case STATUS_TAKE_OFF:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                         // 未抢号
@@ -364,6 +370,7 @@ public class GiftTypeUtil {
                 }
                 break;
             case STATUS_FINISHED:
+            case STATUS_TAKE_OFF:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:
                         // 未抢号

@@ -44,6 +44,20 @@ public class DateUtil {
         return result;
     }
 
+    /**
+     * 提取时间，针对 yyyy-MM-dd HH:mm:ss 格式
+     */
+    public static String optDateLong(String date, long time) {
+        String result;
+        if (isToday(time)) {
+            result = "今日 " + date.substring(11, 16);
+        } else {
+            result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10),
+                    date.substring(11, 16));
+        }
+        return result;
+    }
+
     public static String formatTime(String timeStr, String format) {
         if (TextUtils.isEmpty(timeStr))
             return null;
