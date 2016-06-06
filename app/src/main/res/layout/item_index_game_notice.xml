@@ -1,114 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-		style = "@style/IndexListItemLayout"
-		android:id = "@+id/rl_recommend"
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto"
-		android:background = "@drawable/selector_white_module"
-		android:layout_width = "match_parent"
-		android:paddingRight = "@dimen/di_index_list_item_margin_right" >
+        style = "@style/IndexListItemLayout"
+        android:id = "@+id/rl_recommend"
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:background = "@drawable/selector_white_module"
+        android:layout_width = "match_parent"
+        android:paddingRight = "@dimen/di_index_list_item_margin_right" >
 
-	<RelativeLayout
-			android:id = "@+id/rl_tag"
-			android:layout_width = "wrap_content"
-			android:layout_height = "@dimen/di_game_icon_layout_diameter" >
+    <RelativeLayout
+            android:id = "@+id/rl_tag"
+            android:layout_width = "wrap_content"
+            android:layout_height = "@dimen/di_game_icon_layout_diameter" >
 
-		<ImageView
-				android:id = "@+id/iv_tag"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:scaleType = "center"
-				android:layout_centerInParent = "true"
-				android:contentDescription = "@null"
-				android:src = "@drawable/ic_notice_other" />
-		<TextView
-				android:id = "@+id/tv_tag"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:layout_centerInParent = "true"
-				android:textColor="@color/co_white"/>
-	</RelativeLayout >
+        <ImageView
+                android:id = "@+id/iv_tag"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:scaleType = "center"
+                android:layout_centerInParent = "true"
+                android:contentDescription = "@null"
+                android:src = "@drawable/ic_notice_other" />
 
-	<RelativeLayout
-			android:id = "@+id/rl_icon"
-			android:layout_width = "@dimen/di_game_icon_layout_diameter"
-			android:layout_height = "@dimen/di_game_icon_layout_diameter"
-			android:layout_toRightOf = "@id/rl_tag"
-			android:layout_marginLeft = "8dp"
-			android:background = "@color/co_transparent" >
+        <TextView
+                android:id = "@+id/tv_tag"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_centerInParent = "true"
+                android:textColor = "@color/co_white" />
+    </RelativeLayout >
 
-		<com.makeramen.roundedimageview.RoundedImageView
-				android:id = "@+id/iv_icon"
-				style = "@style/DefaultImageView.Icon"
-				app:riv_border_color = "@color/co_stroke_bg"
-				app:riv_border_width = "@dimen/di_icon_border_size"
-				app:riv_corner_radius = "@dimen/di_icon_radius"
-				android:layout_margin = "@dimen/di_game_icon_margin"
-				app:riv_oval = "false" />
+    <RelativeLayout
+            android:id = "@+id/rl_icon"
+            android:layout_width = "@dimen/di_game_icon_layout_diameter"
+            android:layout_height = "@dimen/di_game_icon_layout_diameter"
+            android:layout_toRightOf = "@id/rl_tag"
+            android:layout_marginLeft = "8dp"
+            android:background = "@color/co_transparent" >
 
-		<ImageView
-				android:id = "@+id/iv_gift_hint"
-				android:layout_alignParentRight = "true"
-				android:contentDescription = "@null"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				android:src = "@drawable/ic_gift" />
-	</RelativeLayout >
+        <com.makeramen.roundedimageview.RoundedImageView
+                android:id = "@+id/iv_icon"
+                style = "@style/DefaultImageView.Icon"
+                app:riv_border_color = "@color/co_stroke_bg"
+                app:riv_border_width = "@dimen/di_icon_border_size"
+                app:riv_corner_radius = "@dimen/di_icon_radius"
+                android:layout_margin = "@dimen/di_game_icon_margin"
+                app:riv_oval = "false" />
 
-	<TextView
-			android:id = "@+id/tv_name"
-			style = "@style/DefaultTextView.Header"
-			android:layout_width = "match_parent"
-			android:layout_alignTop = "@+id/rl_icon"
-			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_marginTop = "4dp"
-			android:layout_toLeftOf = "@+id/ll_send"
-			android:layout_toRightOf = "@+id/rl_icon"
-			android:gravity = "center_vertical" />
+        <ImageView
+                android:id = "@+id/iv_gift_hint"
+                android:layout_alignParentRight = "true"
+                android:contentDescription = "@null"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/ic_gift" />
+    </RelativeLayout >
 
-	<TextView
-			android:id = "@+id/tv_content"
-			style = "@style/DefaultTextView.Text.Note"
-			android:layout_width = "60dp"
-			android:layout_below = "@+id/tv_name"
-			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_marginTop = "12dp"
-			android:layout_toRightOf = "@+id/rl_icon"
-			android:gravity = "center_vertical" />
+    <TextView
+            android:id = "@+id/tv_name"
+            style = "@style/DefaultTextView.Header"
+            android:layout_width = "match_parent"
+            android:layout_alignTop = "@+id/rl_icon"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_marginTop = "4dp"
+            android:layout_toLeftOf = "@+id/ll_send"
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:gravity = "center_vertical" />
 
-	<TextView
-			android:id = "@+id/tv_size"
-			style = "@style/DefaultTextView.Text.Note"
-			android:layout_width = "match_parent"
-			android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-			android:layout_alignTop = "@+id/tv_content"
-			android:layout_toLeftOf = "@+id/ll_send"
-			android:layout_toRightOf = "@+id/tv_content"
-			android:gravity = "center_vertical" />
+    <TextView
+            android:id = "@+id/tv_content"
+            style = "@style/DefaultTextView.Text.Note"
+            android:layout_width = "60dp"
+            android:layout_below = "@+id/tv_name"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_marginTop = "12dp"
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:gravity = "center_vertical" />
 
-	<TextView
-			android:id = "@+id/tv_gift"
-			style = "@style/DefaultTextView.Text"
-			android:gravity = "left"
-			android:layout_below = "@+id/tv_content"
-			android:layout_marginLeft = "7dp"
-			android:layout_marginTop = "6dp"
-			android:layout_toRightOf = "@+id/rl_icon" />
+    <TextView
+            android:id = "@+id/tv_size"
+            style = "@style/DefaultTextView.Text.Note"
+            android:layout_width = "match_parent"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_alignTop = "@+id/tv_content"
+            android:layout_toLeftOf = "@+id/ll_send"
+            android:layout_toRightOf = "@+id/tv_content"
+            android:gravity = "center_vertical" />
+
+    <TextView
+            android:id = "@+id/tv_gift"
+            style = "@style/DefaultTextView.Text"
+            android:gravity = "left"
+            android:layout_below = "@+id/tv_content"
+            android:layout_marginLeft = "7dp"
+            android:layout_marginTop = "6dp"
+            android:layout_toRightOf = "@+id/rl_icon" />
 
 
-	<LinearLayout
-			android:id = "@+id/ll_send"
-			android:layout_width = "wrap_content"
-			android:layout_height = "70dp"
-			android:layout_alignParentRight = "true"
-			android:layout_marginLeft = "@dimen/di_index_hoz_module_margin_left"
-			android:background = "@color/co_transparent"
-			android:gravity = "center" >
+    <LinearLayout
+            android:id = "@+id/ll_send"
+            android:layout_width = "wrap_content"
+            android:layout_height = "70dp"
+            android:layout_alignParentRight = "true"
+            android:layout_marginLeft = "@dimen/di_index_hoz_module_margin_left"
+            android:background = "@color/co_transparent"
+            android:gravity = "center" >
 
-		<TextView
-				android:id = "@+id/tv_download"
-				style = "@style/ButtonText"
-				android:text = "下载"
-				android:background = "@drawable/selector_btn_green" />
-	</LinearLayout >
+        <TextView
+                android:id = "@+id/tv_download"
+                style = "@style/ButtonText"
+                android:text = "下载"
+                android:background = "@drawable/selector_btn_green"
+                android:textColor = "@color/color_btn_green_border" />
+    </LinearLayout >
 </RelativeLayout >

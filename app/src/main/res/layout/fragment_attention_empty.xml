@@ -21,6 +21,7 @@
             android:layout_height = "wrap_content"
             android:layout_centerHorizontal = "true"
             android:background = "@drawable/selector_btn_green"
+            android:textColor = "@color/color_btn_green_border"
             android:text = "@string/st_my_attention_empty_btn"
             android:layout_marginTop = "10dp"
             android:textSize = "@dimen/di_common_text"
@@ -28,7 +29,6 @@
             android:paddingRight = "@dimen/di_common_text_padding_left_right"
             android:paddingTop = "@dimen/di_common_text_padding_top_bottom"
             android:paddingBottom = "@dimen/di_common_text_padding_top_bottom"
-            android:textColor = "@color/co_white"
             android:visibility = "gone"
             android:layout_below = "@+id/iv_empty" />
 

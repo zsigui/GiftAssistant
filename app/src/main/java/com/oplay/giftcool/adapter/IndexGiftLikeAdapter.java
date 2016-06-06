@@ -43,8 +43,8 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
         ViewHolder itemHolder = (ViewHolder) holder;
         IndexGiftLike o = getItem(position);
         itemHolder.tvName.setText(o.name);
-        if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
-                o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+        if (o.newestCreateTime >= Global.getLikeNewTimeArray().get(o.id) &&
+                o.newestCreateTime * 1000 >= AssistantApp.getInstance().getLastLaunchTime()) {
             itemHolder.ivHint.setVisibility(View.VISIBLE);
         } else {
             itemHolder.ivHint.setVisibility(View.GONE);
@@ -63,7 +63,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
         }
         Integer pos = (Integer) v.getTag(TAG_POSITION);
         IndexGiftLike o = getItem(pos);
-        Global.getLikeNewTimeArray().put(o.id, (int) o.newestCreateTime);
+        Global.getLikeNewTimeArray().put(o.id, o.newestCreateTime);
         notifyItemChanged(pos);
         IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
     }

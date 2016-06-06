@@ -1,6 +1,7 @@
 package com.oplay.giftcool.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
@@ -32,6 +33,7 @@ public class ViewUtil {
     }
 
     public static void initDownloadBtnStatus(TextView view, AppStatus status) {
+        view.setTextColor(getColorState(view.getContext(), R.color.color_btn_blue_border));
         switch (status) {
             case OPENABLE:
                 view.setText("打开");
@@ -43,23 +45,28 @@ public class ViewUtil {
                 break;
             case PAUSABLE:
                 view.setText("暂停");
+                view.setTextColor(getColorState(view.getContext(), R.color.color_btn_grey_border));
                 view.setBackgroundResource(R.drawable.selector_btn_grey);
                 break;
             case RESUMABLE:
                 view.setText("继续");
+                view.setTextColor(getColorState(view.getContext(), R.color.color_btn_green_border));
                 view.setBackgroundResource(R.drawable.selector_btn_green);
                 break;
             case DOWNLOADABLE:
                 view.setText("下载");
+                view.setTextColor(getColorState(view.getContext(), R.color.color_btn_green_border));
                 view.setBackgroundResource(R.drawable.selector_btn_green);
                 break;
             case RETRYABLE:
                 view.setText("重试");
+                view.setTextColor(getColorState(view.getContext(), R.color.color_btn_green_border));
                 view.setBackgroundResource(R.drawable.selector_btn_green);
                 break;
             default:
                 view.setText("失效");
                 view.setBackgroundResource(R.drawable.selector_btn_grey);
+                view.setTextColor(getColorState(view.getContext(), R.color.color_btn_grey_border));
                 break;
         }
     }
@@ -162,6 +169,16 @@ public class ViewUtil {
             colorInt = context.getColor(colorId);
         } else {
             colorInt = context.getResources().getColor(colorId);
+        }
+        return colorInt;
+    }
+
+    public static ColorStateList getColorState(Context context, @ColorRes int colorId) {
+        ColorStateList colorInt;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            colorInt = context.getResources().getColorStateList(colorId, null);
+        } else {
+            colorInt = context.getResources().getColorStateList(colorId);
         }
         return colorInt;
     }

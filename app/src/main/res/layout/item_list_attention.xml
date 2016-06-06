@@ -85,6 +85,6 @@
 			android:layout_height = "@dimen/di_btn_height"
 			android:layout_alignTop = "@+id/tv_name"
 			android:background = "@drawable/selector_btn_grey"
-			android:text = "@string/st_my_attention_btn_quick"
-			android:textColor = "@color/co_white" />
+			android:textColor = "@color/color_btn_grey_border"
+			android:text = "@string/st_my_attention_btn_quick" />
 </RelativeLayout >

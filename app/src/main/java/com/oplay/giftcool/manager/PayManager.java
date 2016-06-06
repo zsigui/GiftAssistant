@@ -79,8 +79,7 @@ public class PayManager {
      */
     public int seizeGift(FragmentActivity context, IndexGiftNew gift, GiftButton button, GiftDetailFragment fragment) {
         if (context == null) {
-            KLog.d(AppDebugConfig.TAG_WARN, "seizeGift(): param context is null");
-            ToastUtil.showShort("哎呦，执行出了点小问题，要不重启试试？");
+//            ToastUtil.showShort("哎呦，执行出了点小问题，要不重启试试？");
             return WebViewInterface.RET_PARAM_ERR;
         }
         if (!AccountManager.getInstance().isLogin()) {
@@ -97,13 +96,6 @@ public class PayManager {
                 gift, 0);
         mLastClickTime = nowClickTime;
         switch (GiftTypeUtil.getItemViewType(gift)) {
-            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
-            case GiftTypeUtil.TYPE_CHARGE_TAKE:
-                chargeGift(context, gift, button, fragment);
-                return WebViewInterface.RET_SUCCESS;
             case GiftTypeUtil.TYPE_NORMAL_SEARCH:
             case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
             case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
@@ -112,8 +104,15 @@ public class PayManager {
             case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
                 chargeReservedFailed(context, gift);
                 return WebViewInterface.RET_SUCCESS;
+            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
+            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+            case GiftTypeUtil.TYPE_CHARGE_TAKE:
+            default:
+                chargeGift(context, gift, button, fragment);
+                return WebViewInterface.RET_SUCCESS;
         }
-        return WebViewInterface.RET_PARAM_ERR;
     }
 
     /**

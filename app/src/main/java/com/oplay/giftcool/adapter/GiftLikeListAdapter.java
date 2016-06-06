@@ -96,7 +96,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
         Integer pos = (Integer) v.getTag(TAG_POSITION);
         IndexGiftLike o = getItem(pos);
         IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
-        Global.getLikeNewTimeArray().put(o.id, (int) o.newestCreateTime);
+        Global.getLikeNewTimeArray().put(o.id, o.newestCreateTime);
         notifyDataSetChanged();
     }
 

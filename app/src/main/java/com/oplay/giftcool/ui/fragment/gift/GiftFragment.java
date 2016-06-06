@@ -483,24 +483,19 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 							rvContainer.smoothScrollToPosition(0);
 						}
 						break;
-					case POS_ZERO:
+					case POS_LIKE:
 						if (rvContainer != null) {
 							rvContainer.smoothScrollToPosition(1);
 						}
 						break;
-					case POS_LIKE:
+					case POS_LIMIT:
 						if (rvContainer != null) {
 							rvContainer.smoothScrollToPosition(2);
 						}
 						break;
-					case POS_LIMIT:
-						if (rvContainer != null) {
-							rvContainer.smoothScrollToPosition(3);
-						}
-						break;
 					case POS_NEW:
 						if (rvContainer != null) {
-							rvContainer.smoothScrollToPosition(4);
+							rvContainer.smoothScrollToPosition(3);
 						}
 				}
 			}

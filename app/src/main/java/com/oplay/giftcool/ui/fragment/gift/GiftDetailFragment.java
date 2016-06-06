@@ -256,6 +256,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                                     giftData.searchCount)));
                             break;
                         case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+                            ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, false);
+                            tvOriginPrice.setVisibility(View.VISIBLE);
+                            setRemainProgress(giftData);
                             if (giftData.freeStartTime > System.currentTimeMillis()) {
                                 tvSeizeHint.setVisibility(View.VISIBLE);
                                 tvSeizeHint.setText(String.format(Locale.CHINA,

@@ -32,12 +32,12 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -174,14 +174,14 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	/**
 	 * 获取包名列表
 	 */
-	public HashSet<String> getPackName() {
-		synchronized (this) {
-			if (mPackName == null || mPackName.isEmpty()) {
-				mPackName = SystemUtil.getInstalledPackName(getContext());
-			}
-		}
-		return mPackName;
-	}
+//	public HashSet<String> getPackName() {
+//		synchronized (this) {
+//			if (mPackName == null || mPackName.isEmpty()) {
+//				mPackName = SystemUtil.getInstalledPackName(getContext());
+//			}
+//		}
+//		return mPackName;
+//	}
 
 	/**
 	 * 将各任务分组列表提取出来合并成一个列表
@@ -195,7 +195,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 			missions.add(groupHeader);
 			for (ScoreMission m : missionGroup.missions) {
 				if (m.dailyLimit > 1) {
-					m.name = String.format("%s(%d/%d)", m.name, m.todayCompleteCount, m.dailyLimit);
+					m.name = String.format(Locale.CHINA, "%s(%d/%d)", m.name, m.todayCompleteCount, m.dailyLimit);
 				}
 				if (m.actionType == TaskTypeUtil.MISSION_TYPE_DOWNLOAD) {
 					// 对于下载类型，需要预先判断
@@ -235,7 +235,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 					missions.add(m);
 				}
 			}
-			groupHeader.name = String.format("%s(%d/%d)",
+			groupHeader.name = String.format(Locale.CHINA, "%s(%d/%d)",
 					missionGroup.name, missionGroup.completedCount, missionGroup.totalCount);
 		}
 		return missions;
@@ -326,7 +326,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 				case TaskTypeUtil.MISSION_TYPE_DOWNLOAD:
 					final TaskInfoThree infoThree = AssistantApp.getInstance().getGson().fromJson(
 							mission.actionInfo, TaskInfoThree.class);
-					handleInfoThree(mission.code, infoThree);
+					handleInfoThree(infoThree);
 					break;
 			}
 		} catch (Throwable t) {
@@ -360,7 +360,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
 	/**
 	 * 处理额外信息类型为三(下载打开应用)的数据
 	 */
-	private void handleInfoThree(String code, TaskInfoThree infoThree) {
+	private void handleInfoThree(TaskInfoThree infoThree) {
 		// 设置试玩游戏信息
 //		ScoreManager.getInstance().addDownloadWork(getContext(), code, infoThree);
 		AlarmClockManager.getInstance().setObserverGame(true);

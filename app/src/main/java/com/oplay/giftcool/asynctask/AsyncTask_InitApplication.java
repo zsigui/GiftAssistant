@@ -111,7 +111,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 //			return;
 //		}
         if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_WARN, "app has global initialed");
+            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "app has global initialed");
         }
 
         // 存储打开APP时间

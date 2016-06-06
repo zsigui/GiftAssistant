@@ -455,11 +455,18 @@ public class IntentUtil {
      */
     public static void jumpHome(Context context, boolean isNewTask) {
         Intent intent = new Intent(context, MainActivity.class);
-        if (isNewTask) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
 //		Util_System_Intent.startActivityByPackageName(context, AppConfig.PACKAGE_NAME);
+    }
+
+    public static void jumpHome(Context context, int type, int data) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setAction(AppConfig.PACKAGE_NAME + ".action.Main");
+        intent.putExtra(KeyConfig.KEY_TYPE, type);
+        intent.putExtra(KeyConfig.KEY_DATA, String.valueOf(data));
+        context.startActivity(intent);
     }
 
     /**

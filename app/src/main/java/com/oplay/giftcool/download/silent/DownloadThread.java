@@ -57,10 +57,6 @@ public class DownloadThread extends Thread {
 		// 默认HttpURLConnection会进行Gzip压缩，这时无法通过getContentLength获取长度，所以要禁掉这个
 		connection.setRequestProperty("Accept-Encoding", "identity");
 		connection.connect();
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_WARN,
-					"initRange = " + connection.getResponseCode() + ", " + connection.getResponseMessage());
-		}
 		final int code = connection.getResponseCode();
 		if (code >= 200 && code < 300) {
 			info.setTotalSize(connection.getContentLength());

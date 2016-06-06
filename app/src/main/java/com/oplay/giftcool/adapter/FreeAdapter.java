@@ -138,7 +138,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-                // 非免费的限量礼包也没有,效果雷同只有免费没有收费限量
+            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
                 gHolder.pbPercent.setVisibility(View.GONE);
                 gHolder.tvPercent.setVisibility(View.GONE);

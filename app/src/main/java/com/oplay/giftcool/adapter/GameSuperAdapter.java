@@ -39,6 +39,7 @@ import com.oplay.giftcool.util.ViewUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by zsigui on 16-1-15.
@@ -256,16 +257,16 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         o.initAppInfoStatus(mContext);
         normalVH.tvName.setText(o.name);
         if (o.playCount < 10000) {
-            normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%d人</font>在玩",
+            normalVH.tvPlay.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%d人</font>在玩",
                     o.playCount)));
         } else {
-            normalVH.tvPlay.setText(Html.fromHtml(String.format("<font color='#ffaa17'>%.1f万人</font>在玩",
+            normalVH.tvPlay.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%.1f万人</font>在玩",
                     (float) o.playCount / 10000)));
         }
         if (o.totalCount > 0) {
             normalVH.ivGift.setVisibility(View.VISIBLE);
             normalVH.tvGift.setText(Html.fromHtml(
-                    String.format("<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
+                    String.format(Locale.CHINA, "<font color='#ffaa17'>%s</font> 等共<font color='#ffaa17'>%d</font>款礼包",
                             o.giftName, o.totalCount)));
         } else {
             normalVH.ivGift.setVisibility(View.GONE);
@@ -355,7 +356,7 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         StatisticsManager.getInstance().trace(mContext,
                 StatisticsManager.ID.GAME_BANNER,
                 StatisticsManager.ID.STR_GAME_BANNER,
-                String.format("第%d推广位，标题：%s", position, banner.title));
+                String.format(Locale.CHINA, "第%d推广位，标题：%s", position, banner.title));
         BannerTypeUtil.handleBanner(mContext, banner);
     }
 

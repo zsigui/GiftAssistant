@@ -78,7 +78,7 @@ public class SocketIOManager {
 				public void call(Object... args) {
 //					loginValidate();
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, "SocketIO连接");
+						KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "SocketIO连接");
 					}
 					mIsConnecting = true;
 				}
@@ -86,7 +86,7 @@ public class SocketIOManager {
 				@Override
 				public void call(Object... args) {
 					if (AppDebugConfig.IS_DEBUG) {
-						KLog.d(AppDebugConfig.TAG_WARN, "SocketIO断开连接");
+						KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "SocketIO断开连接");
 					}
 				}
 			}).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter

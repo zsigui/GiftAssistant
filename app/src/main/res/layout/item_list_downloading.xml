@@ -1,141 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-		android:id = "@+id/rl_recommend"
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto"
-		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content"
-		android:background = "@color/co_white"
-		android:orientation = "vertical"
-		android:paddingBottom = "0dp"
-		android:paddingLeft = "0dp"
-		android:paddingRight = "0dp" >
+        android:id = "@+id/rl_recommend"
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background = "@color/co_white"
+        android:orientation = "vertical"
+        android:paddingBottom = "0dp"
+        android:paddingLeft = "0dp"
+        android:paddingRight = "0dp" >
 
-	<RelativeLayout
-			android:id = "@id/expandable_toggle_button"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:background = "?selectableItemBackground"
-			android:paddingBottom = "@dimen/di_index_hoz_module_top_bottom"
-			android:paddingLeft = "16dp"
-			android:paddingRight = "16dp"
-			android:paddingTop = "@dimen/di_index_hoz_module_top_bottom" >
+    <RelativeLayout
+            android:id = "@id/expandable_toggle_button"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:background = "?selectableItemBackground"
+            android:paddingBottom = "@dimen/di_index_hoz_module_top_bottom"
+            android:paddingLeft = "16dp"
+            android:paddingRight = "16dp"
+            android:paddingTop = "@dimen/di_index_hoz_module_top_bottom" >
 
-		<com.makeramen.roundedimageview.RoundedImageView
-				android:id = "@+id/iv_downloading_icon"
-				style = "@style/DefaultImageView.Icon"
-				app:riv_border_color = "@color/co_stroke_bg"
-				app:riv_border_width = "@dimen/di_icon_border_size"
-				app:riv_corner_radius = "@dimen/di_icon_radius"
-				app:riv_oval = "false" />
+        <com.makeramen.roundedimageview.RoundedImageView
+                android:id = "@+id/iv_downloading_icon"
+                style = "@style/DefaultImageView.Icon"
+                app:riv_border_color = "@color/co_stroke_bg"
+                app:riv_border_width = "@dimen/di_icon_border_size"
+                app:riv_corner_radius = "@dimen/di_icon_radius"
+                app:riv_oval = "false" />
 
-		<TextView
-				android:id = "@+id/tv_downloading_action"
-				style = "@style/DefaultTextView"
-				android:layout_width = "wrap_content"
-				android:layout_height = "28dp"
-				android:layout_alignParentRight = "true"
-				android:layout_centerVertical = "true"
-				android:background = "@drawable/selector_btn_green"
-				android:text = "继续"
-				android:textColor = "@color/co_white"
-				/>
+        <TextView
+                android:id = "@+id/tv_downloading_action"
+                style = "@style/DefaultTextView"
+                android:layout_width = "wrap_content"
+                android:layout_height = "28dp"
+                android:layout_alignParentRight = "true"
+                android:layout_centerVertical = "true"
+                android:background = "@drawable/selector_btn_green"
+                android:textColor = "@color/color_btn_green_border"
+                android:text = "继续" />
 
-		<LinearLayout
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:layout_marginLeft = "8dp"
-				android:layout_marginRight = "8dp"
-				android:layout_toLeftOf = "@id/tv_downloading_action"
-				android:layout_toRightOf = "@id/iv_downloading_icon"
-				android:gravity = "center_vertical"
-				android:orientation = "vertical" >
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginLeft = "8dp"
+                android:layout_marginRight = "8dp"
+                android:layout_toLeftOf = "@id/tv_downloading_action"
+                android:layout_toRightOf = "@id/iv_downloading_icon"
+                android:gravity = "center_vertical"
+                android:orientation = "vertical" >
 
-			<TextView
-					android:id = "@+id/tv_downloading_name"
-					style = "@style/DefaultTextView.Header"
-					android:layout_width = "wrap_content"
-					android:layout_height = "wrap_content"
-					android:textSize="16sp"
-					android:text = "兰陵王" />
+            <TextView
+                    android:id = "@+id/tv_downloading_name"
+                    style = "@style/DefaultTextView.Header"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:textSize = "16sp"
+                    android:text = "兰陵王" />
 
-			<RelativeLayout
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:layout_marginBottom = "8dp"
-					android:layout_marginTop = "8dp"
-					android:background = "@null" >
+            <RelativeLayout
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_marginBottom = "8dp"
+                    android:layout_marginTop = "8dp"
+                    android:background = "@null" >
 
-				<TextView
-						android:id = "@+id/tv_downloading_degree"
-						style = "@style/DefaultTextView.Text"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentLeft = "true"
-						android:text = "23.5M/105M"
-						/>
+                <TextView
+                        android:id = "@+id/tv_downloading_degree"
+                        style = "@style/DefaultTextView.Text"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:layout_alignParentLeft = "true"
+                        android:text = "23.5M/105M"
+                        />
 
-				<TextView
-						android:id = "@+id/tv_downloading_rate"
-						style = "@style/DefaultTextView.Text"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:layout_alignParentRight = "true"
-						android:text = "下载暂停中" />
-			</RelativeLayout >
+                <TextView
+                        android:id = "@+id/tv_downloading_rate"
+                        style = "@style/DefaultTextView.Text"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:layout_alignParentRight = "true"
+                        android:text = "下载暂停中" />
+            </RelativeLayout >
 
-			<ProgressBar
-					android:id = "@+id/pbar_downloading"
-					style = "?android:attr/progressBarStyleHorizontal"
-					android:layout_width = "match_parent"
-					android:layout_height = "6dp"
-					android:layout_gravity="center"
-					android:layout_marginTop = "2dp"
-					android:max="100"
-					android:progressDrawable="@drawable/selector_pbar_download"/>
+            <ProgressBar
+                    android:id = "@+id/pbar_downloading"
+                    style = "?android:attr/progressBarStyleHorizontal"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "6dp"
+                    android:layout_gravity = "center"
+                    android:layout_marginTop = "2dp"
+                    android:max = "100"
+                    android:progressDrawable = "@drawable/selector_pbar_download" />
 
-		</LinearLayout >
-	</RelativeLayout >
+        </LinearLayout >
+    </RelativeLayout >
 
-	<LinearLayout
-			android:id = "@id/expandable"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:orientation = "vertical" >
+    <LinearLayout
+            android:id = "@id/expandable"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation = "vertical" >
 
-		<View style = "@style/HDividerView" />
+        <View style = "@style/HDividerView" />
 
-		<LinearLayout
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
-				android:layout_marginTop = "@dimen/di_index_hoz_module_top_bottom"
-				android:orientation = "horizontal" >
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "@dimen/di_index_hoz_module_top_bottom"
+                android:layout_marginTop = "@dimen/di_index_hoz_module_top_bottom"
+                android:orientation = "horizontal" >
 
-			<TextView
-					android:id="@+id/tv_downloading_detail"
-					style = "@style/DefaultTextView.Text"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:layout_weight = "1"
-					android:drawablePadding = "3dp"
-					android:drawableTop = "@drawable/ic_detail"
-					android:gravity = "center"
-					android:textSize="14sp"
-					android:text = "详情" />
+            <TextView
+                    android:id = "@+id/tv_downloading_detail"
+                    style = "@style/DefaultTextView.Text"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_weight = "1"
+                    android:drawablePadding = "3dp"
+                    android:drawableTop = "@drawable/ic_detail"
+                    android:gravity = "center"
+                    android:textSize = "14sp"
+                    android:text = "详情" />
 
-			<TextView
-					android:id="@+id/tv_downloading_delete"
-					style = "@style/DefaultTextView.Text"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					android:layout_weight = "1"
-					android:drawablePadding = "3dp"
-					android:drawableTop = "@drawable/ic_delete"
-					android:gravity = "center"
-					android:textSize="14sp"
-					android:text = "删除" />
-		</LinearLayout >
+            <TextView
+                    android:id = "@+id/tv_downloading_delete"
+                    style = "@style/DefaultTextView.Text"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_weight = "1"
+                    android:drawablePadding = "3dp"
+                    android:drawableTop = "@drawable/ic_delete"
+                    android:gravity = "center"
+                    android:textSize = "14sp"
+                    android:text = "删除" />
+        </LinearLayout >
 
-	</LinearLayout >
+    </LinearLayout >
 </LinearLayout >

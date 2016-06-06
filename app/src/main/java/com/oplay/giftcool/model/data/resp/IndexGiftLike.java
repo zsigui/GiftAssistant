@@ -47,7 +47,7 @@ public class IndexGiftLike implements Serializable{
 
 	// 最新礼包创建时间
 	@SerializedName("new_gift_time")
-	public long newestCreateTime;
+	public int newestCreateTime;
 
 	public boolean hasNew = true;
 

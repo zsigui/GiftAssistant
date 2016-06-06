@@ -293,7 +293,7 @@ public class GiftLimitListDataFragment extends BaseFragment_Refresh<TimeData<Ind
                             return;
                         }
                         if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_WARN, response == null ? "返回失败" : response.code() + "-" + response.errorBody());
+                            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, response == null ? "返回失败" : response.code() + "-" + response.errorBody());
 
                         }
                     } else {

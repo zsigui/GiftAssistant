@@ -8,7 +8,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
  * @date 2015/12/30
  */
 public class GiftTypeUtil {
-	public static final int TYPE_COUNT = 24;
+	public static final int TYPE_COUNT = 25;
 
 	// 限量礼包类型，可抢，limit
 	public static final int TYPE_LIMIT_SEIZE = 0;
@@ -34,30 +34,32 @@ public class GiftTypeUtil {
 	public static final int TYPE_NORMAL_SEARCHED = 10;
 	// 正常礼包类型，已抢号, disabled
 	public static final int TYPE_NORMAL_SEIZED = 11;
-    // 限量免费类型，无量，等待免费或者免费已空
-    public static final int TYPE_LIMIT_FREE_EMPTY = 12;
+    // 限量免费类型，无量，等待免费抢
+    public static final int TYPE_LIMIT_FREE_WAIT_SEIZE = 12;
+    // 限量免费类型，已抢完
+    public static final int TYPE_LIMIT_FREE_EMPTY = 13;
     // 限量免费类型，可抢
-    public static final int TYPE_LIMIT_FREE_SEIZE = 13;
+    public static final int TYPE_LIMIT_FREE_SEIZE = 14;
     // 限量免费类型，已抢号
-    public static final int TYPE_LIMIT_FREE_SEIZED = 14;
+    public static final int TYPE_LIMIT_FREE_SEIZED = 15;
 	// 首充券类型,可抢
-	public static final int TYPE_CHARGE_SEIZE = 15;
+	public static final int TYPE_CHARGE_SEIZE = 16;
 	// 首充券类型,可预约
-	public static final int TYPE_CHARGE_UN_RESERVE = 16;
+	public static final int TYPE_CHARGE_UN_RESERVE = 17;
 	// 首充券类型,已预约
-	public static final int TYPE_CHARGE_RESERVED = 17;
+	public static final int TYPE_CHARGE_RESERVED = 18;
 	// 首充券类型,可领号
-	public static final int TYPE_CHARGE_TAKE = 18;
+	public static final int TYPE_CHARGE_TAKE = 19;
 	// 首充券类型,已抢号
-	public static final int TYPE_CHARGE_SEIZED = 19;
+	public static final int TYPE_CHARGE_SEIZED = 20;
 	// 首充券类型,已抢完
-	public static final int TYPE_CHARGE_EMPTY = 20;
+	public static final int TYPE_CHARGE_EMPTY = 21;
 	// 首充券类型,预约完
-	public static final int TYPE_CHARGE_RESERVE_EMPTY = 21;
+	public static final int TYPE_CHARGE_RESERVE_EMPTY = 22;
     // 首充券类型,不可预约
-    public static final int TYPE_CHARGE_DISABLE_RESERVE = 22;
+    public static final int TYPE_CHARGE_DISABLE_RESERVE = 23;
 
-	public static final int TYPE_ERROR = 23;
+	public static final int TYPE_ERROR = 24;
 
 	// 礼包状态 0 删除, 1 等待开始， 2 开始， 3 抢完， 4 淘号， 5 结束 , 6 下架(0, 6状态不关注) 7 可预约 , 8 预约完
 	public static final int STATUS_WAIT_SEIZE = 1;
@@ -156,7 +158,7 @@ public class GiftTypeUtil {
         switch (gift.status) {
             case STATUS_WAIT_SEIZE:
                 // 免费抢尚未开始 (该状态表示该礼包无关联的非免费礼包)
-                return TYPE_LIMIT_FREE_EMPTY;
+                return TYPE_LIMIT_FREE_WAIT_SEIZE;
             case STATUS_SEIZE:
                 switch (gift.seizeStatus) {
                     case SEIZE_TYPE_NEVER:

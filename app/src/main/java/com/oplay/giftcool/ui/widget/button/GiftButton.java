@@ -59,12 +59,15 @@ public class GiftButton extends TextView {
         setOrangeBg();
         switch (state) {
             case GiftTypeUtil.TYPE_NORMAL_FINISHED:
+            case GiftTypeUtil.TYPE_LIMIT_FINISHED:
                 setText(R.string.st_gift_finished);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
                 setText(R.string.st_gift_wait_search);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
                 setText(R.string.st_gift_wait_seize);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
@@ -80,12 +83,6 @@ public class GiftButton extends TextView {
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
                 setText(R.string.st_gift_empty);
-                break;
-            case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-                setText(R.string.st_gift_finished);
-                break;
-            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-                setText(R.string.st_gift_wait_seize);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:

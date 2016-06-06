@@ -130,14 +130,14 @@ public class ScoreManager {
                                     final TaskStateInfo info = response.body().getData();
                                     final boolean isSignIn = info.signInState.signToday;
                                     final boolean isLotteryEmpty = (info.lotteryState.remainFreeCount == 0);
+                                    if (MixUtil.xor(mIsFreeLotteryEmpty, isLotteryEmpty)) {
+                                        mIsFreeLotteryEmpty = isLotteryEmpty;
+                                    }
                                     if (MixUtil.xor(mIsSignInTaskFinished, isSignIn)) {
                                         // 在状态不同的时候进行通知
                                         mIsSignInTaskFinished = isSignIn;
                                         ObserverManager.getInstance()
                                                 .notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
-                                    }
-                                    if (MixUtil.xor(mIsFreeLotteryEmpty, isLotteryEmpty)) {
-                                        mIsFreeLotteryEmpty = isLotteryEmpty;
                                     }
                                 }
                             }
@@ -343,18 +343,10 @@ public class ScoreManager {
      */
     public synchronized void judgePlayTime(final Context context, final int elapseTime) {
         try {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_WARN, "judgePlayTime is running!");
-            }
             Iterator<Map.Entry<String, TaskInfoDownload>> it = getCurDownloadTaskSet(context).entrySet().iterator();
             while (it.hasNext()) {
                 final Map.Entry<String, TaskInfoDownload> entry = it.next();
                 final TaskInfoDownload info = entry.getValue();
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_WARN, "hasPlayTime = " + info.hasPlayTime + ", elapseTime = " + elapseTime
-
-                            + ", isForeground = " + SystemUtil.isForeground(context, info.packName));
-                }
                 if (SystemUtil.isForeground(context, info.packName)) {
                     info.hasPlayTime += elapseTime;
                 }
@@ -370,9 +362,6 @@ public class ScoreManager {
             }
 
             if (!getCurDownloadTaskSet(context).isEmpty()) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_WARN, "no finished, continue!");
-                }
                 // 任务没完成，继续监测
                 AlarmClockManager.getInstance().setObserverGame(true);
             } else {

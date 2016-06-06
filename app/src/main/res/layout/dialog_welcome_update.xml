@@ -83,14 +83,14 @@
 					android:text = "@string/st_welcome_update_cancel"
 					android:layout_marginRight = "20dp"
 					android:background = "@drawable/selector_btn_grey"
-					android:textColor = "@color/co_white" />
+					android:textColor = "@color/color_btn_grey_border" />
 
 			<TextView
 					android:id = "@+id/btn_confirm"
 					style = "@style/DefaultTextView.NormalBtn"
 					android:text = "@string/st_welcome_update_confirm"
 					android:background = "@drawable/selector_btn_green"
-					android:textColor = "@color/co_white" />
+					android:textColor = "@color/color_btn_green_border" />
 		</LinearLayout >
 	</RelativeLayout >
 

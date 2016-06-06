@@ -204,8 +204,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                         updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
                     }
                     if (mCurSelectedItem == INDEX_POST
-                            || ScoreManager.getInstance().isFreeLotteryEmpty()
-                            || ScoreManager.getInstance().isSignInTaskFinished()) {
+                            || (ScoreManager.getInstance().isSignInTaskFinished()
+                            && ScoreManager.getInstance().isFreeLotteryEmpty())) {
                         showTabHint(INDEX_POST, View.GONE);
                     } else {
                         showTabHint(INDEX_POST, View.VISIBLE);
@@ -271,6 +271,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                         break;
                     case KeyConfig.TYPE_ID_INDEX_FREE:
                         jumpToIndexFree(data);
+                        break;
+                    case KeyConfig.TYPE_ID_INDEX_UPGRADE:
+                        mHasShowUpdate = false;
                         break;
                 }
             }
@@ -624,12 +627,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     public void onUserUpdate(int action) {
         switch (action) {
             case ObserverManager.STATUS.USER_UPDATE_ALL:
-                if (!AccountManager.getInstance().isLogin()
-                        || !ScoreManager.getInstance().isSignInTaskFinished()) {
-                    showTabHint(INDEX_POST, View.VISIBLE);
-                } else {
-                    showTabHint(INDEX_POST, View.GONE);
-                }
             case ObserverManager.STATUS.USER_UPDATE_TASK:
                 updateToolBar();
                 break;

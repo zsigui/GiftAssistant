@@ -155,6 +155,7 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
             case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
                 holder.pbPercent.setVisibility(View.GONE);

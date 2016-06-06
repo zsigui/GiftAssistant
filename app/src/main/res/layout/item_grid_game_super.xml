@@ -48,6 +48,7 @@
 			android:layout_marginTop = "6dp"
 			android:layout_below = "@+id/tv_name"
 			android:text = "下载"
-			android:background = "@drawable/selector_btn_green" />
+			android:background = "@drawable/selector_btn_green"
+			android:textColor = "@color/color_btn_green_border" />
 
 </RelativeLayout >

@@ -73,18 +73,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onPageStarted: " + url);
-				}
 				onWebPageStarted();
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onPageFinished: " + url);
-				}
 				onWebPageFinished();
 				if (!mSettings.getLoadsImagesAutomatically()) {
 					mSettings.setLoadsImagesAutomatically(true);
@@ -94,18 +88,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				super.onReceivedError(view, errorCode, description, failingUrl);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onReceivedError: " + description);
-				}
 				onWebReceivedError();
 			}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				boolean hasFind;
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "shouldOverrideUrlLoading: " + url);
-				}
 				Uri mUri = Uri.parse(url);
 				if (mUri == null) {
 					return false;
@@ -140,26 +128,17 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				super.onProgressChanged(view, newProgress);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onProgressChanged: " + newProgress);
-				}
 				onWebProgressChangedMethod(newProgress);
 			}
 
 			@Override
 			public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onJsBeforeUnload: " + message);
-				}
 				return super.onJsBeforeUnload(view, url, message, result);
 			}
 
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onReceivedTitle: " + title);
-				}
 				if (getContext() != null && getContext() instanceof SetTitleListner) {
 					mTitles.add(title);
 					((SetTitleListner) getContext()).setBarTitle(title);
@@ -169,9 +148,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 			@Override
 			public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
 				ToastUtil.showShort(message);
-				if (AppDebugConfig.IS_DEBUG) {
-					KLog.d(AppDebugConfig.TAG_WARN, "onJsAlert: " + message);
-				}
 				return super.onJsAlert(view, url, message, result);
 			}
 
@@ -410,9 +386,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 		if (mWebView != null) {
 			if (sScrollMap.get(mUrl) != null) {
 				mScrollY = sScrollMap.get(mUrl);
-			}
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_WARN, "loadUrl: " + url);
 			}
 			mWebView.loadUrl(mUrl);
 		}

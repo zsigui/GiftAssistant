@@ -185,7 +185,7 @@ public class Global {
                 }
             } catch (Throwable t) {
                 if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_WARN, t);
+                    KLog.d(AppDebugConfig.TAG_DEBUG_INFO, t);
                 }
             }
 

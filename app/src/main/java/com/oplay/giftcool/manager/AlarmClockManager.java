@@ -163,7 +163,7 @@ public class AlarmClockManager {
         am.cancel(alarmSender);
         am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
         if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_WARN, "initAndSetWakeAlarm is exec success");
+            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "initAndSetWakeAlarm is exec success");
         }
     }
 
