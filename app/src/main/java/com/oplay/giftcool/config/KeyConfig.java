@@ -107,8 +107,8 @@ public class KeyConfig {
     public static final int GIFT_TYPE_COUPON = 1;
     // 已抢
     public static final int TYPE_KEY_COUPON_SEIZED = 1;
-    // 已淘
-    public static final int TYPE_KEY_COUPON_RESERVED = 2;
+    // 已预约
+    public static final int TYPE_KEY_COUPON_RESERVED = 4;
     // 已过期
     public static final int TYPE_KEY_COUPON_OVERTIME = 3;
 }

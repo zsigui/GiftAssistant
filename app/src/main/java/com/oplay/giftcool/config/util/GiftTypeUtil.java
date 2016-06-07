@@ -92,6 +92,64 @@ public class GiftTypeUtil {
     public static final int TOTAL_TYPE_GIFT = 1;
     public static final int TOTAL_TYPE_GIFT_LIMIT = 2;
     public static final int TOTAL_TYPE_COUPON = 3;
+    // 统一定义按钮的状态
+    public static final int BUTTON_TYPE_WAIT_SEIZE = 1;
+    public static final int BUTTON_TYPE_SEIZE = 2;
+    public static final int BUTTON_TYPE_SEIZED = 3;
+    public static final int BUTTON_TYPE_EMPTY = 4;
+    public static final int BUTTON_TYPE_SEARCH = 5;
+    public static final int BUTTON_TYPE_TAKE_OFF = 6;
+    public static final int BUTTON_TYPE_RESERVE = 7;
+    public static final int BUTTON_TYPE_RESERVE_EMPTY = 8;
+    public static final int BUTTON_TYPE_RESERVED = 9;
+    public static final int BUTTON_TYPE_FINISH = 10;
+    public static final int BUTTON_TYPE_RESERVE_TAKE = 11;
+
+    public static int getButtonState(IndexGiftNew gift) {
+        switch (gift.seizeStatus) {
+            case SEIZE_TYPE_SEIZED:
+                return BUTTON_TYPE_SEIZED;
+            case SEIZE_TYPE_RESERVED:
+                switch (gift.status) {
+                    case STATUS_WAIT_SEIZE:
+                        return BUTTON_TYPE_WAIT_SEIZE;
+                    case STATUS_FINISHED:
+                        return BUTTON_TYPE_FINISH;
+                    case STATUS_TAKE_OFF:
+                        return BUTTON_TYPE_TAKE_OFF;
+                    case STATUS_RESERVE:
+                    case STATUS_RESERVE_FINISHED:
+                        return BUTTON_TYPE_RESERVED;
+                    case STATUS_SEIZE:
+                    case STATUS_WAIT_SEARCH:
+                    case STATUS_SEARCH:
+                    default:
+                        return BUTTON_TYPE_RESERVE_TAKE;
+                }
+            case SEIZE_TYPE_NEVER:
+            case SEIZE_TYPE_SEARCHED:
+            default:
+                switch (gift.status) {
+                    case STATUS_WAIT_SEIZE:
+                        return BUTTON_TYPE_WAIT_SEIZE;
+                    case STATUS_WAIT_SEARCH:
+                        return BUTTON_TYPE_EMPTY;
+                    case STATUS_SEARCH:
+                        return BUTTON_TYPE_SEARCH;
+                    case STATUS_FINISHED:
+                        return BUTTON_TYPE_FINISH;
+                    case STATUS_TAKE_OFF:
+                        return BUTTON_TYPE_TAKE_OFF;
+                    case STATUS_RESERVE:
+                        return BUTTON_TYPE_RESERVE;
+                    case STATUS_RESERVE_FINISHED:
+                        return BUTTON_TYPE_RESERVE_EMPTY;
+                    case STATUS_SEIZE:
+                    default:
+                        return BUTTON_TYPE_SEIZE;
+                }
+        }
+    }
 
     /**
      * 只针对无免费抢的新鲜出炉类型判断
@@ -117,50 +175,26 @@ public class GiftTypeUtil {
                     return GiftTypeUtil.TYPE_LIMIT_SEIZED;
             }
         } else {
-            switch (gift.giftType) {
-                case GIFT_TYPE_NORMAL:
-                case GIFT_TYPE_NORMAL_FREE:
-                    // 针对普通免费礼包，该处不判断是否为首充券
-                    return handleNormalType(gift);
-                case GIFT_TYPE_LIMIT_FREE:
-                    switch (gift.totalType) {
-                        case TOTAL_TYPE_COUPON:
-                            return handleFreeFirstCharge(gift);
-                        case TOTAL_TYPE_UNKNOWN:
-                        case TOTAL_TYPE_GIFT:
-                        case TOTAL_TYPE_GIFT_LIMIT:
-                        default:
-                            return handleFreeLimitGift(gift);
-
-                    }
-                case GIFT_TYPE_LIMIT:
+            switch (gift.totalType) {
+                case TOTAL_TYPE_COUPON:
+                    return handleFreeFirstCharge(gift);
+                case TOTAL_TYPE_UNKNOWN:
+                case TOTAL_TYPE_GIFT:
+                case TOTAL_TYPE_GIFT_LIMIT:
                 default:
-                    return handleLimitType(gift);
+                    switch (gift.giftType) {
+                        case GIFT_TYPE_NORMAL:
+                        case GIFT_TYPE_NORMAL_FREE:
+                            return handleNormalType(gift);
+                        case GIFT_TYPE_LIMIT_FREE:
+                            return handleFreeLimitGift(gift);
+                        case GIFT_TYPE_LIMIT:
+                        default:
+                            return handleLimitType(gift);
+                    }
             }
         }
-//        return TYPE_ERROR;
     }
-
-//    public static int getItemViewTypeNew(IndexGiftNew gift) {
-//        switch (gift.seizeStatus) {
-//            case SEIZE_TYPE_NEVER:
-//                break;
-//            case SEIZE_TYPE_SEIZED:
-//                switch (gift.totalType) {
-//                    case TOTAL_TYPE_GIFT:
-//                        break;
-//                    case TOTAL_TYPE_COUPON:
-//                        break;
-//                    case TOTAL_TYPE_GIFT_LIMIT:
-//                        default:
-//                }
-//                break;
-//            case SEIZE_TYPE_SEARCHED:
-//                break;
-//            case SEIZE_TYPE_RESERVED:
-//                break;
-//        }
-//    }
 
     /**
      * 处理限时免费的限量礼包类型

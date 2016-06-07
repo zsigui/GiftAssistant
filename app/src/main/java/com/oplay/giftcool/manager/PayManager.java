@@ -219,10 +219,8 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.d(AppDebugConfig.TAG_UTIL, t);
-                                }
-                                ToastUtil.showShort("抢号失败 - 网络异常");
+                                AppDebugConfig.warn(t);
+                                ToastUtil.blurThrow();
                             }
                         });
             }
@@ -257,11 +255,11 @@ public class PayManager {
                 dialog.setContent(response.body().getMsg());
                 dialog.show(context.getSupportFragmentManager(), "seize failed");
             } else {
-                ToastUtil.showShort("抢号失败 - 解析失败");
+                ToastUtil.blurErrorMsg(response.body());
             }
             return;
         }
-        ToastUtil.showShort("抢号失败 - 返回出错");
+        ToastUtil.blurErrorResp(response);
     }
 
     /**
@@ -285,10 +283,12 @@ public class PayManager {
         if (button != null) {
             if (isSeize) {
                 // 抢号状态
-                button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+                gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_SEIZED;
+                button.setState(GiftTypeUtil.BUTTON_TYPE_SEIZED);
             } else {
                 // 淘号状态
-                button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+                gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_SEARCHED;
+                button.setState(GiftTypeUtil.BUTTON_TYPE_SEARCH);
             }
         }
         if (codeData.gameInfo != null) {
@@ -341,10 +341,8 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.d(AppDebugConfig.TAG_UTIL, t);
-                                }
-                                ToastUtil.showShort("抢号失败 - 网络异常");
+                                AppDebugConfig.warn(t);
+                                ToastUtil.blurThrow();
                             }
                         });
             }
@@ -390,7 +388,7 @@ public class PayManager {
                     dialog.setPositiveBtnText(context.getResources().getString(R.string
                             .st_dialog_btn_ok));
                     dialog.setContent(response.body().getMsg());
-                    dialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(), "search failed");
+                    dialog.show(context.getSupportFragmentManager(), "search failed");
                 }
             } else {
                 ToastUtil.blurErrorMsg("抢号失败", response.body());
@@ -406,13 +404,13 @@ public class PayManager {
     private void chargeReservedSuccess(FragmentActivity context, IndexGiftNew gift, GiftButton button) {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "恭喜，预约成功！",
-                String.format(Locale.CHINA, "已为您预留一枚礼包码到开抢日%s", gift.reserveDeadline),
+                String.format(Locale.CHINA, "已为您预留一枚礼包码到%s", DateUtil.optDate(gift.reserveDeadline)),
                 String.format(Locale.CHINA,
                         ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
                 "reserve_hint");
         gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
         if (button != null) {
-            button.setState(GiftTypeUtil.TYPE_CHARGE_RESERVED);
+            button.setState(GiftTypeUtil.BUTTON_TYPE_RESERVED);
         }
         ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_PART);
     }
@@ -460,13 +458,13 @@ public class PayManager {
             // 抢号状态
             gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_SEIZED;
             if (button != null) {
-                button.setState(GiftTypeUtil.TYPE_LIMIT_SEIZED);
+                button.setState(GiftTypeUtil.BUTTON_TYPE_SEIZED);
             }
         } else {
             // 淘号状态
             gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_SEARCHED;
             if (button != null) {
-                button.setState(GiftTypeUtil.TYPE_NORMAL_SEARCHED);
+                button.setState(GiftTypeUtil.BUTTON_TYPE_SEARCH);
             }
         }
         ObserverManager.getInstance()
@@ -481,10 +479,11 @@ public class PayManager {
             payType) {
         Map<String, String> kv = new HashMap<String, String>();
         kv.put("所属游戏名", gift.gameName);
-        kv.put("礼包名", gift.name);
+        kv.put("名称", gift.name);
         String payTypeStr;
         String payMoney;
         String giftType;
+        kv.put("型号", String.valueOf(gift.totalType));
         kv.put("礼包类型", String.valueOf(gift.giftType));
         switch (gift.giftType) {
             case GiftTypeUtil.GIFT_TYPE_NORMAL:

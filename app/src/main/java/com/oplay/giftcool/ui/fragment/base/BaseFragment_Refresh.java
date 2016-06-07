@@ -59,9 +59,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	protected void refreshFailEnd() {
 		if (mIsSwipeRefresh) {
 			if (NetworkUtil.isConnected(getContext())) {
-				ToastUtil.showShort("刷新失败-呜，异常了%>_<%");
+				ToastUtil.showShort("呜，异常了%>_<%");
 			} else {
-				ToastUtil.showShort("刷新失败-网络连接好像有问题哦");
+				ToastUtil.showShort("网络连接好像有问题哦");
 			}
 		}
 		super.refreshFailEnd();
@@ -112,9 +112,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mIsLoadMore = false;
 		mRefreshLayout.setLoading(false);
 		if (NetworkUtil.isConnected(getContext())) {
-			showToast("加载失败-从服务器获取数据出错");
+			showToast("服务器大姨妈了=。=");
 		} else {
-			showToast("加载失败-网络异常");
+			showToast("咦，好像网络连接不了");
 		}
 	}
 
@@ -122,7 +122,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	public void onLoad() {
 		if (mNoMoreLoad) {
 			// return true 显示正在加载更多，return false 不显示
-			ToastUtil.showShort("没有更多新数据");
+//			ToastUtil.showShort("没有更多新数据");
 			mRefreshLayout.setLoading(false);
 			mRefreshLayout.setCanShowLoad(false);
 			return;

@@ -39,7 +39,26 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
         setContentView(R.layout.dialog_show_code_new);
         TextView tvContent = getViewById(R.id.tv_content);
         tvGiftCode = getViewById(R.id.tv_gift_code);
-        tvContent.setText(Html.fromHtml("礼包码已保存至 <font color='#ffaa17'>我的礼包</font>"));
+        if ((mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
+                || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {
+            tvContent.setText(Html.fromHtml("兑换码已保存至 <font color='#ffaa17'>我的首充券</font>"));
+        } else {
+            tvContent.setText(Html.fromHtml("礼包码已保存至 <font color='#ffaa17'>我的礼包</font>"));
+        }
+        TextView tvHint = getViewById(R.id.tv_hint);
+        switch (mType) {
+            case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+            case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+                tvHint.setText("已复制到粘贴板，淘号的礼包不一定可以用，祝你好运。");
+                break;
+            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+            case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+                tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换，否则会进入淘号。");
+                break;
+            default:
+                tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换。");
+                break;
+        }
         setListener(this);
     }
 
@@ -50,7 +69,14 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
         mPayCode = payCode;
         mAppInfo = payCode.gameInfo;
         if (tvGiftCode != null) {
-            tvGiftCode.setText(Html.fromHtml(String.format("礼包码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));
+            if ((mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
+                    || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {
+                tvGiftCode.setText(Html.fromHtml(
+                        String.format("礼包码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));
+            } else {
+                tvGiftCode.setText(Html.fromHtml(
+                        String.format("兑换码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));
+            }
         }
         if (getContext() != null) {
             ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);

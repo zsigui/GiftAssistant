@@ -220,7 +220,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             int type = GiftTypeUtil.getItemViewType(giftData);
             inflateVsView(giftData);
 
-            btnSend.setState(type);
+            btnSend.setState(GiftTypeUtil.getButtonState(giftData));
             tvOr.setVisibility(View.GONE);
             pbPercent.setVisibility(View.GONE);
             tvBean.setVisibility(View.GONE);
@@ -238,10 +238,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 tvConsume.setVisibility(View.VISIBLE);
                 tvRemain.setVisibility(View.VISIBLE);
                 setMoneyConsume(giftData);
-                if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_RESERVED
+                        || giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
                     ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                     tvOriginPrice.setVisibility(View.VISIBLE);
-                    setRemainProgress(giftData);
+                    if (giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED) {
+                        setRemainProgress(giftData);
+                    }
                     if (giftData.freeStartTime > System.currentTimeMillis()) {
                         tvSeizeHint.setVisibility(View.VISIBLE);
                         tvSeizeHint.setText(String.format(Locale.CHINA,
@@ -256,6 +259,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                                     giftData.searchCount)));
                             break;
                         case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+                        case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+                        case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+                        case GiftTypeUtil.TYPE_LIMIT_FINISHED:
                             ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, false);
                             tvOriginPrice.setVisibility(View.VISIBLE);
                             setRemainProgress(giftData);
@@ -372,7 +378,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      * 设置进度条信息
      */
     private void setRemainProgress(IndexGiftNew giftData) {
-        int progress = giftData.remainCount * 100 / giftData.totalCount;
+        int progress = (int) Math.ceil(giftData.remainCount * 100.0 / giftData.totalCount);
         tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, "剩余%d%%", progress)));
         tvRemain.setVisibility(View.VISIBLE);
         pbPercent.setVisibility(View.VISIBLE);

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
-import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
@@ -73,7 +72,7 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
                 DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
-        holder.tvGiftCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, o.code)));
+        holder.tvGiftCode.setText(Html.fromHtml(String.format("兑换码: <font color='#ffaa17'>%s</font>", o.code)));
         if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
             holder.btnCopy.setEnabled(false);
             holder.btnCopy.setText("已结束");
@@ -97,7 +96,7 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         switch (v.getId()) {
             case R.id.btn_copy:
                 ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                cmb.setPrimaryClip(ClipData.newPlainText("礼包码", item.code));
+                cmb.setPrimaryClip(ClipData.newPlainText("兑换码", item.code));
                 ToastUtil.showShort("已复制");
                 break;
             case R.id.rl_recommend:

@@ -23,6 +23,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
@@ -48,6 +49,7 @@ import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import cn.finalteam.galleryfinal.CoreConfig;
@@ -161,6 +163,17 @@ public class AssistantApp extends Application {
         if (mIsGlobalInit) {
             return;
         }
+        if (AppDebugConfig.IS_DEBUG) {
+            String data = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
+                    SPConfig.SP_APP_DEVICE_FILE,
+                    SPConfig.KEY_TEST_REQUEST_URI,
+                    "http://test.lbapi.ouwan.com/api/\nhttp://test.giftcool.ouwan.com/");
+            String[] s = data.split("\n");
+            NetUrl.REAL_URL = s[0].trim();
+            if (s.length > 1) {
+                WebViewUrl.REAL_URL = s[1].trim();
+            }
+        }
         KLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
         // 初始配置加载列表
@@ -268,7 +281,7 @@ public class AssistantApp extends Application {
 
     public String getHeaderValue() {
         if (TextUtils.isEmpty(mHeaderValue)) {
-            mHeaderValue = String.format(ConstString.TEXT_HEADER,
+            mHeaderValue = String.format(Locale.CHINA, ConstString.TEXT_HEADER,
                     AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
                     AppConfig.SDK_VER_NAME, getChannelId(), AppConfig.OUWAN_SDK_VER);
         }

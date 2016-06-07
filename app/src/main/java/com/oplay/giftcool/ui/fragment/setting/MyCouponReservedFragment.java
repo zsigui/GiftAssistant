@@ -14,13 +14,17 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -33,7 +37,8 @@ import retrofit2.Response;
 /**
  * Created by zsigui on 16-5-31.
  */
-public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew> implements
+        OnItemClickListener<IndexGiftNew> {
 
     private ListView mDataView;
     private NestedGiftListAdapter mAdapter;
@@ -45,7 +50,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_refresh_lv_container);
+        initViewManger(R.layout.fragment_my_coupon_reserved);
         View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty,
                 (ViewGroup) mContentView.getParent(), false);
         TextView tv = getViewById(emptyView, R.id.tv_hint);
@@ -58,6 +63,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
 
     @Override
     protected void setListener() {
+        mAdapter.setListener(this);
     }
 
     @Override
@@ -216,6 +222,9 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
         if (moreData == null) {
             return;
         }
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
         mData.addAll(moreData);
         mCurY = mDataView.getScrollY();
         mAdapter.updateData(mData);
@@ -246,6 +255,18 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
         if (mDataView != null) {
             mDataView.setAdapter(null);
             mDataView = null;
+        }
+    }
+
+    @Override
+    public void onItemClick(IndexGiftNew item, View view, int position) {
+        switch (view.getId()) {
+            case R.id.rl_recommend:
+                IntentUtil.jumpGiftDetail(getContext(), item.id);
+                break;
+            case R.id.btn_send:
+                PayManager.getInstance().seizeGift(getActivity(), item, (GiftButton) view);
+                break;
         }
     }
 }

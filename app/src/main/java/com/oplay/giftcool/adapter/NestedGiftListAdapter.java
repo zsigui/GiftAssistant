@@ -67,6 +67,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
 
     public void updateData(List<IndexGiftNew> data) {
         this.mData = data;
+        AppDebugConfig.warn(AppDebugConfig.TAG_WARN, "updateData, count = " + getCount());
         notifyDataSetChanged();
     }
 
@@ -103,9 +104,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (getCount() == 0) {
-            return null;
-        }
 
         int type = getItemViewType(position);
 
@@ -202,7 +200,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         holder.tvPrice.setText(o.content);
         holder.tvPrice.setPadding(0, 6, 0, 0);
-        holder.btnSend.setState(type);
+        holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
@@ -240,7 +238,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void setProgressBarData(IndexGiftNew o, GiftLimitFeeHolder gHolder) {
         gHolder.tvPercent.setVisibility(View.VISIBLE);
         gHolder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
         gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         gHolder.pbPercent.setProgress(percent);
         gHolder.pbPercent.setMax(100);
@@ -250,7 +248,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void handleGiftNormalCharge(int type, IndexGiftNew o, GiftNormalHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        holder.btnSend.setState(type);
+        holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         holder.tvContent.setText(o.content);
         if (type != GiftTypeUtil.TYPE_NORMAL_SEIZE) {
             holder.tvMoney.setVisibility(View.GONE);
@@ -314,7 +312,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         ViewUtil.showImage(cHolder.ivIcon, o.img);
         cHolder.tvName.setText(o.gameName);
         cHolder.tvPlatform.setText(o.platform);
-        cHolder.btnSend.setState(type);
+        cHolder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
             case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
@@ -350,7 +348,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 setSeizeTextUI(cHolder.tvSeize, 0);
                 cHolder.tvReserveDeadline.setVisibility(View.VISIBLE);
                 cHolder.tvReserveDeadline.setText(
-                        String.format("已预留一张首充券到%s", o.reserveDeadline));
+                        String.format("已预留一张首充券到%s", DateUtil.optDate(o.reserveDeadline)));
                 break;
             case GiftTypeUtil.TYPE_CHARGE_SEIZED:
                 cHolder.tvSeizeHint.setVisibility(View.GONE);

@@ -232,7 +232,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     private void handleGiftNormalCharge(int type, IndexGiftNew o, ItemHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(o.gameName);
-        holder.btnSend.setState(type);
+        holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         holder.tvContent.setText(o.content);
         if (type != GiftTypeUtil.TYPE_NORMAL_SEIZE) {
             holder.tvMoney.setVisibility(View.GONE);
@@ -283,7 +283,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     private void setProgressBarData(IndexGiftNew o, ItemHolder holder) {
         holder.tvPercent.setVisibility(View.VISIBLE);
         holder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
         holder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         holder.pbPercent.setProgress(percent);
         holder.pbPercent.setMax(100);

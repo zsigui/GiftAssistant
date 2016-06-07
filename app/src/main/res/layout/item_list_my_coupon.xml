@@ -100,7 +100,7 @@
                 android:gravity = "left|center_vertical"
                 android:paddingLeft = "10dp"
                 android:paddingRight = "10dp"
-                android:text = "礼包码：123456789KKKKKKKK" />
+                android:text = "兑换码：123456789KKKKKKKK" />
 
         <TextView
                 android:id = "@+id/btn_copy"

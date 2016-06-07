@@ -1,7 +1,9 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MyGiftListAdapter;
@@ -35,6 +37,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     private MyGiftListAdapter mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
     private int mType;
+    private TextView tvHint;
 
     public static MyGiftListFragment newInstance(int type) {
         MyGiftListFragment fragment = new MyGiftListFragment();
@@ -46,8 +49,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_refresh_lv_container);
+        initViewManger(R.layout.fragment_my_coupon_reserved);
         mDataView = getViewById(R.id.lv_content);
+        tvHint = getViewById(R.id.tv_hint);
     }
 
     @Override
@@ -66,6 +70,12 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
         }
         mAdapter = new MyGiftListAdapter(getContext(), null, mType);
         mDataView.setAdapter(mAdapter);
+        if (mType == KeyConfig.TYPE_KEY_SEARCH) {
+            tvHint.setText("抢号结束的普通礼包会进入淘号喔，还没使用的礼包码请尽快打开游戏兑换。");
+            tvHint.setVisibility(View.VISIBLE);
+        } else {
+            tvHint.setVisibility(View.GONE);
+        }
     }
 
     /**

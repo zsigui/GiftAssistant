@@ -192,6 +192,16 @@ public class AppDebugConfig {
         }
     }
 
+    public static void warn(String msg) {
+        warn(AppDebugConfig.TAG_DEBUG_INFO, msg);
+    }
+
+    public static void warn(String tag, String msg) {
+        if (IS_DEBUG) {
+            KLog.w(tag, msg);
+        }
+    }
+
     public static void warn(String tag, Response response) {
         if (IS_DEBUG) {
             KLog.w(tag, response == null ? "返回出错!" : response.code() + ": " + response.message());

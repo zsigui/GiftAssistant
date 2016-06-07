@@ -106,7 +106,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 //首先域名匹配
                 // 对于部分机型 getBaseUrl 可能为null
                 if (WebViewUrl.getBaseUrl().contains(host)
-                        || NetUrl.getBaseUrl().contains(host)) {
+                        || NetUrl.getBaseUrl().contains(host)
+                        || host.contains(WebViewUrl.URL_DOMAIN)) {
                     //其次路径匹配
                     if (mWebView != null) {
                         sScrollMap.put(mUrl, mWebView.getScrollY());

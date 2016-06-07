@@ -52,15 +52,10 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
         itemHolder.itemView.setTag(TAG_POS, item.id);
         itemHolder.itemView.setOnClickListener(this);
         itemHolder.tvName.setTextColor(ViewUtil.getColor(mContext, R.color.co_common_text_second));
-        if (GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE == GiftTypeUtil.getItemViewType(item)) {
-            ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, true);
-            itemHolder.vDelete.setVisibility(View.VISIBLE);
-            if (item.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
-                itemHolder.tvName.setTextColor(ViewUtil.getColor(mContext, R.color.co_common_app_second_bg_green));
-            }
-        } else {
-            ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, false);
-            itemHolder.vDelete.setVisibility(View.GONE);
+        ViewUtil.siteValueUI(itemHolder.tvPrice, item.originPrice, true);
+        itemHolder.vDelete.setVisibility(View.VISIBLE);
+        if (item.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+            itemHolder.tvName.setTextColor(ViewUtil.getColor(mContext, R.color.co_common_app_second_bg_green));
         }
     }
 

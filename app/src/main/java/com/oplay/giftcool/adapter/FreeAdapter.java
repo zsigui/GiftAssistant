@@ -5,8 +5,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.ArrayMap;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -130,10 +128,10 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ViewUtil.showImage(gHolder.ivIcon, o.img);
         gHolder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         gHolder.tvContent.setText(o.content);
-        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
-        final int startPos = String.valueOf(o.score).length() + 10;
-        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
+//        final int startPos = String.valueOf(o.score).length() + 10;
+//        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
@@ -143,7 +141,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 finishState(o, gHolder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
+//                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 gHolder.pbPercent.setVisibility(View.VISIBLE);
                 gHolder.tvPercent.setVisibility(View.VISIBLE);
                 final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
@@ -154,7 +152,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 setSeizeTextUI(gHolder.tvSeize, 0);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
-                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
+//                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 seizedState(gHolder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
@@ -175,7 +173,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
 
         }
-        gHolder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
+//        gHolder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
+        ViewUtil.siteValueUI(gHolder.tvMoney, o.originPrice, true);
     }
 
     private void seizeLimitState(IndexGiftNew o, GiftHolder gHolder) {
@@ -218,7 +217,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ViewUtil.showImage(cHolder.ivIcon, o.img);
         cHolder.tvName.setText(o.gameName);
         cHolder.tvPlatform.setText(o.platform);
-        cHolder.btnSend.setState(type);
+        cHolder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
             case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
             case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
@@ -240,7 +239,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.pbPercent.setVisibility(View.VISIBLE);
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.tvSeize, 0);
-                final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+                final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
                 cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
                 cHolder.pbPercent.setMax(100);
@@ -254,7 +253,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 setSeizeTextUI(cHolder.tvSeize, 0);
                 cHolder.tvReserveDeadline.setVisibility(View.VISIBLE);
                 cHolder.tvReserveDeadline.setText(
-                        String.format("已预留一张首充券到%s", o.reserveDeadline));
+                        String.format("已预留一张首充券到%s", DateUtil.optDate(o.reserveDeadline)));
                 break;
             case GiftTypeUtil.TYPE_CHARGE_SEIZED:
                 cHolder.tvSeizeHint.setVisibility(View.GONE);

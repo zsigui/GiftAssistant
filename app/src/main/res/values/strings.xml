@@ -177,7 +177,7 @@
     <string name = "st_wallet_score_note" >金币说明</string >
 
     <!-- 设置 - 我的首充券 -->
-    <string name = "st_my_coupon_reserved_msg_hint">已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。首充券为您预留到开抢当天12点</string>
+    <string name = "st_my_coupon_reserved_msg_hint">已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。</string>
 
     <!-- 设置 - 金币任务 -->
     <string name = "st_task_title" >金币任务</string >

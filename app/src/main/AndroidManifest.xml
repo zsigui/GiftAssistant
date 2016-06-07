@@ -1,964 +1,967 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-		package = "com.oplay.giftcool"
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:tools = "http://schemas.android.com/tools" >
-
-
-	<uses-permission android:name = "android.permission.WAKE_LOCK" />
-	<uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE" />
-	<!-- 监听开机启动权限 -->
-	<uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED" />
-	<!-- 设置快捷方式 -->
-	<!--<uses-permission android:code = "com.android.launcher.permission.READ_SETTINGS" />-->
-	<!-- 偶玩权限 -->
-	<uses-permission android:name = "android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name = "android.permission.INTERNET" />
-	<uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
-	<!--悬浮窗权限-->
-	<uses-permission android:name = "android.permission.SYSTEM_ALERT_WINDOW" />
-	<uses-permission android:name = "android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name = "com.android.launcher.permission.READ_SETTINGS" />
-	<uses-permission android:name = "com.android.launcher.permission.INSTALL_SHORTCUT" />
-	<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />
-	<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
-	<!--银联插件3.1.0新增权限-->
-	<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
-	<!--易联支付需要权限 -->
-	<!--<uses-permission android:code = "android.permission.ACCESS_COARSE_LOCATION" />-->
-	<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
-
-	<!--读取短信权限,本APP不需要-->
-	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
-	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
-	<!-- 二次风险验证需要照相权限,默认去掉 -->
-	<!--<uses-feature android:name = "android.hardware.camera" />-->
-	<!--<uses-feature android:name = "android.hardware.camera.autofocus" />-->
-	<!--<uses-permission android:name = "android.permission.CAMERA" />-->
-	<!-- 录像权限 -->
-	<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-	<!--<uses-permission android:code = "android.permission.RECORD_AUDIO" />-->
-	<!--<uses-permission android:code = "android.permission.RECORD_VIDEO" />-->
-
-
-	<!-- 汇付宝-微信支付需要权限-->
-	<uses-permission android:name = "android.permission.VIBRATE" />
-	<uses-permission android:name = "android.permission.PLUGIN" />
-	<uses-permission android:name = "android.permission.GET_TASKS" />
-
-
-	<!-- 极光推送， 相同已删 -->
-	<uses-permission android:name = "${applicationId}.permission.JPUSH_MESSAGE" />
-	<permission
-			android:name = "${applicationId}.permission.JPUSH_MESSAGE"
-			android:protectionLevel = "signature" />
-
-	<uses-permission android:name = "android.permission.RECEIVE_USER_PRESENT" />
-	<uses-permission android:name = "android.permission.WRITE_SETTINGS" />
-
-	<application
-			android:name = ".AssistantApp"
-			android:allowBackup = "false"
-			android:icon = "@mipmap/ic_launcher"
-			android:label = "@string/app_name"
-			android:theme = "@style/AppTheme"
-			android:taskAffinity="${applicationId}"
-			tools:replace = "android:icon, android:theme, android:allowBackup" >
-
-		<activity
-				android:name = ".ui.activity.SplashActivity"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait" >
-			<intent-filter >
-				<action android:name = "android.intent.action.MAIN" />
-				<category android:name = "android.intent.category.LAUNCHER" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "android.intent.action.CREATE_SHORTCUT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.MainActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.Main" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.SearchActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "stateVisible|adjustPan" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.Search" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.GiftListActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.GiftList" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.GameDetailActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
-
-		<activity
-				android:name = ".ui.activity.GiftDetailActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:exported = "true"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "android.intent.action.VIEW" />
-
-				<category android:name = "android.intent.category.DEFAULT" />
-				<category android:name = "android.intent.category.BROWSABLE" />
-
-				<data
-						android:host = "giftcool.ouwan.com"
-						android:pathPrefix = "/api/show_gift"
-						android:scheme = "http" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.GiftDetail" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.GameListActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.GameList" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<!-- taskAffinity 定义防止不同栈通知调起失败 -->
-		<activity
-				android:name = ".ui.activity.SettingActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.Setting" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.LoginActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:launchMode = "singleTop"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
-
-		<activity
-				android:name = ".ui.activity.WebActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.Web" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.PostDetailActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:launchMode = "singleTop"
-				android:windowSoftInputMode = "adjustNothing|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.PostDetail" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.PostListActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:launchMode = "singleTop"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.PostList" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<activity
-				android:name = ".ui.activity.MessageActivity"
-				android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:launchMode = "singleTop"
-				android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-			<intent-filter >
-				<action android:name = "${applicationId}.action.MessageList" />
-				<category android:name = "android.intent.category.DEFAULT" />
-			</intent-filter >
-		</activity >
-
-		<service
-				android:name = ".service.ClockService"
-				android:exported = "false" />
-
-		<activity
-				android:name = ".wxapi.WXEntryActivity"
-				android:exported = "true"
-				android:screenOrientation = "sensorPortrait" />
-
-		<activity
-				android:name = ".sharesdk.activity.QQEntryActivity"
-				android:exported = "true"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "sensorPortrait" >
-			<intent-filter >
-				<action android:name = "android.intent.action.VIEW" />
-
-				<category android:name = "android.intent.category.DEFAULT" />
-				<category android:name = "android.intent.category.BROWSABLE" />
-				<!-- 使用腾讯demo id -->
-				<data android:scheme = "tencent222222" />
-			</intent-filter >
-		</activity >
-
-		<receiver
-				android:name = ".receiver.StartReceiver"
-				android:exported = "true" >
-			<intent-filter android:priority = "1000" >
-				<action android:name = "android.intent.action.BOOT_COMPLETED" />
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-				<action android:name = "${applicationId}.action.ALARM_WAKE" />
-				<!--<action android:name = "com.tencent.mm.permission.MM_AUTO_HEARD_MESSAGE" />-->
-				<!--<action android:name = "com.tencent.mm.permission.MM_AUTO_REPLY_MESSAGE" />-->
-				<!--<action android:name = "com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_REGISTER" />-->
-				<!--<action android:name = "com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_UNREGISTER" />-->
-				<action android:name = "android.intent.action.ACTION_POWER_CONNECTED" />
-				<action android:name = "android.intent.action.ACTION_POWER_DISCONNECTED" />
-				<action android:name = "android.intent.action.BATTERY_OKAY" />
-				<!--<action android:name = "android.intent.action.BATTERY_LOW" />-->
-			</intent-filter >
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.google.android.c2dm.intent.RECEIVE" />-->
-				<!--<action android:name = "com.google.android.c2dm.intent.REGISTRATION" />-->
-
-				<!--<category android:name = "com.tencent.mm" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter android:priority = "1000" >-->
-				<!--<action android:name = "android.intent.action.PACKAGE_ADDED" />-->
-				<!--<action android:name = "android.intent.action.PACKAGE_REMOVED" />-->
-
-				<!--<data android:scheme = "package" />-->
-			<!--</intent-filter >-->
-		</receiver >
-
-		<!--<receiver android:name = ".receiver.GameObserverReceiver" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "${applicationId}.clock_action.PLAY_GAME" />-->
-				<!--<category android:name = "${applicationId}" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-
-		<receiver android:name = ".download.DownloadNotificationManager$DownloadReceiver"
-				android:exported="false">
-			<intent-filter >
-				<action android:name = "giftcool.action.download.SHOW_VIEW" />
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-		</receiver >
-
-		<activity
-				android:name = "com.tencent.tauth.AuthActivity"
-				android:launchMode = "singleTask"
-				android:noHistory = "true" >
-			<intent-filter >
-				<action android:name = "android.intent.action.VIEW" />
-
-				<category android:name = "android.intent.category.DEFAULT" />
-				<category android:name = "android.intent.category.BROWSABLE" />
-
-				<data android:scheme = "tencent${qqAppKey}" />
-			</intent-filter >
-		</activity >
-		<!-- NOTE:::::下面AssistActivity不能设置noHistory，否则会导致连QQ登录都无法正常回调 -->
-		<!--android:noHistory = "true"-->
-		<activity
-				android:name = "com.tencent.connect.common.AssistActivity"
-				android:configChanges = "orientation|keyboardHidden|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:theme = "@android:style/Theme.Translucent.NoTitleBar" />
-
-		<receiver android:name = ".receiver.PackageInstallReceiver" >
-			<intent-filter android:priority = "1000" >
-				<action android:name = "android.intent.action.PACKAGE_ADDED" />
-				<action android:name = "android.intent.action.PACKAGE_REMOVED" />
-
-				<data android:scheme = "package" />
-			</intent-filter >
-		</receiver >
-
-		<!-- GalleryFinal Start -->
-		<activity
-				android:name = "cn.finalteam.galleryfinal.PhotoSelectActivity"
-				android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
-				android:screenOrientation = "portrait" />
-		<activity
-				android:name = "cn.finalteam.galleryfinal.PhotoEditActivity"
-				android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
-				android:screenOrientation = "portrait" />
-		<activity
-				android:name = "cn.finalteam.galleryfinal.PhotoPreviewActivity"
-				android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
-				android:screenOrientation = "portrait" />
-		<!-- GalleryFinal End -->
-
-		<!-- Ouwan SDK 内容 -->
-		<activity
-				android:name = "net.ouwan.umipay.android.api.UmipayActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "landscape"
-				android:theme = "@style/umipay_main_dialog_theme" >
-		</activity >
-		<activity
-				android:name = "net.ouwan.umipay.android.api.UmipayBrowser"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "sensorPortrait"
-				android:theme = "@style/UmipayTheme_NoFullscreen" >
-		</activity >
-
-		<!-- 新版支付宝需要添加的acticity -->
-		<activity
-				android:name = "com.alipay.sdk.app.H5PayActivity"
-				android:configChanges = "orientation|keyboardHidden|navigation"
-				android:exported = "false"
-				android:screenOrientation = "behind" >
-		</activity >
-		<activity
-				android:name = "com.alipay.sdk.auth.AuthActivity"
-				android:configChanges = "orientation|keyboardHidden|navigation"
-				android:exported = "false"
-				android:screenOrientation = "behind" >
-		</activity >
-		<!-- 新版支付宝需要添加的acticity-->
-		<!--银联支付activity-->
-		<activity
-				android:name = "com.unionpay.uppay.PayActivity"
-				android:configChanges = "orientation|keyboardHidden|screenSize"
-				android:excludeFromRecents = "true"
-				android:screenOrientation = "sensorPortrait" />
-		<!--银联支付activity-->
-		<!-- 插件入口界面 -->
-		<activity
-				android:name = "com.payeco.android.plugin.PayecoPluginLoadingActivity"
-				android:launchMode = "singleTask"
-				android:screenOrientation = "sensorPortrait"
-				/>
-
-		<!-- 插件拍照界面 -->
-		<activity
-				android:name = "com.payeco.android.plugin.PayecoCameraActivity"
-				android:screenOrientation = "sensorPortrait"
-				/>
-
-		<!-- 插件录像界面 -->
-		<activity
-				android:name = "com.payeco.android.plugin.PayecoVedioActivity"
-				android:process = "com.payeco.android.plugin.vedio"
-				android:screenOrientation = "landscape"
-				/>
-
-		<!--百度插件部分  -->
-		<service
-				android:name = "com.baidu.location.f"
-				android:enabled = "true"
-				android:process = ":remote" >
-			<intent-filter >
-				<action android:name = "com.baidu.location.service_v2.2" >
-				</action >
-			</intent-filter >
-		</service >
-		<!-- meta-data需要写在application中 -->
-		<meta-data
-				android:name = "com.baidu.lbsapi.API_KEY"
-				android:value = "DhNxS47YIr3CNdocGoAcy1ts" />
-		<!--易联需要添加的activity-->
-		<!--汇付宝-微信支付需要添加的activity-->
-
-		<activity
-				android:name = "com.heepay.plugin.activity.WeChatNotityActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "behind"
-				android:theme = "@android:style/Theme.NoDisplay" />
-
-		<service
-				android:name = "net.ouwan.umipay.android.api.UmipayService"
-				android:exported = "false" >
-		</service >
-		<!--&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;-->
-		<!--<receiver android:code = "net.umipay.android.poll.Push_Boot_Receiver" >-->
-		<!--<intent-filter >-->
-		<!--<action android:code = "android.net.conn.CONNECTIVITY_CHANGE" />-->
-		<!--</intent-filter >-->
-		<!--</receiver >-->
-
-		<!-- 接听闹钟广播 -->
-		<receiver
-				android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"
-				android:exported = "false" >
-			<intent-filter >
-				<action android:name = "net.ouwan.umipay.android.poll.push" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter >
-		</receiver >
-
-		<meta-data
-				android:name = "UMIPAY_CHANNEL"
-				android:value = "0" />
-		<meta-data
-				android:name = "UMIPAY_SUBCHANNEL"
-				android:value = "0" />
-
-
-		<!-- 以下Jpush内容 -->
-		<!-- Rich push 核心功能 since 2.0.6-->
-		<activity
-				android:name = "cn.jpush.android.ui.PopWinActivity"
-				android:exported = "false"
-				android:theme = "@style/MyDialogStyle" >
-		</activity >
-
-		<!-- Required SDK核心功能-->
-		<activity
-				android:name = "cn.jpush.android.ui.PushActivity"
-				android:configChanges = "orientation|keyboardHidden"
-				android:exported = "false"
-				android:theme = "@android:style/Theme.NoTitleBar" >
-			<intent-filter >
-				<action android:name = "cn.jpush.android.ui.PushActivity" />
-
-				<category android:name = "android.intent.category.DEFAULT" />
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-		</activity >
-		<!-- Required  SDK核心功能-->
-		<service
-				android:name = "cn.jpush.android.service.DownloadService"
-				android:enabled = "true"
-				android:exported = "false" >
-		</service >
-
-
-		<!-- Required SDK 核心功能-->
-		<!-- 可配置android:process参数将PushService放在其他进程中 -->
-		<service
-				android:name = "cn.jpush.android.service.PushService"
-				android:enabled = "true"
-				android:exported = "false" >
-			<intent-filter >
-				<action android:name = "cn.jpush.android.intent.REGISTER" />
-				<action android:name = "cn.jpush.android.intent.REPORT" />
-				<action android:name = "cn.jpush.android.intent.PushService" />
-				<action android:name = "cn.jpush.android.intent.PUSH_TIME" />
-			</intent-filter >
-		</service >
-
-		<!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
-		<!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
-		<service
-				android:name = "cn.jpush.android.service.DaemonService"
-				android:enabled = "true"
-				android:exported = "true" >
-			<intent-filter >
-				<action android:name = "cn.jpush.android.intent.DaemonService" />
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-
-		</service >
-
-		<!-- Required SDK核心功能-->
-		<receiver
-				android:name = "cn.jpush.android.service.PushReceiver"
-				android:enabled = "true"
-				android:exported = "false" >
-			<intent-filter android:priority = "1000" >
-				<action android:name = "cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-				<!--Required  显示通知栏 -->
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "android.intent.action.USER_PRESENT" />
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter >
-			<!-- Optional，这个接收会导致ANR异常，去掉 -->
-			<!--<intent-filter >-->
-			<!--<action android:code = "android.intent.action.PACKAGE_ADDED" />-->
-			<!--<action android:code = "android.intent.action.PACKAGE_REMOVED" />-->
-
-			<!--<data android:scheme = "package" />-->
-			<!--</intent-filter >-->
-
-		</receiver >
-
-		<!-- Required SDK核心功能-->
-		<receiver
-				android:name = "cn.jpush.android.service.AlarmReceiver"
-				android:exported = "false" />
-
-		<!-- User defined.  For test only  用户自定义的广播接收器-->
-		<receiver
-				android:name = ".receiver.JPushReceiver"
-				android:enabled = "true"
-				android:exported = "false" >
-			<intent-filter >
-				<action android:name = "cn.jpush.android.intent.REGISTRATION" />
-				<!--Required  用户注册SDK的intent-->
-				<action android:name = "cn.jpush.android.intent.MESSAGE_RECEIVED" />
-				<!--Required  用户接收SDK消息的intent-->
-				<action android:name = "cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-				<!--Required  用户接收SDK通知栏信息的intent-->
-				<action android:name = "cn.jpush.android.intent.NOTIFICATION_OPENED" />
-				<!--Required  用户打开自定义通知栏的intent-->
-				<action android:name = "cn.jpush.android.intent.CONNECTION" />
-				<!-- 接收网络变化 连接/断开 since 1.6.3 -->
-				<category android:name = "${applicationId}" />
-			</intent-filter >
-		</receiver >
-
-
-		<!-- Required  . Enable it you can get statistics data with channel -->
-		<meta-data
-				android:name = "JPUSH_CHANNEL"
-				android:value = "developer-default" />
-		<meta-data
-				android:name = "JPUSH_APPKEY"
-				android:value = "${jpushAppKey}" />
-		<!--  </>值来自开发者平台取得的AppKey-->
-
-
-		<!-- lebian sdk components begin -->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.open.KXQP"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:process = ":lbmain"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@android:style/Theme.NoTitleBar.Fullscreen" >-->
-			<!--<intent-filter >-->
-				<!--&lt;!&ndash;请勿删除此intent filter，如果其余SDK要求设置他们的activity为主activity，只需将下面的meta data配置为他们的主activity即可&ndash;&gt;-->
-				<!--<action android:name = "android.intent.action.MAIN" />-->
-				<!--<category android:name = "android.intent.category.LAUNCHER" />-->
-			<!--</intent-filter >-->
-			<!--<meta-data-->
-					<!--android:name = "mainActivity"-->
-					<!--android:value = "${applicationId}.ui.activity.SplashActivity" />-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.open.platform.NextChapter"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:process = ":lbmain"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_main_app_theme" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.startNextChapter" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-		<!--</activity >-->
-
-		<!--<activity-->
-				<!--android:name = "com.excelliance.open.PromptActivity"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:process = ":lbmain"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@android:style/Theme.Translucent.NoTitleBar" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.startPromptActivity" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-		<!--</activity >-->
-
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.open.notification.BGReceiver"-->
-				<!--android:process = ":lbmain" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.appstate" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.queryUpdate" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "android.intent.action.MEDIA_MOUNTED" />-->
-				<!--<data android:scheme = "file" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.open.BGService"-->
-				<!--android:process = ":download" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.gameverchk" />-->
-				<!--<action android:name = "com.excelliance.open.action.apkverchk" />-->
-				<!--<action android:name = "com.excelliance.open.action.dmchk" />-->
-				<!--<action android:name = "com.excelliance.open.action.fw" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.NEXT_CHAPTER" />-->
-				<!--<action android:name = "com.excelliance.open.action.PLAT_DO" />-->
-			<!--</intent-filter >-->
-		<!--</service >-->
-
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.GameActivity"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:process = ":lbmain"-->
-				<!--android:screenOrientation = "portrait" >-->
-		<!--</activity >-->
-
-		<!--<service-->
-				<!--android:name = "com.android.ggapsvc.LBService"-->
-				<!--android:process = ":lebian" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.actlbs1" />-->
-				<!--<action android:name = "com.excelliance.open.action.actlbs2" />-->
-				<!--<action android:name = "com.excelliance.open.action.actlbs3" />-->
-				<!--<action android:name = "com.excelliance.open.action.ACT_LBService" />-->
-			<!--</intent-filter >-->
-		<!--</service >-->
-
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.notification.NotificationReceiver"-->
-				<!--android:process = ":lebian" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.ACT_LB_RECEIVER" />-->
-				<!--<action android:name = "com.excelliance.open.action.downloadcomponent.progress" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.PlatformService"-->
-				<!--android:process = ":lbmain" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.BIND_REMOTE" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.UNBIND_REMOTE" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.platform.gameplugin.action.START_FROM_SHORTCUT" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "com.excelliance.open.action.ACTIVITY_STATE" />-->
-				<!--<category android:name = "android.intent.category.DEFAULT" />-->
-			<!--</intent-filter >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.open.PrestartService" />-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.BootService" >-->
-		<!--</service >-->
-
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy2"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy3"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy4"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy5"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT2"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleInstance"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI2"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleInstance"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySIT1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleInstance"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTask"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST2"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTask"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTT1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTask"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTop"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop2"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTop"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy" >-->
-		<!--</activity >-->
-		<!--<activity-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTopT1"-->
-				<!--android:configChanges = "orientation|screenSize"-->
-				<!--android:launchMode = "singleTop"-->
-				<!--android:screenOrientation = "portrait"-->
-				<!--android:theme = "@style/lebian_activity_proxy_t" >-->
-		<!--</activity >-->
-
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy1" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy2" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy3" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy4" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy5" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy6" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy7" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy8" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy9" >-->
-		<!--</service >-->
-		<!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy10" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A1"-->
-				<!--android:process = ":platform.gameplugin_SP_A" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A2"-->
-				<!--android:process = ":platform.gameplugin_SP_A" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A3"-->
-				<!--android:process = ":platform.gameplugin_SP_A" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A4"-->
-				<!--android:process = ":platform.gameplugin_SP_A" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B1"-->
-				<!--android:process = ":platform.gameplugin_SP_B" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B2"-->
-				<!--android:process = ":platform.gameplugin_SP_B" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B3"-->
-				<!--android:process = ":platform.gameplugin_SP_B" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B4"-->
-				<!--android:process = ":platform.gameplugin_SP_B" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C1"-->
-				<!--android:process = ":platform.gameplugin_SP_C" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C2"-->
-				<!--android:process = ":platform.gameplugin_SP_C" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C3"-->
-				<!--android:process = ":platform.gameplugin_SP_C" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C4"-->
-				<!--android:process = ":platform.gameplugin_SP_C" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D1"-->
-				<!--android:process = ":platform.gameplugin_SP_D" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D2"-->
-				<!--android:process = ":platform.gameplugin_SP_D" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D3"-->
-				<!--android:process = ":platform.gameplugin_SP_D" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D4"-->
-				<!--android:process = ":platform.gameplugin_SP_D" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E1"-->
-				<!--android:process = ":platform.gameplugin_SP_E" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E2"-->
-				<!--android:process = ":platform.gameplugin_SP_E" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E3"-->
-				<!--android:process = ":platform.gameplugin_SP_E" >-->
-		<!--</service >-->
-		<!--<service-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E4"-->
-				<!--android:process = ":platform.gameplugin_SP_E" >-->
-		<!--</service >-->
-
-		<!--<receiver android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A"-->
-				<!--android:process = ":platform.gameplugin_SP_A" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B"-->
-				<!--android:process = ":platform.gameplugin_SP_B" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C"-->
-				<!--android:process = ":platform.gameplugin_SP_C" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D"-->
-				<!--android:process = ":platform.gameplugin_SP_D" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!--<receiver-->
-				<!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E"-->
-				<!--android:process = ":platform.gameplugin_SP_E" >-->
-			<!--<intent-filter >-->
-				<!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E" />-->
-			<!--</intent-filter >-->
-		<!--</receiver >-->
-		<!-- lebian sdk components end -->
-		<!-- 乐变参数 -->
-		<!--<meta-data-->
-				<!--android:name = "ClientChId"-->
-				<!--android:value = "${loveotaClientID}" />-->
-		<!--<meta-data-->
-				<!--android:name = "MainChId"-->
-				<!--android:value = "${loveotaMainChId}" />-->
-	</application >
+        package = "com.oplay.giftcool"
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools" >
+
+
+    <uses-permission android:name = "android.permission.WAKE_LOCK" />
+    <uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 监听开机启动权限 -->
+    <uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 设置快捷方式 -->
+    <!--<uses-permission android:code = "com.android.launcher.permission.READ_SETTINGS" />-->
+    <!-- 偶玩权限 -->
+    <uses-permission android:name = "android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name = "android.permission.INTERNET" />
+    <uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name = "android.permission.ACCESS_WIFI_STATE" />
+    <!--悬浮窗权限-->
+    <uses-permission android:name = "android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name = "android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name = "com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name = "com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
+    <!--银联插件3.1.0新增权限-->
+    <uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
+    <!--易联支付需要权限 -->
+    <!--<uses-permission android:code = "android.permission.ACCESS_COARSE_LOCATION" />-->
+    <uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />
+
+    <!--读取短信权限,本APP不需要-->
+    <!--<uses-permission android:name = "android.permission.READ_SMS" />-->
+    <!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
+    <!-- 二次风险验证需要照相权限,默认去掉 -->
+    <!--<uses-feature android:name = "android.hardware.camera" />-->
+    <!--<uses-feature android:name = "android.hardware.camera.autofocus" />-->
+    <!--<uses-permission android:name = "android.permission.CAMERA" />-->
+    <!-- 录像权限 -->
+    <uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!--<uses-permission android:code = "android.permission.RECORD_AUDIO" />-->
+    <!--<uses-permission android:code = "android.permission.RECORD_VIDEO" />-->
+
+
+    <!-- 汇付宝-微信支付需要权限-->
+    <uses-permission android:name = "android.permission.VIBRATE" />
+    <uses-permission android:name = "android.permission.PLUGIN" />
+    <uses-permission android:name = "android.permission.GET_TASKS" />
+
+
+    <!-- 极光推送， 相同已删 -->
+    <uses-permission android:name = "${applicationId}.permission.JPUSH_MESSAGE" />
+    <permission
+            android:name = "${applicationId}.permission.JPUSH_MESSAGE"
+            android:protectionLevel = "signature" />
+
+    <uses-permission android:name = "android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name = "android.permission.WRITE_SETTINGS" />
+
+    <application
+            android:name = ".AssistantApp"
+            android:allowBackup = "false"
+            android:icon = "@mipmap/ic_launcher"
+            android:label = "@string/app_name"
+            android:theme = "@style/AppTheme"
+            android:taskAffinity = "${applicationId}"
+            tools:replace = "android:icon, android:theme, android:allowBackup" >
+
+        <activity
+                android:name = ".ui.activity.SplashActivity"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait" >
+            <intent-filter >
+                <action android:name = "android.intent.action.MAIN" />
+                <category android:name = "android.intent.category.LAUNCHER" />
+            </intent-filter >
+            <intent-filter >
+                <action android:name = "android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.MainActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTask"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.Main" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.SearchActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "stateVisible|adjustPan" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.Search" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.GiftListActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.GiftList" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.GameDetailActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+
+        <activity
+                android:name = ".ui.activity.GiftDetailActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:exported = "true"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <!--<action android:name = "android.intent.action.VIEW" />-->
+                <action android:name = "gcool.ouwan.com.action" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+                <category android:name = "android.intent.category.BROWSABLE" />
+
+                <data
+                        android:host = "giftcool.ouwan.com"
+                        android:pathPrefix = "/api/show_gift"
+                        android:scheme = "http" />
+            </intent-filter >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.GiftDetail" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.GameListActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.GameList" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <!-- taskAffinity 定义防止不同栈通知调起失败 -->
+        <activity
+                android:name = ".ui.activity.SettingActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.Setting" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.LoginActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+
+        <activity
+                android:name = ".ui.activity.WebActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.Web" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.PostDetailActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:launchMode = "singleTop"
+                android:windowSoftInputMode = "adjustNothing|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.PostDetail" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.PostListActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:launchMode = "singleTop"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.PostList" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
+                android:name = ".ui.activity.MessageActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:launchMode = "singleTop"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.MessageList" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <service
+                android:name = ".service.ClockService"
+                android:exported = "false" />
+
+        <activity
+                android:name = ".wxapi.WXEntryActivity"
+                android:exported = "true"
+                android:theme="@android:style/Theme.Translucent"
+                android:screenOrientation = "sensorPortrait" />
+
+        <activity
+                android:name = ".sharesdk.activity.QQEntryActivity"
+                android:exported = "true"
+                android:launchMode = "singleTask"
+                android:screenOrientation = "sensorPortrait" >
+            <intent-filter >
+                <action android:name = "android.intent.action.VIEW" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+                <category android:name = "android.intent.category.BROWSABLE" />
+                <!-- 使用腾讯demo id -->
+                <data android:scheme = "tencent222222" />
+            </intent-filter >
+        </activity >
+
+        <receiver
+                android:name = ".receiver.StartReceiver"
+                android:exported = "true" >
+            <intent-filter android:priority = "1000" >
+                <action android:name = "android.intent.action.BOOT_COMPLETED" />
+                <action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name = "${applicationId}.action.ALARM_WAKE" />
+                <!--<action android:name = "com.tencent.mm.permission.MM_AUTO_HEARD_MESSAGE" />-->
+                <!--<action android:name = "com.tencent.mm.permission.MM_AUTO_REPLY_MESSAGE" />-->
+                <!--<action android:name = "com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_REGISTER" />-->
+                <!--<action android:name = "com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_UNREGISTER" />-->
+                <action android:name = "android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name = "android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name = "android.intent.action.BATTERY_OKAY" />
+                <!--<action android:name = "android.intent.action.BATTERY_LOW" />-->
+            </intent-filter >
+            <!--<intent-filter >-->
+            <!--<action android:name = "com.google.android.c2dm.intent.RECEIVE" />-->
+            <!--<action android:name = "com.google.android.c2dm.intent.REGISTRATION" />-->
+
+            <!--<category android:name = "com.tencent.mm" />-->
+            <!--</intent-filter >-->
+            <!--<intent-filter android:priority = "1000" >-->
+            <!--<action android:name = "android.intent.action.PACKAGE_ADDED" />-->
+            <!--<action android:name = "android.intent.action.PACKAGE_REMOVED" />-->
+
+            <!--<data android:scheme = "package" />-->
+            <!--</intent-filter >-->
+        </receiver >
+
+        <!--<receiver android:name = ".receiver.GameObserverReceiver" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "${applicationId}.clock_action.PLAY_GAME" />-->
+        <!--<category android:name = "${applicationId}" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+
+        <receiver
+                android:name = ".download.DownloadNotificationManager$DownloadReceiver"
+                android:exported = "false" >
+            <intent-filter >
+                <action android:name = "giftcool.action.download.SHOW_VIEW" />
+                <category android:name = "${applicationId}" />
+            </intent-filter >
+        </receiver >
+
+        <activity
+                android:name = "com.tencent.tauth.AuthActivity"
+                android:launchMode = "singleTask"
+                android:noHistory = "true" >
+            <intent-filter >
+                <action android:name = "android.intent.action.VIEW" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+                <category android:name = "android.intent.category.BROWSABLE" />
+
+                <data android:scheme = "tencent${qqAppKey}" />
+            </intent-filter >
+        </activity >
+        <!-- NOTE:::::下面AssistActivity不能设置noHistory，否则会导致连QQ登录都无法正常回调 -->
+        <!--android:noHistory = "true"-->
+        <activity
+                android:name = "com.tencent.connect.common.AssistActivity"
+                android:configChanges = "orientation|keyboardHidden|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:theme = "@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver android:name = ".receiver.PackageInstallReceiver" >
+            <intent-filter android:priority = "1000" >
+                <action android:name = "android.intent.action.PACKAGE_ADDED" />
+                <action android:name = "android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme = "package" />
+            </intent-filter >
+        </receiver >
+
+        <!-- GalleryFinal Start -->
+        <activity
+                android:name = "cn.finalteam.galleryfinal.PhotoSelectActivity"
+                android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
+                android:screenOrientation = "portrait" />
+        <activity
+                android:name = "cn.finalteam.galleryfinal.PhotoEditActivity"
+                android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
+                android:screenOrientation = "portrait" />
+        <activity
+                android:name = "cn.finalteam.galleryfinal.PhotoPreviewActivity"
+                android:configChanges = "orientation|keyboard|keyboardHidden|screenSize"
+                android:screenOrientation = "portrait" />
+        <!-- GalleryFinal End -->
+
+        <!-- Ouwan SDK 内容 -->
+        <activity
+                android:name = "net.ouwan.umipay.android.api.UmipayActivity"
+                android:configChanges = "keyboardHidden|orientation|screenSize"
+                android:screenOrientation = "landscape"
+                android:theme = "@style/umipay_main_dialog_theme" >
+        </activity >
+        <activity
+                android:name = "net.ouwan.umipay.android.api.UmipayBrowser"
+                android:configChanges = "keyboardHidden|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:theme = "@style/UmipayTheme_NoFullscreen" >
+        </activity >
+
+        <!-- 新版支付宝需要添加的acticity -->
+        <activity
+                android:name = "com.alipay.sdk.app.H5PayActivity"
+                android:configChanges = "orientation|keyboardHidden|navigation"
+                android:exported = "false"
+                android:screenOrientation = "behind" >
+        </activity >
+        <activity
+                android:name = "com.alipay.sdk.auth.AuthActivity"
+                android:configChanges = "orientation|keyboardHidden|navigation"
+                android:exported = "false"
+                android:screenOrientation = "behind" >
+        </activity >
+        <!-- 新版支付宝需要添加的acticity-->
+        <!--银联支付activity-->
+        <activity
+                android:name = "com.unionpay.uppay.PayActivity"
+                android:configChanges = "orientation|keyboardHidden|screenSize"
+                android:excludeFromRecents = "true"
+                android:screenOrientation = "sensorPortrait" />
+        <!--银联支付activity-->
+        <!-- 插件入口界面 -->
+        <activity
+                android:name = "com.payeco.android.plugin.PayecoPluginLoadingActivity"
+                android:launchMode = "singleTask"
+                android:screenOrientation = "sensorPortrait"
+                />
+
+        <!-- 插件拍照界面 -->
+        <activity
+                android:name = "com.payeco.android.plugin.PayecoCameraActivity"
+                android:screenOrientation = "sensorPortrait"
+                />
+
+        <!-- 插件录像界面 -->
+        <activity
+                android:name = "com.payeco.android.plugin.PayecoVedioActivity"
+                android:process = "com.payeco.android.plugin.vedio"
+                android:screenOrientation = "landscape"
+                />
+
+        <!--百度插件部分  -->
+        <service
+                android:name = "com.baidu.location.f"
+                android:enabled = "true"
+                android:process = ":remote" >
+            <intent-filter >
+                <action android:name = "com.baidu.location.service_v2.2" >
+                </action >
+            </intent-filter >
+        </service >
+        <!-- meta-data需要写在application中 -->
+        <meta-data
+                android:name = "com.baidu.lbsapi.API_KEY"
+                android:value = "DhNxS47YIr3CNdocGoAcy1ts" />
+        <!--易联需要添加的activity-->
+        <!--汇付宝-微信支付需要添加的activity-->
+
+        <activity
+                android:name = "com.heepay.plugin.activity.WeChatNotityActivity"
+                android:configChanges = "keyboardHidden|orientation|screenSize"
+                android:screenOrientation = "behind"
+                android:theme = "@android:style/Theme.NoDisplay" />
+
+        <service
+                android:name = "net.ouwan.umipay.android.api.UmipayService"
+                android:exported = "false" >
+        </service >
+        <!--&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;-->
+        <!--<receiver android:code = "net.umipay.android.poll.Push_Boot_Receiver" >-->
+        <!--<intent-filter >-->
+        <!--<action android:code = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+
+        <!-- 接听闹钟广播 -->
+        <receiver
+                android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"
+                android:exported = "false" >
+            <intent-filter >
+                <action android:name = "net.ouwan.umipay.android.poll.push" />
+            </intent-filter >
+            <intent-filter >
+                <action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter >
+        </receiver >
+
+        <meta-data
+                android:name = "UMIPAY_CHANNEL"
+                android:value = "0" />
+        <meta-data
+                android:name = "UMIPAY_SUBCHANNEL"
+                android:value = "0" />
+
+
+        <!-- 以下Jpush内容 -->
+        <!-- Rich push 核心功能 since 2.0.6-->
+        <activity
+                android:name = "cn.jpush.android.ui.PopWinActivity"
+                android:exported = "false"
+                android:theme = "@style/MyDialogStyle" >
+        </activity >
+
+        <!-- Required SDK核心功能-->
+        <activity
+                android:name = "cn.jpush.android.ui.PushActivity"
+                android:configChanges = "orientation|keyboardHidden"
+                android:exported = "false"
+                android:theme = "@android:style/Theme.NoTitleBar" >
+            <intent-filter >
+                <action android:name = "cn.jpush.android.ui.PushActivity" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+                <category android:name = "${applicationId}" />
+            </intent-filter >
+        </activity >
+        <!-- Required  SDK核心功能-->
+        <service
+                android:name = "cn.jpush.android.service.DownloadService"
+                android:enabled = "true"
+                android:exported = "false" >
+        </service >
+
+
+        <!-- Required SDK 核心功能-->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <service
+                android:name = "cn.jpush.android.service.PushService"
+                android:enabled = "true"
+                android:exported = "false" >
+            <intent-filter >
+                <action android:name = "cn.jpush.android.intent.REGISTER" />
+                <action android:name = "cn.jpush.android.intent.REPORT" />
+                <action android:name = "cn.jpush.android.intent.PushService" />
+                <action android:name = "cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter >
+        </service >
+
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+                android:name = "cn.jpush.android.service.DaemonService"
+                android:enabled = "true"
+                android:exported = "true" >
+            <intent-filter >
+                <action android:name = "cn.jpush.android.intent.DaemonService" />
+                <category android:name = "${applicationId}" />
+            </intent-filter >
+
+        </service >
+
+        <!-- Required SDK核心功能-->
+        <receiver
+                android:name = "cn.jpush.android.service.PushReceiver"
+                android:enabled = "true"
+                android:exported = "false" >
+            <intent-filter android:priority = "1000" >
+                <action android:name = "cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <!--Required  显示通知栏 -->
+                <category android:name = "${applicationId}" />
+            </intent-filter >
+            <intent-filter >
+                <action android:name = "android.intent.action.USER_PRESENT" />
+                <action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter >
+            <!-- Optional，这个接收会导致ANR异常，去掉 -->
+            <!--<intent-filter >-->
+            <!--<action android:code = "android.intent.action.PACKAGE_ADDED" />-->
+            <!--<action android:code = "android.intent.action.PACKAGE_REMOVED" />-->
+
+            <!--<data android:scheme = "package" />-->
+            <!--</intent-filter >-->
+
+        </receiver >
+
+        <!-- Required SDK核心功能-->
+        <receiver
+                android:name = "cn.jpush.android.service.AlarmReceiver"
+                android:exported = "false" />
+
+        <!-- User defined.  For test only  用户自定义的广播接收器-->
+        <receiver
+                android:name = ".receiver.JPushReceiver"
+                android:enabled = "true"
+                android:exported = "false" >
+            <intent-filter >
+                <action android:name = "cn.jpush.android.intent.REGISTRATION" />
+                <!--Required  用户注册SDK的intent-->
+                <action android:name = "cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!--Required  用户接收SDK消息的intent-->
+                <action android:name = "cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!--Required  用户接收SDK通知栏信息的intent-->
+                <action android:name = "cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!--Required  用户打开自定义通知栏的intent-->
+                <action android:name = "cn.jpush.android.intent.CONNECTION" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name = "${applicationId}" />
+            </intent-filter >
+        </receiver >
+
+
+        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+                android:name = "JPUSH_CHANNEL"
+                android:value = "developer-default" />
+        <meta-data
+                android:name = "JPUSH_APPKEY"
+                android:value = "${jpushAppKey}" />
+        <!--  </>值来自开发者平台取得的AppKey-->
+
+
+        <!-- lebian sdk components begin -->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.open.KXQP"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:process = ":lbmain"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@android:style/Theme.NoTitleBar.Fullscreen" >-->
+        <!--<intent-filter >-->
+        <!--&lt;!&ndash;请勿删除此intent filter，如果其余SDK要求设置他们的activity为主activity，只需将下面的meta data配置为他们的主activity即可&ndash;&gt;-->
+        <!--<action android:name = "android.intent.action.MAIN" />-->
+        <!--<category android:name = "android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter >-->
+        <!--<meta-data-->
+        <!--android:name = "mainActivity"-->
+        <!--android:value = "${applicationId}.ui.activity.SplashActivity" />-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.open.platform.NextChapter"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:process = ":lbmain"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_main_app_theme" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.startNextChapter" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--</activity >-->
+
+        <!--<activity-->
+        <!--android:name = "com.excelliance.open.PromptActivity"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:process = ":lbmain"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@android:style/Theme.Translucent.NoTitleBar" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.startPromptActivity" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--</activity >-->
+
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.open.notification.BGReceiver"-->
+        <!--android:process = ":lbmain" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.appstate" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.queryUpdate" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "android.intent.action.MEDIA_MOUNTED" />-->
+        <!--<data android:scheme = "file" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.open.BGService"-->
+        <!--android:process = ":download" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.gameverchk" />-->
+        <!--<action android:name = "com.excelliance.open.action.apkverchk" />-->
+        <!--<action android:name = "com.excelliance.open.action.dmchk" />-->
+        <!--<action android:name = "com.excelliance.open.action.fw" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.NEXT_CHAPTER" />-->
+        <!--<action android:name = "com.excelliance.open.action.PLAT_DO" />-->
+        <!--</intent-filter >-->
+        <!--</service >-->
+
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.GameActivity"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:process = ":lbmain"-->
+        <!--android:screenOrientation = "portrait" >-->
+        <!--</activity >-->
+
+        <!--<service-->
+        <!--android:name = "com.android.ggapsvc.LBService"-->
+        <!--android:process = ":lebian" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.actlbs1" />-->
+        <!--<action android:name = "com.excelliance.open.action.actlbs2" />-->
+        <!--<action android:name = "com.excelliance.open.action.actlbs3" />-->
+        <!--<action android:name = "com.excelliance.open.action.ACT_LBService" />-->
+        <!--</intent-filter >-->
+        <!--</service >-->
+
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.notification.NotificationReceiver"-->
+        <!--android:process = ":lebian" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.ACT_LB_RECEIVER" />-->
+        <!--<action android:name = "com.excelliance.open.action.downloadcomponent.progress" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.PlatformService"-->
+        <!--android:process = ":lbmain" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.BIND_REMOTE" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.kxqp.platform.gameplugin.action.UNBIND_REMOTE" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.platform.gameplugin.action.START_FROM_SHORTCUT" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "com.excelliance.open.action.ACTIVITY_STATE" />-->
+        <!--<category android:name = "android.intent.category.DEFAULT" />-->
+        <!--</intent-filter >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.open.PrestartService" />-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.BootService" >-->
+        <!--</service >-->
+
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy2"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy3"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy4"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxy5"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyT2"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleInstance"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySI2"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleInstance"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySIT1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleInstance"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTask"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxyST2"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTask"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTT1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTask"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTop"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTop2"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTop"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy" >-->
+        <!--</activity >-->
+        <!--<activity-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ActivityProxySTopT1"-->
+        <!--android:configChanges = "orientation|screenSize"-->
+        <!--android:launchMode = "singleTop"-->
+        <!--android:screenOrientation = "portrait"-->
+        <!--android:theme = "@style/lebian_activity_proxy_t" >-->
+        <!--</activity >-->
+
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy1" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy2" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy3" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy4" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy5" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy6" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy7" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy8" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy9" >-->
+        <!--</service >-->
+        <!--<service android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy10" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A1"-->
+        <!--android:process = ":platform.gameplugin_SP_A" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A2"-->
+        <!--android:process = ":platform.gameplugin_SP_A" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A3"-->
+        <!--android:process = ":platform.gameplugin_SP_A" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_A4"-->
+        <!--android:process = ":platform.gameplugin_SP_A" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B1"-->
+        <!--android:process = ":platform.gameplugin_SP_B" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B2"-->
+        <!--android:process = ":platform.gameplugin_SP_B" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B3"-->
+        <!--android:process = ":platform.gameplugin_SP_B" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_B4"-->
+        <!--android:process = ":platform.gameplugin_SP_B" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C1"-->
+        <!--android:process = ":platform.gameplugin_SP_C" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C2"-->
+        <!--android:process = ":platform.gameplugin_SP_C" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C3"-->
+        <!--android:process = ":platform.gameplugin_SP_C" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_C4"-->
+        <!--android:process = ":platform.gameplugin_SP_C" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D1"-->
+        <!--android:process = ":platform.gameplugin_SP_D" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D2"-->
+        <!--android:process = ":platform.gameplugin_SP_D" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D3"-->
+        <!--android:process = ":platform.gameplugin_SP_D" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_D4"-->
+        <!--android:process = ":platform.gameplugin_SP_D" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E1"-->
+        <!--android:process = ":platform.gameplugin_SP_E" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E2"-->
+        <!--android:process = ":platform.gameplugin_SP_E" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E3"-->
+        <!--android:process = ":platform.gameplugin_SP_E" >-->
+        <!--</service >-->
+        <!--<service-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ServiceProxy_SP_E4"-->
+        <!--android:process = ":platform.gameplugin_SP_E" >-->
+        <!--</service >-->
+
+        <!--<receiver android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A"-->
+        <!--android:process = ":platform.gameplugin_SP_A" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_A" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B"-->
+        <!--android:process = ":platform.gameplugin_SP_B" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_B" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C"-->
+        <!--android:process = ":platform.gameplugin_SP_C" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_C" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D"-->
+        <!--android:process = ":platform.gameplugin_SP_D" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_D" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!--<receiver-->
+        <!--android:name = "com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E"-->
+        <!--android:process = ":platform.gameplugin_SP_E" >-->
+        <!--<intent-filter >-->
+        <!--<action android:name = "rpa.com.excelliance.kxqp.platform.gameplugin.ReceiverProxy_SP_E" />-->
+        <!--</intent-filter >-->
+        <!--</receiver >-->
+        <!-- lebian sdk components end -->
+        <!-- 乐变参数 -->
+        <!--<meta-data-->
+        <!--android:name = "ClientChId"-->
+        <!--android:value = "${loveotaClientID}" />-->
+        <!--<meta-data-->
+        <!--android:name = "MainChId"-->
+        <!--android:value = "${loveotaMainChId}" />-->
+    </application >
 
 </manifest >

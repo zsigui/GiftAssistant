@@ -3,7 +3,6 @@ package com.oplay.giftcool.ui.widget.button;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 public class GiftButton extends TextView {
 
     private boolean mBiggerButton;
-    private CountDownTimer mTimer;
+//    private CountDownTimer mTimer;
 
     private int mStatus;
 
@@ -45,93 +44,138 @@ public class GiftButton extends TextView {
     public void setState(int state) {
         mStatus = state;
         setEnabled(false);
-        if (state >= GiftTypeUtil.TYPE_CHARGE_SEIZE) {
-            setChargeCodeState(state);
-        } else {
-            setGiftState(state);
-        }
+//        if (state >= GiftTypeUtil.TYPE_CHARGE_SEIZE) {
+//            setChargeCodeState(state);
+//        } else {
+//            setGiftState(state);
+//        }
+        setGiftState(state);
     }
 
-    /**
-     * 设置礼包对应状态的显示信息
-     */
     private void setGiftState(int state) {
         setOrangeBg();
+        setEnabled(false);
         switch (state) {
-            case GiftTypeUtil.TYPE_NORMAL_FINISHED:
-            case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-                setText(R.string.st_gift_finished);
-                break;
-            case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-                setText(R.string.st_gift_wait_search);
-                break;
-            case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+            case GiftTypeUtil.BUTTON_TYPE_WAIT_SEIZE:
                 setText(R.string.st_gift_wait_seize);
                 break;
-            case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-            case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-                setText(R.string.st_gift_search);
-                setEnabled(true);
-                break;
-            case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-            case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
+            case GiftTypeUtil.BUTTON_TYPE_SEIZED:
                 setText(R.string.st_gift_seized);
                 break;
-            case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+            case GiftTypeUtil.BUTTON_TYPE_EMPTY:
                 setText(R.string.st_gift_empty);
                 break;
-            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-            default:
-                setText(R.string.st_gift_seize);
-                setRedBg();
+            case GiftTypeUtil.BUTTON_TYPE_SEARCH:
+                setEnabled(true);
+                setText(R.string.st_gift_search);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_TAKE_OFF:
+            case GiftTypeUtil.BUTTON_TYPE_FINISH:
+                setText(R.string.st_gift_finished);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
+                setText(R.string.st_gift_reserve);
+                setGreenBg();
                 setEnabled(true);
                 break;
-        }
-    }
-
-    /**
-     * 设置首充券对应状态的显示信息
-     */
-    private void setChargeCodeState(int state) {
-        setGreenBg();
-        switch (state) {
-            case GiftTypeUtil.TYPE_CHARGE_TAKE:
+            case GiftTypeUtil.BUTTON_TYPE_RESERVED:
+                setText(R.string.st_gift_reserved);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
                 setText(R.string.st_gift_take);
                 setRedBg();
                 setEnabled(true);
                 break;
-            case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
-//				setText(R.string.st_gift_reserve_empty);
-//				break;
-            case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
-                setText(R.string.st_gift_reserve);
-                setEnabled(true);
-                break;
-            case GiftTypeUtil.TYPE_CHARGE_EMPTY:
-                setText(R.string.st_gift_empty);
-                break;
-            case GiftTypeUtil.TYPE_CHARGE_RESERVED:
-                setText(R.string.st_gift_reserved);
-                break;
-            case GiftTypeUtil.TYPE_CHARGE_SEIZED:
-                setText(R.string.st_gift_seized);
-                break;
-            case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
-                setText(R.string.st_gift_reserve_disabled);
-                break;
-            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+            case GiftTypeUtil.BUTTON_TYPE_SEIZE:
             default:
                 setText(R.string.st_gift_seize);
                 setRedBg();
                 setEnabled(true);
+                break;
         }
     }
+
+//    /**
+//     * 设置礼包对应状态的显示信息
+//     */
+//    private void setGiftState(int state) {
+//        setOrangeBg();
+//        switch (state) {
+//            case GiftTypeUtil.TYPE_NORMAL_FINISHED:
+//            case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+//                setText(R.string.st_gift_finished);
+//                break;
+//            case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
+//                setText(R.string.st_gift_wait_search);
+//                break;
+//            case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
+//            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
+//            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+//                setText(R.string.st_gift_wait_seize);
+//                break;
+//            case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
+//            case GiftTypeUtil.TYPE_NORMAL_SEARCH:
+//                setText(R.string.st_gift_search);
+//                setEnabled(true);
+//                break;
+//            case GiftTypeUtil.TYPE_LIMIT_SEIZED:
+//            case GiftTypeUtil.TYPE_NORMAL_SEIZED:
+//            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
+//                setText(R.string.st_gift_seized);
+//                break;
+//            case GiftTypeUtil.TYPE_LIMIT_EMPTY:
+//            case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
+//                setText(R.string.st_gift_empty);
+//                break;
+//            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
+//            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+//            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
+//            default:
+//                setText(R.string.st_gift_seize);
+//                setRedBg();
+//                setEnabled(true);
+//                break;
+//        }
+//    }
+//
+//    /**
+//     * 设置首充券对应状态的显示信息
+//     */
+//    private void setChargeCodeState(int state) {
+//        setGreenBg();
+//        switch (state) {
+//            case GiftTypeUtil.TYPE_CHARGE_TAKE:
+//                setText(R.string.st_gift_take);
+//                setRedBg();
+//                setEnabled(true);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
+////				setText(R.string.st_gift_reserve_empty);
+////				break;
+//            case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
+//                setText(R.string.st_gift_reserve);
+//                setEnabled(true);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_EMPTY:
+//                setText(R.string.st_gift_empty);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_RESERVED:
+//                setText(R.string.st_gift_reserved);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_SEIZED:
+//                setText(R.string.st_gift_seized);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_DISABLE_RESERVE:
+//                setText(R.string.st_gift_reserve_disabled);
+//                break;
+//            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
+//            default:
+//                setText(R.string.st_gift_seize);
+//                setRedBg();
+//                setEnabled(true);
+//        }
+//    }
 
     private void setTextColorRes(@ColorRes int colorRes) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

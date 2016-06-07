@@ -1,7 +1,6 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.util.ArrayMap;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -47,7 +46,6 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
         OnFinishListener,
         StickyListHeadersAdapter {
 
-    final int COLOR_GREY;
     final ImageSpan DRAWER_GOLD;
     final ImageSpan DRAWER_BEAN;
     final int W_DIVIDER;
@@ -57,11 +55,6 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
 
     public LimitGiftListAdapter(Context context, List<TimeData<IndexGiftNew>> objects) {
         super(context, objects);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            COLOR_GREY = context.getColor(R.color.co_common_text_second);
-        } else {
-            COLOR_GREY = context.getResources().getColor(R.color.co_common_text_second);
-        }
         W_DIVIDER = context.getResources().getDimensionPixelSize(R.dimen.di_divider_height);
         DRAWER_GOLD = new ImageSpan(context, R.drawable.ic_score);
         DRAWER_BEAN = new ImageSpan(context, R.drawable.ic_bean);
@@ -130,8 +123,8 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
         final int startPos = String.valueOf(o.score).length() + 10;
         ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, false);
-        holder.btnSend.setState(type);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+        holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
@@ -146,7 +139,6 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
                 setProgressBarData(o, holder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-                holder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 holder.tvSeizeHint.setVisibility(View.VISIBLE);
                 holder.tvSeizeHint.setText("正在免费抢");
                 setProgressBarData(o, holder);
@@ -169,7 +161,7 @@ public class LimitGiftListAdapter extends BaseListAdapter<TimeData<IndexGiftNew>
     private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {
         gHolder.tvPercent.setVisibility(View.VISIBLE);
         gHolder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
         gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         gHolder.pbPercent.setProgress(percent);
         gHolder.pbPercent.setMax(100);
