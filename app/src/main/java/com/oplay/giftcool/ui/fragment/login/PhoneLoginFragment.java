@@ -41,7 +41,6 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 
@@ -221,6 +220,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                 }
                 break;
             case R.id.tv_user_clear:
+                clearText(etCode);
                 clearText(etPhone);
                 btnSendCode.setEnabled(false);
                 btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
@@ -302,12 +302,11 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 showToast("短信已经发送，请注意接收");
                                 return;
                             }
-                            showToast("发送失败 - " + (response.body() == null ?
-                                    "解析异常" : response.body().getMsg()));
+                            ToastUtil.blurErrorMsg(response.body());
                             resetRemain();
                             return;
                         }
-                        showToast("发送失败 - 返回出错:" + (response == null ? "" : response.message()));
+                        ToastUtil.blurErrorResp(response);
                         resetRemain();
                     }
 
@@ -317,10 +316,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(t);
-                        }
-                        showToast("发送失败 - 网络异常");
+                        AppDebugConfig.warn(t);
+                        ToastUtil.blurThrow();
                         resetRemain();
                     }
                 });
@@ -385,10 +382,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 doAfterSuccess(response, login);
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
+                            ToastUtil.blurErrorMsg(response.body());
                             return;
                         }
-                        ToastUtil.blurErrorResp(ERR_PREFIX, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -397,10 +394,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(t);
-                        }
-                        ToastUtil.blurThrow(ERR_PREFIX);
+                        AppDebugConfig.warn(t);
+                        ToastUtil.blurThrow();
                     }
                 });
             }

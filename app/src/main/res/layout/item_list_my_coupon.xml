@@ -80,20 +80,22 @@
             android:layout_toRightOf = "@+id/rl_icon"
             android:text = "有效期：2015.10.30 10:00 ~ 2016.10.30 10:00" />
 
-    <RelativeLayout
+    <LinearLayout
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:layout_alignLeft = "@+id/rl_icon"
             android:layout_below = "@+id/rl_icon"
+            android:orientation = "horizontal"
             android:layout_marginBottom = "5dp"
             android:layout_marginTop = "8dp" >
 
         <TextView
                 android:id = "@+id/tv_gift_code"
                 style = "@style/DefaultTextView.Text"
-                android:layout_width = "244dp"
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
                 android:layout_height = "33dp"
-                android:layout_marginRight = "10dp"
+                android:layout_marginRight = "25dp"
                 android:background = "@color/co_gift_code_bg"
                 android:gravity = "left|center_vertical"
                 android:paddingLeft = "10dp"
@@ -104,10 +106,8 @@
                 android:id = "@+id/btn_copy"
                 style = "@style/DefaultTextView"
                 android:layout_height = "@dimen/di_btn_height"
-                android:layout_alignParentRight = "true"
-                android:layout_centerVertical = "true"
                 android:background = "@drawable/selector_btn_red"
                 android:text = "@string/st_gift_code_copy"
                 android:textColor = "@color/color_btn_red_border" />
-    </RelativeLayout >
+    </LinearLayout >
 </RelativeLayout >

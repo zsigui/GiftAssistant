@@ -426,7 +426,7 @@ public class WebViewInterface extends Observable {
         }
         if (callbackJsName != null) {
             // WebView执行需要在主线程中
-            ThreadUtil.runOnUiThread(new Runnable() {
+            mWebView.post(new Runnable() {
                 @Override
                 public void run() {
                     String js = String.format("%s('%s')", callbackJsName, returnData);

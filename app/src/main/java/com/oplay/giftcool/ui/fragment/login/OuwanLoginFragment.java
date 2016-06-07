@@ -40,7 +40,6 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 
@@ -212,6 +211,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                 }
                 break;
             case R.id.tv_user_clear:
+                clearText(etPwd);
                 clearText(etUser);
                 break;
             case R.id.tv_pwd_clear:
@@ -282,11 +282,11 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                                 doAfterSuccess(response, login);
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(ERR_PREFIX, response.body());
+                            ToastUtil.blurErrorMsg(response.body());
                             return;
 
                         }
-                        ToastUtil.blurErrorResp(ERR_PREFIX, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -295,10 +295,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(t);
-                        }
-                        ToastUtil.blurThrow(ERR_PREFIX);
+                        AppDebugConfig.warn(t);
+                        ToastUtil.blurThrow();
                     }
                 });
             }

@@ -67,7 +67,7 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         }
 
         IndexGiftNew o = getItem(position);
-        holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
+        holder.tvName.setText(o.gameName);
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvPlatform.setText(o.platform);
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);

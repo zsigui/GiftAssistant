@@ -71,11 +71,24 @@ public abstract class NetStatusCode {
 
 
 
-	/* ******** 用户相关状态码 1002x ~ 1003x ********* */
+	/* ******** 用户相关状态码 30~50 ********* */
+
+    /**
+     * 输入不合规范
+     */
+    public static final int ERR_BAD_PARAM = 10030;
+    /**
+     * 短信验证不通过
+     */
+    public static final int ERR_BAD_PHONE_CODE = 10031;
     /**
      * 用户服务出错
      */
     public static final int ERR_BAD_SERVER = 10032;
+    /**
+     * 获取用户信息错误
+     */
+    public static final int ERR_GET_INFO_FAILED = 10033;
     /**
      * 未登录
      */

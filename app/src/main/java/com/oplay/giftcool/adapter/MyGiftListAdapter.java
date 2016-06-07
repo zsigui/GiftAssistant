@@ -71,11 +71,6 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
         } else {
             holder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-//        if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-//            holder.ivLimit.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.ivLimit.setVisibility(View.GONE);
-//        }
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvContent.setText(o.content);
         holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
