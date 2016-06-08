@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.PayManager;
@@ -326,12 +327,10 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
     private void setSeizeTextUI(TextView tv, int state) {
         tv.setVisibility(View.VISIBLE);
         if (state == 0) {
-            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_red_right, 0);
             tv.setTextColor(COLOR_RED);
             tv.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
             tv.setText("正在疯抢");
         } else {
-            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             tv.setTextColor(COLOR_GREY);
             tv.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
             switch (state) {
@@ -351,6 +350,15 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
     @Override
     public void updateData(List<TimeData<IndexGiftNew>> data) {
         mData = data;
+        if (AppDebugConfig.IS_DEBUG) {
+            IndexGiftNew o = mData.get(0).data;
+            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
+            o.status = GiftTypeUtil.STATUS_SEIZE;
+            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
+            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
+            o.remainCount = 1;
+            o.totalCount = 101;
+        }
         notifyDataSetChanged();
     }
 

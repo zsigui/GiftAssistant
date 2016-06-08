@@ -248,13 +248,12 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
     private Call<JsonRespBase<UserModel>> mCall;
 
     private void handleLogin() {
-        showLoading();
         final ReqLogin login = new ReqLogin();
         if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
-            hideLoading();
             showToast("账号密码格式不符合要求");
             return;
         }
+        showLoading();
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {

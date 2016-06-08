@@ -261,13 +261,12 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
      * 处理获取验证码事件
      */
     private void handleGetCode() {
-        showLoading();
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString())) {
             showToast("手机号码格式不符合要求");
-            hideLoading();
             return;
         }
+        showLoading();
         btnSendCode.setEnabled(false);
         btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
         sSendCodeRemainTime = RESEND_DURATION;
@@ -346,13 +345,12 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
      * 处理手机登录事件
      */
     private void handleLogin() {
-        showLoading();
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
-            hideLoading();
             showToast("手机号码格式不符合要求");
             return;
         }
+        showLoading();
         etCode.requestFocus();
         etCode.setSelection(etCode.getText().toString().length());
         Global.THREAD_POOL.execute(new Runnable() {

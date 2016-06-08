@@ -404,7 +404,7 @@ public class PayManager {
     private void chargeReservedSuccess(FragmentActivity context, IndexGiftNew gift, GiftButton button) {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "恭喜，预约成功！",
-                String.format(Locale.CHINA, "已为您预留一枚礼包码到%s", DateUtil.optDate(gift.reserveDeadline)),
+                String.format(Locale.CHINA, "已为您预留一枚首充券兑换码到%s", DateUtil.optDate(gift.reserveDeadline)),
                 String.format(Locale.CHINA,
                         ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
                 "reserve_hint");

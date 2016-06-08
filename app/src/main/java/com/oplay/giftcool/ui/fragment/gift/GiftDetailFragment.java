@@ -242,7 +242,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         || giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
                     ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                     tvOriginPrice.setVisibility(View.VISIBLE);
-                    if (giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED) {
+                    if (giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED
+                            || (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_RESERVED
+                            && giftData.status != GiftTypeUtil.STATUS_SEIZE)) {
                         setRemainProgress(giftData);
                     }
                     if (giftData.freeStartTime > System.currentTimeMillis()) {

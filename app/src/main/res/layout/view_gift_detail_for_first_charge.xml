@@ -36,12 +36,26 @@
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
-    <TextView
-            android:id = "@+id/tv_usage_title"
-            style = "@style/DefaultTextView.DetailTitle"
-            android:paddingLeft = "@dimen/di_list_item_gap_big"
-            android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:text = "@string/st_coupon_usage" />
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation = "horizontal" >
+
+        <TextView
+                android:id = "@+id/tv_usage_title"
+                style = "@style/DefaultTextView.DetailTitle"
+                android:layout_width = "wrap_content"
+                android:paddingLeft = "@dimen/di_list_item_gap_big"
+                android:text = "@string/st_coupon_usage" />
+
+        <TextView
+                style = "@style/DefaultTextView.Text"
+                android:textColor = "@color/co_common_app_second_bg_orange"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_normal"
+                android:layout_marginTop = "18dp"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
+                android:text = "（点击下方查看图文步骤）" />
+    </LinearLayout >
 
     <com.oplay.giftcool.ui.widget.layout.GCRecyclerView
             android:id = "@+id/rv_usage"

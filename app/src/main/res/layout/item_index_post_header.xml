@@ -5,8 +5,6 @@
               android:layout_height = "wrap_content"
               android:paddingBottom = "@dimen/di_list_item_gap_small"
               android:paddingTop = "@dimen/di_list_item_gap_small"
-              android:paddingLeft = "@dimen/di_list_item_gap_normal"
-              android:paddingRight = "@dimen/di_list_item_gap_normal"
               android:layout_gravity = "center_horizontal"
               android:background = "@color/co_white" >
 

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
      * 左右间隔的大小
      */
     private final int GAP_SIZE;
+    private final int GAP;
     private final int SCREEN_WIDTH;
 
     // 重复使用的文字类型
@@ -61,6 +63,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
     public PostAdapter(Context context) {
         super(context);
         GAP_SIZE = context.getResources().getDimensionPixelSize(R.dimen.di_index_post_gap_vertical);
+        GAP = context.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_normal);
         SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;
         TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
         TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
@@ -117,21 +120,29 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
      * 初始化标题头的配置
      */
     private void initHeaderLayoutParams(HeaderHolder headerHolder) {
-        final int width = (SCREEN_WIDTH - 2 * GAP_SIZE - 2 * headerHolder.itemView.getPaddingLeft()) / 3;
-        final int height = (int) (width * HEADER_RIGHT_WH_RATE);
         LinearLayout.LayoutParams lpSignIn = (LinearLayout.LayoutParams) headerHolder.flSignIn.getLayoutParams();
-        lpSignIn.width = width;
-        lpSignIn.height = height;
-        lpSignIn.rightMargin = GAP_SIZE;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pic_sign_in_everyday, options);
+        float rate = (float)options.outHeight / options.outWidth;
+        final int width = (SCREEN_WIDTH - 4 * GAP) / 3 - GAP_SIZE;
+        final int height = (int) (width * rate);
+        lpSignIn.rightMargin = GAP;
+        lpSignIn.leftMargin = GAP;
+        lpSignIn.width = width + GAP_SIZE;
+        lpSignIn.height = height + GAP_SIZE;
         headerHolder.flSignIn.setLayoutParams(lpSignIn);
         LinearLayout.LayoutParams lpLottery = (LinearLayout.LayoutParams) headerHolder.flLottery.getLayoutParams();
-        lpLottery.width = width;
-        lpLottery.height = height;
-        lpLottery.rightMargin = GAP_SIZE;
+        lpLottery.leftMargin = 0;
+        lpLottery.rightMargin = GAP;
+        lpLottery.width = width + GAP_SIZE;
+        lpLottery.height = height + GAP_SIZE;
         headerHolder.flLottery.setLayoutParams(lpLottery);
         LinearLayout.LayoutParams lpTask = (LinearLayout.LayoutParams) headerHolder.flTask.getLayoutParams();
-        lpTask.width = width;
-        lpTask.height = height;
+        lpTask.leftMargin = 0;
+        lpTask.rightMargin = GAP;
+        lpTask.width = width + GAP_SIZE;
+        lpTask.height = height + GAP_SIZE;
         headerHolder.flTask.setLayoutParams(lpTask);
     }
 

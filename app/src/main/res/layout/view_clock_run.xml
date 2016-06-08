@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.oplay.giftcool.ui.widget.ClockAnimView
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content" >
+
+    <ImageView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity = "center_horizontal"
+            android:src = "@drawable/ic_anim_clock" />
+
+    <ImageView
+            android:id = "@+id/iv_pointer"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity = "center_horizontal"
+            android:layout_marginTop = "4dp"
+            android:src = "@drawable/ic_anim_clock_point" />
+</com.oplay.giftcool.ui.widget.ClockAnimView >
