@@ -677,11 +677,12 @@ public class AssistantApp extends Application {
         }
     }
 
-    public void setLastLaunchTime(long lastLaunchTime) {
-        mLastLaunchTime = lastLaunchTime;
-    }
-
     public long getLastLaunchTime() {
+        if (mLastLaunchTime == 0) {
+            mLastLaunchTime = SPUtil.getLong(this, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_OPEN_APP_TIME, 1);
+            SPUtil.putLong(this, SPConfig.SP_APP_CONFIG_FILE,
+                    SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
+        }
         return mLastLaunchTime;
     }
 

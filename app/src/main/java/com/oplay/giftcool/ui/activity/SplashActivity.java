@@ -175,12 +175,12 @@ public class SplashActivity extends BaseAppCompatActivity {
 	 */
 	public void judgeFirstOpenToday() {
 		long lastOpenTime = SPUtil.getLong(SplashActivity.this,
-				SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+				SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
 		// 今日首次登录，首次打开APP并不显示
 		MainActivity.sIsTodayFirstOpen = (lastOpenTime != 0 && !DateUtil.isToday(lastOpenTime));
 		MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
 		// 写入当前时间
-		SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System.currentTimeMillis());
+		SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System.currentTimeMillis());
 	}
 
 }

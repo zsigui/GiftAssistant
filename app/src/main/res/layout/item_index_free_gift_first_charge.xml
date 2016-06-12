@@ -145,9 +145,11 @@
     </RelativeLayout >
 
     <com.oplay.giftcool.ui.widget.ClockAnimView
+            android:id = "@+id/cav_view"
             android:layout_toLeftOf = "@+id/tv_seize"
             android:layout_centerVertical = "true"
             android:layout_marginRight = "@dimen/di_line_space_extra_big"
+            android:visibility = "gone"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content" >
 
@@ -171,28 +173,31 @@
             style = "@style/DefaultTextView.Header"
             android:text = "@string/st_gift_free_seize"
             android:layout_centerVertical = "true"
-            android:layout_toLeftOf = "@+id/ll_arrow"
+            android:layout_toLeftOf = "@+id/aav_view"
             android:textStyle = "bold"
             android:textColor = "@color/co_btn_red" />
 
     <com.oplay.giftcool.ui.widget.ArrowAnimView
-            android:id = "@+id/ll_arrow"
-            android:layout_width = "20dp"
+            android:id = "@+id/aav_view"
+            android:layout_width = "@dimen/di_list_item_gap_big"
             android:layout_centerVertical = "true"
             android:layout_alignParentRight = "true"
+            android:orientation = "horizontal"
             android:layout_height = "wrap_content" >
 
         <ImageView
                 android:id = "@+id/iv_arrow_1"
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
+                android:visibility = "gone"
                 android:src = "@drawable/ic_arrow_red_right" />
 
         <ImageView
                 android:id = "@+id/iv_arrow_2"
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
-                android:visibility="gone"
+                android:visibility = "gone"
+                android:layout_marginLeft = "@dimen/di_line_space_extra_normal"
                 android:src = "@drawable/ic_arrow_red_right" />
     </com.oplay.giftcool.ui.widget.ArrowAnimView >
 

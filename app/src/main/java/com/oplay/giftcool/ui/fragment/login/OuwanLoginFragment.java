@@ -206,7 +206,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
             case R.id.tv_another_login:
                 if (getActivity() != null) {
                     ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-                            PhoneLoginFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
+                            PhoneLoginNewFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
                             false);
                 }
                 break;

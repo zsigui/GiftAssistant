@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:paddingTop = "@dimen/di_login_padding_top"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+
+    <LinearLayout
+            android:id = "@+id/ll_input"
+            android:orientation = "horizontal"
+            android:visibility = "gone"
+            style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+        <EditText
+                android:id = "@+id/et_clear_focus"
+                android:layout_width = "0dp"
+                android:layout_height = "0dp" />
+
+        <AutoCompleteTextView
+                android:id = "@+id/et_input"
+                style = "@style/DefaultTextView.Login"
+                android:cursorVisible = "true"
+                android:imeOptions = "actionNext"
+                android:dropDownAnchor = "@+id/ll_input"
+                android:paddingRight = "50dp"
+                android:hint = "@string/st_login_phone_hint" />
+
+        <TextView
+                android:id = "@+id/tv_user_clear"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:clickable = "true"
+                android:layout_marginRight = "5dp"
+                android:layout_toLeftOf = "@+id/iv_more"
+                android:visibility = "gone"
+                android:background = "@drawable/ic_input_clear" />
+
+        <ImageView
+                android:id = "@+id/iv_more"
+                android:layout_width = "wrap_content"
+                android:layout_height = "match_parent"
+                android:paddingLeft = "8dp"
+                android:paddingRight = "8dp"
+                android:clickable = "true"
+                android:contentDescription = "@null"
+                android:scaleType = "centerInside"
+                android:src = "@drawable/ic_login_select_account" />
+    </LinearLayout >
+
+    <LinearLayout
+            android:id = "@+id/ll_code"
+            android:orientation = "vertical"
+            android:visibility = "gone"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content" >
+
+        <TextView
+                android:id = "@+id/tv_code_hint"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:paddingRight = "@dimen/di_login_padding_left_right"
+                android:paddingLeft = "@dimen/di_login_padding_left_right"
+                android:paddingBottom = "@dimen/di_login_padding_left_right"
+                android:singleLine = "false"
+                android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+                android:textColor = "@color/co_common_text_second"
+                android:text = "已向您的手机 138****3294 发送了一条验证短信" />
+
+        <LinearLayout
+                android:orientation = "horizontal"
+                style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+            <EditText
+                    android:id = "@+id/et_phone_code"
+                    style = "@style/DefaultTextView.Login"
+                    android:cursorVisible = "true"
+                    android:inputType = "number"
+                    android:imeOptions = "actionDone"
+                    android:hint = "@string/st_login_phone_code_hint" />
+
+            <TextView
+                    android:id = "@+id/tv_code_clear"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:clickable = "true"
+                    android:layout_marginRight = "5dp"
+                    android:layout_marginLeft = "5dp"
+                    android:visibility = "gone"
+                    android:background = "@drawable/ic_input_clear" />
+
+            <View style = "@style/VDividerView" />
+
+            <TextView
+                    android:id = "@+id/tv_send_code"
+                    style = "@style/DefaultTextView.LoginPoint"
+                    android:layout_marginLeft = "10dp"
+                    android:layout_height = "match_parent"
+                    android:textColor = "@color/co_btn_grey"
+                    android:enabled = "false"
+                    android:text = "@string/st_login_phone_send_code" />
+        </LinearLayout >
+    </LinearLayout >
+
+    <!--
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:paddingLeft = "@dimen/di_login_padding_left_right"
+            android:paddingTop = "@dimen/di_login_padding_gap" >
+
+        <CheckedTextView
+                android:id = "@+id/ctv_law"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:checked = "true"
+                android:drawableLeft = "@drawable/selector_item_check" />
+
+        <TextView
+                style = "@style/DefaultTextView.Text"
+                android:textSize = "10sp"
+                android:paddingLeft = "5dp"
+                android:paddingRight = "5dp"
+                android:text = "@string/st_login_law_a" />
+
+        <TextView
+                android:id = "@+id/tv_law"
+                style = "@style/DefaultTextView.LoginPoint"
+                android:textSize = "10sp"
+                android:clickable = "true"
+                android:text = "@string/st_login_law_b" />
+    </LinearLayout >
+    -->
+
+    <TextView
+            android:id = "@+id/btn_send"
+            android:layout_marginLeft = "@dimen/di_login_padding_gap"
+            android:layout_marginRight = "@dimen/di_login_padding_gap"
+            android:layout_marginTop = "15dp"
+            style = "@style/DefaultTextView.BiggerBtn"
+            android:background = "@drawable/selector_btn_bigger_red"
+            android:layout_width = "match_parent"
+            android:text = "@string/st_login_btn_text" />
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:paddingRight = "@dimen/di_login_padding_left_right"
+            android:paddingTop = "@dimen/di_login_padding_gap" >
+
+        <TextView
+                style = "@style/DefaultTextView.Text"
+                android:textSize = "12sp"
+                android:gravity = "right"
+                android:layout_weight = "1"
+                android:layout_width = "0dp"
+                android:text = "@string/st_login_has_ouwan_a" />
+
+        <TextView
+                android:id = "@+id/tv_another_login"
+                style = "@style/DefaultTextView.LoginPoint"
+                android:textSize = "12sp"
+                android:clickable = "true"
+                android:text = "@string/st_login_has_ouwan_b" />
+    </LinearLayout >
+
+</LinearLayout >

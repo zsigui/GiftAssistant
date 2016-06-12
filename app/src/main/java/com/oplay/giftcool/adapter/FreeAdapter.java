@@ -16,12 +16,13 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeData;
+import com.oplay.giftcool.ui.widget.ArrowAnimView;
+import com.oplay.giftcool.ui.widget.ClockAnimView;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
@@ -129,7 +130,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ViewUtil.showImage(gHolder.ivIcon, o.img);
         gHolder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         gHolder.tvContent.setText(o.content);
-//        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
+//        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o
+// .bean));
 //        final int startPos = String.valueOf(o.score).length() + 10;
 //        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -150,7 +152,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 gHolder.pbPercent.setProgress(percent);
                 gHolder.pbPercent.setMax(100);
                 gHolder.tvSeizeHint.setVisibility(View.GONE);
-                setSeizeTextUI(gHolder.tvSeize, 0);
+                setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 0);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
 //                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
@@ -183,11 +185,11 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.tvPercent.setVisibility(View.GONE);
         gHolder.tvSeizeHint.setVisibility(View.VISIBLE);
         if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
-            setSeizeTextUI(gHolder.tvSeize, 4);
+            setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 4);
             gHolder.tvSeize.setText(String.format(Locale.CHINA,
                     ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
         } else {
-            setSeizeTextUI(gHolder.tvSeize, 3);
+            setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 3);
         }
     }
 
@@ -195,7 +197,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.pbPercent.setVisibility(View.GONE);
         gHolder.tvPercent.setVisibility(View.GONE);
         gHolder.tvSeizeHint.setVisibility(View.GONE);
-        setSeizeTextUI(gHolder.tvSeize, 2);
+        setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 2);
     }
 
     private void finishState(IndexGiftNew o, GiftHolder gHolder) {
@@ -203,11 +205,11 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.tvPercent.setVisibility(View.GONE);
         gHolder.tvSeizeHint.setVisibility(View.GONE);
         if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
-            setSeizeTextUI(gHolder.tvSeize, 4);
+            setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 4);
             gHolder.tvSeize.setText(String.format(Locale.CHINA,
                     ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
         } else {
-            setSeizeTextUI(gHolder.tvSeize, 3);
+            setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 3);
         }
     }
 
@@ -239,7 +241,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.tvReserveDeadline.setVisibility(View.GONE);
                 cHolder.pbPercent.setVisibility(View.VISIBLE);
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
-                setSeizeTextUI(cHolder.tvSeize, 0);
+                setSeizeTextUI(cHolder.aavView, cHolder.cavView, cHolder.tvSeize, 0);
                 final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
                 cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
@@ -251,7 +253,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.pbPercent.setVisibility(View.GONE);
                 cHolder.tvPercent.setVisibility(View.GONE);
                 cHolder.tvSeize.setVisibility(View.VISIBLE);
-                setSeizeTextUI(cHolder.tvSeize, 0);
+                setSeizeTextUI(cHolder.aavView, cHolder.cavView, cHolder.tvSeize, 0);
                 cHolder.tvReserveDeadline.setVisibility(View.VISIBLE);
                 cHolder.tvReserveDeadline.setText(
                         String.format("已预留一张首充券到%s", DateUtil.optDate(o.reserveDeadline)));
@@ -263,7 +265,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.tvPercent.setVisibility(View.GONE);
                 cHolder.tvReserveDeadline.setVisibility(View.GONE);
                 cHolder.tvSeize.setVisibility(View.VISIBLE);
-                setSeizeTextUI(cHolder.tvSeize, 2);
+                setSeizeTextUI(cHolder.aavView, cHolder.cavView, cHolder.tvSeize, 2);
                 break;
             case GiftTypeUtil.TYPE_CHARGE_EMPTY:
                 cHolder.tvSeizeHint.setVisibility(View.GONE);
@@ -272,7 +274,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.tvPercent.setVisibility(View.GONE);
                 cHolder.tvReserveDeadline.setVisibility(View.GONE);
                 cHolder.tvSeize.setVisibility(View.VISIBLE);
-                setSeizeTextUI(cHolder.tvSeize, 1);
+                setSeizeTextUI(cHolder.aavView, cHolder.cavView, cHolder.tvSeize, 1);
                 break;
         }
         ViewUtil.siteValueUI(cHolder.tvPrice, o.originPrice, true);
@@ -293,6 +295,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
         gHolder.tvSeize = ViewUtil.getViewById(convertView, R.id.tv_seize);
         gHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
+        gHolder.aavView = ViewUtil.getViewById(convertView, R.id.aav_view);
+        gHolder.cavView = ViewUtil.getViewById(convertView, R.id.cav_view);
         convertView.setTag(gHolder);
         return convertView;
     }
@@ -314,6 +318,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         cHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
         cHolder.tvReserveDeadline = ViewUtil.getViewById(convertView, R.id.tv_reserve_deadline);
         cHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
+        cHolder.aavView = ViewUtil.getViewById(convertView, R.id.aav_view);
+        cHolder.cavView = ViewUtil.getViewById(convertView, R.id.cav_view);
         convertView.setTag(cHolder);
         return convertView;
     }
@@ -324,12 +330,18 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
      * @param tv
      * @param state 0 正在疯抢 1 已抢完 2 已抢号 3 免费已抢完 4 灰色不填
      */
-    private void setSeizeTextUI(TextView tv, int state) {
+    private void setSeizeTextUI(ArrowAnimView aav, ClockAnimView cav, TextView tv, int state) {
         tv.setVisibility(View.VISIBLE);
         if (state == 0) {
             tv.setTextColor(COLOR_RED);
             tv.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
             tv.setText("正在疯抢");
+            if (aav != null) {
+                aav.setViewVisibility(true);
+            }
+            if (cav != null) {
+                cav.setVisibility(View.VISIBLE);
+            }
         } else {
             tv.setTextColor(COLOR_GREY);
             tv.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
@@ -344,21 +356,18 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                     tv.setText("免费已抢完");
                     break;
             }
+            if (aav != null) {
+                aav.setViewVisibility(false);
+            }
+            if (cav != null) {
+                cav.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
     public void updateData(List<TimeData<IndexGiftNew>> data) {
         mData = data;
-        if (AppDebugConfig.IS_DEBUG) {
-            IndexGiftNew o = mData.get(0).data;
-            o.seizeStatus = GiftTypeUtil.SEIZE_TYPE_NEVER;
-            o.status = GiftTypeUtil.STATUS_SEIZE;
-            o.totalType = GiftTypeUtil.TOTAL_TYPE_COUPON;
-            o.giftType = GiftTypeUtil.GIFT_TYPE_LIMIT_FREE;
-            o.remainCount = 1;
-            o.totalCount = 101;
-        }
         notifyDataSetChanged();
     }
 
@@ -531,6 +540,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ProgressBar pbPercent;
         TextView tvSeizeHint;
         TextView tvSeize;
+        ArrowAnimView aavView;
+        ClockAnimView cavView;
     }
 
     private static class ChargeHolder {
@@ -544,5 +555,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ProgressBar pbPercent;
         TextView tvReserveDeadline;
         TextView tvSeizeHint;
+        ArrowAnimView aavView;
+        ClockAnimView cavView;
     }
 }

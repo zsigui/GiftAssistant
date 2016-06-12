@@ -83,7 +83,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             // 写入最新版本信息
             SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
             // 清空今日登录状态
-            SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+            SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
             AssistantApp.getInstance().setFirstOpenInThisVersion(true);
         }
     }
@@ -93,11 +93,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
      * 判断是否今日首次登录
      */
     public boolean judgeFirstOpenToday() {
-        long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, 0);
+        long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
         // 首次打开APP 或者 今日首次登录
-        // 写入当前时间
-        AssistantApp.getInstance().setLastLaunchTime(lastOpenTime);
-        SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LAST_OPEN_TIME, System
+        SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System
                 .currentTimeMillis());
         return (lastOpenTime == 0 || !DateUtil.isToday(lastOpenTime));
     }

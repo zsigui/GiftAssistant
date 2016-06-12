@@ -209,7 +209,8 @@
 
     <!-- 登录 -->
     <string name = "st_login_user" >点击登录</string >
-    <string name = "st_login_phone_title" >登录礼包酷</string >
+    <!--<string name = "st_login_phone_title" >登录礼包酷</string >-->
+    <string name = "st_login_phone_title" >快速登录</string >
     <string name = "st_login_ouwan_title" >偶玩账号登录</string >
     <string name = "st_login_phone_hint" >请输入手机号直接登录，无须注册</string >
     <string name = "st_login_phone_code_hint" >请输入短信验证码</string >

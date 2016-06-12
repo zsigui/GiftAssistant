@@ -18,7 +18,6 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.util.GameTypeUtil;
-import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.model.data.resp.message.PushMessageApp;
 import com.oplay.giftcool.model.data.resp.message.PushMessageDetail;
 import com.oplay.giftcool.model.data.resp.message.PushMessageExtra;
@@ -27,7 +26,6 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.SPUtil;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -174,7 +172,7 @@ public class PushMessageManager {
 	private void handleLongUnOpenAction(Context context, PushMessageExtra message, Intent intent) {
 
 		long lastOpenTime =
-				SPUtil.getLong(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_LAST_OPEN_APP_TIME, 0);
+				AssistantApp.getInstance().getLastLaunchTime();
 		long curTime = System.currentTimeMillis();
 
 		Gson gson = AssistantApp.getInstance().getGson();
