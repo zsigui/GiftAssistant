@@ -90,6 +90,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     private ImageView ivHint;
     private TextView tvGiftCount;
     private TextView tvTitle;
+    private ImageView ivTitle;
     // 礼物Fragment
     private GiftFragment mGiftFragment;
     private GiftFreeFragment mFreeFragment;
@@ -188,6 +189,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
         ivHint = getViewById(R.id.iv_hint);
         tvTitle = getViewById(R.id.tv_title);
+        ivTitle = getViewById(R.id.iv_title);
         llGiftCount = getViewById(R.id.ll_gift_count);
         llGiftCount.setOnClickListener(this);
     }
@@ -310,7 +312,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
         mCtvs[position].setChecked(true);
         mCtvs[position].setTextColor(getResources().getColor(R.color.co_tab_index_text_selected));
-        showToolbarSearch(position != INDEX_POST);
         switch (position) {
             case INDEX_POST:
                 displayEssayUI();
@@ -326,19 +327,24 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 displayGiftUI();
                 break;
         }
-
+        showToolbarStyle(position);
     }
 
-    private void showToolbarSearch(boolean showSearch) {
+    private void showToolbarStyle(int index) {
         if (tvTitle != null) {
-            tvTitle.setVisibility(showSearch ? View.GONE : View.VISIBLE);
+            tvTitle.setVisibility(index == INDEX_POST ? View.VISIBLE : View.GONE);
         }
+        final boolean isShowSearch = (index == INDEX_GIFT || index == INDEX_GAME || index == INDEX_DEFAULT);
         if (mSearchLayout != null) {
-            mSearchLayout.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+            mSearchLayout.setVisibility(isShowSearch ? View.VISIBLE : View.GONE);
         }
         if (llGiftCount != null) {
-            llGiftCount.setVisibility(showSearch ? View.VISIBLE : View.GONE);
+            llGiftCount.setVisibility(isShowSearch ? View.VISIBLE : View.GONE);
         }
+        if (ivTitle != null) {
+            ivTitle.setVisibility(index == INDEX_FREE ? View.VISIBLE : View.GONE);
+        }
+
     }
 
     /**

@@ -62,6 +62,7 @@ import com.socks.library.KLog;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import cn.finalteam.galleryfinal.GalleryFinal;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,7 +89,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvContent;
     private TextView tvDeadline;
     private TextView tvUsage;
-    private TextView tvUsageTitle;
+    private LinearLayout llUsageTitle;
     private RecyclerView rvUsage;
     private GiftDetailPicsAdapter mAdapter;
     private GiftButton btnSend;
@@ -352,7 +353,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
-                tvUsageTitle = getViewById(R.id.tv_usage_title);
+                llUsageTitle = getViewById(R.id.ll_usage_title);
                 LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
                         llm.getOrientation(),
@@ -486,7 +487,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         if (mDataRunnable != null) {
             Global.THREAD_POOL.execute(mDataRunnable);
         }
-
     }
 
     @Override
@@ -522,12 +522,21 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
                 }
                 break;
+            case R.id.iv_confirm:
+                mDialog.cancel();
+                break;
+            case R.id.ll_content:
+                if (mAdapter != null) {
+                    GalleryFinal.openMultiPhoto(0, mAdapter.getPics());
+                }
+                mDialog.cancel();
+                break;
         }
     }
 
-    /**
-     * 判断是否安装了游戏，如果没有，弹窗提示下载安装
-     */
+//    /**
+//     * 判断是否安装了游戏，如果没有，弹窗提示下载安装
+//     */
 //	private boolean isInstalledGame() {
 //		HashSet<String> appNames = Global.getInstalledAppNames();
 //		for (String name : appNames) {
@@ -540,21 +549,21 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //			ToastUtil.showShort("页面信息错误，请重新进入");
 //			return false;
 //		}
-//		final ConfirmDialog dialog = ConfirmDialog.newInstance();
-//		dialog.setTitle("小贴士");
-//		dialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
+//		final ConfirmDialog mDialog = ConfirmDialog.newInstance();
+//		mDialog.setTitle("小贴士");
+//		mDialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
 //				mData.gameData.name)));
 //		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus
 //				.INSTALLABLE) {
-//			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
-//			dialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
+//			mDialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
+//			mDialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
 //		} else {
-//			dialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
+//			mDialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
 //		}
-//		dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//		mDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
 //			@Override
 //			public void onCancel() {
-//				dialog.dismissAllowingStateLoss();
+//				mDialog.dismissAllowingStateLoss();
 //			}
 //
 //			@Override
@@ -563,17 +572,17 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //					if (mAppInfo.downloadStatus != null) {
 //						if (mAppInfo.downloadStatus == DownloadStatus.DOWNLOADING) {
 //							ToastUtil.showShort("已经在下载中，请等待下载完成");
-//							dialog.dismissAllowingStateLoss();
+//							mDialog.dismissAllowingStateLoss();
 //							return;
 //						}
 //						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
 //					}
 //					mAppInfo.handleOnClick(getChildFragmentManager());
 //				}
-//				dialog.dismissAllowingStateLoss();
+//				mDialog.dismissAllowingStateLoss();
 //			}
 //		});
-//		dialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
+//		mDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
 //		return false;
 //	}
 
@@ -720,43 +729,45 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     }
 
 
+    private Dialog mDialog;
+
     /**
      * 显示首充券使用的指引页面
      */
     public void showGuidePage() {
-        final Dialog dialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
-        View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.overlay_hint_gift_detail_usage, (ViewGroup) mContentView.getParent(), false);
-        View llTop = getViewById(v, R.id.ll_top);
-        View llContent = getViewById(v, R.id.ll_content);
-        final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()
-                - svContent.getScrollY();
-        final int padding = getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
-        if (llTop != null) {
-            ViewGroup.LayoutParams lp = llTop.getLayoutParams();
-            lp.height = top + tvUsageTitle.getTop() - padding;
-            llTop.setLayoutParams(lp);
+        if (mDialog == null) {
+            mDialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
+            View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.overlay_hint_gift_detail_usage, (ViewGroup) mContentView.getParent(), false);
+            View llTop = getViewById(v, R.id.ll_top);
+            View llContent = getViewById(v, R.id.ll_content);
+            final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()
+                    - svContent.getScrollY();
+            final int padding = getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
+
+            if (llTop != null) {
+                ViewGroup.LayoutParams lp = llTop.getLayoutParams();
+                lp.height = top + llUsageTitle.getTop() + padding;
+                llTop.setLayoutParams(lp);
+            }
+            if (llContent != null) {
+                ViewGroup.LayoutParams lp = llContent.getLayoutParams();
+                lp.height = rvUsage.getBottom() - llUsageTitle.getTop() + padding;
+                llContent.setLayoutParams(lp);
+                llContent.setOnClickListener(this);
+            }
+            ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
+            if (ivConfirm != null) {
+                ivConfirm.setOnClickListener(this);
+            }
+            mDialog.setCancelable(true);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setContentView(v);
+            mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+                    .MATCH_PARENT);
+        } else {
+            mDialog.show();
         }
-        if (llContent != null) {
-            ViewGroup.LayoutParams lp = llContent.getLayoutParams();
-            lp.height = rvUsage.getBottom() - tvUsageTitle.getTop() + 2 * padding;
-            llContent.setLayoutParams(lp);
-        }
-        ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
-        if (ivConfirm != null) {
-            ivConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.cancel();
-                }
-            });
-        }
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setContentView(v);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                .MATCH_PARENT);
-        dialog.show();
         mIsFirstOpenPage = false;
     }
 }

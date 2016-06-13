@@ -64,7 +64,7 @@
                 android:minWidth = "70dp"
                 android:layout_below = "@+id/tv_name"
                 android:layout_marginLeft = "7dp"
-                android:layout_marginTop = "6dp"
+                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
                 android:layout_toRightOf = "@+id/rl_icon"
                 style = "@style/DefaultTextView.Text" />
 

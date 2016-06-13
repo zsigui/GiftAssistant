@@ -53,6 +53,10 @@ public class GiftDetailPicsAdapter extends BaseRVAdapter<String> implements View
         GalleryFinal.openMultiPhoto(pos, mPics);
     }
 
+    public ArrayList<PhotoInfo> getPics() {
+        return mPics;
+    }
+
     public void updateData(ArrayList<String> thumbData, ArrayList<String> originData) {
         this.mData = thumbData;
         notifyDataSetChanged();

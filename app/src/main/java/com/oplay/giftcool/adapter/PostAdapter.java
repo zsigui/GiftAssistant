@@ -62,7 +62,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
 
     public PostAdapter(Context context) {
         super(context);
-        GAP_SIZE = context.getResources().getDimensionPixelSize(R.dimen.di_index_post_gap_vertical);
+        GAP_SIZE = context.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_very_small);
         GAP = context.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_normal);
         SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;
         TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
@@ -117,30 +117,45 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
     }
 
     /**
-     * 初始化标题头的配置
+     * 初始化标题头的配置，动态设置3个图片按钮位置和距离
      */
     private void initHeaderLayoutParams(HeaderHolder headerHolder) {
-        LinearLayout.LayoutParams lpSignIn = (LinearLayout.LayoutParams) headerHolder.flSignIn.getLayoutParams();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pic_sign_in_everyday, options);
-        float rate = (float)options.outHeight / options.outWidth;
-        final int width = (SCREEN_WIDTH - 4 * GAP) / 3 - GAP_SIZE;
+        float rate = (float) options.outHeight / options.outWidth;
+//        final int width = options.outWidth;
+        final int width = (SCREEN_WIDTH - 4 * GAP) / 3;
         final int height = (int) (width * rate);
-        lpSignIn.rightMargin = GAP;
+        // 设置内层ImageView的布局
+        FrameLayout.LayoutParams flSignIn = (FrameLayout.LayoutParams) headerHolder.ivSignIn.getLayoutParams();
+        flSignIn.width = width;
+        flSignIn.height = height;
+        headerHolder.ivSignIn.setLayoutParams(flSignIn);
+        FrameLayout.LayoutParams flLottery  = (FrameLayout.LayoutParams) headerHolder.ivLottery.getLayoutParams();
+        flLottery.width = width;
+        flLottery.height = height;
+        headerHolder.ivLottery.setLayoutParams(flSignIn);
+        FrameLayout.LayoutParams flTask = (FrameLayout.LayoutParams) headerHolder.ivTask.getLayoutParams();
+        flTask.width = width;
+        flTask.height = height;
+        headerHolder.ivTask.setLayoutParams(flSignIn);
+        // 设置外层FrameLayout的布局
+        LinearLayout.LayoutParams lpSignIn = (LinearLayout.LayoutParams) headerHolder.flSignIn.getLayoutParams();
         lpSignIn.leftMargin = GAP;
+        lpSignIn.rightMargin = GAP - GAP_SIZE;
         lpSignIn.width = width + GAP_SIZE;
         lpSignIn.height = height + GAP_SIZE;
         headerHolder.flSignIn.setLayoutParams(lpSignIn);
         LinearLayout.LayoutParams lpLottery = (LinearLayout.LayoutParams) headerHolder.flLottery.getLayoutParams();
         lpLottery.leftMargin = 0;
-        lpLottery.rightMargin = GAP;
+        lpLottery.rightMargin = GAP - GAP_SIZE;
         lpLottery.width = width + GAP_SIZE;
         lpLottery.height = height + GAP_SIZE;
         headerHolder.flLottery.setLayoutParams(lpLottery);
         LinearLayout.LayoutParams lpTask = (LinearLayout.LayoutParams) headerHolder.flTask.getLayoutParams();
         lpTask.leftMargin = 0;
-        lpTask.rightMargin = GAP;
+        lpTask.rightMargin = GAP - GAP_SIZE;
         lpTask.width = width + GAP_SIZE;
         lpTask.height = height + GAP_SIZE;
         headerHolder.flTask.setLayoutParams(lpTask);

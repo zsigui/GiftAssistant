@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.gift.GiftLikeListFragment;
-import com.oplay.giftcool.ui.fragment.gift.GiftLimitListDataFragment;
+import com.oplay.giftcool.ui.fragment.gift.GiftLimitListDataNewFragment;
 import com.oplay.giftcool.util.IntentUtil;
 
 /**
@@ -121,8 +121,8 @@ public class GiftListActivity extends BaseAppCompatActivity {
 	}
 
 	private void displayGiftLimitUI() {
-		replaceFrag(R.id.fl_container, GiftLimitListDataFragment.newInstance(),
-				GiftLimitListDataFragment.class.getSimpleName(), false);
+		replaceFrag(R.id.fl_container, GiftLimitListDataNewFragment.newInstance(),
+				GiftLimitListDataNewFragment.class.getSimpleName(), false);
 	}
 
 //	private void displayGiftNewUI(ArrayList<TimeDataList<IndexGiftNew>> data) {

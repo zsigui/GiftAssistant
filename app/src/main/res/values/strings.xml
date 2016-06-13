@@ -89,7 +89,7 @@
     <string name = "st_coupon_content">▌首充券价值</string>
     <string name = "st_coupon_deadline">▌使用期限</string>
     <string name = "st_coupon_usage">▌兑换步骤</string>
-    <string name = "st_coupon_usage_hint">点击下方查看图文步骤</string>
+    <string name = "st_coupon_usage_hint">（点击下方查看图文步骤）</string>
     <string name = "st_coupon_hint_content" >1、首充券只能使用同一个偶玩账号兑换1次，多次兑换无效。\n2、首充券的有效时间较短，抢号后请马上使用。</string >
     <!-- 游戏状态 -->
     <string name = "st_tabs_home_gift" >礼包</string >
