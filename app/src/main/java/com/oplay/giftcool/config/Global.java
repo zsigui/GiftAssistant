@@ -306,18 +306,28 @@ public class Global {
 
     public static void updateMsgCentralData(Context context, MessageCentralUnread unread) {
         final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
+        final String s = context.getResources().getString(R.string.st_msg_central_hint_no_notify);
         for (CentralHintMessage item : data) {
             if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY)) {
                 item.count = unread.unreadNewGiftCount;
+                item.content = !TextUtils.isEmpty(unread.newestGift) ?
+                        unread.newestGift : s;
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_COMMENT)) {
                 item.count = unread.unreadCommentCount;
+                item.content = !TextUtils.isEmpty(unread.newestComment) ?
+                        unread.newestComment : s;
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_SYSTEM)) {
                 item.count = unread.unreadSystemCount;
+                item.content = !TextUtils.isEmpty(unread.newestSystem) ?
+                        unread.newestSystem : s;
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_ADMIRE)) {
                 item.count = unread.unreadAdmireCount;
+                item.content = !TextUtils.isEmpty(unread.newestAdmire) ?
+                        unread.newestAdmire :
+                        (String.format(context.getResources().getString(R.string.st_msg_central_get_a_admire), s));
                 mMsgCentralTobeRefresh = true;
             }
         }

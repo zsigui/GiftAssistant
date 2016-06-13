@@ -351,6 +351,7 @@ public class AccountManager implements OnFinishListener {
         }
 
         HashMap<String, String> cookieMap = new HashMap<>();
+        cookieMap.put("version", String.valueOf(AppConfig.SDK_VER));
         cookieMap.put("version_code", String.valueOf(AppConfig.SDK_VER));
         cookieMap.put("version_name", AppConfig.SDK_VER_NAME);
         cookieMap.put("imei", MobileInfoModel.getInstance().getImei());

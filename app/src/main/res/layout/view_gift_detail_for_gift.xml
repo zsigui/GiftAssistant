@@ -47,6 +47,7 @@
             style = "@style/DefaultTextView.Detail"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:autoLink = "all"
             android:singleLine = "false" />
 
     <TextView

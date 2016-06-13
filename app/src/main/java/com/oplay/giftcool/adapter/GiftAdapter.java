@@ -4,7 +4,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -231,7 +230,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
 
     private void handleGiftNormalCharge(int type, IndexGiftNew o, ItemHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
-        holder.tvName.setText(o.gameName);
+        holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         holder.tvContent.setText(o.content);
         if (type != GiftTypeUtil.TYPE_NORMAL_SEIZE) {
@@ -241,11 +240,11 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         }
         switch (type) {
             case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-                setMoneyData(o, holder);
+                ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
                 holder.tvCount.setVisibility(View.GONE);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-                setMoneyData(o, holder);
+                ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
                 setProgressBarData(o, holder);
                 holder.tvCount.setVisibility(View.GONE);
                 break;
@@ -266,13 +265,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
                         o.searchCount)));
                 break;
         }
-    }
-
-    private void setMoneyData(IndexGiftNew o, ItemHolder holder) {
-        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d", o.score));
-        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
-        holder.tvMoney.setVisibility(View.VISIBLE);
     }
 
     private void setDisabledText(TextView tv, Spanned text) {

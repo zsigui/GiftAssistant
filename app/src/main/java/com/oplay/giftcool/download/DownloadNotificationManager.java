@@ -49,7 +49,7 @@ public class DownloadNotificationManager {
 						KLog.d(AppDebugConfig.TAG_RECEIVER, "action = " + intent.getAction());
 					}
 					if (ACTION_OPEN_DOWNLOAD_FRAGMENT.equals(intent.getAction())) {
-						IntentUtil.jumpDownloadManager(context, true);
+						IntentUtil.jumpDownloadManager(context);
 					}
 				}
 			} catch (Throwable t) {

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.Html;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -194,12 +193,8 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void handleGiftFee(int type, IndexGiftNew o, GiftLimitFeeHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
-        final int startPos = String.valueOf(o.score).length() + 10;
-        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        holder.tvPrice.setText(o.content);
-        holder.tvPrice.setPadding(0, 6, 0, 0);
+        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, GiftTypeUtil.PAY_TYPE_BOTH);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
@@ -215,7 +210,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 setProgressBarData(o, holder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-                holder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 holder.tvSeizeHint.setVisibility(View.VISIBLE);
                 holder.tvSeizeHint.setText("正在免费抢");
                 setProgressBarData(o, holder);
@@ -232,7 +226,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 holder.tvSeizeHint.setVisibility(View.GONE);
                 break;
         }
-        holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
     }
 
     private void setProgressBarData(IndexGiftNew o, GiftLimitFeeHolder gHolder) {
@@ -257,11 +250,11 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         }
         switch (type) {
             case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-                setMoneyData(o, holder);
+                ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
                 holder.tvCount.setVisibility(View.GONE);
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-                setMoneyData(o, holder);
+                ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
                 setProgressBarData(o, holder);
                 holder.tvCount.setVisibility(View.GONE);
                 break;
@@ -282,13 +275,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                         o.searchCount)));
                 break;
         }
-    }
-
-    private void setMoneyData(IndexGiftNew o, GiftNormalHolder holder) {
-        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d", o.score));
-        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
-        holder.tvMoney.setVisibility(View.VISIBLE);
     }
 
     private void setDisabledText(TextView tv, Spanned text) {

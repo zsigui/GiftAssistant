@@ -84,7 +84,7 @@
     <string name = "st_gift_usage" >▌礼包兑换方式</string >
     <string name = "st_gift_remark" >▌特别说明</string >
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
-    <string name = "st_gift_hint_content" >此礼包不能库存，抢号后请马上使用，一旦抢号，非礼包码本身问题，概不退回金币或者偶玩豆，请理解虚拟物品的特殊性！</string >
+    <string name = "st_gift_hint_content" >1、此类型礼包同一个账号只能使用1次，多次兑换无效。\n2、抢号后请马上使用，非礼包码本身问题，概不退回积分或者偶玩豆。</string >
     <!-- 首充券详情 -->
     <string name = "st_coupon_content">▌首充券价值</string>
     <string name = "st_coupon_deadline">▌使用期限</string>

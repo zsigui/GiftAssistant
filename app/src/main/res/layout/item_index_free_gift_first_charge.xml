@@ -46,12 +46,12 @@
         <TextView
                 android:id = "@+id/tv_name"
                 style = "@style/DefaultTextView.Header"
-                android:layout_width = "match_parent"
+                android:layout_width = "wrap_content"
                 android:layout_alignTop = "@+id/rl_icon"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
                 android:layout_marginTop = "4dp"
-                android:layout_toLeftOf = "@+id/btn_send"
                 android:layout_toRightOf = "@+id/rl_icon"
+                android:maxWidth = "200dp"
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
@@ -104,11 +104,17 @@
                 android:layout_height = "wrap_content"
                 android:layout_toLeftOf = "@+id/ll_percent"
                 android:layout_below = "@+id/tv_platform"
+                android:orientation = "horizontal"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
                 android:layout_toRightOf = "@+id/rl_icon" >
 
+            <TextView
+                    android:id="@+id/tv_spend"
+                    style = "@style/DefaultTextView.Text" />
+
             <com.oplay.giftcool.ui.widget.DeletedTextView
                     android:id = "@+id/tv_price"
+                    android:layout_marginLeft="@dimen/di_index_item_margin_left"
                     style = "@style/DefaultTextView.Text"
                     android:gravity = "center_vertical" />
         </LinearLayout >

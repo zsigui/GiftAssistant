@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private ProgressBar pbPercent;
     private TextView tvCode;
     private TextView btnCopy;
+    private TextView tvRemark;
     private TextView tvQQ;
     private DownloadButtonView btnDownload;
     private LinearLayout downloadLayout;
@@ -265,8 +267,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         case GiftTypeUtil.TYPE_LIMIT_EMPTY:
                         case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
                         case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-                            ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, false);
-                            tvOriginPrice.setVisibility(View.VISIBLE);
+                            ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                             setRemainProgress(giftData);
                             if (giftData.freeStartTime > System.currentTimeMillis()) {
                                 tvSeizeHint.setVisibility(View.VISIBLE);
@@ -353,7 +354,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
-                llUsageTitle = getViewById(R.id.ll_usage_title);
+                llUsageTitle = getViewById(vsCharge, R.id.ll_usage_title);
+                tvRemark = getViewById(vsCharge, R.id.tv_remark);
                 LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
                         llm.getOrientation(),
@@ -364,14 +366,19 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 rvUsage.addItemDecoration(decoration);
                 mAdapter = new GiftDetailPicsAdapter(getContext());
                 rvUsage.setAdapter(mAdapter);
-                tvQQ = getViewById(R.id.tv_qq);
+                tvRemark.setText(TextUtils.isEmpty(o.remark) ?
+                        getContext().getResources().getString(R.string.st_coupon_hint_content) : o.remark);
+                tvQQ = getViewById(vsCharge, R.id.tv_qq);
             } else {
                 // 礼包
                 View vsGift = ((ViewStub) getViewById(R.id.vs_gift)).inflate();
                 tvContent = getViewById(vsGift, R.id.tv_content);
                 tvDeadline = getViewById(vsGift, R.id.tv_deadline);
                 tvUsage = getViewById(vsGift, R.id.tv_usage);
-                tvQQ = getViewById(R.id.tv_qq);
+                tvQQ = getViewById(vsGift, R.id.tv_qq);
+                tvRemark = getViewById(vsGift, R.id.tv_remark);
+                tvRemark.setText(TextUtils.isEmpty(o.remark) ?
+                        getContext().getResources().getString(R.string.st_gift_hint_content) : o.remark);
             }
             tvQQ.setOnClickListener(this);
         }

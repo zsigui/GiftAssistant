@@ -74,7 +74,6 @@
             android:layout_below = "@+id/ll_money"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_toRightOf = "@+id/rl_icon"
-            android:layout_toLeftOf = "@+id/btn_send"
             android:layout_marginRight = "@dimen/di_list_item_gap_big"
             android:layout_marginTop = "@dimen/di_line_space_extra_normal"
             android:gravity = "center_vertical" />

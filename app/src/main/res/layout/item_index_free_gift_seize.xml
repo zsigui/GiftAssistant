@@ -46,10 +46,11 @@
         <TextView
                 android:id = "@+id/tv_name"
                 style = "@style/DefaultTextView.Header"
-                android:layout_width = "match_parent"
+                android:layout_width = "wrap_content"
                 android:layout_alignTop = "@+id/rl_icon"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
                 android:layout_marginTop = "4dp"
+                android:maxWidth = "200dp"
                 android:layout_toLeftOf = "@+id/btn_send"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
@@ -58,14 +59,22 @@
                 android:text = "[暴打魏蜀吴]新手礼包" />
 
 
+        <TextView
+                android:id = "@+id/tv_spend"
+                style = "@style/DefaultTextView.Text"
+                android:layout_below = "@+id/tv_name"
+                android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+                android:layout_marginTop = "@dimen/di_line_space_extra_big"
+                android:layout_toRightOf = "@+id/rl_icon" />
+
         <com.oplay.giftcool.ui.widget.DeletedTextView
                 android:id = "@+id/tv_money"
                 android:gravity = "center_vertical"
-                android:minWidth = "70dp"
                 android:layout_below = "@+id/tv_name"
-                android:layout_marginLeft = "7dp"
+                android:layout_marginLeft = "@dimen/di_index_item_margin_left"
                 android:layout_marginTop = "@dimen/di_line_space_extra_normal"
-                android:layout_toRightOf = "@+id/rl_icon"
+                android:text = "￥6.00"
+                android:layout_toRightOf = "@+id/tv_spend"
                 style = "@style/DefaultTextView.Text" />
 
 

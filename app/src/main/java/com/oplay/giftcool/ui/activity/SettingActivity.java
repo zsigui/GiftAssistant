@@ -130,7 +130,8 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
             }
             ToastUtil.showShort("跳转出错");
             return;
-        } else if (type != KeyConfig.TYPE_ID_SETTING && !AccountManager.getInstance().isLogin()) {
+        } else if ((type != KeyConfig.TYPE_ID_SETTING && type != KeyConfig.TYPE_ID_DOWNLOAD)
+                && !AccountManager.getInstance().isLogin()) {
             // 判断是否登录
             ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
             IntentUtil.jumpLoginNoToast(this);

@@ -259,12 +259,9 @@ public class IntentUtil {
     /**
      * 跳转下载管理界面
      */
-    public static void jumpDownloadManager(Context context, boolean newTask) {
+    public static void jumpDownloadManager(Context context) {
         Intent intent = new Intent(context, SettingActivity.class);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DOWNLOAD);
-//		if (newTask) {
-//			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//		}
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }

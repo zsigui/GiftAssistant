@@ -99,7 +99,7 @@ public class PayManager {
             case GiftTypeUtil.TYPE_NORMAL_SEARCH:
             case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
             case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
-                searchGift(context, gift, button);
+                handleScorePay(context, gift, button, false);
                 return WebViewInterface.RET_SUCCESS;
             case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
                 chargeReservedFailed(context, gift);
@@ -114,14 +114,6 @@ public class PayManager {
                 return WebViewInterface.RET_SUCCESS;
         }
     }
-
-    /**
-     * 执行淘号操作，直接回调
-     */
-    private void searchGift(final FragmentActivity context, final IndexGiftNew gift, GiftButton button) {
-        handleScorePay(context, gift, button, false);
-    }
-
 
     /**
      * 请求执行抢号操作的购买服务

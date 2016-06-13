@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +18,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
+
+import java.util.Locale;
 
 /**
  * @author JackieZhuang
@@ -73,25 +77,62 @@ public class ViewUtil {
 
 
     /**
-     * 设置礼包'价值:￥5.00'的显示方式
+     * 设置礼包'￥5.00'的显示方式
      */
     public static void siteValueUI(TextView tv, int value, boolean delete) {
+        if (tv == null) {
+            return;
+        }
         Context context = tv.getContext();
-        final int originSize = 7;
-        final String s = String.format("价值:￥%d.00", value);
+        final int originSize = 4;
+        final String s = String.format(Locale.CHINA, "￥%d.00", value);
         final int moneyLength = s.length() - originSize;
         SpannableString ss = new SpannableString(s);
-        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1),
-                0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2),
-                3, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S3),
-                4, 5 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                1, 2 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S4),
-                5 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                2 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tv.setText(ss, TextView.BufferType.NORMAL);
         if (delete && tv instanceof DeletedTextView) {
             ((DeletedTextView) tv).setPaint(getColor(context, R.color.co_btn_grey_pressed), 3);
+        }
+        tv.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 设置花费的金币或偶玩豆样式
+     */
+    public static void siteSpendUI(TextView tv, int score, int bean, int type) {
+        if (tv == null) {
+            return;
+        }
+        final ImageSpan DRAWER_GOLD = new ImageSpan(tv.getContext(), R.drawable.ic_score);
+        final ImageSpan DRAWER_BEAN = new ImageSpan(tv.getContext(), R.drawable.ic_bean);
+        tv.setVisibility(View.VISIBLE);
+        switch (type) {
+            case GiftTypeUtil.PAY_TYPE_BEAN: {
+                SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[bean] %d", bean));
+                ss.setSpan(DRAWER_BEAN, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                tv.setText(ss, TextView.BufferType.SPANNABLE);
+                break;
+            }
+            case GiftTypeUtil.PAY_TYPE_SCORE: {
+                SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d", score));
+                ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                tv.setText(ss, TextView.BufferType.SPANNABLE);
+                break;
+            }
+            default: {
+                SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d  [bean] %d",
+                        score, bean));
+                final int startPos = String.valueOf(score).length() + 9;
+                ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                tv.setText(ss, TextView.BufferType.SPANNABLE);
+            }
+
         }
     }
 

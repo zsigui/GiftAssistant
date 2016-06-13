@@ -169,7 +169,7 @@ public class DrawerFragment extends BaseFragment {
                 IntentUtil.jumpMyAttention(context);
                 break;
             case KeyConfig.TYPE_ID_DOWNLOAD:
-                IntentUtil.jumpDownloadManager(context, false);
+                IntentUtil.jumpDownloadManager(context);
                 break;
         }
         closeDrawer();

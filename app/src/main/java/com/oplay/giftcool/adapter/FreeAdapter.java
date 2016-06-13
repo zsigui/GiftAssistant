@@ -130,11 +130,6 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ViewUtil.showImage(gHolder.ivIcon, o.img);
         gHolder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         gHolder.tvContent.setText(o.content);
-//        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o
-// .bean));
-//        final int startPos = String.valueOf(o.score).length() + 10;
-//        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
@@ -155,7 +150,6 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 0);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
-//                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 seizedState(gHolder);
                 break;
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
@@ -164,7 +158,6 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
             default:
                 if (o.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
-                    // 效果同 TYPE_LIMIT_FREE_SEIZED , 不过没有删除线
                     seizedState(gHolder);
                 } else if (o.status == GiftTypeUtil.STATUS_FINISHED
                         || o.status == GiftTypeUtil.STATUS_WAIT_SEIZE
@@ -176,8 +169,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
 
         }
-//        gHolder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
         ViewUtil.siteValueUI(gHolder.tvMoney, o.originPrice, true);
+        ViewUtil.siteSpendUI(gHolder.tvSpend, o.score, o.bean, o.priceType);
     }
 
     private void seizeLimitState(IndexGiftNew o, GiftHolder gHolder) {
@@ -278,6 +271,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 break;
         }
         ViewUtil.siteValueUI(cHolder.tvPrice, o.originPrice, true);
+        ViewUtil.siteSpendUI(cHolder.tvSpend, o.score, o.bean, o.priceType);
     }
 
     /**
@@ -291,6 +285,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
         gHolder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
         gHolder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_money);
+        gHolder.tvSpend = ViewUtil.getViewById(convertView, R.id.tv_spend);
         gHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
         gHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
         gHolder.tvSeize = ViewUtil.getViewById(convertView, R.id.tv_seize);
@@ -316,6 +311,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         cHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
         cHolder.tvSeize = ViewUtil.getViewById(convertView, R.id.tv_seize);
         cHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
+        cHolder.tvSpend = ViewUtil.getViewById(convertView, R.id.tv_spend);
         cHolder.tvReserveDeadline = ViewUtil.getViewById(convertView, R.id.tv_reserve_deadline);
         cHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
         cHolder.aavView = ViewUtil.getViewById(convertView, R.id.aav_view);
@@ -536,6 +532,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         TextView tvName;
         TextView tvContent;
         DeletedTextView tvMoney;
+        TextView tvSpend;
         TextView tvPercent;
         ProgressBar pbPercent;
         TextView tvSeizeHint;
@@ -548,6 +545,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         ImageView ivIcon;
         TextView tvName;
         DeletedTextView tvPrice;
+        TextView tvSpend;
         TextView tvPlatform;
         GiftButton btnSend;
         TextView tvSeize;
