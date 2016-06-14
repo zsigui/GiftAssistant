@@ -72,11 +72,11 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
         mDataView.setAdapter(mAdapter);
         switch (mType) {
             case KeyConfig.TYPE_KEY_SEARCH:
-                tvHint.setText("抢号结束的普通礼包会进入淘号喔，还没使用的礼包码请尽快打开游戏兑换。");
+                tvHint.setText("淘号的礼包不一定可用，祝你好运。");
                 tvHint.setVisibility(View.VISIBLE);
                 break;
             case KeyConfig.TYPE_KEY_SEIZED:
-                tvHint.setText("淘号的礼包不一定可用，祝你好运。");
+                tvHint.setText("抢号结束的普通礼包会进入淘号喔，还没使用的礼包码请尽快打开游戏兑换。");
                 tvHint.setVisibility(View.VISIBLE);
                 break;
             default:

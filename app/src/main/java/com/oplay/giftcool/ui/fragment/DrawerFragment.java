@@ -163,7 +163,7 @@ public class DrawerFragment extends BaseFragment {
             case KeyConfig.TYPE_ID_MSG:
                 IntentUtil.jumpMessageCentral(context);
                 AccountManager.getInstance().setUnreadMessageCount(0);
-                updateCount(KeyConfig.TYPE_ID_MSG, 0);
+                ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
                 break;
             case KeyConfig.TYPE_ID_MY_ATTENTION:
                 IntentUtil.jumpMyAttention(context);
