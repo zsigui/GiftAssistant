@@ -119,6 +119,7 @@ public class AssistantApp extends Application {
 
     private OkHttpClient mHttpClient;
     private long mLastLaunchTime;
+    private int mPhoneLoginType;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -692,5 +693,16 @@ public class AssistantApp extends Application {
 
     public void setFirstOpenInThisVersion(boolean firstOpenInThisVersion) {
         mFirstOpenInThisVersion = firstOpenInThisVersion;
+    }
+
+    public void setPhoneLoginType(int phoneLoginType) {
+        mPhoneLoginType = phoneLoginType;
+    }
+
+    /**
+     * 获取手机登录的展示UI样式，0 旧版 1 新版
+     */
+    public int getPhoneLoginType() {
+        return mPhoneLoginType;
     }
 }

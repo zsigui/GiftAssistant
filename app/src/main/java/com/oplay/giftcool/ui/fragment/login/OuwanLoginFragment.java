@@ -33,6 +33,7 @@ import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -205,9 +206,17 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                 break;
             case R.id.tv_another_login:
                 if (getActivity() != null) {
-                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-                            PhoneLoginNewFragment.newInstance(), getResources().getString(R.string.st_login_phone_title),
-                            false);
+                    if (AssistantApp.getInstance().getPhoneLoginType() == 1) {
+                        ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                PhoneLoginNewFragment.newInstance(),
+                                getResources().getString(R.string.st_login_phone_new_title),
+                                false);
+                    } else {
+                        ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                PhoneLoginFragment.newInstance(),
+                                getResources().getString(R.string.st_login_phone_title),
+                                false);
+                    }
                 }
                 break;
             case R.id.tv_user_clear:
@@ -325,7 +334,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                 "用户名:" + userModel.userInfo.username);
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((BaseAppCompatActivity) getActivity()).onBack();
+        ((LoginActivity)getActivity()).doLoginBack();
     }
 
     public void hideLoading() {

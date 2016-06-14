@@ -345,7 +345,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 final boolean isUpdate =
                         DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager());
                 if (!isUpdate) {
-                    ToastUtil.showShort("已更新至最新版本");
+                    ToastUtil.showShort(getContext().getResources().getString(R.string.st_gift_hint_content));
                 }
                 break;
         }

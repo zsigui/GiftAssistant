@@ -23,6 +23,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
@@ -586,7 +587,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
-            ToastUtil.showShort("再次点击退出应用");
+            ToastUtil.showShort(ConstString.TEXT_EXIT_APP);
         }
     }
 

@@ -9,11 +9,12 @@ public class ConstString {
 
     public static final String TEXT_HEADER = "pn=%s&vc=%d&vn=%s&chn=%d&ov=%s";
 
-    public static final String TEXT_NET_ERROR = "网络连接错误";
-    public static final String TEXT_EXECUTE_ERROR = "执行出错，请求失败";
-    public static final String TEXT_ENTER_ERROR = "进入页面出错";
+    public static final String TEXT_NET_ERROR = "呜，网络正在发生流血事件...";
+    public static final String TEXT_EXECUTE_ERROR = "哎呦，程序执行时脑袋抽风了";
+    public static final String TEXT_DATA_OVERTIME = "诶，这的东西我得去山沟沟找找看了";
+    public static final String TEXT_ENTER_ERROR = "呜呼，想要的页面去哪了呢";
 
-    public static final String TEXT_LOGIN_FIRST = "请求失败,请先登录";
+    public static final String TEXT_LOGIN_FIRST = "警告！非法禁止，请先登录";
 
 
     public static final String TEXT_SEIZE = "开抢时间：<font color='#ffaa17'>%s</font>";
@@ -23,4 +24,5 @@ public class ConstString {
     public static final String TEXT_GIFT_TOTAL = "共 <font color='#ffaa17'>%s</font> 款礼包";
 
     public static final String TEXT_GIFT_FREE_SEIZE = "%s免费抢";
+    public static final String TEXT_EXIT_APP = "再点我就离你而去了~~~~(>_<)~~~~";
 }

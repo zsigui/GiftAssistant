@@ -11,6 +11,12 @@
     <string name = "err_setting" >去设置</string >
 
     <string name = "st_title_stress" >▌</string >
+
+    <!-- 部分提示 -->
+    <string name = "st_hint_upgrade_newest" >厉害，已经是更无可更了</string >
+    <string name = "st_hint_version_not_support" >唷，当前版本不支持该功能显示喔，不如下载最新版本</string >
+    <string name = "st_hint_unknown_failed" >(⊙o⊙)? 哪里出错了，没有反应</string >
+
     <!-- 侧边栏 -->
     <string name = "st_drawer_text_open" >打开</string >
     <string name = "st_drawer_text_close" >关闭</string >
@@ -86,10 +92,10 @@
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
     <string name = "st_gift_hint_content" >1、此类型礼包同一个账号只能使用1次，多次兑换无效。\n2、抢号后请马上使用，非礼包码本身问题，概不退回积分或者偶玩豆。</string >
     <!-- 首充券详情 -->
-    <string name = "st_coupon_content">▌首充券内容</string>
-    <string name = "st_coupon_deadline">▌使用期限</string>
-    <string name = "st_coupon_usage">▌兑换步骤</string>
-    <string name = "st_coupon_usage_hint">（点击下方查看图文步骤）</string>
+    <string name = "st_coupon_content" >▌首充券内容</string >
+    <string name = "st_coupon_deadline" >▌使用期限</string >
+    <string name = "st_coupon_usage" >▌兑换步骤</string >
+    <string name = "st_coupon_usage_hint" >（点击下方查看图文步骤）</string >
     <string name = "st_coupon_hint_content" >1、首充券只能在首次充值时用于抵扣充值金额，每个偶玩账号可兑换使用一次。\n2、首充券的有效时间较短，抢号后请马上兑换，并到游戏中消费使用。</string >
     <!-- 游戏状态 -->
     <string name = "st_tabs_home_gift" >礼包</string >
@@ -177,7 +183,7 @@
     <string name = "st_wallet_score_note" >金币说明</string >
 
     <!-- 设置 - 我的首充券 -->
-    <string name = "st_my_coupon_reserved_msg_hint">已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。</string>
+    <string name = "st_my_coupon_reserved_msg_hint" >已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。</string >
     <string name = "st_my_coupon_note" >首充券说明</string >
 
     <!-- 设置 - 金币任务 -->
@@ -211,7 +217,8 @@
     <!-- 登录 -->
     <string name = "st_login_user" >点击登录</string >
     <!--<string name = "st_login_phone_title" >登录礼包酷</string >-->
-    <string name = "st_login_phone_title" >快速登录</string >
+    <string name = "st_login_phone_title" >手机登录</string >
+    <string name = "st_login_phone_new_title" >快速登录</string >
     <string name = "st_login_ouwan_title" >偶玩账号登录</string >
     <string name = "st_login_phone_hint" >请输入手机号</string >
     <string name = "st_login_phone_code_hint" >请输入短信验证码</string >

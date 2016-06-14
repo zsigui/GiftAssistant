@@ -1,6 +1,7 @@
 package com.oplay.giftcool.config.util;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
@@ -8,6 +9,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -34,10 +36,11 @@ public class BannerTypeUtil {
     public static final int ACTION_JOIN_QQ_GROUP = 6;
     public static final int ACTION_POST = 7;
     public static final int ACTION_POST_DETAIL = 8;
+    public static final int ACTION_UPGRADE = 9;
     public static final int ACTION_LIKE_AS_TASK = 11011;
 
     public static void handleBanner(Context context, IndexBanner banner) {
-        if (banner == null) {
+        if (banner == null || context == null) {
             return;
         }
         try {
@@ -91,14 +94,31 @@ public class BannerTypeUtil {
                     IntentUtil.jumpPostDetail(context, post_p.id);
                     break;
                 case ACTION_DEFAULT:
+                case ACTION_UPGRADE:
+                    if (context instanceof FragmentActivity) {
+                        final boolean isUpdate =
+                                DialogManager.getInstance().showUpdateDialog(context,
+                                        ((FragmentActivity) context).getSupportFragmentManager());
+                        if (!isUpdate) {
+                            ToastUtil.showShort(context.getResources().getString(R.string.st_hint_upgrade_newest));
+                        }
+                    } else {
+                        ToastUtil.showShort(context.getResources().getString(R.string.st_hint_unknown_failed));
+                    }
+                    break;
                 case ACTION_LIKE_AS_TASK:
                     TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
                             banner.extData, TaskInfoOne.class);
                     IntentUtil.handleJumpInfo(context, infoOne);
                     break;
                 default:
-                    ToastUtil.showShort("唷，当前版本不支持该功能显示喔，请下载最新版本");
-                    IntentUtil.jumpHome(context, KeyConfig.TYPE_ID_INDEX_UPGRADE, 0);
+                    ToastUtil.showShort(context.getResources().getString(R.string.st_hint_version_not_support));
+                    if (context instanceof FragmentActivity) {
+                        DialogManager.getInstance().showUpdateDialog(context,
+                                ((FragmentActivity) context).getSupportFragmentManager());
+                    } else {
+                        IntentUtil.jumpHome(context, KeyConfig.TYPE_ID_INDEX_UPGRADE, 0);
+                    }
             }
         } catch (Throwable t) {
             if (AppDebugConfig.IS_DEBUG) {

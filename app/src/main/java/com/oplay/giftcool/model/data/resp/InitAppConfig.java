@@ -12,20 +12,25 @@ import java.util.ArrayList;
  *         date 16-1-24
  *         description
  */
-public class InitAppConfig implements Serializable{
-	@SerializedName("qq_v2")
-	public ArrayList<InitQQ> qqInfo;
+public class InitAppConfig implements Serializable {
+    @SerializedName("qq_v2")
+    public ArrayList<InitQQ> qqInfo;
 
-	@SerializedName("start_img")
-	public String startImgUrl;
+    @SerializedName("start_img")
+    public String startImgUrl;
 
-	@SerializedName("is_show_download")
-	public boolean isShowDownload;
+    @SerializedName("is_show_download")
+    public boolean isShowDownload;
 
-	/**
-	 * 启动页面活动图
-	 */
-	@SerializedName("activity")
-	public IndexBanner broadcastBanner;
+    /**
+     * 启动页面活动图
+     */
+    @SerializedName("activity")
+    public IndexBanner broadcastBanner;
 
+    /**
+     * 手机登录的样式，0 旧版 1 新版
+     */
+    @SerializedName("phone_login_ui_type")
+    public int phoneLoginType;
 }

@@ -214,6 +214,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                                     .startImgUrl);
                             AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
                                     .broadcastBanner);
+                            AssistantApp.getInstance().setPhoneLoginType(initData.initAppConfig.phoneLoginType);
                         }
                         if (initData.updateInfo != null) {
                             AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);

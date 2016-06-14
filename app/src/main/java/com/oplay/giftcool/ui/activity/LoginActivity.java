@@ -3,11 +3,13 @@ package com.oplay.giftcool.ui.activity;
 import android.support.annotation.IdRes;
 import android.view.View;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
+import com.oplay.giftcool.ui.fragment.login.PhoneLoginFragment;
 import com.oplay.giftcool.ui.fragment.login.PhoneLoginNewFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 
@@ -29,8 +31,13 @@ public class LoginActivity extends BaseAppCompatActivity {
             type = getIntent().getIntExtra(KeyConfig.KEY_TYPE, 0);
 
         if (type != KeyConfig.TYPE_ID_OUWAN_LOGIN) {
-            replaceFragWithTitle(R.id.fl_container, PhoneLoginNewFragment.newInstance(),
-                    getResources().getString(R.string.st_login_phone_title), false);
+            if (AssistantApp.getInstance().getPhoneLoginType() == 1) {
+                replaceFragWithTitle(R.id.fl_container, PhoneLoginNewFragment.newInstance(),
+                        getResources().getString(R.string.st_login_phone_new_title), false);
+            } else {
+                replaceFragWithTitle(R.id.fl_container, PhoneLoginFragment.newInstance(),
+                        getResources().getString(R.string.st_login_phone_title), false);
+            }
         } else {
             replaceFragWithTitle(R.id.fl_container, OuwanLoginFragment.newInstance(),
                     getResources().getString(R.string.st_login_ouwan_title), false);
@@ -46,10 +53,14 @@ public class LoginActivity extends BaseAppCompatActivity {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_bar_back) {
-            InputMethodUtil.hideSoftInput(this);
-            mNeedWorkCallback = false;
-            doBeforeFinish();
-            finish();
+            doLoginBack();
         }
+    }
+
+    public void doLoginBack() {
+        InputMethodUtil.hideSoftInput(this);
+        mNeedWorkCallback = false;
+        doBeforeFinish();
+        finish();
     }
 }

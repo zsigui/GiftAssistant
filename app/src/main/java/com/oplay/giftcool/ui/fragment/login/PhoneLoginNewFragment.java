@@ -25,6 +25,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
@@ -40,6 +41,7 @@ import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -47,12 +49,13 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.StringUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -223,11 +226,6 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                     btnLogin.setText("登录");
                     btnLogin.setEnabled(false);
                 } else {
-                    long curTime = System.currentTimeMillis();
-                    if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
-                        mLastClickTime = curTime;
-                        return;
-                    }
                     handleLogin();
                 }
                 break;
@@ -386,6 +384,11 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
      * 处理手机登录事件
      */
     private void handleLogin() {
+        long curTime = System.currentTimeMillis();
+        if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+            mLastClickTime = curTime;
+            return;
+        }
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
             showToast("手机号码格式不符合要求");
@@ -399,7 +402,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    showToast("网络连接失败");
+                    showToast(ConstString.TEXT_NET_ERROR);
                     return;
                 }
                 if (mCallLogin != null) {
@@ -458,7 +461,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                 "手机号:" + userModel.userInfo.phone);
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((OnBackPressListener) getActivity()).onBack();
+        ((LoginActivity) getActivity()).doLoginBack();
     }
 
 
@@ -550,8 +553,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             etPhone.dismissDropDown();
             return true;
         }
-        KLog.d(AppDebugConfig.TAG_WARN, "mIsInFirstStep = " + mIsInFirstStep);
         if (!mIsInFirstStep) {
+            etCode.setText("");
             llCode.setVisibility(View.GONE);
             llPhone.setVisibility(View.VISIBLE);
             etPhone.requestFocus();
@@ -574,6 +577,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             mCallGetCode.cancel();
             mCallGetCode = null;
         }
+        btnLogin = null;
+        etCode = null;
         getContext().getContentResolver().unregisterContentObserver(mObserver);
     }
 
@@ -605,11 +610,28 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
 
     /* ----------- 注册短信的广播接收  ----------- */
 
+    private int mLoginCountdown;
+
+    Runnable autoLoginRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!mIsInFirstStep && btnLogin != null) {
+                btnLogin.setText(String.format(Locale.CHINA, "自动登录中(%d)", mLoginCountdown));
+                if (--mLoginCountdown < 0) {
+                    handleLogin();
+                    btnLogin.setText("登录");
+                } else {
+                    ThreadUtil.runOnUiThread(autoLoginRunnable, 1000);
+                }
+            }
+        }
+    };
+
     private SmsObserver mObserver;
 
     class SmsObserver extends ContentObserver {
 
-         private Cursor mCursor = null;
+        private Cursor mCursor = null;
 
         public SmsObserver(Handler handler) {
             super(handler);
@@ -618,7 +640,6 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            KLog.d(AppDebugConfig.TAG_WARN, "have change");
             if (etCode != null) {
                 //每当有新短信到来时，使用我们获取短消息的方法
                 getSmsFromPhone();
@@ -627,18 +648,18 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
 
         private void getSmsFromPhone() {
             mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
-                    new String[] { "_id", "address", "read", "body" }, "read=?",
-                    new String[] {"0" }, "_id desc");
+                    new String[]{"_id", "address", "read", "body"}, "read=?",
+                    new String[]{"0"}, "_id desc");
             // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
-            KLog.d(AppDebugConfig.TAG_WARN, "mCursor = " + (mCursor == null ? "null" : mCursor.getCount()));
             if (mCursor != null && mCursor.getCount() > 0) {
                 mCursor.moveToFirst();
                 if (mCursor.moveToFirst()) {
                     String smsBody = mCursor
                             .getString(mCursor.getColumnIndex("body"));
-                    KLog.d(AppDebugConfig.TAG_WARN, "smsBody = " + smsBody);
                     if (smsBody.startsWith("【有米科技】验证码")) {
                         etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
+                        mLoginCountdown = 3;
+                        ThreadUtil.runOnUiThread(autoLoginRunnable);
                     }
                 }
             }

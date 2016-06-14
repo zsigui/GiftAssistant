@@ -160,7 +160,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 @Override
                 public void share() {
                     if (mData == null || mData.giftData == null || mData.gameData == null) {
-                        ToastUtil.showShort("页面出错，请重新进入");
+                        ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
                         return;
                     }
                     mData.giftData.gameName = mData.gameData.name;
@@ -209,7 +209,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
     private void updateData(GiftDetail data) {
         if (data == null || data.giftData == null) {
-            ToastUtil.showShort("该请求数据可能已经过期");
+            ToastUtil.showShort(ConstString.TEXT_DATA_OVERTIME);
             mViewManager.showEmpty();
             return;
         }
