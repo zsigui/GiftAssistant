@@ -174,6 +174,7 @@ public class DateUtil {
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
 
         Calendar tomorrow = Calendar.getInstance();    //明天
         tomorrow.set(Calendar.YEAR, current.get(Calendar.YEAR));
@@ -183,21 +184,21 @@ public class DateUtil {
         tomorrow.set(Calendar.HOUR_OF_DAY, 0);
         tomorrow.set(Calendar.MINUTE, 0);
         tomorrow.set(Calendar.SECOND, 0);
+        tomorrow.set(Calendar.MILLISECOND, 0);
 
         current.setTime(date);
-//        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-//        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//        KLog.d(AppDebugConfig.TAG_WARN, "date = " + format1.format(date) + ", time = " + format1.format(time));
+        current.set(Calendar.SECOND, 0);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault());
         if (current.after(today) && current.before(tomorrow)) {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "明天" + format.format(date);
         } else if (current.after(tomorrow)) {
             SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
             return format.format(date);
+        } else if (current.getTime().compareTo(today.getTime()) == 0) {
+            return "明天";
         } else {
-//            TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-//            return format.format(date);
             SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "今天" + format.format(date);
         }
