@@ -41,149 +41,149 @@ import cn.jpush.android.api.JPushInterface;
  * @date 2015/12/13
  */
 public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog implements View.OnClickListener,
-		FragmentManager.OnBackStackChangedListener, OnFinishListener, OnBackPressListener, SetTitleListner {
+        FragmentManager.OnBackStackChangedListener, OnFinishListener, OnBackPressListener, SetTitleListner {
 
-	protected AssistantApp mApp;
-	protected Toolbar mToolbar;
-	private TextView tvTitle;
+    protected AssistantApp mApp;
+    protected Toolbar mToolbar;
+    private TextView tvTitle;
 
-	private LoadingDialog mLoadingDialog;
-	protected boolean mNeedWorkCallback = false;
-	// 封装加载和等待等页面的管理器对象
-	protected LoadAndRetryViewManager mViewManager;
-	protected boolean mIsLoading;
-	protected Handler mHandler = new Handler(Looper.myLooper());
+    private LoadingDialog mLoadingDialog;
+    protected boolean mNeedWorkCallback = false;
+    // 封装加载和等待等页面的管理器对象
+    protected LoadAndRetryViewManager mViewManager;
+    protected boolean mIsLoading;
+    protected Handler mHandler = new Handler(Looper.myLooper());
 
-	// 保存当前栈顶对象
-	private Fragment mCurTopFragment;
-	// fragment处理onActivityResult
-	private Fragment mFragmentForResult;
-	private int mFragmentRequestCode;
+    // 保存当前栈顶对象
+    protected Fragment mCurTopFragment;
+    // fragment处理onActivityResult
+    private Fragment mFragmentForResult;
+    private int mFragmentRequestCode;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mApp = AssistantApp.getInstance();
-		int statusColor = getStatusBarColor();
-		if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().setStatusBarColor(statusColor);
-		}
-		getSupportFragmentManager().addOnBackStackChangedListener(this);
-		initView();
-		mToolbar = getViewById(R.id.toolbar);
-		if (mToolbar != null) {
-			final View backIcon = mToolbar.findViewById(R.id.iv_bar_back);
-			if (backIcon != null) {
-				backIcon.setOnClickListener(this);
-			}
-			initMenu(mToolbar);
-		}
-		processLogic();
-		mNeedWorkCallback = true;
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mApp = AssistantApp.getInstance();
+        int statusColor = getStatusBarColor();
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(statusColor);
+        }
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+        initView();
+        mToolbar = getViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            final View backIcon = mToolbar.findViewById(R.id.iv_bar_back);
+            if (backIcon != null) {
+                backIcon.setOnClickListener(this);
+            }
+            initMenu(mToolbar);
+        }
+        processLogic();
+        mNeedWorkCallback = true;
+    }
 
-	/**
-	 * 重写此类设置状态栏颜色
-	 *
-	 * @return
-	 */
-	protected int getStatusBarColor() {
-		return getResources().getColor(R.color.co_status_bar_bg);
-	}
+    /**
+     * 重写此类设置状态栏颜色
+     *
+     * @return
+     */
+    protected int getStatusBarColor() {
+        return getResources().getColor(R.color.co_status_bar_bg);
+    }
 
-	protected abstract void processLogic();
+    protected abstract void processLogic();
 
-	/**
-	 * this will be called before {@code super.onCreate()} when you override {@code onCreate()} method <br />
-	 * Note: all views initial work have better implemented here
-	 */
-	protected abstract void initView();
+    /**
+     * this will be called before {@code super.onCreate()} when you override {@code onCreate()} method <br />
+     * Note: all views initial work have better implemented here
+     */
+    protected abstract void initView();
 
-	protected void initMenu(@NonNull Toolbar toolbar) {
-	}
+    protected void initMenu(@NonNull Toolbar toolbar) {
+    }
 
-	@SuppressWarnings("unchecked")
-	protected <V extends View> V getViewById(@IdRes int id) {
-		if (mViewManager == null) {
-			View child = findViewById(id);
-			return (child != null ? (V) child : null);
-		} else {
-			return getViewById(mViewManager.getContentView(), id);
-		}
-	}
+    @SuppressWarnings("unchecked")
+    protected <V extends View> V getViewById(@IdRes int id) {
+        if (mViewManager == null) {
+            View child = findViewById(id);
+            return (child != null ? (V) child : null);
+        } else {
+            return getViewById(mViewManager.getContentView(), id);
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	protected <V extends View> V getViewById(View v, @IdRes int id) {
-		View child = v.findViewById(id);
-		return (child != null ? (V) child : null);
-	}
+    @SuppressWarnings("unchecked")
+    protected <V extends View> V getViewById(View v, @IdRes int id) {
+        View child = v.findViewById(id);
+        return (child != null ? (V) child : null);
+    }
 
-	public void setBarTitle(@StringRes int res) {
-		setBarTitle(getResources().getString(res));
-	}
+    public void setBarTitle(@StringRes int res) {
+        setBarTitle(getResources().getString(res));
+    }
 
-	public void setBarTitle(String title) {
-		if (mToolbar != null) {
-			if (tvTitle == null) {
-				tvTitle = getViewById(mToolbar, R.id.tv_bar_title);
-			}
-			if (tvTitle != null) {
-				tvTitle.setText(title);
-			}
-		}
-	}
+    public void setBarTitle(String title) {
+        if (mToolbar != null) {
+            if (tvTitle == null) {
+                tvTitle = getViewById(mToolbar, R.id.tv_bar_title);
+            }
+            if (tvTitle != null) {
+                tvTitle.setText(title);
+            }
+        }
+    }
 
-	protected void initViewManger(@LayoutRes int layoutResID) {
-		mViewManager = LoadAndRetryViewManager.generate(this, layoutResID);
-		setContentView(mViewManager.getContainer());
-	}
+    protected void initViewManger(@LayoutRes int layoutResID) {
+        mViewManager = LoadAndRetryViewManager.generate(this, layoutResID);
+        setContentView(mViewManager.getContainer());
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.iv_bar_back) {
-			onBackPressed();
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_bar_back) {
+            onBackPressed();
+        }
+    }
 
-	public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title) {
-		newFrag.setTitleName(title);
-		replaceFrag(id, newFrag);
-		setBarTitle(title);
-	}
+    public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title) {
+        newFrag.setTitleName(title);
+        replaceFrag(id, newFrag);
+        setBarTitle(title);
+    }
 
-	public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String tag, String title) {
-		newFrag.setTitleName(title);
-		replaceFrag(id, newFrag, tag, true);
-		setBarTitle(title);
-	}
+    public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String tag, String title) {
+        newFrag.setTitleName(title);
+        replaceFrag(id, newFrag, tag, true);
+        setBarTitle(title);
+    }
 
-	public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title,
-	                                 boolean isAddToBackStack) {
-		newFrag.setTitleName(title);
-		replaceFrag(id, newFrag, isAddToBackStack);
-		setBarTitle(title);
-	}
+    public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title,
+                                     boolean isAddToBackStack) {
+        newFrag.setTitleName(title);
+        replaceFrag(id, newFrag, isAddToBackStack);
+        setBarTitle(title);
+    }
 
-	public void replaceFrag(@IdRes int id, Fragment newFrag) {
-		replaceFrag(id, newFrag, newFrag.getClass().getSimpleName(), true);
-	}
+    public void replaceFrag(@IdRes int id, Fragment newFrag) {
+        replaceFrag(id, newFrag, newFrag.getClass().getSimpleName(), true);
+    }
 
-	public void replaceFrag(@IdRes int id, Fragment newFrag, boolean isAddToBackStack) {
-		replaceFrag(id, newFrag, newFrag.getClass().getSimpleName(), isAddToBackStack);
-	}
+    public void replaceFrag(@IdRes int id, Fragment newFrag, boolean isAddToBackStack) {
+        replaceFrag(id, newFrag, newFrag.getClass().getSimpleName(), isAddToBackStack);
+    }
 
-	public void replaceFrag(@IdRes int id, Fragment newFrag, String tag, boolean isAddToBackStack) {
+    public void replaceFrag(@IdRes int id, Fragment newFrag, String tag, boolean isAddToBackStack) {
         if (isFinishing()) {
             // Activity处于Finished中
             return;
         }
         // 查找特定tag的Fragment
-		Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		if (f != null) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (f != null) {
             // 查找的tag已经存在，直接显示
-			ft.show(f);
-		} else {
+            ft.show(f);
+        } else {
             // 查找的tag不存在
             if (newFrag == null) {
                 // 需要新添加的Fragment为null，不处理
@@ -196,38 +196,38 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
                 // 没有添加，调用replace方法
                 ft.replace(id, newFrag, tag);
             }
-		}
-		if (isAddToBackStack) {
-			ft.addToBackStack(tag);
-		}
-		ft.commitAllowingStateLoss();
-	}
+        }
+        if (isAddToBackStack) {
+            ft.addToBackStack(tag);
+        }
+        ft.commitAllowingStateLoss();
+    }
 
-	/**
-	 * 重新<code>attach</code>添加Fragment到视图资源ID处，会先<code>detach</code>该ID处已拥有的视图，
-	 * 然后根据tag查找该Fragment是否已经存在且被add了，是则直接<code>attach</code>，否则执行<code>add<code/>，
-	 * 最后执行<code>show</code>显示视图
-	 *
-	 * @param id      进行添加的资源ID名，会先判断是否已存在该ID下的Fragment，存在则先<code>Detach</code>
-	 * @param newFrag 需要<code>attach</code>的新Fragment名
-	 * @param tag     当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
-	 */
-	public void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment f = getSupportFragmentManager().findFragmentById(id);
-		if (f != null && f == newFrag) {
+    /**
+     * 重新<code>attach</code>添加Fragment到视图资源ID处，会先<code>detach</code>该ID处已拥有的视图，
+     * 然后根据tag查找该Fragment是否已经存在且被add了，是则直接<code>attach</code>，否则执行<code>add<code/>，
+     * 最后执行<code>show</code>显示视图
+     *
+     * @param id      进行添加的资源ID名，会先判断是否已存在该ID下的Fragment，存在则先<code>Detach</code>
+     * @param newFrag 需要<code>attach</code>的新Fragment名
+     * @param tag     当Fragment此前未被<code>add<code/>，需要先进行添加设置的Tag
+     */
+    public void reattachFrag(@IdRes int id, Fragment newFrag, String tag) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment f = getSupportFragmentManager().findFragmentById(id);
+        if (f != null && f == newFrag) {
             // 已经存在
             if (f.isDetached()) {
                 // 不存在添加状态，先添加
                 ft.attach(f);
             }
-		} else {
+        } else {
             // 没有存在
-			if (f != null && !f.isDetached()) {
-				ft.detach(f);
-			}
-			Fragment self_f = getSupportFragmentManager().findFragmentByTag(tag);
-			if (self_f == null) {
+            if (f != null && !f.isDetached()) {
+                ft.detach(f);
+            }
+            Fragment self_f = getSupportFragmentManager().findFragmentByTag(tag);
+            if (self_f == null) {
                 // tag 找不到时，添加
                 ft.add(id, newFrag, tag);
             } else {
@@ -241,14 +241,14 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
                     ft.attach(self_f);
                 }
             }
-		}
-		ft.show(newFrag);
-		ft.commitAllowingStateLoss();
-	}
+        }
+        ft.show(newFrag);
+        ft.commitAllowingStateLoss();
+    }
 
-	/**
-	 * 隐藏当前栈顶Fragment
-	 */
+    /**
+     * 隐藏当前栈顶Fragment
+     */
 //	public void reshowFrag(@IdRes int id, Fragment newFrag, String newTag, String... oldTags) {
 //		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //		Fragment f;
@@ -270,226 +270,226 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 //		ft.commit();
 //	}
 
-	/**
-	 * 执行Fragment出栈操作，栈中有Fragment时返回true，否则返回false
-	 */
-	public boolean popFrag() {
-		if (isFinishing()) {
-			return false;
-		}
-		if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-			if (isMainThread()) {
-				if (getTopFragment() != null) {
-					mCurTopFragment.onPause();
-				}
-				return getSupportFragmentManager().popBackStackImmediate();
-			} else {
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (getTopFragment() != null) {
-							mCurTopFragment.onPause();
-						}
-						getSupportFragmentManager().popBackStackImmediate();
-					}
-				});
-			}
-			return true;
-		}
-		return false;
-	}
+    /**
+     * 执行Fragment出栈操作，栈中有Fragment时返回true，否则返回false
+     */
+    public boolean popFrag() {
+        if (isFinishing()) {
+            return false;
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            if (isMainThread()) {
+                if (getTopFragment() != null) {
+                    mCurTopFragment.onPause();
+                }
+                return getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getTopFragment() != null) {
+                            mCurTopFragment.onPause();
+                        }
+                        getSupportFragmentManager().popBackStackImmediate();
+                    }
+                });
+            }
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		JPushInterface.onResume(this);
-		if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
-			SocketIOManager.getInstance().connectOrReConnect(false);
-		}
-		SocketIOManager.getInstance().runCandidateReward();
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+        if (AccountManager.getInstance().isLogin() && !SocketIOManager.getInstance().isConnected()) {
+            SocketIOManager.getInstance().connectOrReConnect(false);
+        }
+        SocketIOManager.getInstance().runCandidateReward();
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		JPushInterface.onPause(this);
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 
-	/**
-	 * 根据tag判断fragment是否处于栈顶
-	 */
-	public boolean isTopFragment(String tag) {
-		return getTopFragment() != null && tag.equals(getTopFragment().getTag());
-	}
+    /**
+     * 根据tag判断fragment是否处于栈顶
+     */
+    public boolean isTopFragment(String tag) {
+        return getTopFragment() != null && tag.equals(getTopFragment().getTag());
+    }
 
-	/**
-	 * 获取当前栈顶Fragment
-	 */
-	public Fragment getTopFragment() {
-		int count = getSupportFragmentManager().getBackStackEntryCount();
-		if (count > 0) {
-			mCurTopFragment = getSupportFragmentManager()
-					.findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
-		}
-		return mCurTopFragment;
-	}
+    /**
+     * 获取当前栈顶Fragment
+     */
+    public Fragment getTopFragment() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            mCurTopFragment = getSupportFragmentManager()
+                    .findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
+        }
+        return mCurTopFragment;
+    }
 
-	/**
-	 * 执行fragment出栈 或者 activity终结操作
-	 */
-	public boolean onBack() {
-		InputMethodUtil.hideSoftInput(this);
-		if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
-				&& ((OnBackPressListener) getTopFragment()).onBack()) {
-			// back事件被处理
-			return false;
-		}
-		if (!popFrag() && !isFinishing()) {
-			mNeedWorkCallback = false;
-			doBeforeFinish();
-			finish();
-		} else {
-			if (getTopFragment() instanceof BaseFragment) {
-				setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
-			}
-		}
-		return true;
-	}
+    /**
+     * 执行fragment出栈 或者 activity终结操作
+     */
+    public boolean onBack() {
+        InputMethodUtil.hideSoftInput(this);
+        if (getTopFragment() != null && getTopFragment() instanceof OnBackPressListener
+                && ((OnBackPressListener) getTopFragment()).onBack()) {
+            // back事件被处理
+            return false;
+        }
+        if (!popFrag() && !isFinishing()) {
+            mNeedWorkCallback = false;
+            doBeforeFinish();
+            finish();
+        } else {
+            if (getTopFragment() instanceof BaseFragment) {
+                setBarTitle(((BaseFragment) getTopFragment()).getTitleName());
+            }
+        }
+        return true;
+    }
 
-	protected void doBeforeFinish() {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_MANAGER, "doBeforeFinish called");
-		}
-		if (MainActivity.sGlobalHolder == null) {
-			IntentUtil.jumpHome(this, true);
-		}
-	}
+    protected void doBeforeFinish() {
+        if (AppDebugConfig.IS_DEBUG) {
+            KLog.d(AppDebugConfig.TAG_MANAGER, "doBeforeFinish called");
+        }
+        if (MainActivity.sGlobalHolder == null) {
+            IntentUtil.jumpHome(this, true);
+        }
+    }
 
-	/**
-	 * 判断是否处于主线程
-	 */
-	private boolean isMainThread() {
-		return Thread.currentThread() == getMainLooper().getThread();
-	}
+    /**
+     * 判断是否处于主线程
+     */
+    private boolean isMainThread() {
+        return Thread.currentThread() == getMainLooper().getThread();
+    }
 
-	@Override
-	public void onBackPressed() {
-		onBack();
-	}
+    @Override
+    public void onBackPressed() {
+        onBack();
+    }
 
-	@Override
-	protected void onDestroy() {
-		if (AppDebugConfig.IS_DEBUG) {
+    @Override
+    protected void onDestroy() {
+        if (AppDebugConfig.IS_DEBUG) {
 //			ViewServer.get(this).removeWindow(this);
 //			AssistantApp.getRefWatcher(this).watch(this);
-		}
-		if (ImageLoader.getInstance().isInited()) {
-			ImageLoader.getInstance().clearMemoryCache();
-		}
-		release();
-		super.onDestroy();
-	}
+        }
+        if (ImageLoader.getInstance().isInited()) {
+            ImageLoader.getInstance().clearMemoryCache();
+        }
+        release();
+        super.onDestroy();
+    }
 
-	@Override
-	public void onLowMemory() {
-		super.onLowMemory();
-		if (ImageLoader.getInstance().isInited()) {
-			ImageLoader.getInstance().clearMemoryCache();
-		}
-	}
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (ImageLoader.getInstance().isInited()) {
+            ImageLoader.getInstance().clearMemoryCache();
+        }
+    }
 
-	@Override
-	public void release() {
-		if (mHandler != null) {
-			mHandler.removeCallbacksAndMessages(null);
-			mHandler = null;
-		}
-		mNeedWorkCallback = false;
-		mApp = null;
-		mToolbar = null;
-		if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
-			mLoadingDialog.dismiss();
-			mLoadingDialog = null;
-		}
-		// 封装加载和等待等页面的管理器对象
-		mViewManager = null;
-		mCurTopFragment = null;
-		// fragment处理onActivityResult
-		mFragmentForResult = null;
-	}
+    @Override
+    public void release() {
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
+        }
+        mNeedWorkCallback = false;
+        mApp = null;
+        mToolbar = null;
+        if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
+            mLoadingDialog.dismiss();
+            mLoadingDialog = null;
+        }
+        // 封装加载和等待等页面的管理器对象
+        mViewManager = null;
+        mCurTopFragment = null;
+        // fragment处理onActivityResult
+        mFragmentForResult = null;
+    }
 
-	/**
-	 * fragment发起需要处理返回信息时调用
-	 *
-	 * @param sponsor     发起的Fragment
-	 * @param requestCode 请求码
-	 * @param target      带有目标信息的Intent
-	 */
-	public void openPageForResult(BaseFragment sponsor, int requestCode, Intent target) {
-		if (sponsor == null) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d("openPageForResult get a null fragment");
-			}
-			return;
-		}
-		mFragmentForResult = sponsor;
-		mFragmentRequestCode = requestCode;
-		startActivityForResult(target, requestCode);
-	}
+    /**
+     * fragment发起需要处理返回信息时调用
+     *
+     * @param sponsor     发起的Fragment
+     * @param requestCode 请求码
+     * @param target      带有目标信息的Intent
+     */
+    public void openPageForResult(BaseFragment sponsor, int requestCode, Intent target) {
+        if (sponsor == null) {
+            if (AppDebugConfig.IS_DEBUG) {
+                KLog.d("openPageForResult get a null fragment");
+            }
+            return;
+        }
+        mFragmentForResult = sponsor;
+        mFragmentRequestCode = requestCode;
+        startActivityForResult(target, requestCode);
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == mFragmentRequestCode && mFragmentForResult != null) {
-			// 交由 Fragment 处理
-			mFragmentForResult.onActivityResult(requestCode, resultCode, data);
-			return;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == mFragmentRequestCode && mFragmentForResult != null) {
+            // 交由 Fragment 处理
+            mFragmentForResult.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-	@Override
-	public void onBackStackChanged() {
-		int count = getSupportFragmentManager().getBackStackEntryCount();
-		if (count > 0) {
-			mCurTopFragment = getSupportFragmentManager()
-					.findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
-		}
-	}
+    @Override
+    public void onBackStackChanged() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            mCurTopFragment = getSupportFragmentManager()
+                    .findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName());
+        }
+    }
 
-	public void showLoadingDialog() {
-		showLoadingDialog(getResources().getString(R.string.st_view_loading_more));
-	}
+    public void showLoadingDialog() {
+        showLoadingDialog(getResources().getString(R.string.st_view_loading_more));
+    }
 
-	public void showLoadingDialog(final String loadText) {
-		if (isMainThread()) {
-			if (mLoadingDialog == null) {
-				mLoadingDialog = LoadingDialog.newInstance();
-			}
-			mLoadingDialog.setLoadText(loadText);
-			mLoadingDialog.setCancelable(false);
-			mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
-		} else {
-			mHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (mLoadingDialog == null) {
-						mLoadingDialog = LoadingDialog.newInstance();
-					}
-					mLoadingDialog.setCancelable(false);
-					mLoadingDialog.setLoadText(loadText);
-					mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
-				}
-			});
-		}
-	}
+    public void showLoadingDialog(final String loadText) {
+        if (isMainThread()) {
+            if (mLoadingDialog == null) {
+                mLoadingDialog = LoadingDialog.newInstance();
+            }
+            mLoadingDialog.setLoadText(loadText);
+            mLoadingDialog.setCancelable(false);
+            mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
+        } else {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mLoadingDialog == null) {
+                        mLoadingDialog = LoadingDialog.newInstance();
+                    }
+                    mLoadingDialog.setCancelable(false);
+                    mLoadingDialog.setLoadText(loadText);
+                    mLoadingDialog.show(getSupportFragmentManager(), LoadingDialog.class.getSimpleName());
+                }
+            });
+        }
+    }
 
-	public void hideLoadingDialog() {
-		if (mLoadingDialog != null) {
-			mLoadingDialog.dismissAllowingStateLoss();
-		}
-	}
+    public void hideLoadingDialog() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismissAllowingStateLoss();
+        }
+    }
 
-	public Handler getHandler() {
-		return mHandler;
-	}
+    public Handler getHandler() {
+        return mHandler;
+    }
 }

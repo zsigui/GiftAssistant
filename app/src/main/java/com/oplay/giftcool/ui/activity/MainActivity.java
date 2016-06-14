@@ -376,16 +376,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 mFreeFragment = (GiftFreeFragment) f;
             }
         }
-        if (mGiftFragment != null) {
+        if (mGiftFragment != null && mCurSelectedItem != INDEX_GIFT) {
             ft.hide(mGiftFragment);
         }
-        if (mGameFragment != null) {
+        if (mGameFragment != null && mCurSelectedItem != INDEX_GAME) {
             ft.hide(mGameFragment);
         }
-        if (mPostFragment != null) {
+        if (mPostFragment != null && mCurSelectedItem != INDEX_POST) {
             ft.hide(mPostFragment);
         }
-        if (mFreeFragment != null) {
+        if (mFreeFragment != null && mCurSelectedItem != INDEX_FREE) {
             ft.hide(mFreeFragment);
         }
     }
@@ -394,6 +394,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
      * 显示游戏界面，采用 show/hide 进行显示
      */
     private void displayGameUI() {
+        mCurSelectedItem = INDEX_GAME;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hideAllFragment(ft);
         if (mGameFragment == null) {
@@ -412,13 +413,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
         mGameFragment.setRetainInstance(true);
         ft.commit();
-        mCurSelectedItem = INDEX_GAME;
     }
 
     /**
      * 显示礼包界面，采用 show/hide 进行显示
      */
     private void displayGiftUI() {
+        mCurSelectedItem = INDEX_GIFT;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hideAllFragment(ft);
         if (mGiftFragment == null) {
@@ -435,13 +436,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
         mGiftFragment.setReenterTransition(true);
         ft.commit();
-        mCurSelectedItem = INDEX_GIFT;
     }
 
     /**
      * 显示限时免费界面
      */
     private void displayFreeUI() {
+        mCurSelectedItem = INDEX_FREE;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hideAllFragment(ft);
         if (mFreeFragment == null) {
@@ -458,13 +459,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
         mFreeFragment.setReenterTransition(true);
         ft.commit();
-        mCurSelectedItem = INDEX_FREE;
     }
 
     /**
      * 显示活动模块
      */
     private void displayEssayUI() {
+        mCurSelectedItem = INDEX_POST;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hideAllFragment(ft);
         if (mPostFragment == null) {
@@ -483,7 +484,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
         mPostFragment.setRetainInstance(true);
         ft.commit();
-        mCurSelectedItem = INDEX_POST;
         if (AccountManager.getInstance().isLogin()) {
             showTabHint(INDEX_POST, View.GONE);
         }

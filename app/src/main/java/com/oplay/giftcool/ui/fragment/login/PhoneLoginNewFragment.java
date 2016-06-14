@@ -1,14 +1,12 @@
 package com.oplay.giftcool.ui.fragment.login;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -165,6 +163,10 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         llCode.setVisibility(View.GONE);
         llPhone.setVisibility(View.VISIBLE);
         btnLogin.setText("下一步");
+        if (mObserver == null) {
+            mObserver = new SmsObserver(new Handler());
+        }
+        getContext().getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, mObserver);
     }
 
     private void initHint() {
@@ -548,6 +550,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             etPhone.dismissDropDown();
             return true;
         }
+        KLog.d(AppDebugConfig.TAG_WARN, "mIsInFirstStep = " + mIsInFirstStep);
         if (!mIsInFirstStep) {
             llCode.setVisibility(View.GONE);
             llPhone.setVisibility(View.VISIBLE);
@@ -571,6 +574,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             mCallGetCode.cancel();
             mCallGetCode = null;
         }
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
     }
 
     @Override
@@ -600,63 +604,41 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     }
 
     /* ----------- 注册短信的广播接收  ----------- */
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerReceiver();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver();
-    }
+    private SmsObserver mObserver;
 
+    class SmsObserver extends ContentObserver {
 
-    private SMSReceiver mReceiver;
-    private IntentFilter mFilter;
+         private Cursor mCursor = null;
 
-    public void registerReceiver() {
-        if (mReceiver == null) {
-            mReceiver = new SMSReceiver();
+        public SmsObserver(Handler handler) {
+            super(handler);
         }
-        if (mFilter == null) {
-            mFilter = new IntentFilter(SMSReceiver.SMS_RECEIVER);
-            mFilter.setPriority(1000);
-        }
-        getContext().registerReceiver(mReceiver, mFilter);
-    }
-
-    public void unregisterReceiver() {
-        getContext().unregisterReceiver(mReceiver);
-    }
-
-    private class SMSReceiver extends BroadcastReceiver {
-
-        private static final String SMS_RECEIVER = "android.provider.Telephony.SMS_RECEIVED";
 
         @Override
-        public void onReceive(Context context, Intent intent) {
-            KLog.d(AppDebugConfig.TAG_WARN, "receiver broadcast = " + intent);
-            if (intent != null && intent.getAction() != null
-                    && SMS_RECEIVER.equals(intent.getAction())) {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    Object[] pushData = (Object[]) bundle.get("pdus");
-                    SmsMessage[] msgs = new SmsMessage[pushData.length];
-                    for (int i = 0; i < msgs.length; i++) {
-                        byte[] pdus = (byte[]) pushData[i];
-                        msgs[i] = SmsMessage.createFromPdu(pdus);
-                    }
-                    final String start = "【有米科技】验证码";
-                    for (SmsMessage msg : msgs) {
-                        KLog.d(AppDebugConfig.TAG_WARN, "msg = " + msg.getEmailBody());
-                        if (!TextUtils.isEmpty(msg.getEmailBody())
-                                && msg.getEmailBody().startsWith(start)) {
-                            etCode.setText(msg.getEmailBody().substring(start.length(), msg.getEmailBody().indexOf(',')));
-                            abortBroadcast();
-                            return;
-                        }
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            KLog.d(AppDebugConfig.TAG_WARN, "have change");
+            if (etCode != null) {
+                //每当有新短信到来时，使用我们获取短消息的方法
+                getSmsFromPhone();
+            }
+        }
+
+        private void getSmsFromPhone() {
+            mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
+                    new String[] { "_id", "address", "read", "body" }, "read=?",
+                    new String[] {"0" }, "_id desc");
+            // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
+            KLog.d(AppDebugConfig.TAG_WARN, "mCursor = " + (mCursor == null ? "null" : mCursor.getCount()));
+            if (mCursor != null && mCursor.getCount() > 0) {
+                mCursor.moveToFirst();
+                if (mCursor.moveToFirst()) {
+                    String smsBody = mCursor
+                            .getString(mCursor.getColumnIndex("body"));
+                    KLog.d(AppDebugConfig.TAG_WARN, "smsBody = " + smsBody);
+                    if (smsBody.startsWith("【有米科技】验证码")) {
+                        etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
                     }
                 }
             }

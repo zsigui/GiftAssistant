@@ -39,9 +39,10 @@ public class PermissionUtil {
     }
 
     public static void judgeSmsPermission(Activity context) {
-        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.BROADCAST_SMS)) {
+        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.RECEIVE_SMS)
+                || !Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
             ActivityCompat.requestPermissions(context, new String[]{
-                    Manifest.permission.RECEIVE_SMS
+                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS
             }, RECEIVE_SMS);
         }
     }

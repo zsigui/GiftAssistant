@@ -257,7 +257,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                                 DateUtil.formatUserReadDate(giftData.freeStartTime)));
                     }
                 } else {
-                    tvUsage.setText(giftData.usage);
                     switch (type) {
                         case GiftTypeUtil.TYPE_NORMAL_SEARCH:
                             tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCHED,

@@ -86,11 +86,11 @@
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
     <string name = "st_gift_hint_content" >1、此类型礼包同一个账号只能使用1次，多次兑换无效。\n2、抢号后请马上使用，非礼包码本身问题，概不退回积分或者偶玩豆。</string >
     <!-- 首充券详情 -->
-    <string name = "st_coupon_content">▌首充券价值</string>
+    <string name = "st_coupon_content">▌首充券内容</string>
     <string name = "st_coupon_deadline">▌使用期限</string>
     <string name = "st_coupon_usage">▌兑换步骤</string>
     <string name = "st_coupon_usage_hint">（点击下方查看图文步骤）</string>
-    <string name = "st_coupon_hint_content" >1、首充券只能使用同一个偶玩账号兑换1次，多次兑换无效。\n2、首充券的有效时间较短，抢号后请马上使用。</string >
+    <string name = "st_coupon_hint_content" >1、首充券只能在首次充值时用于抵扣充值金额，每个偶玩账号可兑换使用一次。\n2、首充券的有效时间较短，抢号后请马上兑换，并到游戏中消费使用。</string >
     <!-- 游戏状态 -->
     <string name = "st_tabs_home_gift" >礼包</string >
     <string name = "st_tabs_home_free" >限时免费</string >
@@ -178,6 +178,7 @@
 
     <!-- 设置 - 我的首充券 -->
     <string name = "st_my_coupon_reserved_msg_hint">已设置提醒，免费抢当天提醒您，请留意通知栏和消息中心。</string>
+    <string name = "st_my_coupon_note" >首充券说明</string >
 
     <!-- 设置 - 金币任务 -->
     <string name = "st_task_title" >金币任务</string >
@@ -212,7 +213,7 @@
     <!--<string name = "st_login_phone_title" >登录礼包酷</string >-->
     <string name = "st_login_phone_title" >快速登录</string >
     <string name = "st_login_ouwan_title" >偶玩账号登录</string >
-    <string name = "st_login_phone_hint" >请输入手机号直接登录，无须注册</string >
+    <string name = "st_login_phone_hint" >请输入手机号</string >
     <string name = "st_login_phone_code_hint" >请输入短信验证码</string >
     <string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
     <string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
