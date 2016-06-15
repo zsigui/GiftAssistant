@@ -15,6 +15,8 @@ public class ConstString {
     public static final String TEXT_ENTER_ERROR = "呜呼，想要的页面去哪了呢";
 
     public static final String TEXT_LOGIN_FIRST = "警告！非法禁止，请先登录";
+    public static final String TEXT_PHONE_ERROR = "你不是输错手机号码了吧？";
+    public static final String TEXT_OUWAN_ERROR = "呜呜，账号密码格式错误了！";
 
 
     public static final String TEXT_SEIZE = "开抢时间：<font color='#ffaa17'>%s</font>";

@@ -1,6 +1,9 @@
 package com.oplay.giftcool.ui.fragment.login;
 
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,17 +37,21 @@ import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
 import com.oplay.giftcool.util.NetworkUtil;
+import com.oplay.giftcool.util.PermissionUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -144,6 +151,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
         btnLogin.setEnabled(false);
         btnSendCode.setEnabled(false);
         initHint();
+        if (mObserver == null) {
+            mObserver = new SmsObserver(new Handler());
+        }
+        getContext().getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, mObserver);
     }
 
     private void initHint() {
@@ -298,6 +309,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
+                                PermissionUtil.judgeSmsPermission(getActivity());
                                 showToast("短信已经发送，请注意接收");
                                 return;
                             }
@@ -417,7 +429,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                 "手机号:" + userModel.userInfo.phone);
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((BaseAppCompatActivity) getActivity()).onBack();
+        ((LoginActivity) getActivity()).doLoginBack();
     }
 
 
@@ -522,6 +534,66 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
         if (mCallGetCode != null) {
             mCallGetCode.cancel();
             mCallGetCode = null;
+        }
+        btnLogin = null;
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
+    }
+
+     /* ----------- 注册短信的广播接收  ----------- */
+
+    private int mLoginCountdown;
+
+    Runnable autoLoginRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (btnLogin != null) {
+                btnLogin.setText(String.format(Locale.CHINA, "自动登录中(%d)", mLoginCountdown));
+                if (--mLoginCountdown < 0) {
+                    handleLogin();
+                    btnLogin.setText("登录");
+                } else {
+                    ThreadUtil.runOnUiThread(autoLoginRunnable, 1000);
+                }
+            }
+        }
+    };
+
+    private SmsObserver mObserver;
+
+    class SmsObserver extends ContentObserver {
+
+        private Cursor mCursor = null;
+
+        public SmsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            if (etCode != null) {
+                //每当有新短信到来时，使用我们获取短消息的方法
+                getSmsFromPhone();
+            }
+        }
+
+        private void getSmsFromPhone() {
+            mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
+                    new String[]{"_id", "address", "read", "body"}, "read=?",
+                    new String[]{"0"}, "_id desc");
+            // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
+            if (mCursor != null && mCursor.getCount() > 0) {
+                mCursor.moveToFirst();
+                if (mCursor.moveToFirst()) {
+                    String smsBody = mCursor
+                            .getString(mCursor.getColumnIndex("body"));
+                    if (smsBody.startsWith("【有米科技】验证码")) {
+                        etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
+                        mLoginCountdown = 3;
+                        ThreadUtil.runOnUiThread(autoLoginRunnable);
+                    }
+                }
+            }
         }
     }
 }

@@ -93,8 +93,8 @@ public class BannerTypeUtil {
                             .class);
                     IntentUtil.jumpPostDetail(context, post_p.id);
                     break;
-                case ACTION_DEFAULT:
                 case ACTION_UPGRADE:
+                    // 添加于1300
                     if (context instanceof FragmentActivity) {
                         final boolean isUpdate =
                                 DialogManager.getInstance().showUpdateDialog(context,
@@ -111,6 +111,7 @@ public class BannerTypeUtil {
                             banner.extData, TaskInfoOne.class);
                     IntentUtil.handleJumpInfo(context, infoOne);
                     break;
+                case ACTION_DEFAULT:
                 default:
                     ToastUtil.showShort(context.getResources().getString(R.string.st_hint_version_not_support));
                     if (context instanceof FragmentActivity) {

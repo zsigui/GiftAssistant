@@ -180,7 +180,7 @@ public class SystemMessageFragment extends BaseFragment_Refresh<SystemMessage> {
             Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_SYSTEM, 0, null);
             return;
         }
-        Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_SYSTEM, 0, data.get(0).content);
+        Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_SYSTEM, 0, data.get(0).title);
 //		AccountManager.getInstance().obtainUnreadPushMessageCount();
         mViewManager.showContent();
         mHasData = true;

@@ -216,13 +216,10 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                     llPhone.setVisibility(View.GONE);
                     handleGetCode();
                     llCode.setVisibility(View.VISIBLE);
-                    final StringBuilder sb = new StringBuilder(etPhone.getText().toString().trim());
-                    sb.replace(3, 7, "****");
                     tvCodeHint.setText(Html.fromHtml(
-                            sb.insert(0, "已向您的手机 <font color='#20C585'>")
-                                    .append("</font> 发送了一条验证短信")
-                                    .toString()
-                    ));
+                            String.format(Locale.CHINA,
+                                    "已向您的手机 <font color='#20C585'>%s</font> 发送了一条验证短信",
+                                    etPhone.getText().toString().trim())));
                     btnLogin.setText("登录");
                     btnLogin.setEnabled(false);
                 } else {
@@ -301,7 +298,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     private void handleGetCode() {
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString())) {
-            showToast("手机号码格式不符合要求");
+            showToast(ConstString.TEXT_PHONE_ERROR);
             return;
         }
         showLoading();
@@ -314,7 +311,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             public void run() {
                 if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
                     hideLoading();
-                    showToast("发送失败 - 网络异常");
+                    showToast(ConstString.TEXT_NET_ERROR);
                     sSendCodeRemainTime = 0;
                     return;
                 }

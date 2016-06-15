@@ -6,8 +6,8 @@ package com.oplay.giftcool.config;
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 1300;
-	public static final String SDK_VER_NAME = "V1.3.0";
+	public static final int SDK_VER = 1301;
+	public static final String SDK_VER_NAME = "V1.3.1";
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 	public static final String OUWAN_SDK_VER = "356";
 

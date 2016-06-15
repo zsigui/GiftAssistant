@@ -17,6 +17,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
@@ -259,7 +260,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
     private void handleLogin() {
         final ReqLogin login = new ReqLogin();
         if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
-            showToast("账号密码格式不符合要求");
+            showToast(ConstString.TEXT_OUWAN_ERROR);
             return;
         }
         showLoading();
@@ -268,7 +269,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    showToast("网络连接失败");
+                    showToast(ConstString.TEXT_NET_ERROR);
                     return;
                 }
 

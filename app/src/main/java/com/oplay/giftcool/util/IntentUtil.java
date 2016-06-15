@@ -8,6 +8,7 @@ import android.net.Uri;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
@@ -370,7 +371,7 @@ public class IntentUtil {
      * 跳转登录界面（根据最后一次登录判断）
      */
     public static void jumpLogin(Context context) {
-        ToastUtil.showShort("请先登录噢~");
+        ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
         jumpLoginNoToast(context);
     }
 
