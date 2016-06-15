@@ -6,8 +6,8 @@ package com.oplay.giftcool.config;
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 1301;
-	public static final String SDK_VER_NAME = "V1.3.1";
+	public static final int SDK_VER = 1302;
+	public static final String SDK_VER_NAME = "V1.3.2";
 	public static final String PACKAGE_NAME = "com.oplay.giftcool";
 	public static final String OUWAN_SDK_VER = "356";
 
@@ -29,8 +29,8 @@ public class AppConfig {
 	public static final String APP_SECRET = "3b4446772144ade3";
 
 	/* 测试环境 */
-//	public static final boolean TEST_MODE = true;
-	public static final boolean TEST_MODE = false;
+	public static final boolean TEST_MODE = true;
+//	public static final boolean TEST_MODE = false;
 
 
 	/* Retrofit 访问网络连接超时时间，单位 ms */

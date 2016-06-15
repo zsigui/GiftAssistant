@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.login;
 
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -170,6 +172,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             mObserver = new SmsObserver(new Handler());
         }
         getContext().getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, mObserver);
+        mIsRegisterObserver = true;
     }
 
     private void initHint() {
@@ -333,7 +336,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                PermissionUtil.judgeSmsPermission(getActivity());
+                                PermissionUtil.judgeSmsPermission(getActivity(), PhoneLoginNewFragment.this);
                                 showToast("短信已经发送，请注意接收");
                                 return;
                             }
@@ -358,6 +361,21 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                 });
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PermissionUtil.RECEIVE_SMS:
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    if (mIsRegisterObserver) {
+                        getContext().getContentResolver().unregisterContentObserver(mObserver);
+                        mIsRegisterObserver = false;
+                    }
+                }
+                break;
+        }
     }
 
     private void resetRemain() {
@@ -576,7 +594,10 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         }
         btnLogin = null;
         etCode = null;
-        getContext().getContentResolver().unregisterContentObserver(mObserver);
+        if (mIsRegisterObserver) {
+            getContext().getContentResolver().unregisterContentObserver(mObserver);
+        }
+        mObserver = null;
     }
 
     @Override
@@ -608,6 +629,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     /* ----------- 注册短信的广播接收  ----------- */
 
     private int mLoginCountdown;
+    private boolean mIsRegisterObserver = false;
 
     Runnable autoLoginRunnable = new Runnable() {
         @Override

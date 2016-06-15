@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -19,9 +20,9 @@ import net.youmi.android.libs.common.util.Util_System_Permission;
 public class PermissionUtil {
 
     private static final byte ALL_CODE = 0;
-    private static final byte WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
-    private static final byte READ_PHONE_STATE_CODE = 2;
-    private static final byte RECEIVE_SMS = 3;
+    public static final byte WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
+    public static final byte READ_PHONE_STATE_CODE = 2;
+    public static final byte RECEIVE_SMS = 3;
 
     public static void judgePermission(Activity context) {
         if (!Util_System_Permission.isWith_WRITE_EXTERNAL_STORAGE_Permission(context)
@@ -42,6 +43,15 @@ public class PermissionUtil {
         if (!Util_System_Permission.isWithPermission(context, Manifest.permission.RECEIVE_SMS)
                 || !Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
             ActivityCompat.requestPermissions(context, new String[]{
+                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS
+            }, RECEIVE_SMS);
+        }
+    }
+
+    public static void judgeSmsPermission(Context context, Fragment fragment){
+        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.RECEIVE_SMS)
+                || !Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
+            fragment.requestPermissions(new String[]{
                     Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS
             }, RECEIVE_SMS);
         }
