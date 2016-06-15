@@ -388,7 +388,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         }
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
-            showToast("手机号码格式不符合要求");
+            showToast(ConstString.TEXT_PHONE_ERROR);
             return;
         }
         showLoading();

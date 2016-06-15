@@ -242,7 +242,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
                 break;
             case TypeStatusCode.POST_WAIT:
                 holder.tvState.setText(TEXT_STATE_WAIT);
-                holder.tvState.setBackgroundResource(R.drawable.ic_post_disabled);
+                holder.tvState.setBackgroundResource(R.drawable.ic_post_wait);
                 break;
             case TypeStatusCode.POST_BEING:
                 holder.tvState.setText(TEXT_STATE_DOING);

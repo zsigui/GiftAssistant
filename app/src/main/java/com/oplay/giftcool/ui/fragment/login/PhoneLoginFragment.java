@@ -22,6 +22,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
@@ -196,11 +197,6 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
         super.onClick(v);
         switch (v.getId()) {
             case R.id.btn_send:
-                long curTime = System.currentTimeMillis();
-                if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
-                    mLastClickTime = curTime;
-                    return;
-                }
                 handleLogin();
                 break;
             case R.id.tv_send_code:
@@ -357,9 +353,14 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
      * 处理手机登录事件
      */
     private void handleLogin() {
+        long curTime = System.currentTimeMillis();
+        if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
+            mLastClickTime = curTime;
+            return;
+        }
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
-            showToast("手机号码格式不符合要求");
+            showToast(ConstString.TEXT_PHONE_ERROR);
             return;
         }
         showLoading();
@@ -370,7 +371,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    showToast("网络连接失败");
+                    showToast(ConstString.TEXT_NET_ERROR);
                     return;
                 }
                 if (mCallLogin != null) {
