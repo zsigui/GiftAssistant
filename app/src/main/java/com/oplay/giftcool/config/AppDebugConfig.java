@@ -19,14 +19,14 @@ public class AppDebugConfig {
     /**
      * debug模式，发布打包需要置为false，可以通过混淆让调试的log文本从代码文件中消除，避免被反编译时漏泄相关信息。
      */
-//    public static final boolean IS_DEBUG = false;
-//	public static final boolean IS_FRAG_DEBUG = false;
-//	public static final boolean IS_PERM_DEBUG = false;
-//	public static final boolean IS_STATISTICS_SHOW = true;
-    public static final boolean IS_DEBUG = true;
-    public static final boolean IS_FRAG_DEBUG = true;
-    public static final boolean IS_PERM_DEBUG = true;
-    public static final boolean IS_STATISTICS_SHOW = false;
+    public static final boolean IS_DEBUG = false;
+	public static final boolean IS_FRAG_DEBUG = false;
+	public static final boolean IS_PERM_DEBUG = false;
+	public static final boolean IS_STATISTICS_SHOW = true;
+//    public static final boolean IS_DEBUG = true;
+//    public static final boolean IS_FRAG_DEBUG = true;
+//    public static final boolean IS_PERM_DEBUG = true;
+//    public static final boolean IS_STATISTICS_SHOW = false;
     public static final int TEST_CHANNEL_ID = 10000;
 
 

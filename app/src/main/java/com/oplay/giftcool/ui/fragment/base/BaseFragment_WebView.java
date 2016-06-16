@@ -167,10 +167,12 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
         mWebView.setDownloadListener(this);
         //滚动条样式
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
         // initWithView mSettings
         mSettings = mWebView.getSettings();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        }
         mSettings.setDomStorageEnabled(true);
         //JS监听
         mSettings.setJavaScriptEnabled(true);

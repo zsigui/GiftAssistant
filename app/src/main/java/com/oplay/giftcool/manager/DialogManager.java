@@ -235,7 +235,9 @@ public class DialogManager {
             @Override
             public void run() {
                 final String tag = LoadingDialog.class.getSimpleName();
-                if (fm.findFragmentByTag(tag) != null) {
+                fm.executePendingTransactions();
+                mLoadingDialog = (LoadingDialog) fm.findFragmentByTag(tag);
+                if (mLoadingDialog != null && mLoadingDialog.isAdded()) {
                     return;
                 }
                 if (mLoadingDialog == null) {

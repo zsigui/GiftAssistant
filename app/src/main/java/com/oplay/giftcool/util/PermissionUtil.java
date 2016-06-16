@@ -22,7 +22,7 @@ public class PermissionUtil {
     private static final byte ALL_CODE = 0;
     public static final byte WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     public static final byte READ_PHONE_STATE_CODE = 2;
-    public static final byte RECEIVE_SMS = 3;
+    public static final byte READ_SMS = 3;
 
     public static void judgePermission(Activity context) {
         if (!Util_System_Permission.isWith_WRITE_EXTERNAL_STORAGE_Permission(context)
@@ -39,21 +39,10 @@ public class PermissionUtil {
         }
     }
 
-    public static void judgeSmsPermission(Activity context) {
-        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.RECEIVE_SMS)
-                || !Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
-            ActivityCompat.requestPermissions(context, new String[]{
-                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS
-            }, RECEIVE_SMS);
-        }
-    }
-
     public static void judgeSmsPermission(Context context, Fragment fragment){
-        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.RECEIVE_SMS)
-                || !Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
-            fragment.requestPermissions(new String[]{
-                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS
-            }, RECEIVE_SMS);
+        if (!Util_System_Permission.isWithPermission(context, Manifest.permission.READ_SMS)) {
+            fragment.requestPermissions(new String[]{ Manifest.permission.READ_SMS
+            }, READ_SMS);
         }
     }
 

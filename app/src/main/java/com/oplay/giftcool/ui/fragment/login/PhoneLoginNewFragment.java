@@ -1,5 +1,6 @@
 package com.oplay.giftcool.ui.fragment.login;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -53,8 +54,10 @@ import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
+import net.youmi.android.libs.common.util.Util_System_Permission;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -168,11 +171,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         llCode.setVisibility(View.GONE);
         llPhone.setVisibility(View.VISIBLE);
         btnLogin.setText("下一步");
-        if (mObserver == null) {
-            mObserver = new SmsObserver(new Handler());
-        }
-        getContext().getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, mObserver);
-        mIsRegisterObserver = true;
+        registerSmsObserver();
     }
 
     private void initHint() {
@@ -363,21 +362,6 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PermissionUtil.RECEIVE_SMS:
-                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    if (mIsRegisterObserver) {
-                        getContext().getContentResolver().unregisterContentObserver(mObserver);
-                        mIsRegisterObserver = false;
-                    }
-                }
-                break;
-        }
-    }
-
     private void resetRemain() {
         mHandler.removeCallbacks(setTimeRunnable);
         sSendCodeRemainTime = 0;
@@ -564,7 +548,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             mAccountPopup.dismiss();
             return true;
         }
-        if (etPhone.isPopupShowing()) {
+        if (etPhone != null && etPhone.isPopupShowing()) {
             etPhone.dismissDropDown();
             return true;
         }
@@ -594,10 +578,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         }
         btnLogin = null;
         etCode = null;
-        if (mIsRegisterObserver) {
-            getContext().getContentResolver().unregisterContentObserver(mObserver);
-        }
-        mObserver = null;
+        unregisterSmsObserver();
     }
 
     @Override
@@ -626,7 +607,23 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
 
     }
 
-    /* ----------- 注册短信的广播接收  ----------- */
+      /* ----------- 注册短信的广播接收  ----------- */
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PermissionUtil.READ_SMS:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 该操作防止短信已过去
+                    KLog.d(AppDebugConfig.TAG_WARN, "sms permission granted");
+                    getSmsFromPhone();
+                    registerSmsObserver();
+                }
+                break;
+        }
+    }
 
     private int mLoginCountdown;
     private boolean mIsRegisterObserver = false;
@@ -634,7 +631,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     Runnable autoLoginRunnable = new Runnable() {
         @Override
         public void run() {
-            if (!mIsInFirstStep && btnLogin != null) {
+            if (btnLogin != null) {
                 btnLogin.setText(String.format(Locale.CHINA, "自动登录中(%d)", mLoginCountdown));
                 if (--mLoginCountdown < 0) {
                     handleLogin();
@@ -646,11 +643,54 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         }
     };
 
+    private void registerSmsObserver() {
+        if (!mIsRegisterObserver
+                && Util_System_Permission.isWithPermission(getContext(), Manifest.permission.READ_SMS)) {
+            if (mObserver == null) {
+                mObserver = new SmsObserver(new Handler());
+            }
+            getContext().getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, mObserver);
+            mIsRegisterObserver = true;
+        }
+    }
+
+    private void unregisterSmsObserver() {
+        if (mIsRegisterObserver && mObserver != null) {
+            getContext().getContentResolver().unregisterContentObserver(mObserver);
+        }
+        mIsRegisterObserver = false;
+    }
+
+    private void getSmsFromPhone() {
+        if (etCode != null) {
+            //每当有新短信到来时，使用我们获取短消息的方法
+            Cursor mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
+                    new String[]{"_id", "address", "read", "body"}, "read=?",
+                    new String[]{"0"}, "_id desc");
+            // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
+            if (mCursor != null && mCursor.getCount() > 0) {
+                try {
+                    while (mCursor.moveToNext()) {
+                        String smsBody = mCursor
+                                .getString(mCursor.getColumnIndex("body"));
+                        if (smsBody.startsWith("【有米科技】验证码")) {
+                            etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
+                            mLoginCountdown = 3;
+                            ThreadUtil.remove(autoLoginRunnable);
+                            ThreadUtil.runOnUiThread(autoLoginRunnable);
+                            break;
+                        }
+                    }
+                } finally {
+                    mCursor.close();
+                }
+            }
+        }
+    }
+
     private SmsObserver mObserver;
 
     class SmsObserver extends ContentObserver {
-
-        private Cursor mCursor = null;
 
         public SmsObserver(Handler handler) {
             super(handler);
@@ -659,29 +699,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            if (etCode != null) {
-                //每当有新短信到来时，使用我们获取短消息的方法
-                getSmsFromPhone();
-            }
+            getSmsFromPhone();
         }
 
-        private void getSmsFromPhone() {
-            mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
-                    new String[]{"_id", "address", "read", "body"}, "read=?",
-                    new String[]{"0"}, "_id desc");
-            // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
-            if (mCursor != null && mCursor.getCount() > 0) {
-                mCursor.moveToFirst();
-                if (mCursor.moveToFirst()) {
-                    String smsBody = mCursor
-                            .getString(mCursor.getColumnIndex("body"));
-                    if (smsBody.startsWith("【有米科技】验证码")) {
-                        etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
-                        mLoginCountdown = 3;
-                        ThreadUtil.runOnUiThread(autoLoginRunnable);
-                    }
-                }
-            }
-        }
     }
 }

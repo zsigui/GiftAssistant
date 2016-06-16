@@ -435,7 +435,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         } else {
             ft.show(mGiftFragment);
         }
-        mGiftFragment.setReenterTransition(true);
+        mGiftFragment.setRetainInstance(true);
         ft.commit();
     }
 
@@ -458,7 +458,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         } else {
             ft.show(mFreeFragment);
         }
-        mFreeFragment.setReenterTransition(true);
+        mFreeFragment.setRetainInstance(true);
         ft.commit();
     }
 
@@ -490,7 +490,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
     }
 
-    /**
+    /*
      * 该方法能保证在完成 Fragment 的唤醒之后再调用，防止在其他 Activity 调用本类 commit 之后出现 IllegalStateException
      */
     @Override
@@ -694,66 +694,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     }
 
     private void handleFirstOpen() {
-//		if (sIsTodayFirstOpenForBroadcast && AssistantApp.getInstance().getBroadcastBanner() != null
-//				&& hasLoadPic() && mHandler != null) {
-        // 每次打开APP显示弹窗
-//			sIsTodayFirstOpenForBroadcast = false;
-//			mHandler.postDelayed(new Runnable() {
-//				@Override
-//				public void run() {
-//					AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
-//					dialog.show(getSupportFragmentManager(), "broadcast");
-//				}
-//			}, 1000);
-//
-//		}
-
         if (AccountManager.getInstance().isLogin()
                 && AssistantApp.getInstance().getBroadcastBanner() != null
                 && AccountManager.getInstance().getUserInfo().isFirstLogin
                 && mHandler != null) {
             // 首次登录显示弹窗
-//			DialogManager.getInstance().showSignInDialog(
-//					AccountManager.getInstance().getUserInfo().isFirstLogin,
-//					this,
-//					getSupportFragmentManager());
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
-                    dialog.show(getSupportFragmentManager(), "broadcast");
-                }
-            }, 1000);
+            AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
+            dialog.show(getSupportFragmentManager(), "broadcast");
             AccountManager.getInstance().getUserInfo().isFirstLogin = false;
         }
-//		else if (sIsTodayFirstOpen && mHandler != null) {
-//			sIsTodayFirstOpen = false;
-//			// 防止在调用onSaveInstanceState时触发导致崩溃，延迟触发
-//			mHandler.postDelayed(new Runnable() {
-//				@Override
-//				public void run() {
-//					if (AccountManager.getInstance().isLogin()) {
-//						ScoreManager.getInstance().showWelComeDialog(getSupportFragmentManager(), MainActivity.this,
-//								AccountManager.getInstance().getUser());
-//					}
-//				}
-//			}, 1000);
-//		}
     }
-
-//    private boolean hasLoadPic() {
-//        boolean hasLoad = false;
-//        String imageUrl = AssistantApp.getInstance().getBroadcastBanner().url;
-//        if (imageUrl != null) {
-//            File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
-//            if (file != null && file.exists()) {
-//                hasLoad = true;
-//            } else {
-//                ImageLoader.getInstance().loadImage(imageUrl, null);
-//            }
-//        }
-//        return hasLoad;
-//    }
 
     /**
      * 处理更新逻辑
