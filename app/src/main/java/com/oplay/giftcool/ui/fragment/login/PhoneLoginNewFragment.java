@@ -315,6 +315,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                     hideLoading();
                     showToast(ConstString.TEXT_NET_ERROR);
                     sSendCodeRemainTime = 0;
+                    mLastSendTime = System.currentTimeMillis();
                     return;
                 }
 
@@ -627,6 +628,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
 
     private int mLoginCountdown;
     private boolean mIsRegisterObserver = false;
+    private long mLastSendTime;
 
     Runnable autoLoginRunnable = new Runnable() {
         @Override
@@ -665,15 +667,17 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         if (etCode != null) {
             //每当有新短信到来时，使用我们获取短消息的方法
             Cursor mCursor = getContext().getContentResolver().query(Uri.parse("content://sms/inbox"),
-                    new String[]{"_id", "address", "read", "body"}, "read=?",
-                    new String[]{"0"}, "_id desc");
+                    new String[]{"_id", "body"}, "read=? and date>?",
+                    new String[]{"0", String.valueOf(mLastSendTime)}, "_id desc");
+            final String appName = getContext().getString(R.string.app_name);
             // 按短信id排序，如果按date排序的话，修改手机时间后，读取的短信就不准了
             if (mCursor != null && mCursor.getCount() > 0) {
                 try {
                     while (mCursor.moveToNext()) {
                         String smsBody = mCursor
                                 .getString(mCursor.getColumnIndex("body"));
-                        if (smsBody.startsWith("【有米科技】验证码")) {
+                        if (smsBody != null && smsBody.startsWith("【有米科技】验证码")
+                                && smsBody.contains(appName)) {
                             etCode.setText(smsBody.substring(10, smsBody.indexOf("，")));
                             mLoginCountdown = 3;
                             ThreadUtil.remove(autoLoginRunnable);

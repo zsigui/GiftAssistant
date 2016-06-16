@@ -200,9 +200,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
             case GiftTypeUtil.TYPE_LIMIT_SEIZE:
                 if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
                     // 限量抢状态,表示当前不处于免费抢
-                    holder.tvSeizeHint.setVisibility(View.VISIBLE);
-                    holder.tvSeizeHint.setText(String.format(Locale.CHINA,
-                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
+                    setSeizeHint(o, holder);
                 } else {
                     // 无免费
                     holder.tvSeizeHint.setVisibility(View.GONE);
@@ -216,16 +214,26 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
                 holder.pbPercent.setVisibility(View.GONE);
                 holder.tvPercent.setVisibility(View.GONE);
                 holder.tvSeizeHint.setVisibility(View.GONE);
                 break;
+            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
+                holder.pbPercent.setVisibility(View.GONE);
+                holder.tvPercent.setVisibility(View.GONE);
+                setSeizeHint(o, holder);
+                break;
         }
+    }
+
+    private void setSeizeHint(IndexGiftNew o, GiftLimitFeeHolder holder) {
+        holder.tvSeizeHint.setVisibility(View.VISIBLE);
+        holder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
     }
 
     private void setProgressBarData(IndexGiftNew o, GiftLimitFeeHolder gHolder) {

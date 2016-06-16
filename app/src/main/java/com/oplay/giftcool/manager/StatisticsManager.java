@@ -163,6 +163,7 @@ public class StatisticsManager {
             }
             MobclickAgent.setDebugMode(debugMode);
             MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
+            MobclickAgent.setCatchUncaughtExceptions(true);
 
             if (AppDebugConfig.IS_DEBUG) {
                 KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "Umeng Data init");

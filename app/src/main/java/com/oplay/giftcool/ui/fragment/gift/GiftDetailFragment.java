@@ -245,12 +245,16 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         || giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
                     ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                     tvOriginPrice.setVisibility(View.VISIBLE);
-                    if (giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED
+                    if ((giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED
                             || (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_RESERVED
-                            && giftData.status != GiftTypeUtil.STATUS_SEIZE)) {
+                            && giftData.status != GiftTypeUtil.STATUS_SEIZE))
+                            && (giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
+                            && giftData.status != GiftTypeUtil.STATUS_FINISHED
+                            && giftData.status != GiftTypeUtil.STATUS_WAIT_SEARCH)) {
                         setRemainProgress(giftData);
                     }
-                    if (giftData.freeStartTime > System.currentTimeMillis()) {
+                    if (giftData.freeStartTime != 0
+                            && giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
                         tvSeizeHint.setVisibility(View.VISIBLE);
                         tvSeizeHint.setText(String.format(Locale.CHINA,
                                 ConstString.TEXT_GIFT_FREE_SEIZE,
@@ -266,9 +270,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         case GiftTypeUtil.TYPE_LIMIT_EMPTY:
                         case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
                         case GiftTypeUtil.TYPE_LIMIT_FINISHED:
+                        case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
                             ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                             setRemainProgress(giftData);
-                            if (giftData.freeStartTime > System.currentTimeMillis()) {
+                            if (giftData.freeStartTime != 0
+                                    && giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
                                 tvSeizeHint.setVisibility(View.VISIBLE);
                                 tvSeizeHint.setText(String.format(Locale.CHINA,
                                         ConstString.TEXT_GIFT_FREE_SEIZE,

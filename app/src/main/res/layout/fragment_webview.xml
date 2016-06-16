@@ -5,17 +5,18 @@
              android:layout_height = "match_parent" >
 
 
-	<WebView
-			android:id = "@+id/wv_container"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent" />
-	<ProgressBar
-			style="?android:attr/progressBarStyleHorizontal"
-			android:id="@+id/pb_percent"
-			android:max="100"
-			android:scrollbarStyle="insideOverlay"
-			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_web_progress_height"
-			android:visibility="gone"
-			android:progressDrawable="@drawable/shape_progress_bar_orange"/>
+    <ProgressBar
+            style = "?android:attr/progressBarStyleHorizontal"
+            android:id = "@+id/pb_percent"
+            android:max = "100"
+            android:scrollbarStyle = "insideOverlay"
+            android:layout_width = "match_parent"
+            android:layout_height = "@dimen/di_web_progress_height"
+            android:visibility = "gone"
+            android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
+    <WebView
+            android:id = "@+id/wv_container"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent" />
 </FrameLayout >
