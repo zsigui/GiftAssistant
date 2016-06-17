@@ -1,11 +1,37 @@
 
 #版本变更日志:
 
+## V1.3.2 -> V1.3.3
+
+#### 目标:
+
+    1) 程序BUG修复
+
+    2) 局部UI交互调整
+
+#### 改动内容:
+
+    1) 修复‘猜你喜欢’模块小红点不显示问题，为int型时间戳逻辑溢出导致
+
+    2) 增加页面详情、系统消息等多处的TextView可划取复制功能
+
+#### 另外说明:
+
+    经过近两个版本出包测试，有两点变动导致的变化需要注意：
+
+    1) 友盟统计，应用退出不执行 System.exit(0) 操作，而依然执行 MoblickAgent.onKillProcess() 后，会出现除了启动数
+    据，其他包含统计时间间隔等多处数据出现严重异常，而 TalkingData 无类似操作，暂未发现受影响。友盟统计是否如不执
+    行 System.exit(0) 则不执行 MoblickAgent.onKillProcess() 还有待验证。
+
+    2) WebView 在部分机型（比如红米Note，VIVO Xplay6）有时会出现 loadUrl 不执行的问题，即是页面完全卡住白屏。通过
+    调整 XML 中 <ProgressBar /> 和 <WebView /> 两个组件的位置，暂时打包未再出现上述问题，是否由此而解决，有待后续
+    验证。
+
 ## V1.3.1 -> V1.3.2
 
 #### 目标:
 
-    1) 程序BUG优化
+    1) 程序BUG修复
 
 #### 改动内容:
 
@@ -22,7 +48,7 @@
 
 #### 目标:
 
-    1) 程序BUG优化
+    1) 程序BUG修复
 
 #### 改动内容:
 
@@ -106,10 +132,10 @@
 
 ## V1.2.3 -> V1.2.4
 
-#### 目标: 
+#### 目标:
     修复数据统计丢失问题 , 修复崩溃异常BUG ,  修复页面显示问题 , 实现断网加载缓存
 
-#### 改动内容: (测试机型 : 1加 A0001, CM系统, Android SDK 6.0.1) 
+#### 改动内容: (测试机型 : 1加 A0001, CM系统, Android SDK 6.0.1)
 
      1) 修复主界面部分机型可能造成空指针问题, 涉及页面ui/activity/MainActivity.java , ui/fragment/gift/GiftFragment.java,
      调整 Fragment.setRetainInstance() 的调用位置, 对 GiftFragment.run.mHandler执行前进行判空创建处理. (测试通过)
