@@ -9,39 +9,46 @@ import java.io.Serializable;
  */
 public class SystemMessage implements Serializable {
 
-	/**
-	 * 系统消息ID
-	 */
-	@SerializedName("message_id")
-	public int id;
+    /**
+     * 系统消息ID
+     */
+    @SerializedName("message_id")
+    public int id;
 
-	/**
-	 * 消息标题
-	 */
-	@SerializedName("title")
-	public String title;
+    /**
+     * 消息标题
+     */
+    @SerializedName("title")
+    public String title;
 
-	/**
-	 * 是否已读
-	 */
-	@SerializedName("check")
-	public int isRead;
+    /**
+     * 是否已读
+     */
+    @SerializedName("check")
+    public int isRead;
 
-	/**
-	 * 消息内容
-	 */
-	@SerializedName("content")
-	public String content;
+    /**
+     * 消息内容
+     */
+    @SerializedName("content")
+    public String content;
 
-	/**
-	 * 消息时间
-	 */
-	@SerializedName("create_time")
-	public String time;
+    /**
+     * 消息时间
+     */
+    @SerializedName("create_time")
+    public String time;
 
-	/**
-	 * 时间戳
-	 */
-	@SerializedName("timestamp")
-	public long timestamp;
+    /**
+     * 时间戳
+     */
+    @SerializedName("timestamp")
+    public long timestamp;
+
+    /**
+     * 礼包id
+     */
+    @SerializedName("plan_id")
+    public int giftId;
+
 }

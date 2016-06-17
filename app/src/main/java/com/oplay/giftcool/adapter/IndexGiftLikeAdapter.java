@@ -44,7 +44,7 @@ public class IndexGiftLikeAdapter extends BaseRVAdapter<IndexGiftLike> implement
         IndexGiftLike o = getItem(position);
         itemHolder.tvName.setText(o.name);
         if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
-                o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+                o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime() / 1000) {
             itemHolder.ivHint.setVisibility(View.VISIBLE);
         } else {
             itemHolder.ivHint.setVisibility(View.GONE);

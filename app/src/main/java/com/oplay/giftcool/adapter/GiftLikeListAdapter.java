@@ -72,7 +72,7 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
                     String.format(Locale.CHINA, "<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
         }
         if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
-                o.newestCreateTime * 1000 > AssistantApp.getInstance().getLastLaunchTime()) {
+                o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime() / 1000) {
             holder.ivHint.setVisibility(View.VISIBLE);
         } else {
             holder.ivHint.setVisibility(View.GONE);

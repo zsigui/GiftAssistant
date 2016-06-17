@@ -7,7 +7,7 @@
         android:orientation = "vertical" >
 
     <RelativeLayout
-            android:id="@+id/rl_header"
+            android:id = "@+id/rl_header"
             style = "@style/DefaultRelativeLayout"
             android:paddingBottom = "20dp"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
@@ -52,6 +52,7 @@
                 android:layout_toLeftOf = "@+id/btn_send"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:drawablePadding = "6dp"
+                android:textIsSelectable = "true"
                 android:gravity = "center_vertical" />
 
         <TextView

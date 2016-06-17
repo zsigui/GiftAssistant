@@ -45,7 +45,6 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
-import net.youmi.android.libs.common.util.Util_System_Intent;
 
 import java.io.File;
 import java.io.IOException;
@@ -150,7 +149,6 @@ public class AssistantApp extends Application {
         // 启动闹钟通知广播进程来唤醒服务
         AlarmClockManager.getInstance().startWakeAlarm(this);
         appInit();
-        Util_System_Intent.createShortcut_forApp(this, AppConfig.PACKAGE_NAME);
     }
 
     @Override

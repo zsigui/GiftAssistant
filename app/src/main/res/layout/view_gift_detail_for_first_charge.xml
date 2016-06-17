@@ -21,6 +21,7 @@
             android:id = "@+id/tv_content"
             style = "@style/DefaultTextView.Detail"
             android:singleLine = "false"
+            android:textIsSelectable = "true"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
@@ -33,6 +34,7 @@
     <TextView
             android:id = "@+id/tv_deadline"
             style = "@style/DefaultTextView.Detail"
+            android:textIsSelectable = "true"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
@@ -76,6 +78,7 @@
             android:singleLine = "false"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:textIsSelectable = "true"
             android:text = "@string/st_coupon_hint_content" />
 
     <TextView

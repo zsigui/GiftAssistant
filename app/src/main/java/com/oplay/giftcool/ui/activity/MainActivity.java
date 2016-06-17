@@ -584,7 +584,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mApp.appExit();
             // 发送退出指令
             finish();
-//            System.exit(0);
+            System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
             ToastUtil.showShort(ConstString.TEXT_EXIT_APP);

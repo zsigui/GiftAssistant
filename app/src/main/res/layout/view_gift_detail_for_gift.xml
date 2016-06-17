@@ -22,6 +22,7 @@
             style = "@style/DefaultTextView.Detail"
             android:singleLine = "false"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:textIsSelectable = "true"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
     <TextView
@@ -33,6 +34,7 @@
     <TextView
             android:id = "@+id/tv_deadline"
             style = "@style/DefaultTextView.Detail"
+            android:textIsSelectable = "true"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
@@ -48,6 +50,7 @@
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
             android:autoLink = "all"
+            android:textIsSelectable = "true"
             android:singleLine = "false" />
 
     <TextView
@@ -63,6 +66,7 @@
             android:singleLine = "false"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:textIsSelectable = "true"
             android:text = "@string/st_gift_hint_content" />
 
     <TextView
