@@ -18,7 +18,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 
 public class DownloadButtonView extends RelativeLayout {
@@ -88,9 +87,7 @@ public class DownloadButtonView extends RelativeLayout {
                     break;
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, e);
         }
         return mAppStatus;
     }

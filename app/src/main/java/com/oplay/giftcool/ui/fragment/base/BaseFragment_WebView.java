@@ -30,9 +30,6 @@ import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
-
-import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -159,9 +156,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
         // 开启硬件加速，否则部分手机（如vivo）WebView会很卡
         if (Build.VERSION.SDK_INT >= 11) {
             mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_WEBVIEW, "isHardwareAccelerated = " + mWebView.isHardwareAccelerated());
-            }
+            AppDebugConfig.v(AppDebugConfig.TAG_WEBVIEW, "isHardwareAccelerated = " + mWebView.isHardwareAccelerated());
         }
         // 下载监听
         mWebView.setDownloadListener(this);
@@ -212,14 +207,10 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             }
             if (cacheDir != null) {
                 if (!NetworkUtil.isAvailable(AssistantApp.getInstance().getApplicationContext())) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
-                    }
+                    AppDebugConfig.v(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
                     mSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
                 } else {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load default");
-                    }
+                    AppDebugConfig.v(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load default");
                     mSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
                 }
                 mSettings.setAppCachePath(cacheDir.getAbsolutePath());
@@ -227,9 +218,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             }
             mSettings.setAllowFileAccess(true);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
         final int vc = SystemUtil.getVerCode(getContext());
         final String ua = mSettings.getUserAgentString() + " GIFT_COOL_APP/" + vc;
@@ -249,9 +238,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 
     protected void onWebPageStarted() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v();
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -263,9 +250,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 
     protected void onWebReceivedError() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v();
         mIsLoadingFailed = true;
         if (mViewManager != null) {
             mViewManager.showErrorRetry();
@@ -276,9 +261,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
     }
 
     protected void onWebPageFinished() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v();
         try {
             mIsLoading = false;
             if (mProgressBar != null) {
@@ -314,9 +297,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 //			mInit = true;
 //			mSettings.setBlockNetworkImage(false);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             if (mViewManager != null) {
                 mViewManager.showErrorRetry();
             }
@@ -385,10 +366,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
     public void loadUrl(String url) {
         mUrl = url;
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this, mUrl);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "request_url = " + mUrl);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "url is " + mUrl);
         if (mWebView != null) {
             if (sScrollMap.get(mUrl) != null) {
                 mScrollY = sScrollMap.get(mUrl);
@@ -402,10 +380,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
      */
     public void postUrl(String url, byte[] postData) {
         mUrl = url;
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this, mUrl);
-            KLog.d(AppDebugConfig.TAG_WEBVIEW, "post_url = " + mUrl);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "url is " + mUrl);
         if (mWebView != null) {
             mWebView.postUrl(url, postData);
         }
@@ -419,18 +394,15 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
     }
 
     @Override
-    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long
+            contentLength) {
         try {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.logMethodWithParams(this, url, userAgent, contentDisposition, mimetype, contentLength);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, url, userAgent, contentDisposition, mimetype, contentLength);
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
     }
 
@@ -449,9 +421,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 //				mWebView.destroy();
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
         return false;
     }
@@ -467,9 +437,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             }
             sScrollMap.remove(mUrl);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
     }
 }

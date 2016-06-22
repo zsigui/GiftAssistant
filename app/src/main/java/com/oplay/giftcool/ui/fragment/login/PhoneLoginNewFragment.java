@@ -54,7 +54,6 @@ import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 import net.youmi.android.libs.common.util.Util_System_Permission;
@@ -340,11 +339,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                                 showToast("短信已经发送，请注意接收");
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(response.body());
-                            resetRemain();
-                            return;
                         }
-                        ToastUtil.blurErrorResp(response);
+                        ToastUtil.blurErrorResp(null, response);
                         resetRemain();
                     }
 
@@ -354,8 +350,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             return;
                         }
                         hideLoading();
-                        AppDebugConfig.warn(t);
-                        ToastUtil.blurThrow();
+                        ToastUtil.blurThrow(null, t);
                         resetRemain();
                     }
                 });
@@ -424,10 +419,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                                 doAfterSuccess(response, login);
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(response.body());
-                            return;
                         }
-                        ToastUtil.blurErrorResp(response);
+                        ToastUtil.blurErrorResp(null, response);
                     }
 
                     @Override
@@ -436,8 +429,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             return;
                         }
                         hideLoading();
-                        AppDebugConfig.warn(t);
-                        ToastUtil.blurThrow();
+                        ToastUtil.blurThrow(null, t);
                     }
                 });
             }
@@ -618,7 +610,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             case PermissionUtil.READ_SMS:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // 该操作防止短信已过去
-                    KLog.d(AppDebugConfig.TAG_WARN, "sms permission granted");
+                    AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, "sms permission granted");
                     getSmsFromPhone();
                     registerSmsObserver();
                 }

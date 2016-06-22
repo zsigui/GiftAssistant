@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnFinishListener;
-import com.socks.library.KLog;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,9 +45,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements IBaseAda
 			}
 			imageView.setTag(TAG_URL, imgUrl);
 		} catch (Exception e) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.e(BaseListAdapter.class.getSimpleName(), e);
-			}
+			AppDebugConfig.w(BaseListAdapter.class.getSimpleName(), e);
 		}
 	}
 

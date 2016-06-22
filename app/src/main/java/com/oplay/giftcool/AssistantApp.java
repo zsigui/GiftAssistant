@@ -26,6 +26,7 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
+import com.oplay.giftcool.ext.CrashHandler;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
@@ -42,7 +43,7 @@ import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
-import com.socks.library.KLog;
+import com.oplay.giftcool.util.log.GCLog;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
@@ -126,9 +127,7 @@ public class AssistantApp extends Application {
 
     public static AssistantApp getInstance() {
         if (sInstance == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
         }
         return sInstance;
     }
@@ -175,12 +174,13 @@ public class AssistantApp extends Application {
                 WebViewUrl.REAL_URL = s[1].trim();
             }
         }
-        KLog.init(AppDebugConfig.IS_DEBUG);
+        GCLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
         // 初始配置加载列表
         initLoadingView();
         // 初始化统计工具
         StatisticsManager.getInstance().init(this, getChannelId());
+        CrashHandler.getInstance().init();
         // 初始化推送SDK
         PushMessageManager.getInstance().initPush(this);
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
@@ -253,18 +253,14 @@ public class AssistantApp extends Application {
             DownloadNotificationManager.cancelDownload(getApplicationContext());
             StatisticsManager.getInstance().exit(this);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMemoryInfo();
-        }
+        AppDebugConfig.logMemoryInfo();
         if (ImageLoader.getInstance().isInited()) {
             ImageLoader.getInstance().clearMemoryCache();
         }
@@ -304,9 +300,7 @@ public class AssistantApp extends Application {
                                 .addHeader(headerName, getHeaderValue())
                                 .cacheControl(CacheControl.FORCE_NETWORK)
                                 .build();
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_UTIL, "net request url = " + newRequest.url().uri().toString());
-                        }
+//                        AppDebugConfig.d(AppDebugConfig.TAG_APP, "net request url = " + newRequest.url().uri().toString());
                         Response response = chain.proceed(newRequest);
 
                         CacheControl cacheControl;
@@ -384,15 +378,10 @@ public class AssistantApp extends Application {
                     .build();
             ImageLoader.getInstance().init(config);
             L.writeLogs(false);
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
         } catch (Throwable e) {
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed");
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed : ", e);
         }
     }
 
@@ -607,9 +596,6 @@ public class AssistantApp extends Application {
      * 设置活动弹窗内容
      */
     public void setBroadcastBanner(IndexBanner broadcastBanner) {
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_APP, "broadcastBanner = " + broadcastBanner);
-        }
         if (broadcastBanner == null) {
             return;
         }

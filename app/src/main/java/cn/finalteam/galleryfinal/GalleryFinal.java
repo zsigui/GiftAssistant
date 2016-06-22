@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 
 import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.finalteam.galleryfinal.model.PhotoInfo;
-import cn.finalteam.galleryfinal.utils.ILogger;
 import cn.finalteam.galleryfinal.utils.Utils;
 
 /**
@@ -104,7 +104,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("FunctionConfig null");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "FunctionConfig null");
         }
     }
 
@@ -117,7 +117,7 @@ public class GalleryFinal {
      */
     public static void openGallerySingle(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
@@ -161,7 +161,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
         }
     }
 
@@ -182,7 +182,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
         }
     }
 
@@ -195,9 +195,9 @@ public class GalleryFinal {
      */
     public static void openGalleryMulti(int requestCode, ArrayList<PhotoInfo> hasSelected,
                                         FunctionConfig config, OnHandlerResultCallback
-            callback) {
+                                                callback) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
@@ -257,7 +257,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
         }
     }
 
@@ -269,7 +269,7 @@ public class GalleryFinal {
      */
     public static void openCamera(int requestCode, FunctionConfig config, OnHandlerResultCallback callback) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
@@ -315,7 +315,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
         }
     }
 
@@ -327,9 +327,10 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openCrop(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback callback) {
+    public static void openCrop(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback
+            callback) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
@@ -349,7 +350,7 @@ public class GalleryFinal {
         }
 
         if (config == null || TextUtils.isEmpty(photoPath) || !new File(photoPath).exists()) {
-            ILogger.d("config为空或文件不存在");
+            AppDebugConfig.d(AppDebugConfig.TAG_GALLERY, "config为空或文件不存在");
             return;
         }
         mRequestCode = requestCode;
@@ -388,7 +389,7 @@ public class GalleryFinal {
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
         }
     }
 
@@ -400,9 +401,10 @@ public class GalleryFinal {
      * @param photoPath
      * @param callback
      */
-    public static void openEdit(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback callback) {
+    public static void openEdit(int requestCode, FunctionConfig config, String photoPath, OnHandlerResultCallback
+            callback) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }
@@ -422,7 +424,7 @@ public class GalleryFinal {
         }
 
         if (config == null || TextUtils.isEmpty(photoPath) || !new File(photoPath).exists()) {
-            ILogger.d("config为空或文件不存在");
+            AppDebugConfig.d(AppDebugConfig.TAG_GALLERY, "config为空或文件不存在");
             return;
         }
         mRequestCode = requestCode;
@@ -447,7 +449,7 @@ public class GalleryFinal {
      * 打开图片预览界面
      *
      * @param selectedIndex 选择首次显示图片的下标，从0开始
-     * @param picsPath 待预览的图片地址字符串数组
+     * @param picsPath      待预览的图片地址字符串数组
      * @return 同步处理操作的结果
      */
     public static int openMultiPhoto(int selectedIndex, String... picsPath) {
@@ -469,7 +471,7 @@ public class GalleryFinal {
      * 打开图片预览界面
      *
      * @param selectedIndex 选择首次显示图片的下标，从0开始
-     * @param photoInfos 待预览的图片信息数组
+     * @param photoInfos    待预览的图片信息数组
      * @return 同步处理操作的结果
      */
     public static int openMultiPhoto(int selectedIndex, List<PhotoInfo> photoInfos) {
@@ -479,17 +481,17 @@ public class GalleryFinal {
     /**
      * 打开图片预览界面
      *
-     * @param requestCode 请求码
+     * @param requestCode   请求码
      * @param selectedIndex 选择首次显示图片的下标，从0开始
-     * @param config 预览的配置设置，如果已经设置了全局，可默认为null
-     * @param callback 异步执行返回
-     * @param photoInfos 待预览的图片信息列表
+     * @param config        预览的配置设置，如果已经设置了全局，可默认为null
+     * @param callback      异步执行返回
+     * @param photoInfos    待预览的图片信息列表
      * @return 同步处理操作的结果
      */
     public static int openMultiPhoto(int requestCode, int selectedIndex, FunctionConfig config,
-                                      OnHandlerResultCallback callback, List<PhotoInfo> photoInfos) {
+                                     OnHandlerResultCallback callback, List<PhotoInfo> photoInfos) {
         if (mCoreConfig.getImageLoader() == null) {
-            ILogger.e("Please init GalleryFinal.");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "Please init GalleryFinal.");
             if (callback != null) {
                 callback.onHandlerFailure(requestCode, mCoreConfig.getContext().getString(R.string.open_gallery_fail));
             }

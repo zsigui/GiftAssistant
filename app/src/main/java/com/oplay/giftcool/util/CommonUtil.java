@@ -8,7 +8,6 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
 import net.youmi.android.libs.platform.global.Global_Runtime_ClientId;
@@ -26,9 +25,7 @@ public class CommonUtil {
 	 */
 	public static void addCommonParams(JsonReqBase reqBase, int cmd) {
 		if (reqBase == null) {
-			if (AppDebugConfig.IS_DEBUG) {
-				KLog.d(AppDebugConfig.TAG_UTIL, "parameter reqBase is not allowed to null");
-			}
+			AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "parameter reqBase is not allowed to null");
 			return;
 		}
 		MobileInfoModel model = MobileInfoModel.getInstance();

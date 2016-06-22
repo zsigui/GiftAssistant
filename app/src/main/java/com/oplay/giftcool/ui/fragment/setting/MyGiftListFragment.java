@@ -125,7 +125,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
                         refreshFailEnd();
-                        AppDebugConfig.warnResp(response);
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                     }
 
                     @Override
@@ -133,7 +133,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        AppDebugConfig.warn(t);
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                         refreshFailEnd();
                     }
                 });

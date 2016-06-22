@@ -12,7 +12,6 @@ import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.URLUtil;
-import com.socks.library.KLog;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
@@ -44,18 +43,14 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
         @Override
         public void onError(UiError uiError) {
             ToastUtil.showShort(getString(R.string.st_share_result_failed));
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_UTIL, "onError: QQ分享失败");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "onError: QQ分享失败");
             finish();
         }
 
         @Override
         public void onCancel() {
             ToastUtil.showShort(getString(R.string.st_share_result_quick));
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_UTIL, "onCancel: QQ分享取消");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "onCancel: QQ分享取消");
             finish();
         }
     };
@@ -101,20 +96,15 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
     @Override
     protected void onResume() {
         super.onResume();
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_UTIL, "onResume: QQ分享");
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "onResume: QQ分享");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Tencent.onActivityResultData(requestCode, resultCode, data, mUiListener);
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_UTIL, "qq分享-onActivityResult: requestCode = " + requestCode + ", " +
-                    "resultCode = " + resultCode
-                    + ", data = " + data);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "qq分享-onActivityResult: requestCode = " + requestCode + ", " +
+                "resultCode = " + resultCode + ", data = " + data);
     }
 
     private void shareQQFriends(String title, String description, String url, String iconUrl, int shareType) {

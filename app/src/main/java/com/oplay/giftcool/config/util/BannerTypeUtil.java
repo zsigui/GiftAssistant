@@ -20,7 +20,6 @@ import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-19.
@@ -98,7 +97,7 @@ public class BannerTypeUtil {
                     if (context instanceof FragmentActivity) {
                         final boolean isUpdate =
                                 DialogManager.getInstance().showUpdateDialog(context,
-                                        ((FragmentActivity) context).getSupportFragmentManager());
+                                        ((FragmentActivity) context).getSupportFragmentManager(), true);
                         if (!isUpdate) {
                             ToastUtil.showShort(context.getResources().getString(R.string.st_hint_upgrade_newest));
                         }
@@ -116,15 +115,13 @@ public class BannerTypeUtil {
                     ToastUtil.showShort(context.getResources().getString(R.string.st_hint_version_not_support));
                     if (context instanceof FragmentActivity) {
                         DialogManager.getInstance().showUpdateDialog(context,
-                                ((FragmentActivity) context).getSupportFragmentManager());
+                                ((FragmentActivity) context).getSupportFragmentManager(), true);
                     } else {
                         IntentUtil.jumpHome(context, KeyConfig.TYPE_ID_INDEX_UPGRADE, 0);
                     }
             }
         } catch (Throwable t) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_UTIL, t);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
         }
     }
 }

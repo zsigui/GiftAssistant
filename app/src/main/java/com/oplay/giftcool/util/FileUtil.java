@@ -1,6 +1,7 @@
 package com.oplay.giftcool.util;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -8,9 +9,9 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.CallbackListener;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.coder.Coder_Md5;
+import net.youmi.android.libs.common.util.Util_System_Permission;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -27,6 +28,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+
+import static android.os.Environment.MEDIA_MOUNTED;
 
 /**
  * @author JackieZhuang
@@ -63,17 +66,13 @@ public class FileUtil {
                             realKey + ".cache");
                     if (storeFile.exists() && storeFile.isFile()) {
                         String d = readString(storeFile, DEFAULT_CHASET);
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_UTIL, "FileUtil.readCacheByKey : read d = " + d);
-                        }
+                        AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.readCacheByKey : read d = " + d);
                         if (!TextUtils.isEmpty(d)) {
                             data = AssistantApp.getInstance().getGson().fromJson(d, type);
                         }
                     }
                 } catch (Throwable t) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_UTIL, "FileUtil.error = " + t.getMessage());
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_UTIL, "FileUtil.error = " + t.getMessage());
                 } finally {
                     if (callback != null) {
                         final T result = data;
@@ -99,20 +98,28 @@ public class FileUtil {
             public void run() {
                 try {
                     String realKey = Coder_Md5.md5(key);
-                    File storeFile = new File(StorageUtils.getOwnCacheDirectory(context, Global.NET_CACHE_PATH, true),
+                    File storeFile = new File(FileUtil.getOwnCacheDirectory(context, Global.NET_CACHE_PATH, true),
                             realKey + ".cache");
                     String content = AssistantApp.getInstance().getGson().toJson(data);
                     writeString(storeFile, content, DEFAULT_CHASET, false);
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeCacheByKey : write content success!");
-                    }
+                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeCacheByKey : write content success!");
                 } catch (Throwable t) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        t.printStackTrace();
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
                 }
             }
         });
+    }
+
+    public static File getOwnCacheDirectory(Context context, String cacheDir, boolean preferExternal) {
+        File appCacheDir = null;
+        if (preferExternal && MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                && Util_System_Permission.isWith_WRITE_EXTERNAL_STORAGE_Permission(context)) {
+            appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
+        }
+        if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
+            appCacheDir = context.getCacheDir();
+        }
+        return appCacheDir;
     }
 
     /**
@@ -151,7 +158,7 @@ public class FileUtil {
         try {
             forceMkdir(directory);
             return true;
-        } catch (IOException e){
+        } catch (IOException e) {
         }
         return false;
     }
@@ -194,14 +201,10 @@ public class FileUtil {
      */
     public static void writeBytes(OutputStream out, byte[] data) {
         if (out == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeBytes : params out(OutputStream) is null");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeBytes : params out(OutputStream) is null");
         }
         if (data == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeBytes : params data(byte[]) is null");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeBytes : params data(byte[]) is null");
         }
 
         if (out instanceof FileOutputStream) {
@@ -209,7 +212,7 @@ public class FileUtil {
             FileChannel outChannel = null;
             try {
                 outChannel = ((FileOutputStream) out).getChannel();
-                outChannel.write(ByteBuffer.wrap(data == null? new byte[0] : data));
+                outChannel.write(ByteBuffer.wrap(data == null ? new byte[0] : data));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -248,9 +251,7 @@ public class FileUtil {
         try {
             writeBytes(file, data.getBytes(charset), append);
         } catch (UnsupportedEncodingException e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, e);
-            }
+            e.printStackTrace();
         }
     }
 

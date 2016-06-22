@@ -117,7 +117,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                         if (response != null) {
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
-                        AppDebugConfig.warnResp(response);
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                         refreshFailEnd();
                     }
 
@@ -126,7 +126,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        AppDebugConfig.warn(AppDebugConfig.TAG_DEBUG_INFO, t);
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                         refreshFailEnd();
                     }
                 });

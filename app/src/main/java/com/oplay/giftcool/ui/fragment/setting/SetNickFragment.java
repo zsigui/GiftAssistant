@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
@@ -156,12 +155,10 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         }
                         return;
                     }
-                    AppDebugConfig.warn(response.body());
-                    ToastUtil.blurErrorMsg(TOAST_FAILED, response.body());
+                    ToastUtil.blurErrorResp(TOAST_FAILED, response);
                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                     return;
                 }
-                AppDebugConfig.warn(response);
                 ToastUtil.blurErrorResp(TOAST_FAILED, response);
             }
 
@@ -172,8 +169,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                 }
                 hideLoading();
                 mIsLoading = false;
-                AppDebugConfig.warn(t);
-                ToastUtil.blurThrow(TOAST_FAILED);
+                ToastUtil.blurThrow(TOAST_FAILED, t);
             }
         });
     }

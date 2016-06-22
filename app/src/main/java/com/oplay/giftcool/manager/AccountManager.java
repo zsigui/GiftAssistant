@@ -30,7 +30,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -142,9 +141,7 @@ public class AccountManager implements OnFinishListener {
                 String userJson = AssistantApp.getInstance().getGson().toJson(mUser, UserModel.class);
                 Global_SharePreferences.saveEncodeStringToSharedPreferences(mContext,
                         SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, userJson, SPConfig.SALT_USER_INFO);
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, "save to sp : " + userJson);
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "save to sp : " + userJson);
             }
         });
     }
@@ -216,12 +213,12 @@ public class AccountManager implements OnFinishListener {
                                 // 登录状态失效，原因包括: 已在其他地方登录，更新失败
                                 sessionFailed(response.body());
                             }
-                            AppDebugConfig.warn(response);
+                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, response);
                         }
 
                         @Override
                         public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-                            AppDebugConfig.warn(t);
+                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                         }
                     });
                 }
@@ -298,12 +295,12 @@ public class AccountManager implements OnFinishListener {
                                 }
                                 sessionFailed(response.body());
                             }
-                            AppDebugConfig.warn(response);
+                            AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                         }
 
                         @Override
                         public void onFailure(Call<JsonRespBase<UserInfo>> call, Throwable t) {
-                            AppDebugConfig.warn(t);
+                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                         }
                     });
                 }
@@ -454,12 +451,12 @@ public class AccountManager implements OnFinishListener {
                             judgeIsSessionFailed(response.body());
                         }
                     }
-                    AppDebugConfig.warn(response);
+                    AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                 }
 
                 @Override
                 public void onFailure(Call<JsonRespBase<UpdateSession>> call, Throwable t) {
-                    AppDebugConfig.warn(t);
+                    AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                 }
             });
         }
@@ -513,17 +510,12 @@ public class AccountManager implements OnFinishListener {
                 mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
                     @Override
                     public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-                        if (AppDebugConfig.IS_FRAG_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_MANAGER, response == null ?
-                                    "logout response null" : "logout " + response.code());
-                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                     }
 
                     @Override
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                        if (AppDebugConfig.IS_FRAG_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_MANAGER, t);
-                        }
+                        AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                     }
                 });
             }
@@ -592,12 +584,12 @@ public class AccountManager implements OnFinishListener {
                         }
                     }
                 }
-                AppDebugConfig.warn(response);
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
             }
 
             @Override
             public void onFailure(Call<JsonRespBase<MessageCentralUnread>> call, Throwable t) {
-                AppDebugConfig.warn(t);
+                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
             }
         });
     }

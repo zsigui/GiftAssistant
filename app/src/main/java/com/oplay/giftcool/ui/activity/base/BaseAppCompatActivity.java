@@ -31,7 +31,6 @@ import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
-import com.socks.library.KLog;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -357,9 +356,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     }
 
     protected void doBeforeFinish() {
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_MANAGER, "doBeforeFinish called");
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "doBeforeFinish called");
         if (MainActivity.sGlobalHolder == null) {
             IntentUtil.jumpHome(this, true);
         }
@@ -379,10 +376,6 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
 
     @Override
     protected void onDestroy() {
-        if (AppDebugConfig.IS_DEBUG) {
-//			ViewServer.get(this).removeWindow(this);
-//			AssistantApp.getRefWatcher(this).watch(this);
-        }
         if (ImageLoader.getInstance().isInited()) {
             ImageLoader.getInstance().clearMemoryCache();
         }
@@ -427,9 +420,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
      */
     public void openPageForResult(BaseFragment sponsor, int requestCode, Intent target) {
         if (sponsor == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d("openPageForResult get a null fragment");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "openPageForResult get a null fragment");
             return;
         }
         mFragmentForResult = sponsor;

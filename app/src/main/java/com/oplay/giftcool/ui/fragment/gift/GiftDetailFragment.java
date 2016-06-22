@@ -58,7 +58,6 @@ import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -179,9 +178,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             return;
         }
         mId = getArguments().getInt(KeyConfig.KEY_DATA);
-        if (AppDebugConfig.IS_FRAG_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
         if (!AssistantApp.getInstance().isAllowDownload()) {
             downloadLayout.setVisibility(View.GONE);
         } else {
@@ -322,9 +319,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             }
 
         } catch (Throwable t) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(AppDebugConfig.TAG_FRAG, t);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
         }
     }
 
@@ -718,10 +713,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                             f.updateData(response.body().getData());
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, "body = " + response.body());
-                        }
                     }
+                    AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                     // 加载错误页面也行
                     f.refreshFailEnd();
                 }
@@ -731,9 +724,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     if (call.isCanceled() || !f.mCanShowUI) {
                         return;
                     }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.e(t);
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                     f.refreshFailEnd();
                 }
             });

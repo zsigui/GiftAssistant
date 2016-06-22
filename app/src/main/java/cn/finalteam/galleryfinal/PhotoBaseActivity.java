@@ -28,6 +28,7 @@ import android.util.DisplayMetrics;
 import android.view.Window;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -42,7 +43,6 @@ import java.util.List;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.permission.EasyPermissions;
 import cn.finalteam.galleryfinal.utils.ActivityManager;
-import cn.finalteam.galleryfinal.utils.ILogger;
 import cn.finalteam.galleryfinal.utils.MediaScanner;
 import cn.finalteam.galleryfinal.utils.Utils;
 
@@ -149,7 +149,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
             startActivityForResult(captureIntent, GalleryFinal.TAKE_REQUEST_CODE);
         } else {
             takePhotoFailure();
-            ILogger.e("create file failure");
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "create file failure");
         }
     }
 

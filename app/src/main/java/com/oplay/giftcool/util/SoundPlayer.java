@@ -46,9 +46,7 @@ public class SoundPlayer {
     public void playDownloadComplete() {
         if (mSoundPool != null) {
             final int id = mSoundPool.play(mDownloadSoundId, 0.5f, 0.5f, 0, 0, 1.0f);
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.logMethodWithParams(this, id);
-            }
+            AppDebugConfig.v(AppDebugConfig.TAG_DOWNLOAD, id);
         }
     }
 

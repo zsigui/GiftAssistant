@@ -142,12 +142,12 @@ public class ScoreManager {
                                 if (response != null) {
                                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                                 }
-                                AppDebugConfig.warn(response);
+                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, response);
                             }
 
                             @Override
                             public void onFailure(Call<JsonRespBase<TaskStateInfo>> call, Throwable t) {
-                                AppDebugConfig.warn(t);
+                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                             }
                         });
             }
@@ -261,12 +261,12 @@ public class ScoreManager {
                                     }
                                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                                 }
-                                AppDebugConfig.warn(response);
+                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, response);
                             }
 
                             @Override
                             public void onFailure(Call<JsonRespBase<MissionReward>> call, Throwable t) {
-                                AppDebugConfig.warn(t);
+                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                             }
                         });
             }
@@ -370,7 +370,7 @@ public class ScoreManager {
             // 进行一次写入
             setCurDownloadTaskSet(context);
         } catch (Throwable t) {
-            AppDebugConfig.warn(AppDebugConfig.TAG_MANAGER, t);
+            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
         }
     }
 

@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-12.
@@ -66,7 +66,7 @@ public class LoadingDialog extends DialogFragment {
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
-			KLog.e(animationDrawable);
+			AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, animationDrawable);
 			if (animationDrawable != null) {
 				animationDrawable.start();
 			}

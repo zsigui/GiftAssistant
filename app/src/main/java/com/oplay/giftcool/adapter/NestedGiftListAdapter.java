@@ -26,7 +26,6 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +65,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
 
     public void updateData(List<IndexGiftNew> data) {
         this.mData = data;
-        AppDebugConfig.warn(AppDebugConfig.TAG_WARN, "updateData, count = " + getCount());
+        AppDebugConfig.w(AppDebugConfig.TAG_WARN, "updateData, count = " + getCount());
         notifyDataSetChanged();
     }
 
@@ -448,9 +447,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 }
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_ADAPTER, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, e);
         }
     }
 

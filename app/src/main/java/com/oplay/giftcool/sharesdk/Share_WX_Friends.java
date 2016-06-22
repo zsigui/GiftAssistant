@@ -10,14 +10,13 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.sharesdk.base.IShare;
 import com.oplay.giftcool.util.BitmapUtil;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-
-import net.youmi.android.libs.common.debug.Debug_SDK;
 
 /**
  * 分享到微信朋友
@@ -112,7 +111,7 @@ public class Share_WX_Friends extends IShare {
 				mWXApi.sendReq(req);
 			}
 		} catch (Exception e) {
-			Debug_SDK.e(e);
+			AppDebugConfig.w(AppDebugConfig.TAG_SHARE, e);
 		}
 	}
 }

@@ -1,12 +1,9 @@
 package com.oplay.giftcool.config;
 
 import android.os.Debug;
-import android.util.Log;
 
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.socks.library.KLog;
-
-import java.lang.reflect.Field;
+import com.oplay.giftcool.util.log.GCLog;
 
 import retrofit2.Response;
 
@@ -20,12 +17,8 @@ public class AppDebugConfig {
      * debug模式，发布打包需要置为false，可以通过混淆让调试的log文本从代码文件中消除，避免被反编译时漏泄相关信息。
      */
 //    public static final boolean IS_DEBUG = false;
-//	public static final boolean IS_FRAG_DEBUG = false;
-//	public static final boolean IS_PERM_DEBUG = false;
 //	public static final boolean IS_STATISTICS_SHOW = true;
     public static final boolean IS_DEBUG = true;
-    public static final boolean IS_FRAG_DEBUG = true;
-    public static final boolean IS_PERM_DEBUG = true;
     public static final boolean IS_STATISTICS_SHOW = false;
     public static final int TEST_CHANNEL_ID = 10000;
 
@@ -46,6 +39,8 @@ public class AppDebugConfig {
 
     public static final String TAG_WEBVIEW = "gcool_debug_webview";
 
+    public static final String TAG_ACTIVITY = "gcool_debug_activity";
+
     public static final String TAG_SERVICE = "gcool_debug_service";
 
     public static final String TAG_ADAPTER = "gcool_debug_adapter";
@@ -59,177 +54,116 @@ public class AppDebugConfig {
     public static final String TAG_WARN = "gcool_debug_warning";
 
     public static final String TAG_JPUSH = "gcool_debug_jpush";
+
     public static final String TAG_STATICS = "gcool_debug_statistics";
 
+    public static final String TAG_DOWNLOAD = "gcool_debug_download";
 
-    public static void logMethodName(Object object) {
-        if (IS_DEBUG) {
-            try {
-                Log.v(getLogTag(object), getMethodName());
-            } catch (Throwable e) {
-                if (IS_DEBUG) {
-                    KLog.e(e);
-                }
-            }
-        }
-    }
+    public static final String TAG_SHARE = "gcool_debug_share";
 
-    public static void logMethodName(Class<?> cls) {
-        if (IS_DEBUG) {
-            try {
-                Log.v(getLogTag(cls), getMethodName());
-            } catch (Throwable e) {
-                if (IS_DEBUG) {
-                    KLog.e(e);
-                }
-            }
-        }
-    }
+    public static final String TAG_GALLERY = "gcool_debug_gallery";
 
-    private static String getLogTag(Object object) {
-        if (object instanceof String) {
-            return (String) object;
-        } else if (object == null) {
-            return "[Null]";
-        }
-        return object.getClass().getSimpleName() + "[" + object.hashCode() + "]";
-    }
-
-    private static String getMethodName() {
-        final Thread current = Thread.currentThread();
-        final StackTraceElement trace = current.getStackTrace()[4];
-        return trace.getMethodName();
-    }
-
-    public static void logParams(String tag, Object... params) {
-        if (IS_DEBUG) {
-            for (Object obj : params) {
-                Log.i(tag, "" + obj);
-            }
-        }
-    }
-
-    public static void logNetworkRequest(Object object, String request, String response) {
-        if (IS_DEBUG) {
-            Log.i(getLogTag(object), String.format("【Request】:%s", request));
-            Log.i(getLogTag(object), String.format("【Response】:%s", response));
-        }
-    }
-
-    public static void logFields(Class<?> classType) {
-        if (IS_DEBUG) {
-            try {
-                final String name = classType.getSimpleName();
-                final Field[] fs = classType.getDeclaredFields();
-                for (Field f : fs) {
-                    Log.i(name, "Filed:" + f.getName());
-                }
-            } catch (Exception e) {
-                if (IS_DEBUG) {
-                    KLog.e(e);
-                }
-            }
-        }
-    }
-
-    public static void logMethodWithParams(Object object, Object... params) {
-        if (IS_DEBUG) {
-            try {
-                final StringBuilder sb = new StringBuilder();
-                sb.append("{").append(Thread.currentThread().getName()).append("}")
-                        .append(getMethodName()).append(":");
-                for (Object obj : params) {
-                    sb.append('[').append(obj).append("], ");
-                }
-                Log.v(getLogTag(object), sb.toString());
-            } catch (Exception e) {
-                if (IS_DEBUG) {
-                    KLog.e(e);
-                }
-            }
-        }
-    }
+    public static final int STACKTRACE_INDEX = 6;
 
     public static void logMemoryInfo() {
         if (IS_DEBUG) {
             try {
 
-                final String tag = "MM_INFO";
-
-                final long mb = 1024 * 1024l;
+                final long mb = 1024 * 1024L;
                 //Get VM Heap Size by calling:
-                Log.i(tag, "VM Heap Size:" + Runtime.getRuntime().totalMemory() / mb);
+                GCLog.i(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO,
+                        "VM Heap Size:" + Runtime.getRuntime().totalMemory() / mb);
 
                 // Get VM Heap Size Limit by calling:
-                Log.i(tag, "VM Heap Size Limit:" + Runtime.getRuntime().maxMemory() / mb);
+                GCLog.i(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO,
+                        "VM Heap Size Limit:" + Runtime.getRuntime().maxMemory() / mb);
 
                 // Get Allocated VM Memory by calling:
-                Log.i(tag, "Allocated VM Memory:" + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime()
-                        .freeMemory()) / mb);
+                GCLog.i(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO,
+                        "Allocated VM Memory:" + (Runtime.getRuntime().totalMemory() -
+                                Runtime.getRuntime().freeMemory()) / mb);
 
                 //Get Native Allocated Memory by calling:
-                Log.i(tag, "Native Allocated Memory:" + Debug.getNativeHeapAllocatedSize() / mb);
+                GCLog.i(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO,
+                        "Native Allocated Memory:" + Debug.getNativeHeapAllocatedSize() / mb);
             } catch (Exception e) {
-                if (IS_DEBUG) {
-                    KLog.e(e);
-                }
+                AppDebugConfig.e(AppDebugConfig.TAG_DEBUG_INFO, e);
             }
         }
 
-    }
-
-    public static <T> void warnResp(Response<JsonRespBase<T>> response) {
-        warnResp(AppDebugConfig.TAG_APP, response);
     }
 
     public static <T> void warnResp(String tag, Response<JsonRespBase<T>> response) {
+        warnResp(STACKTRACE_INDEX + 1, tag, response);
+    }
+
+    public static <T> void warnResp(int stacktraceIndex, String tag, Response<JsonRespBase<T>> response) {
         if (IS_DEBUG) {
             if (response == null || !response.isSuccessful()) {
-                warn(tag, response);
-            } else if (response.body() == null || !response.body().isSuccess()) {
-                warn(tag, response.body());
+                GCLog.w(stacktraceIndex, tag,
+                        response == null ? "返回出错!" : response.code() + ": " + response.message());
+            } else {
+                JsonRespBase<T> respBase = response.body();
+                GCLog.w(stacktraceIndex, tag, respBase == null ? "解析结构出错!" : respBase.error());
             }
         }
     }
 
-    public static void warn(String msg) {
-        warn(AppDebugConfig.TAG_DEBUG_INFO, msg);
+    public static void w(String tag, Object... object) {
+        w(STACKTRACE_INDEX + 1, tag, object);
     }
 
-    public static void warn(String tag, String msg) {
-        if (IS_DEBUG) {
-            KLog.w(tag, msg);
-        }
-    }
-
-    public static void warn(String tag, Response response) {
-        if (IS_DEBUG) {
-            KLog.w(tag, response == null ? "返回出错!" : response.code() + ": " + response.message());
-        }
-    }
-
-    public static void warn(Response response) {
-        warn(AppDebugConfig.TAG_DEBUG_INFO, response);
-    }
-
-    public static <T> void warn(String tag, JsonRespBase<T> respBase) {
-        if (IS_DEBUG) {
-            KLog.w(tag, respBase == null ? "解析结构出错!" : respBase.error());
-        }
-    }
-
-    public static <T> void warn(JsonRespBase<T> respBase) {
-        warn(AppDebugConfig.TAG_DEBUG_INFO, respBase);
-    }
-
-    public static void warn(String tag, Throwable t) {
+    public static void w(int stacktraceIndex, String tag, Object... object) {
         if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(tag, t);
-            t.printStackTrace();
+            GCLog.w(stacktraceIndex, tag, object);
         }
     }
 
-    public static void warn(Throwable t) {
-        warn(AppDebugConfig.TAG_DEBUG_INFO, t);
+    public static void v() {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.v(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO);
+        }
+    }
+
+    public static void v(String tag, Object... object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.v(STACKTRACE_INDEX, tag, object);
+        }
+    }
+
+    public static void d(Object object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.d(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO, object);
+        }
+    }
+
+    public static void d(String tag, Object... object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.d(STACKTRACE_INDEX, tag, object);
+        }
+    }
+
+    public static void e(Object object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.e(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO, object);
+        }
+    }
+
+    public static void e(String tag, Object... object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.e(STACKTRACE_INDEX, tag, object);
+        }
+    }
+
+    public static void file(Object object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.file(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO, null, null, object);
+        }
+    }
+
+    public static void file(String tag, Object... object) {
+        if (AppDebugConfig.IS_DEBUG) {
+            GCLog.file(STACKTRACE_INDEX, tag, null, null, object);
+        }
     }
 }

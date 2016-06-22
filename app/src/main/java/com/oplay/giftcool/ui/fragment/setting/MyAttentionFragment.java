@@ -10,10 +10,10 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MyAttentionListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -29,7 +29,6 @@ import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -132,7 +131,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                         if (response != null) {
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
-                        AppDebugConfig.warnResp(response);
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                         refreshFailEnd();
 
                     }
@@ -142,9 +141,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(AppDebugConfig.TAG_FRAG, t);
-                        }
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                         refreshFailEnd();
                     }
                 });
@@ -384,8 +381,6 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                             removeData(mReqBase.data.gameId);
                             return;
                         }
-                        ToastUtil.blurErrorMsg(TAG_PREFIX, response.body());
-                        return;
                     }
                     ToastUtil.blurErrorResp(TAG_PREFIX, response);
                 }
@@ -396,7 +391,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
-                    ToastUtil.blurThrow(TAG_PREFIX);
+                    ToastUtil.blurThrow(TAG_PREFIX, t);
                 }
             });
         }

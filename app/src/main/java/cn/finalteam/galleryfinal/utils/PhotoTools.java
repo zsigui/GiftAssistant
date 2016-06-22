@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class PhotoTools {
                 }
             }
         } catch (Exception ex) {
-            ILogger.e(ex);
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, ex);
         } finally {
             if (cursor != null) {
                 cursor.close();

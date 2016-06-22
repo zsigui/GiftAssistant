@@ -51,7 +51,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 import net.youmi.android.libs.common.util.Util_System_Permission;
@@ -312,11 +311,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 mLastSendTime = System.currentTimeMillis();
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(response.body());
-                            resetRemain();
-                            return;
                         }
-                        ToastUtil.blurErrorResp(response);
+                        ToastUtil.blurErrorResp(null, response);
                         resetRemain();
                     }
 
@@ -326,8 +322,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        AppDebugConfig.warn(t);
-                        ToastUtil.blurThrow();
+                        ToastUtil.blurThrow(null, t);
                         resetRemain();
                     }
                 });
@@ -396,10 +391,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 doAfterSuccess(response, login);
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(response.body());
-                            return;
                         }
-                        ToastUtil.blurErrorResp(response);
+                        ToastUtil.blurErrorResp(null, response);
                     }
 
                     @Override
@@ -408,8 +401,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        AppDebugConfig.warn(t);
-                        ToastUtil.blurThrow();
+                        ToastUtil.blurThrow(null, t);
                     }
                 });
             }
@@ -553,7 +545,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
             case PermissionUtil.READ_SMS:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // 该操作防止短信已过去
-                    KLog.d(AppDebugConfig.TAG_WARN, "sms permission granted");
+                    AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, "sms permission granted");
                     getSmsFromPhone();
                     registerSmsObserver();
                 }

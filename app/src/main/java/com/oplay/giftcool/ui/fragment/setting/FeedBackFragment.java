@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnBackPressListener;
@@ -29,7 +28,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -225,7 +223,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                                 return;
                             }
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
-                            ToastUtil.blurErrorMsg(TOAST_FEEDBACK, response.body());
+                            ToastUtil.blurErrorResp(TOAST_FEEDBACK, response);
                             return;
                         }
                         ToastUtil.blurErrorResp(TOAST_FEEDBACK, response);
@@ -237,10 +235,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(t);
-                        }
-                        ToastUtil.blurThrow(TOAST_FEEDBACK);
+                        ToastUtil.blurThrow(TOAST_FEEDBACK, t);
                     }
                 });
             }

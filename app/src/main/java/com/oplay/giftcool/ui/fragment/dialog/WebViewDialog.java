@@ -20,9 +20,6 @@ import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog_NoButton;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
-import com.socks.library.KLog;
-
-import net.youmi.android.libs.common.debug.Debug_SDK;
 
 import java.io.File;
 
@@ -125,14 +122,10 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
             }
             if (cacheDir != null) {
                 if (!NetworkUtil.isAvailable(getContext())) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
-                    }
+                    AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load cache else network");
                     mSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
                 } else {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load default");
-                    }
+                    AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "cache_mode : load default");
                     mSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
                 }
                 mSettings.setAppCachePath(cacheDir.getAbsolutePath());
@@ -141,9 +134,7 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
             mSettings.setAllowFileAccess(true);
             mSettings.setDomStorageEnabled(true);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
         final int vc = SystemUtil.getVerCode(getContext());
         final String ua = mSettings.getUserAgentString() + " GIFT_COOL_APP/" + vc;
@@ -158,18 +149,14 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
     }
 
     protected void onWebPageStarted() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v(AppDebugConfig.TAG_WEBVIEW, this);
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
     protected void onWebReceivedError() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v();
         mIsLoadingFailed = true;
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);
@@ -177,9 +164,7 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
     }
 
     protected void onWebPageFinished() {
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodWithParams(this);
-        }
+        AppDebugConfig.v();
         try {
             if (mProgressBar != null) {
                 mProgressBar.setVisibility(View.GONE);
@@ -207,9 +192,7 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
             mInit = true;
 //			mSettings.setBlockNetworkImage(false);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, e);
         }
     }
 
@@ -219,19 +202,17 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
         try {
             if (wv != null) {
                 if (wv.canGoBack()) {
-                    if ( wv.canGoBack()) {
+                    if (wv.canGoBack()) {
                         wv.goBack();
                     }
                 }
                 wv.stopLoading();
-                ((ViewGroup)mContentView).removeView(wv);
+                ((ViewGroup) mContentView).removeView(wv);
                 wv.removeAllViews();
                 wv.destroy();
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, e);
         }
     }
 
@@ -244,7 +225,6 @@ public class WebViewDialog extends BaseFragment_Dialog_NoButton {
         }
         super.onCreate(savedInstanceState);
     }
-
 
 
     @Override

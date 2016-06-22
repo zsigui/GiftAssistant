@@ -18,7 +18,6 @@ import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.ViewUtil;
 
-import net.youmi.android.libs.common.debug.Debug_SDK;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
 
 import java.util.ArrayList;
@@ -117,9 +116,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
                 }
             }
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                Debug_SDK.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, e);
         }
     }
 

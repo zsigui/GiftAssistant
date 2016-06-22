@@ -31,7 +31,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import org.json.JSONObject;
 
@@ -89,9 +88,7 @@ public class WebViewInterface extends Observable {
             IndexGiftNew gift = AssistantApp.getInstance().getGson().fromJson(giftJson, IndexGiftNew.class);
             return PayManager.getInstance().seizeGift(mHostActivity, gift, null);
         } catch (JsonSyntaxException e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_WEBVIEW, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
         }
         return RET_INTERNAL_ERR;
     }
@@ -107,9 +104,7 @@ public class WebViewInterface extends Observable {
                 try {
                     appInfo = AssistantApp.getInstance().getGson().fromJson(params, IndexGameNew.class);
                 } catch (Throwable e) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.e(e);
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
                 }
                 if (appInfo == null || !appInfo.isValid()) {
                     return RET_PARAM_ERR;
@@ -122,9 +117,7 @@ public class WebViewInterface extends Observable {
                 return RET_OTHER_ERR;
             }
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             return RET_INTERNAL_ERR;
         }
     }
@@ -137,9 +130,7 @@ public class WebViewInterface extends Observable {
         try {
             IntentUtil.jumpLogin(mHostActivity, loginType);
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_WEBVIEW, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             return RET_INTERNAL_ERR;
         }
         return RET_SUCCESS;
@@ -163,9 +154,7 @@ public class WebViewInterface extends Observable {
             }
             return RET_SUCCESS;
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             return RET_INTERNAL_ERR;
         }
     }
@@ -180,9 +169,7 @@ public class WebViewInterface extends Observable {
                     ());
             return RET_SUCCESS;
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             return RET_INTERNAL_ERR;
         }
     }
@@ -240,9 +227,7 @@ public class WebViewInterface extends Observable {
             }
             return RET_SUCCESS;
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_WEBVIEW, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
             return RET_INTERNAL_ERR;
         }
     }
@@ -380,9 +365,7 @@ public class WebViewInterface extends Observable {
                         }
                     });
                 } catch (Exception e) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        e.printStackTrace();
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, e);
                     execJs(callbackJsName, initJsonError(NetStatusCode.ERR_EXEC_FAIL, "执行异常"));
                 }
             }

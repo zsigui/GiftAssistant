@@ -33,7 +33,6 @@ import com.oplay.giftcool.ui.fragment.setting.WalletFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,16 +117,12 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
 
         if (intent == null) {
             ToastUtil.showShort("跳转出错");
-            if (AppDebugConfig.IS_FRAG_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_FRAG, "no intent");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no intent");
             return;
         }
         int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
         if (type == KeyConfig.TYPE_ID_DEFAULT) {
-            if (AppDebugConfig.IS_FRAG_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_FRAG, "no type");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no type");
             ToastUtil.showShort("跳转出错");
             return;
         } else if ((type != KeyConfig.TYPE_ID_SETTING && type != KeyConfig.TYPE_ID_DOWNLOAD)
@@ -189,9 +184,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
                 break;
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
-                if (AppDebugConfig.IS_FRAG_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_FRAG, "type = " + type);
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "type = " + type);
                 ToastUtil.showShort("跳转出错");
         }
     }

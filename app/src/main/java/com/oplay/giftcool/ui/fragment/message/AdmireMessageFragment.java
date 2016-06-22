@@ -19,7 +19,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -125,6 +124,7 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
                                 updateData(backObj.data);
                                 return;
                             }
+                            AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                             refreshFailEnd();
                         }
 
@@ -133,9 +133,7 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
                             if (!mCanShowUI || call.isCanceled()) {
                                 return;
                             }
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(AppDebugConfig.TAG_FRAG, t);
-                            }
+                            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                             refreshFailEnd();
                         }
                     });
@@ -264,31 +262,12 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
                             @Override
                             public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>>
                                     response) {
-                                if (call.isCanceled()) {
-                                    return;
-                                }
-                                if (response != null && response.isSuccessful()) {
-                                    if (response.body() != null && response.body().isSuccess()) {
-                                        if (AppDebugConfig.IS_DEBUG) {
-                                            KLog.d(AppDebugConfig.TAG_FRAG, "修改成功");
-                                        }
-                                        return;
-                                    }
-                                    if (AppDebugConfig.IS_DEBUG) {
-                                        KLog.d(AppDebugConfig.TAG_FRAG, response.body() == null ? "解析出错" :
-                                                response.body().error());
-                                    }
-                                    return;
-                                }
-                                if (AppDebugConfig.IS_DEBUG) {
-                                    KLog.d(AppDebugConfig.TAG_FRAG, response == null ? "服务器出错" :
-                                            response.code() + ":" + response.body());
-                                }
+                                AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                             }
 
                             @Override
                             public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                                KLog.d(AppDebugConfig.TAG_FRAG, t);
+                                AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                             }
                         });
             }

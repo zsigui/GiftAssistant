@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -32,9 +31,7 @@ public final class DefaultGsonRequestBodyConverter<T> implements Converter<T, Re
 	}
 
 	@Override public RequestBody convert(T value) throws IOException {
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_UTIL, value == null ? "null" : gson.toJson(value));
-		}
+		AppDebugConfig.d(AppDebugConfig.TAG_UTIL, value == null ? "null" : gson.toJson(value));
 		if (value != null && String.class.getName().equalsIgnoreCase(value.getClass().getName())) {
 			return RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), (String)value);
 		} else {

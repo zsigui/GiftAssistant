@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.FileUtil;
 import com.ta.utdid2.android.utils.StringUtils;
 
@@ -47,7 +48,6 @@ import cn.finalteam.galleryfinal.adapter.PhotoEditListAdapter;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.model.PhotoTempModel;
 import cn.finalteam.galleryfinal.utils.ActivityManager;
-import cn.finalteam.galleryfinal.utils.ILogger;
 import cn.finalteam.galleryfinal.utils.RecycleViewBitmapUtils;
 import cn.finalteam.galleryfinal.utils.Utils;
 import cn.finalteam.galleryfinal.widget.FloatingActionButton;
@@ -470,7 +470,7 @@ public class PhotoEditActivity extends CropImageActivity implements AdapterView.
                     FileUtil.mkdirs(toFile.getParentFile());
                     onSaveClicked(toFile);//保存裁剪
                 } catch (Exception e) {
-                    ILogger.e(e);
+                    AppDebugConfig.w(AppDebugConfig.TAG_GALLERY, e);
                 }
             } else { //完成选择
                 resultAction();

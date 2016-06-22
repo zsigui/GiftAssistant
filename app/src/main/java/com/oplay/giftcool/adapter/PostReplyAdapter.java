@@ -15,7 +15,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,9 +140,7 @@ public class PostReplyAdapter extends BaseRVAdapter<PhotoInfo> implements View.O
 	@Override
 	public void onHandlerFailure(int requestCode, String errorMsg) {
 		// 取消不做处理
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_ADAPTER, "errorMsg = " + errorMsg);
-		}
+		AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, "errorMsg = " + errorMsg);
 	}
 
 	private static class ItemHolder extends BaseRVHolder{

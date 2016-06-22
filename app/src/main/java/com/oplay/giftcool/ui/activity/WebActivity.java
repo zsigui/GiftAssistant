@@ -9,7 +9,6 @@ import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.WebFragment;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-29.
@@ -17,43 +16,39 @@ import com.socks.library.KLog;
 public class WebActivity extends BaseAppCompatActivity {
 
 
-	@Override
-	protected void initView() {
-		setContentView(R.layout.activity_web);
-	}
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_web);
+    }
 
-	@Override
-	protected void processLogic() {
-		if (getIntent() == null) {
-			ToastUtil.showShort("参数获取失败，请重新进入");
-			finish();
-			return;
-		}
-		handleRedirect(getIntent());
-	}
+    @Override
+    protected void processLogic() {
+        if (getIntent() == null) {
+            ToastUtil.showShort("参数获取失败，请重新进入");
+            finish();
+            return;
+        }
+        handleRedirect(getIntent());
+    }
 
-	private void handleRedirect(Intent intent) {
-		String url = intent.getStringExtra(KeyConfig.KEY_DATA);
-		String title = intent.getStringExtra(KeyConfig.KEY_TITLE);
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.d(AppDebugConfig.TAG_APP, "url = " + url);
-		}
-		if (AppDebugConfig.IS_DEBUG) {
-			KLog.e(AppDebugConfig.TAG_APP, "handle intent = " + intent + ", url = " + url);
-		}
-		replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), title);
-	}
+    private void handleRedirect(Intent intent) {
+        String url = intent.getStringExtra(KeyConfig.KEY_DATA);
+        String title = intent.getStringExtra(KeyConfig.KEY_TITLE);
+        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "url = " + url);
+        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "handle intent = " + intent + ", url = " + url);
+        replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), title);
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.iv_bar_back) {
-			finish();
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_bar_back) {
+            finish();
+        }
+    }
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		handleRedirect(intent);
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleRedirect(intent);
+    }
 }

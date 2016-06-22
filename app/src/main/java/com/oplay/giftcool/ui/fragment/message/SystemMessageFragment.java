@@ -17,7 +17,6 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -97,6 +96,7 @@ public class SystemMessageFragment extends BaseFragment_Refresh<SystemMessage> {
                                 updateData(backObj.data);
                                 return;
                             }
+                            AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                             refreshFailEnd();
                         }
 
@@ -105,9 +105,7 @@ public class SystemMessageFragment extends BaseFragment_Refresh<SystemMessage> {
                             if (!mCanShowUI || call.isCanceled()) {
                                 return;
                             }
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.e(AppDebugConfig.TAG_FRAG, t);
-                            }
+                            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                             refreshFailEnd();
                         }
                     });

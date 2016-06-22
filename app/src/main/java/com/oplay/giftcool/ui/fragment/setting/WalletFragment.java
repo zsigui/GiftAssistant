@@ -16,7 +16,6 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-6.
@@ -127,9 +126,7 @@ public class WalletFragment extends BaseFragment {
                 }
             }
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, e);
         }
     }
 

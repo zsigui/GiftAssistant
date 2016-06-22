@@ -13,7 +13,6 @@ import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
 import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.util.SPUtil;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_Executor;
 
@@ -184,9 +183,7 @@ public class Global {
                     }.getType());
                 }
             } catch (Throwable t) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_DEBUG_INFO, t);
-                }
+                AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
             }
 
         }

@@ -118,7 +118,7 @@ public class AboutFragment extends BaseFragment {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                AppDebugConfig.warn(AppDebugConfig.TAG_FRAG, t);
+                AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                 setUpdate(mContext.getResources().getString(R.string
                         .st_about_check_update_failed));
             }

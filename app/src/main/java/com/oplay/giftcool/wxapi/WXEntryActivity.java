@@ -10,7 +10,6 @@ import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
@@ -43,9 +42,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
          */
     @Override
     public void onReq(BaseReq baseReq) {
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_SERVICE, "req from wx share : " + baseReq);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "req from wx share : " + baseReq);
         goToShowShare((ShowMessageFromWX.Req) baseReq);
         finish();
     }
@@ -55,10 +52,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
      */
     @Override
     public void onResp(BaseResp baseResp) {
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_SERVICE, "resp from wx share : "
-                    + (baseResp == null ? null : baseResp.errCode + ":" + baseResp.errStr));
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "resp from wx share : "
+                + (baseResp == null ? null : baseResp.errCode + ":" + baseResp.errStr));
         if (baseResp == null) {
             ToastUtil.showShort(getString(R.string.st_share_result_failed));
             return;
@@ -91,13 +86,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             return;
         }
         WXWebpageObject webObj = (WXWebpageObject) msg.mediaObject;
-        String index = webObj.webpageUrl.substring(webObj.webpageUrl.indexOf("plan_id=") + 8, webObj.webpageUrl.length());
-        KLog.e("share from: detail index = " + index);
         try {
+            String index = webObj.webpageUrl.substring(webObj.webpageUrl.indexOf("plan_id=") + 8, webObj.webpageUrl
+                    .length());
             int id = Integer.parseInt(index);
             IntentUtil.jumpGiftDetail(this, id);
         } catch (Exception e) {
-            AppDebugConfig.warn(e);
+            AppDebugConfig.w(AppDebugConfig.TAG_SHARE, e);
         }
     }
 }

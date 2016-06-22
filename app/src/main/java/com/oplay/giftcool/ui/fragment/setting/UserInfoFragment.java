@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -23,7 +22,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-1-17.
@@ -96,9 +94,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
     @Override
     protected void lazyLoad() {
         if (!AccountManager.getInstance().isLogin()) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_FRAG, "no login");
-            }
+            AccountManager.getInstance().notifyUserAll(null);
             return;
         }
         setData();

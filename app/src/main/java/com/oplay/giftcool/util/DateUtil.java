@@ -3,7 +3,6 @@ package com.oplay.giftcool.util;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -95,9 +94,7 @@ public class DateUtil {
                 Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
                 curTimeMillisecond = date.getTime();
             } catch (ParseException e) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_UTIL, e);
-                }
+                AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
             }
         }
         return curTimeMillisecond;
@@ -130,9 +127,7 @@ public class DateUtil {
             String before = sdf.format(sdf.parse(date));
             return before.equals(sdf.format(new Date(System.currentTimeMillis())));
         } catch (ParseException e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_UTIL, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
         return false;
     }

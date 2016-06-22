@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.StatisticsManager;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -17,33 +16,25 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMemoryInfo();
-        }
+        AppDebugConfig.v();
     }
 
     @Override
@@ -51,13 +42,9 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
         super.onPause();
         try {
             StatisticsManager.getInstance().onPause(this);
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.logMethodName(this);
-            }
+            AppDebugConfig.v();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
         }
     }
 
@@ -66,38 +53,28 @@ public abstract class BaseAppCompatActivityLog extends AppCompatActivity {
         super.onResume();
         try {
             StatisticsManager.getInstance().onResume(this);
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.logMethodName(this);
-            }
+            AppDebugConfig.v();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (AppDebugConfig.IS_DEBUG) {
-            AppDebugConfig.logMethodName(this);
-        }
+        AppDebugConfig.v();
     }
 
 }

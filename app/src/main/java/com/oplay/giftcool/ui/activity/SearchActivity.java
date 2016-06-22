@@ -29,7 +29,6 @@ import com.oplay.giftcool.ui.fragment.search.ResultFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -120,9 +119,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
         if (TextUtils.isEmpty(s)) {
             return;
         }
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d("get saveHistory = " + s);
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "get saveHistory = " + s);
 
         String[] keys = s.split("\t");
         Collections.addAll(mHistoryData, keys);
@@ -150,9 +147,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
         for (String s : mHistoryData) {
             builder.append(s).append("\t");
         }
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d("put saveHistory = " + builder.toString());
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "put saveHistory = " + builder.toString());
         SPUtil.putString(getApplicationContext(),
                 SPConfig.SP_SEARCH_FILE,
                 SPConfig.KEY_SEARCH_INDEX,
@@ -414,10 +409,8 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
                             displayDataUI(data, mLastSearchKey, id);
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(response.body());
-                        }
                     }
+                    AppDebugConfig.warnResp(AppDebugConfig.TAG_ACTIVITY, response);
                     displayNetworkErrUI();
                 }
 
@@ -426,9 +419,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
                     if (!mNeedWorkCallback || call.isCanceled()) {
                         return;
                     }
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.e(AppDebugConfig.TAG_SEARCH, t);
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, t);
                     // 提示网络错误
                     displayNetworkErrUI();
                 }
@@ -488,10 +479,8 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
                             displayPromptUI(data.promptList);
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.e(response.body());
-                        }
                     }
+                    AppDebugConfig.warnResp(AppDebugConfig.TAG_ACTIVITY, response);
                     if (curKeyWord.equals(mLastInputKey)) {
                         displayPromptUI(null);
                     }
@@ -502,9 +491,7 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
                     if (!mNeedWorkCallback || call.isCanceled()) {
                         return;
                     }
-                    if (AppDebugConfig.IS_FRAG_DEBUG) {
-                        KLog.e(t);
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, t);
                     if (mSearchLayout.getKeyword().trim().equals(mLastInputKey)) {
                         displayPromptUI(null);
                     }

@@ -25,7 +25,6 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,9 +203,7 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
                 }
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_ADAPTER, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, e);
         }
     }
 

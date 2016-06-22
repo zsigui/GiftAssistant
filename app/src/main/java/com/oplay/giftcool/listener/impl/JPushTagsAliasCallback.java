@@ -5,7 +5,6 @@ import android.content.Context;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.util.ThreadUtil;
-import com.socks.library.KLog;
 
 import java.util.Set;
 
@@ -28,14 +27,10 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
     @Override
     public void gotResult(int code, final String alias, Set<String> tag) {
         if (code == 0) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_JPUSH, "set alias success : " + alias);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "set alias success : " + alias);
             AccountManager.getInstance().setHasSetAliasSuccess(true);
         } else {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed : " + alias + ", code = " + code);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "set alias failed : " + alias + ", code = " + code);
             if (mRunnable == null) {
                 mRunnable = new Runnable() {
                     @Override
@@ -46,9 +41,7 @@ public class JPushTagsAliasCallback implements TagAliasCallback {
             }
             AccountManager.getInstance().setHasSetAliasSuccess(false);
             if (count++ < 3) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_JPUSH, "set alias failed, wait for 5s to run again! ");
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "set alias failed, wait for 5s to run again! ");
                 ThreadUtil.runOnUiThread(mRunnable, 5000);
             }
         }

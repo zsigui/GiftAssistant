@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.SearchHistoryAdapter;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -17,7 +16,6 @@ import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.FlowLayout;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout;
 import com.oplay.giftcool.util.IntentUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +37,9 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 
     private TextView tvClear;
     private TextView tvEmptyHistory;
-//    private TextView tvChange;
+    //    private TextView tvChange;
     private TagFlowLayout tagHistoryView;
-//    private RecyclerView rvHotView;
+    //    private RecyclerView rvHotView;
 //    private LoadingView ivLoading;
 //    private ImageView ivHotError;
     private boolean mHotInError = false;
@@ -82,8 +80,6 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 
     @Override
     protected void setListener() {
-//        ivHotError.setOnClickListener(this);
-//        tvChange.setOnClickListener(this);
         tvClear.setOnClickListener(this);
         tagHistoryView.setOnTagClickListener(this);
         ivHopeGift.setOnClickListener(this);
@@ -99,144 +95,11 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         mHistoryAdapter = new SearchHistoryAdapter(getContext(), data);
         tagHistoryView.setAdapter(mHistoryAdapter);
         updateHistoryData(data);
-
-//        ReqSearchHot reqData = new ReqSearchHot();
-//        reqData.pageId = mLastPage;
-//        reqData.pageSize = PAGE_ITEM_SIZE;
-//        mReqBase = new JsonReqBase<>(reqData);
-
-//        AutoMeasureGridLayoutManager gridLayoutManager = new AutoMeasureGridLayoutManager(getContext(), 2);
-//        DividerItemDecoration hDivider = new DividerItemDecoration(getContext(), GridLayout.HORIZONTAL);
-//        DividerItemDecoration vDivider = new DividerItemDecoration(getContext(), GridLayout.VERTICAL);
-//        rvHotView.setLayoutManager(gridLayoutManager);
-//        rvHotView.addItemDecoration(hDivider);
-//        rvHotView.addItemDecoration(vDivider);
-//        mHotAdapter = new SearchHistoryHotAdapter(getContext());
-//        rvHotView.setAdapter(mHotAdapter);
-
     }
-
-    private long mLastClickTime = 0;
 
     @Override
     protected void lazyLoad() {
-//        long curTime = System.currentTimeMillis();
-//        if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
-//            // 防止重复点击
-//            mLastClickTime = curTime;
-//            return;
-//        }
-//        if (mIsLoading) {
-//            return;
-//        }
-//        showHotState(TYPE_LOAD);
-//        mIsLoading = true;
-//        if (!NetworkUtil.isConnected(getContext())) {
-//            // 网络错误的处理
-//            mIsLoading = false;
-//            showHotState(TYPE_ERROR);
-//            return;
-//        }
-//        if (mCall != null) {
-//            mCall.cancel();
-//        }
-//        mReqBase.data.pageId = mLastPage;
-//        mCall = Global.getNetEngine().obtainSearchHotData(mReqBase);
-//        mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-//            @Override
-//            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
-//                                   Response<JsonRespBase<OneTypeDataList<IndexGameNew>>> response) {
-//                mIsLoading = false;
-//                if (!mCanShowUI || call.isCanceled()) {
-//                    return;
-//                }
-//                if (response != null && response.isSuccessful()) {
-//                    if (response.body() != null && response.body().isSuccess()) {
-//                        OneTypeDataList<IndexGameNew> model = response.body().getData();
-//                        if (model.pageSize == 0 || model.isEndPage || model.data == null) {
-//                            // 已到最后一页，重新开始
-//                            mLastPage = FIRST_PAGE;
-//                        }
-//                        updateHotData(model.data);
-//                        return;
-//                    }
-//                    if (AppDebugConfig.IS_DEBUG) {
-//                        KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null ? "解析失败" : response.body().error()));
-//                    }
-//                }
-//                if (AppDebugConfig.IS_DEBUG) {
-//                    KLog.d(AppDebugConfig.TAG_FRAG, (response == null? "返回出错" : "错误码: " + response.code()));
-//                }
-//                showHotState(TYPE_ERROR);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable t) {
-//                mIsLoading = false;
-//                if (!mCanShowUI || call.isCanceled()) {
-//                    return;
-//                }
-//                if (AppDebugConfig.IS_FRAG_DEBUG) {
-//                    KLog.d(AppDebugConfig.TAG_FRAG, t);
-//                }
-//                showHotState(TYPE_ERROR);
-//            }
-//        });
     }
-
-//    public ArrayList<IndexGameNew> initStashData() {
-//        ArrayList<IndexGameNew> stashData = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            IndexGameNew item = new IndexGameNew();
-//            item.totalCount = i;
-//            item.img = "http://owan-img.ymapp.com/app/11124/icon/icon_1455787586.png_128_128_70.png";
-//            item.code = "\u6df7\u6c8c\u8d5e\u6b4c";
-//            item.id = 11124 + i;
-//            stashData.add(item);
-//        }
-//        return stashData;
-//    }
-
-//    /**
-//     * 根据传入的 type 显示热搜页面的当前状态
-//     *
-//     * @param type {@link #TYPE_CONTENT}, {@link #TYPE_EMPTY}, {@link #TYPE_LOAD}, {@link #TYPE_ERROR}
-//     */
-//    private boolean showHotState(int type) {
-//        if (ivHotError == null || ivLoading == null
-//                || rvHotView == null) {
-//            return false;
-//        }
-//        switch (type) {
-//            case TYPE_ERROR:
-//                ivHotError.setImageResource(R.drawable.pic_error_net);
-//                ivHotError.setVisibility(View.VISIBLE);
-//                ivLoading.setVisibility(View.GONE);
-//                rvHotView.setVisibility(View.GONE);
-//                mHotInError = true;
-//                return true;
-//            case TYPE_EMPTY:
-//                ivHotError.setImageResource(R.drawable.pic_data_empty);
-//                ivHotError.setVisibility(View.VISIBLE);
-//                ivLoading.setVisibility(View.GONE);
-//                rvHotView.setVisibility(View.GONE);
-//                mHotInError = false;
-//                return true;
-//            case TYPE_LOAD:
-//                ivLoading.setVisibility(View.VISIBLE);
-//                ivHotError.setVisibility(View.GONE);
-//                rvHotView.setVisibility(View.GONE);
-//                mHotInError = false;
-//                return true;
-//            case TYPE_CONTENT:
-//                ivLoading.setVisibility(View.GONE);
-//                ivHotError.setVisibility(View.GONE);
-//                rvHotView.setVisibility(View.VISIBLE);
-//                mHotInError = false;
-//                return true;
-//        }
-//        return false;
-//    }
 
     /**
      * 根据传入的 type 显示历史记录页面
@@ -267,9 +130,6 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
      */
     public void updateHistoryData(List<String> data) {
         if (data == null || data.isEmpty()) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d("test-test", "data = null");
-            }
             showHistoryState(TYPE_EMPTY);
             return;
         }

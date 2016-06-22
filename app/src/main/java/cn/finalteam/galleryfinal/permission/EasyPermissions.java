@@ -25,12 +25,13 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+
+import com.oplay.giftcool.config.AppDebugConfig;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.finalteam.galleryfinal.utils.ILogger;
 
 /**
  * Desction:Utility to request and check System permissions for apps targeting Android M (API >= 23).
@@ -74,8 +75,6 @@ public class EasyPermissions {
      *
      * @param object      Activity or Fragment requesting permissions. Should implement
      *                    {@link ActivityCompat.OnRequestPermissionsResultCallback}
-     *                    or
-     *                    {@link android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
      * @param rationale   a message explaining why the application needs this set of permissions, will
      *                    be displayed if the user rejects the request the first time.
      * @param requestCode request code to track this request, must be < 256.
@@ -94,8 +93,6 @@ public class EasyPermissions {
      *
      * @param object         Activity or Fragment requesting permissions. Should implement
      *                       {@link ActivityCompat.OnRequestPermissionsResultCallback}
-     *                       or
-     *                       {@link android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
      * @param rationale      a message explaining why the application needs this set of permissions, will
      *                       be displayed if the user rejects the request the first time.
      * @param positiveButton custom text for positive button
@@ -240,9 +237,9 @@ public class EasyPermissions {
                         }
                         method.invoke(object);
                     } catch (IllegalAccessException e) {
-                        ILogger.e(TAG, "runDefaultMethod:IllegalAccessException", e);
+                        AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "runDefaultMethod:IllegalAccessException", e);
                     } catch (InvocationTargetException e) {
-                        ILogger.e(TAG, "runDefaultMethod:InvocationTargetException", e);
+                        AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, "runDefaultMethod:InvocationTargetException", e);
                     }
                 }
             }

@@ -5,11 +5,9 @@ import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.SearchPromptAdapter;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.listener.OnSearchListener;
 import com.oplay.giftcool.model.data.resp.PromptData;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +74,6 @@ public class PromptFragment extends BaseFragment {
 
     public void updateData(List<PromptData> data) {
         if (mAdapter != null) {
-            if (AppDebugConfig.IS_FRAG_DEBUG) {
-                KLog.v(data);
-            }
             mAdapter.updateData(data);
         }
     }

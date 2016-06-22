@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.util.Util_System_File;
 import net.youmi.android.libs.common.util.Util_System_Package;
@@ -37,9 +36,7 @@ public class InstallAppUtil {
 
             Util_System_Package.InstallApkByFilePath(context, destFilePath);
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
     }
 

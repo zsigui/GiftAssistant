@@ -17,7 +17,6 @@ import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -74,9 +73,7 @@ public class IndexGiftLimitAdapter extends BaseRVAdapter<IndexGiftNew> implement
                 }
             }
         } catch (Throwable t) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_ADAPTER, t);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, t);
         }
     }
 

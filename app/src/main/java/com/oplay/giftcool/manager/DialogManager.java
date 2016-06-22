@@ -33,7 +33,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -167,25 +166,17 @@ public class DialogManager {
                             confirmDialog.setTitle(title);
                             confirmDialog.setContent(content);
                             confirmDialog.show(fm, "confirm");
+                            return;
                         } else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
                                 || resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
                             // 登录状态失效
                             ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
                             AccountManager.getInstance().notifyUserAll(null);
-                        } else {
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.d(AppDebugConfig.TAG_MANAGER, (response.body() == null ? "解析失败" :
-                                        response.body().error()));
-                            }
+                            return;
                         }
-
-                        return;
                     }
-                    return;
                 }
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, (response == null ? "返回失败" : response.message()));
-                }
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                 ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
             }
 
@@ -195,9 +186,7 @@ public class DialogManager {
                 if (call.isCanceled()) {
                     return;
                 }
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, t);
-                }
+                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                 ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
             }
         });
@@ -205,7 +194,7 @@ public class DialogManager {
 
     /**
      * @Hint 显示重点内容
-     *
+     * <p/>
      * 显示重点提示窗
      */
     public void showHintDialog(FragmentManager fm, String title, String content, String hint, String tag) {
@@ -263,7 +252,7 @@ public class DialogManager {
     /**
      * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
      */
-    public boolean showUpdateDialog(final Context context, final FragmentManager fm) {
+    public boolean showUpdateDialog(final Context context, final FragmentManager fm, boolean forceShow) {
         final UpdateInfo updateInfo = AssistantApp.getInstance().getUpdateInfo();
         if (updateInfo != null && updateInfo.checkoutUpdateInfo(context)) {
             final IndexGameNew appInfo = new IndexGameNew();
@@ -277,11 +266,14 @@ public class DialogManager {
             appInfo.packageName = updateInfo.packageName;
             appInfo.versionName = updateInfo.versionName;
             appInfo.size = appInfo.getApkFileSizeStr();
-            appInfo.initAppInfoStatus(context);
-            BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
-                    updateInfo.updatePercent);
-            confirmDialog.show(fm, "update");
-            return true;
+            appInfo.initFile();
+            if (forceShow && appInfo.isFileExists()) {
+                appInfo.initAppInfoStatus(context);
+                BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
+                        updateInfo.updatePercent);
+                confirmDialog.show(fm, "update");
+                return true;
+            }
         }
         return false;
     }

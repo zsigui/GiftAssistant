@@ -20,7 +20,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
-import cn.finalteam.galleryfinal.utils.ILogger;
+import com.oplay.giftcool.config.AppDebugConfig;
 
 public class CupcakeGestureDetector implements GestureDetector {
 
@@ -70,7 +70,7 @@ public class CupcakeGestureDetector implements GestureDetector {
                 if (null != mVelocityTracker) {
                     mVelocityTracker.addMovement(ev);
                 } else {
-                    ILogger.d("Velocity tracker is null");
+                    AppDebugConfig.d(AppDebugConfig.TAG_GALLERY, "Velocity tracker is null");
                 }
 
                 mLastTouchX = getActiveX(ev);

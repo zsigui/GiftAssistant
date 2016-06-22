@@ -33,7 +33,6 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -142,7 +141,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                     }
                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                 }
-                AppDebugConfig.warn(response);
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                 refreshFailEnd();
             }
 
@@ -151,7 +150,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                AppDebugConfig.warn(t);
+                AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                 refreshFailEnd();
             }
         });
@@ -249,9 +248,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
     @Override
     public void onItemClick(ScoreMission item, View view, int position) {
         if (mData == null || mData.size() == 0) {
-            if (AppDebugConfig.IS_FRAG_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_FRAG, "Empty or Null Data On Item Click! mData = " + mData);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "Empty or Null Data On Item Click! mData = " + mData);
             return;
         }
         handleMission(item);
@@ -324,9 +321,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                     break;
             }
         } catch (Throwable t) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_FRAG, t);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
         }
     }
 
@@ -343,7 +338,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 break;
             case TaskTypeUtil.INFO_TWO_SHOW_UPGRADE:
                 final boolean isUpdate =
-                        DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager());
+                        DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager(), true);
                 if (!isUpdate) {
                     ToastUtil.showShort(getContext().getResources().getString(R.string.st_gift_hint_content));
                 }

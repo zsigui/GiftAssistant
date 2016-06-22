@@ -31,7 +31,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -211,8 +210,7 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                AppDebugConfig.warn(t);
-                                ToastUtil.blurThrow();
+                                ToastUtil.blurThrow(null, t);
                             }
                         });
             }
@@ -246,12 +244,10 @@ public class PayManager {
                         .st_dialog_btn_ok));
                 dialog.setContent(response.body().getMsg());
                 dialog.show(context.getSupportFragmentManager(), "seize failed");
-            } else {
-                ToastUtil.blurErrorMsg(response.body());
+                return;
             }
-            return;
         }
-        ToastUtil.blurErrorResp(response);
+        ToastUtil.blurErrorResp(null, response);
     }
 
     /**
@@ -333,8 +329,7 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                AppDebugConfig.warn(t);
-                                ToastUtil.blurThrow();
+                                ToastUtil.blurThrow(null, t);
                             }
                         });
             }
@@ -382,10 +377,7 @@ public class PayManager {
                     dialog.setContent(response.body().getMsg());
                     dialog.show(context.getSupportFragmentManager(), "search failed");
                 }
-            } else {
-                ToastUtil.blurErrorMsg("抢号失败", response.body());
             }
-            return;
         }
         ToastUtil.blurErrorResp("抢号失败", response);
     }
@@ -539,19 +531,12 @@ public class PayManager {
                 if (call.isCanceled()) {
                     return;
                 }
-                if (response != null && response.isSuccessful()
-                        && response.body() != null && response.body().isSuccess()) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_MANAGER, "关注成功");
-                    }
-                }
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
             }
 
             @Override
             public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_MANAGER, t);
-                }
+                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
             }
         });
     }

@@ -44,7 +44,6 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -281,9 +280,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 }
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
         }
     }
 
@@ -712,7 +709,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
      */
     private boolean handleUpdateApp() {
         if (!mHasShowUpdate
-                && DialogManager.getInstance().showUpdateDialog(this, getSupportFragmentManager())) {
+                && DialogManager.getInstance().showUpdateDialog(this, getSupportFragmentManager(), false)) {
             mHasShowUpdate = true;
             return true;
         }

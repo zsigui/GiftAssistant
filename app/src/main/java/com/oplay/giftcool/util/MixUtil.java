@@ -7,7 +7,6 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.InitQQ;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -49,9 +48,7 @@ public class MixUtil {
      */
     public static boolean isUrlNeedLoginFirst(Context context, String url) {
         if (context == null || url == null) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_UTIL, "context和url不允许定义为空");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "context和url不允许定义为空");
             return false;
         }
         final String key = "need_validate=";

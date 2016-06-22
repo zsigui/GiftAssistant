@@ -26,8 +26,6 @@ import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.ThreadUtil;
-import com.socks.library.KLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
@@ -62,9 +60,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             // 初始化下载列表
             ApkDownloadManager.getInstance(mContext).initDownloadList();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                AppDebugConfig.warn(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         return null;
     }
@@ -93,7 +89,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
      * 判断是否今日首次登录
      */
     public boolean judgeFirstOpenToday() {
-        long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
+        long lastOpenTime = SPUtil.getLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME,
+                0);
         // 首次打开APP 或者 今日首次登录
         SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System
                 .currentTimeMillis());
@@ -108,13 +105,11 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 //		if (assistantApp.isGlobalInit()) {
 //			return;
 //		}
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "app has global initialed");
-        }
+        AppDebugConfig.v(AppDebugConfig.TAG_APP, "app has global initialed");
 
         // 存储打开APP时间
-        SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
-                SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
+//        SPUtil.putLong(assistantApp, SPConfig.SP_APP_CONFIG_FILE,
+//                SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
 
         // 初始化照片墙控件
         assistantApp.initGalleryFinal();
@@ -131,32 +126,22 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         Global.resetNetEngine();
         // 初始化配置，获取更新信息
         if (!initAndCheckUpdate()) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e("initAndCheckUpdate failed!");
-            }
+            AppDebugConfig.d("initAndCheckUpdate failed!");
         }
 
         doClearWorkForOldVer();
         Global.getInstalledAppNames();
         // 判断是否今日首次打开APP
-        ThreadUtil.runInThread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
-                if (judgeFirstOpenToday()) {
-                    // 进行应用信息上报
-                    reportedAppInfo(infos);
-                }
-
-            }
-        });
+        ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
+        if (judgeFirstOpenToday()) {
+            // 进行应用信息上报
+            reportedAppInfo(infos);
+        }
 
         try {
             OuwanSDKManager.getInstance().init();
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_APP, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         // 获取用户信息
         // 该信息使用salt加密存储再SharedPreference中
@@ -164,18 +149,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         try {
             String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
                     SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
             user = assistantApp.getGson().fromJson(userJson, UserModel.class);
             if (user != null && user.userInfo != null) {
                 // 将首次登录状态清掉，再次获取已经不属于首次登录
                 user.userInfo.isFirstLogin = false;
             }
         } catch (Exception e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(AppDebugConfig.TAG_APP, e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         AccountManager.getInstance().notifyUserAll(user);
         // 每次登录请求一次更新用户状态和数据
@@ -222,14 +203,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                         return true;
                     }
                 }
-                AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response.body());
-                return false;
             }
-            AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, response);
+            AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                e.printStackTrace();
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         return false;
     }
@@ -252,11 +229,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                         if (response != null && response.isSuccessful()
                                 && response.body() != null && response.body().isSuccess()) {
                             // 执行上报成功
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.d(AppDebugConfig.TAG_APP, "信息上报成功");
-                            }
+                            AppDebugConfig.d(AppDebugConfig.TAG_APP, "信息上报成功");
+                            return;
                         }
-                        AppDebugConfig.warnResp(AppDebugConfig.TAG_UTIL, response);
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
 //									public void run() {
@@ -267,7 +243,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
                     @Override
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                        AppDebugConfig.warn(AppDebugConfig.TAG_UTIL, t);
+                        AppDebugConfig.w(AppDebugConfig.TAG_APP, t);
                         // 上报失败，等待30秒后继续执行
 //								ThreadUtil.runOnUiThread(new Runnable() {
 //									@Override
@@ -297,10 +273,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                 info.vc = String.valueOf(packageInfo.versionCode);
                 info.vn = packageInfo.versionName;
                 result.add(info);
-            } catch (Exception e) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_UTIL, e);
-                }
+            } catch (Throwable e) {
+                AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
             }
         }
 

@@ -27,7 +27,6 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -152,8 +151,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                             }
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
-                        AppDebugConfig.warn(response);
-//						refreshFailEnd();
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, response);
                         readCacheData();
                     }
 
@@ -162,8 +160,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        AppDebugConfig.warn(t);
-//						refreshFailEnd();
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                         readCacheData();
                     }
                 });
@@ -304,11 +301,8 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                             addMoreData(backObj.data);
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, (response.body() == null ?
-                                    "解析错误" : response.body().error()));
-                        }
                     }
+                    AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                     moreLoadFailEnd();
                 }
 
@@ -317,6 +311,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
+                    AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                     moreLoadFailEnd();
                 }
             });
@@ -376,16 +371,8 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                                 }
                                 return;
                             }
-                            if (AppDebugConfig.IS_DEBUG) {
-                                KLog.d(AppDebugConfig.TAG_FRAG, response.body() != null ?
-                                        response.body().error() : "解析失败");
-                            }
-//							return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, response != null ?
-                                    response.code() + ", " + response.message() : "返回失败");
-                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                         toggleFailed("error~获取相关关注快讯失败");
                     }
 
@@ -394,9 +381,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_FRAG, t);
-                        }
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
                         toggleFailed("error~获取相关关注快讯失败");
                         mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = mIsLoadMore = false;
                         if (mRefreshLayout != null) {

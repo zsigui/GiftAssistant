@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -291,11 +290,8 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                                 doAfterSuccess(response, login);
                                 return;
                             }
-                            ToastUtil.blurErrorMsg(response.body());
-                            return;
-
                         }
-                        ToastUtil.blurErrorResp(response);
+                        ToastUtil.blurErrorResp(null, response);
                     }
 
                     @Override
@@ -304,8 +300,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        AppDebugConfig.warn(t);
-                        ToastUtil.blurThrow();
+                        ToastUtil.blurThrow(null, t);
                     }
                 });
             }

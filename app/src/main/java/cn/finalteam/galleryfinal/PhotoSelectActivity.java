@@ -127,8 +127,10 @@ public class PhotoSelectActivity extends PhotoBaseActivity
                 mPhotoListAdapter.notifyDataSetChanged();
                 mFolderListAdapter.notifyDataSetChanged();
                 mPhotoBottomPreviewAdapter.notifyItemRangeChanged(0, mSelectPhotoList.size());
-                if (mAllPhotoFolderList.get(0).getPhotoList() == null ||
-                        mAllPhotoFolderList.get(0).getPhotoList().size() == 0) {
+                if (mAllPhotoFolderList == null
+                        || mAllPhotoFolderList.size() <= 0
+                        || mAllPhotoFolderList.get(0).getPhotoList() == null
+                        || mAllPhotoFolderList.get(0).getPhotoList().size() == 0) {
                     mTvEmptyView.setText(R.string.no_photo);
                 }
 
@@ -303,7 +305,8 @@ public class PhotoSelectActivity extends PhotoBaseActivity
     private void takeRefreshGallery(PhotoInfo photoInfo) {
         mCurPhotoList.add(0, photoInfo);
         mPhotoListAdapter.notifyDataSetChanged();
-        mPhotoBottomPreviewAdapter.notifyItemRangeChanged(0, mSelectPhotoList.size());
+        if (mSelectPhotoList != null && mSelectPhotoList.size() > 0)
+            mPhotoBottomPreviewAdapter.notifyItemRangeChanged(0, mSelectPhotoList.size());
 
         //添加到集合中
         List<PhotoInfo> photoInfoList = mAllPhotoFolderList.get(0).getPhotoList();
@@ -427,7 +430,8 @@ public class PhotoSelectActivity extends PhotoBaseActivity
         } else if (id == R.id.iv_clear) {
             mSelectPhotoList.clear();
             mPhotoListAdapter.notifyDataSetChanged();
-            mPhotoBottomPreviewAdapter.notifyItemRangeChanged(0, mSelectPhotoList.size());
+            if (mSelectPhotoList != null && mSelectPhotoList.size() > 0)
+                mPhotoBottomPreviewAdapter.notifyItemRangeChanged(0, mSelectPhotoList.size());
             refreshSelectCount();
         } else if (id == R.id.iv_preview) {
             if (mSelectPhotoList == null || mSelectPhotoList.size() == 0) {
@@ -501,6 +505,9 @@ public class PhotoSelectActivity extends PhotoBaseActivity
         if (position == 0) {
             // 进行拍照
             takePhotoAction();
+            return;
+        }
+        if (mCurPhotoList == null || mCurPhotoList.size() == 0) {
             return;
         }
         PhotoInfo info = mCurPhotoList.get(position - 1);

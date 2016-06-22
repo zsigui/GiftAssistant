@@ -32,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.FileUtil;
 
 import java.io.File;
@@ -41,7 +42,6 @@ import java.io.OutputStream;
 import java.util.concurrent.CountDownLatch;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
-import cn.finalteam.galleryfinal.utils.ILogger;
 /*
  * Modified from original in AOSP.
  */
@@ -125,11 +125,8 @@ public abstract class CropImageActivity extends MonitoredActivity {
                 BitmapFactory.Options option = new BitmapFactory.Options();
                 option.inSampleSize = sampleSize;
                 rotateBitmap = new RotateBitmap(BitmapFactory.decodeStream(is, null, option), exifRotation);
-            } catch (IOException e) {
-                ILogger.e(e);
-//                setCropSaveException(e);
-            } catch (OutOfMemoryError e) {
-                ILogger.e(e);
+            } catch (IOException | OutOfMemoryError e) {
+                AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, e);
 //                setCropSaveException(e);
             } finally {
                 CropUtil.closeSilently(is);
@@ -357,11 +354,8 @@ public abstract class CropImageActivity extends MonitoredActivity {
                         + width + "," + height + "," + exifRotation + ")", e);
             }
 
-        } catch (IOException e) {
-            ILogger.e(e);
-            setCropSaveException(e);
-        } catch (OutOfMemoryError e) {
-            ILogger.e(e);
+        } catch (IOException | OutOfMemoryError e) {
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, e);
             setCropSaveException(e);
         } finally {
             CropUtil.closeSilently(is);
@@ -395,7 +389,7 @@ public abstract class CropImageActivity extends MonitoredActivity {
                 }
             } catch (IOException e) {
                 setCropSaveException(e);
-                ILogger.e(e);
+                AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, e);
             } finally {
                 CropUtil.closeSilently(outputStream);
             }

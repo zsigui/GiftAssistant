@@ -31,6 +31,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
+import com.oplay.giftcool.model.data.resp.LimitGiftListData;
 import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
@@ -40,6 +41,7 @@ import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.PostToken;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.model.data.resp.SearchPromptResult;
+import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -154,7 +156,7 @@ public interface NetEngine {
 	 * 获取 首页-礼包-限量礼包 页面的数据
 	 */
 	@POST(NetUrl.GIFT_GET_LIMIT_BY_PAGE)
-	Call<JsonRespLimitGiftList> obtainGiftLimitByPage(@Body JsonReqBase<ReqPageData> reqData);
+	Call<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>> obtainGiftLimitByPage(@Body JsonReqBase<ReqPageData> reqData);
 
 	/**
 	 * 获取 首页-礼包-新鲜出炉礼包 页面的数据

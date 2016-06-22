@@ -77,32 +77,21 @@ public class ToastUtil {
         show(resId, Toast.LENGTH_SHORT);
     }
 
-    public static void blurThrow() {
-        blurThrow(null);
-    }
-
-    public static void blurThrow(String prefix) {
+    public static void blurThrow(String prefix, Throwable t) {
+        AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, t);
         ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-") + "哎呦，网络流血事故！");
     }
 
-    public static void blurErrorResp(Response response) {
-        blurErrorResp(null, response);
-    }
+    public static <T> void blurErrorResp(String prefix, Response<JsonRespBase<T>> response) {
+        AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
+        if (response == null || !response.isSuccessful()) {
+            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
+                    + (response == null ? "呜，抽风了！" : response.message()));
+        } else if (response.body() == null || !response.body().isSuccess()) {
+            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
+                    + (response.body() == null ? "嚄，服务器大姨妈了？" : response.body().getMsg()));
+        }
 
-    public static void blurErrorResp(String prefix, Response response) {
-        AppDebugConfig.warn(AppDebugConfig.TAG_DEBUG_INFO, response);
-        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-                + (response == null ? "呜，抽风了！" : response.message()));
-    }
-
-    public static void blurErrorMsg(JsonRespBase response) {
-        blurErrorMsg(null, response);
-    }
-
-    public static void blurErrorMsg(String prefix, JsonRespBase response) {
-        AppDebugConfig.warn(AppDebugConfig.TAG_DEBUG_INFO, response);
-        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-                + (response == null ? "嚄，服务器大姨妈了？" : response.getMsg()));
     }
 
     /**

@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
 import com.tendcloud.tenddata.TCAgent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -123,9 +122,7 @@ public class StatisticsManager {
      */
     public void init(Context context, int channelId) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "statics init = " + mIsInit);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statics init = " + mIsInit);
             initUmeng(context, channelId);
             initTCAgent(context, channelId);
             initStrictMode(context);
@@ -141,9 +138,7 @@ public class StatisticsManager {
                         .penaltyDeathOnNetwork()
                         .penaltyLog()
                         .build());
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "StrictMode Data init");
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "StrictMode Data init");
             }
         } catch (Throwable t) {
             t.printStackTrace();
@@ -165,17 +160,9 @@ public class StatisticsManager {
             MobclickAgent.openActivityDurationTrack(false);     //禁止默认的页面统计
             MobclickAgent.setCatchUncaughtExceptions(true);
 
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "Umeng Data init");
-            }
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "statistics sdk is initialed");
-                if (AppConfig.TEST_MODE) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.d(AppDebugConfig.TAG_STATICS, getDeviceInfo(context));
-                    }
-                }
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "Umeng Data init");
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statistics sdk is initialed");
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, getDeviceInfo(context));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -189,20 +176,16 @@ public class StatisticsManager {
             TCAgent.setReportUncaughtExceptions(false);
             TCAgent.setAdditionalVersionNameAndCode(AppConfig.SDK_VER_NAME, AppConfig.SDK_VER);
             TCAgent.setPushDisabled();
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "Talking Data init");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "Talking Data init");
         } catch (Throwable t) {
-            AppDebugConfig.warn(AppDebugConfig.TAG_STATICS, t);
+            AppDebugConfig.w(AppDebugConfig.TAG_STATICS, t);
             mIsInit = false;
         }
     }
 
     public void onResume(Activity context) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "statistics onResume");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statistics onResume");
             MobclickAgent.onResume(context);
             TCAgent.onResume(context);
         }
@@ -210,9 +193,7 @@ public class StatisticsManager {
 
     public void onPause(Activity context) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "statistics onPause");
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statistics onPause");
             MobclickAgent.onPause(context);
             TCAgent.onPause(context);
         }
@@ -221,9 +202,7 @@ public class StatisticsManager {
     public void onPageStart(Context context, String name) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
             if (!TextUtils.isEmpty(name)) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_STATICS, "statistics onPageStart");
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statistics onPageStart");
                 MobclickAgent.onPageStart(name);
                 TCAgent.onPageStart(context, name);
             }
@@ -233,9 +212,7 @@ public class StatisticsManager {
     public void onPageEnd(Context context, String name) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
             if (!TextUtils.isEmpty(name)) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_STATICS, "statistics onPageEnd");
-                }
+                AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "statistics onPageEnd");
                 MobclickAgent.onPageEnd(name);
                 TCAgent.onPageEnd(context, name);
             }
@@ -276,9 +253,7 @@ public class StatisticsManager {
 
     public void trace(final Context context, final String id, final String title) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
             MobclickAgent.onEvent(context, id);
             TCAgent.onEvent(context, title);
         }
@@ -286,11 +261,8 @@ public class StatisticsManager {
 
     public void trace(final Context context, final String id, final String title, final String subtitle) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " +
-                        mIsInit);
-            }
-//			KLog.d(AppDebugConfig.TAG_WARN, "mIsinit = " + mIsInit);
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", subtitle = " + subtitle + ", isInit = " +
+                    mIsInit);
             MobclickAgent.onEvent(context, id, subtitle);
             TCAgent.onEvent(context, title, subtitle);
         }
@@ -304,10 +276,8 @@ public class StatisticsManager {
     public void trace(final Context context, final String id, final String title, final String subTitle,
                       final Map<String, String> keyMap, final int val) {
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val + ", " +
-                        "isInit = " + mIsInit);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", keyMap = " + keyMap + ", val = " + val +
+                    ", " + "isInit = " + mIsInit);
             if (!TextUtils.isEmpty(subTitle)) {
                 keyMap.put("SubTitle", subTitle);
             }

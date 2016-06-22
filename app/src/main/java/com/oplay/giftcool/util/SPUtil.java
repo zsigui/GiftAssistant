@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.socks.library.KLog;
 
 /**
  * @author micle
@@ -51,9 +50,7 @@ public class SPUtil {
             }
             getEditableSharedPreferences(context, file).putBoolean(key, value).commit();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
     }
 
@@ -64,9 +61,7 @@ public class SPUtil {
             }
             getEditableSharedPreferences(context, file).putLong(key, value).commit();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
     }
 
@@ -77,9 +72,7 @@ public class SPUtil {
             }
             getEditableSharedPreferences(context, file).putInt(key, value).commit();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
     }
 
@@ -90,9 +83,7 @@ public class SPUtil {
             }
             getEditableSharedPreferences(context, file).putString(key, value).commit();
         } catch (Throwable e) {
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.e(e);
-            }
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, e);
         }
     }
 

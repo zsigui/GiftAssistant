@@ -17,14 +17,12 @@ import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.LimitGiftListData;
 import com.oplay.giftcool.model.data.resp.TimeData;
-import com.oplay.giftcool.model.json.JsonRespLimitGiftList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,7 +230,7 @@ public class GiftLimitListDataNewFragment extends BaseFragment_Refresh<TimeData<
      */
     private class LoadDataByPageRunnable implements Runnable {
         private JsonReqBase<ReqPageData> mReqPageObj;
-        private Call<JsonRespLimitGiftList> mCallLoad;
+        private Call<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>> mCallLoad;
 
         /**
          * @param page     指定加载页数
@@ -261,9 +259,10 @@ public class GiftLimitListDataNewFragment extends BaseFragment_Refresh<TimeData<
                 mCallLoad.cancel();
             }
             mCallLoad = Global.getNetEngine().obtainGiftLimitByPage(mReqPageObj);
-            mCallLoad.enqueue(new Callback<JsonRespLimitGiftList>() {
+            mCallLoad.enqueue(new Callback<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>>() {
                 @Override
-                public void onResponse(Call<JsonRespLimitGiftList> call, Response<JsonRespLimitGiftList> response) {
+                public void onResponse(Call<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>> call,
+                                       Response<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>> response) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
@@ -288,14 +287,7 @@ public class GiftLimitListDataNewFragment extends BaseFragment_Refresh<TimeData<
                     if (mReqPageObj.data.page == 1) {
                         //刷新失败
                         refreshFailEnd();
-                        if (response != null && response.isSuccessful()) {
-                            AppDebugConfig.warn(AppDebugConfig.TAG_WARN, response.body());
-                            return;
-                        }
-                        if (AppDebugConfig.IS_DEBUG) {
-                            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, response == null ? "返回失败" : response.code() + "-" + response.errorBody());
-
-                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
                     } else {
                         //加载更多失败
                         moreLoadFailEnd();
@@ -303,7 +295,7 @@ public class GiftLimitListDataNewFragment extends BaseFragment_Refresh<TimeData<
                 }
 
                 @Override
-                public void onFailure(Call<JsonRespLimitGiftList> call, Throwable t) {
+                public void onFailure(Call<JsonRespBase<LimitGiftListData<TimeData<IndexGiftNew>>>> call, Throwable t) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }

@@ -7,8 +7,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.socks.library.KLog;
-
 /**
  * 重写LinearLayoutManager的OnMeasure方法以达成嵌套在ScrollView中的目的 <br />
  * 实际使用存在卡顿现象
@@ -40,12 +38,6 @@ public class NestedLinearLayoutManager extends LinearLayoutManager {
         final int heightMode = View.MeasureSpec.getMode(heightSpec);
         final int widthSize = View.MeasureSpec.getSize(widthSpec);
         final int heightSize = View.MeasureSpec.getSize(heightSpec);
-
-        KLog.i("onMeasure called. \nwidthMode " + widthMode
-                + " \nheightMode " + heightSpec
-                + " \nwidthSize " + widthSize
-                + " \nheightSize " + heightSize
-                + " \ngetItemCount() " + getItemCount());
 
         int width = 0;
         int height = 0;

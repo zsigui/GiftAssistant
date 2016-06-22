@@ -27,14 +27,15 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import com.oplay.giftcool.config.AppDebugConfig;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import cn.finalteam.galleryfinal.utils.ILogger;
 
 /*
  * Modified from original in AOSP.
@@ -69,7 +70,7 @@ class CropUtil {
                     return ExifInterface.ORIENTATION_UNDEFINED;
             }
         } catch (IOException e) {
-            ILogger.e(e);
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, e);
             return 0;
         }
     }
@@ -83,7 +84,7 @@ class CropUtil {
             exifDest.saveAttributes();
             return true;
         } catch (IOException e) {
-            ILogger.e(e);
+            AppDebugConfig.e(AppDebugConfig.TAG_GALLERY, e);
             return false;
         }
     }

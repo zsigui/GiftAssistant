@@ -12,7 +12,6 @@ import com.oplay.giftcool.receiver.StartReceiver;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ThreadUtil;
-import com.socks.library.KLog;
 
 /**
  * Created by zsigui on 16-3-14.
@@ -113,9 +112,7 @@ public class AlarmClockManager {
                         SilentDownloadManager.getInstance().startDownload();
                     }
                 } catch (Throwable t) {
-                    if (AppDebugConfig.IS_DEBUG) {
-                        KLog.w(AppDebugConfig.TAG_MANAGER, t);
-                    }
+                    AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
                 }
             }
         });
@@ -125,11 +122,9 @@ public class AlarmClockManager {
     private void resetWakeElapsed() {
         if (!SystemUtil.isMyAppInForeground()) {
             // 判断应用是否处于后台
-            if (AppDebugConfig.IS_DEBUG) {
-                KLog.d(AppDebugConfig.TAG_MANAGER,
-                        "Wake Alarm is running when app in background! elapsed time = " + mElapsedTime
-                                + ", background count = " + mBackgroundWakeCount);
-            }
+            AppDebugConfig.d(AppDebugConfig.TAG_MANAGER,
+                    "Wake Alarm is running when app in background! elapsed time = " + mElapsedTime
+                            + ", background count = " + mBackgroundWakeCount);
             mBackgroundWakeCount++;
             if (mBackgroundWakeCount > 5) {
                 // 20分钟
@@ -154,57 +149,14 @@ public class AlarmClockManager {
                 alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
                         startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             } catch (Exception e) {
-                if (AppDebugConfig.IS_DEBUG) {
-                    KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
-                }
+                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, "unable to start broadcast");
             }
         }
         AlarmManager am = getAlarmManager(context);
         am.cancel(alarmSender);
         am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
-        if (AppDebugConfig.IS_DEBUG) {
-            KLog.d(AppDebugConfig.TAG_DEBUG_INFO, "initAndSetWakeAlarm is exec success");
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "initAndSetWakeAlarm is exec success");
     }
-
-//	/**
-//	 * 停止唤醒闹钟
-//	 */
-//	public void stopWakeAlarm(Context context) {
-//		getAlarmManager(context).cancel(alarmSender);
-//	}
-//
-//	// 试玩游戏的意图
-//	private PendingIntent mPlayGameSender;
-//
-//	/**
-//	 * 开启试玩游戏的闹钟监听服务
-//	 */
-//	public void startGameObserverAlarm(Context context) {
-//		if (mPlayGameSender == null) {
-//			Intent startIntent = new Intent(context, GameObserverReceiver.class);
-//			startIntent.setAction(Action.ALARM_PLAY_GAME);
-//			startIntent.addCategory(Category.GCOOL_DEFAULT);
-//			try {
-//				mPlayGameSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
-//						startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//			} catch (Exception e) {
-//				if (AppDebugConfig.IS_DEBUG) {
-//					KLog.d(AppDebugConfig.TAG_RECEIVER, "unable to start broadcast");
-//				}
-//			}
-//		}
-//		AlarmManager am = getAlarmManager(context);
-//		am.cancel(mPlayGameSender);
-//		am.set(AlarmManager.RTC, System.currentTimeMillis() + ALARM_WAKE_ELAPSED_TIME, mPlayGameSender);
-//	}
-//
-//	/**
-//	 * 停止试玩游戏的闹钟监听服务
-//	 */
-//	public void stopGameObserverAlarm(Context context) {
-//		getAlarmManager(context).cancel(mPlayGameSender);
-//	}
 
     public interface Action {
         String ALARM_WAKE = AppConfig.PACKAGE_NAME + ".clock_action.ALARM_WAKE";

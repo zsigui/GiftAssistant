@@ -2,8 +2,8 @@ package com.oplay.giftcool.download;
 
 import android.content.Context;
 
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.download.listener.OnInstallListener;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class InstallNotifier {
 			try {
 				listener.onInstall(context, packageName);
 			}catch (Throwable e) {
-				KLog.e(e);
+				AppDebugConfig.w(AppDebugConfig.TAG_DOWNLOAD, e);
 			}
 		}
 	}

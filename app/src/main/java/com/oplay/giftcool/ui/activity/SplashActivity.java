@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -22,7 +23,6 @@ import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.socks.library.KLog;
 
 import java.io.File;
 
@@ -131,7 +131,7 @@ public class SplashActivity extends BaseAppCompatActivity {
                 try {
                     bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 } catch (Throwable e) {
-                    KLog.e(e);
+                    AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
                 }
                 iv.setImageBitmap(bitmap);
                 useCacheImg = true;
@@ -166,7 +166,8 @@ public class SplashActivity extends BaseAppCompatActivity {
         MainActivity.sIsTodayFirstOpen = (lastOpenTime != 0 && !DateUtil.isToday(lastOpenTime));
         MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
         // 写入当前时间
-        SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System.currentTimeMillis());
+        SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System
+                .currentTimeMillis());
     }
 
 }
