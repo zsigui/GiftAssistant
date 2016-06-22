@@ -371,7 +371,7 @@ public class IntentUtil {
      * 跳转登录界面（根据最后一次登录判断）
      */
     public static void jumpLogin(Context context) {
-        ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+        ToastUtil.showShort(ConstString.TOAST_LOGIN_FIRST);
         jumpLoginNoToast(context);
     }
 
@@ -503,7 +503,7 @@ public class IntentUtil {
     public static boolean joinQQGroup(Context context, String qqKey) {
         String qqPackageName = "com.tencent.mobileqq";
         if (!InstallAppUtil.isAppInstalled(AssistantApp.getInstance().getApplicationContext(), qqPackageName)) {
-            ToastUtil.showShort("请先安装QQ");
+            ToastUtil.showShort(ConstString.TOAST_OPEN_QQ_GROUP_FAIL);
             return false;
         }
         Intent intent = new Intent();

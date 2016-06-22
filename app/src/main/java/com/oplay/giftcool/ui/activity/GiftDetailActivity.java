@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnShareListener;
 import com.oplay.giftcool.manager.ScoreManager;
@@ -57,7 +58,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 
     public void loadData(Intent intent) {
         if (intent == null) {
-            ToastUtil.showShort("跳转失败，获取不到礼包ID");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
 
@@ -73,7 +74,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
                     mId = Integer.parseInt(uri.getQueryParameter("plan_id"));
                 } catch (Exception e) {
                     mId = 0;
-                    ToastUtil.showShort("跳转链接出错");
+                    ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
                     onBackPressed();
                     return;
                 }
@@ -127,7 +128,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
             if (mOnShareListener != null) {
                 mOnShareListener.share();
             } else {
-                ToastUtil.showShort("该礼包无分享设置");
+                ToastUtil.showShort(ConstString.TOAST_SHARE_NO_OFFER);
             }
         }
     }
@@ -157,7 +158,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
                 case Activity.RESULT_CANCELED:
                     break;
                 default:
-                    ToastUtil.showShort("分享失败");
+                    ToastUtil.showShort(ConstString.TOAST_SHARE_FAILED);
             }
         }
     }

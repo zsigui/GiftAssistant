@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.util.DateUtil;
@@ -97,7 +98,7 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
             case R.id.btn_copy:
                 ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setPrimaryClip(ClipData.newPlainText("兑换码", item.code));
-                ToastUtil.showShort("已复制");
+                ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
                 break;
             case R.id.rl_recommend:
                 IntentUtil.jumpGiftDetail(mContext, item.id);

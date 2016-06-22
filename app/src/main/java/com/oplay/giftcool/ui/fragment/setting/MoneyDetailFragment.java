@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
@@ -12,6 +13,7 @@ import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.fragment.dialog.WebViewDialog;
+import com.oplay.giftcool.util.ToastUtil;
 
 /**
  * 偶玩豆和金币明细
@@ -42,7 +44,7 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
         }
         final int type = getArguments().getInt(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
         if (type == KeyConfig.TYPE_ID_DEFAULT) {
-            showToast("错误传递类型");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
         // do something

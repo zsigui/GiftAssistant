@@ -159,7 +159,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 @Override
                 public void share() {
                     if (mData == null || mData.giftData == null || mData.gameData == null) {
-                        ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+                        ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
                         return;
                     }
                     mData.giftData.gameName = mData.gameData.name;
@@ -174,7 +174,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (getArguments() == null) {
-            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
         mId = getArguments().getInt(KeyConfig.KEY_DATA);
@@ -206,7 +206,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
     private void updateData(GiftDetail data) {
         if (data == null || data.giftData == null) {
-            ToastUtil.showShort(ConstString.TEXT_DATA_OVERTIME);
+            ToastUtil.showShort(ConstString.TOAST_DATA_OVERTIME);
             mViewManager.showEmpty();
             return;
         }
@@ -508,7 +508,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             case R.id.btn_copy:
                 ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setPrimaryClip(ClipData.newPlainText("礼包码", mData.giftData.code));
-                ToastUtil.showShort("已复制");
+                ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
                 break;
             case R.id.btn_send:
                 if (mData == null) {

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameDetailInfoAdapter;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.GameDetail;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -41,7 +42,7 @@ public class GameDetailInfoFragment extends BaseFragment {
 	protected void processLogic(Bundle savedInstanceState) {
 		if (getArguments() == null) {
 			mViewManager.showEmpty();
-			ToastUtil.showShort("获取数据为空");
+			ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
 			if (getActivity() != null) {
 				getActivity().finish();
 			}

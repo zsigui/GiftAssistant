@@ -126,7 +126,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (getArguments() == null) {
-            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -268,7 +268,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     return;
                 }
                 if (mCallGetToken == null) {
@@ -290,7 +290,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
                             return;
                         }
                         hideLoading();
-                        ToastUtil.showShort("获取Token失败");
+                        ToastUtil.showShort(ConstString.TOAST_GET_TOKEN_FAILED);
                     }
 
                     @Override
@@ -396,7 +396,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 //			reloadPage();
 //		}
         hideLoading();
-        ToastUtil.showShort("回复成功");
+        ToastUtil.showShort(ConstString.TOAST_COMMENT_SUCCESS);
     }
 
     private void clearState() {

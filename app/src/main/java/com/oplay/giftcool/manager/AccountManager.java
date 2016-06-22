@@ -7,9 +7,9 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.oplay.giftcool.AssistantApp;
-import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
@@ -231,14 +231,15 @@ public class AccountManager implements OnFinishListener {
      */
     private void sessionFailed(JsonRespBase response) {
         if (judgeIsSessionFailed(response)) {
-            ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
+//            ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
         }
     }
 
     public boolean judgeIsSessionFailed(JsonRespBase response) {
         if (response != null
                 && (response.getCode() == NetStatusCode.ERR_UN_LOGIN
-                || response.getCode() == NetStatusCode.ERR_BAD_SERVER)) {
+                || response.getCode() == NetStatusCode.ERR_BAD_USER_SERVER)) {
             notifyUserAll(null);
             return true;
         }

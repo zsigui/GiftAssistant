@@ -9,7 +9,6 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.WebViewInterface;
@@ -153,7 +152,7 @@ public class PayManager {
                 // 执行抢号操作
                 long nowClickTime = System.currentTimeMillis();
                 if (nowClickTime - mLastDialogClickTime <= 2000) {
-                    ToastUtil.showShort("请求过于频繁，请勿连续点击");
+                    ToastUtil.showShort(ConstString.TOAST_FREQUENT_REQUEST);
                     return;
                 }
                 mLastDialogClickTime = nowClickTime;
@@ -164,7 +163,7 @@ public class PayManager {
                 } else if (consumeDialog.getPayType() == GiftTypeUtil.PAY_TYPE_SCORE) {
                     handleScorePay(context, gift, button, true);
                 } else {
-                    ToastUtil.showShort("选择支付类型有误，请重新选择");
+                    ToastUtil.showShort(ConstString.TOAST_PAY_METHOD_ERROR);
                     return;
                 }
                 consumeDialog.dismiss();
@@ -185,7 +184,7 @@ public class PayManager {
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(context)) {
-                    ToastUtil.showShort("网络连接异常");
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     hideLoading(context);
                     return;
                 }
@@ -228,11 +227,9 @@ public class PayManager {
                 return;
             }
             if (response.body() != null) {
-                if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-                    AccountManager.getInstance().notifyUserAll(null);
-                    ToastUtil.showShort(context.getResources().getString(R.string
-                            .st_hint_un_login));
-                    IntentUtil.jumpLogin(context);
+                if (AccountManager.getInstance().judgeIsSessionFailed(response.body())) {
+                    ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+                    IntentUtil.jumpLoginNoToast(context);
                     return;
                 }
                 ConfirmDialog dialog = ConfirmDialog.newInstance();
@@ -304,7 +301,7 @@ public class PayManager {
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(context)) {
-                    ToastUtil.showShort("网络连接异常");
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     hideLoading(context);
                     return;
                 }
@@ -351,11 +348,9 @@ public class PayManager {
                 return;
             }
             if (response.body() != null) {
-                if (response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
-                    AccountManager.getInstance().notifyUserAll(null);
-                    ToastUtil.showShort(context.getResources().getString(R.string
-                            .st_hint_un_login));
-                    IntentUtil.jumpLogin(context);
+                if (AccountManager.getInstance().judgeIsSessionFailed(response.body())) {
+                    ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+                    IntentUtil.jumpLoginNoToast(context);
                     return;
                 }
                 if (GiftTypeUtil.getItemViewType(gift) == GiftTypeUtil.TYPE_CHARGE_UN_RESERVE) {

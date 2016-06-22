@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnShareListener;
@@ -116,19 +117,20 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
     private void handleRedirect(Intent intent) {
 
         if (intent == null) {
-            ToastUtil.showShort("跳转出错");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no intent");
             return;
         }
         int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
         if (type == KeyConfig.TYPE_ID_DEFAULT) {
             AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no type");
-            ToastUtil.showShort("跳转出错");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         } else if ((type != KeyConfig.TYPE_ID_SETTING && type != KeyConfig.TYPE_ID_DOWNLOAD)
                 && !AccountManager.getInstance().isLogin()) {
             // 判断是否登录
-            ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
+//            ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
             IntentUtil.jumpLoginNoToast(this);
             finish();
         }
@@ -185,7 +187,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
                 AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "type = " + type);
-                ToastUtil.showShort("跳转出错");
+                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
         }
     }
 
@@ -252,7 +254,8 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
             return;
         }
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
+//            ToastUtil.showShort(getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
             IntentUtil.jumpLoginNoToast(this);
             finish();
         }

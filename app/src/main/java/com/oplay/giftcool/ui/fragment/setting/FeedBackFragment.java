@@ -57,8 +57,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+//            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -177,11 +178,11 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     private void handleCommit() {
         if (TextUtils.isEmpty(etContent.getText().toString().trim())
                 || TextUtils.isEmpty(etPhone.getText().toString().trim())) {
-            ToastUtil.showShort("请填写完整反馈内容和联系方式");
+            ToastUtil.showShort(ConstString.TOAST_FEEDBACK_LACK);
             return;
         }
         if (etContent.getText().toString().trim().length() < 10) {
-            ToastUtil.showShort("反馈信息有点少，麻烦更详细地描述你的反馈(不少于10个字)");
+            ToastUtil.showShort(ConstString.TOAST_FEEDBACK_CONTENT_NOT_ENOUGH);
             return;
         }
 
@@ -194,7 +195,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
-                    ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     mIsLoading = false;
                     return;
                 }
@@ -215,7 +216,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                         }
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
-                                ToastUtil.showShort("反馈成功，谢谢你");
+                                ToastUtil.showShort(ConstString.TOAST_FEEDBACK_SUCCESS);
                                 ScoreManager.getInstance().setTaskFinished(true);
                                 if (getActivity() != null) {
                                     getActivity().onBackPressed();

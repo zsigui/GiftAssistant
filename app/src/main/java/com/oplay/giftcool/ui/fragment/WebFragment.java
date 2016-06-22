@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment;
 import android.os.Bundle;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
@@ -43,7 +44,7 @@ public class WebFragment extends BaseFragment_WebView {
 	protected void processLogic(Bundle savedInstanceState) {
 		if (getArguments() == null) {
 			mViewManager.showEmpty();
-			ToastUtil.showShort("获取数据为空");
+			ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
 			if (getActivity() != null) {
 				getActivity().finish();
 			}

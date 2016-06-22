@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -52,8 +53,9 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+//            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -233,7 +235,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
                 break;
             case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:
                 if (code == ObserverManager.UserActionListener.ACTION_CODE_SUCCESS) {
-                    ToastUtil.showShort("密码修改成功，请使用新密码重新登录");
+                    ToastUtil.showShort(ConstString.TOAST_MODIFY_PWD_SUCCESS);
                     AccountManager.getInstance().logout();
                 }
                 return;

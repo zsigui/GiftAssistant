@@ -15,7 +15,6 @@ import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.ToastUtil;
 
 /**
  * @author micle
@@ -238,11 +237,6 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 	protected <VT extends View> VT getViewById(View contentView, @IdRes int id) {
 		return (VT) contentView.findViewById(id);
 	}
-
-	protected void showToast(String text) {
-		ToastUtil.showShort(text);
-	}
-
 
 	@Override
 	public void onDestroyView() {

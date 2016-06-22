@@ -18,6 +18,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
@@ -272,7 +273,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
     @Override
     public void onClick(View v) {
         if (mContext == null) {
-            ToastUtil.showShort("页面失效，请重新打开应用");
+            ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
             return;
         }
         switch (v.getId()) {

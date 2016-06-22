@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
@@ -36,8 +37,9 @@ public class MyCouponFragment extends BaseFragment implements OnBackPressListene
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+//            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }

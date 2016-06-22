@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -113,7 +112,7 @@ public class DialogManager {
     private void handleHopeGiftRequest(final FragmentManager fm, final HopeGiftDialog dialog,
                                        int id, String name, String note) {
         if (!NetworkUtil.isConnected(mContext)) {
-            ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
             return;
         }
         if (mCallHopeGift != null) {
@@ -168,16 +167,15 @@ public class DialogManager {
                             confirmDialog.show(fm, "confirm");
                             return;
                         } else if (resp.getCode() == NetStatusCode.ERR_UN_LOGIN
-                                || resp.getCode() == NetStatusCode.ERR_BAD_SERVER) {
+                                || resp.getCode() == NetStatusCode.ERR_BAD_USER_SERVER) {
                             // 登录状态失效
-                            ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+                            ToastUtil.showShort(ConstString.TOAST_LOGIN_FIRST);
                             AccountManager.getInstance().notifyUserAll(null);
                             return;
                         }
                     }
                 }
-                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
-                ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+                ToastUtil.blurErrorResp("", response);
             }
 
             @Override
@@ -186,8 +184,7 @@ public class DialogManager {
                 if (call.isCanceled()) {
                     return;
                 }
-                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
-                ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+                ToastUtil.blurThrow("", t);
             }
         });
     }

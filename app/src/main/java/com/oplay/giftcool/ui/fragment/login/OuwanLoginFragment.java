@@ -259,7 +259,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
     private void handleLogin() {
         final ReqLogin login = new ReqLogin();
         if (!login.setOuwanUser(etUser.getText().toString(), etPwd.getText().toString(), sNeedEncrypt)) {
-            showToast(ConstString.TEXT_OUWAN_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_OUWAN_ERROR);
             return;
         }
         showLoading();
@@ -268,7 +268,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    showToast(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     return;
                 }
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
@@ -183,7 +184,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
             SilentDownloadManager.getInstance().quickDownload(downloadUrl);
             ApkDownloadManager.getInstance(mContext).addDownloadTask(this);
             if (!isSilent) {
-                ToastUtil.showShort("已添加新的下载任务");
+                ToastUtil.showShort(ConstString.TOAST_ADD_NEW_DOWNLOAD_TASK);
             }
         } catch (Throwable e) {
             AppDebugConfig.w(AppDebugConfig.TAG_DOWNLOAD, e);
@@ -215,7 +216,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
                 InstallAppUtil.install(mContext, this);
                 handlePlayDownloadTask(mContext, packageName);
             } else {
-                ToastUtil.showShort("安装失败-安装文件已被移除");
+                ToastUtil.showShort(ConstString.TOAST_INSTALL_FAIL_FOR_NO_APK);
                 DownloadNotificationManager.clearDownloadComplete(mContext, destUrl);
                 ApkDownloadManager.getInstance(mContext).removeDownloadTask(downloadUrl, true);
                 initAppInfoStatus(mContext);
@@ -317,7 +318,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
                     restartDownload();
                 } else {
                     if (fragmentManager == null) {
-                        ToastUtil.showShort("当前正在移动网络下下载");
+                        ToastUtil.showShort(ConstString.TOAST_DOWNLOADING_NOT_IN_WIFI);
                         restartDownload();
                         return;
                     }
@@ -352,7 +353,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
         } else {
             if (!isSilent) {
                 if (fragmentManager == null) {
-                    ToastUtil.showShort("当前正在移动网络下下载");
+                    ToastUtil.showShort(ConstString.TOAST_DOWNLOADING_NOT_IN_WIFI);
                     startDownload();
                     return;
                 }

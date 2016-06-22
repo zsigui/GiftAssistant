@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -99,10 +100,12 @@ public class BannerTypeUtil {
                                 DialogManager.getInstance().showUpdateDialog(context,
                                         ((FragmentActivity) context).getSupportFragmentManager(), true);
                         if (!isUpdate) {
-                            ToastUtil.showShort(context.getResources().getString(R.string.st_hint_upgrade_newest));
+//                            ToastUtil.showShort(context.getResources().getString(R.string.st_hint_upgrade_newest));
+                            ToastUtil.showShort(ConstString.TOAST_VERSION_NEWEST);
                         }
                     } else {
-                        ToastUtil.showShort(context.getResources().getString(R.string.st_hint_unknown_failed));
+//                        ToastUtil.showShort(context.getResources().getString(R.string.st_hint_unknown_failed));
+                        ToastUtil.showShort(ConstString.TOAST_UNKNOWN_ERROR);
                     }
                     break;
                 case ACTION_LIKE_AS_TASK:
@@ -112,7 +115,8 @@ public class BannerTypeUtil {
                     break;
                 case ACTION_DEFAULT:
                 default:
-                    ToastUtil.showShort(context.getResources().getString(R.string.st_hint_version_not_support));
+//                    ToastUtil.showShort(context.getResources().getString(R.string.st_hint_version_not_support));
+                    ToastUtil.showShort(ConstString.TOAST_VERSION_NOT_SUPPORT);
                     if (context instanceof FragmentActivity) {
                         DialogManager.getInstance().showUpdateDialog(context,
                                 ((FragmentActivity) context).getSupportFragmentManager(), true);

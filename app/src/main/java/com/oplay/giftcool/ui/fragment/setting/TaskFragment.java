@@ -65,8 +65,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+//            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -299,7 +300,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
     private void handleMission(ScoreMission mission) {
         if (mission == null) return;
         if (getContext() == null || !(getContext() instanceof BaseAppCompatActivity)) {
-            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_EXECUTE_ERROR);
             return;
         }
         try {
@@ -340,7 +341,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 final boolean isUpdate =
                         DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager(), true);
                 if (!isUpdate) {
-                    ToastUtil.showShort(getContext().getResources().getString(R.string.st_gift_hint_content));
+                    ToastUtil.showShort(ConstString.TOAST_VERSION_NEWEST);
                 }
                 break;
         }

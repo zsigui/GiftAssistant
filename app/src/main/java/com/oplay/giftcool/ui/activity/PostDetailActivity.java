@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.engine.NoEncryptEngine;
@@ -83,14 +84,14 @@ public class PostDetailActivity extends BaseAppCompatActivity {
     private void handleRedirect(Intent intent) {
 
         if (intent == null) {
-            ToastUtil.showShort("跳转出错");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no intent");
             return;
         }
         int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
         if (type == KeyConfig.TYPE_ID_DEFAULT) {
             AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no type");
-            ToastUtil.showShort("跳转出错");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
         mTypeHierarchy.add(type);
@@ -106,7 +107,7 @@ public class PostDetailActivity extends BaseAppCompatActivity {
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
                 AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "type = " + type);
-                ToastUtil.showShort("跳转出错");
+                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
         }
     }
 

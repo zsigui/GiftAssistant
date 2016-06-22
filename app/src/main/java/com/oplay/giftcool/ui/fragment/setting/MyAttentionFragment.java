@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.MyAttentionListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
@@ -377,7 +378,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                     }
                     if (response != null && response.isSuccessful()) {
                         if (response.body() != null && response.body().isSuccess()) {
-                            ToastUtil.showShort(TAG_PREFIX + "-成功");
+                            ToastUtil.showShort(ConstString.TOAST_FOCUS_SUCCESS);
                             removeData(mReqBase.data.gameId);
                             return;
                         }

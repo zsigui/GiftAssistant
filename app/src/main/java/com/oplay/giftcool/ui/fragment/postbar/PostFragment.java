@@ -11,6 +11,7 @@ import com.oplay.giftcool.adapter.PostAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
@@ -367,13 +368,13 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                                     mRefreshLayout.setCanShowLoad(true);
                                     updateData(mData);
                                 } else {
-                                    toggleFailed("没有相关关注快讯");
+                                    toggleFailed(ConstString.TOAST_EMPTY_FOCUS_ACTIVITY);
                                 }
                                 return;
                             }
                         }
                         AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
-                        toggleFailed("error~获取相关关注快讯失败");
+                        toggleFailed(ConstString.TOAST_GET_FOCUS_ACTIVITY_FAILED);
                     }
 
                     @Override
@@ -382,7 +383,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew> implements 
                             return;
                         }
                         AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
-                        toggleFailed("error~获取相关关注快讯失败");
+                        toggleFailed(ConstString.TOAST_GET_FOCUS_ACTIVITY_FAILED);
                         mIsSwipeRefresh = mIsNotifyRefresh = mIsLoading = mIsLoadMore = false;
                         if (mRefreshLayout != null) {
                             mRefreshLayout.setRefreshing(false);

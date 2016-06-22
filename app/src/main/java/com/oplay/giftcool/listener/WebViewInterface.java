@@ -404,7 +404,7 @@ public class WebViewInterface extends Observable {
      */
     private void execJs(final String callbackJsName, final String returnData) {
         if (mWebView == null) {
-            ToastUtil.showShort(ConstString.TEXT_EXECUTE_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_EXECUTE_ERROR);
             return;
         }
         if (callbackJsName != null) {

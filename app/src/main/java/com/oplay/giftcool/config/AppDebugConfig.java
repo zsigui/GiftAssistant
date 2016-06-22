@@ -101,10 +101,12 @@ public class AppDebugConfig {
         if (IS_DEBUG) {
             if (response == null || !response.isSuccessful()) {
                 GCLog.w(stacktraceIndex, tag,
-                        response == null ? "返回出错!" : response.code() + ": " + response.message());
+                        response == null ?
+                                ConstString.TOAST_SERVER_ERROR : response.code() + ": " + response.message());
             } else {
                 JsonRespBase<T> respBase = response.body();
-                GCLog.w(stacktraceIndex, tag, respBase == null ? "解析结构出错!" : respBase.error());
+                GCLog.w(stacktraceIndex, tag, respBase == null ?
+                        ConstString.TOAST_SERVER_BAD_CALLBACK : respBase.error());
             }
         }
     }

@@ -100,7 +100,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (getArguments() == null) {
-            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             getActivity().onBackPressed();
             return;
         }
@@ -188,7 +188,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
-                    ToastUtil.showShort(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     return;
                 }
                 showLoading();
@@ -211,7 +211,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
                             return;
                         }
                         hideLoading();
-                        ToastUtil.showShort("获取Token失败");
+                        ToastUtil.showShort(ConstString.TOAST_GET_TOKEN_FAILED);
                     }
 
                     @Override
@@ -271,7 +271,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
      * 在提交回复后执行刷新UI操作
      */
     private void refreshAfterPost() {
-        ToastUtil.showShort("评论成功");
+        ToastUtil.showShort(ConstString.TOAST_COMMENT_SUCCESS);
         etContent.setText("");
         replyStep = walkStep;
         InputMethodUtil.hideSoftInput(getActivity());

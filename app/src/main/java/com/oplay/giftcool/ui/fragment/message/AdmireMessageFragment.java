@@ -68,7 +68,7 @@ public class AdmireMessageFragment extends BaseFragment_Refresh<ReplyMessage> {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 //		if (getArguments() == null) {
-//			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+//			ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
 //			return;
 //		}
 //		mUrl = getArguments().getString(KeyConfig.KEY_URL);

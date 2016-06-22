@@ -2,7 +2,6 @@ package com.oplay.giftcool.util;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
 import retrofit2.Response;
@@ -79,17 +79,20 @@ public class ToastUtil {
 
     public static void blurThrow(String prefix, Throwable t) {
         AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, t);
-        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-") + "哎呦，网络流血事故！");
+//        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-") + "哎呦，网络流血事故！");
+        ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
     }
 
     public static <T> void blurErrorResp(String prefix, Response<JsonRespBase<T>> response) {
         AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
         if (response == null || !response.isSuccessful()) {
-            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-                    + (response == null ? "呜，抽风了！" : response.message()));
+//            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
+//                    + (response == null ? "呜，抽风了！" : response.message()));
+            ToastUtil.showShort(ConstString.TOAST_SERVER_ERROR);
         } else if (response.body() == null || !response.body().isSuccess()) {
-            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-                    + (response.body() == null ? "嚄，服务器大姨妈了？" : response.body().getMsg()));
+//            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
+//                    + (response.body() == null ? "嚄，服务器大姨妈了？" : response.body().getMsg()));
+            ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
         }
 
     }

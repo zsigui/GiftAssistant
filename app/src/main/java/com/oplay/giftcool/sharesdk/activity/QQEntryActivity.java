@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
@@ -33,7 +33,8 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
     private IUiListener mUiListener = new IUiListener() {
         @Override
         public void onComplete(Object o) {
-            ToastUtil.showShort(getString(R.string.st_share_result_success));
+//            ToastUtil.showShort(getString(R.string.st_share_result_success));
+            ToastUtil.showShort(ConstString.TOAST_SHARE_SUCCESS);
             // 通知发放金币
             ScoreManager.getInstance().setTaskFinished(true);
             ScoreManager.getInstance().reward(null, true);
@@ -42,14 +43,16 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
 
         @Override
         public void onError(UiError uiError) {
-            ToastUtil.showShort(getString(R.string.st_share_result_failed));
+//            ToastUtil.showShort(getString(R.string.st_share_result_failed));
+            ToastUtil.showShort(ConstString.TOAST_SHARE_FAILED);
             AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "onError: QQ分享失败");
             finish();
         }
 
         @Override
         public void onCancel() {
-            ToastUtil.showShort(getString(R.string.st_share_result_quick));
+//            ToastUtil.showShort(getString(R.string.st_share_result_quick));
+            ToastUtil.showShort(ConstString.TOAST_SHARE_QUICKED);
             AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "onCancel: QQ分享取消");
             finish();
         }
@@ -83,7 +86,8 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
                 Map<String, String> params = URLUtil.getParams(data);
                 final String result = params.get(KEY_RESULT);
                 if (result.equals(SUCCESS)) {
-                    ToastUtil.showShort(getString(R.string.st_share_result_success));
+//                    ToastUtil.showShort(getString(R.string.st_share_result_success));
+                    ToastUtil.showShort(ConstString.TOAST_SHARE_SUCCESS);
 //					新手任务过来的分享需要上报服务器
                     ScoreManager.getInstance().setTaskFinished(true);
                     ScoreManager.getInstance().reward(null, true);

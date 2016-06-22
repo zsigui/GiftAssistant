@@ -299,7 +299,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     private void handleGetCode() {
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString())) {
-            showToast(ConstString.TEXT_PHONE_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
             return;
         }
         showLoading();
@@ -312,7 +312,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             public void run() {
                 if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
                     hideLoading();
-                    showToast(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     sSendCodeRemainTime = 0;
                     mLastSendTime = System.currentTimeMillis();
                     return;
@@ -336,7 +336,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 PermissionUtil.judgeSmsPermission(getActivity(), PhoneLoginNewFragment.this);
-                                showToast("短信已经发送，请注意接收");
+                                ToastUtil.showShort(ConstString.TOAST_PHONE_CODE_SEND);
                                 return;
                             }
                         }
@@ -386,7 +386,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         }
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
-            showToast(ConstString.TEXT_PHONE_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
             return;
         }
         showLoading();
@@ -397,7 +397,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
                     hideLoading();
-                    showToast(ConstString.TEXT_NET_ERROR);
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     return;
                 }
                 if (mCallLogin != null) {

@@ -62,7 +62,7 @@ public class PostListFragment extends BaseFragment_Refresh<IndexPostNew> {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (getArguments() == null) {
-            ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             getActivity().onBackPressed();
             return;
         }

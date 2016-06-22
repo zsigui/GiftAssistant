@@ -584,7 +584,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
-            ToastUtil.showShort(ConstString.TEXT_EXIT_APP);
+            ToastUtil.showShort(ConstString.TOAST_EXIT_APP);
         }
     }
 

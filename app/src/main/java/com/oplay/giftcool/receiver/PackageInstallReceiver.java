@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
@@ -18,6 +19,7 @@ import com.oplay.giftcool.util.ToastUtil;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * PackageInstallReceiver
@@ -91,8 +93,8 @@ public class PackageInstallReceiver extends BroadcastReceiver {
                 appInfo.initAppInfoStatus(context);
                 final File file = appInfo.getDestFile();
                 if (file != null && file.exists()) {
-                    final String delToast = String.format("已删除%s安装包，节省%s空间", appInfo.packageName, appInfo
-                            .size);
+                    final String delToast = String.format(Locale.CHINA, ConstString.TOAST_REMOVE_AFTER_SUCCESS_INSTALL,
+                            appInfo.packageName, appInfo.size);
                     final boolean delete = file.delete();
                     if (delete) {
                         ToastUtil.showShort(delToast);

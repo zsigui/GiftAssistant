@@ -23,6 +23,7 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Created by zsigui on 16-1-5.
@@ -197,7 +198,7 @@ public class SettingFragment extends BaseFragment {
                 break;
             case R.id.rl_feedback:
                 if (!AccountManager.getInstance().isLogin()) {
-                    ToastUtil.showShort(ConstString.TEXT_LOGIN_FIRST);
+                    ToastUtil.showShort(ConstString.TOAST_LOGIN_FIRST);
                     IntentUtil.jumpLogin(getContext());
                 } else {
                     if (getContext() != null && getActivity() instanceof BaseAppCompatActivity) {
@@ -263,8 +264,8 @@ public class SettingFragment extends BaseFragment {
                 }
                 if (getContext() != null) {
                     final String size = DataClearUtil.getFormatSize(cacheSize);
-                    ToastUtil.showShort(String.format(getContext().getString(R.string
-                            .st_setting_auto_clear_cache_hint), size));
+//                    ToastUtil.showShort(String.format(getContext().getString(R.string.st_setting_auto_clear_cache_hint), size));
+                    ToastUtil.showShort(String.format(Locale.CHINA, ConstString.TOAST_CLEAR_CACHE_SUCCESS, size));
                 }
             }
         });

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.listener.OnLoadListener;
 import com.oplay.giftcool.ui.widget.layout.RefreshLayout;
 import com.oplay.giftcool.util.NetworkUtil;
@@ -59,9 +60,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 	protected void refreshFailEnd() {
 		if (mIsSwipeRefresh) {
 			if (NetworkUtil.isConnected(getContext())) {
-				ToastUtil.showShort("呜，异常了%>_<%");
+				ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
 			} else {
-				ToastUtil.showShort("网络连接好像有问题哦");
+				ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
 			}
 		}
 		super.refreshFailEnd();
@@ -112,9 +113,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 		mIsLoadMore = false;
 		mRefreshLayout.setLoading(false);
 		if (NetworkUtil.isConnected(getContext())) {
-			showToast("服务器大姨妈了=。=");
+			ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
 		} else {
-			showToast("咦，好像网络连接不了");
+			ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
 		}
 	}
 

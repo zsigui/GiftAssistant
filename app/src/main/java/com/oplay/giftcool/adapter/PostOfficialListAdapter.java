@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.util.IntentUtil;
@@ -88,7 +89,7 @@ public class PostOfficialListAdapter extends BaseRVAdapter<IndexPostNew> impleme
 	@Override
 	public void onClick(View v) {
 		if (mContext == null) {
-			ToastUtil.showShort("页面失效，请重新打开应用");
+			ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
 			return;
 		}
 		final IndexPostNew item = getItem((Integer) v.getTag(TAG_POSITION));

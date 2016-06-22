@@ -26,6 +26,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -115,8 +116,8 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     }
 
     public void toast(String msg) {
-//        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        ToastUtil.showShort(msg);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+//        ToastUtil.showShort(msg);
     }
 
     /**
@@ -125,7 +126,7 @@ public abstract class PhotoBaseActivity extends Activity implements EasyPermissi
     protected void takePhotoAction() {
         if (!Util_System_SDCard_Util.IsSdCardCanRead()) {
             String errormsg = getString(R.string.empty_sdcard);
-            toast(errormsg);
+            ToastUtil.showShort(errormsg);
             if (mTakePhotoAction) {
                 resultFailure(errormsg, true);
             }

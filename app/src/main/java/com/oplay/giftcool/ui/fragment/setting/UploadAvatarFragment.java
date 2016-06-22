@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.manager.AccountManager;
@@ -58,8 +59,8 @@ public class UploadAvatarFragment extends BaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -110,7 +111,7 @@ public class UploadAvatarFragment extends BaseFragment {
                 case REQ_ID_PHOTO_CAMERA:
                     if (resultList == null || resultList.size() == 0) {
                         mCurrentSelectFilePath = null;
-                        ToastUtil.showShort("获取图片信息失败");
+                        ToastUtil.showShort(ConstString.TOAST_GET_PIC_FAILED);
                         return;
                     }
                     AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "upload avatar path = " + resultList.get(0)
@@ -191,7 +192,8 @@ public class UploadAvatarFragment extends BaseFragment {
                 ReqModifyAvatar reqData = new ReqModifyAvatar();
                 File file = new File(filePath);
                 if (!file.exists() || !file.isFile()) {
-                    ToastUtil.showShort("请求文件不存在 : " + filePath);
+                    AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求文件不存在 : " + filePath);
+                    ToastUtil.showShort(ConstString.TOAST_GET_PIC_FAILED);
                     hideLoading();
                     return;
                 }

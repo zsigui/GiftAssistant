@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.WebFragment;
@@ -24,7 +25,7 @@ public class WebActivity extends BaseAppCompatActivity {
     @Override
     protected void processLogic() {
         if (getIntent() == null) {
-            ToastUtil.showShort("参数获取失败，请重新进入");
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             finish();
             return;
         }

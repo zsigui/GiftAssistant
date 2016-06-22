@@ -22,7 +22,7 @@ public class PostListActivity extends BaseAppCompatActivity {
 	@Override
 	protected void processLogic() {
 		if (getIntent() == null) {
-			ToastUtil.showShort(ConstString.TEXT_ENTER_ERROR);
+			ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
 			finish();
 			return;
 		}

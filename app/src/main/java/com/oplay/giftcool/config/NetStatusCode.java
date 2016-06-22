@@ -84,7 +84,7 @@ public abstract class NetStatusCode {
     /**
      * 用户服务出错
      */
-    public static final int ERR_BAD_SERVER = 10032;
+    public static final int ERR_BAD_USER_SERVER = 10032;
     /**
      * 获取用户信息错误
      */

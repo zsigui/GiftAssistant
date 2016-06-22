@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.util.IntentUtil;
@@ -55,23 +55,27 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "resp from wx share : "
                 + (baseResp == null ? null : baseResp.errCode + ":" + baseResp.errStr));
         if (baseResp == null) {
-            ToastUtil.showShort(getString(R.string.st_share_result_failed));
+//            ToastUtil.showShort(getString(R.string.st_share_result_failed));
+            ToastUtil.showShort(ConstString.TOAST_SHARE_FAILED);
             return;
         }
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
                 // 分享成功
-                ToastUtil.showShort(getString(R.string.st_share_result_success));
+//                ToastUtil.showShort(getString(R.string.st_share_result_success));
+                ToastUtil.showShort(ConstString.TOAST_SHARE_SUCCESS);
                 ScoreManager.getInstance().setTaskFinished(true);
                 ScoreManager.getInstance().reward(null, true);
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 // 分享取消
-                ToastUtil.showShort(getString(R.string.st_share_result_quick));
+//                ToastUtil.showShort(getString(R.string.st_share_result_quick));
+                ToastUtil.showShort(ConstString.TOAST_SHARE_QUICKED);
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 // 分享失败
-                ToastUtil.showShort(getString(R.string.st_share_result_failed));
+//                ToastUtil.showShort(getString(R.string.st_share_result_failed));
+                ToastUtil.showShort(ConstString.TOAST_SHARE_FAILED);
                 break;
         }
         finish();

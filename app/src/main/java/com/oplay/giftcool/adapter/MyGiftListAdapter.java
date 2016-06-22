@@ -100,7 +100,7 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
             case R.id.btn_copy:
                 ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setPrimaryClip(ClipData.newPlainText("礼包码", item.code));
-                ToastUtil.showShort("已复制");
+                ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
                 break;
             case R.id.rl_recommend:
                 IntentUtil.jumpGiftDetail(mContext, item.id);

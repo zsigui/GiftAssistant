@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
@@ -62,8 +63,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (!AccountManager.getInstance().isLogin()) {
-            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
-            IntentUtil.jumpLogin(getContext());
+//            ToastUtil.showShort(mApp.getResources().getString(R.string.st_hint_un_login));
+            ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            IntentUtil.jumpLoginNoToast(getContext());
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -148,7 +150,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         UserModel model = AccountManager.getInstance().getUser();
                         model.userInfo.nick = response.body().getData().nick;
                         AccountManager.getInstance().notifyUserAll(model);
-                        ToastUtil.showShort("修改成功");
+                        ToastUtil.showShort(ConstString.TOAST_MODIFY_SUCCESS);
                         ScoreManager.getInstance().setTaskFinished(true);
                         if (getActivity() != null) {
                             getActivity().onBackPressed();
