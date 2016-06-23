@@ -30,7 +30,6 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
-import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
@@ -118,7 +117,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         updateToolBar();
         handleIntent(getIntent());
         updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
-        SocketIOManager.getInstance().connectOrReConnect(false);
     }
 
     private void findFragmentByTag(Bundle savedInstanceState) {

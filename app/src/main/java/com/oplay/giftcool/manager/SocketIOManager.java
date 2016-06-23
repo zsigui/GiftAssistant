@@ -1,7 +1,5 @@
 package com.oplay.giftcool.manager;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -10,6 +8,7 @@ import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ThreadUtil;
+import com.oplay.giftcool.util.log.GCLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,13 +27,10 @@ public class SocketIOManager {
 
     private final String URI_WS = "/ws";
     private static SocketIOManager manager;
-    private Context mAppContext;
     private boolean mIsConnecting = false;
 
 
-    private SocketIOManager() {
-        mAppContext = AssistantApp.getInstance().getApplicationContext();
-    }
+    private SocketIOManager() {}
 
     public static SocketIOManager getInstance() {
         if (manager == null) {
@@ -52,6 +48,7 @@ public class SocketIOManager {
 
     public void connectOrReConnect(boolean forceNew) {
         if (mIsConnecting) {
+            GCLog.d(AppDebugConfig.TAG_MANAGER, "SocketIO is connecting!");
             return;
         }
         try {
@@ -68,21 +65,52 @@ public class SocketIOManager {
             IO.Options opts = new IO.Options();
             opts.forceNew = true;
             opts.reconnection = true;
-            opts.reconnectionAttempts = 0;
+            opts.reconnectionAttempts = 3;
 //				// 断开后，间隔30秒再次重试
-            opts.reconnectionDelay = 25 * 1000;
+            opts.reconnectionDelay = 30 * 1000;
             mSocket = IO.socket(getRealUrl(), opts);
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
 //					loginValidate();
-                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO连接");
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO连接, sid = "
+                            + (mSocket != null ? mSocket.id() : "0"));
                     mIsConnecting = true;
+                }
+            }).on(Socket.EVENT_CONNECTING, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO连接中, sid = "
+                            + (mSocket != null ? mSocket.id() : "0"));
+                    mIsConnecting = true;
+                }
+            }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO建立连接过程中出现错误");
+                    if (args != null) {
+                        for (Object arg : args) {
+                            AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "arg : " + arg);
+                        }
+                    }
+                    mIsConnecting = false;
+                }
+            }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO出现错误");
+                    if (args != null) {
+                        for (Object arg : args) {
+                            AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "arg : " + arg);
+                        }
+                    }
                 }
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO断开连接");
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO断开连接, sid = "
+                            + (mSocket != null ? mSocket.id() : "0"));
+                    mIsConnecting = false;
                 }
             }).on(CustomSocket.EVENT_REQUIRE_LOGIN, new Emitter
                     .Listener() {
@@ -139,6 +167,7 @@ public class SocketIOManager {
                     }
                 }
             });
+            GCLog.d(AppDebugConfig.TAG_MANAGER, "IOSocket start to connect " + getRealUrl());
             mSocket.connect();
         } catch (URISyntaxException e) {
             AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, e);
@@ -150,6 +179,7 @@ public class SocketIOManager {
             if (AccountManager.getInstance().isLogin()) {
                 // 发送验证消息
                 try {
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "进行登录验证");
                     JSONObject obj = new JSONObject();
                     JSONObject data = new JSONObject();
                     data.put("cuid", AccountManager.getInstance().getUserSesion().uid);
@@ -184,9 +214,9 @@ public class SocketIOManager {
 
     public void close() {
         AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO关闭");
+        mIsConnecting = false;
         if (isConnected()) {
             mSocket.disconnect();
-            mSocket.close();
             mSocket = null;
             AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "SocketIO关闭成功");
         }

@@ -142,7 +142,7 @@ public class ScoreManager {
                                 if (response != null) {
                                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                                 }
-                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, response);
+                                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                             }
 
                             @Override
