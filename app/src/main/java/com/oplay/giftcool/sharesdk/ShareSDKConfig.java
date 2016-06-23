@@ -1,5 +1,7 @@
 package com.oplay.giftcool.sharesdk;
 
+import com.oplay.giftcool.BuildConfig;
+
 /**
  * 分享SDK的配置类
  * Created by yxf on 14-11-7.
@@ -18,7 +20,7 @@ public class ShareSDKConfig {
 	public static final int QZONE = 2;
 
 	/* 分享 */
-	public static final String SHARE_WEXIN_APP_ID = "wxf0794ef08cf93255";
-	public static final String SHARE_QQ_APP_ID = "1105140946";
+	public static final String SHARE_WEXIN_APP_ID = BuildConfig.WX_APPKEY;
+	public static final String SHARE_QQ_APP_ID = BuildConfig.QQ_APPKEY;
 	public static final int SHARE_REQUEST_CODE = 0xA10;
 }

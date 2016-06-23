@@ -312,7 +312,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 return;
                             }
                         }
-                        ToastUtil.blurErrorResp(null, response);
+                        ToastUtil.blurErrorResp(response);
                         resetRemain();
                     }
 
@@ -322,7 +322,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        ToastUtil.blurThrow(null, t);
+                        ToastUtil.blurThrow(t);
                         resetRemain();
                     }
                 });
@@ -392,7 +392,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 return;
                             }
                         }
-                        ToastUtil.blurErrorResp(null, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -401,7 +401,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             return;
                         }
                         hideLoading();
-                        ToastUtil.blurThrow(null, t);
+                        ToastUtil.blurThrow(t);
                     }
                 });
             }

@@ -10,6 +10,7 @@ import android.os.StrictMode;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.BuildConfig;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.tendcloud.tenddata.TCAgent;
@@ -98,8 +99,8 @@ public class StatisticsManager {
         String STR_TASK_FROM_ACTIVITY = "活动页面的每日任务点击";
     }
 
-    private final String TC_APP_KEY = "7E57533EDCF044DA1BF657D786E0FDF7";
-    private final String UMENG_APP_KEY = "56cbc68067e58e32bb00231a";
+    private final String TC_APP_KEY = BuildConfig.TD_APPKEY;
+    private final String UMENG_APP_KEY = BuildConfig.UMENG_APPKEY;
 
     private static StatisticsManager sInstance;
     private boolean mIsInit = false;

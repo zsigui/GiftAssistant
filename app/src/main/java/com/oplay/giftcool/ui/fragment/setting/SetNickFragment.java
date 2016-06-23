@@ -38,7 +38,6 @@ import retrofit2.Response;
 public class SetNickFragment extends BaseFragment implements OnBackPressListener, TextWatcher {
 
     private final static String PAGE_NAME = "设置昵称";
-    private final static String TOAST_FAILED = "修改失败";
     private TextView etNick;
     private TextView tvClear;
 
@@ -157,11 +156,11 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                         }
                         return;
                     }
-                    ToastUtil.blurErrorResp(TOAST_FAILED, response);
+                    ToastUtil.blurErrorResp(response);
                     AccountManager.getInstance().judgeIsSessionFailed(response.body());
                     return;
                 }
-                ToastUtil.blurErrorResp(TOAST_FAILED, response);
+                ToastUtil.blurErrorResp(response);
             }
 
             @Override
@@ -171,7 +170,7 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
                 }
                 hideLoading();
                 mIsLoading = false;
-                ToastUtil.blurThrow(TOAST_FAILED, t);
+                ToastUtil.blurThrow(t);
             }
         });
     }

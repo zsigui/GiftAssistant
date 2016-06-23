@@ -40,7 +40,6 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         OnBackPressListener {
 
     private final static String PAGE_NAME = "意见反馈";
-    final String TOAST_FEEDBACK = "提交反馈";
     //	private RadioButton rbFunction;
 //	private RadioButton rbPay;
 //	private RadioButton rbOther;
@@ -224,10 +223,10 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                                 return;
                             }
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
-                            ToastUtil.blurErrorResp(TOAST_FEEDBACK, response);
+                            ToastUtil.blurErrorResp(response);
                             return;
                         }
-                        ToastUtil.blurErrorResp(TOAST_FEEDBACK, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -236,7 +235,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
-                        ToastUtil.blurThrow(TOAST_FEEDBACK, t);
+                        ToastUtil.blurThrow(t);
                     }
                 });
             }

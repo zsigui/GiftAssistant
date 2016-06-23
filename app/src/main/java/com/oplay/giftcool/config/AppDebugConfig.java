@@ -2,6 +2,7 @@ package com.oplay.giftcool.config;
 
 import android.os.Debug;
 
+import com.oplay.giftcool.BuildConfig;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.log.GCLog;
 
@@ -16,18 +17,15 @@ public class AppDebugConfig {
     /**
      * debug模式，发布打包需要置为false，可以通过混淆让调试的log文本从代码文件中消除，避免被反编译时漏泄相关信息。
      */
-//    public static final boolean IS_DEBUG = false;
-//	public static final boolean IS_STATISTICS_SHOW = true;
-    public static final boolean IS_DEBUG = true;
-    public static final boolean IS_STATISTICS_SHOW = false;
-    public static final int TEST_CHANNEL_ID = 10000;
+    public static boolean IS_DEBUG = BuildConfig.LOG_DEBUG;
+    public static boolean IS_FILE_DEBUG = BuildConfig.FILE_DEBUG;
+    public static boolean IS_STATISTICS_SHOW = BuildConfig.STATISTICS_DEBUG;
+    public static int TEST_CHANNEL_ID = BuildConfig.TEST_CHANNEL_ID;
 
 
     public static final String TAG_APP = "gcool_debug_app";
 
     public static final String TAG_FRAG = "gcool_debug_fragment";
-    /* define some tag for debug below */
-    public static final String TAG_SEARCH = "gcool_debug_search";
 
     public static final String TAG_UTIL = "gcool_debug_util";
 
@@ -158,13 +156,13 @@ public class AppDebugConfig {
     }
 
     public static void file(Object object) {
-        if (AppDebugConfig.IS_DEBUG) {
+        if (AppDebugConfig.IS_DEBUG && AppDebugConfig.IS_FILE_DEBUG) {
             GCLog.file(STACKTRACE_INDEX, AppDebugConfig.TAG_DEBUG_INFO, null, null, object);
         }
     }
 
     public static void file(String tag, Object... object) {
-        if (AppDebugConfig.IS_DEBUG) {
+        if (AppDebugConfig.IS_DEBUG && AppDebugConfig.IS_FILE_DEBUG) {
             GCLog.file(STACKTRACE_INDEX, tag, null, null, object);
         }
     }

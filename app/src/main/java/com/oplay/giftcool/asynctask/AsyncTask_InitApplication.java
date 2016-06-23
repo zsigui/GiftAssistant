@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
@@ -11,8 +12,6 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
-import com.oplay.giftcool.download.silent.SilentDownloadManager;
-import com.oplay.giftcool.download.silent.bean.DownloadInfo;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
@@ -25,10 +24,13 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.log.GCLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -105,6 +107,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 //		if (assistantApp.isGlobalInit()) {
 //			return;
 //		}
+
+        readAndSetDebugConfig();
+
         AppDebugConfig.v(AppDebugConfig.TAG_APP, "app has global initialed");
 
         // 存储打开APP时间
@@ -166,16 +171,52 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         assistantApp.setGlobalInit(true);
     }
 
-    private void testDownload() {
-        DownloadInfo info = new DownloadInfo();
-        info.setTotalSize(95827865);
-        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
-        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5" +
-                ".0_250_chn_1856000_92efbb4bde7721b1" +
-                ".owk");
-        info.setIsDownload(true);
-        SilentDownloadManager.getInstance().startDownload(info);
+    /**
+     * 读取 /sdcard/gift_cool/cache/dl 文件，值为boolean，为0/1
+     * 文件格式需要为：
+     * =========文件开始=========
+     * LOG_DEBUG=1
+     * FILE_DEBUG=0
+     * =========文件结束=========
+     */
+    private void readAndSetDebugConfig() {
+        File configFile = new File(FileUtil.getOwnCacheDirectory(mContext, Global.EXTERNAL_CACHE, true),
+                Global.DEBUG_CONFIG);
+        if (!configFile.exists() || !configFile.canRead()) {
+            return;
+        }
+        try {
+            String config = FileUtil.readString(configFile, FileUtil.DEFAULT_CHASET);
+            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "read debug config : \n" + config);
+            String[] map = config.split("\n");
+            for (String entry : map) {
+                if (TextUtils.isEmpty(entry) || !entry.contains("=")) {
+                    continue;
+                }
+                String[] keyValue = entry.split("=");
+                if ("LOG_DEBUG".equals(keyValue[0])) {
+                    AppDebugConfig.IS_DEBUG = !TextUtils.isEmpty(keyValue[1]) && "1".equals(keyValue[1]);
+                    GCLog.init(AppDebugConfig.IS_DEBUG);
+                } else if ("FILE_DEBUG".equals(keyValue[0])) {
+                    AppDebugConfig.IS_FILE_DEBUG = !TextUtils.isEmpty(keyValue[1]) && "1".equals(keyValue[1]);
+                }
+            }
+
+        } catch (Throwable t) {
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
+        }
     }
+
+//    private void testDownload() {
+//        DownloadInfo info = new DownloadInfo();
+//        info.setTotalSize(95827865);
+//        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
+//        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5" +
+//                ".0_250_chn_1856000_92efbb4bde7721b1" +
+//                ".owk");
+//        info.setIsDownload(true);
+//        SilentDownloadManager.getInstance().startDownload(info);
+//    }
 
     private boolean initAndCheckUpdate() {
         ReqInitApp data = new ReqInitApp();

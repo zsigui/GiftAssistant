@@ -14,7 +14,6 @@ import java.io.File;
  */
 public class FileLog {
 
-    private static boolean sNeedWriteLog = false;
     private static String debugDirectory;
     private static String debugFileName;
 
@@ -43,9 +42,6 @@ public class FileLog {
     }
 
     public static void printFile(String directory, String filename, String content, String charset, boolean isAppend) {
-        if (!sNeedWriteLog) {
-            return;
-        }
         if (TextUtils.isEmpty(directory)) {
             directory = getDebugDirectory();
         }

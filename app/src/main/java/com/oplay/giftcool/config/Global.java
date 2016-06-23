@@ -50,6 +50,10 @@ public class Global {
      */
     public final static String LOGGING_CACHE_PATH = EXTERNAL_CACHE + "/log";
     /**
+     * LOG输出与否的配置文件
+     */
+    public static final String DEBUG_CONFIG = "dl";
+    /**
      * 礼包酷渠道名文件后缀
      */
     public final static String CHANNEL_FILE_NAME_SUFFIX = ".gift_cool";

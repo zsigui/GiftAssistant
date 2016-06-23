@@ -43,7 +43,6 @@ import retrofit2.Response;
 public class UploadAvatarFragment extends BaseFragment {
 
     private final static String PAGE_NAME = "上传头像";
-    private final static String TOAST_FAILED = "上传失败";
     private static final int REQ_ID_PHOTO_ALBUM = 33;
     private static final int REQ_ID_PHOTO_CAMERA = 34;
     private String mCurrentSelectFilePath;
@@ -224,7 +223,7 @@ public class UploadAvatarFragment extends BaseFragment {
                                 return;
                             }
                         }
-                        ToastUtil.blurErrorResp(TOAST_FAILED, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -233,7 +232,7 @@ public class UploadAvatarFragment extends BaseFragment {
                             return;
                         }
                         hideLoading();
-                        ToastUtil.blurThrow(TOAST_FAILED, t);
+                        ToastUtil.blurThrow(t);
                     }
                 });
             }

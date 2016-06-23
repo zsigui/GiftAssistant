@@ -336,7 +336,6 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
 
         private ConfirmDialog mDialog;
         private JsonReqBase<ReqChangeFocus> mReqBase;
-        private static final String TAG_PREFIX = "取消关注";
 
         public QuickDialogListener() {
             ReqChangeFocus focus = new ReqChangeFocus();
@@ -383,7 +382,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                             return;
                         }
                     }
-                    ToastUtil.blurErrorResp(TAG_PREFIX, response);
+                    ToastUtil.blurErrorResp(response);
                 }
 
                 @Override
@@ -392,7 +391,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
-                    ToastUtil.blurThrow(TAG_PREFIX, t);
+                    ToastUtil.blurThrow(t);
                 }
             });
         }

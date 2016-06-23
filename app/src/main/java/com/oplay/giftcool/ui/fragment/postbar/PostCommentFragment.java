@@ -48,7 +48,6 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
 
     static final String KEY_POST = "key_id_post";
     static final String KEY_COMMENT = "key_id_comment";
-    private final String TAG_PREFIX = "提交评论失败";
 
     private final String KEY_POST_ID = "activity_id";
     private final String KEY_COMMENT_ID = "comment_id";
@@ -254,13 +253,13 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
                             }
                         }
                         hideLoading();
-                        ToastUtil.blurErrorResp(TAG_PREFIX, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         hideLoading();
-                        ToastUtil.blurThrow(TAG_PREFIX, t);
+                        ToastUtil.blurThrow(t);
                     }
                 });
             }

@@ -175,7 +175,7 @@ public class DialogManager {
                         }
                     }
                 }
-                ToastUtil.blurErrorResp("", response);
+                ToastUtil.blurErrorResp(response);
             }
 
             @Override
@@ -184,7 +184,7 @@ public class DialogManager {
                 if (call.isCanceled()) {
                     return;
                 }
-                ToastUtil.blurThrow("", t);
+                ToastUtil.blurThrow(t);
             }
         });
     }

@@ -1,15 +1,17 @@
 package com.oplay.giftcool.config;
 
+import com.oplay.giftcool.BuildConfig;
+
 /**
  * Created by zsigui on 16-1-17.
  */
 public class AppConfig {
 
 	/* APP版本信息 */
-	public static final int SDK_VER = 1303;
-	public static final String SDK_VER_NAME = "V1.3.3";
-	public static final String PACKAGE_NAME = "com.oplay.giftcool";
-	public static final String OUWAN_SDK_VER = "356";
+	public static final int SDK_VER = BuildConfig.VERSION_CODE;
+	public static final String SDK_VER_NAME = BuildConfig.VERSION_NAME;
+	public static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
+	public static final String OUWAN_SDK_VER = BuildConfig.OUWAN_SDK_VERSION;
 
 	/* 上传头像的大小 */
 	public static final int UPLOAD_PIC_WIDTH = 400;

@@ -209,7 +209,7 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                ToastUtil.blurThrow(null, t);
+                                ToastUtil.blurThrow(t);
                             }
                         });
             }
@@ -244,7 +244,7 @@ public class PayManager {
                 return;
             }
         }
-        ToastUtil.blurErrorResp(null, response);
+        ToastUtil.blurErrorResp(response);
     }
 
     /**
@@ -326,7 +326,7 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                ToastUtil.blurThrow(null, t);
+                                ToastUtil.blurThrow(t);
                             }
                         });
             }
@@ -374,7 +374,7 @@ public class PayManager {
                 }
             }
         }
-        ToastUtil.blurErrorResp("抢号失败", response);
+        ToastUtil.blurErrorResp(response);
     }
 
     /**

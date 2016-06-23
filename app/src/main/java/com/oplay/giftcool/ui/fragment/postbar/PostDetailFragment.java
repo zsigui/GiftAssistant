@@ -62,7 +62,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
         ViewTreeObserver.OnGlobalLayoutListener, ShowBottomBarListener, View.OnTouchListener {
 
     private final String PAGE_NAME = "活动详情";
-    private final String TAG_PREFIX = "提交回复失败";
 
     private final String KEY_CUID = "cuid";
     private final String KEY_TOKEN = "token";
@@ -336,13 +335,13 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
                             }
                         }
                         hideLoading();
-                        ToastUtil.blurErrorResp(TAG_PREFIX, response);
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         hideLoading();
-                        ToastUtil.blurThrow(TAG_PREFIX, t);
+                        ToastUtil.blurThrow(t);
                     }
                 });
             }

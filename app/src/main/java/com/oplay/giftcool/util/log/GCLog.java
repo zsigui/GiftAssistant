@@ -137,7 +137,7 @@ public class GCLog {
         printFile(DEFAULT_STACKTRACE_INDEX, tag, directory, filename, msg);
     }
 
-    public static void file(int stacktraceIndex, String tag, String directory, String filename, Object msg) {
+    public static void file(int stacktraceIndex, String tag, String directory, String filename, Object... msg) {
         printFile(stacktraceIndex, tag, directory, filename, msg);
     }
 
@@ -165,9 +165,11 @@ public class GCLog {
     }
 
 
-    private static void printFile(int stacktraceIndex, String tagStr, String directory, String fileName, Object
+    private static void printFile(int stacktraceIndex, String tagStr, String directory, String fileName, Object...
             objectMsg) {
-
+        if (!IS_SHOW_LOG) {
+            return;
+        }
         String content = wrapperFileContent(stacktraceIndex, tagStr, objectMsg);
         FileLog.printFile(directory, fileName, content);
     }

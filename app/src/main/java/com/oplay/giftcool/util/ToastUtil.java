@@ -77,13 +77,13 @@ public class ToastUtil {
         show(resId, Toast.LENGTH_SHORT);
     }
 
-    public static void blurThrow(String prefix, Throwable t) {
+    public static void blurThrow(Throwable t) {
         AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, t);
 //        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-") + "哎呦，网络流血事故！");
         ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
     }
 
-    public static <T> void blurErrorResp(String prefix, Response<JsonRespBase<T>> response) {
+    public static <T> void blurErrorResp(Response<JsonRespBase<T>> response) {
         AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
         if (response == null || !response.isSuccessful()) {
 //            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")

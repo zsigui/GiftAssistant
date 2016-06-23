@@ -12,6 +12,35 @@ android {
 		versionName VERSION_NAME
 		manifestPlaceholders = [jpushAppKey    : JPUSH_APPKEY, qqAppKey: QQ_APPKEY,
 		                        loveotaMainChId: LOVEOTA_MAIN_CHID, loveotaClientID: LOVEOTA_CLIENT_CHID]
+		buildConfigField 'String', 'OUWAN_SDK_VERSION', "\"${OUWAN_SDK_VERSION}\""
+		buildConfigField 'int', 'TEST_CHANNEL_ID', TEST_CHANNEL_ID
+		buildConfigField 'String', 'QQ_APPKEY', "\"${QQ_APPKEY}\""
+		buildConfigField 'String', 'WX_APPKEY', "\"${WX_APPKEY}\""
+		buildConfigField 'String', 'TD_APPKEY', "\"${TD_APPKEY}\""
+		buildConfigField 'String', 'UMENG_APPKEY', "\"${UMENG_APPKEY}\""
+		// 以下三个根据版本变动
+		// 注意：FILE_DEBUG需要在允许LOG_DEBUG的前提下生效
+		buildConfigField 'boolean', 'LOG_DEBUG', 'false'
+		buildConfigField 'boolean', 'FILE_DEBUG', 'false'
+		buildConfigField 'boolean', 'STATISTICS_DEBUG', 'true'
+	}
+
+	productFlavors {
+		dDebug {
+			// 测试环境下的测试配置
+			buildConfigField 'boolean', 'LOG_DEBUG', 'true'
+			buildConfigField 'boolean', 'FILE_DEBUG', 'false'
+			buildConfigField 'boolean', 'STATISTICS_DEBUG', 'false'
+		}
+		rDebug {
+			// 正式环境下的测试配置
+			buildConfigField 'boolean', 'LOG_DEBUG', 'true'
+			buildConfigField 'boolean', 'FILE_DEBUG', 'false'
+			buildConfigField 'boolean', 'STATISTICS_DEBUG', 'false'
+		}
+		rRelease {
+			// 正式环境下的正式配置
+		}
 	}
 
 	signingConfigs {
