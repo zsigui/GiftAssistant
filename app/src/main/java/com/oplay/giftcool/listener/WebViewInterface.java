@@ -19,6 +19,8 @@ import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
@@ -28,6 +30,7 @@ import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -61,6 +64,10 @@ public class WebViewInterface extends Observable {
         mWebView = webView;
     }
 
+    /**
+     * Better use {@link #jumpPage(String)} to instead,
+     * this will be removed later
+     */
     @JavascriptInterface
     public int jumpToGift(int id) {
         if (id <= 0) {
@@ -70,6 +77,11 @@ public class WebViewInterface extends Observable {
         return RET_SUCCESS;
     }
 
+    /**
+     * Better use {@link #jumpPage(String)} to instead,
+     * this will be removed later
+     */
+    @Deprecated
     @JavascriptInterface
     public int jumpToGame(int id) {
         if (id <= 0) {
@@ -122,6 +134,10 @@ public class WebViewInterface extends Observable {
         }
     }
 
+    /**
+     * Better use {@link #jumpPage(String)} to instead,
+     * this will be removed later
+     */
     @JavascriptInterface
     public int login(int loginType) {
         if (loginType != KeyConfig.TYPE_ID_OUWAN_LOGIN && loginType != KeyConfig.TYPE_ID_PHONE_LOGIN) {
@@ -136,6 +152,10 @@ public class WebViewInterface extends Observable {
         return RET_SUCCESS;
     }
 
+    /**
+     * Better use {@link #executeLogicCode(String)} to instead,
+     * this will be removed later
+     */
     @JavascriptInterface
     public int shareGift(String giftJson) {
         try {
@@ -159,6 +179,10 @@ public class WebViewInterface extends Observable {
         }
     }
 
+    /**
+     * Better use {@link #executeLogicCode(String)} to instead,
+     * this will be removed later
+     */
     @JavascriptInterface
     public int shareGCool() {
         try {
@@ -175,7 +199,10 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 根据类型跳转对应列表界面
+     * 根据类型跳转对应列表界面 <br /> <br />
+     *
+     * Better use {@link #jumpPage(String)} to instead,
+     * this will be removed later
      */
     @JavascriptInterface
     public int jumpByType(int type) {
@@ -233,8 +260,12 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 跳转活动评论页面
+     * 跳转活动评论页面 <br /> <br />
+     *
+     * Better use {@link #jumpPage(String)} to instead,
+     * this will be removed later
      */
+    @Deprecated
     @JavascriptInterface
     public int jumpCommentDetail(int postId, int commentId) {
         if (commentId == 0) {
@@ -245,7 +276,9 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 显示多张预览图片
+     * 显示多张预览图片 <br /> <br />
+     *
+     * Add in 1104
      *
      * @param selectedIndex 选择最初显示图片的下标，从0开始
      * @param picsPath      传入图片地址的字符串数组
@@ -266,7 +299,9 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 显示底部的回复栏
+     * 显示底部的回复栏 <br /> <br />
+     *
+     * Add in 1104
      */
     @JavascriptInterface
     public int showBottomBar(final boolean isShow) {
@@ -287,7 +322,53 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 获取APP的启动时间
+     * 进行页面跳转 <br /> <br />
+     *
+     * Add in 1400
+     */
+    @JavascriptInterface
+    public int jumpPage(final String data) {
+        if (mHostActivity == null) {
+            return RET_INTERNAL_ERR;
+        }
+        if (TextUtils.isEmpty(data)) {
+            return RET_PARAM_ERR;
+        }
+        try {
+            TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(data, TaskInfoOne.class);
+            IntentUtil.handleJumpInfo(mHostActivity, infoOne);
+            return RET_SUCCESS;
+        } catch (Throwable t) {
+            return RET_PARAM_ERR;
+        }
+    }
+
+    /**
+     *  执行特定代码段任务，如调起升级、求礼包、分享等弹窗 <br /> <br />
+     *
+     *  Add in 1400
+     */
+    @JavascriptInterface
+    public int executeLogicCode(final String data) {
+        if (mHostActivity == null || mHostFragment == null || mHostFragment.getChildFragmentManager() == null) {
+            return RET_INTERNAL_ERR;
+        }
+        if (TextUtils.isEmpty(data)) {
+            return RET_PARAM_ERR;
+        }
+        try {
+            TaskInfoTwo infoTwo = AssistantApp.getInstance().getGson().fromJson(data, TaskInfoTwo.class);
+            MixUtil.executeLogicCode(mHostActivity, mHostFragment.getChildFragmentManager(), infoTwo);
+            return RET_SUCCESS;
+        } catch (Throwable t) {
+            return RET_PARAM_ERR;
+        }
+    }
+
+    /**
+     * 获取APP的启动时间 <br /> <br />
+     *
+     * Add in 1300
      */
     @JavascriptInterface
     public long getLastLaunchTimeInMilli() {
@@ -295,7 +376,9 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 显示关注游戏的引导页
+     * 显示关注游戏的引导页 <br /> <br />
+     *
+     * Add in 1300
      */
     @JavascriptInterface
     public int showFocusGameGuidePage() {
@@ -309,7 +392,9 @@ public class WebViewInterface extends Observable {
     private Call<Object> mCall;
 
     /**
-     * 进行异步网络请求
+     * 进行异步网络请求 <br /> <br />
+     *
+     * Add in 1104
      */
     @JavascriptInterface
     public int asyncNativeRequest(final String reqUrl, final String reqParam,
@@ -374,7 +459,9 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     * 设置回复谁
+     * 设置回复谁 <br /> <br />
+     *
+     * Add in 1104
      *
      * @param commentId 回复对象ID
      * @param name      回复对象名称

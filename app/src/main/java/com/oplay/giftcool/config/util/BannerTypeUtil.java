@@ -17,9 +17,11 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.WebData;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 /**
@@ -37,7 +39,8 @@ public class BannerTypeUtil {
     public static final int ACTION_POST = 7;
     public static final int ACTION_POST_DETAIL = 8;
     public static final int ACTION_UPGRADE = 9;
-    public static final int ACTION_LIKE_AS_TASK = 11011;
+    public static final int ACTION_JUMP_PAGE = 11011;
+    public static final int ACTION_EXECUTE_LOGIC_CODE = 11012;
 
     public static void handleBanner(Context context, IndexBanner banner) {
         if (banner == null || context == null) {
@@ -108,7 +111,17 @@ public class BannerTypeUtil {
                         ToastUtil.showShort(ConstString.TOAST_UNKNOWN_ERROR);
                     }
                     break;
-                case ACTION_LIKE_AS_TASK:
+                case ACTION_EXECUTE_LOGIC_CODE:
+                    if (!(context instanceof FragmentActivity)) {
+                        ToastUtil.showShort(ConstString.TOAST_UNKNOWN_ERROR);
+                        return;
+                    }
+                    TaskInfoTwo infoTwo = AssistantApp.getInstance().getGson().fromJson(
+                            banner.extData, TaskInfoTwo.class
+                    );
+                    MixUtil.executeLogicCode(context, ((FragmentActivity) context).getSupportFragmentManager(), infoTwo);
+                    break;
+                case ACTION_JUMP_PAGE:
                     TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
                             banner.extData, TaskInfoOne.class);
                     IntentUtil.handleJumpInfo(context, infoOne);

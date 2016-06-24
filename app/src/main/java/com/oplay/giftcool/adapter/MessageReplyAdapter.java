@@ -23,96 +23,96 @@ import java.util.ArrayList;
 
 /**
  * 收到的赞/回复消息列表适配器
- *
+ * <p/>
  * Created by zsigui on 16-4-18.
  */
 public class MessageReplyAdapter extends BaseRVAdapter<ReplyMessage> implements View.OnClickListener {
 
-	/**
-	 * 是否回复消息
-	 */
-	private boolean mIsComment;
-	private SpannableString ss;
+    /**
+     * 是否回复消息
+     */
+    private boolean mIsComment;
+    private SpannableString ss;
 
-	public MessageReplyAdapter(Context context) {
-		this(context, null);
-	}
+    public MessageReplyAdapter(Context context) {
+        this(context, null);
+    }
 
-	public MessageReplyAdapter(Context context, ArrayList<ReplyMessage> data) {
-		super(context, data);
-	}
+    public MessageReplyAdapter(Context context, ArrayList<ReplyMessage> data) {
+        super(context, data);
+    }
 
-	@Override
-	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return new MessageHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_msg_reply, parent, false));
-	}
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MessageHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_msg_reply, parent, false));
+    }
 
-	public void setIsComment(boolean isComment) {
-		mIsComment = isComment;
-	}
+    public void setIsComment(boolean isComment) {
+        mIsComment = isComment;
+    }
 
-	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
-		MessageHolder holder = (MessageHolder) h;
-		ReplyMessage item = getItem(position);
-		holder.tvName.setText(item.name);
-		ViewUtil.showImage(holder.ivIcon, item.icon);
-		if (item.hintPics != null && !item.hintPics.isEmpty()) {
-			ViewUtil.showImage(holder.ivHint, item.hintPics.get(0));
-			holder.ivHint.setVisibility(View.VISIBLE);
-		} else {
-			holder.tvHint.setText(item.hintText);
-			holder.ivHint.setVisibility(View.GONE);
-		}
-		holder.tvTime.setText(DateUtil.optDate(item.time, item.timestamp));
-		if (mIsComment) {
-			holder.tvContent.setText(item.content);
-		} else {
-			if (ss == null) {
-				ImageSpan span = new ImageSpan(mContext, R.drawable.ic_msg_content_admire);
-				ss = new SpannableString("zan");
-				ss.setSpan(span, 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-			}
-			holder.tvContent.setText(ss);
-		}
-		holder.itemView.setTag(TAG_POSITION, position);
-		holder.itemView.setOnClickListener(this);
-	}
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
+        MessageHolder holder = (MessageHolder) h;
+        ReplyMessage item = getItem(position);
+        holder.tvName.setText(item.name);
+        ViewUtil.showImage(holder.ivIcon, item.icon);
+        if (item.hintPics != null && !item.hintPics.isEmpty()) {
+            ViewUtil.showImage(holder.ivHint, item.hintPics.get(0));
+            holder.ivHint.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvHint.setText(item.hintText);
+            holder.ivHint.setVisibility(View.GONE);
+        }
+        holder.tvTime.setText(DateUtil.optDate(item.time, item.timestamp));
+        if (mIsComment) {
+            holder.tvContent.setText(item.content);
+        } else {
+            if (ss == null) {
+                ImageSpan span = new ImageSpan(mContext, R.drawable.ic_msg_content_admire);
+                ss = new SpannableString("zan");
+                ss.setSpan(span, 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
+            holder.tvContent.setText(ss);
+        }
+        holder.itemView.setTag(TAG_POSITION, position);
+        holder.itemView.setOnClickListener(this);
+    }
 
-	@Override
-	public void onClick(View v) {
-		if (v.getTag(TAG_POSITION) == null) {
-			return;
-		}
-		ReplyMessage item = getItem((Integer) v.getTag(TAG_POSITION));
-		IntentUtil.jumpPostReplyDetail(mContext, item.postId, item.reCommentId);
-	}
+    @Override
+    public void onClick(View v) {
+        if (v.getTag(TAG_POSITION) == null) {
+            return;
+        }
+        ReplyMessage item = getItem((Integer) v.getTag(TAG_POSITION));
+        IntentUtil.jumpPostReplyDetail(mContext, item.postId, item.reCommentId);
+    }
 
-	@Override
-	public void release() {
-		super.release();
-	}
+    @Override
+    public void release() {
+        super.release();
+    }
 
-	/**
-	 * 消息Holder
-	 */
-	private class MessageHolder extends BaseRVHolder {
+    /**
+     * 消息Holder
+     */
+    private class MessageHolder extends BaseRVHolder {
 
-		private TextView tvName;
-		private TextView tvContent;
-		private ImageView ivIcon;
-		private TextView tvTime;
-		private TextView tvHint;
-		private ImageView ivHint;
+        private TextView tvName;
+        private TextView tvContent;
+        private ImageView ivIcon;
+        private TextView tvTime;
+        private TextView tvHint;
+        private ImageView ivHint;
 
-		public MessageHolder(View itemView) {
-			super(itemView);
-			tvName = getViewById(R.id.tv_name);
-			tvContent = getViewById(R.id.tv_content);
-			ivIcon = getViewById(R.id.iv_icon);
-			tvTime = getViewById(R.id.tv_time);
-			tvHint = getViewById(R.id.tv_hint);
-			ivHint = getViewById(R.id.iv_hint);
-		}
-	}
+        public MessageHolder(View itemView) {
+            super(itemView);
+            tvName = getViewById(R.id.tv_name);
+            tvContent = getViewById(R.id.tv_content);
+            ivIcon = getViewById(R.id.iv_icon);
+            tvTime = getViewById(R.id.tv_time);
+            tvHint = getViewById(R.id.tv_hint);
+            ivHint = getViewById(R.id.iv_hint);
+        }
+    }
 }

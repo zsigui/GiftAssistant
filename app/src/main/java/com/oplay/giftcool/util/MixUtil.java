@@ -1,12 +1,18 @@
 package com.oplay.giftcool.util;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.resp.InitQQ;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
+import com.oplay.giftcool.sharesdk.ShareSDKManager;
 
 import java.util.ArrayList;
 
@@ -83,5 +89,39 @@ public class MixUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 处理额外信息类型为二(执行特定代码段)的数据
+     */
+    public static void executeLogicCode(Context context, FragmentManager fm, TaskInfoTwo infoTwo) {
+        if (context == null) {
+            AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_UTIL,
+                    "context is not allowed to be null");
+            return;
+        }
+        if (fm == null) {
+            AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_UTIL,
+                    "fm is not allowed to be null");
+            return;
+        }
+        switch (infoTwo.type) {
+            case TaskTypeUtil.INFO_TWO_SHARE_GCOOL:
+                ShareSDKManager.getInstance(context).shareGCool(context, fm);
+                break;
+            case TaskTypeUtil.INFO_TWO_REQUEST_GIFT:
+                DialogManager.getInstance().showHopeGift(fm, 0, "", true);
+                break;
+            case TaskTypeUtil.INFO_TWO_SHOW_UPGRADE:
+                final boolean isUpdate =
+                        DialogManager.getInstance().showUpdateDialog(context, fm, true);
+                if (!isUpdate) {
+                    ToastUtil.showShort(ConstString.TOAST_VERSION_NEWEST);
+                }
+                break;
+            case TaskTypeUtil.INFO_TWO_JOIN_QQ_GROUP:
+                IntentUtil.joinQQGroup(context, infoTwo.data);
+                break;
+        }
     }
 }

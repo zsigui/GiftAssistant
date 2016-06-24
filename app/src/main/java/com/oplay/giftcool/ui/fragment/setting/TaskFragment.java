@@ -17,7 +17,6 @@ import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.AlarmClockManager;
-import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.task.ScoreMission;
@@ -27,10 +26,10 @@ import com.oplay.giftcool.model.data.resp.task.TaskInfoThree;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
@@ -313,7 +312,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 case TaskTypeUtil.MISSION_TYPE_EXECUTE_LOGIC:
                     final TaskInfoTwo infoTwo = AssistantApp.getInstance().getGson().fromJson(
                             mission.actionInfo, TaskInfoTwo.class);
-                    handleInfoTwo(infoTwo);
+                    MixUtil.executeLogicCode(getContext(), getChildFragmentManager(), infoTwo);
                     break;
                 case TaskTypeUtil.MISSION_TYPE_DOWNLOAD:
                     final TaskInfoThree infoThree = AssistantApp.getInstance().getGson().fromJson(
@@ -326,26 +325,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
         }
     }
 
-    /**
-     * 处理额外信息类型为二(执行特定代码段)的数据
-     */
-    private void handleInfoTwo(TaskInfoTwo infoTwo) {
-        switch (infoTwo.type) {
-            case TaskTypeUtil.INFO_TWO_SHARE_GCOOL:
-                ShareSDKManager.getInstance(getContext()).shareGCool(getContext(), getChildFragmentManager());
-                break;
-            case TaskTypeUtil.INFO_TWO_REQUEST_GIFT:
-                DialogManager.getInstance().showHopeGift(getChildFragmentManager(), 0, "", true);
-                break;
-            case TaskTypeUtil.INFO_TWO_SHOW_UPGRADE:
-                final boolean isUpdate =
-                        DialogManager.getInstance().showUpdateDialog(getContext(), getChildFragmentManager(), true);
-                if (!isUpdate) {
-                    ToastUtil.showShort(ConstString.TOAST_VERSION_NEWEST);
-                }
-                break;
-        }
-    }
 
     /**
      * 处理额外信息类型为三(下载打开应用)的数据

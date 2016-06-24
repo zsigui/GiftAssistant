@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -577,7 +578,11 @@ public class IntentUtil {
         } else if ("GiftDetail".equals(taskInfo.action)) {
             IntentUtil.jumpGiftDetail(context, taskInfo.id);
         } else if ("PostDetail".equals(taskInfo.action)) {
-            IntentUtil.jumpPostDetail(context, taskInfo.id);
+            if (TextUtils.isEmpty(taskInfo.data)) {
+                IntentUtil.jumpPostDetail(context, taskInfo.id);
+            } else {
+                IntentUtil.jumpPostReplyDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
+            }
         } else if ("Sdk".equals(taskInfo.action)) {
             switch (taskInfo.id) {
                 case TaskTypeUtil.INFO_ONE_SDK_RECHARGE:
@@ -599,4 +604,5 @@ public class IntentUtil {
             }
         }
     }
+
 }
