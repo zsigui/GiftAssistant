@@ -1,3 +1,40 @@
+# 版本变更日志:
+
+## V1.3.4 -> V1.3.5
+
+#### 目标:
+
+    1) 统一 LOG 调用规范，添加文件配置 LOG 输出
+
+    2) 统一 Toast 提示内容
+
+    3) 统一 轮播图 / Web / 任务 / 推送 等多处的跳转页面和特殊代码块调用逻辑
+
+    4) 尽量解决出现的BUG
+
+#### 改动内容:
+
+    1) 添加 util/log 模块，修改 config/AppDebugConfig.java ，涉及全局 KLog 与 Debug_Sdk 调用处；此外，
+    在 asynctask/AsyncTask_InitApplication.java 中添加了文件配置 LOG 输出逻辑判断
+
+    2) 提取所有的客户端出现的 Toast 提示内容到 config/ConstString.java 中，修改 ToastUtil.java 的 blur 方法
+    逻辑，涉及全体 ToastUtil.blurXXX() 调用处
+
+    3) config/util/BannerTypeUtil.java、listener/WebViewInterface.java、ui/fragment/TaskFragment.java、
+    manager/PushMessageManager.java 各处添加调用统一结构逻辑方法
+
+    4) SocketIOManager.java 逻辑重连判断缺失，进行了 log 输出调整和 mIsConnecting 判断
+
+    5) 提取全局静态配置变量到 BuildConfig 中，采用 gradle.properties + app.gradle 协调模式配置，增加了
+    dDebug (测试环境测试参数) 、rDebug (正式环境测试参数)、rRelease (正式环境正式参数，发布模式) 等三个
+    执行配置模式，减少人为修改可能的出错率
+
+## V1.3.3 -> V1.3.4
+
+#### 特别说明:
+
+    无实际大调整，开启统计重新出包
+
 
 # 版本变更日志:
 
