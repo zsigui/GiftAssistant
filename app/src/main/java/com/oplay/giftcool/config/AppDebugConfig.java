@@ -29,6 +29,8 @@ public class AppDebugConfig {
 
     public static final String TAG_UTIL = "gcool_debug_util";
 
+    public static final String TAG_WIDGET = "gcool_debug_widget";
+
     public static final String TAG_RECEIVER = "gcool_debug_receiver";
 
     public static final String TAG_ENCRYPT = "gcool_debug_encrypt";

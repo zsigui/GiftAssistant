@@ -61,7 +61,6 @@ public class GiftLimitListDataNewFragment extends BaseFragment_Refresh<TimeData<
 
         mLoadingView = inflater.inflate(R.layout.view_item_footer, mDataView, false);
         mLoadingView.setVisibility(View.GONE);
-        mDataView.addFooterView(mLoadingView);
     }
 
     @Override

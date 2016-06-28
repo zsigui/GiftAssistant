@@ -1,14 +1,9 @@
 package com.oplay.giftcool.ui.fragment.search;
 
-import android.animation.Animator;
-import android.animation.TimeInterpolator;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -33,7 +28,6 @@ import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -226,140 +220,6 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
                 DialogManager.getInstance().showHopeGift(getChildFragmentManager(), mId, mName, mId == 0);
                 break;
         }
-    }
-
-    // 该类暂时可能导致部分4.4.4系统的机型爆StackOverflowError错误，故暂时停止使用
-    static class ScrollListener implements View.OnTouchListener {
-
-        private final TimeInterpolator DEFAULT_INTERPOLATOR = new AccelerateDecelerateInterpolator();
-        private final int DEFAULT_ANIM_DURATION = 200;
-        private final int MIN_SLIDE_UP_DISTANCE = 10;
-
-        private WeakReference<ImageView> mReference;
-        private int mLastY;
-        private int mDiffY;
-        private int mSinceDirectionChange;
-
-        public ScrollListener(ImageView iv) {
-            mReference = new WeakReference<ImageView>(iv);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            //KLog.e("test-test", "getX = " + event.getY() + ", " + event.getX());
-            if (mReference == null || mReference.get() == null) {
-                return false;
-            }
-            ImageView iv = mReference.get();
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mLastY = (int) event.getY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    int curY = (int) event.getY();
-                    mDiffY = curY - mLastY;
-                    if ((mDiffY > 0 && mSinceDirectionChange < 0)
-                            || (mDiffY < 0 && mSinceDirectionChange > 0)) {
-                        // 滑动方向相对于最初改变，取消动画
-                        iv.animate().cancel();
-                        mSinceDirectionChange = 0;
-                    }
-                    mSinceDirectionChange += mDiffY;
-                    if (mSinceDirectionChange < 0 && iv.getVisibility() == View.VISIBLE) {
-                        animationHide(iv);
-                    } else if (mSinceDirectionChange > 0 && iv.getVisibility() == View.GONE) {
-                        animationShow(iv);
-                    }
-                    mLastY = curY;
-                    break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
-                    break;
-            }
-            return false;
-        }
-
-        /**
-         * 执行隐藏按钮动画
-         */
-        private void animationHide(ImageView iv) {
-            ViewPropertyAnimator animator = iv.animate()
-                    .translationX(iv.getWidth())
-                    .setInterpolator(DEFAULT_INTERPOLATOR)
-                    .setDuration(DEFAULT_ANIM_DURATION);
-            animator.setListener(hideListener);
-            animator.start();
-        }
-
-        /**
-         * 执行显示按钮动画
-         */
-        private void animationShow(ImageView iv) {
-            ViewPropertyAnimator animator = iv.animate()
-                    .translationX(0)
-                    .setInterpolator(DEFAULT_INTERPOLATOR)
-                    .setDuration(DEFAULT_ANIM_DURATION);
-            animator.setListener(showListener);
-            animator.start();
-        }
-
-        /**
-         * 隐藏按钮动画监听器
-         */
-        private Animator.AnimatorListener hideListener = new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (mReference != null && mReference.get() != null) {
-                    mReference.get().setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                if (mReference != null && mReference.get() != null) {
-                    animationShow(mReference.get());
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        };
-
-        /**
-         * 显示按钮动画监听器
-         */
-        private Animator.AnimatorListener showListener = new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (mReference != null && mReference.get() != null) {
-                    mReference.get().setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                if (mReference != null && mReference.get() != null) {
-                    animationHide(mReference.get());
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        };
     }
 
 }

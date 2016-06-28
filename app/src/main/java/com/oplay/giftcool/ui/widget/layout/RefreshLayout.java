@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
@@ -101,16 +100,16 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
                 R.color.co_btn_green);
     }
 
-    public void setAdapter(ListAdapter adapter) {
-        if (mListView != null) {
-            if (mListView.getFooterViewsCount() == 0) {
-                mListView.addFooterView(mViewFooter);
-            }
-            mListView.setAdapter(adapter);
-            // 添加只是为了在ListView的setAdapter方法时将Adapter包装成HeaderViewListAdapter。因此并不需要footer，因此添加后再移除,
-            mListView.removeFooterView(mViewFooter);
-        }
-    }
+//    public void setAdapter(ListAdapter adapter) {
+//        if (mListView != null) {
+//            if (mListView.getFooterViewsCount() == 0) {
+//                mListView.addFooterView(mViewFooter);
+//            }
+//            mListView.setAdapter(adapter);
+//            // 添加只是为了在ListView的setAdapter方法时将Adapter包装成HeaderViewListAdapter。因此并不需要footer，因此添加后再移除,
+//            mListView.removeFooterView(mViewFooter);
+//        }
+//    }
 
 //	@Override
 //	public boolean canChildScrollUp() {
