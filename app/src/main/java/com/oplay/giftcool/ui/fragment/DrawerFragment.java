@@ -121,9 +121,9 @@ public class DrawerFragment extends BaseFragment {
             }
             tvNick.setText(nick);
             tvName.setText(name);
+            tvUnLogin.setVisibility(View.GONE);
             tvScore.setVisibility(View.VISIBLE);
             tvBean.setVisibility(View.VISIBLE);
-            tvUnLogin.setVisibility(View.GONE);
             tvScore.setText(String.valueOf(user.score));
             tvBean.setText(String.valueOf(user.bean));
             ViewUtil.showAvatarImage(user.avatar, ivIcon, AccountManager.getInstance().isLogin());

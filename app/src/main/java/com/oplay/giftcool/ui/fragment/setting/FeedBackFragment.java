@@ -82,7 +82,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
         etContent.addTextChangedListener(this);
         etContent.setOnEditorActionListener(this);
         tvTypeTitle.setOnClickListener(this);
-        etPhone.addTextChangedListener(this);
+//        etPhone.addTextChangedListener(this);
     }
 
     private long mLastClickTime = 0;
@@ -145,7 +145,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
             s.subSequence(0, 500);
         }
         tvContentCount.setText(String.format("%s/500", s.toString().length()));
-        if (length < 10 || etPhone.getText().toString().trim().isEmpty()) {
+        if (length < 10) {
             if (getContext() != null && getContext() instanceof ToolbarListener) {
                 ((ToolbarListener) getContext()).setRightBtnEnabled(false);
             }
