@@ -71,7 +71,7 @@ public class Util_Loadlib {
             try {
                 localInputStream = context.getAssets().open(libAssetsPath);
             } catch (Throwable e) {
-                Debug_Log.e(e);
+                Debug_Log.v(e);
             }
             if (localInputStream == null) {
                 return isValid;

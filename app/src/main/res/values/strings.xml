@@ -59,6 +59,7 @@
     <!-- 活动-详情 -->
     <string name = "st_post_replay_text_hint" >我也说一句</string >
     <string name = "st_post_replay_btn_send" >发表</string >
+    <string name = "st_post_see_back" >查看原帖</string >
 
     <!-- 礼包状态 -->
     <string name = "st_gift_or" >或</string >
@@ -329,7 +330,7 @@
     <string name = "st_share_result_success" >分享成功</string >
     <string name = "st_share_result_quick" >取消分享</string >
     <string name = "st_share_result_failed" >分享失败</string >
-    <string name = "share_key_mm_id" >wx-share-key</string >
+    <string name = "share_key_mm_id" >wx-deal-key</string >
     <string name = "st_share_mm_friends" >微信好友</string >
     <string name = "st_share_mm_moments" >朋友圈</string >
     <string name = "st_share_qq_zone" >QQ空间</string >

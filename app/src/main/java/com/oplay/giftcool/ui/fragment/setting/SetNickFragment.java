@@ -12,7 +12,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.listener.OnBackPressListener;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -74,9 +74,9 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
         if (getContext() != null && getContext() instanceof ToolbarListener) {
             ((ToolbarListener) getContext()).showRightBtn(View.VISIBLE,
                     mApp.getResources().getString(R.string.st_user_set_nick_save));
-            ((ToolbarListener) getContext()).setRightBtnListener(new OnShareListener() {
+            ((ToolbarListener) getContext()).setHandleListener(new OnHandleListener() {
                 @Override
-                public void share() {
+                public void deal() {
                     handleSave();
                 }
             });
@@ -123,12 +123,12 @@ public class SetNickFragment extends BaseFragment implements OnBackPressListener
             return;
         }
         mIsLoading = true;
-        showLoading();
         final String nick = etNick.getText().toString().trim();
         if (!NetworkUtil.isConnected(getContext())) {
-            refreshFailEnd();
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
             return;
         }
+        showLoading();
         if (mCall != null) {
             mCall.cancel();
         }

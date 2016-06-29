@@ -9,5 +9,5 @@ public interface ToolbarListener {
 
 	void setRightBtnEnabled(boolean enabled);
 
-	void setRightBtnListener(OnShareListener saveListener);
+	void setHandleListener(OnHandleListener handleListener);
 }

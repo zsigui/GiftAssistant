@@ -377,7 +377,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                     }
                     if (response != null && response.isSuccessful()) {
                         if (response.body() != null && response.body().isSuccess()) {
-                            ToastUtil.showShort(ConstString.TOAST_FOCUS_SUCCESS);
+                            ToastUtil.showShort(ConstString.TOAST_QUICK_FOCUS_SUCCESS);
                             removeData(mReqBase.data.gameId);
                             return;
                         }

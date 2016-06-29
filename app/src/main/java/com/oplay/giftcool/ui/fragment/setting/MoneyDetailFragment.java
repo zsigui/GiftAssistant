@@ -8,7 +8,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
@@ -53,9 +53,9 @@ public class MoneyDetailFragment extends BaseFragment_WebView implements OnBackP
             ToolbarListener activity = ((ToolbarListener) getContext());
             activity.showRightBtn(View.VISIBLE, mApp.getResources().getString(R.string.st_wallet_money_note));
             activity.setRightBtnEnabled(true);
-            activity.setRightBtnListener(new OnShareListener() {
+            activity.setHandleListener(new OnHandleListener() {
                 @Override
-                public void share() {
+                public void deal() {
                     long time = System.currentTimeMillis();
                     if (time - mLastClickTime < 500) {
                         mLastClickTime = time;

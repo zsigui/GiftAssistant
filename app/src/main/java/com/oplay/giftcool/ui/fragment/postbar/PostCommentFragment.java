@@ -62,6 +62,7 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
     private TextView tvSend;
     private View llBackground;
     private int mLastSoftInputHeight;
+    private int mPostId;
 
     /**
      * 请求参数字典
@@ -103,20 +104,24 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
             getActivity().onBackPressed();
             return;
         }
-        final int postId = getArguments().getInt(KEY_POST);
+        mPostId = getArguments().getInt(KEY_POST);
         final int commentId = getArguments().getInt(KEY_COMMENT);
 
-        reqToken.postId = postId;
-        reqData.put(KEY_POST_ID, postId);
+        reqToken.postId = mPostId;
+        reqData.put(KEY_POST_ID, mPostId);
         reqData.put(KEY_COMMENT_ID, commentId);
         setReplyTo(commentId, KEY_COMMENT_TO_DEFAULT);
 //		showBar(true, null);
-        loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), postId, commentId));
+        loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_COMMENT_LIST), mPostId, commentId));
     }
 
     @Override
     protected void lazyLoad() {
-
+        if (getActivity() != null) {
+            ((PostDetailActivity) getActivity()).setPostId(mPostId);
+            ((PostDetailActivity) getActivity()).showRightBtn(View.VISIBLE, ConstString.TEXT_POST_BTN);
+        }
+        reloadPage();
     }
 
     @Override
@@ -166,6 +171,14 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
                 }
                 handleSend();
                 break;
+        }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (getActivity() != null) {
+            ((PostDetailActivity) getActivity()).showRightBtn(View.INVISIBLE, ConstString.TEXT_POST_BTN);
         }
     }
 

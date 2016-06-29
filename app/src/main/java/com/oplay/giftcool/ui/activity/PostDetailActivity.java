@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -16,6 +18,8 @@ import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.engine.NoEncryptEngine;
 import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.listener.OnHandleListener;
+import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
@@ -33,11 +37,17 @@ import retrofit2.Retrofit;
 /**
  * Created by zsigui on 16-4-11.
  */
-public class PostDetailActivity extends BaseAppCompatActivity {
+public class PostDetailActivity extends BaseAppCompatActivity implements ToolbarListener {
 
     private NoEncryptEngine mEngine;
 
     private List<Integer> mTypeHierarchy;
+    private int mPostId;
+    private int identifierId = 100000;
+
+    public int getIdentifierId() {
+        return identifierId++;
+    }
 
     @Override
     protected void initView() {
@@ -65,6 +75,45 @@ public class PostDetailActivity extends BaseAppCompatActivity {
     @Override
     protected void initMenu(@NonNull Toolbar toolbar) {
         super.initMenu(toolbar);
+
+    }
+
+    private OnHandleListener mHandleListener;
+    private TextView btnToolRight;
+
+    public void showRightBtn(int visibility, String text) {
+        if (mToolbar == null)
+            return;
+        iniToolRight(text);
+        if (btnToolRight != null) {
+            btnToolRight.setVisibility(visibility);
+        }
+    }
+
+    private void iniToolRight(String text) {
+        if (btnToolRight == null) {
+            ViewStub v = getViewById(mToolbar, R.id.vs_bar_right);
+            if (v != null) {
+                v.inflate();
+                btnToolRight = getViewById(R.id.btn_bar_right);
+                btnToolRight.setOnClickListener(this);
+                btnToolRight.setText(text);
+            }
+        }
+    }
+
+    @Override
+    public void setRightBtnEnabled(boolean enabled) {
+        if (mToolbar == null)
+            return;
+        iniToolRight("");
+        if (btnToolRight != null) {
+            btnToolRight.setEnabled(enabled);
+        }
+    }
+
+    public void setHandleListener(OnHandleListener handleListener) {
+        mHandleListener = handleListener;
     }
 
     @Override
@@ -77,6 +126,13 @@ public class PostDetailActivity extends BaseAppCompatActivity {
         switch (v.getId()) {
             case R.id.iv_bar_back:
                 finish();
+                break;
+            case R.id.btn_bar_right:
+                if (mHandleListener != null) {
+                    mHandleListener.deal();
+                } else {
+                    IntentUtil.jumpPostDetail(this, mPostId);
+                }
                 break;
         }
     }
@@ -95,14 +151,16 @@ public class PostDetailActivity extends BaseAppCompatActivity {
             return;
         }
         mTypeHierarchy.add(type);
-        final int postId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
+        mPostId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
         switch (type) {
             case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
-                replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(postId), "", true);
+                replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(mPostId),
+                        String.valueOf(getIdentifierId()), "");
                 break;
             case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
                 final int commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
-                replaceFragWithTitle(R.id.fl_container, PostCommentFragment.newInstance(postId, commentId), "", true);
+                replaceFragWithTitle(R.id.fl_container, PostCommentFragment.newInstance(mPostId, commentId),
+                        String.valueOf(getIdentifierId()), "");
                 break;
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
@@ -161,4 +219,7 @@ public class PostDetailActivity extends BaseAppCompatActivity {
         return mEngine;
     }
 
+    public void setPostId(int postId) {
+        mPostId = postId;
+    }
 }

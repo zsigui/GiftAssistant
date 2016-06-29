@@ -15,9 +15,10 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.listener.OnBackPressListener;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -96,9 +97,9 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
             ((ToolbarListener) getContext()).showRightBtn(View.VISIBLE,
                     mApp.getResources().getString(R.string.st_feedback_btn));
             ((ToolbarListener) getContext()).setRightBtnEnabled(false);
-            ((ToolbarListener) getContext()).setRightBtnListener(new OnShareListener() {
+            ((ToolbarListener) getContext()).setHandleListener(new OnHandleListener() {
                 @Override
-                public void share() {
+                public void deal() {
                     final long curTime = System.currentTimeMillis();
                     if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
                         mLastClickTime = curTime;
@@ -201,6 +202,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                 if (mCall != null) {
                     mCall.cancel();
                 }
+                showLoading();
                 ReqFeedBack feedBack = new ReqFeedBack();
                 feedBack.contact = etPhone.getText().toString();
                 feedBack.content = etContent.getText().toString();
@@ -210,6 +212,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                     @Override
                     public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
                         mIsLoading = false;
+                        hideLoading();
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
@@ -232,6 +235,7 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
                     @Override
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         mIsLoading = false;
+                        hideLoading();
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
@@ -245,6 +249,19 @@ public class FeedBackFragment extends BaseFragment implements TextWatcher, TextV
     @Override
     public String getPageName() {
         return PAGE_NAME;
+    }
+
+    public void showLoading() {
+        if (getContext() != null && getChildFragmentManager() != null) {
+            DialogManager.getInstance().showLoadingDialog(getChildFragmentManager(),
+                    getContext().getString(R.string.st_user_set_avatar_loading));
+        }
+    }
+
+    public void hideLoading() {
+        if (getContext() != null) {
+            DialogManager.getInstance().hideLoadingDialog();
+        }
     }
 
     @Override

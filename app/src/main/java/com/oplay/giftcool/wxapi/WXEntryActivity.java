@@ -42,7 +42,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
          */
     @Override
     public void onReq(BaseReq baseReq) {
-        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "req from wx share : " + baseReq);
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "req from wx deal : " + baseReq);
         goToShowShare((ShowMessageFromWX.Req) baseReq);
         finish();
     }
@@ -52,7 +52,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
      */
     @Override
     public void onResp(BaseResp baseResp) {
-        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "resp from wx share : "
+        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "resp from wx deal : "
                 + (baseResp == null ? null : baseResp.errCode + ":" + baseResp.errStr));
         if (baseResp == null) {
 //            ToastUtil.showShort(getString(R.string.st_share_result_failed));

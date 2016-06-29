@@ -2,6 +2,7 @@ package com.oplay.giftcool.asynctask;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
@@ -26,6 +27,7 @@ import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.log.GCLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -136,12 +138,18 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
         doClearWorkForOldVer();
         Global.getInstalledAppNames();
-        // 判断是否今日首次打开APP
-        ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
-        if (judgeFirstOpenToday()) {
-            // 进行应用信息上报
-            reportedAppInfo(infos);
-        }
+        ThreadUtil.runInThread(new Runnable() {
+            @Override
+            public void run() {
+
+                // 判断是否今日首次打开APP
+                ArrayList<AppBaseInfo> infos = getAppInfos(assistantApp);
+                if (judgeFirstOpenToday()) {
+                    // 进行应用信息上报
+                    reportedAppInfo(infos);
+                }
+            }
+        });
 
         try {
             OuwanSDKManager.getInstance().init();
@@ -303,12 +311,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         HashSet<String> appNames = new HashSet<>();
 
         final ArrayList<AppBaseInfo> result = new ArrayList<>();
-        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(0);
         for (int i = 0; i < packages.size(); i++) {
             try {
                 final PackageInfo packageInfo = packages.get(i);
                 final AppBaseInfo info = new AppBaseInfo();
-                info.name = packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString();
+                info.name = pm.getApplicationLabel(pm.getApplicationInfo(packageInfo.packageName,
+                        PackageManager.GET_META_DATA)).toString();
                 appNames.add(info.name);
                 info.pkg = packageInfo.packageName;
                 info.vc = String.valueOf(packageInfo.versionCode);

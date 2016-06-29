@@ -35,10 +35,17 @@
                 android:textColor = "@android:color/white"
                 android:textSize = "@dimen/di_tool_bar_title_size" />
 
+        <ViewStub
+                android:id = "@+id/vs_bar_right"
+                android:layout_width = "match_parent"
+                android:layout_height = "?actionBarSize"
+                android:layout = "@layout/view_save" />
+
     </android.support.v7.widget.Toolbar >
+
     <FrameLayout
-            android:id="@+id/fl_container"
-            android:background="@color/co_common_content_bg"
+            android:id = "@+id/fl_container"
+            android:background = "@color/co_common_content_bg"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent" />
 

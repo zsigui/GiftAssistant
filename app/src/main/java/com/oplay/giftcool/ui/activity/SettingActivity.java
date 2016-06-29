@@ -13,7 +13,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -44,7 +44,7 @@ import java.util.List;
 public class SettingActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener,
         ToolbarListener {
 
-    private OnShareListener mSaveListener;
+    private OnHandleListener mSaveListener;
     private TextView btnToolRight;
     private List<Integer> mTypeHierarchy;
 
@@ -81,10 +81,10 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
         if (mToolbar == null)
             return;
         if (btnToolRight == null) {
-            ViewStub v = getViewById(mToolbar, R.id.vs_save);
+            ViewStub v = getViewById(mToolbar, R.id.vs_bar_right);
             if (v != null) {
                 v.inflate();
-                btnToolRight = getViewById(R.id.btn_bar_save);
+                btnToolRight = getViewById(R.id.btn_bar_right);
                 btnToolRight.setOnClickListener(this);
                 btnToolRight.setText(text);
             }
@@ -98,10 +98,10 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
         if (mToolbar == null)
             return;
         if (btnToolRight == null) {
-            ViewStub v = getViewById(mToolbar, R.id.vs_save);
+            ViewStub v = getViewById(mToolbar, R.id.vs_bar_right);
             if (v != null) {
                 v.inflate();
-                btnToolRight = getViewById(R.id.btn_bar_save);
+                btnToolRight = getViewById(R.id.btn_bar_right);
                 btnToolRight.setOnClickListener(this);
             }
         }
@@ -110,8 +110,8 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
         }
     }
 
-    public void setRightBtnListener(OnShareListener saveListener) {
-        mSaveListener = saveListener;
+    public void setHandleListener(OnHandleListener handleListener) {
+        mSaveListener = handleListener;
     }
 
     private void handleRedirect(Intent intent) {
@@ -195,9 +195,9 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
-            case R.id.btn_bar_save:
+            case R.id.btn_bar_right:
                 if (mSaveListener != null) {
-                    mSaveListener.share();
+                    mSaveListener.deal();
                 }
                 break;
         }

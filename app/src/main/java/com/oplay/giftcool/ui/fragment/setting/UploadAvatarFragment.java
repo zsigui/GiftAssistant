@@ -177,14 +177,14 @@ public class UploadAvatarFragment extends BaseFragment {
      * 执行上传头像的任务
      */
     public void onRequestUploadPortrait(final String filePath) {
-        showLoading();
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(getContext())) {
-                    hideLoading();
+                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
                     return;
                 }
+                showLoading();
                 if (mCall != null) {
                     mCall.cancel();
                 }

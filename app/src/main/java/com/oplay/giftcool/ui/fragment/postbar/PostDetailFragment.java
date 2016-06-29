@@ -130,7 +130,6 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
         }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         int postId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
-
         mAdapter = new PostReplyAdapter(getContext(), mPostImg);
         GridLayoutManager gld = new GridLayoutManager(getContext(), 4);
         rlContainer.setLayoutManager(gld);
@@ -149,6 +148,9 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
 
     @Override
     protected void lazyLoad() {
+        if (getActivity() != null) {
+            ((PostDetailActivity) getActivity()).showRightBtn(View.INVISIBLE, ConstString.TEXT_POST_BTN);
+        }
         reloadPage();
     }
 

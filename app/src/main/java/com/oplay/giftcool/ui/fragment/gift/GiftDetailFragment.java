@@ -35,7 +35,7 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.download.listener.OnProgressUpdateListener;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
@@ -155,9 +155,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
         ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
         if (getActivity() instanceof GiftDetailActivity) {
-            ((GiftDetailActivity) getActivity()).setOnShareListener(new OnShareListener() {
+            ((GiftDetailActivity) getActivity()).setOnHandleListener(new OnHandleListener() {
                 @Override
-                public void share() {
+                public void deal() {
                     if (mData == null || mData.giftData == null || mData.gameData == null) {
                         ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
                         return;

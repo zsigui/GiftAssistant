@@ -15,7 +15,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.listener.OnShareListener;
+import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
@@ -30,7 +30,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
 
     private TextView tvTag;
     private ImageView ivShare;
-    private OnShareListener mOnShareListener;
+    private OnHandleListener mOnHandleListener;
     private int mId;
     private GiftDetailFragment mDetailFragment;
 
@@ -90,8 +90,8 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
         }
     }
 
-    public void setOnShareListener(OnShareListener shareClickListener) {
-        mOnShareListener = shareClickListener;
+    public void setOnHandleListener(OnHandleListener shareClickListener) {
+        mOnHandleListener = shareClickListener;
     }
 
     public void showLimitTag(boolean isShow, @StringRes int textId) {
@@ -125,8 +125,8 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
     public void onClick(View v) {
         super.onClick(v);
         if (v.getId() == R.id.iv_bar_share) {
-            if (mOnShareListener != null) {
-                mOnShareListener.share();
+            if (mOnHandleListener != null) {
+                mOnHandleListener.deal();
             } else {
                 ToastUtil.showShort(ConstString.TOAST_SHARE_NO_OFFER);
             }
@@ -136,7 +136,7 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
     @Override
     public void release() {
         super.release();
-        mOnShareListener = null;
+        mOnHandleListener = null;
         if (tvTag != null && tvTag.getBackground() != null) {
             tvTag.getBackground().setCallback(null);
         }
