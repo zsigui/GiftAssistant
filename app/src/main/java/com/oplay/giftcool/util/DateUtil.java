@@ -184,17 +184,24 @@ public class DateUtil {
         current.setTime(date);
         current.set(Calendar.SECOND, 0);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault());
+//        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat format;
         if (current.after(today) && current.before(tomorrow)) {
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "明天" + format.format(date);
         } else if (current.after(tomorrow)) {
-            SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
-            return format.format(date);
+            if (current.get(Calendar.HOUR) == 0
+                    && current.get(Calendar.MINUTE) == 0) {
+                format = new SimpleDateFormat("MM-dd", Locale.getDefault());
+                return format.format(date);
+            } else {
+                format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
+                return format.format(date);
+            }
         } else if (current.getTime().compareTo(today.getTime()) == 0) {
             return "明天";
         } else {
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "今天" + format.format(date);
         }
     }

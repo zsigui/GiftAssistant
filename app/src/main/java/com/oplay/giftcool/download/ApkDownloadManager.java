@@ -606,20 +606,22 @@ public class ApkDownloadManager extends BaseApkCachedDownloadManager implements 
 
     @Override
     public boolean onFileAlreadyExist(FileDownloadTask fileDownloadTask) {
-        GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
-        if (appInfo != null) {
-            stopDownloadingTask(appInfo);
-            appInfo.downloadStatus = DownloadStatus.FINISHED;
-            appInfo.completeSize = appInfo.apkFileSize;
-            mManagerList.add(getEndOfPaused(), appInfo);
-            mFinishedCnt++;
-            DownloadNotificationManager.showDownload(mApplicationContext);
-            DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
-            notifyDownloadStatusListeners(appInfo);
-            if (AssistantApp.getInstance().isShouldAutoInstall()) {
-                appInfo.startInstall();
-            }
-        }
+        AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "文件已经存在，执行下载完成操作");
+        onDownloadSuccess(fileDownloadTask);
+//        GameDownloadInfo appInfo = mUrl_AppInfo.get(fileDownloadTask.getRawDownloadUrl());
+//        if (appInfo != null) {
+//            stopDownloadingTask(appInfo);
+//            appInfo.downloadStatus = DownloadStatus.FINISHED;
+//            appInfo.completeSize = appInfo.apkFileSize;
+//            mManagerList.add(getEndOfPaused(), appInfo);
+//            mFinishedCnt++;
+//            DownloadNotificationManager.showDownload(mApplicationContext);
+//            DownloadNotificationManager.showDownloadComplete(mApplicationContext, appInfo);
+//            notifyDownloadStatusListeners(appInfo);
+//            if (AssistantApp.getInstance().isShouldAutoInstall()) {
+//                appInfo.startInstall();
+//            }
+//        }
         return false;
     }
 

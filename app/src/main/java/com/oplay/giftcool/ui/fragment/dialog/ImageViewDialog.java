@@ -27,13 +27,13 @@ import java.io.File;
 /**
  * Created by zsigui on 16-2-1.
  */
-public class AllViewDialog extends DialogFragment implements View.OnClickListener {
+public class ImageViewDialog extends DialogFragment implements View.OnClickListener {
 
     private static final String KEY_BANNER = "key_data_banner";
     private IndexBanner mData;
 
-    public static AllViewDialog newInstance(IndexBanner banner) {
-        AllViewDialog dialog = new AllViewDialog();
+    public static ImageViewDialog newInstance(IndexBanner banner) {
+        ImageViewDialog dialog = new ImageViewDialog();
         Bundle b = new Bundle();
         b.putSerializable(KEY_BANNER, banner);
         dialog.setArguments(b);

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
@@ -130,6 +131,8 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
     }
 
     private void showCouponGuide() {
+        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "mFragment = " + mFragment
+        + ", mType = ");
         if (mFragment != null
                 && (mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
                 || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {

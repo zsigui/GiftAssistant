@@ -33,7 +33,9 @@ import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
-import com.oplay.giftcool.ui.fragment.dialog.AllViewDialog;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
@@ -70,6 +72,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     // 判断是否今日首次打开APP
     public static boolean sIsTodayFirstOpen = false;
     public static boolean sIsTodayFirstOpenForBroadcast = false;
+    // 判断并显示弹窗
+    public static boolean sIsLoginStateUnavailableShow = false;
 
     private long mLastClickTime = 0;
     private int mCurSelectedItem = INDEX_DEFAULT;
@@ -495,9 +499,37 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
 
         //没更新才显示欢迎
-        if (!handleUpdateApp()) {
+        if (sIsLoginStateUnavailableShow) {
+            handleLoginUnavailable();
+        } else if (!handleUpdateApp()) {
             handleFirstOpen();
         }
+    }
+
+    /**
+     * 处理显示登录失效的弹窗
+     */
+    private void handleLoginUnavailable() {
+        final ConfirmDialog dialog = ConfirmDialog.newInstance();
+        dialog.setTitle("登录失效");
+        dialog.setContent(ConstString.TOAST_SESSION_UNAVAILABLE);
+        dialog.setNegativeVisibility(View.GONE);
+        dialog.setPositiveVisibility(View.VISIBLE);
+        dialog.setPositiveBtnText("我知道了");
+        dialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+            @Override
+            public void onCancel() {
+                dialog.dismissAllowingStateLoss();
+            }
+
+            @Override
+            public void onConfirm() {
+                dialog.dismissAllowingStateLoss();
+                IntentUtil.jumpLoginNoToast(MainActivity.this);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "session_unavailable");
+        sIsLoginStateUnavailableShow = false;
     }
 
     private void jumpFragment() {
@@ -694,7 +726,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 && AccountManager.getInstance().getUserInfo().isFirstLogin
                 && mHandler != null) {
             // 首次登录显示弹窗
-            AllViewDialog dialog = AllViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
+            ImageViewDialog dialog = ImageViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
             dialog.show(getSupportFragmentManager(), "broadcast");
             AccountManager.getInstance().getUserInfo().isFirstLogin = false;
         }

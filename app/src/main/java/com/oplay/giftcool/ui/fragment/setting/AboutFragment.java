@@ -11,14 +11,12 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
-import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
-import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
@@ -142,7 +140,8 @@ public class AboutFragment extends BaseFragment {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.rl_update:
-                handleUpdate();
+//                handleUpdate();
+                DialogManager.getInstance().showUpdateDialog(mContext, getChildFragmentManager(), true, mUpdateInfo);
                 break;
             case R.id.rl_qq:
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
@@ -150,46 +149,46 @@ public class AboutFragment extends BaseFragment {
         }
     }
 
-    private void handleUpdate() {
-        if (mUpdateInfo == null || !mUpdateInfo.checkoutUpdateInfo(getContext())) {
-            return;
-        }
-        final IndexGameNew appInfo = new IndexGameNew();
-        appInfo.id = Global.GIFTCOOL_GAME_ID;
-        appInfo.name = getString(R.string.app_name);
-        appInfo.apkFileSize = mUpdateInfo.apkFileSize;
-        //没icon地址，随便填个
-        appInfo.img = mUpdateInfo.downloadUrl;
-        appInfo.downloadUrl = mUpdateInfo.downloadUrl;
-        appInfo.destUrl = mUpdateInfo.downloadUrl;
-        appInfo.packageName = mUpdateInfo.packageName;
-        appInfo.versionName = mUpdateInfo.versionName;
-        appInfo.size = appInfo.getApkFileSizeStr();
-        appInfo.initAppInfoStatus(getContext());
-        ConfirmDialog confirmDialog = getUpdateDialog(appInfo, mUpdateInfo.content);
-        confirmDialog.show(getFragmentManager(), "update");
-    }
-
-    private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
-        final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
-        confirmDialog.setTitle("更新提示");
-        confirmDialog.setContent(content);
-        confirmDialog.setPositiveBtnText("马上更新");
-        confirmDialog.setNegativeBtnText("暂不更新");
-        confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-            @Override
-            public void onCancel() {
-                confirmDialog.dismiss();
-            }
-
-            @Override
-            public void onConfirm() {
-                appInfo.startDownload();
-                confirmDialog.dismiss();
-            }
-        });
-        return confirmDialog;
-    }
+//    private void handleUpdate() {
+//        if (mUpdateInfo == null || !mUpdateInfo.checkoutUpdateInfo(getContext())) {
+//            return;
+//        }
+//        final IndexGameNew appInfo = new IndexGameNew();
+//        appInfo.id = Global.GIFTCOOL_GAME_ID;
+//        appInfo.name = getString(R.string.app_name);
+//        appInfo.apkFileSize = mUpdateInfo.apkFileSize;
+//        //没icon地址，随便填个
+//        appInfo.img = mUpdateInfo.downloadUrl;
+//        appInfo.downloadUrl = mUpdateInfo.downloadUrl;
+//        appInfo.destUrl = mUpdateInfo.downloadUrl;
+//        appInfo.packageName = mUpdateInfo.packageName;
+//        appInfo.versionName = mUpdateInfo.versionName;
+//        appInfo.size = appInfo.getApkFileSizeStr();
+//        appInfo.initAppInfoStatus(getContext());
+//        ConfirmDialog confirmDialog = getUpdateDialog(appInfo, mUpdateInfo.content);
+//        confirmDialog.show(getFragmentManager(), "update");
+//    }
+//
+//    private ConfirmDialog getUpdateDialog(final IndexGameNew appInfo, final String content) {
+//        final ConfirmDialog confirmDialog = ConfirmDialog.newInstance();
+//        confirmDialog.setTitle("更新提示");
+//        confirmDialog.setContent(content);
+//        confirmDialog.setPositiveBtnText("马上更新");
+//        confirmDialog.setNegativeBtnText("暂不更新");
+//        confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//            @Override
+//            public void onCancel() {
+//                confirmDialog.dismiss();
+//            }
+//
+//            @Override
+//            public void onConfirm() {
+//                appInfo.startDownload();
+//                confirmDialog.dismiss();
+//            }
+//        });
+//        return confirmDialog;
+//    }
 
     @Override
     public String getPageName() {

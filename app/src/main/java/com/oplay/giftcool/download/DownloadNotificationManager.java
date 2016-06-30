@@ -59,9 +59,9 @@ public class DownloadNotificationManager {
 
     public static void showDownload(Context context) {
         try {
-            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "显示下载Notification");
 
             int count = ApkDownloadManager.getInstance(context).getEndOfPaused();
+            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "显示下载Notification，当前正在下载数:" + count);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service
                     .NOTIFICATION_SERVICE);
             if (count > 0) {

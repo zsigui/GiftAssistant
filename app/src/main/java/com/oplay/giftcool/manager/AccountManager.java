@@ -25,6 +25,7 @@ import com.oplay.giftcool.model.data.resp.UserSession;
 import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -233,6 +234,7 @@ public class AccountManager implements OnFinishListener {
         if (judgeIsSessionFailed(response)) {
 //            ToastUtil.showShort(mContext.getResources().getString(R.string.st_hint_un_login));
             ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
+            MainActivity.sIsLoginStateUnavailableShow = true;
         }
     }
 

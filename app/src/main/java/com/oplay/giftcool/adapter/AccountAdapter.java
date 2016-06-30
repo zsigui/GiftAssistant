@@ -1,6 +1,7 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,7 @@ public class AccountAdapter extends BaseListAdapter<String> implements Filterabl
 
 		@Override
 		protected FilterResults performFiltering(CharSequence prefix) {
-			if (mData == null) {
+			if (mData == null || TextUtils.isEmpty(prefix)) {
 				return null;
 			}
 			FilterResults results = new FilterResults();

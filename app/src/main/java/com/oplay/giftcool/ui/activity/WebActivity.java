@@ -36,7 +36,6 @@ public class WebActivity extends BaseAppCompatActivity {
         String url = intent.getStringExtra(KeyConfig.KEY_DATA);
         String title = intent.getStringExtra(KeyConfig.KEY_TITLE);
         AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "url = " + url);
-        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "handle intent = " + intent + ", url = " + url);
         replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), title);
     }
 

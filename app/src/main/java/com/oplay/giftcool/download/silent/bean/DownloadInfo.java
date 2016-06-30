@@ -163,4 +163,12 @@ public class DownloadInfo {
         }
         return temp + Global.APK_FILE_NAME_SUFFIX;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o == this)
+                || (o != null
+                && (o instanceof DownloadInfo)
+                && ((DownloadInfo) o).getDownloadUrl().equals(getDownloadUrl()));
+    }
 }

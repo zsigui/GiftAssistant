@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -250,7 +251,14 @@ public class DialogManager {
      * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
      */
     public boolean showUpdateDialog(final Context context, final FragmentManager fm, boolean forceShow) {
-        final UpdateInfo updateInfo = AssistantApp.getInstance().getUpdateInfo();
+        return showUpdateDialog(context, fm, forceShow, AssistantApp.getInstance().getUpdateInfo());
+    }
+
+    /**
+     * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
+     */
+    public boolean showUpdateDialog(final Context context, final FragmentManager fm, boolean forceShow
+            , final UpdateInfo updateInfo) {
         if (updateInfo != null && updateInfo.checkoutUpdateInfo(context)) {
             final IndexGameNew appInfo = new IndexGameNew();
             appInfo.id = Global.GIFTCOOL_GAME_ID;
@@ -264,12 +272,23 @@ public class DialogManager {
             appInfo.versionName = updateInfo.versionName;
             appInfo.size = appInfo.getApkFileSizeStr();
             appInfo.initFile();
-            if (forceShow && appInfo.isFileExists()) {
+            if (forceShow || appInfo.isFileExists()) {
                 appInfo.initAppInfoStatus(context);
                 BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
                         updateInfo.updatePercent);
                 confirmDialog.show(fm, "update");
                 return true;
+            } else {
+                if (!SilentDownloadManager.getInstance().contains(appInfo.downloadUrl)) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "start to download app silent!");
+                    DownloadInfo info = new DownloadInfo();
+                    info.setDestUrl(appInfo.destUrl);
+                    info.setDownloadUrl(appInfo.downloadUrl);
+                    info.setTotalSize(appInfo.apkFileSize);
+                    info.setMd5Sum(appInfo.apkMd5);
+                    info.setIsDownload(true);
+                    SilentDownloadManager.getInstance().startDownload(info);
+                }
             }
         }
         return false;
@@ -288,7 +307,7 @@ public class DialogManager {
         confirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
             @Override
             public void onCancel() {
-                if (appInfo.isSilent) {
+                if (!SilentDownloadManager.getInstance().contains(appInfo.downloadUrl)) {
                     // 允许默认先下载
                     DownloadInfo info = new DownloadInfo();
                     info.setDestUrl(appInfo.destUrl);

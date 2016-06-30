@@ -768,9 +768,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             mDialog.setContentView(v);
             mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
                     .MATCH_PARENT);
-        } else {
-            mDialog.show();
         }
+        mDialog.show();
         mIsFirstOpenPage = false;
     }
 }

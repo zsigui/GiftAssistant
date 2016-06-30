@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
@@ -17,6 +18,7 @@ import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
+import net.youmi.android.libs.common.util.Util_System_Intent;
 
 import java.io.File;
 import java.util.Locale;
@@ -43,6 +45,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
             // 安装新应用
             if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
                 try {
+                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "package_added : " + packName);
                     handleAppState(context, packName);
 //					handlePlayDownloadTask(context, packName);
                 } catch (Throwable e) {
@@ -52,6 +55,11 @@ public class PackageInstallReceiver extends BroadcastReceiver {
             if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {// 卸载应用
                 if (Global.getInstalledAppNames() != null) {
                     Global.getInstalledAppNames().remove(SystemUtil.getAppNameByPackName(context, packName));
+                }
+                if (AppConfig.PACKAGE_NAME.equals(packName)) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "package_removed : " + packName);
+                    Util_System_Intent.startActivityByPackageName(context, packName,
+                            Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
             }
             ThreadUtil.runOnUiThread(new Runnable() {

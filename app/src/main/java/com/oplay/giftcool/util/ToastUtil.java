@@ -79,20 +79,16 @@ public class ToastUtil {
 
     public static void blurThrow(Throwable t) {
         AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, t);
-//        ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-") + "哎呦，网络流血事故！");
         ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
     }
 
     public static <T> void blurErrorResp(Response<JsonRespBase<T>> response) {
         AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
         if (response == null || !response.isSuccessful()) {
-//            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-//                    + (response == null ? "呜，抽风了！" : response.message()));
             ToastUtil.showShort(ConstString.TOAST_SERVER_ERROR);
         } else if (response.body() == null || !response.body().isSuccess()) {
-//            ToastUtil.showShort((TextUtils.isEmpty(prefix) ? "" : prefix + "-")
-//                    + (response.body() == null ? "嚄，服务器大姨妈了？" : response.body().getMsg()));
-            ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
+            ToastUtil.showShort(response.body() == null ?
+                    ConstString.TOAST_SERVER_BAD_CALLBACK : response.body().getMsg());
         }
 
     }

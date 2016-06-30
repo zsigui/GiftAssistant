@@ -317,6 +317,7 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
+                                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mFragment = " + fragment);
                                 scorePayBack(response, isSeize, context, gift, button, fragment);
                             }
 
@@ -425,6 +426,8 @@ public class PayManager {
             dialog.setTitle(context.getResources().getString(R.string
                     .st_dialog_search_success));
         }
+        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "mFragment = " + fragment
+                + ", mType = " + GiftTypeUtil.getItemViewType(gift));
         dialog.setCouponCharge(GiftTypeUtil.getItemViewType(gift), fragment);
         // 统计
         staticsPay(context, StatisticsManager.ID.GIFT_GOLD_SEIZE,

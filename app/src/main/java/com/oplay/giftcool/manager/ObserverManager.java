@@ -178,6 +178,8 @@ public class ObserverManager {
         int ACTION_CHANGE_PHONE = 2;
         int ACTION_BIND_PHONE = 3;
         int ACTION_BIND_OUWAN = 4;
+        int ACTION_CHANGE_NET_STATE = 5;
+
 
         int ACTION_CODE_DEFAULT = -1;
         int ACTION_CODE_FAILED = 0;

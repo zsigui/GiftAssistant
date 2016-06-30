@@ -9,6 +9,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.silent.bean.DownloadInfo;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
@@ -31,7 +32,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by zsigui on 16-4-25.
  */
-public class SilentDownloadManager {
+public class SilentDownloadManager implements ObserverManager.UserActionListener {
 
     private ConcurrentHashMap<String, DownloadInfo> mTotalDownloadMap;
     private LinkedBlockingQueue<DownloadInfo> mWaitDownloadQueue;
@@ -55,6 +56,8 @@ public class SilentDownloadManager {
 
     private static SilentDownloadManager mInstance;
 
+    // 用于判断是否不管网络是否处于wifi下都进行下载
+    private boolean mForceDownload = false;
     private DownloadThread[] mThreads;
     private boolean mIsRunning = false;
 
@@ -72,6 +75,7 @@ public class SilentDownloadManager {
         mWaitDownloadQueue = new LinkedBlockingQueue<>();
         initDownloadTasks(context, dirPath);
         mContext = context;
+        ObserverManager.getInstance().addUserActionListener(this);
     }
 
     /**
@@ -120,7 +124,7 @@ public class SilentDownloadManager {
      */
     public synchronized void startDownload() {
         if (mIsRunning || mTotalDownloadMap.isEmpty()) {
-            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "mIsRunning = " + mIsRunning + ", totalMap.size = " +
+            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "下载器状态: " + mIsRunning + ", 当前下载列表数量: " +
                     mTotalDownloadMap.size());
             return;
         }
@@ -133,8 +137,15 @@ public class SilentDownloadManager {
                 info.setIsDownload(false);
                 mWaitDownloadQueue.remove(info);
             } else {
-                info.setIsDownload(true);
+                if (!mWaitDownloadQueue.contains(info)) {
+                    info.setIsDownload(true);
+                    mWaitDownloadQueue.add(info);
+                }
             }
+        }
+        if (!mForceDownload && !NetworkUtil.isWifiConnected(mContext)) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "正处于非WIFI网络下，不进行强制下载……");
+            return;
         }
         if (mThreads == null) {
             mThreads = new DownloadThread[1];
@@ -330,33 +341,47 @@ public class SilentDownloadManager {
      * 此时会记录
      */
     public synchronized void stopAllDownload() {
-        if (mIsBeingStop) {
+        if (mIsBeingStop || !mIsRunning) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "正处于正在暂停或已停止运行状态，不操作");
             return;
         }
         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "停止所有下载任务");
         mIsBeingStop = true;
-        stopThreadRunning();
         for (DownloadInfo info : mTotalDownloadMap.values()) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, info.getTempFileName() + " 设置停止状态");
             info.setIsDownload(false);
         }
+        stopThreadRunning();
         mWaitDownloadQueue.clear();
         writeConfigFile(new File(mDirPath, CONFIG_FILE), mTotalDownloadMap);
         mIsBeingStop = false;
-        AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "stopAllDownload.mIsRunning = " + mIsRunning);
+        AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "当前下载器状态:  " + mIsRunning);
     }
 
     private void stopThreadRunning() {
         if (mThreads != null) {
-            for (DownloadThread t : mThreads) {
-                if (t != null) {
-                    t.setIsStop(true);
-                    t.interrupt();
+            for (int i = 0; i < mThreads.length; i++) {
+                if (mThreads[i] != null) {
+                    mThreads[i].setIsStop(true);
+                    mThreads[i] = null;
+//                    t.interrupt();
                 }
             }
         }
         mIsRunning = false;
     }
 
+    public void judgeIsRunning() {
+        if (mThreads != null) {
+            for (DownloadThread t : mThreads) {
+                if (t != null && !t.isStop()) {
+                    mIsRunning = true;
+                    break;
+                }
+            }
+        }
+        mIsRunning = false;
+    }
 
     /**
      * 判断传入的下载对象是否有效 <br />
@@ -382,7 +407,7 @@ public class SilentDownloadManager {
         return isValid;
     }
 
-    public void onProgressUpdate(DownloadInfo info) {
+    public void onProgressUpdate(DownloadInfo info, int elapse_time) {
         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "-------------onProgressUpdate----------------");
         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "下载地址：" + info.getDownloadUrl());
         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "当前下载： 已完成-" + (info.getDownloadSize() / 1024)
@@ -394,6 +419,21 @@ public class SilentDownloadManager {
             // 如果非Wifi条件下，停止下载
             AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "当前不处于Wifi下，停止后台下载");
             stopAllDownload();
+        }
+    }
+
+    @Override
+    public void onUserActionFinish(int action, int code) {
+        if (action == ObserverManager.UserActionListener.ACTION_CHANGE_NET_STATE) {
+            if (NetworkUtil.isWifiConnected(mContext)) {
+                AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "已切换WIFI环境，重新开启下载~");
+                startDownload();
+            } else {
+                AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "已切换非WIFI环境，当前强制下载状态：" + mForceDownload);
+                if (!mForceDownload) {
+                    stopAllDownload();
+                }
+            }
         }
     }
 

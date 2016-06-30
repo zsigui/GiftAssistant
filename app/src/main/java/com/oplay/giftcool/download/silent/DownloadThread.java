@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -25,6 +26,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class DownloadThread extends Thread {
 
+
+    private static final int ELPASE_TIME = 1000;
     private boolean mIsStop = false;
     private String mTag;
     private String mDirPath;
@@ -75,18 +78,23 @@ public class DownloadThread extends Thread {
     @Override
     public void run() {
         mIsStop = false;
-        AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("线程%s开始执行。。。。", mTag));
+        AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format(Locale.CHINA,
+                "线程%s开始执行。。。。", mTag));
         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         DownloadInfo info = null;
         while (!mIsStop) {
             try {
-                info = mWaitQueue.take();
-                if (info == null) {
+                AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format(Locale.CHINA,
+                        "线程%s进入获取任务流程，当前任务剩余数量:%d，执行状态: %b",
+                        mTag, mWaitQueue.size(), mIsStop));
+                if (mWaitQueue.size() == 0) {
                     // 列表已经无任务了，退出
                     AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("线程%s无任务，退出执行", mTag));
                     mIsStop = true;
+                    SilentDownloadManager.getInstance().judgeIsRunning();
                     return;
                 }
+                info = mWaitQueue.take();
                 AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("线程%s执行下载任务：%s", mTag, info
                         .getDownloadUrl()));
                 if (initRange(info)) {
@@ -127,8 +135,10 @@ public class DownloadThread extends Thread {
                         if (code >= 200 && code < 300) {
                             InputStream in = connection.getInputStream();
                             BufferedInputStream bin = new BufferedInputStream(in);
-                            RandomAccessFile out = new RandomAccessFile(new File(mDirPath, info.getTempFileName()),
-                                    "rwd");
+                            File tempFile = new File(mDirPath, info.getTempFileName());
+                            RandomAccessFile out = new RandomAccessFile(tempFile, "rwd");
+                            AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "start to download: store file path = "
+                                    + tempFile.getAbsolutePath());
                             out.seek(info.getDownloadSize());
                             int length;
                             byte[] bs = new byte[4096];
@@ -138,19 +148,19 @@ public class DownloadThread extends Thread {
                                 out.write(bs, 0, length);
                                 info.setDownloadSize(info.getDownloadSize() + length);
                                 stopTime = System.currentTimeMillis();
-                                if (stopTime - startTime > 5000) {
-                                    SilentDownloadManager.getInstance().onProgressUpdate(info);
+                                if (stopTime - startTime >= ELPASE_TIME) {
+                                    SilentDownloadManager.getInstance().onProgressUpdate(info, ELPASE_TIME);
                                     startTime = stopTime;
                                 }
                                 if (!info.isDownload()) {
                                     // 暂停下载
+                                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, tempFile.getName() + " 下载暂停");
                                     break;
                                 }
                             }
                             out.close();
                             if (info.isDownload() && length == -1) {
                                 // 下载完成
-                                final File tempFile = new File(mDirPath, info.getTempFileName());
                                 if (!TextUtils.isEmpty(info.getMd5Sum())) {
                                     if (Coder_Md5.checkMd5Sum(tempFile, info.getMd5Sum())) {
                                         // 验证不通过，下载的包有问题，需要重新下载
@@ -172,7 +182,7 @@ public class DownloadThread extends Thread {
                             }
                         }
                         // 取消下载
-                        SilentDownloadManager.getInstance().removeDownload(info, false);
+//                        SilentDownloadManager.getInstance().removeDownload(info, false);
                         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("url : %s 取消下载！", info.getDownloadUrl
                                 ()));
 

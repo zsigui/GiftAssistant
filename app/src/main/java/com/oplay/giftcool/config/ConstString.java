@@ -50,13 +50,13 @@ public class ConstString {
     public static final String TOAST_SESSION_UNAVAILABLE = "太久没有登录啦，为了您的账户安全，请重新登录哦～";
 
     // 复制礼包码后提示
-    public static final String TOAST_COPY_CODE = "礼包码已复制，请去游戏中粘贴兑换";
+    public static final String TOAST_COPY_CODE = "已复制，请去游戏中粘贴兑换";
     // 已更新到最新版本提示
     public static final String TOAST_VERSION_NEWEST = "666！你已经更新到最新版本咯！";
     // 当前版本不支持提示
-    public static final String TOAST_VERSION_NOT_SUPPORT = "咦，当前版本不支持该功能显示喔，据说帅的人都更新到最新版本了";
+    public static final String TOAST_VERSION_NOT_SUPPORT = "该版本不支持该功能喔，帅的人都更新了";
     // 未知异常状况
-    public static final String TOAST_UNKNOWN_ERROR = "(⊙o⊙)?没有反应？哪里出错了？请尝试重新加载页面或重启应用";
+    public static final String TOAST_UNKNOWN_ERROR = "(⊙o⊙)?请尝试重新加载页面或重启应用";
     // 请求获取数据为空
     public static final String TOAST_NO_RESPONSE_DATA = "咦～页面跑丢了，请尝试重新打开页面";
     // 连续过快请求
@@ -66,18 +66,18 @@ public class ConstString {
     public static final String TOAST_PAY_METHOD_ERROR = "选择支付类型有误，请重新选择";
 
     // 处于非WIFI下下载提示
-    public static final String TOAST_DOWNLOADING_NOT_IN_WIFI = "当前正在移动网络环境下，下载需要消耗流量哦～";
+    public static final String TOAST_DOWNLOADING_NOT_IN_WIFI = "正在使用移动网络，下载会耗费流量哦~";
     // 添加了新的下载任务提示
     public static final String TOAST_ADD_NEW_DOWNLOAD_TASK = "已添加新的下载任务";
     // 安装文件被移除导致的安装失败提示
-    public static final String TOAST_INSTALL_FAIL_FOR_NO_APK = "安装失败！安装文件已被删除，请重新下载游戏";
+    public static final String TOAST_INSTALL_FAIL_FOR_NO_APK = "安装失败！安装包已被删除，请重新下载";
     // 安装完删除安装文件提示
     public static final String TOAST_REMOVE_AFTER_SUCCESS_INSTALL = "已删除%s安装包，为您节省了%s空间";
 
     // 分享成功
     public static final String TOAST_SHARE_SUCCESS = "分享成功";
     // 分享失败
-    public static final String TOAST_SHARE_FAILED = "分享好像出了点问题，请检查网络后重新尝试以下哦！";
+    public static final String TOAST_SHARE_FAILED = "分享失败，请检查网络后重新尝试哦！";
     // 取消分享
     public static final String TOAST_SHARE_QUICKED = "分享已取消";
     // 没有提供分享按钮情况下异常触发的提示
@@ -92,7 +92,7 @@ public class ConstString {
     // 获取关注快讯失败
     public static final String TOAST_GET_FOCUS_ACTIVITY_FAILED = "呜，网络有点挤，请稍后重试！";
     // 点击qq群直接调起qq失败
-    public static final String TOAST_OPEN_QQ_GROUP_FAIL = "您好像还没有安装QQ，安装QQ后才可以加群哦～";
+    public static final String TOAST_OPEN_QQ_GROUP_FAIL = "未安装QQ，安装QQ后才可以加群哦~";
     // 取消关注成功
     public static final String TOAST_QUICK_FOCUS_SUCCESS = "取消关注成功";
     // 头像/昵称等资料修改成功
@@ -103,14 +103,15 @@ public class ConstString {
     public static final String TOAST_CLEAR_CACHE_SUCCESS = "清除缓存成功，总共释放 %s 空间";
 
     // 提交反馈成功
-    public static final String TOAST_FEEDBACK_SUCCESS = "反馈成功，谢谢你！我们会认真的对待每一个有价值的建议！做大家钟爱的产品";
+    public static final String TOAST_FEEDBACK_SUCCESS = "反馈成功，感谢您的宝贵建议！";
     // 反馈填写信息不足
-    public static final String TOAST_FEEDBACK_LACK = "请填写完整反馈内容和联系方式，可爱的客服MM没法联系你哦";
+    public static final String TOAST_FEEDBACK_LACK = "请填写完整反馈内容和联系方式";
     // 反馈内容太少
-    public static final String TOAST_FEEDBACK_CONTENT_NOT_ENOUGH = "反馈信息不少于10个字，麻烦说的更详细点哦~我们才能更好的帮您解决问题";
+    public static final String TOAST_FEEDBACK_CONTENT_NOT_ENOUGH
+            = "反馈信息不能少于10个字，麻烦说的更详细点哦~我们才能更好的帮您解决问题";
 
     // 密码修改成功提示
-    public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录，请牢记新密码哦~";
+    public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录~";
 
     /*------------- 定义Toast显示内容 ----------------*/
 }
