@@ -25,6 +25,7 @@ import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.List;
@@ -65,7 +66,6 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
 
     public void updateData(List<IndexGiftNew> data) {
         this.mData = data;
-        AppDebugConfig.w(AppDebugConfig.TAG_WARN, "updateData, count = " + getCount());
         notifyDataSetChanged();
     }
 
@@ -238,7 +238,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void setProgressBarData(IndexGiftNew o, GiftLimitFeeHolder gHolder) {
         gHolder.tvPercent.setVisibility(View.VISIBLE);
         gHolder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
+        final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
         gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         gHolder.pbPercent.setProgress(percent);
         gHolder.pbPercent.setMax(100);
@@ -292,7 +292,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void setProgressBarData(IndexGiftNew o, GiftNormalHolder holder) {
         holder.tvPercent.setVisibility(View.VISIBLE);
         holder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+        final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
         holder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         holder.pbPercent.setProgress(percent);
         holder.pbPercent.setMax(100);
@@ -327,7 +327,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 cHolder.pbPercent.setVisibility(View.VISIBLE);
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.tvSeize, 0);
-                final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+                final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
                 cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
                 cHolder.pbPercent.setMax(100);

@@ -24,6 +24,7 @@ import com.oplay.giftcool.model.data.resp.TimeData;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
@@ -151,7 +152,7 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
     private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {
         gHolder.tvPercent.setVisibility(View.VISIBLE);
         gHolder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
+        final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
         gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         gHolder.pbPercent.setProgress(percent);
         gHolder.pbPercent.setMax(100);

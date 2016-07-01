@@ -28,6 +28,7 @@ import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import net.ouwan.umipay.android.debug.Debug_Log;
@@ -142,7 +143,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 //                gHolder.tvMoney.setPaint(COLOR_GREY, W_DIVIDER);
                 gHolder.pbPercent.setVisibility(View.VISIBLE);
                 gHolder.tvPercent.setVisibility(View.VISIBLE);
-                final int percent = (int) ((float) o.remainCount * 100 / o.totalCount);
+                final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
                 gHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 gHolder.pbPercent.setProgress(percent);
                 gHolder.pbPercent.setMax(100);
@@ -235,7 +236,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
                 cHolder.pbPercent.setVisibility(View.VISIBLE);
                 cHolder.tvPercent.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.aavView, cHolder.cavView, cHolder.tvSeize, 0);
-                final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
+                final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
                 cHolder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
                 cHolder.pbPercent.setProgress(percent);
                 cHolder.pbPercent.setMax(100);

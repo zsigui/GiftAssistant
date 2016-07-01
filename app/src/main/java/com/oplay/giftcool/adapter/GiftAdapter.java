@@ -32,6 +32,7 @@ import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.lang.ref.WeakReference;
@@ -275,7 +276,7 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     private void setProgressBarData(IndexGiftNew o, ItemHolder holder) {
         holder.tvPercent.setVisibility(View.VISIBLE);
         holder.pbPercent.setVisibility(View.VISIBLE);
-        final int percent = (int) (Math.ceil(o.remainCount * 100.0 / o.totalCount));
+        final int percent = MixUtil.calculatePercent(o.remainCount, o.totalCount);
         holder.tvPercent.setText(String.format(Locale.CHINA, "剩余%d%%", percent));
         holder.pbPercent.setProgress(percent);
         holder.pbPercent.setMax(100);

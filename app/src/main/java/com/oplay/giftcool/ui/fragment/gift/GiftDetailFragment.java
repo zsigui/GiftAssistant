@@ -387,8 +387,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     /**
      * 设置进度条信息
      */
-    private void setRemainProgress(IndexGiftNew giftData) {
-        int progress = (int) Math.ceil(giftData.remainCount * 100.0 / giftData.totalCount);
+    private void setRemainProgress(IndexGiftNew o) {
+        int progress = MixUtil.calculatePercent(o.remainCount, o.totalCount);
         tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, "剩余%d%%", progress)));
         tvRemain.setVisibility(View.VISIBLE);
         pbPercent.setVisibility(View.VISIBLE);

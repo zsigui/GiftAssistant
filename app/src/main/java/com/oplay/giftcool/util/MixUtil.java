@@ -124,4 +124,8 @@ public class MixUtil {
                 break;
         }
     }
+
+    public static int calculatePercent(int remainCount, int totalCount) {
+        return (int) (Math.ceil(remainCount * 100.0 / totalCount));
+    }
 }
