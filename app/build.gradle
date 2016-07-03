@@ -11,7 +11,7 @@ android {
 		versionCode VERSION_CODE as int
 		versionName VERSION_NAME
 
-		multiDexEnabled true
+//		multiDexEnabled true
 
 		manifestPlaceholders = [jpushAppKey    : JPUSH_APPKEY, qqAppKey: QQ_APPKEY,
 		                        loveotaMainChId: LOVEOTA_MAIN_CHID, loveotaClientID: LOVEOTA_CLIENT_CHID]
@@ -93,7 +93,7 @@ android {
 	}
 
 	dexOptions{
-		incremental = true;
+//		incremental = true;
 		javaMaxHeapSize "2G"
 	}
 
@@ -127,4 +127,5 @@ dependencies {
 	compile project(':third:ouwansdk')
 	compile project(':third:convenientbanner')
 //	compile project(':third:viewserver')
+    compile 'com.alipay.euler:andfix:0.4.0@aar'
 }

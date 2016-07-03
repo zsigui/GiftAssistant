@@ -313,9 +313,8 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         final ArrayList<AppBaseInfo> result = new ArrayList<>();
         PackageManager pm = context.getPackageManager();
         List<PackageInfo> packages = pm.getInstalledPackages(0);
-        for (int i = 0; i < packages.size(); i++) {
+        for (PackageInfo packageInfo : packages) {
             try {
-                final PackageInfo packageInfo = packages.get(i);
                 final AppBaseInfo info = new AppBaseInfo();
                 info.name = pm.getApplicationLabel(pm.getApplicationInfo(packageInfo.packageName,
                         PackageManager.GET_META_DATA)).toString();

@@ -17,7 +17,7 @@ import java.net.URLDecoder;
 /**
  * Created by zsigui on 16-4-26.
  */
-public class DownloadInfo {
+public class DownloadInfo{
 
     private String mDownloadUrl;
     private String mDestUrl;
@@ -28,6 +28,8 @@ public class DownloadInfo {
     private String mTempFileName;
     private String mStoreFileName;
     private int mRetryTime;
+
+    private DownloadListener mListener;
     /**
      * 指示下载状态
      */
@@ -164,11 +166,45 @@ public class DownloadInfo {
         return temp + Global.APK_FILE_NAME_SUFFIX;
     }
 
+    public void setListener(DownloadListener listener) {
+        mListener = listener;
+    }
+
     @Override
     public boolean equals(Object o) {
         return (o == this)
                 || (o != null
                 && (o instanceof DownloadInfo)
                 && ((DownloadInfo) o).getDownloadUrl().equals(getDownloadUrl()));
+    }
+
+//    public void onProgressUpdate(DownloadInfo info, int elapsedTime) {
+//        if (mListener != null) {
+//            mListener.onProgressUpdate(info, elapsedTime);
+//        }
+//    }
+//
+//    public void onFinishDownload(DownloadInfo info) {
+//        if (mListener != null) {
+//            mListener.onFinishDownload(info);
+//        }
+//    }
+//
+//    public void onFailDownload(DownloadInfo info, String err) {
+//        if (mListener != null) {
+//            mListener.onFailDownload(info, err);
+//        }
+//    }
+
+    public DownloadListener getListener() {
+        return mListener;
+    }
+
+    public interface DownloadListener {
+        void onProgressUpdate(DownloadInfo info, int elapsedTime);
+
+        void onFinishDownload(DownloadInfo info);
+
+        void onFailDownload(DownloadInfo info, String err);
     }
 }

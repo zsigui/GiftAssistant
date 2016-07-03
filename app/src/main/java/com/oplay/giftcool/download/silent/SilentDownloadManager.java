@@ -91,6 +91,12 @@ public class SilentDownloadManager implements ObserverManager.UserActionListener
         return mTotalDownloadMap.containsKey(Coder_Md5.md5(url));
     }
 
+    public File concatDownloadFilePath(String filename) {
+        if (TextUtils.isEmpty(mDirPath))
+            return null;
+        return new File(mDirPath, filename);
+    }
+
     /**
      * 初始化下载配置
      */
@@ -278,18 +284,21 @@ public class SilentDownloadManager implements ObserverManager.UserActionListener
                 AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "添加的任务已经存在下载");
                 return;
             }
-            if (!mTotalDownloadMap.containsKey(info.getDownloadUrl())
-                    && isValid(info)) {
-                AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "添加新的下载任务：" + info.getDownloadUrl());
-                final File storeFile = new File(mDirPath, info.getStoreFileName());
-                if (!storeFile.exists()) {
-                    info.setIsDownload(true);
-                    if (!mTotalDownloadMap.containsKey(info.getDownloadUrl())) {
-                        mTotalDownloadMap.put(info.getDownloadUrl(), info);
+            if (isValid(info)) {
+                if (!mTotalDownloadMap.containsKey(info.getDownloadUrl())) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "添加新的下载任务：" + info.getDownloadUrl());
+                    final File storeFile = new File(mDirPath, info.getStoreFileName());
+                    if (!storeFile.exists()) {
+                        info.setIsDownload(true);
+                        if (!mTotalDownloadMap.containsKey(info.getDownloadUrl())) {
+                            mTotalDownloadMap.put(info.getDownloadUrl(), info);
+                        }
+                        if (!mWaitDownloadQueue.contains(info)) {
+                            mWaitDownloadQueue.add(info);
+                        }
                     }
-                    if (!mWaitDownloadQueue.contains(info)) {
-                        mWaitDownloadQueue.add(info);
-                    }
+                } else if (info.getListener() != null){
+                    mTotalDownloadMap.get(info.getDownloadUrl()).setListener(info.getListener());
                 }
             }
         }

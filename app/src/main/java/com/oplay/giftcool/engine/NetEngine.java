@@ -14,6 +14,7 @@ import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.req.ReqModifyAvatar;
 import com.oplay.giftcool.model.data.req.ReqModifyNick;
 import com.oplay.giftcool.model.data.req.ReqPageData;
+import com.oplay.giftcool.model.data.req.ReqPatchInfo;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
 import com.oplay.giftcool.model.data.req.ReqPostToken;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
@@ -21,6 +22,7 @@ import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.data.req.ReqSearchHot;
 import com.oplay.giftcool.model.data.req.ReqSearchKey;
 import com.oplay.giftcool.model.data.req.ReqTaskReward;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
@@ -370,4 +372,7 @@ public interface NetEngine {
 	 */
 	@GET
 	Call<Object> asyncGetForJsCall(@Url String url, @Body JsonReqBase<Object> reqData);
+
+    @POST(NetUrl.REQUEST_PATCH)
+    Call<JsonRespBase<GameDownloadInfo>> requestPatch(@Body JsonReqBase<ReqPatchInfo> reqData);
 }

@@ -286,6 +286,11 @@ public class NetUrl {
      */
     public static final String APP_INFO_REPORTED = "v1/uil";
 
+    /**
+     * 请求升级补丁信息
+     */
+    public static final String REQUEST_PATCH = "v1/patch_info";
+
 	/* 消息接口 */
 
     /**

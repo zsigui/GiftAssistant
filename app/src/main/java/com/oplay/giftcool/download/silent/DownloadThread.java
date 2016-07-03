@@ -24,7 +24,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by zsigui on 16-4-26.
  */
-public class DownloadThread extends Thread {
+public class DownloadThread extends Thread implements DownloadInfo.DownloadListener {
 
 
     private static final int ELPASE_TIME = 1000;
@@ -150,6 +150,7 @@ public class DownloadThread extends Thread {
                                 stopTime = System.currentTimeMillis();
                                 if (stopTime - startTime >= ELPASE_TIME) {
                                     SilentDownloadManager.getInstance().onProgressUpdate(info, ELPASE_TIME);
+                                    onProgressUpdate(info, ELPASE_TIME);
                                     startTime = stopTime;
                                 }
                                 if (!info.isDownload()) {
@@ -165,6 +166,7 @@ public class DownloadThread extends Thread {
                                     if (Coder_Md5.checkMd5Sum(tempFile, info.getMd5Sum())) {
                                         // 验证不通过，下载的包有问题，需要重新下载
                                         failDownload(info, true);
+                                        onFailDownload(info, "MD5验证失败");
                                         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("url : %s 执行验证，验证MD5不通过！",
                                                 info.getDownloadUrl()));
                                     } else {
@@ -183,16 +185,19 @@ public class DownloadThread extends Thread {
                         }
                         // 取消下载
 //                        SilentDownloadManager.getInstance().removeDownload(info, false);
+                        onFailDownload(info, "取消下载");
                         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("url : %s 取消下载！", info.getDownloadUrl
                                 ()));
 
                     } else {
                         // 连接错误，下载失败，将任务重新移动队列末尾
                         failDownload(info, false);
+                        onFailDownload(info, "连接出错");
                         AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, String.format("url : %s 下载失败！", info.getDownloadUrl()));
                     }
                 } else {
-                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "InitRange Failed");
+                    onFailDownload(info, "初始化文件信息失败");
+                    AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "初始化文件信息失败");
                 }
 
             } catch (IOException | InterruptedException e) {
@@ -214,7 +219,29 @@ public class DownloadThread extends Thread {
     }
 
     private void finishDownload(DownloadInfo info, File tempFile) {
+        onFinishDownload(info);
         Util_System_File.cp(tempFile, new File(mDirPath, info.getStoreFileName()));
         SilentDownloadManager.getInstance().removeDownload(info, true);
+    }
+
+    @Override
+    public void onProgressUpdate(DownloadInfo info, int elapsedTime) {
+        if (info != null && info.getListener() != null) {
+            info.getListener().onProgressUpdate(info, elapsedTime);
+        }
+    }
+
+    @Override
+    public void onFinishDownload(DownloadInfo info) {
+        if (info != null && info.getListener() != null) {
+            info.getListener().onFinishDownload(info);
+        }
+    }
+
+    @Override
+    public void onFailDownload(DownloadInfo info, String err) {
+        if (info != null && info.getListener() != null) {
+            info.getListener().onFailDownload(info, err);
+        }
     }
 }

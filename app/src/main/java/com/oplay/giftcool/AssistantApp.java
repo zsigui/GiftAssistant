@@ -30,6 +30,7 @@ import com.oplay.giftcool.ext.CrashHandler;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
+import com.oplay.giftcool.manager.HotFixManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -167,7 +168,7 @@ public class AssistantApp extends Application {
             String data = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
                     SPConfig.SP_APP_DEVICE_FILE,
                     SPConfig.KEY_TEST_REQUEST_URI,
-                    "http://test.lbapi.ouwan.com/api/\nhttp://test.giftcool.ouwan.com/");
+                    String.format("%s\n%s", NetUrl.TEST_URL_BASE, WebViewUrl.TEST_URL_BASE));
             String[] s = data.split("\n");
             NetUrl.REAL_URL = s[0].trim();
             if (s.length > 1) {
@@ -184,6 +185,9 @@ public class AssistantApp extends Application {
         // 初始化推送SDK
         PushMessageManager.getInstance().initPush(this);
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+        HotFixManager.getInstance().requestPatchFromServer();
+        HotFixManager.getInstance().test();
+
     }
 
     public void initLoadingView() {
