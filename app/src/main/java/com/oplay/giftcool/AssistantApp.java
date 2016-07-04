@@ -155,6 +155,8 @@ public class AssistantApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         sInstance = this;
+        HotFixManager.getInstance().requestPatchFromServer();
+        HotFixManager.getInstance().test();
     }
 
     /**
@@ -185,8 +187,6 @@ public class AssistantApp extends Application {
         // 初始化推送SDK
         PushMessageManager.getInstance().initPush(this);
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
-        HotFixManager.getInstance().requestPatchFromServer();
-        HotFixManager.getInstance().test();
 
     }
 

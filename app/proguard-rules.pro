@@ -159,14 +159,6 @@
 -keep class cn.finalteam.galleryfinal.widget.zoonview.*{*;}
 #GalleryFinal end
 
-
-#lebian sdk begin
--keep class com.excelliance.** { *; }
--keepclassmembers class * implements java.lang.reflect.InvocationHandler {
-	private java.lang.Object *(java.lang.Object, java.lang.reflect.Method, java.lang.Object[]);
-}
-#lebian sdk end
-
 #talking data sdk begin
 -dontwarn com.tendcloud.tenddata.**
 -keep public class com.tendcloud.tenddata.** { public protected *;}
@@ -176,3 +168,8 @@ public void *(***);
 -keep class com.talkingdata.sdk.TalkingDataSDK {public *;}
 -keep class com.apptalkingdata.** {*;}
 #talking data sdk end
+
+#RocooFix start
+-keep class com.dodola.rocoofix.** {*;}
+-keep class com.lody.legend.** {*;}
+#RocooFix end

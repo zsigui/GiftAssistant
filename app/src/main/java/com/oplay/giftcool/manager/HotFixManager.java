@@ -1,7 +1,5 @@
 package com.oplay.giftcool.manager;
 
-import com.alipay.euler.andfix.patch.PatchManager;
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
@@ -11,11 +9,8 @@ import com.oplay.giftcool.model.data.req.ReqPatchInfo;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.util.FileUtil;
 
 import net.youmi.android.libs.common.coder.Coder_Md5;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,8 +28,9 @@ public class HotFixManager {
     }
 
     private HotFixManager() {
-        mPatchManager = new PatchManager(AssistantApp.getInstance());
-        mPatchManager.init(String.valueOf(AppConfig.SDK_VER));
+//        mPatchManager = new PatchManager(AssistantApp.getInstance());
+//        mPatchManager.init(String.valueOf(AppConfig.SDK_VER));
+//        RocooFix.init(AssistantApp.getInstance());
         AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "初始化HotFixManager实例");
     }
 
@@ -42,7 +38,7 @@ public class HotFixManager {
         return SingletonHolder.sInstance;
     }
 
-    private PatchManager mPatchManager = null;
+//    private PatchManager mPatchManager = null;
 
     public void requestPatchFromServer() {
         AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "请求补丁文件，当前版本号：" + AppConfig.SDK_VER);
@@ -81,10 +77,10 @@ public class HotFixManager {
     public void test() {
         try {
             AppDebugConfig.d(AppDebugConfig.TAG_WARN, "当前版本：" + AppConfig.SDK_VER);
-            mPatchManager.addPatch(FileUtil.getOwnCacheDirectory(AssistantApp.getInstance(),
-                    Global.EXTERNAL_DOWNLOAD, true).getAbsolutePath());
+//            mPatchManager.addPatch(FileUtil.getOwnCacheDirectory(AssistantApp.getInstance(),
+//                    Global.EXTERNAL_DOWNLOAD, true).getAbsolutePath());
             AppDebugConfig.d(AppDebugConfig.TAG_WARN, "升级后版本：" + AppConfig.SDK_VER);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             AppDebugConfig.w(AppDebugConfig.TAG_WARN, "测试");
         }
     }
@@ -112,11 +108,11 @@ public class HotFixManager {
                 AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "补丁包下载完成，开始执行补丁加载逻辑");
                 // PatchManager 本身会在 init() 判断并删除旧版本的补丁包
 //                HotFixManager.getInstance().mPatchManager.removeAllPatch();
-                HotFixManager.getInstance().mPatchManager.addPatch(
-                        SilentDownloadManager.getInstance()
-                                .concatDownloadFilePath(info.getStoreFileName())
-                                .getAbsolutePath()
-                );
+//                HotFixManager.getInstance().mPatchManager.addPatch(
+//                        SilentDownloadManager.getInstance()
+//                                .concatDownloadFilePath(info.getStoreFileName())
+//                                .getAbsolutePath()
+//                );
                 AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "补丁包加载完成");
             } catch (Throwable t) {
                 AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);

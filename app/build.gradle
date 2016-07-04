@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.dodola.rocoofix'
+
 
 android {
 	compileSdkVersion BUILD_COMPILE_SDK_VERSION as int
@@ -13,8 +15,7 @@ android {
 
 //		multiDexEnabled true
 
-		manifestPlaceholders = [jpushAppKey    : JPUSH_APPKEY, qqAppKey: QQ_APPKEY,
-		                        loveotaMainChId: LOVEOTA_MAIN_CHID, loveotaClientID: LOVEOTA_CLIENT_CHID]
+		manifestPlaceholders = [jpushAppKey : JPUSH_APPKEY, qqAppKey: QQ_APPKEY]
 		buildConfigField 'String', 'APP_KEY', "\"${APP_KEY}\""
 		buildConfigField 'String', 'APP_SECRET', "\"${APP_SECRET}\""
 		buildConfigField 'String', 'OUWAN_SDK_VERSION', "\"${OUWAN_SDK_VERSION}\""
@@ -100,6 +101,20 @@ android {
 	useLibrary 'org.apache.http.legacy'
 }
 
+//repositories {
+//	maven {
+//		url  "http://dl.bintray.com/dodola/maven"
+//	}
+//}
+
+//rocoo_fix {
+//	includePackage = ['com/oplay/giftcool']//限制需要制作补丁的package
+////	excludeClass = ['BaseApplication.class']//将不需要加到patch里的类写在这里
+////	preVersionPath = '1'//注意：此项属性只在需要制作补丁的时候才需开启！！如果不需要制作补丁则需要去掉此项
+//
+//	enable = true//注意：关掉此项会无法生成Hash.txt文件
+//}
+
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 	testCompile 'junit:junit:4.12'
@@ -127,5 +142,6 @@ dependencies {
 	compile project(':third:ouwansdk')
 	compile project(':third:convenientbanner')
 //	compile project(':third:viewserver')
-    compile 'com.alipay.euler:andfix:0.4.0@aar'
+//    compile 'com.alipay.euler:andfix:0.4.0@aar'
+//	compile 'com.dodola:rocoo:1.0@aar'
 }
