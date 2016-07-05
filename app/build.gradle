@@ -142,6 +142,6 @@ dependencies {
 	compile project(':third:ouwansdk')
 	compile project(':third:convenientbanner')
 //	compile project(':third:viewserver')
-//    compile 'com.alipay.euler:andfix:0.4.0@aar'
+    compile 'com.alipay.euler:andfix:0.4.0@aar'
 //	compile 'com.dodola:rocoo:1.0@aar'
 }

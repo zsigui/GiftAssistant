@@ -156,7 +156,7 @@ public class AssistantApp extends Application {
         super.attachBaseContext(base);
         sInstance = this;
         HotFixManager.getInstance().requestPatchFromServer();
-        HotFixManager.getInstance().test();
+//        HotFixManager.getInstance().test();
     }
 
     /**

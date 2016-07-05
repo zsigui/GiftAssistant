@@ -173,3 +173,8 @@ public void *(***);
 -keep class com.dodola.rocoofix.** {*;}
 -keep class com.lody.legend.** {*;}
 #RocooFix end
+
+-keep class * extends java.lang.annotation.Annotation
+-keepclasseswithmembernames class * {
+    native <methods>;
+}

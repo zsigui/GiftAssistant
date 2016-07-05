@@ -5,11 +5,11 @@
 ## 根据本机项目位置设置
 APP_PATH=/home/zsigui/AndroidStudioProjects/GiftCool
 SCRIPT_PATH=${APP_PATH}"/script"
-REDEX_PATH=/home/zsigui/software/android/redex/
+REDEX_PATH=/home/zsigui/software/android/redex
 REDEX_CONFIG=${REDEX_PATH}"/config/gc.config"
 
 INPUT_APK_PATH=
-OUTPUT_APK_PATH=${APP_PATH}"/apk/src/"
+OUTPUT_APK_PATH=
 # dDebug下不执行
 PROGUARD_TXT=
 MAPPING_TXT=
@@ -75,19 +75,22 @@ echo "start to work script!!!"
 
 setDefaultVar
 
+echo ${INPUT_APK_PATH},${OUTPUT_APK_PATH}
+
 echo "now pack_mode is "${PACK_MODE}" and need_redex is "${NEED_REDEX}
 if [ ${PACK_MODE} -eq 1 ]; then
 	if [ ${NEED_REDEX} -eq 1 ]; then
 		cd ${REDEX_PATH} && pwd
         ${REDEX_PATH}/redex -c ${REDEX_CONFIG}  ${INPUT_APK_PATH} -o ${OUTPUT_APK_PATH}
+        echo "${REDEX_PATH}/redex -c ${REDEX_CONFIG}  ${INPUT_APK_PATH} -o ${OUTPUT_APK_PATH}"
 	fi
 	cd ${SCRIPT_PATH} && pwd
     ${SCRIPT_PATH}/work.sh -s ${OUTPUT_APK_PATH}
 else
 	if [ ${NEED_REDEX} -eq 1 ]; then
 		cd ${REDEX_PATH} && pwd
-        ${REDEX_PATH}/redex -c ${REDEX_CONFIG} ${INPUT_APK_PATH} -P ${PROGUARD_TXT} -m ${MAPPING_TXT} -o
-        ${OUTPUT_APK_PATH}
+        ${REDEX_PATH}/redex -c ${REDEX_CONFIG} ${INPUT_APK_PATH} -P ${PROGUARD_TXT} -m ${MAPPING_TXT} -o ${OUTPUT_APK_PATH}
+        echo "${REDEX_PATH}/redex -c ${REDEX_CONFIG} ${INPUT_APK_PATH} -P ${PROGUARD_TXT} -m ${MAPPING_TXT} -o ${OUTPUT_APK_PATH}"
 	fi
 	cd ${SCRIPT_PATH} && pwd
     ${SCRIPT_PATH}/work.sh -s ${OUTPUT_APK_PATH}

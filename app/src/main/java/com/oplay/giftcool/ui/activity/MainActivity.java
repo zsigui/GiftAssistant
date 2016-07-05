@@ -603,7 +603,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
     }
 
-
     @Override
     public void onBackPressed() {
 
