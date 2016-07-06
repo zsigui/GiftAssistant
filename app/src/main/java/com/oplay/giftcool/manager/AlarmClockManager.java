@@ -97,9 +97,7 @@ public class AlarmClockManager {
                 try {
                     initAndSetWakeAlarm(context);
 
-                    if (mObserverGame
-                            && mBackgroundWakeCount > 0
-                            && mBackgroundWakeCount < 20) {
+                    if (mObserverGame) {
                         // 处理观察试玩游戏
                         ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
                     }
