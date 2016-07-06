@@ -159,12 +159,18 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 @Override
                 public void deal() {
                     if (mData == null || mData.giftData == null || mData.gameData == null) {
+                        AppDebugConfig.d(AppDebugConfig.TAG_SHARE, "share for null failed");
                         ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
                         return;
                     }
-                    mData.giftData.gameName = mData.gameData.name;
-                    mData.giftData.img = mData.gameData.img;
-                    ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
+                    try {
+                        mData.giftData.gameName = mData.gameData.name;
+                        mData.giftData.img = mData.gameData.img;
+                        ShareSDKManager.getInstance(mApp).shareGift(mApp, getChildFragmentManager(), mData.giftData);
+                    } catch (Throwable e) {
+                        AppDebugConfig.w(AppDebugConfig.TAG_SHARE, e);
+                        ToastUtil.showShort(ConstString.TOAST_UNKNOWN_ERROR);
+                    }
 
                 }
             });

@@ -24,6 +24,8 @@ android {
 		buildConfigField 'String', 'WX_APPKEY', "\"${WX_APPKEY}\""
 		buildConfigField 'String', 'TD_APPKEY', "\"${TD_APPKEY}\""
 		buildConfigField 'String', 'UMENG_APPKEY', "\"${UMENG_APPKEY}\""
+		buildConfigField 'String', 'XM_APPID', "\"${XM_APPID}\""
+		buildConfigField 'String', 'XM_APPKEY', "\"${XM_APPKEY}\""
 		// 以下三个根据版本变动
 		// 注意：FILE_DEBUG需要在允许LOG_DEBUG的前提下生效
 		buildConfigField 'boolean', 'TEST_MODE', 'false'
@@ -118,8 +120,8 @@ android {
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 	testCompile 'junit:junit:4.12'
-	compile 'com.android.support:appcompat-v7:24.0.0'
-	compile 'com.android.support:recyclerview-v7:24.0.0'
+	compile 'com.android.support:appcompat-v7:23.1.1'
+	compile 'com.android.support:recyclerview-v7:23.1.1'
 	compile 'com.squareup.retrofit2:retrofit:2.0.0'
 //	compile 'cn.pedant.sweetalert:library:1.3'
 	compile 'com.nineoldandroids:library:2.4.0'

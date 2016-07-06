@@ -278,6 +278,7 @@ public class ScoreManager {
     private HashMap<String, TaskInfoDownload> mCurDownloadTaskSet;
 
     private void setCurDownloadTaskSet(Context context) {
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 当前下载任务列表写入");
         final String val = AssistantApp.getInstance().getGson().toJson(getCurDownloadTaskSet(context));
         SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE,
                 SPConfig.KEY_TODAY_DOWNLOAD_TASK, val);
@@ -346,13 +347,16 @@ public class ScoreManager {
             while (it.hasNext()) {
                 final Map.Entry<String, TaskInfoDownload> entry = it.next();
                 final TaskInfoDownload info = entry.getValue();
+                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 执行下载任务判断");
                 if (SystemUtil.isForeground(context, info.packName)) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 添加间隔时间 " + elapseTime);
                     info.hasPlayTime += elapseTime;
                 }
                 if (!info.isToday()) {
                     it.remove();
                 } else {
                     if (info.isFinished()) {
+                        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 通知任务已经完成 " + info.appId);
                         reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), true);
                         it.remove();
                         setTaskFinished(true);
@@ -361,9 +365,11 @@ public class ScoreManager {
             }
 
             if (!getCurDownloadTaskSet(context).isEmpty()) {
+                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 还有判断任务，继续监测");
                 // 任务没完成，继续监测
                 AlarmClockManager.getInstance().setObserverGame(true);
             } else {
+                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 无任务，不继续监测");
                 // 任务完成,不监测
                 AlarmClockManager.getInstance().setObserverGame(false);
             }

@@ -26,11 +26,9 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
-import com.oplay.giftcool.ext.CrashHandler;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
 import com.oplay.giftcool.manager.AlarmClockManager;
-import com.oplay.giftcool.manager.HotFixManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -155,7 +153,6 @@ public class AssistantApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         sInstance = this;
-        HotFixManager.getInstance().requestPatchFromServer();
 //        HotFixManager.getInstance().test();
     }
 
@@ -183,14 +180,16 @@ public class AssistantApp extends Application {
         initLoadingView();
         // 初始化统计工具
         StatisticsManager.getInstance().init(this, getChannelId());
-        CrashHandler.getInstance().init();
         // 初始化推送SDK
-        PushMessageManager.getInstance().initPush(this);
+//        if (MixUtil.isInMainProcess(this)) {
+            PushMessageManager.getInstance().initPush(this);
+//        }
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 
     }
 
     public void initLoadingView() {
+        AppDebugConfig.d(AppDebugConfig.TAG_APP, "初始化LogindView");
         LoadAndRetryViewManager.setDefaultEmptyViewId(R.layout.fragment_data_empty);
         LoadAndRetryViewManager.setDefaultLoadViewId(R.layout.fragment_data_loading);
         // 加载失败，错误或者重试
@@ -382,7 +381,7 @@ public class AssistantApp extends Application {
                     .build();
             ImageLoader.getInstance().init(config);
             L.writeLogs(false);
-            AppDebugConfig.d(AppDebugConfig.TAG_APP, "ImageLoader.init()");
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "初始化ImageLoader");
         } catch (Throwable e) {
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
             AppDebugConfig.w(AppDebugConfig.TAG_APP, "ImageLoader.init() in failed : ", e);

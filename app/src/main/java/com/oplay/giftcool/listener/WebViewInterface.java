@@ -324,7 +324,7 @@ public class WebViewInterface extends Observable {
     /**
      * 进行页面跳转 <br /> <br />
      *
-     * Add in 1400
+     * Add in 1305
      */
     @JavascriptInterface
     public int jumpPage(final String data) {
@@ -346,7 +346,7 @@ public class WebViewInterface extends Observable {
     /**
      *  执行特定代码段任务，如调起升级、求礼包、分享等弹窗 <br /> <br />
      *
-     *  Add in 1400
+     *  Add in 1305
      */
     @JavascriptInterface
     public int executeLogicCode(final String data) {

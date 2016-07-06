@@ -73,7 +73,7 @@ public class JPushReceiver extends BroadcastReceiver {
                     }
                     final PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
                             .class);
-                    PushMessageManager.getInstance().handleNotifyMessage(context, msg, intent);
+                    PushMessageManager.getInstance().handleNotifyMessage(context, msg);
                     AccountManager.getInstance().obtainUnreadPushMessageCount();
 
                     if (AppDebugConfig.IS_STATISTICS_SHOW) {

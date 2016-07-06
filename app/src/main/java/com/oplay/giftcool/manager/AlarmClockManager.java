@@ -82,6 +82,7 @@ public class AlarmClockManager {
     }
 
     public void setObserverGame(boolean observerGame) {
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 设置下载标志");
         mObserverGame = observerGame;
     }
 
@@ -98,7 +99,7 @@ public class AlarmClockManager {
 
                     if (mObserverGame
                             && mBackgroundWakeCount > 0
-                            && mBackgroundWakeCount < 4) {
+                            && mBackgroundWakeCount < 20) {
                         // 处理观察试玩游戏
                         ScoreManager.getInstance().judgePlayTime(context, mElapsedTime / 1000);
                     }
@@ -146,6 +147,7 @@ public class AlarmClockManager {
             Intent startIntent = new Intent(context, StartReceiver.class);
             startIntent.setAction(Action.ALARM_WAKE);
             try {
+                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "set alarm");
                 alarmSender = PendingIntent.getBroadcast(context, ALARM_WAKE_REQUEST_CODE,
                         startIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             } catch (Exception e) {
@@ -154,8 +156,9 @@ public class AlarmClockManager {
         }
         AlarmManager am = getAlarmManager(context);
         am.cancel(alarmSender);
-        am.set(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis() + mElapsedTime, alarmSender);
-        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "initAndSetWakeAlarm is exec success");
+        am.set(AlarmManager.RTC, System.currentTimeMillis() + mElapsedTime, alarmSender);
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "initAndSetWakeAlarm is exec success," +
+                "new elpasedTime = " + mElapsedTime + ", alarm_wake = " + Action.ALARM_WAKE);
     }
 
     public interface Action {

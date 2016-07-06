@@ -140,21 +140,25 @@ public class PushMessageManager {
 	 */
 	public void initPush(Context context) {
 		if (!JPushInterface.isPushStopped(context)) {
-			return;
+			// 极光推送
+			JPushInterface.init(context);
+			JPushInterface.setDebugMode(AppConfig.TEST_MODE);
+			// 设置通知静默时间，不震动和响铃，晚上10点30分-早上8点
+			JPushInterface.setSilenceTime(context, START_HOUR, START_MINUTE, END_HOUR, END_MINUTE);
+			// 设置默认的通知栏样式
+			CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(
+					context, R.layout.view_status_bar_notify, R.id.iv_icon, R.id.tv_title, R.id.tv_content);
+			builder.statusBarDrawable = R.mipmap.ic_launcher;
+			builder.notificationFlags = PendingIntent.FLAG_ONE_SHOT;
+			builder.layoutIconDrawable = R.mipmap.ic_launcher;
+			JPushInterface.setDefaultPushNotificationBuilder(builder);
+			// 设置保留最近通知条数 5
+			JPushInterface.setLatestNotificationNumber(context, 5);
+
 		}
-		JPushInterface.init(context);
-		JPushInterface.setDebugMode(AppConfig.TEST_MODE);
-		// 设置通知静默时间，不震动和响铃，晚上10点30分-早上8点
-		JPushInterface.setSilenceTime(context, START_HOUR, START_MINUTE, END_HOUR, END_MINUTE);
-		// 设置默认的通知栏样式
-		CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(
-				context, R.layout.view_status_bar_notify, R.id.iv_icon, R.id.tv_title, R.id.tv_content);
-		builder.statusBarDrawable = R.mipmap.ic_launcher;
-		builder.notificationFlags = PendingIntent.FLAG_ONE_SHOT;
-		builder.layoutIconDrawable = R.mipmap.ic_launcher;
-		JPushInterface.setDefaultPushNotificationBuilder(builder);
-		// 设置保留最近通知条数 5
-		JPushInterface.setLatestNotificationNumber(context, 5);
+
+		// 小米推送
+//		MiPushClient.registerPush(this, BuildConfig.XM_APPID, BuildConfig.XM_APPKEY);
 	}
 
 //	/**
@@ -223,7 +227,7 @@ public class PushMessageManager {
 	/**
 	 * 处理广播收到的通知栏消息
 	 */
-	public void handleNotifyMessage(Context context, PushMessageExtra data, Intent intent) {
+	public void handleNotifyMessage(Context context, PushMessageExtra data) {
 
 		switch (data.type) {
 			case Status.ACTION_GIFT_ZERO:

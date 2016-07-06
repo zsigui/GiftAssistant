@@ -175,6 +175,7 @@ public void *(***);
 #RocooFix end
 
 -keep class * extends java.lang.annotation.Annotation
--keepclasseswithmembernames class * {
-    native <methods>;
-}
+
+-keep class com.alipay.euler.andfix.** { public *; }
+
+-keep class com.oplay.giftcool.receiver.MiPushReceiver { *; }

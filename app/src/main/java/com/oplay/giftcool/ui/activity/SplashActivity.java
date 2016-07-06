@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
@@ -23,6 +24,8 @@ import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
+
+import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
 
@@ -62,7 +65,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 
     @Override
     protected void processLogic() {
-
+        Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getApplicationContext()));
     }
 
     private TestChoiceDialog mDialog;

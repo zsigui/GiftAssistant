@@ -200,6 +200,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                                 // 任务未完成，添加入队列中，已完成则跳过
                                 ScoreManager.getInstance().addDownloadWork(getContext(), m.code, info);
                             }
+                            AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 添加下载: " + info.packName);
                             missions.add(m);
 //							if (!getPackName().contains(info.packName)
 //									|| ScoreManager.getInstance().containDownloadTask(getContext(), info.packName)) {

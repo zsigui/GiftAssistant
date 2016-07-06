@@ -187,9 +187,11 @@ public class DateUtil {
 //        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat format;
         if (current.after(today) && current.before(tomorrow)) {
+            // current > today 00 && current < tomorrow 00
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "明天" + format.format(date);
-        } else if (current.after(tomorrow)) {
+        } else if (current.after(tomorrow) || current.getTime().compareTo(tomorrow.getTime()) == 0) {
+            // current > tomorrow 00 && current == tomorrow 00
             if (current.get(Calendar.HOUR) == 0
                     && current.get(Calendar.MINUTE) == 0) {
                 format = new SimpleDateFormat("MM-dd", Locale.getDefault());
@@ -199,8 +201,10 @@ public class DateUtil {
                 return format.format(date);
             }
         } else if (current.getTime().compareTo(today.getTime()) == 0) {
+            // current = today 00
             return "明天";
         } else {
+            // current < today 00
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return "今天" + format.format(date);
         }

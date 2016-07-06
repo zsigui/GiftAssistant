@@ -487,6 +487,9 @@ public class AccountManager implements OnFinishListener {
         // 使用uid进行别名标记
         String alias = Coder_Md5.md5(String.valueOf(getUserInfo().uid));
         JPushInterface.setAlias(mContext, alias, new JPushTagsAliasCallback(mContext));
+
+        // 小米别名标记
+//        MiPushClient.subscribe(mContext, alias, null);
     }
 
     /**
