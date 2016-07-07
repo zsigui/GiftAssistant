@@ -1,5 +1,24 @@
 # 版本变更日志:
 
+## V1.3.5 -> V1.3.6
+
+### 改动内容:
+
+    1) 修复更新弹窗不显示BUG，涉及 manager/DialogManager.java
+
+    2) 修复静默下载模块，增加判断网络状态，默认WIFI下才进行，涉及 download/silent 模块
+
+    3) 修复游戏任务检测的闹钟失效BUG，修改设置闹钟的类型间隔为RTC，涉及 manager/AlarmClockManager.java
+
+    4) 修复礼包两日后0点显示错误BUG，增加临界值判断，涉及 util/DateUtil.java
+
+    5) 活动评论页面修改逻辑，右上角增加‘阅读原帖’按钮
+
+    6) 欲增加 AndFix 热更新判断逻辑，涉及 manager/HotFixManager.java
+
+    7) 调整 async/AsyncTask_InitApplication.java 的初始化逻辑，将非用户状态判断的网络请求初始化提取延后至
+    ui/actvity/SplashActivity.java 里执行，已减少可能的推送唤醒时的同时大量网络请求情况
+
 ## V1.3.4 -> V1.3.5
 
 #### 目标:
@@ -28,6 +47,11 @@
     5) 提取全局静态配置变量到 BuildConfig 中，采用 gradle.properties + app.gradle 协调模式配置，增加了
     dDebug (测试环境测试参数) 、rDebug (正式环境测试参数)、rRelease (正式环境正式参数，发布模式) 等三个
     执行配置模式，减少人为修改可能的出错率
+
+#### 特别说明:
+
+    由于出包时仓促未经测试的错误判断语句，导致了两个BUG： DialogManager#showUpdateDialog() 调起应用更新弹窗失败的BUG，和
+    AlarmClockManager#startAlarm() 后台轮询失效而无法进行有效的游戏任务检测的BUG。关系1.3.4和1.3.5(未发包版本)
 
 ## V1.3.3 -> V1.3.4
 
