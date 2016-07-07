@@ -198,7 +198,8 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
         gHolder.pbPercent.setVisibility(View.GONE);
         gHolder.tvPercent.setVisibility(View.GONE);
         gHolder.tvSeizeHint.setVisibility(View.GONE);
-        if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE) {
+        if (o.status == GiftTypeUtil.STATUS_WAIT_SEIZE ||
+                (o.freeStartTime != 0 && o.freeStartTime > System.currentTimeMillis())) {
             setSeizeTextUI(gHolder.aavView, gHolder.cavView, gHolder.tvSeize, 4);
             gHolder.tvSeize.setText(String.format(Locale.CHINA,
                     ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));

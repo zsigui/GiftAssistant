@@ -2,8 +2,6 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,25 +108,9 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
     private void handleGiftLimit(int type, IndexGiftNew o, ViewHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        SpannableString ss = new SpannableString(String.format(Locale.CHINA, "[gold] %d 或 [bean] %d", o.score, o.bean));
-        final int startPos = String.valueOf(o.score).length() + 10;
-        ss.setSpan(DRAWER_GOLD, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(DRAWER_BEAN, startPos, startPos + 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {
-            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
-                    // 限量抢状态,表示当前不处于免费抢
-                    holder.tvSeizeHint.setVisibility(View.VISIBLE);
-                    holder.tvSeizeHint.setText(String.format(Locale.CHINA,
-                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
-                } else {
-                    // 无免费
-                    holder.tvSeizeHint.setVisibility(View.GONE);
-                }
-                setProgressBarData(o, holder);
-                break;
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
                 holder.tvSeizeHint.setVisibility(View.VISIBLE);
                 holder.tvSeizeHint.setText("正在免费抢");
@@ -145,8 +127,21 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
                 holder.tvPercent.setVisibility(View.GONE);
                 holder.tvSeizeHint.setVisibility(View.GONE);
                 break;
+            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
+            default:
+                if (o.freeStartTime != 0 && System.currentTimeMillis() < o.freeStartTime * 1000) {
+                    // 限量抢状态,表示当前不处于免费抢
+                    holder.tvSeizeHint.setVisibility(View.VISIBLE);
+                    holder.tvSeizeHint.setText(String.format(Locale.CHINA,
+                            ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
+                } else {
+                    // 无免费
+                    holder.tvSeizeHint.setVisibility(View.GONE);
+                }
+                setProgressBarData(o, holder);
+                break;
         }
-        holder.tvMoney.setText(ss, TextView.BufferType.SPANNABLE);
+        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
     }
 
     private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {

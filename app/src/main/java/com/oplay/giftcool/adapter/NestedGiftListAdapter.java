@@ -192,7 +192,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
     private void handleGiftFee(int type, IndexGiftNew o, GiftLimitFeeHolder holder) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, GiftTypeUtil.PAY_TYPE_BOTH);
+        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
         switch (type) {

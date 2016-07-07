@@ -156,57 +156,48 @@ public class DateUtil {
         if (time == 0) {
             return "";
         }
-        Date date = null;
-
-        date = new Date(time * 1000);
+        // 由 s 转为 ms
+        long tCurrent = time * 1000;
+        Date date = new Date(tCurrent);
         Calendar current = Calendar.getInstance();
 
         Calendar today = Calendar.getInstance();    //今天
         today.set(Calendar.YEAR, current.get(Calendar.YEAR));
         today.set(Calendar.MONTH, current.get(Calendar.MONTH));
-        today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH) + 1);
+        today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
         //  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
 
-        Calendar tomorrow = Calendar.getInstance();    //明天
-        tomorrow.set(Calendar.YEAR, current.get(Calendar.YEAR));
-        tomorrow.set(Calendar.MONTH, current.get(Calendar.MONTH));
-        tomorrow.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH) + 2);
-        //  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
-        tomorrow.set(Calendar.HOUR_OF_DAY, 0);
-        tomorrow.set(Calendar.MINUTE, 0);
-        tomorrow.set(Calendar.SECOND, 0);
-        tomorrow.set(Calendar.MILLISECOND, 0);
-
         current.setTime(date);
         current.set(Calendar.SECOND, 0);
+        current.set(Calendar.MILLISECOND, 0);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-//        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault());
+
         SimpleDateFormat format;
-        if (current.after(today) && current.before(tomorrow)) {
-            // current > today 00 && current < tomorrow 00
+        long tDiffToday = tCurrent - today.getTimeInMillis();
+        long dayToMilli = 24 * 60 * 60 * 1000;
+        // 左右误差偏值在3分钟以内
+        long deviation = 3 * 60 * 1000;
+        if (tDiffToday < 0) {
+            return "";
+        } else if (tDiffToday < dayToMilli - deviation) {
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return "明天" + format.format(date);
-        } else if (current.after(tomorrow) || current.getTime().compareTo(tomorrow.getTime()) == 0) {
-            // current > tomorrow 00 && current == tomorrow 00
-            if (current.get(Calendar.HOUR) == 0
-                    && current.get(Calendar.MINUTE) == 0) {
-                format = new SimpleDateFormat("MM-dd", Locale.getDefault());
-                return format.format(date);
-            } else {
-                format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
-                return format.format(date);
-            }
-        } else if (current.getTime().compareTo(today.getTime()) == 0) {
-            // current = today 00
+            return format.format(tCurrent);
+        } else if (tDiffToday <= dayToMilli + deviation) {
             return "明天";
-        } else {
-            // current < today 00
+        } else if (tDiffToday < 2 * dayToMilli - deviation) {
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return "今天" + format.format(date);
+            return "明天" + format.format(tCurrent);
+        } else if (tDiffToday < 2 * dayToMilli || tDiffToday % dayToMilli <= deviation) {
+            format = new SimpleDateFormat("MM-dd", Locale.getDefault());
+            return format.format(date);
+        } else {
+            format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
+            return format.format(date);
         }
+
     }
 }

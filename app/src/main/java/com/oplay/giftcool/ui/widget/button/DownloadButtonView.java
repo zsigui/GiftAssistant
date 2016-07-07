@@ -104,7 +104,7 @@ public class DownloadButtonView extends RelativeLayout {
                 case RETRYABLE:
                     setProgressVisible(false);
                     mCurStateText = "重试";
-                    mCurStateBackground = R.color.co_transparent;
+                    mCurStateBackground = R.drawable.selector_btn_green;
                     break;
                 case RESUMABLE:
                     setProgressVisible(true);
