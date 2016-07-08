@@ -31,6 +31,7 @@ import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -254,11 +255,11 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
                 setDisabledText(holder.tvCount, Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
-                        o.searchTime)));
+                        DateUtil.formatTime(o.searchTime, "yyyy-MM-dd HH:mm"))));
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
                 setDisabledText(holder.tvCount, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-                        o.seizeTime)));
+                        DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEARCH:
             case GiftTypeUtil.TYPE_NORMAL_SEARCHED:

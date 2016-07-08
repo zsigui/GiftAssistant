@@ -10,6 +10,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.text.style.TextAppearanceSpan;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * @author JackieZhuang
@@ -222,5 +224,18 @@ public class ViewUtil {
             colorInt = context.getResources().getColorStateList(colorId);
         }
         return colorInt;
+    }
+
+    public static void handleLink(TextView tv, String text, String protocol) {
+        if (tv == null) {
+            return;
+        }
+        tv.setText(text);
+        if (TextUtils.isEmpty(protocol) || !text.contains(protocol)) {
+            tv.setAutoLinkMask(Linkify.ALL);
+        } else {
+            Linkify.addLinks(tv, Pattern.compile(protocol + "://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"),
+                    protocol);
+        }
     }
 }

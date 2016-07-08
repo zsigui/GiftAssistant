@@ -270,11 +270,11 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
                 setDisabledText(holder.tvCount, Html.fromHtml(String.format("开淘时间：<font color='#ffaa17'>%s</font>",
-                        o.searchTime)));
+                        DateUtil.formatTime(o.searchTime, "yyyy-MM-dd HH:mm"))));
                 break;
             case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
                 setDisabledText(holder.tvCount, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
-                        o.seizeTime)));
+                        DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
                 break;
             case GiftTypeUtil.TYPE_NORMAL_SEARCH:
             case GiftTypeUtil.TYPE_NORMAL_SEARCHED:

@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +16,14 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.engine.NoEncryptEngine;
 import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.WebFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_WebView;
 import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
@@ -138,34 +141,62 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
     }
 
     private void handleRedirect(Intent intent) {
-
         if (intent == null) {
             ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no intent");
             return;
         }
-        int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
-        if (type == KeyConfig.TYPE_ID_DEFAULT) {
-            AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no type");
-            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
-            return;
+
+        int type = 0;
+        int commentId = 0;
+        String url = WebViewUrl.URL_BASE;
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "action = " + intent.getAction());
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            // 来自浏览器的URI请求
+            Uri uri = intent.getData();
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data = " + intent.getData());
+
+            if (uri != null) {
+                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "" + uri.getAuthority() + "\n"
+                + uri.toString() + "\n" + uri.getPath() + "\n" + uri.getEncodedPath());
+                url = uri.toString();
+                final String path = uri.getPath();
+                final String detailS = "article/detail";
+                if (path.contains(detailS)) {
+                    type = KeyConfig.TYPE_ID_POST_REPLY_DETAIL;
+                    mPostId = Integer.parseInt(path.substring(detailS.length() + 2, path.length() - 1));
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mPostId = " + mPostId);
+                } else if (path.contains("comment")) {
+                    type = KeyConfig.TYPE_ID_POST_COMMENT_DETAIL;
+                    mPostId = Integer.parseInt(uri.getQueryParameter("activity_id"));
+                    commentId = Integer.parseInt(uri.getQueryParameter("comment_id"));
+                }
+            }
+        } else {
+            type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
+            if (type == KeyConfig.TYPE_ID_DEFAULT) {
+                AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "no type");
+                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
+                return;
+            }
+            commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
+            mPostId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
         }
         mTypeHierarchy.add(type);
-        mPostId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
         switch (type) {
             case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
                 replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(mPostId),
                         String.valueOf(getIdentifierId()), "");
                 break;
             case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:
-                final int commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
                 replaceFragWithTitle(R.id.fl_container, PostCommentFragment.newInstance(mPostId, commentId),
                         String.valueOf(getIdentifierId()), "");
                 break;
             default:
-                mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
+                replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), "Web");
                 AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "type = " + type);
-                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
+//                mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
+//                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
         }
     }
 

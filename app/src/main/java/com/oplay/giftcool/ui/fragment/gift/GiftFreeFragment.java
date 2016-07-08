@@ -249,8 +249,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
                             refreshData(mData);
                         } else {
                             //加载更多成功
-                            setLoadState(data.data, (data.data == null || data.data.size() == 0 || data.data.size() <
-                                    data.pageSize));
+                            setLoadState(data.data, data.isEndPage);
                             addMoreData(data.data);
                             moreLoadSuccessEnd();
                         }

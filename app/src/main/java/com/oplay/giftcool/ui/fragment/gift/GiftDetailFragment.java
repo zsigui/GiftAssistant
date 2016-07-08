@@ -30,6 +30,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
@@ -261,7 +262,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         tvSeizeHint.setVisibility(View.VISIBLE);
                         tvSeizeHint.setText(String.format(Locale.CHINA,
                                 ConstString.TEXT_GIFT_FREE_SEIZE,
-                                DateUtil.formatUserReadDate(giftData.freeStartTime)));
+                                DateUtil.formatUserReadDateForDetail(giftData.freeStartTime)));
                     }
                 } else {
                     switch (type) {
@@ -315,7 +316,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
                     tvName.setText(giftData.name);
-                    tvUsage.setText(giftData.usage);
+//                    tvUsage.setText(giftData.usage);
+                    ViewUtil.handleLink(tvUsage, giftData.usage, WebViewUrl.PROTOCOL);
                 }
                 tvContent.setText(giftData.content);
                 tvDeadline.setText(String.format("%s ~ %s",

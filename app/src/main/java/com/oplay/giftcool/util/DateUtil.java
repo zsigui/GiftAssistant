@@ -24,7 +24,8 @@ public class DateUtil {
         if (isToday(date)) {
             result = "今日 " + date.substring(11, 16);
         } else {
-            result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10), date.substring(11, 16));
+            result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10),
+                    date.substring(11, 16));
         }
         return result;
     }
@@ -179,21 +180,55 @@ public class DateUtil {
         SimpleDateFormat format;
         long tDiffToday = tCurrent - today.getTimeInMillis();
         long dayToMilli = 24 * 60 * 60 * 1000;
-        // 左右误差偏值在3分钟以内
-        long deviation = 3 * 60 * 1000;
         if (tDiffToday < 0) {
-            return "";
-        } else if (tDiffToday < dayToMilli - deviation) {
+            return "正在";
+        } else if (tDiffToday < dayToMilli) {
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             return format.format(tCurrent);
-        } else if (tDiffToday <= dayToMilli + deviation) {
+        } else if (tDiffToday < 2 * dayToMilli) {
             return "明天";
-        } else if (tDiffToday < 2 * dayToMilli - deviation) {
-            format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return "明天" + format.format(tCurrent);
-        } else if (tDiffToday < 2 * dayToMilli || tDiffToday % dayToMilli <= deviation) {
+        } else {
             format = new SimpleDateFormat("MM-dd", Locale.getDefault());
             return format.format(date);
+        }
+
+    }
+
+    public static String formatUserReadDateForDetail(long time) {
+        if (time == 0) {
+            return "";
+        }
+        // 由 s 转为 ms
+        long tCurrent = time * 1000;
+        Date date = new Date(tCurrent);
+        Calendar current = Calendar.getInstance();
+
+        Calendar today = Calendar.getInstance();    //今天
+        today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+        today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+        today.set(Calendar.DAY_OF_MONTH, current.get(Calendar.DAY_OF_MONTH));
+        //  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        current.setTime(date);
+        current.set(Calendar.SECOND, 0);
+        current.set(Calendar.MILLISECOND, 0);
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+
+        SimpleDateFormat format;
+        long tDiffToday = tCurrent - today.getTimeInMillis();
+        long dayToMilli = 24 * 60 * 60 * 1000;
+        if (tDiffToday < 0) {
+            return "正在";
+        } else if (tDiffToday < dayToMilli) {
+            format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            return format.format(tCurrent);
+        } else if (tDiffToday < 2 * dayToMilli) {
+            format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            return "明天" + format.format(tCurrent);
         } else {
             format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
             return format.format(date);

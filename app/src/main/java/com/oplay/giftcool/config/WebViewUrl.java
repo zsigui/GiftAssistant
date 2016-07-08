@@ -10,6 +10,7 @@ public class WebViewUrl {
 	public static final String URL_BASE = "https://libao.ouwan.com/";
 	// 分享的Icon地址
 	public static final String ICON_GCOOL = "http://lb-cdn.ymapp.com/static/img/icon192_192.png";
+	public static final String PROTOCOL = "lb";
 
 	public static String REAL_URL = TEST_URL_BASE;
 

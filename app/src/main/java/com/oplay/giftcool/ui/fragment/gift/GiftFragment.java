@@ -438,7 +438,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                     @Override
                                     public void run() {
                                         int y = rvContainer.getScrollY();
-                                        refreshSuccessEnd();
+//                                        refreshSuccessEnd();
                                         updateData(mGiftData, 1, -1);
                                         rvContainer.smoothScrollBy(0, y);
                                     }

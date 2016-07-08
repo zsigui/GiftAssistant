@@ -81,7 +81,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
 
 	protected void refreshLoadState(Object data, boolean isEndPage) {
 		if (data != null && data instanceof List) {
-			mRefreshLayout.setCanShowLoad(!isEndPage || (((List)data).size() > 5));
+			mRefreshLayout.setCanShowLoad(!isEndPage);
 			mNoMoreLoad = isEndPage;
 		} else {
 			mNoMoreLoad = isEndPage || data == null;
