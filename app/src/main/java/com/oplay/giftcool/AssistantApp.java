@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.oplay.giftcool.assist.CrashHandler;
 import com.oplay.giftcool.assist.UILImageLoader;
 import com.oplay.giftcool.asynctask.AsyncTask_InitApplication;
 import com.oplay.giftcool.config.AppConfig;
@@ -174,6 +175,7 @@ public class AssistantApp extends Application {
                 WebViewUrl.REAL_URL = s[1].trim();
             }
         }
+        CrashHandler.getInstance().init();
         GCLog.init(AppDebugConfig.IS_DEBUG);
         initImageLoader();
         // 初始配置加载列表
