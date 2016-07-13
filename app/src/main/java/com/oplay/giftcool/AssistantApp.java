@@ -95,7 +95,7 @@ public class AssistantApp extends Application {
     // 是否已经完成全局初始化
     private boolean mIsGlobalInit = false;
     // 是否允许显示下载，根据渠道获取而定
-    private boolean mIsAllowDownload = true;
+    private boolean mIsAllowDownload = false;
     // 是否记住密码
     private boolean mIsRememberPwd = true;
     // 活动页面的游戏资讯是否只查看已关注的
