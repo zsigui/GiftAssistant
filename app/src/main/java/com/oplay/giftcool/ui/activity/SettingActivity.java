@@ -20,6 +20,7 @@ import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.message.NewNotifyMessageFragment;
+import com.oplay.giftcool.ui.fragment.setting.AboutFragment;
 import com.oplay.giftcool.ui.fragment.setting.DownloadFragment;
 import com.oplay.giftcool.ui.fragment.setting.FeedBackFragment;
 import com.oplay.giftcool.ui.fragment.setting.MyAttentionFragment;
@@ -183,6 +184,10 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
             case KeyConfig.TYPE_ID_MY_COUPON:
                 replaceFragWithTitle(R.id.fl_container, MyCouponFragment.newInstance(),
                         getResources().getString(R.string.st_drawer_my_coupon));
+                break;
+            case KeyConfig.TYPE_ID_ABOUT:
+                replaceFragWithTitle(R.id.fl_container, AboutFragment
+                        .newInstance(), getResources().getString(R.string.st_about_title));
                 break;
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);

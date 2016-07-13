@@ -320,6 +320,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                             mission.actionInfo, TaskInfoThree.class);
                     handleInfoThree(infoThree);
                     break;
+                default:
+                    ToastUtil.showShort(ConstString.TOAST_VERSION_NOT_SUPPORT);
             }
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);

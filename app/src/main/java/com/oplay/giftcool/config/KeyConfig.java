@@ -37,6 +37,7 @@ public class KeyConfig {
     public static final int TYPE_ID_DOWNLOAD = 106;
     public static final int TYPE_ID_SETTING = 107;
     public static final int TYPE_ID_MY_COUPON = 108;
+    public static final int TYPE_ID_ABOUT = 109;
 
     public static final int TYPE_ID_DETAIL_BEAN = 113;
     public static final int TYPE_ID_DETAIL_SCORE = 114;
