@@ -12,7 +12,12 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.model.data.req.ReqInitApp;
+import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -22,6 +27,8 @@ import com.oplay.giftcool.util.log.GCLog;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.io.File;
+
+import retrofit2.Response;
 
 
 /**
@@ -103,6 +110,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         assistantApp.initRetrofit();
         Global.resetNetEngine();
 
+        // 初始化配置，获取更新信息
+        if (!initAndCheckUpdate()) {
+            AppDebugConfig.d("initAndCheckUpdate failed!");
+        }
 
         doClearWorkForOldVer();
         Global.getInstalledAppNames();
@@ -175,6 +186,41 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
         }
+    }
+
+
+    private boolean initAndCheckUpdate() {
+        ReqInitApp data = new ReqInitApp();
+        data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
+        JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
+        try {
+            Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
+            if (response != null && response.isSuccessful()) {
+                if (response.body() != null && response.body().isSuccess()) {
+                    InitAppResult initData = response.body().getData();
+                    if (initData != null) {
+                        if (initData.initAppConfig != null) {
+                            AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
+                                    .isShowDownload);
+                            AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);
+                            AssistantApp.getInstance().setStartImg(initData.initAppConfig
+                                    .startImgUrl);
+                            AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
+                                    .broadcastBanner);
+                            AssistantApp.getInstance().setPhoneLoginType(initData.initAppConfig.phoneLoginType);
+                        }
+                        if (initData.updateInfo != null) {
+                            AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
+                        }
+                        return true;
+                    }
+                }
+            }
+            AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
+        } catch (Throwable e) {
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
+        }
+        return false;
     }
 
 //    private void testDownload() {

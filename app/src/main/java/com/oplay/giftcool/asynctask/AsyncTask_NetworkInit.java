@@ -6,18 +6,14 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.manager.HotFixManager;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
-import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
-import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
 
@@ -53,50 +49,13 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
                 reportedAppInfo(infos);
             }
 
-            // 初始化配置，获取更新信息
-            if (!initAndCheckUpdate()) {
-                AppDebugConfig.d("initAndCheckUpdate failed!");
-            }
+
 
         } catch (Throwable e) {
             e.printStackTrace();
             AppDebugConfig.d(AppDebugConfig.TAG_APP, e);
         }
         return null;
-    }
-
-    private boolean initAndCheckUpdate() {
-        ReqInitApp data = new ReqInitApp();
-        data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
-        JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
-        try {
-            Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
-            if (response != null && response.isSuccessful()) {
-                if (response.body() != null && response.body().isSuccess()) {
-                    InitAppResult initData = response.body().getData();
-                    if (initData != null) {
-                        if (initData.initAppConfig != null) {
-                            AssistantApp.getInstance().setAllowDownload(initData.initAppConfig
-                                    .isShowDownload);
-                            AssistantApp.getInstance().setQQInfo(initData.initAppConfig.qqInfo);
-                            AssistantApp.getInstance().setStartImg(initData.initAppConfig
-                                    .startImgUrl);
-                            AssistantApp.getInstance().setBroadcastBanner(initData.initAppConfig
-                                    .broadcastBanner);
-                            AssistantApp.getInstance().setPhoneLoginType(initData.initAppConfig.phoneLoginType);
-                        }
-                        if (initData.updateInfo != null) {
-                            AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
-                        }
-                        return true;
-                    }
-                }
-            }
-            AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
-        } catch (Throwable e) {
-            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
-        }
-        return false;
     }
 
     /**

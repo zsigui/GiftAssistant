@@ -195,6 +195,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                 refreshSuccessEnd();
                                 IndexGift data = response.body().getData();
                                 updateData(data, 0, -1);
+                                mLastPage = PAGE_FIRST;
                                 FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
                                 return;
                             }
@@ -226,6 +227,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                             // 获取数据成功
                             refreshSuccessEnd();
                             updateData(data, 0, -1);
+                            mLastPage = PAGE_FIRST;
                         } else {
                             refreshFailEnd();
                         }
@@ -309,7 +311,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             return;
         }
         if ((data.limit == null || data.limit.size() == 0)
-                && (data.zero == null || data.zero.size() == 0)
                 && (data.news == null || data.news.size() == 0)
                 && (data.banner == null || data.banner.size() == 0)
                 && (data.like == null || data.like.size() == 0)) {
@@ -320,7 +321,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         mViewManager.showContent();
         mHasData = true;
         mGiftData = data;
-        mLastPage = PAGE_FIRST;
         mAdapter.updateData(mGiftData, start, end);
     }
 
@@ -407,14 +407,15 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         mCallRefreshCircle.cancel();
                     }
                     HashSet<Integer> ids = new HashSet<Integer>();
-                    for (IndexGiftNew gift : mGiftData.zero) {
-                        ids.add(gift.id);
+                    if (mGiftData.limit != null) {
+                        for (IndexGiftNew gift : mGiftData.limit) {
+                            ids.add(gift.id);
+                        }
                     }
-                    for (IndexGiftNew gift : mGiftData.limit) {
-                        ids.add(gift.id);
-                    }
-                    for (IndexGiftNew gift : mGiftData.news) {
-                        ids.add(gift.id);
+                    if (mGiftData.news != null) {
+                        for (IndexGiftNew gift : mGiftData.news) {
+                            ids.add(gift.id);
+                        }
                     }
                     ReqRefreshGift reqData = new ReqRefreshGift();
                     reqData.ids = ids;
@@ -426,8 +427,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                 // 数据刷新成功，进行更新
                                 HashMap<String, IndexGiftNew> respData = response.body().getData();
                                 ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-                                updateCircle(respData, waitDelIndexs, mGiftData.zero);
-                                delIndex(mGiftData.zero, waitDelIndexs);
                                 waitDelIndexs.clear();
                                 updateCircle(respData, waitDelIndexs, mGiftData.limit);
                                 delIndex(mGiftData.limit, waitDelIndexs);

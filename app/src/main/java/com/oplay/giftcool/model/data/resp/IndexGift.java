@@ -13,8 +13,8 @@ public class IndexGift implements Serializable {
 	@SerializedName("banner")
 	public ArrayList<IndexBanner> banner;
 
-	@SerializedName("zero")
-	public ArrayList<IndexGiftNew> zero;
+//	@SerializedName("zero")
+//	public ArrayList<IndexGiftNew> zero;
 
 	@SerializedName("like")
 	public ArrayList<IndexGiftLike> like;
