@@ -605,4 +605,11 @@ public class IntentUtil {
         }
     }
 
+    public static void startBrowser(Context context, String url) {
+        if (context == null) {
+            return;
+        }
+        Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(in);
+    }
 }

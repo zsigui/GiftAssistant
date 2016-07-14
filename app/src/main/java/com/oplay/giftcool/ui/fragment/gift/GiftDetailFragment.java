@@ -316,7 +316,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
                     tvName.setText(giftData.name);
-//                    tvUsage.setText(giftData.usage);
                     ViewUtil.handleLink(tvUsage, giftData.usage, WebViewUrl.PROTOCOL);
                 }
                 tvContent.setText(giftData.content);
