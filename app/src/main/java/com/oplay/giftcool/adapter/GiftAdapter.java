@@ -196,11 +196,6 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
             case TYPE_BANNER:
                 updateBanners((BannerVH) holder);
                 break;
-//			case TYPE_ZERO:
-//				ZeroVH zeroVH = ((ZeroVH) holder);
-//				zeroVH.rvAdapter.updateData(mData.zero);
-//				zeroVH.tvSubTitle.setText(TITLE_ZERO);
-//				break;
             case TYPE_LIKE:
                 LikeVH likeVH = ((LikeVH) holder);
                 likeVH.rlTitle.setOnClickListener(this);

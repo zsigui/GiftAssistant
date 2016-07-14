@@ -163,9 +163,9 @@ public class AppDebugConfig {
         }
     }
 
-    public static void file(String tag, Object... object) {
+    public static void file(String tag, String filename, Object... object) {
         if (AppDebugConfig.IS_DEBUG && AppDebugConfig.IS_FILE_DEBUG) {
-            GCLog.file(STACKTRACE_INDEX, tag, null, null, object);
+            GCLog.file(STACKTRACE_INDEX, tag, null, filename, object);
         }
     }
 }

@@ -35,7 +35,7 @@ final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
         String json = gson.toJson(value, type);
         AppDebugConfig.w(AppDebugConfig.TAG_ENCRYPT, "url : " + requestUrl);
         AppDebugConfig.w(AppDebugConfig.TAG_ENCRYPT, "request data : " + json);
-        AppDebugConfig.file(AppDebugConfig.TAG_ENCRYPT,
+        AppDebugConfig.file(AppDebugConfig.TAG_ENCRYPT, null,
                 String.format(Locale.CHINA, "url : %s\nrequest data : %s", requestUrl, json));
         byte[] data = NetDataEncrypt.getInstance().encrypt(json, 0);
         return RequestBody.create(MEDIA_TYPE, data);
