@@ -93,16 +93,51 @@ public class FileUtil {
      * 写入缓存数据到指定Key的MD5为文件名的文件中
      */
     public static <T> void writeCacheByKey(final Context context, final String key, final T data) {
+//        ThreadUtil.runInThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String realKey = Coder_Md5.md5(key);
+//                    File storeFile = new File(FileUtil.getOwnCacheDirectory(context, Global.NET_CACHE_PATH, true),
+//                            realKey + ".cache");
+//                    String content = AssistantApp.getInstance().getGson().toJson(data);
+//                    writeString(storeFile, content, DEFAULT_CHASET, false);
+//                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeCacheByKey : write content success!");
+//                } catch (Throwable t) {
+//                    AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
+//                }
+//            }
+//        });
+        writeCacheByKey(context, key, data, false);
+    }
+
+    public static <T> void writeCacheByKey(final Context context, final String key, final T data, final boolean
+            needMd5Judge) {
         ThreadUtil.runInThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     String realKey = Coder_Md5.md5(key);
+                    String content = AssistantApp.getInstance().getGson().toJson(data);
+                    if (needMd5Judge) {
+                        String srcMd5 = SPUtil.getString(context, "file_md5", key, null);
+                        final String destMd5 = Coder_Md5.md5(content);
+                        if (!TextUtils.isEmpty(srcMd5)) {
+                            // 此前已有缓存数据
+                            if (destMd5 != null && destMd5.equalsIgnoreCase(srcMd5)) {
+                                AppDebugConfig.d(AppDebugConfig.TAG_UTIL, key + " : has equal md5, no need to update!");
+                                // md5相同，不更新
+                                return;
+                            }
+                        }
+                        if (!TextUtils.isEmpty(destMd5)) {
+                            SPUtil.putString(context, "file_md5", key, destMd5);
+                        }
+                    }
                     File storeFile = new File(FileUtil.getOwnCacheDirectory(context, Global.NET_CACHE_PATH, true),
                             realKey + ".cache");
-                    String content = AssistantApp.getInstance().getGson().toJson(data);
                     writeString(storeFile, content, DEFAULT_CHASET, false);
-                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "FileUtil.writeCacheByKey : write content success!");
+                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, key + " : FileUtil.writeCacheByKey : write content success!");
                 } catch (Throwable t) {
                     AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
                 }
@@ -278,14 +313,19 @@ public class FileUtil {
      * @param data
      */
     public static void writeBytes(File file, byte[] data, boolean append) {
-        FileOutputStream fout = null;
-        try {
-            fout = new FileOutputStream(file, append);
-            writeBytes(fout, data);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            closeIO(fout);
+        File parent = file.getParentFile();
+        AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "写入文件路径: " + file.getAbsolutePath());
+        if (parent == null || parent.mkdirs() || parent.isDirectory()) {
+            FileOutputStream fout = null;
+            try {
+                fout = new FileOutputStream(file, append);
+                writeBytes(fout, data);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                AppDebugConfig.d(AppDebugConfig.TAG_UTIL, e);
+            } finally {
+                closeIO(fout);
+            }
         }
     }
 

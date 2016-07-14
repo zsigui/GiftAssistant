@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
@@ -26,18 +27,21 @@ import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
+import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
+import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,6 +72,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     private IndexGift mGiftData;
     // 请求后游戏键值的MD5串
     private String mGameKey;
+
+    // ‘猜你喜欢’ 分离出来的数据
+    private ArrayList<IndexGiftLike> mLikeData;
     private JsonReqBase<ReqIndexGift> mReqPageObj;
     // 每隔5分钟刷新一次
     private Runnable mRefreshRunnable = new Runnable() {
@@ -148,6 +155,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         data.pageSize = 20;
         mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
         mLastPage = PAGE_FIRST;
+        readLikeCacheData();
     }
 
     /**
@@ -168,16 +176,17 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             public void run() {
                 refreshInitConfig();
                 // 判断网络情况
-//        if (!NetworkUtil.isConnected(getContext())) {
-//            refreshFailEnd();
-//            return;
-//        }
+                if (!NetworkUtil.isConnected(getContext())) {
+                    readCacheData();
+                    return;
+                }
                 if (mCallRefresh != null) {
                     mCallRefresh.cancel();
                 }
 
                 ReqIndexGift data = new ReqIndexGift();
-                data.appNames = Global.getInstalledAppNames();
+                // 解除已安装应用信息获取
+//                data.appNames = Global.getInstalledAppNames();
                 JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
                 mCallRefresh = Global.getNetEngine().obtainIndexGift(reqData);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGift>>() {
@@ -195,7 +204,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                 refreshSuccessEnd();
                                 IndexGift data = response.body().getData();
                                 updateData(data, 0, -1);
+                                mLastPage = PAGE_FIRST;
                                 FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
+                                requestLikeData();
                                 return;
                             }
                         }
@@ -216,6 +227,17 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         });
     }
 
+    private void readLikeCacheData() {
+        FileUtil.readCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
+                new CallbackListener<ArrayList<IndexGiftLike>>() {
+                    @Override
+                    public void doCallBack(ArrayList<IndexGiftLike> data) {
+                        AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "加载的猜你喜欢数据: " + data);
+                        mLikeData = data;
+                    }
+                }, new TypeToken<ArrayList<IndexGiftLike>>(){}.getType());
+    }
+
     private void readCacheData() {
         FileUtil.readCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX,
                 new CallbackListener<IndexGift>() {
@@ -226,6 +248,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                             // 获取数据成功
                             refreshSuccessEnd();
                             updateData(data, 0, -1);
+                            mLastPage = PAGE_FIRST;
                         } else {
                             refreshFailEnd();
                         }
@@ -254,10 +277,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     @Override
     protected void loadMoreData() {
         if (!mNoMoreLoad && !mIsLoadMore) {
-//            if (!NetworkUtil.isConnected(getContext())) {
-//                moreLoadFailEnd();
-//                return;
-//            }
+            if (!NetworkUtil.isConnected(getContext())) {
+                moreLoadFailEnd();
+                return;
+            }
             if (mCallLoad != null) {
                 mCallLoad.cancel();
             }
@@ -309,19 +332,63 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             return;
         }
         if ((data.limit == null || data.limit.size() == 0)
-                && (data.zero == null || data.zero.size() == 0)
-                && (data.news == null || data.news.size() == 0)
-                && (data.banner == null || data.banner.size() == 0)
-                && (data.like == null || data.like.size() == 0)) {
+                && (data.news == null || data.news.size() == 0)) {
             // 数据为空
             mViewManager.showEmpty();
             return;
         }
+
+
+        data.like = mLikeData;
         mViewManager.showContent();
         mHasData = true;
         mGiftData = data;
-        mLastPage = PAGE_FIRST;
         mAdapter.updateData(mGiftData, start, end);
+    }
+
+    private boolean mIsLoadLike = false;
+
+    private void requestLikeData() {
+
+        if (!mIsLoadLike) {
+            AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求猜你喜欢数据");
+            mIsLoadLike = true;
+            JsonReqBase<ReqIndexGift> req = new JsonReqBase<>();
+            req.data = new ReqIndexGift();
+            req.data.page = 1;
+            req.data.appNames = Global.getInstalledAppNames();
+            Global.getNetEngine().obtainGiftLike(req)
+                    .enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+                        @Override
+                        public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
+                                               Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+                            mIsLoadLike = false;
+                            if (!mCanShowUI || call.isCanceled()) {
+                                return;
+                            }
+                            AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
+                            if (response != null && response.isSuccessful()) {
+                                if (response.body() != null && response.body().isSuccess()) {
+                                    refreshSuccessEnd();
+                                    mLikeData = response.body().getData().data;
+                                    AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求到猜你喜欢数据: " + mLikeData);
+                                    updateData(mGiftData, 1, 1);
+                                    FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
+                                            mLikeData, true);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+                            mIsLoadLike = false;
+                            if (!mCanShowUI || call.isCanceled()) {
+                                return;
+                            }
+                            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
+                        }
+                    });
+        }
     }
 
     private boolean mIsResume = false;
@@ -407,14 +474,15 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         mCallRefreshCircle.cancel();
                     }
                     HashSet<Integer> ids = new HashSet<Integer>();
-                    for (IndexGiftNew gift : mGiftData.zero) {
-                        ids.add(gift.id);
+                    if (mGiftData != null && mGiftData.limit != null) {
+                        for (IndexGiftNew gift : mGiftData.limit) {
+                            ids.add(gift.id);
+                        }
                     }
-                    for (IndexGiftNew gift : mGiftData.limit) {
-                        ids.add(gift.id);
-                    }
-                    for (IndexGiftNew gift : mGiftData.news) {
-                        ids.add(gift.id);
+                    if (mGiftData != null && mGiftData.news != null) {
+                        for (IndexGiftNew gift : mGiftData.news) {
+                            ids.add(gift.id);
+                        }
                     }
                     ReqRefreshGift reqData = new ReqRefreshGift();
                     reqData.ids = ids;
@@ -426,8 +494,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                 // 数据刷新成功，进行更新
                                 HashMap<String, IndexGiftNew> respData = response.body().getData();
                                 ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-                                updateCircle(respData, waitDelIndexs, mGiftData.zero);
-                                delIndex(mGiftData.zero, waitDelIndexs);
                                 waitDelIndexs.clear();
                                 updateCircle(respData, waitDelIndexs, mGiftData.limit);
                                 delIndex(mGiftData.limit, waitDelIndexs);
@@ -567,7 +633,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         IndexBanner banner = mGiftData.banner.get(position);
         StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.GIFT_BANNER,
                 StatisticsManager.ID.STR_GIFT_BANNER,
-                String.format("第%d推广位，标题：%s", position, banner.title));
+                String.format(Locale.CHINA, "第%d推广位，标题：%s", position, banner.title));
         BannerTypeUtil.handleBanner(getContext(), banner);
     }
 
