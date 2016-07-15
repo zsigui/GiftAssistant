@@ -112,6 +112,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         assistantApp.initRetrofit();
         Global.resetNetEngine();
 
+        // 初始化配置，获取更新信息
+        if (!initAndCheckUpdate()) {
+            AppDebugConfig.d("initAndCheckUpdate failed!");
+        }
 
         doClearWorkForOldVer();
         Global.getInstalledAppNames();
@@ -193,7 +197,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
         }
     }
-
 
     private boolean initAndCheckUpdate() {
         ReqInitApp data = new ReqInitApp();

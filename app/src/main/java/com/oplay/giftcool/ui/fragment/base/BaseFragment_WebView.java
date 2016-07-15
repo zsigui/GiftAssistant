@@ -22,11 +22,11 @@ import android.widget.ProgressBar;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
-import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.SetTitleListner;
 import com.oplay.giftcool.listener.WebViewInterface;
+import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -102,9 +102,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 }
                 //首先域名匹配
                 // 对于部分机型 getBaseUrl 可能为null
-                if (WebViewUrl.getBaseUrl().contains(host)
-                        || NetUrl.getBaseUrl().contains(host)
-                        || host.contains(WebViewUrl.URL_DOMAIN)) {
+                if (MixUtil.isAppHost(host)) {
                     //其次路径匹配
                     if (mWebView != null) {
                         sScrollMap.put(mUrl, mWebView.getScrollY());
@@ -113,8 +111,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 //					loadUrl(url);
                     hasFind = false;
                 } else {
-                    Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(in);
+                    IntentUtil.startBrowser(getContext(), url);
                     hasFind = true;
                 }
                 return hasFind;

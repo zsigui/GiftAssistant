@@ -46,6 +46,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 /**
  * 主页-礼包页面主要内容页
@@ -474,12 +475,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         mCallRefreshCircle.cancel();
                     }
                     HashSet<Integer> ids = new HashSet<Integer>();
-                    if (mGiftData != null && mGiftData.limit != null) {
+                    if (mGiftData.limit != null) {
                         for (IndexGiftNew gift : mGiftData.limit) {
                             ids.add(gift.id);
                         }
                     }
-                    if (mGiftData != null && mGiftData.news != null) {
+                    if (mGiftData.news != null) {
                         for (IndexGiftNew gift : mGiftData.news) {
                             ids.add(gift.id);
                         }

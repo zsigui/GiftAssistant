@@ -30,6 +30,7 @@ import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -150,26 +151,33 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
         int type = 0;
         int commentId = 0;
         String url = WebViewUrl.URL_BASE;
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "action = " + intent.getAction());
+        AppDebugConfig.d(AppDebugConfig.TAG_APP, "action = " + intent.getAction());
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // 来自浏览器的URI请求
             Uri uri = intent.getData();
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data = " + intent.getData());
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "data = " + intent.getData());
 
             if (uri != null) {
-                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "" + uri.getAuthority() + "\n"
-                + uri.toString() + "\n" + uri.getPath() + "\n" + uri.getEncodedPath());
                 url = uri.toString();
                 final String path = uri.getPath();
                 final String detailS = "article/detail";
                 if (path.contains(detailS)) {
                     type = KeyConfig.TYPE_ID_POST_REPLY_DETAIL;
                     mPostId = Integer.parseInt(path.substring(detailS.length() + 2, path.length() - 1));
-                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mPostId = " + mPostId);
                 } else if (path.contains("comment")) {
                     type = KeyConfig.TYPE_ID_POST_COMMENT_DETAIL;
                     mPostId = Integer.parseInt(uri.getQueryParameter("activity_id"));
                     commentId = Integer.parseInt(uri.getQueryParameter("comment_id"));
+                } else {
+                    if (!url.startsWith("http")) {
+                        int index = url.indexOf("://");
+                        if (index != -1) {
+                            url = "http" + url.substring(index);
+                        } else {
+                            url = "http://" + url;
+                        }
+                    }
+                    type = KeyConfig.TYPE_ID_DEFAULT;
                 }
             }
         } else {
@@ -193,9 +201,17 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
                         String.valueOf(getIdentifierId()), "");
                 break;
             default:
-                replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), "Web");
-                AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "type = " + type);
-//                mTypeHierarchy.remove(mTypeHierarchy.size() - 1);
+                try {
+                    String host = url.substring(7, url.indexOf("/", 8));
+                    if (MixUtil.isAppHost(host)) {
+                        replaceFragWithTitle(R.id.fl_container, WebFragment.newInstance(url), "Web");
+                    } else {
+                        IntentUtil.startBrowser(this, url);
+                        onBackPressed();
+                    }
+                } catch (Throwable t) {
+                    AppDebugConfig.w(AppDebugConfig.TAG_APP, t);
+                }
 //                ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
         }
     }

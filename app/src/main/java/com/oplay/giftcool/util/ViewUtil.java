@@ -230,10 +230,11 @@ public class ViewUtil {
         if (tv == null) {
             return;
         }
-        tv.setText(text);
         if (TextUtils.isEmpty(protocol) || !text.contains(protocol)) {
             tv.setAutoLinkMask(Linkify.ALL);
+            tv.setText(text);
         } else {
+            tv.setText(text);
             Linkify.addLinks(tv, Pattern.compile(protocol + "://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"),
                     protocol);
         }

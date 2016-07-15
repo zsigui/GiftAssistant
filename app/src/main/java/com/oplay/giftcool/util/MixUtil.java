@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -145,5 +147,11 @@ public class MixUtil {
             }
         }
         return false;
+    }
+
+    public static boolean isAppHost(String host) {
+        return WebViewUrl.getBaseUrl().contains(host)
+                || NetUrl.getBaseUrl().contains(host)
+                || host.contains(WebViewUrl.URL_DOMAIN);
     }
 }
