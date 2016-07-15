@@ -174,8 +174,11 @@ public void *(***);
 -keep class com.lody.legend.** {*;}
 #RocooFix end
 
+#AndFix start
 -keep class * extends java.lang.annotation.Annotation
-
 -keep class com.alipay.euler.andfix.** { public *; }
+#AndFix end
 
+#Xiaomi start
 -keep class com.oplay.giftcool.receiver.MiPushReceiver { *; }
+#Xiaomi end

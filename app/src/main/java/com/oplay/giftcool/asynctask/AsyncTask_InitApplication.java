@@ -12,7 +12,14 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.manager.PushMessageManager;
+import com.oplay.giftcool.model.data.req.ReqInitApp;
+import com.oplay.giftcool.model.data.resp.InitAppConfig;
+import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -22,6 +29,8 @@ import com.oplay.giftcool.util.log.GCLog;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.io.File;
+
+import retrofit2.Response;
 
 
 /**
@@ -138,6 +147,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         });
         // 每次登录请求一次更新用户状态和数据
         AccountManager.getInstance().updateUserSession();
+
+        // 初始化配置，获取更新信息
+        if (!initAndCheckUpdate()) {
+            AppDebugConfig.d("initAndCheckUpdate failed!");
+        }
+        // 初始化推送SDK
+        PushMessageManager.getInstance().initPush(assistantApp);
+
         assistantApp.setGlobalInit(true);
     }
 
@@ -177,17 +194,38 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         }
     }
 
-//    private void testDownload() {
-//        DownloadInfo info = new DownloadInfo();
-//        info.setTotalSize(95827865);
-//        info.setDownloadUrl("http://m.ouwan.com/api/quick_download/?app_id=6279&chn=300&pack_chn=1856000");
-//        info.setDestUrl("http://owan-cdn.ymapp.com/chn/apkpack/2016/04/19/qbpqq_2.5" +
-//                ".0_250_chn_1856000_92efbb4bde7721b1" +
-//                ".owk");
-//        info.setIsDownload(true);
-//        SilentDownloadManager.getInstance().startDownload(info);
-//    }
 
-
+    private boolean initAndCheckUpdate() {
+        ReqInitApp data = new ReqInitApp();
+        data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
+        JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
+        try {
+            Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
+            if (response != null && response.isSuccessful()) {
+                if (response.body() != null && response.body().isSuccess()) {
+                    InitAppResult initData = response.body().getData();
+                    if (initData != null) {
+                        if (initData.initAppConfig != null) {
+                            InitAppConfig config = initData.initAppConfig;
+                            AssistantApp.getInstance().setAllowDownload(config.isShowDownload);
+                            AssistantApp.getInstance().setQQInfo(config.qqInfo);
+                            AssistantApp.getInstance().setStartImg(config.startImgUrl);
+                            AssistantApp.getInstance().setBroadcastBanner(config.broadcastBanner);
+                            AssistantApp.getInstance().setPhoneLoginType(config.phoneLoginType);
+                            AssistantApp.getInstance().setPushSdk(config.pushSdk);
+                        }
+                        if (initData.updateInfo != null) {
+                            AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
+                        }
+                        return true;
+                    }
+                }
+            }
+            AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
+        } catch (Throwable e) {
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
+        }
+        return false;
+    }
 
 }

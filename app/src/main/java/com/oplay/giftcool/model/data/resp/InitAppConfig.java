@@ -33,4 +33,11 @@ public class InitAppConfig implements Serializable {
      */
     @SerializedName("phone_login_ui_type")
     public int phoneLoginType;
+
+    /**
+     * 设置推送的sdk，0 全部 1 小米推送 2 极光推送 <br />
+     * 默认 2
+     */
+    @SerializedName("push_sdk")
+    public int pushSdk = 2;
 }

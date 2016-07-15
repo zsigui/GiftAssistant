@@ -16,7 +16,6 @@ import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
-import com.oplay.giftcool.listener.impl.JPushTagsAliasCallback;
 import com.oplay.giftcool.model.MobileInfoModel;
 import com.oplay.giftcool.model.data.resp.UpdateSession;
 import com.oplay.giftcool.model.data.resp.UserInfo;
@@ -32,14 +31,12 @@ import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 
-import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.jpush.android.api.JPushInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -124,7 +121,7 @@ public class AccountManager implements OnFinishListener {
             ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_ALL);
             // 更新未读消息数量
             obtainUnreadPushMessageCount();
-            updateJPushTagAndAlias();
+            PushMessageManager.getInstance().updateJPushTagAndAlias(mContext);
         } else {
             ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_PART);
         }
@@ -253,61 +250,68 @@ public class AccountManager implements OnFinishListener {
      */
     private Call<JsonRespBase<UserInfo>> mCallUpdatePartInfo;
 
+    private boolean isUpdatePart = false;
     /**
      * 更新用户部分信息: 偶玩豆，金币，礼包数
      */
     public void updatePartUserInfo() {
         if (isLogin()) {
-            Global.THREAD_POOL.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (!NetworkUtil.isConnected(mContext)) {
-                        return;
-                    }
+            if (!isUpdatePart) {
+                isUpdatePart = true;
+                Global.THREAD_POOL.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!NetworkUtil.isConnected(mContext)) {
+                            isUpdatePart = false;
+                            return;
+                        }
 
-                    if (mCallUpdatePartInfo != null) {
-                        mCallUpdatePartInfo.cancel();
-                        mCallUpdatePartInfo = mCallUpdatePartInfo.clone();
-                    } else {
-                        mCallUpdatePartInfo = Global.getNetEngine().getUserPartInfo(new JsonReqBase<Void>());
-                    }
-                    mCallUpdatePartInfo.enqueue(new Callback<JsonRespBase<UserInfo>>() {
-                        @Override
-                        public void onResponse(Call<JsonRespBase<UserInfo>> call, Response<JsonRespBase
-                                <UserInfo>> response) {
-                            if (call.isCanceled() || !isLogin()) {
-                                return;
-                            }
-                            if (response != null && response.isSuccessful()) {
-                                if (response.body() != null && response.body().isSuccess()) {
-                                    UserModel user = getUser();
-                                    if (!isLogin()) {
-                                        // 重置登录信息，表示未登录
-                                        notifyUserAll(null);
-                                        return;
-                                    }
-                                    UserInfo info = response.body().getData();
-                                    if (info == null) {
-                                        return;
-                                    }
-                                    user.userInfo.score = info.score;
-                                    user.userInfo.bean = info.bean;
-                                    user.userInfo.giftCount = info.giftCount;
-                                    notifyUserPart(user);
+                        if (mCallUpdatePartInfo != null) {
+                            mCallUpdatePartInfo.cancel();
+                            mCallUpdatePartInfo = mCallUpdatePartInfo.clone();
+                        } else {
+                            mCallUpdatePartInfo = Global.getNetEngine().getUserPartInfo(new JsonReqBase<Void>());
+                        }
+                        mCallUpdatePartInfo.enqueue(new Callback<JsonRespBase<UserInfo>>() {
+                            @Override
+                            public void onResponse(Call<JsonRespBase<UserInfo>> call, Response<JsonRespBase
+                                    <UserInfo>> response) {
+                                isUpdatePart = false;
+                                if (call.isCanceled() || !isLogin()) {
                                     return;
                                 }
-                                sessionFailed(response.body());
+                                if (response != null && response.isSuccessful()) {
+                                    if (response.body() != null && response.body().isSuccess()) {
+                                        UserModel user = getUser();
+                                        if (!isLogin()) {
+                                            // 重置登录信息，表示未登录
+                                            notifyUserAll(null);
+                                            return;
+                                        }
+                                        UserInfo info = response.body().getData();
+                                        if (info == null) {
+                                            return;
+                                        }
+                                        user.userInfo.score = info.score;
+                                        user.userInfo.bean = info.bean;
+                                        user.userInfo.giftCount = info.giftCount;
+                                        notifyUserPart(user);
+                                        return;
+                                    }
+                                    sessionFailed(response.body());
+                                }
+                                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
                             }
-                            AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonRespBase<UserInfo>> call, Throwable t) {
-                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
-                        }
-                    });
-                }
-            });
+                            @Override
+                            public void onFailure(Call<JsonRespBase<UserInfo>> call, Throwable t) {
+                                isUpdatePart = false;
+                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -463,33 +467,6 @@ public class AccountManager implements OnFinishListener {
                 }
             });
         }
-    }
-
-    private boolean mHasSetAliasSuccess = false;
-
-    public boolean isHasSetAliasSuccess() {
-        return mHasSetAliasSuccess;
-    }
-
-    public void setHasSetAliasSuccess(boolean hasSetAliasSuccess) {
-        mHasSetAliasSuccess = hasSetAliasSuccess;
-    }
-
-    /**
-     * 更新Jpush的别名和标签信息（暂只设置别名）
-     */
-    public void updateJPushTagAndAlias() {
-        if (!isLogin()) {
-            // 用户不处于登录状态，不进行别名标记
-            mHasSetAliasSuccess = false;
-            return;
-        }
-        // 使用uid进行别名标记
-        String alias = Coder_Md5.md5(String.valueOf(getUserInfo().uid));
-        JPushInterface.setAlias(mContext, alias, new JPushTagsAliasCallback(mContext));
-
-        // 小米别名标记
-//        MiPushClient.subscribe(mContext, alias, null);
     }
 
     /**

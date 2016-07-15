@@ -28,7 +28,7 @@ public class JPushReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         long startTime = System.currentTimeMillis();
         if (intent != null && !TextUtils.isEmpty(intent.getAction())) {
-            AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction());
+            AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction());
             try {
                 if (context == null) {
                     context = AssistantApp.getInstance().getApplicationContext();
@@ -38,7 +38,7 @@ public class JPushReceiver extends BroadcastReceiver {
                         // 此时JPush连接中断
                         if (AppDebugConfig.IS_DEBUG) {
                             boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-                            AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", " +
+                            AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction() + ", " +
                                     "connected:" +
                                     connected);
                         }
@@ -47,26 +47,25 @@ public class JPushReceiver extends BroadcastReceiver {
                     }
                 } else if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
                     // 传递RegistrationId给服务器
-                    AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction()
+                    AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction()
                             + ", register id:" + JPushInterface.getRegistrationID(context));
                 } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                     // 不显示在状态栏的自定义消息，根据需要进行额外工作
                     String extra = intent.getExtras().getString(JPushInterface.EXTRA_EXTRA);
-                    AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 自定义消息，内容:" + extra);
+                    AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction() + ", 自定义消息，内容:" + extra);
                     if (extra == null) {
                         return;
                     }
                     PushMessageExtra msg = AssistantApp.getInstance().getGson().fromJson(extra, PushMessageExtra
                             .class);
-                    PushMessageManager.getInstance().handleCustomMessage(context, msg, intent);
-//					PushMessageManager.getInstance().handleNotifyMessage(context, msg);
+                    PushMessageManager.getInstance().handleCustomMessage(context, msg, intent, false);
 
                 } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
                     // 用户点击了通知，打开对应界面
                     // 不显示在状态栏的自定义消息，根据需要进行额外工作
                     final Bundle bundle = intent.getExtras();
                     String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
-                    AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" +
+                    AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction() + ", 处理打开的消息，附加:" +
 		                    extra);
                     if (extra == null) {
                         return;
@@ -83,9 +82,8 @@ public class JPushReceiver extends BroadcastReceiver {
                                 Map<String, String> kv = new HashMap<>();
                                 String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
                                 kv.put("消息ID", msgId);
-                                kv.put("消息标题", msg.title);
-                                kv.put("消息内容", msg.content);
-                                kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
+                                kv.put("推送SDK", "极光");
+                                kv.put("总计", String.format("%s-%s-极光", msgId, msg.title));
                                 StatisticsManager.getInstance().trace(
                                         AssistantApp.getInstance().getApplicationContext(),
                                         StatisticsManager.ID.PUSH_MESSAGE_OPENED,
@@ -98,7 +96,7 @@ public class JPushReceiver extends BroadcastReceiver {
                     // 用户接收到通知
                     final Bundle bundle = intent.getExtras();
                     String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
-                    AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "
+                    AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "action: " + intent.getAction() + ", 接收到通知消息,附加: "
                             + bundle.getString(JPushInterface.EXTRA_EXTRA));
                     if (extra == null) {
                         return;
@@ -112,9 +110,8 @@ public class JPushReceiver extends BroadcastReceiver {
                                 Map<String, String> kv = new HashMap<>();
                                 String msgId = bundle.getString(JPushInterface.EXTRA_MSG_ID);
                                 kv.put("消息ID", msgId);
-                                kv.put("消息标题", msg.title);
-                                kv.put("消息内容", msg.content);
-                                kv.put("总计", String.format("%s-%s-%s", msgId, msg.title, msg.content));
+                                kv.put("推送SDK", "极光");
+                                kv.put("总计", String.format("%s-%s-极光", msgId, msg.title));
                                 StatisticsManager.getInstance().trace(
                                         AssistantApp.getInstance().getApplicationContext(),
                                         StatisticsManager.ID.PUSH_MESSAGE_RECEIVED,
@@ -125,9 +122,9 @@ public class JPushReceiver extends BroadcastReceiver {
                     }
                 }
             } catch (Throwable t) {
-                AppDebugConfig.w(AppDebugConfig.TAG_JPUSH, t);
+                AppDebugConfig.w(AppDebugConfig.TAG_PUSH, t);
             } finally {
-                AppDebugConfig.d(AppDebugConfig.TAG_JPUSH, "deal time is " + (System.currentTimeMillis() - startTime)
+                AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "deal time is " + (System.currentTimeMillis() - startTime)
                         + " " + "ms");
             }
         }

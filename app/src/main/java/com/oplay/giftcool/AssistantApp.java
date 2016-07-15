@@ -121,6 +121,7 @@ public class AssistantApp extends Application {
     private OkHttpClient mHttpClient;
     private long mLastLaunchTime;
     private int mPhoneLoginType;
+    private int mPushSdk;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -182,10 +183,6 @@ public class AssistantApp extends Application {
         initLoadingView();
         // 初始化统计工具
         StatisticsManager.getInstance().init(this, getChannelId());
-        // 初始化推送SDK
-//        if (MixUtil.isInMainProcess(this)) {
-            PushMessageManager.getInstance().initPush(this);
-//        }
         Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
 
     }
@@ -695,5 +692,13 @@ public class AssistantApp extends Application {
      */
     public int getPhoneLoginType() {
         return mPhoneLoginType;
+    }
+
+    public void setPushSdk(int pushSdk) {
+        mPushSdk = pushSdk;
+    }
+
+    public int getPushSdk() {
+        return mPushSdk;
     }
 }
