@@ -34,7 +34,6 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -53,9 +52,6 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
     private ListView mDataView;
     private ArrayList<ScoreMission> mData;
     private ScoreTaskAdapter mAdapter;
-
-    // 包名列表
-    private HashSet<String> mPackName;
 
     public static TaskFragment newInstance() {
         return new TaskFragment();
@@ -182,13 +178,18 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
     private ArrayList<ScoreMission> transferToMissionList(ArrayList<ScoreMissionGroup> missionGroups) {
         ArrayList<ScoreMission> missions = new ArrayList<>();
         final boolean allowDownload = AssistantApp.getInstance().isAllowDownload();
+        int denominator = 0;
+        int molecular = 0;
         for (ScoreMissionGroup missionGroup : missionGroups) {
             final ScoreMission groupHeader = new ScoreMission();
             groupHeader.isHeader = true;
             missions.add(groupHeader);
             for (ScoreMission m : missionGroup.missions) {
-                if (m.dailyLimit > 1) {
-                    m.name = String.format(Locale.CHINA, "%s(%d/%d)", m.name, m.todayCompleteCount, m.dailyLimit);
+                denominator = Math.min(m.totalLimit, m.dailyLimit);
+                molecular = Math.max(m.todayCompleteCount, m.totalCompleteCount);
+                molecular = Math.min(denominator, molecular);
+                if (denominator > 1) {
+                    m.name = String.format(Locale.CHINA, "%s(%d/%d)", m.name, molecular, denominator);
                 }
                 if (m.actionType == TaskTypeUtil.MISSION_TYPE_DOWNLOAD) {
                     // 对于下载类型，需要预先判断
