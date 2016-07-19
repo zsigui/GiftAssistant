@@ -15,7 +15,7 @@ android {
 
 //		multiDexEnabled true
 
-		manifestPlaceholders = [jpushAppKey : JPUSH_APPKEY, qqAppKey: QQ_APPKEY]
+		manifestPlaceholders = [scheme: URI_SCHEME, jpushAppKey : JPUSH_APPKEY, qqAppKey: QQ_APPKEY]
 		buildConfigField 'String', 'APP_KEY', "\"${APP_KEY}\""
 		buildConfigField 'String', 'APP_SECRET', "\"${APP_SECRET}\""
 		buildConfigField 'String', 'OUWAN_SDK_VERSION', "\"${OUWAN_SDK_VERSION}\""

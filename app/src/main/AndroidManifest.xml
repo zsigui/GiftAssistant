@@ -62,8 +62,8 @@
 
     <!-- 小米推送，相同已删 -->
     <!--<permission-->
-            <!--android:name = "${applicationId}.permission.MIPUSH_RECEIVE"-->
-            <!--android:protectionLevel = "signature" />-->
+    <!--android:name = "${applicationId}.permission.MIPUSH_RECEIVE"-->
+    <!--android:protectionLevel = "signature" />-->
     <!--<uses-permission android:name = "${applicationId}.permission.MIPUSH_RECEIVE" />-->
 
     <application
@@ -95,8 +95,17 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.Main" />
+                <action android:name = "${applicationId}.action.MAIN" />
                 <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+            <intent-filter >
+                <category android:name = "android.intent.category.APP_BROWSER" />
+                <category android:name = "android.intent.category.DEFAULT" />
+
+                <action android:name = "android.intent.action.VIEW" />
+                <data
+                        android:scheme = "${scheme}"
+                        android:host = "libao.ouwan.com" />
             </intent-filter >
         </activity >
 
@@ -107,7 +116,7 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "stateVisible|adjustPan" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.Search" />
+                <action android:name = "${applicationId}.action.SEARCH" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -119,7 +128,7 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.GiftList" />
+                <action android:name = "${applicationId}.action.GIFTLIST" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -138,22 +147,17 @@
                 android:launchMode = "singleTop"
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
-            <intent-filter >
+            <!--<intent-filter >-->
                 <!--<action android:name = "android.intent.action.VIEW" />-->
-                <action android:name = "gcool.ouwan.com.action" />
 
-                <category android:name = "android.intent.category.DEFAULT" />
-                <category android:name = "android.intent.category.BROWSABLE" />
+                <!--<category android:name = "android.intent.category.DEFAULT" />-->
+                <!--<category android:name = "android.intent.category.BROWSABLE" />-->
 
-                <data
-                        android:host = "giftcool.ouwan.com"
-                        android:pathPrefix = "/api/show_gift"
-                        android:scheme = "http" />
-            </intent-filter >
-            <intent-filter >
-                <action android:name = "${applicationId}.action.GiftDetail" />
-                <category android:name = "android.intent.category.DEFAULT" />
-            </intent-filter >
+                <!--<data-->
+                        <!--android:host = "giftcool.ouwan.com"-->
+                        <!--android:pathPrefix = "/api/show_gift"-->
+                        <!--android:scheme = "http" />-->
+            <!--</intent-filter >-->
         </activity >
 
         <activity
@@ -163,7 +167,7 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.GameList" />
+                <action android:name = "${applicationId}.action.GAMELIST" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -176,7 +180,7 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.Setting" />
+                <action android:name = "${applicationId}.action.SETTING" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -194,7 +198,7 @@
                 android:screenOrientation = "sensorPortrait"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.Web" />
+                <action android:name = "${applicationId}.action.WEB" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -206,7 +210,7 @@
                 android:launchMode = "singleTop"
                 android:windowSoftInputMode = "adjustNothing|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.PostDetail" />
+                <action android:name = "${applicationId}.action.POSTDETAIL" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
             <intent-filter >
@@ -216,7 +220,7 @@
                 <action android:name = "android.intent.action.VIEW" />
 
                 <data
-                        android:scheme = "lb" />
+                        android:scheme = "lbweb" />
             </intent-filter >
         </activity >
 
@@ -227,7 +231,7 @@
                 android:launchMode = "singleTop"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.PostList" />
+                <action android:name = "${applicationId}.action.POSTLIST" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -239,7 +243,7 @@
                 android:launchMode = "singleTop"
                 android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
             <intent-filter >
-                <action android:name = "${applicationId}.action.MessageList" />
+                <action android:name = "${applicationId}.action.MESSAGELIST" />
                 <category android:name = "android.intent.category.DEFAULT" />
             </intent-filter >
         </activity >
@@ -632,10 +636,10 @@
             <intent-filter >
                 <action android:name = "com.xiaomi.mipush.ERROR" />
             </intent-filter >
-            <intent-filter>
-                <action android:name="${applicationId}.mipush.RECEIVE_ARRIVED" />
-                <action android:name="${applicationId}.mipush.RECEIVE_MESSAGE" />
-            </intent-filter>
+            <intent-filter >
+                <action android:name = "${applicationId}.mipush.RECEIVE_ARRIVED" />
+                <action android:name = "${applicationId}.mipush.RECEIVE_MESSAGE" />
+            </intent-filter >
         </receiver >
     </application >
 

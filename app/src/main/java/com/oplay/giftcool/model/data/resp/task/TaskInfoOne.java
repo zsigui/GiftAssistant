@@ -15,5 +15,5 @@ public class TaskInfoOne {
 	public String data;
 
 	@SerializedName("action")
-	public String action;
+	public String action = "";
 }

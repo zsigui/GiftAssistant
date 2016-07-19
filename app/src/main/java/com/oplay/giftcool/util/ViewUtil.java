@@ -230,6 +230,7 @@ public class ViewUtil {
         if (tv == null) {
             return;
         }
+        text = text.toLowerCase();
         if (TextUtils.isEmpty(protocol) || !text.contains(protocol)) {
             tv.setAutoLinkMask(Linkify.ALL);
             tv.setText(text);
