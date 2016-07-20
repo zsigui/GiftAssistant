@@ -2,7 +2,6 @@ package com.oplay.giftcool.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
@@ -68,17 +67,17 @@ public class GiftDetailActivity extends BaseAppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // 来自浏览器的URI请求
-            Uri uri = intent.getData();
-            if (uri != null) {
-                try {
-                    mId = Integer.parseInt(uri.getQueryParameter("plan_id"));
-                } catch (Exception e) {
-                    mId = 0;
-                    ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
-                    onBackPressed();
-                    return;
-                }
-            }
+//            Uri uri = intent.getData();
+//            if (uri != null) {
+//                try {
+//                    mId = Integer.parseInt(uri.getQueryParameter("plan_id"));
+//                } catch (Exception e) {
+//                    mId = 0;
+//                    ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
+//                    onBackPressed();
+//                    return;
+//                }
+//            }
         } else {
             mId = intent.getIntExtra(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_DEFAULT);
         }

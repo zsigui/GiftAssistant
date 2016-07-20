@@ -573,17 +573,17 @@ public class IntentUtil {
      */
     public static void handleJumpInfo(Context context, TaskInfoOne taskInfo) {
         final String ACTION_PREFIX = AppConfig.PACKAGE_NAME + ".action.";
-        if ("GameDetail".equals(taskInfo.action)) {
+        if ("GameDetail".equalsIgnoreCase(taskInfo.action)) {
             IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
-        } else if ("GiftDetail".equals(taskInfo.action)) {
+        } else if ("GiftDetail".equalsIgnoreCase(taskInfo.action)) {
             IntentUtil.jumpGiftDetail(context, taskInfo.id);
-        } else if ("PostDetail".equals(taskInfo.action)) {
+        } else if ("PostDetail".equalsIgnoreCase(taskInfo.action)) {
             if (TextUtils.isEmpty(taskInfo.data)) {
                 IntentUtil.jumpPostDetail(context, taskInfo.id);
             } else {
                 IntentUtil.jumpPostReplyDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
             }
-        } else if ("Sdk".equals(taskInfo.action)) {
+        } else if ("Sdk".equalsIgnoreCase(taskInfo.action)) {
             switch (taskInfo.id) {
                 case TaskTypeUtil.INFO_ONE_SDK_RECHARGE:
                     OuwanSDKManager.getInstance().recharge();
@@ -596,8 +596,8 @@ public class IntentUtil {
                     break;
             }
         } else {
-            IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action, taskInfo.id, taskInfo.data);
-            if ("Main".equals(taskInfo.action)) {
+            IntentUtil.jumpImplicit(context, ACTION_PREFIX + taskInfo.action.toUpperCase(), taskInfo.id, taskInfo.data);
+            if ("Main".equalsIgnoreCase(taskInfo.action)) {
                 if (context != null && context instanceof Activity) {
                     ((Activity) context).finish();
                 }

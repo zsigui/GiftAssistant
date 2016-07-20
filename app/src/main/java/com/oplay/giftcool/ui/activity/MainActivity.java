@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,14 +35,15 @@ import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
-import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
 import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -258,27 +260,32 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     private void handleIntent(Intent intent) {
         try {
-            if (intent != null && intent.getAction() != null
-                    && intent.getAction().equals(AppConfig.PACKAGE_NAME + ".action.Main")) {
-                int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
-                String dStr = intent.getStringExtra(KeyConfig.KEY_DATA);
-                int data = Integer.parseInt(TextUtils.isEmpty(dStr) ? "0" : dStr);
-                switch (type) {
-                    case KeyConfig.TYPE_ID_INDEX_GIFT:
-                        jumpToIndexGift(data);
-                        break;
-                    case KeyConfig.TYPE_ID_INDEX_GAME:
-                        jumpToIndexGame(data);
-                        break;
-                    case KeyConfig.TYPE_ID_INDEX_POST:
-                        jumpToIndexPost(data);
-                        break;
-                    case KeyConfig.TYPE_ID_INDEX_FREE:
-                        jumpToIndexFree(data);
-                        break;
-                    case KeyConfig.TYPE_ID_INDEX_UPGRADE:
-                        mHasShowUpdate = false;
-                        break;
+            if (intent != null && intent.getAction() != null) {
+                String action = intent.getAction();
+                if (action.equals(AppConfig.PACKAGE_NAME + ".action.MAIN")) {
+                    int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
+                    String dStr = intent.getStringExtra(KeyConfig.KEY_DATA);
+                    int data = Integer.parseInt(TextUtils.isEmpty(dStr) ? "0" : dStr);
+                    switch (type) {
+                        case KeyConfig.TYPE_ID_INDEX_GIFT:
+                            jumpToIndexGift(data);
+                            break;
+                        case KeyConfig.TYPE_ID_INDEX_GAME:
+                            jumpToIndexGame(data);
+                            break;
+                        case KeyConfig.TYPE_ID_INDEX_POST:
+                            jumpToIndexPost(data);
+                            break;
+                        case KeyConfig.TYPE_ID_INDEX_FREE:
+                            jumpToIndexFree(data);
+                            break;
+                        case KeyConfig.TYPE_ID_INDEX_UPGRADE:
+                            mHasShowUpdate = false;
+                            break;
+                    }
+                } else if (action.equals(Intent.ACTION_VIEW)) {
+                    Uri uri = intent.getData();
+                    MixUtil.handleViewUri(getApplicationContext(), uri);
                 }
             }
         } catch (Exception e) {

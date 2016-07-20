@@ -2,6 +2,7 @@ package com.oplay.giftcool.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
@@ -15,6 +16,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitQQ;
+import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 
@@ -163,5 +165,26 @@ public class MixUtil {
         return WebViewUrl.getBaseUrl().contains(host)
                 || NetUrl.getBaseUrl().contains(host)
                 || host.contains(WebViewUrl.URL_DOMAIN);
+    }
+
+    public static void handleViewUri(Context context, Uri uri) {
+        if (uri == null || context == null) {
+            AppDebugConfig.d(AppDebugConfig.TAG_UTIL, "uri = " + uri + ", context = " + context);
+            return;
+        }
+        try {
+            TaskInfoOne info = new TaskInfoOne();
+            String pathAction = uri.getEncodedPath();
+            info.action = pathAction.substring(1,
+                    pathAction.lastIndexOf('/') == pathAction.length() - 1? pathAction.length() - 1 : pathAction.length());
+            info.data = uri.getQueryParameter("data");
+            String id = uri.getQueryParameter("id");
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data = " + info.data + ", id = " + info.id);
+            info.id = (TextUtils.isEmpty(id) ? 0 : Integer.parseInt(id));
+
+            IntentUtil.handleJumpInfo(context, info);
+        } catch (Throwable t) {
+            AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
+        }
     }
 }
