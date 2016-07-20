@@ -21,7 +21,7 @@ import com.oplay.giftcool.util.ToastUtil;
 /**
  * Created by zsigui on 16-1-6.
  */
-public class WalletFragment extends BaseFragment {
+public class WalletFragment extends BaseFragment  {
 
     private final static String PAGE_NAME = "我的钱包";
     private TextView tvScore;

@@ -13,6 +13,7 @@ import net.ouwan.umipay.android.api.ActionCallbackListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
+import net.ouwan.umipay.android.api.PayCallbackListener;
 import net.ouwan.umipay.android.api.UmipayBrowser;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
@@ -31,7 +32,7 @@ import java.util.List;
 /**
  * Created by zsigui on 16-1-14.
  */
-public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener {
+public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener, PayCallbackListener {
 
     private Context mContext = AssistantApp.getInstance().getApplicationContext();
     private Handler mHandler = new Handler(mContext.getMainLooper());
@@ -68,6 +69,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 AccountManager.getInstance().logout();
             }
         });
+        ListenerManager.setPayCallbackListener(this);
         ListenerManager.setActionCallbackListener(this);
     }
 
@@ -201,11 +203,20 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
     @Override
     public void onActionCallback(final int action, final int code) {
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "action = " + action + ", code = " + code);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 ObserverManager.getInstance().notifyUserActionUpdate(action, code);
             }
         });
+    }
+
+    @Override
+    public void onPay(int code) {
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "pay_result：" + code);
+        if (code == UmipaySDKStatusCode.PAY_FINISH) {
+            AccountManager.getInstance().updatePartUserInfo();
+        }
     }
 }

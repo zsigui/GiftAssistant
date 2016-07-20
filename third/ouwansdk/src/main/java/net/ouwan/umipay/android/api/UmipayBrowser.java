@@ -563,7 +563,7 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 
 	@Override
 	protected void onDestroy() {
-		if (isPayPage() && mPayType == PAY_GAME) {
+		if (isPayPage() && (mPayType == PAY_GAME || mPayType == PAY_OUWAN)) {
 			ListenerManager.callbackPay(mPayCode);
 		}
 		if (mActionType != ACTION_DEFAULT) {
