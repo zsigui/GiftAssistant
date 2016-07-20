@@ -13,6 +13,7 @@ import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
@@ -126,6 +127,15 @@ public class MixUtil {
             case TaskTypeUtil.INFO_TWO_JOIN_QQ_GROUP:
                 IntentUtil.joinQQGroup(context, infoTwo.data);
                 break;
+            case TaskTypeUtil.INFO_TWO_SHARE_SPECIFIC_GIFT:
+                try {
+                    IndexGiftNew o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, IndexGiftNew.class);
+                    ShareSDKManager.getInstance(context).shareGift(context, fm, o);
+                } catch (Throwable t) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
+                }
+            default:
+                ToastUtil.showShort(ConstString.TOAST_VERSION_NOT_SUPPORT);
         }
     }
 
