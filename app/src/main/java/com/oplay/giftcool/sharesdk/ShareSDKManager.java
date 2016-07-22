@@ -5,21 +5,25 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.ShareAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.sharesdk.base.IShare;
 import com.oplay.giftcool.ui.fragment.dialog.ShareDialog;
 import com.oplay.giftcool.util.BitmapUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
@@ -85,6 +89,10 @@ public class ShareSDKManager {
     }
 
     public void shareGift(Context context, FragmentManager fm, IndexGiftNew gift) {
+        shareGift(context, fm, gift, "share");
+    }
+
+    public void shareGift(Context context, FragmentManager fm, IndexGiftNew gift, String from) {
         // 设置分享成功后奖励类型
         String title;
         String b_desc;
@@ -123,7 +131,8 @@ public class ShareSDKManager {
                 title,
                 gift.content,
                 b_desc,
-                String.format(Locale.CHINA, "%s?plan_id=%d", WebViewUrl.getWebUrl(WebViewUrl.GIFT_DETAIL), gift.id),
+                String.format(Locale.CHINA, "%s?plan_id=%d&from=%s", WebViewUrl.getWebUrl(WebViewUrl.GIFT_DETAIL),
+                        gift.id, from),
                 gift.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
                         ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
     }
@@ -143,6 +152,46 @@ public class ShareSDKManager {
                 b_desc,
                 WebViewUrl.getBaseUrl(),
                 WebViewUrl.ICON_GCOOL, icon);
+    }
+
+    public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data) {
+        shareActivity(context, fm, data, "share");
+    }
+
+    public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data, String from) {
+        if (data == null) {
+            ToastUtil.showShort(ConstString.SHARE_ERROR);
+            return;
+        }
+        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_ACTIVITY_SHARE);
+        String title = data.title;
+        String desc = data.content;
+        String b_desc = data.content;
+        String icon = data.img;
+        String shareUrl = String.format(Locale.CHINA, WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), data.id, from);
+        Bitmap bitmap = null;
+
+        if (TextUtils.isEmpty(title)) {
+            title = context.getResources().getString(R.string.st_share_activity_title);
+        }
+
+        if (TextUtils.isEmpty(desc)) {
+            b_desc = desc = context.getResources().getString(R.string.st_share_activity_desc);
+        } else if (desc.length() > 20) {
+            desc = desc.substring(0, 20) + "...";
+        }
+
+        if (TextUtils.isEmpty(icon)) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+        }
+        ShareSDKManager.getInstance(context).share(fm,
+                context,
+                context.getResources().getString(R.string.st_dialog_activity_share_title),
+                title,
+                desc,
+                b_desc,
+                shareUrl,
+                icon, bitmap);
     }
 
     public IWXAPI getWXApi() {

@@ -5,9 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -22,6 +24,8 @@ import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnHandleListener;
 import com.oplay.giftcool.listener.ToolbarListener;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
+import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.WebFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -44,10 +48,12 @@ import retrofit2.Retrofit;
 public class PostDetailActivity extends BaseAppCompatActivity implements ToolbarListener {
 
     private NoEncryptEngine mEngine;
+    public final static String DEFAULT_FROM = "activity";
 
     private List<Integer> mTypeHierarchy;
     private int mPostId;
     private int identifierId = 100000;
+    private IndexPostNew postData;
 
     public int getIdentifierId() {
         return identifierId++;
@@ -84,6 +90,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
 
     private OnHandleListener mHandleListener;
     private TextView btnToolRight;
+    private ImageView ivShare;
 
     public void showRightBtn(int visibility, String text) {
         if (mToolbar == null)
@@ -95,13 +102,30 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
     }
 
     private void iniToolRight(String text) {
-        if (btnToolRight == null) {
+        if (btnToolRight == null || ivShare == null) {
             ViewStub v = getViewById(mToolbar, R.id.vs_bar_right);
             if (v != null) {
                 v.inflate();
                 btnToolRight = getViewById(R.id.btn_bar_right);
                 btnToolRight.setOnClickListener(this);
                 btnToolRight.setText(text);
+                ivShare = getViewById(R.id.iv_bar_share);
+                ivShare.setOnClickListener(this);
+
+            }
+        }
+    }
+
+    public void showShareBtn(int visibility, IndexPostNew data) {
+        if (mToolbar == null)
+            return;
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "visibility = " + visibility + ", data = " + data);
+        iniToolRight(null);
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ivShare = " + ivShare);
+        if (ivShare != null) {
+            ivShare.setVisibility(visibility);
+            if (data != null) {
+                postData = data;
             }
         }
     }
@@ -116,6 +140,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
         }
     }
 
+    @Override
     public void setHandleListener(OnHandleListener handleListener) {
         mHandleListener = handleListener;
     }
@@ -132,11 +157,11 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
                 finish();
                 break;
             case R.id.btn_bar_right:
-                if (mHandleListener != null) {
-                    mHandleListener.deal();
-                } else {
                     IntentUtil.jumpPostDetail(this, mPostId);
-                }
+                break;
+            case R.id.iv_bar_share:
+                ShareSDKManager.getInstance(this)
+                        .shareActivity(getApplicationContext(), getSupportFragmentManager(), postData);
                 break;
         }
     }
@@ -150,6 +175,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
 
         int type = 0;
         int commentId = 0;
+        String from = DEFAULT_FROM;
         String url = WebViewUrl.URL_BASE;
         AppDebugConfig.d(AppDebugConfig.TAG_APP, "action = " + intent.getAction());
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -161,6 +187,10 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
                 url = uri.toString();
                 final String path = uri.getPath();
                 final String detailS = "article/detail";
+                final String f = uri.getQueryParameter("from");
+                if (!TextUtils.isEmpty(f)) {
+                    from = f;
+                }
                 if (path.contains(detailS)) {
                     type = KeyConfig.TYPE_ID_POST_REPLY_DETAIL;
                     mPostId = Integer.parseInt(path.substring(detailS.length() + 2, path.length() - 1));
@@ -189,11 +219,13 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
             }
             commentId = intent.getIntExtra(KeyConfig.KEY_DATA_O, 0);
             mPostId = intent.getIntExtra(KeyConfig.KEY_DATA, 0);
+            from = intent.getStringExtra(KeyConfig.KEY_DATA_T);
         }
         mTypeHierarchy.add(type);
         switch (type) {
             case KeyConfig.TYPE_ID_POST_REPLY_DETAIL:
-                replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(mPostId),
+                replaceFragWithTitle(R.id.fl_container, PostDetailFragment.newInstance(mPostId,
+                        TextUtils.isEmpty(from)? DEFAULT_FROM : from),
                         String.valueOf(getIdentifierId()), "");
                 break;
             case KeyConfig.TYPE_ID_POST_COMMENT_DETAIL:

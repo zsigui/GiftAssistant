@@ -74,6 +74,8 @@ public class ConstString {
     // 安装完删除安装文件提示
     public static final String TOAST_REMOVE_AFTER_SUCCESS_INSTALL = "已删除%s安装包，为您节省了%s空间";
 
+    // 获取不到分享内容
+    public static final String SHARE_ERROR = "分享内容出错";
     // 分享成功
     public static final String TOAST_SHARE_SUCCESS = "分享成功";
     // 分享失败
@@ -112,6 +114,7 @@ public class ConstString {
 
     // 密码修改成功提示
     public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录~";
+
 
     /*------------- 定义Toast显示内容 ----------------*/
 }

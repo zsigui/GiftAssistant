@@ -88,10 +88,11 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
     private HashMap<String, Object> reqData = new HashMap<>();
     private ReqPostToken reqToken = new ReqPostToken();
 
-    public static PostDetailFragment newInstance(int postId) {
+    public static PostDetailFragment newInstance(int postId, String from) {
         PostDetailFragment fragment = new PostDetailFragment();
         Bundle b = new Bundle();
         b.putInt(KeyConfig.KEY_DATA, postId);
+        b.putString(KeyConfig.KEY_DATA_O, from);
         fragment.setArguments(b);
         return fragment;
     }
@@ -130,6 +131,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
         }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         int postId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
+        String from = getArguments().getString(KeyConfig.KEY_DATA_O, PostDetailActivity.DEFAULT_FROM);
         mAdapter = new PostReplyAdapter(getContext(), mPostImg);
         GridLayoutManager gld = new GridLayoutManager(getContext(), 4);
         rlContainer.setLayoutManager(gld);
@@ -143,13 +145,14 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
         reqToken.postId = postId;
         reqData.put(KEY_POST_ID, postId);
 //		showBar(true, null);
-        loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), postId));
+        loadUrl(String.format(WebViewUrl.getWebUrl(WebViewUrl.ACTIVITY_DETAIL), postId, from));
     }
 
     @Override
     protected void lazyLoad() {
         if (getActivity() != null) {
-            ((PostDetailActivity) getActivity()).showRightBtn(View.INVISIBLE, ConstString.TEXT_POST_BTN);
+            PostDetailActivity p = (PostDetailActivity) getActivity();
+            p.showRightBtn(View.GONE, ConstString.TEXT_POST_BTN);
         }
         reloadPage();
     }

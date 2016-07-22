@@ -10,6 +10,7 @@ public class KeyConfig {
     public static final String KEY_TYPE = "key_type";
     public static final String KEY_DATA = "key_data";
     public static final String KEY_DATA_O = "key_data2";
+    public static final String KEY_DATA_T = "key_data3";
     public static final String KEY_TITLE = "key_title";
     public static final String KEY_URL = "key_url";
     public static final String KEY_SEARCH = "key_search";

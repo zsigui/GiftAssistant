@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import io.socket.engineio.client.transports.Polling;
 
 /**
  * Created by zsigui on 16-4-12.
@@ -65,6 +66,8 @@ public class SocketIOManager {
             IO.Options opts = new IO.Options();
             opts.forceNew = true;
             opts.reconnection = true;
+            opts.port = 80;
+            opts.transports = new String[]{Polling.NAME};
             opts.reconnectionAttempts = 3;
 //				// 断开后，间隔30秒再次重试
             opts.reconnectionDelay = 30 * 1000;

@@ -285,6 +285,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                 mission.iconAlternate = R.drawable.ic_task_share_gcool;
             } else if (TaskTypeUtil.ID_GIFT_SHARE.equalsIgnoreCase(id)) {
                 mission.iconAlternate = R.drawable.ic_task_share_gift;
+            } else if (TaskTypeUtil.ID_ACTIVITY_SHARE.equalsIgnoreCase(id)) {
+                mission.iconAlternate = R.drawable.ic_task_share_activity;
             } else if (TaskTypeUtil.ID_PLAY_GAME.equalsIgnoreCase(id)) {
                 mission.iconAlternate = R.drawable.ic_task_play_game;
             } else if (TaskTypeUtil.ID_BUG_GIFT_USE_OUWAN.equalsIgnoreCase(id)) {

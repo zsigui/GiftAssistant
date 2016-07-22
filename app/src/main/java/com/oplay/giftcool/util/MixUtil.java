@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
@@ -132,10 +133,19 @@ public class MixUtil {
             case TaskTypeUtil.INFO_TWO_SHARE_SPECIFIC_GIFT:
                 try {
                     IndexGiftNew o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, IndexGiftNew.class);
-                    ShareSDKManager.getInstance(context).shareGift(context, fm, o);
+                    ShareSDKManager.getInstance(context).shareGift(context, fm, o, "task");
                 } catch (Throwable t) {
                     AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
                 }
+                break;
+            case TaskTypeUtil.INFO_TWO_SHARE_SPECIFIC_ACTIVITY:
+                try {
+                    IndexPostNew o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, IndexPostNew.class);
+                    ShareSDKManager.getInstance(context).shareActivity(context, fm, o, "task");
+                } catch (Throwable t) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
+                }
+                break;
             default:
                 ToastUtil.showShort(ConstString.TOAST_VERSION_NOT_SUPPORT);
         }

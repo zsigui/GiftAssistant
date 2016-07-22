@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -19,12 +20,14 @@ import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
@@ -168,7 +171,7 @@ public class WebViewInterface extends Observable {
                     return RET_PARAM_ERR;
                 }
                 ShareSDKManager.getInstance(mHostActivity).shareGift(mHostActivity,
-                        mHostFragment.getChildFragmentManager(), gift);
+                        mHostFragment.getChildFragmentManager(), gift, "js");
             } catch (Throwable e) {
                 return RET_PARAM_ERR;
             }
@@ -200,7 +203,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 根据类型跳转对应列表界面 <br /> <br />
-     *
+     * <p/>
      * Better use {@link #jumpPage(String)} to instead,
      * this will be removed later
      */
@@ -261,7 +264,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 跳转活动评论页面 <br /> <br />
-     *
+     * <p/>
      * Better use {@link #jumpPage(String)} to instead,
      * this will be removed later
      */
@@ -277,7 +280,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 显示多张预览图片 <br /> <br />
-     *
+     * <p/>
      * Add in 1104
      *
      * @param selectedIndex 选择最初显示图片的下标，从0开始
@@ -300,7 +303,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 显示底部的回复栏 <br /> <br />
-     *
+     * <p/>
      * Add in 1104
      */
     @JavascriptInterface
@@ -323,7 +326,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 进行页面跳转 <br /> <br />
-     *
+     * <p/>
      * Add in 1305
      */
     @JavascriptInterface
@@ -344,9 +347,9 @@ public class WebViewInterface extends Observable {
     }
 
     /**
-     *  执行特定代码段任务，如调起升级、求礼包、分享等弹窗 <br /> <br />
-     *
-     *  Add in 1305
+     * 执行特定代码段任务，如调起升级、求礼包、分享等弹窗 <br /> <br />
+     * <p/>
+     * Add in 1305
      */
     @JavascriptInterface
     public int executeLogicCode(final String data) {
@@ -367,7 +370,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 获取APP的启动时间 <br /> <br />
-     *
+     * <p/>
      * Add in 1300
      */
     @JavascriptInterface
@@ -377,7 +380,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 显示关注游戏的引导页 <br /> <br />
-     *
+     * <p/>
      * Add in 1300
      */
     @JavascriptInterface
@@ -393,7 +396,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 进行异步网络请求 <br /> <br />
-     *
+     * <p/>
      * Add in 1104
      */
     @JavascriptInterface
@@ -460,7 +463,7 @@ public class WebViewInterface extends Observable {
 
     /**
      * 设置回复谁 <br /> <br />
-     *
+     * <p/>
      * Add in 1104
      *
      * @param commentId 回复对象ID
@@ -483,7 +486,40 @@ public class WebViewInterface extends Observable {
             });
             return RET_SUCCESS;
         }
-        return RET_OTHER_ERR;
+        return RET_INTERNAL_ERR;
+    }
+
+
+    /**
+     * 显示活动详情页面的分享按钮 <br /> <br />
+     * <p/>
+     * Add in 1108
+     *
+     * @param show 是否显示
+     * @param data 分享的数据
+     * @return
+     */
+    @JavascriptInterface
+    public int showActivityShareBtn(final boolean show, final String data) {
+        try {
+            final IndexPostNew o = TextUtils.isEmpty(data) ?
+                    null : AssistantApp.getInstance().getGson().fromJson(data, IndexPostNew.class);
+            if (mHostActivity != null) {
+                if (mHostActivity instanceof PostDetailActivity) {
+                    ThreadUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((PostDetailActivity) mHostActivity).showShareBtn(show ? View.VISIBLE : View.GONE, o);
+                        }
+                    });
+                    return RET_SUCCESS;
+                }
+            }
+            return RET_INTERNAL_ERR;
+        } catch (Throwable t) {
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, t);
+            return RET_PARAM_ERR;
+        }
     }
 
     /**

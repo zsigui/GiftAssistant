@@ -533,6 +533,18 @@ public class IntentUtil {
     }
 
     /**
+     * 跳转活动详情页面，并指定来源
+     */
+    public static void jumpPostDetail(Context context, int postId, String from) {
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
+        intent.putExtra(KeyConfig.KEY_DATA, postId);
+        intent.putExtra(KeyConfig.KEY_DATA_T, from);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    /**
      * 跳转活动评论详情页面
      */
     public static void jumpPostReplyDetail(Context context, int postId, int commentId) {

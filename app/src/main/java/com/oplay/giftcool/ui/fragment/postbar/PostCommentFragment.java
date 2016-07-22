@@ -118,8 +118,10 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
     @Override
     protected void lazyLoad() {
         if (getActivity() != null) {
-            ((PostDetailActivity) getActivity()).setPostId(mPostId);
-            ((PostDetailActivity) getActivity()).showRightBtn(View.VISIBLE, ConstString.TEXT_POST_BTN);
+            PostDetailActivity p = (PostDetailActivity) getActivity();
+            p.setPostId(mPostId);
+            p.showRightBtn(View.VISIBLE, ConstString.TEXT_POST_BTN);
+            p.showShareBtn(View.GONE, null);
         }
         reloadPage();
     }
@@ -178,7 +180,9 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
     public void release() {
         super.release();
         if (getActivity() != null) {
-            ((PostDetailActivity) getActivity()).showRightBtn(View.INVISIBLE, ConstString.TEXT_POST_BTN);
+            PostDetailActivity p = (PostDetailActivity) getActivity();
+            p.showRightBtn(View.GONE, ConstString.TEXT_POST_BTN);
+            p.showShareBtn(View.VISIBLE, null);
         }
     }
 

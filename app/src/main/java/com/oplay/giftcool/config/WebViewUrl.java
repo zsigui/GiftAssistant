@@ -27,7 +27,7 @@ public class WebViewUrl {
 	public static final String COUPON_DETAIL_NOTE = "coupon-intro/";
 	public static final String LOTTERY = "campaigns/2016/lottery/?need_validate=1";
 	public static final String SIGN_IN = "campaigns/2016/checkin/?need_validate=1";
-	public static final String ACTIVITY_DETAIL = "article/detail/%d/";
+	public static final String ACTIVITY_DETAIL = "article/detail/%d/?from=%s";
 	public static final String ACTIVITY_COMMENT_LIST = "comment/?activity_id=%d&comment_id=%d";
 
 	public static String getWebUrl(String url) {

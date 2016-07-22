@@ -260,6 +260,9 @@
     <string name = "st_dialog_gcool_share_title" >礼包酷分享</string >
     <string name = "st_dialog_invite_title" >没时间解释了，快来抢礼包</string >
     <string name = "st_share_gcool_description_1" >价值888元的礼包，居然可以「0元抢」，手快有，手慢无</string >
+    <string name = "st_dialog_activity_share_title" >活动分享</string >
+    <string name = "st_share_activity_title" >活动详情</string >
+    <string name = "st_share_activity_desc" >精彩活动等你来参与，还不快快点击！</string >
 
     <string name = "st_dialog_btn_download" >马上下载</string >
     <string name = "st_dialog_btn_install" >安装</string >

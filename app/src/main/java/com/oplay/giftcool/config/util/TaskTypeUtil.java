@@ -49,6 +49,7 @@ public class TaskTypeUtil {
     public static final int INFO_TWO_SHOW_UPGRADE = 103;
     public static final int INFO_TWO_JOIN_QQ_GROUP = 104;
     public static final int INFO_TWO_SHARE_SPECIFIC_GIFT = 105;
+    public static final int INFO_TWO_SHARE_SPECIFIC_ACTIVITY = 106;
 
 	/*----------- 任务代号 -----------*/
     /**
@@ -91,6 +92,10 @@ public class TaskTypeUtil {
      * 分享礼包
      */
     public static final String ID_GIFT_SHARE = "SHARE_GIFT";
+    /**
+     * 分享活动
+     */
+    public static final String ID_ACTIVITY_SHARE = "SHARE_ACTIVITY";
     /**
      * 试玩游戏
      */
