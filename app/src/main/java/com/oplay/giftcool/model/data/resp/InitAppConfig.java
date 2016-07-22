@@ -36,8 +36,7 @@ public class InitAppConfig implements Serializable {
 
     /**
      * 设置推送的sdk，0 全部 1 小米推送 2 极光推送 <br />
-     * 默认 2
      */
     @SerializedName("push_sdk")
-    public int pushSdk = 2;
+    public int pushSdk;
 }

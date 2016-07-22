@@ -513,13 +513,13 @@ public class PushMessageManager {
 
     public boolean needSetJPush() {
         int sdkType = AssistantApp.getInstance().getPushSdk();
-        return (sdkType == 0 || sdkType == SdkType.JPUSH)
+        return (sdkType == SdkType.ALL || sdkType == SdkType.JPUSH)
                 && (mHasSetAliasSign & SdkType.JPUSH) != SdkType.JPUSH;
     }
 
     public boolean needSetMPush() {
         int sdkType = AssistantApp.getInstance().getPushSdk();
-        return (sdkType == 0 || sdkType == SdkType.MI)
+        return (sdkType == SdkType.ALL || sdkType == SdkType.MI)
                 && (mHasSetAliasSign & SdkType.MI) != SdkType.MI;
     }
 

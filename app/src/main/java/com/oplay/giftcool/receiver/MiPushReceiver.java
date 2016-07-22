@@ -157,7 +157,7 @@ public class MiPushReceiver extends PushMessageReceiver {
                 tryCount = 0;
             } else {
                 AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "小米设置Alias失败");
-                PushMessageManager.getInstance().orHasSetAliasSign(PushMessageManager.SdkType.MI_F);
+                PushMessageManager.getInstance().andHasSetAliasSign(PushMessageManager.SdkType.MI_F);
                 if (tryCount ++ < 3) {
                     PushMessageManager.getInstance().updateJPushTagAndAlias(context);
                 }

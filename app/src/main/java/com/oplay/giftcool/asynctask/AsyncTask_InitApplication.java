@@ -215,7 +215,14 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                             AssistantApp.getInstance().setStartImg(config.startImgUrl);
                             AssistantApp.getInstance().setBroadcastBanner(config.broadcastBanner);
                             AssistantApp.getInstance().setPhoneLoginType(config.phoneLoginType);
-                            AssistantApp.getInstance().setPushSdk(config.pushSdk);
+                            // 由于默认未传会被默认为0，所以废除传值的0表示
+                            int pushSdk = 2;
+                            if (config.pushSdk < 0) {
+                                pushSdk = 0;
+                            } else if (config.pushSdk > 0) {
+                                pushSdk = config.pushSdk;
+                            }
+                            AssistantApp.getInstance().setPushSdk(pushSdk);
                         }
                         if (initData.updateInfo != null) {
                             AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);
