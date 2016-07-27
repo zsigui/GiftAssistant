@@ -1,0 +1,8 @@
+编译打包默认测试包(dDebugDebug)：
+    ./redex -d 1 -n 1 -a 1
+编译打包默认混淆测试包(rDebugRelease):
+    ./redex -d 2 -n 1 -a 1
+编译打包默认发布包(rReleaseRelease):
+    ./redex -d 3 -n 1 -a 1
+指定编译混淆偏好包(XXX):
+    ./redex -d 3 -n 1 -a 1 -v XXX

@@ -28,7 +28,7 @@ STOREPASS=ouwan_giftcool_store
 KEYSTORENAME=giftcool
 
 
-while getopts "c:v:s:" OPTION
+while getopts "c:v:s:o:" OPTION
 do
     case ${OPTION} in
         c)
@@ -39,6 +39,9 @@ do
             ;;
         s)
             SOURCEAPK=$OPTARG
+            ;;
+        o)
+            OUTPUT=$OPTARG
             ;;
         \?)
             printUsage
