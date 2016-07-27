@@ -16,20 +16,18 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.ThreadUtil;
+import com.oplay.giftcool.util.SystemUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
 
 /**
  * 进行网络请求的初始化
- *
+ * <p/>
  * Created by zsigui on 16-7-6.
  */
 public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
@@ -44,16 +42,12 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
     protected Void doInBackground(Object... params) {
         try {
             HotFixManager.getInstance().requestPatchFromServer();
+            Global.setInstalledAppNames(SystemUtil.getInstalledAppName(mContext));
             // 判断是否今日首次打开APP
             if (judgeFirstOpenToday()) {
-                ThreadUtil.runInThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 进行应用信息上报
-                        ArrayList<AppBaseInfo> infos = getAppInfos(mContext);
-                        reportedAppInfo(infos);
-                    }
-                });
+                ArrayList<AppBaseInfo> infos = getAppInfos(mContext);
+                // 进行应用信息上报
+                reportedAppInfo(infos);
             }
 
         } catch (Throwable e) {
@@ -123,8 +117,6 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
      * 获取已安装应用信息
      */
     private ArrayList<AppBaseInfo> getAppInfos(Context context) {
-        HashSet<String> appNames = new HashSet<>();
-
         final ArrayList<AppBaseInfo> result = new ArrayList<>();
         PackageManager pm = context.getPackageManager();
         List<PackageInfo> packages = pm.getInstalledPackages(0);
@@ -133,7 +125,6 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
                 final AppBaseInfo info = new AppBaseInfo();
                 info.name = pm.getApplicationLabel(pm.getApplicationInfo(packageInfo.packageName,
                         PackageManager.GET_META_DATA)).toString();
-                appNames.add(info.name);
                 info.pkg = packageInfo.packageName;
                 info.vc = String.valueOf(packageInfo.versionCode);
                 info.vn = packageInfo.versionName;
@@ -143,7 +134,6 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
             }
         }
 
-        Global.setInstalledAppNames(appNames);
         return result;
     }
 }

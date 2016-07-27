@@ -211,12 +211,14 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 holder.tvSeizeHint.setText("正在免费抢");
                 setProgressBarData(o, holder);
                 break;
+            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+                setDisabledText(holder.tvMoney, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+                        DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
                 holder.pbPercent.setVisibility(View.GONE);
                 holder.tvPercent.setVisibility(View.GONE);
                 holder.tvSeizeHint.setVisibility(View.GONE);
@@ -225,6 +227,8 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 holder.pbPercent.setVisibility(View.GONE);
                 holder.tvPercent.setVisibility(View.GONE);
                 setSeizeHint(o, holder);
+                setDisabledText(holder.tvMoney, Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+                        DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
                 break;
         }
     }

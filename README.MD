@@ -47,7 +47,8 @@
 
     7) 调整 async/AsyncTask_InitApplication.java 的初始化逻辑，将非用户状态判断的网络请求初始化提取延后至
     ui/actvity/SplashActivity.java 里执行，已减少可能的推送唤醒时的同时大量网络请求情况
-8) 修改礼包页面项免费抢的显示内容
+
+    8) 修改礼包页面项免费抢的显示内容
 
     9) 添加全局默认异常捕获器(Logic)
 

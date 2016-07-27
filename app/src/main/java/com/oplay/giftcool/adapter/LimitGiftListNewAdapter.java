@@ -2,6 +2,7 @@ package com.oplay.giftcool.adapter;
 
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
+import android.text.Html;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,17 +111,20 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
+        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
         switch (type) {
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
                 holder.tvSeizeHint.setVisibility(View.VISIBLE);
                 holder.tvSeizeHint.setText("正在免费抢");
                 setProgressBarData(o, holder);
                 break;
+            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
+            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
+                holder.tvMoney.setText(Html.fromHtml(String.format("开抢时间：<font color='#ffaa17'>%s</font>",
+                        DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
             case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZED:
             case GiftTypeUtil.TYPE_LIMIT_SEIZED:
-            case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
             case GiftTypeUtil.TYPE_LIMIT_EMPTY:
             case GiftTypeUtil.TYPE_LIMIT_FINISHED:
                 holder.pbPercent.setVisibility(View.GONE);
@@ -141,7 +145,6 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
                 setProgressBarData(o, holder);
                 break;
         }
-        ViewUtil.siteSpendUI(holder.tvMoney, o.score, o.bean, o.priceType);
     }
 
     private void setProgressBarData(IndexGiftNew o, ViewHolder gHolder) {
