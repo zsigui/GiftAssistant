@@ -76,6 +76,7 @@ public class JPushReceiver extends BroadcastReceiver {
                     AccountManager.getInstance().obtainUnreadPushMessageCount();
 
                     if (AppDebugConfig.IS_STATISTICS_SHOW) {
+                        JPushInterface.reportNotificationOpened(context, bundle.getString(JPushInterface.EXTRA_MSG_ID));
                         ThreadUtil.runInThread(new Runnable() {
                             @Override
                             public void run() {

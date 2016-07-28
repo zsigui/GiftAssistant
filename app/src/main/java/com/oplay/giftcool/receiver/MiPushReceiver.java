@@ -130,6 +130,7 @@ public class MiPushReceiver extends PushMessageReceiver {
 //            ThreadUtil.runInThread(new Runnable() {
 //                @Override
 //                public void run() {
+                    MiPushClient.reportMessageClicked(context, miPushMessage.getMessageId());
                     Map<String, String> kv = new HashMap<>();
                     kv.put("消息ID", miPushMessage.getMessageId());
                     kv.put("推送SDK", "小米");
