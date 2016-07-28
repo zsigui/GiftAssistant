@@ -50,6 +50,7 @@ public class TaskTypeUtil {
     public static final int INFO_TWO_JOIN_QQ_GROUP = 104;
     public static final int INFO_TWO_SHARE_SPECIFIC_GIFT = 105;
     public static final int INFO_TWO_SHARE_SPECIFIC_ACTIVITY = 106;
+    public static final int INFO_TWO_SHARE = 107;
 
 	/*----------- 任务代号 -----------*/
     /**

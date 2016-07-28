@@ -307,6 +307,7 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             return;
         }
         try {
+            ScoreManager.getInstance().setRewardCode(mission.code);
             switch (mission.actionType) {
                 case TaskTypeUtil.MISSION_TYPE_JUMP_PAGE:
                     final TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(

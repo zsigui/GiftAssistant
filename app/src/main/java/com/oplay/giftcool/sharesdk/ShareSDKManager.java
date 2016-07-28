@@ -89,6 +89,7 @@ public class ShareSDKManager {
     }
 
     public void shareGift(Context context, FragmentManager fm, IndexGiftNew gift) {
+        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_GIFT_SHARE);
         shareGift(context, fm, gift, "share");
     }
 
@@ -96,7 +97,6 @@ public class ShareSDKManager {
         // 设置分享成功后奖励类型
         String title;
         String b_desc;
-        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_GIFT_SHARE);
         if (gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL
                 && gift.giftType != GiftTypeUtil.GIFT_TYPE_NORMAL_FREE) {
             title = String.format(
@@ -138,7 +138,6 @@ public class ShareSDKManager {
     }
 
     public void shareGCool(final Context context, final FragmentManager fm) {
-        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_GCOOL_SHARE);
         final String title = context.getString(R.string.st_dialog_invite_title);
         final String desc = context.getString(R.string.st_share_gcool_description_1);
         final String b_desc = context.getString(R.string.st_share_gcool_description_1);
@@ -155,6 +154,7 @@ public class ShareSDKManager {
     }
 
     public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data) {
+        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_ACTIVITY_SHARE);
         shareActivity(context, fm, data, "share");
     }
 
@@ -163,7 +163,6 @@ public class ShareSDKManager {
             ToastUtil.showShort(ConstString.SHARE_ERROR);
             return;
         }
-        ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_ACTIVITY_SHARE);
         String title = data.title;
         String desc = data.content;
         String b_desc = data.content;

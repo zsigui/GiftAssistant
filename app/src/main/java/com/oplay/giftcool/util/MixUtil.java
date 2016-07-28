@@ -17,6 +17,7 @@ import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitQQ;
+import com.oplay.giftcool.model.data.resp.task.ShareTask;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
@@ -142,6 +143,15 @@ public class MixUtil {
                 try {
                     IndexPostNew o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, IndexPostNew.class);
                     ShareSDKManager.getInstance(context).shareActivity(context, fm, o, "task");
+                } catch (Throwable t) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
+                }
+                break;
+            case TaskTypeUtil.INFO_TWO_SHARE:
+                try {
+                    ShareTask o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, ShareTask.class);
+                    ShareSDKManager.getInstance(context).share(fm, context, o.shareDialogTitle, o.title, o.desc,
+                            o.desc, o.url, o.icon, null);
                 } catch (Throwable t) {
                     AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
                 }
