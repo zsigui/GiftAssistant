@@ -74,9 +74,13 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     }
 
     public void login() {
+        if (!AccountManager.getInstance().isLogin()) {
+            return;
+        }
         UserSession user = AccountManager.getInstance().getUserSesion();
         // 此处游戏账号只为占位
         GameUserInfo sdkUser = new GameUserInfo();
+
         sdkUser.setOpenId(user.openId);
         UmipayAccount account;
         if (AccountManager.getInstance().isPhoneLogin()) {
