@@ -151,7 +151,7 @@ public class MixUtil {
                 try {
                     ShareTask o = AssistantApp.getInstance().getGson().fromJson(infoTwo.data, ShareTask.class);
                     ShareSDKManager.getInstance(context).share(fm, context, o.shareDialogTitle, o.title, o.desc,
-                            o.desc, o.url, o.icon, null);
+                            o.desc, o.url, o.icon, null, o.contentType);
                 } catch (Throwable t) {
                     AppDebugConfig.d(AppDebugConfig.TAG_UTIL, t);
                 }

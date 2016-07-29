@@ -59,7 +59,7 @@ public class ShareSDKManager {
 
     public void share(final FragmentManager fragmentManager, final Context context, final String dialog_title,
                       final String title, final String description, final String b_desc, final String url,
-                      final String iconUrl, final Bitmap iconBitmap) {
+                      final String iconUrl, final Bitmap iconBitmap, final int type) {
         try {
             AppDebugConfig.v(AppDebugConfig.TAG_SHARE, "\ntitle;" + title, "\ndescription" + description +
                     "\nurl:" + url, "\nimg:" + iconUrl, "\nIconBitmap:" + iconBitmap);
@@ -75,9 +75,9 @@ public class ShareSDKManager {
                 public void onItemClick(IShare item, View view, int position) {
                     dialog.dismissAllowingStateLoss();
                     if (item instanceof Share_More) {
-                        item.share(title, b_desc, url, iconUrl, iconBitmap);
+                        item.share(title, b_desc, url, iconUrl, iconBitmap, type);
                     } else {
-                        item.share(title, description, url, iconUrl, iconBitmap);
+                        item.share(title, description, url, iconUrl, iconBitmap, type);
                     }
                 }
             });
@@ -134,7 +134,7 @@ public class ShareSDKManager {
                 String.format(Locale.CHINA, "%s?plan_id=%d&from=%s", WebViewUrl.getWebUrl(WebViewUrl.GIFT_DETAIL),
                         gift.id, from),
                 gift.img, (src == null ? null : BitmapUtil.getSmallBitmap(src,
-                        ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)));
+                        ShareSDKConfig.THUMB_SIZE, ShareSDKConfig.THUMB_SIZE)), IShare.TYPE.WEB);
     }
 
     public void shareGCool(final Context context, final FragmentManager fm) {
@@ -150,7 +150,7 @@ public class ShareSDKManager {
                 desc,
                 b_desc,
                 WebViewUrl.getBaseUrl(),
-                WebViewUrl.ICON_GCOOL, icon);
+                WebViewUrl.ICON_GCOOL, icon, IShare.TYPE.WEB);
     }
 
     public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data) {
@@ -190,7 +190,7 @@ public class ShareSDKManager {
                 desc,
                 b_desc,
                 shareUrl,
-                icon, bitmap);
+                icon, bitmap, IShare.TYPE.WEB);
     }
 
     public IWXAPI getWXApi() {

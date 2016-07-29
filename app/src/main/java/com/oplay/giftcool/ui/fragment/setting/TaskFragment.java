@@ -185,7 +185,8 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
             groupHeader.isHeader = true;
             missions.add(groupHeader);
             for (ScoreMission m : missionGroup.missions) {
-                denominator = Math.min(m.totalLimit, m.dailyLimit);
+                denominator = Math.min(m.totalLimit == -1? Integer.MAX_VALUE : m.totalLimit,
+                        m.dailyLimit == -1? Integer.MAX_VALUE : m.dailyLimit);
                 molecular = Math.max(m.todayCompleteCount, m.totalCompleteCount);
                 molecular = Math.min(denominator, molecular);
                 if (denominator > 1) {

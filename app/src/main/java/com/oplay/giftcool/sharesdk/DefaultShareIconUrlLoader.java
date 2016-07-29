@@ -2,7 +2,6 @@ package com.oplay.giftcool.sharesdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -14,60 +13,50 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
  * 加载默认图片的URL
  */
 public class DefaultShareIconUrlLoader {
-	private static DefaultShareIconUrlLoader instance;
-	public String defaulturl = "";
-	private LoaderListener mListener;
+    private static DefaultShareIconUrlLoader instance;
+    private LoaderListener mListener;
 
-	public static synchronized DefaultShareIconUrlLoader getInstance() {
-		if (instance == null) {
-			instance = new DefaultShareIconUrlLoader();
-		}
-		return instance;
-	}
+    public static synchronized DefaultShareIconUrlLoader getInstance() {
+        if (instance == null) {
+            instance = new DefaultShareIconUrlLoader();
+        }
+        return instance;
+    }
 
-	public void getDefaultShareIcon(Context context, final String title, final String description, final String url,
-	                                final int shareType) {
-		if (!TextUtils.isEmpty(defaulturl)) {
-			if (mListener != null) {
-				mListener.onFetch(title, description, url, defaulturl, shareType);
-			}
-			return;
-		}
-		ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
-			@Override
-			public void onLoadingStarted(String s, View view) {
+    public void getDefaultShareIcon(Context context, final String title, final String description, final String url,
+                                    final String iconUrl, final int shareType, final int type) {
+        ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
 
-			}
+            }
 
-			@Override
-			public void onLoadingFailed(String s, View view, FailReason failReason) {
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
 
-			}
+            }
 
-			@Override
-			public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-				if (mListener != null && !TextUtils.isEmpty(defaulturl)) {
-					mListener.onFetch(title, description, url, defaulturl, shareType);
-				}
-			}
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                if (mListener != null) {
+                    String localUrl = ImageLoader.getInstance().getDiskCache().get(s).getAbsolutePath();
+                    mListener.onFetch(title, description, localUrl, iconUrl, shareType, type);
+                }
+            }
 
-			@Override
-			public void onLoadingCancelled(String s, View view) {
+            @Override
+            public void onLoadingCancelled(String s, View view) {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	public String getDefaulturl() {
-		return defaulturl;
-	}
+    public void setListener(LoaderListener listener) {
+        mListener = listener;
+    }
 
-	public void setListener(LoaderListener listener) {
-		mListener = listener;
-	}
-
-	public static interface LoaderListener {
-		public void onFetch(String title, String description, String url, String iconUrl, int shareType);
-	}
+    public interface LoaderListener {
+        void onFetch(String title, String description, String url, String iconUrl, int shareType, int contentType);
+    }
 }
 

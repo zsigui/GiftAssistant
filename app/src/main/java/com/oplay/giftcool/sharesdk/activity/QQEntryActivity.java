@@ -7,9 +7,11 @@ import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.sharesdk.DefaultShareIconUrlLoader;
 import com.oplay.giftcool.sharesdk.ShareSDKConfig;
+import com.oplay.giftcool.sharesdk.base.IShare;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.URLUtil;
 import com.tencent.connect.share.QQShare;
@@ -72,12 +74,13 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
                 final String description = intent.getStringExtra(ShareSDKConfig.ARGS_DESCRIPTION);
                 final String url = intent.getStringExtra(ShareSDKConfig.ARGS_URL);
                 final String iconUrl = intent.getStringExtra(ShareSDKConfig.ARGS_ICON_URL);
+                final int type = intent.getIntExtra(ShareSDKConfig.ARGS_CONTENT_TYPE, IShare.TYPE.WEB);
                 switch (shareType) {
                     case ShareSDKConfig.QQFRIENDS:
-                        shareQQFriends(title, description, url, iconUrl, shareType);
+                        shareQQFriends(title, description, url, iconUrl, shareType, type);
                         break;
                     case ShareSDKConfig.QZONE:
-                        shareQZone(title, description, url, iconUrl, shareType);
+                        shareQZone(title, description, url, iconUrl, shareType, type);
                         break;
                     default:
                 }
@@ -111,45 +114,75 @@ public class QQEntryActivity extends Activity implements DefaultShareIconUrlLoad
                 "resultCode = " + resultCode + ", data = " + data);
     }
 
-    private void shareQQFriends(String title, String description, String url, String iconUrl, int shareType) {
+    private void shareQQFriends(String title, String description, String url, String iconUrl, int shareType, int type) {
         final Bundle params = new Bundle();
         params.putString(QQShare.SHARE_TO_QQ_TITLE, title);
         params.putString(QQShare.SHARE_TO_QQ_SUMMARY, description);
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
-        if (!TextUtils.isEmpty(iconUrl)) {
-            params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, iconUrl);
-            mTencent.shareToQQ(this, params, mUiListener);
-        } else {
-            DefaultShareIconUrlLoader.getInstance().setListener(this);
-            DefaultShareIconUrlLoader.getInstance().getDefaultShareIcon(this, title, description, url, shareType);
+        switch (type) {
+            case IShare.TYPE.IMG:
+                // 纯图片分享只针对本地图片
+                // 对于分享图片，url则为图片地址
+                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
+                if (TextUtils.isEmpty(url)) {
+                    // 本地图片地址为空，则采用默认图文方式
+                    shareQQFriends(title, description, url, iconUrl, shareType, IShare.TYPE.TEXT);
+                } else if (url.startsWith("http")) {
+                    // 先加载执行到本地
+                    DefaultShareIconUrlLoader.getInstance().setListener(this);
+                    DefaultShareIconUrlLoader.getInstance()
+                            .getDefaultShareIcon(this, title, description, url, iconUrl, shareType, type);
+                } else {
+                    // 设置地址并进行分享
+                    params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, url);
+                    mTencent.shareToQQ(this, params, mUiListener);
+                }
+                return;
+            case IShare.TYPE.MUSIC:
+            case IShare.TYPE.VIDEO:
+                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_AUDIO);
+                break;
+            case IShare.TYPE.TEXT:
+            case IShare.TYPE.WEB:
+            default:
+                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+
         }
+        if (TextUtils.isEmpty(iconUrl)) {
+            iconUrl = WebViewUrl.ICON_GCOOL;
+        }
+        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, iconUrl);
+        mTencent.shareToQQ(this, params, mUiListener);
     }
 
-    private void shareQZone(String title, String description, String url, String iconUrl, int shareType) {
+    private void shareQZone(String title, String description, String url, String iconUrl, int shareType, int type) {
         final Bundle params = new Bundle();
+        // QQ空间只支持图文分享
         params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
         params.putString(QzoneShare.SHARE_TO_QQ_TITLE, title);
         params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, description);
         params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
-        if (!TextUtils.isEmpty(iconUrl)) {
-            final ArrayList<String> imgList = new ArrayList<String>();
-            imgList.add(iconUrl);
-            params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imgList);
-            mTencent.shareToQzone(this, params, mUiListener);
-        } else {
-            DefaultShareIconUrlLoader.getInstance().setListener(this);
-            DefaultShareIconUrlLoader.getInstance().getDefaultShareIcon(this, title, description, url, shareType);
+        if (TextUtils.isEmpty(iconUrl)) {
+            iconUrl = WebViewUrl.ICON_GCOOL;
         }
+        final ArrayList<String> imgList = new ArrayList<String>();
+        if (type == IShare.TYPE.IMG && !TextUtils.isEmpty(url)) {
+            imgList.add(url);
+        } else {
+            imgList.add(iconUrl);
+        }
+        params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imgList);
+        mTencent.shareToQzone(this, params, mUiListener);
     }
 
     @Override
-    public void onFetch(String title, String description, String url, String iconUrl, int shareType) {
+    public void onFetch(String title, String description, String url, String iconUrl, int shareType, int type) {
         switch (shareType) {
             case ShareSDKConfig.QQFRIENDS:
-                shareQQFriends(title, description, url, iconUrl, shareType);
+                shareQQFriends(title, description, url, iconUrl, shareType, type);
                 break;
             case ShareSDKConfig.QZONE:
-                shareQZone(title, description, url, iconUrl, shareType);
+                shareQZone(title, description, url, iconUrl, shareType, type);
         }
         DefaultShareIconUrlLoader.getInstance().setListener(null);
     }

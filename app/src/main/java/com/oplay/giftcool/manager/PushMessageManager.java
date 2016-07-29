@@ -141,11 +141,11 @@ public class PushMessageManager {
     private NotificationManager mNotificationManager;
     private boolean isInit = false;
 
-    // 无震动响铃的起始接收时间点
-    private final int START_HOUR = 22;
-    private final int START_MINUTE = 30;
-    private final int END_HOUR = 8;
-    private final int END_MINUTE = 30;
+    // 极光无震动响铃的起始接收时间点
+    private final int START_HOUR = 23;
+    private final int START_MINUTE = 0;
+    private final int END_HOUR = 7;
+    private final int END_MINUTE = 0;
 
     public static PushMessageManager getInstance() {
         if (sInstance == null) {

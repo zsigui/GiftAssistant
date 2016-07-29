@@ -20,17 +20,12 @@ public class Share_More extends IShare {
 	}
 
 
-	public void share(String title, String description, String url, String iconUrl, Bitmap icon) {
+	public void share(String title, String description, String url, String iconUrl, Bitmap icon, int type) {
 		ShareUtil.shareText(mContext, title, description + " " + url);
 	}
 
 	@Override
 	public boolean isSupport() {
 		return true;
-	}
-
-	@Override
-	public ShareType getShareType() {
-		return ShareType.MORE;
 	}
 }
