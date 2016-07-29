@@ -189,7 +189,9 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener<Sc
                         m.dailyLimit == -1? Integer.MAX_VALUE : m.dailyLimit);
                 molecular = Math.max(m.todayCompleteCount, m.totalCompleteCount);
                 molecular = Math.min(denominator, molecular);
-                if (denominator > 1) {
+                if (denominator == Integer.MAX_VALUE) {
+                    m.name = String.format(Locale.CHINA, "%s(%d/不限次数)", m.name, molecular);
+                } else if (denominator > 1) {
                     m.name = String.format(Locale.CHINA, "%s(%d/%d)", m.name, molecular, denominator);
                 }
                 if (m.actionType == TaskTypeUtil.MISSION_TYPE_DOWNLOAD) {
