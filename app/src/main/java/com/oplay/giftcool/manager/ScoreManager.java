@@ -16,7 +16,6 @@ import com.oplay.giftcool.model.data.resp.task.TaskStateInfo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.MixUtil;
-import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SystemUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -111,49 +110,40 @@ public class ScoreManager {
     /**
      * 初始化抽奖、签到等的提示状态
      */
-    public void initTaskState(final Context context) {
-        Global.THREAD_POOL.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (!NetworkUtil.isConnected(context)) {
-                    return;
-                }
-                JsonReqBase<Void> reqData = new JsonReqBase<>();
-                Global.getNetEngine().obtainDailyTaskStateInfo(reqData)
-                        .enqueue(new Callback<JsonRespBase<TaskStateInfo>>() {
-                            @Override
-                            public void onResponse(Call<JsonRespBase<TaskStateInfo>> call,
-                                                   Response<JsonRespBase<TaskStateInfo>> response) {
-                                if (response != null && response.isSuccessful()
-                                        && response.body() != null && response.body().isSuccess()) {
-                                    final TaskStateInfo info = response.body().getData();
-                                    final boolean isSignIn = info.signInState.signToday;
-                                    final boolean isLotteryEmpty = (info.lotteryState.remainFreeCount == 0);
-                                    if (MixUtil.xor(mIsFreeLotteryEmpty, isLotteryEmpty)) {
-                                        mIsFreeLotteryEmpty = isLotteryEmpty;
-                                    }
-                                    if (MixUtil.xor(mIsSignInTaskFinished, isSignIn)) {
-                                        // 在状态不同的时候进行通知
-                                        mIsSignInTaskFinished = isSignIn;
-                                        ObserverManager.getInstance()
-                                                .notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
-                                    }
-                                }
-                                if (response != null) {
-                                    AccountManager.getInstance().judgeIsSessionFailed(response.body());
-                                }
-                                AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
+    public void initTaskState() {
+        JsonReqBase<Void> reqData = new JsonReqBase<>();
+        Global.getNetEngine().obtainDailyTaskStateInfo(reqData)
+                .enqueue(new Callback<JsonRespBase<TaskStateInfo>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<TaskStateInfo>> call,
+                                           Response<JsonRespBase<TaskStateInfo>> response) {
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            final TaskStateInfo info = response.body().getData();
+                            final boolean isSignIn = info.signInState.signToday;
+                            final boolean isLotteryEmpty = (info.lotteryState.remainFreeCount == 0);
+                            if (MixUtil.xor(mIsFreeLotteryEmpty, isLotteryEmpty)) {
+                                mIsFreeLotteryEmpty = isLotteryEmpty;
                             }
+                            if (MixUtil.xor(mIsSignInTaskFinished, isSignIn)) {
+                                // 在状态不同的时候进行通知
+                                mIsSignInTaskFinished = isSignIn;
+                                ObserverManager.getInstance()
+                                        .notifyUserUpdate(ObserverManager.STATUS.USER_UPDATE_TASK);
+                            }
+                        }
+                        if (response != null) {
+                            AccountManager.getInstance().judgeIsSessionFailed(response.body());
+                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
+                    }
 
-                            @Override
-                            public void onFailure(Call<JsonRespBase<TaskStateInfo>> call, Throwable t) {
-                                AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
-                            }
-                        });
-            }
-        });
+                    @Override
+                    public void onFailure(Call<JsonRespBase<TaskStateInfo>> call, Throwable t) {
+                        AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
+                    }
+                });
     }
-
 
 
 //	/**

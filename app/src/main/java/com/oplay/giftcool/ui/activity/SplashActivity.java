@@ -106,6 +106,7 @@ public class SplashActivity extends BaseAppCompatActivity {
             });
             mDialog.setCancelable(false);
             mDialog.show(getSupportFragmentManager(), "init");
+            ToastUtil.showShort("当前渠道号: " + AssistantApp.getInstance().getChannelId());
         } else {
             initAction();
         }

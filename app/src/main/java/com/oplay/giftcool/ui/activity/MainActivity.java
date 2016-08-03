@@ -303,6 +303,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
         // 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
         setCurSelected(mCurSelectedItem);
+        ScoreManager.getInstance().initTaskState();
     }
 
     public void setCurSelected(int position) {

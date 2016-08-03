@@ -418,7 +418,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
         AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
         AccountManager.getInstance().notifyUserAll(userModel);
         SocketIOManager.getInstance().connectOrReConnect(true);
-        ScoreManager.getInstance().initTaskState(getContext());
+        ScoreManager.getInstance().initTaskState();
         StatisticsManager.getInstance().trace(getContext(),
                 StatisticsManager.ID.USER_PHONE_LOGIN,
                 StatisticsManager.ID.STR_USER_PHONE_LOGIN,

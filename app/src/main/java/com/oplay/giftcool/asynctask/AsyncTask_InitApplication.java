@@ -111,12 +111,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         // 初始化网络下载模块
         assistantApp.initRetrofit();
         Global.resetNetEngine();
-
-        // 初始化配置，获取更新信息
-        if (!initAndCheckUpdate()) {
-            AppDebugConfig.d("initAndCheckUpdate failed!");
-        }
-
         doClearWorkForOldVer();
         Global.getInstalledAppNames();
 
@@ -185,17 +179,25 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                     continue;
                 }
                 String[] keyValue = entry.split("=");
-                if ("LOG_DEBUG".equals(keyValue[0])) {
-                    AppDebugConfig.IS_DEBUG = !TextUtils.isEmpty(keyValue[1]) && "1".equals(keyValue[1]);
+                keyValue[0] = keyValue[0].trim();
+                keyValue[1] = keyValue[1].trim();
+                if ("TEST_MODE".equalsIgnoreCase(keyValue[0])) {
+                    AppConfig.TEST_MODE = isEqual(keyValue[1]);
+                } else if ("LOG_DEBUG".equalsIgnoreCase(keyValue[0])) {
+                    AppDebugConfig.IS_DEBUG = isEqual(keyValue[1]);
                     GCLog.init(AppDebugConfig.IS_DEBUG);
-                } else if ("FILE_DEBUG".equals(keyValue[0])) {
-                    AppDebugConfig.IS_FILE_DEBUG = !TextUtils.isEmpty(keyValue[1]) && "1".equals(keyValue[1]);
+                } else if ("FILE_DEBUG".equalsIgnoreCase(keyValue[0])) {
+                    AppDebugConfig.IS_FILE_DEBUG = isEqual(keyValue[1]);
                 }
             }
 
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
         }
+    }
+
+    private boolean isEqual(String s) {
+        return !TextUtils.isEmpty(s) && s.charAt(0) == '1';
     }
 
     private boolean initAndCheckUpdate() {

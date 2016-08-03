@@ -14,7 +14,7 @@ public class AppConfig {
     public static final String OUWAN_SDK_VER = BuildConfig.OUWAN_SDK_VERSION;
 
     /* 测试环境 */
-    public static final boolean TEST_MODE = BuildConfig.TEST_MODE;
+    public static boolean TEST_MODE = BuildConfig.TEST_MODE;
 
     /* 通讯密钥 */
     public static final String APP_KEY = BuildConfig.APP_KEY;

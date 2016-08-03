@@ -177,7 +177,6 @@ public class AccountManager implements OnFinishListener {
                     if (!NetworkUtil.isConnected(mContext)) {
                         return;
                     }
-                    ScoreManager.getInstance().initTaskState(mContext);
                     if (mCallGetUserInfo != null) {
                         mCallGetUserInfo.cancel();
                         mCallGetUserInfo = mCallGetUserInfo.clone();
@@ -384,8 +383,9 @@ public class AccountManager implements OnFinishListener {
     public void updateUserSession() {
         if (isLogin()) {
             // 当天登录过，无须再次重新更新 session
-            if (DateUtil.isToday(getUserSesion().lastUpdateTime)) {
-                // 只更新用户信息
+            long lastTime = AssistantApp.getInstance().getLastLaunchTime();
+            if (lastTime + 14 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
+                // 2周内打开，只更新用户信息
                 updateUserInfo();
                 return;
             }
