@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.dodola.rocoofix'
-
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
 	compileSdkVersion BUILD_COMPILE_SDK_VERSION as int
@@ -89,6 +89,18 @@ android {
 			signingConfig signingConfigs.myConfigs
 
 		}
+	}
+
+	dexcount {
+		format = "list"
+		includeClasses = false
+		includeFieldCount = true
+		includeTotalMethodCount = true
+		orderByMethodCount = false
+		verbose = false
+		maxTreeDepth = Integer.MAX_VALUE
+		teamCityIntegration = false
+		enableForInstantRun = false
 	}
 
 	lintOptions {
