@@ -3,7 +3,6 @@ package com.oplay.giftcool.util;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
@@ -30,9 +29,9 @@ public class ChannelUtil {
      */
     public static int getChannelId(Context context) {
 
-        if (AppConfig.TEST_MODE) {
-            return AppDebugConfig.TEST_CHANNEL_ID;
-        }
+//        if (AppConfig.TEST_MODE) {
+//            return AppDebugConfig.TEST_CHANNEL_ID;
+//        }
 
         // 从SP中获取
         int chnInt = SPUtil.getInt(context, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_CHANNEL, 0);
