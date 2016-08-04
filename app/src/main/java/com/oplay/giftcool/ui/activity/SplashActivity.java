@@ -3,11 +3,14 @@ package com.oplay.giftcool.ui.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
@@ -17,18 +20,21 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.config.Sea;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.model.data.resp.AdInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * @author micle
@@ -37,22 +43,22 @@ import java.io.File;
  */
 public class SplashActivity extends BaseAppCompatActivity {
 
-    private long mLastClickTime = 0;
-    private long mFirstInitTime = 0;
+    private ImageView ivSplash;
+    private TextView tvPass;
 
-    /**
-     * 进行初始化或者闪屏的等待操作
-     */
-    private Runnable mInitRunnable = new Runnable() {
+    private int remainTime;
+//    private String prefixTag;
+
+    private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            long initDuration = System.currentTimeMillis() - mFirstInitTime;
-            long minSplashDuration = 1000;
-            long maxInitDuration = 4000;
-            if ((mApp.isGlobalInit() && initDuration > minSplashDuration) || initDuration > maxInitDuration) {
-                judgeToMain();
+            if (remainTime == 0) {
+                jumpToMain();
             } else {
-                mHandler.postDelayed(mInitRunnable, 100);
+//                tvPass.setText(String.format(Locale.CHINA, "%s%ds", prefixTag, remainTime));
+                tvPass.setText(String.format(Locale.CHINA, "跳过%ds", remainTime));
+                remainTime--;
+                ThreadUtil.runOnUiThread(mRunnable, 1000);
             }
         }
     };
@@ -67,6 +73,28 @@ public class SplashActivity extends BaseAppCompatActivity {
     @Override
     protected void processLogic() {
         Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getApplicationContext()));
+        tvPass.setOnClickListener(this);
+        ivSplash.setOnClickListener(this);
+        Bitmap b;
+        AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ad info  = " +adInfo);
+        if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
+            File f = ImageLoader.getInstance().getDiskCache().get(adInfo.img);
+            // 此前f已经验证
+            b = BitmapFactory.decodeFile(f.getAbsolutePath());
+            if (b != null) {
+                ivSplash.setImageBitmap(b);
+            }
+            remainTime = AssistantApp.getInstance().getAdInfo().displayTime;
+        } else {
+            b = BitmapFactory.decodeResource(getResources(), R.drawable.pic_splash_2016);
+        }
+//        prefixTag = (adInfo == null || adInfo.showPass)? "跳过" : "剩余";
+        if (adInfo != null && !adInfo.showPass) {
+            tvPass.setVisibility(View.GONE);
+        }
+        remainTime = (adInfo == null || adInfo.displayTime < 3)? 3 : adInfo.displayTime;
+        ivSplash.setImageBitmap(b);
     }
 
     private TestChoiceDialog mDialog;
@@ -116,53 +144,48 @@ public class SplashActivity extends BaseAppCompatActivity {
 
     private void initAction() {
         judgeFirstOpenToday();
-        mFirstInitTime = System.currentTimeMillis();
-        mHandler.post(mInitRunnable);
+        ThreadUtil.runOnUiThread(mRunnable);
     }
 
     @Override
     protected void initView() {
-        AssistantApp.getInstance().initImageLoader();
-        ImageView iv = new ImageView(this);
-        iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        boolean useCacheImg = false;
-        String imageUrl = AssistantApp.getInstance().getStartImg();
-        if (imageUrl != null) {
-            File file = ImageLoader.getInstance().getDiskCache().get(imageUrl);
-            if (file != null && file.exists()) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                } catch (Throwable e) {
-                    AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
-                }
-                iv.setImageBitmap(bitmap);
-                useCacheImg = true;
-            } else {
-                ImageLoader.getInstance().loadImage(imageUrl, null);
-            }
-        }
-        if (!useCacheImg) {
-            iv.setImageResource(R.drawable.pic_splash_2016);
-        }
-        setContentView(iv);
+        setContentView(R.layout.activity_ad);
+        ivSplash = getViewById(R.id.iv_splash);
+        tvPass = getViewById(R.id.tv_pass);
     }
 
-    private void judgeToMain() {
-        if (Sea.getInstance().isShowAd()) {
-            startActivity(new Intent(SplashActivity.this, AdActivity.class));
-        } else {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        }
+    private void jumpToMain() {
+        ThreadUtil.remove(mRunnable);
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
         this.finish();
     }
 
     @Override
     public void onBackPressed() {
+        // 不处理按钮回退事件
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
+        switch (v.getId()) {
+            case R.id.tv_pass:
+                if (adInfo == null || adInfo.showPass) {
+                    jumpToMain();
+                }
+                break;
+            case R.id.iv_splash:
+                if (adInfo != null && !TextUtils.isEmpty(adInfo.uri)) {
+                    ThreadUtil.remove(mRunnable);
+                    MixUtil.handleViewUri(this, Uri.parse(adInfo.uri));
+                    finish();
+                } else {
+                    jumpToMain();
+                }
+                break;
+        }
+    }
 
     /**
      * 判断是否今日首次登录<br/>

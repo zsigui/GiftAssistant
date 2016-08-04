@@ -88,10 +88,10 @@
             </intent-filter >
         </activity >
 
-        <activity
-                android:name = ".ui.activity.AdActivity"
-                android:launchMode = "singleTop"
-                android:screenOrientation = "sensorPortrait" />
+        <!--<activity-->
+                <!--android:name = ".ui.activity.AdActivity"-->
+                <!--android:launchMode = "singleTop"-->
+                <!--android:screenOrientation = "sensorPortrait" />-->
 
         <activity
                 android:name = ".ui.activity.MainActivity"

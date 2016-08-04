@@ -29,9 +29,9 @@ public class AdInfo {
     public String img;
 
     /**
-     * 是否可以被跳过
+     * 是否显示跳过按钮，默认true
      */
-    @SerializedName("can_pass")
-    public boolean canPass;
+    @SerializedName("show_pass")
+    public boolean showPass = true;
 
 }
