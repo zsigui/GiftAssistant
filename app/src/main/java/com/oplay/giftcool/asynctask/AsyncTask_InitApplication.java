@@ -9,6 +9,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.Sea;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
@@ -217,6 +218,13 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                             AssistantApp.getInstance().setStartImg(config.startImgUrl);
                             AssistantApp.getInstance().setBroadcastBanner(config.broadcastBanner);
                             AssistantApp.getInstance().setPhoneLoginType(config.phoneLoginType);
+//
+//                            config.adInfo = new AdInfo();
+//                            config.adInfo.canPass = true;
+//                            config.adInfo.displayTime = 15;
+//                            config.adInfo.uri = "lbapp://libao.ouwan.com/gamedetail/?id=11185&data=2";
+//                            config.adInfo.img = "http://owan-img.ymapp.com/giftcool/splash/giftcool_20160803.jpg";
+                            Sea.getInstance().setAdInfo(config.adInfo);
                             // 由于默认未传会被默认为0，所以废除传值的0表示
                             int pushSdk = 2;
                             if (config.pushSdk < 0) {

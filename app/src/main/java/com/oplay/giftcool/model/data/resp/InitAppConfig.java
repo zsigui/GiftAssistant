@@ -39,4 +39,10 @@ public class InitAppConfig implements Serializable {
      */
     @SerializedName("push_sdk")
     public int pushSdk;
+
+    /**
+     * 广告闪屏信息
+     */
+    @SerializedName("ad_splash")
+    public AdInfo adInfo;
 }

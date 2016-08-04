@@ -17,6 +17,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.config.Sea;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
@@ -150,7 +151,11 @@ public class SplashActivity extends BaseAppCompatActivity {
     }
 
     private void judgeToMain() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        if (Sea.getInstance().isShowAd()) {
+            startActivity(new Intent(SplashActivity.this, AdActivity.class));
+        } else {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        }
         this.finish();
     }
 
