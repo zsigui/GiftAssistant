@@ -328,6 +328,7 @@ public class AssistantApp extends Application {
                 mHttpClient = new OkHttpClient.Builder()
                         .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                         .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                        .writeTimeout(AppConfig.NET_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
                         .cache(cacheFile)
                         .addInterceptor(cacheInterceptor)
                         .retryOnConnectionFailure(false)

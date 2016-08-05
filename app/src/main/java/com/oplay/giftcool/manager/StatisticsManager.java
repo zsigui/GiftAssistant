@@ -26,11 +26,10 @@ import java.util.Map;
  */
 public class StatisticsManager {
 
-
     /*
-     说明: ID组成 2字母 + 6位数字 (2字母代表类型缩写)
-     gm = game 游戏事件  ;  gf = gift 礼包事件  ; us = 用户事件  ; ap = 应用事件
-     */
+         说明: ID组成 2字母 + 6位数字 (2字母代表类型缩写)
+         gm = game 游戏事件  ;  gf = gift 礼包事件  ; us = 用户事件  ; ap = 应用事件
+         */
     public interface ID {
         // 礼包首页轮播图
         String GIFT_BANNER = "gift_banner";
@@ -257,6 +256,13 @@ public class StatisticsManager {
             AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "id = " + id + ", isInit = " + mIsInit);
             MobclickAgent.onEvent(context, id);
             TCAgent.onEvent(context, title);
+        }
+    }
+
+    public void reportThrowable(Throwable t) {
+        if (AppDebugConfig.IS_STATISTICS_SHOW) {
+            MobclickAgent.reportError(AssistantApp.getInstance(), t);
+            TCAgent.onError(AssistantApp.getInstance(), t);
         }
     }
 

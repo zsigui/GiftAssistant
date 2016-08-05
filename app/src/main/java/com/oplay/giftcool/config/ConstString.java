@@ -23,96 +23,138 @@ public class ConstString {
     /*------------- 定义Toast显示内容 ----------------*/
 
     // 网络连接错误
-    public static final String TOAST_NET_ERROR = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_NET_ERROR = 101;
+    public static final String TOAST_NET_ERROR = "呜，网络有点挤，请稍后重试！" + CODE_NET_ERROR;
     // 应用程序执行出现异常情况
-    public static final String TOAST_EXECUTE_ERROR = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_EXECUTE_ERROR = 102;
+    public static final String TOAST_EXECUTE_ERROR = "呜，网络有点挤，请稍后重试！" + CODE_EXECUTE_ERROR;
     // 访问服务器出现异常情况
-    public static final String TOAST_SERVER_ERROR = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_SERVER_ERROR = 103;
+    public static final String TOAST_SERVER_ERROR = "呜，网络有点挤，请稍后重试！" + CODE_SERVER_ERROR;
     // 服务器返回的数据格式出错，解析异常
-    public static final String TOAST_SERVER_BAD_CALLBACK = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_SERVER_BAD_CALLBACK = 105;
+    public static final String TOAST_SERVER_BAD_CALLBACK = "呜，网络有点挤，请稍后重试！" + CODE_SERVER_BAD_CALLBACK;
     // 页面数据过期 或者 非网络问题导致的获取失败
-    public static final String TOAST_DATA_OVERTIME = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_DATA_OVERTIME = 106;
+    public static final String TOAST_DATA_OVERTIME = "呜，网络有点挤，请稍后重试！" + CODE_DATA_OVERTIME;
     // 页面状态丢失导致的失效问题
-    public static final String TOAST_MISS_STATE = "页面失效，请重新打开再进行尝试";
+    public static final int CODE_MISS_STATE = 107;
+    public static final String TOAST_MISS_STATE = "页面失效，请重新打开再进行尝试" + CODE_MISS_STATE;
     // 参数传递出错导致的页面跳转失败
-    public static final String TOAST_WRONG_PARAM = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_WRONG_PARAM = 108;
+    public static final String TOAST_WRONG_PARAM = "呜，网络有点挤，请稍后重试！" + CODE_WRONG_PARAM;
     // 尚未登录
-    public static final String TOAST_LOGIN_FIRST = "为了您的账户安全，请先登录哦～";
+    public static final int CODE_LOGIN_FIRST = 109;
+    public static final String TOAST_LOGIN_FIRST = "为了您的账户安全，请先登录哦～" + CODE_LOGIN_FIRST;
     // 手机号码格式不符合要求
-    public static final String TOAST_PHONE_ERROR = "您好像输错手机号码了？请重新输入哦～";
+    public static final int CODE_PHONE_ERROR = 110;
+    public static final String TOAST_PHONE_ERROR = "您好像输错手机号码了？请重新输入哦～" + CODE_PHONE_ERROR;
     // 偶玩账号或密码格式不符合要求
-    public static final String TOAST_OUWAN_ERROR = "呜呜，账号密码格式化错误了！请重新输入哦～";
+    public static final int CODE_OUWAN_ERROR = 111;
+    public static final String TOAST_OUWAN_ERROR = "呜呜，账号密码格式化错误了！请重新输入哦～" + CODE_OUWAN_ERROR;
     // 手机短信验证码发送提醒
+    public static final int CODE_PHONE_CODE_SEND = 112;
     public static final String TOAST_PHONE_CODE_SEND = "短信已经发送，请注意接收";
     // 点击退出应用的提示
+    public static final int CODE_EXIT_APP = 113;
     public static final String TOAST_EXIT_APP = "再点我就离你而去了~~~~(>_<)~~~~";
     // 用户登录态失效
-    public static final String TOAST_SESSION_UNAVAILABLE = "太久没有登录啦，为了您的账户安全，请重新登录哦～";
+    public static final int CODE_SESSION_UNAVAILABLE = 114;
+    public static final String TOAST_SESSION_UNAVAILABLE = "太久没有登录啦，为了您的账户安全，请重新登录哦～" + CODE_SESSION_UNAVAILABLE;
 
     // 复制礼包码后提示
-    public static final String TOAST_COPY_CODE = "已复制，请去游戏中粘贴兑换";
+    public static final int CODE_COPY_CODE = 115;
+    public static final String TOAST_COPY_CODE = "已复制，请去游戏中粘贴兑换。";
     // 已更新到最新版本提示
+    public static final int CODE_VERSION_NEWEST = 116;
     public static final String TOAST_VERSION_NEWEST = "666！你已经更新到最新版本咯！";
     // 当前版本不支持提示
-    public static final String TOAST_VERSION_NOT_SUPPORT = "该版本不支持该功能喔，帅的人都更新了";
+    public static final int CODE_VERSION_NOT_SUPPORT = 117;
+    public static final String TOAST_VERSION_NOT_SUPPORT = "该版本不支持该功能喔，帅的人都更新了!" + CODE_VERSION_NOT_SUPPORT;
     // 未知异常状况
-    public static final String TOAST_UNKNOWN_ERROR = "(⊙o⊙)?请尝试重新加载页面或重启应用";
+    public static final int CODE_UNKNOWN_ERROR = 118;
+    public static final String TOAST_UNKNOWN_ERROR = "(⊙o⊙)?请尝试重新加载页面或重启应用。" + CODE_UNKNOWN_ERROR;
     // 请求获取数据为空
-    public static final String TOAST_NO_RESPONSE_DATA = "咦～页面跑丢了，请尝试重新打开页面";
+    public static final int CODE_NO_RESPONSE_DATA = 119;
+    public static final String TOAST_NO_RESPONSE_DATA = "咦～页面跑丢了，请尝试重新打开页面。" + CODE_NO_RESPONSE_DATA;
     // 连续过快请求
-    public static final String TOAST_FREQUENT_REQUEST = "手速太快啦，请耐心等待哦～";
+    public static final int CODE_FREQUENT_REQUEST = 120;
+    public static final String TOAST_FREQUENT_REQUEST = "手速太快啦，请耐心等待哦～" + CODE_FREQUENT_REQUEST;
 
     // 抢号支付方式选择有误
-    public static final String TOAST_PAY_METHOD_ERROR = "选择支付类型有误，请重新选择";
+    public static final int CODE_PAY_METHOD_ERROR = 121;
+    public static final String TOAST_PAY_METHOD_ERROR = "选择支付类型有误，请重新选择。" + CODE_PHONE_ERROR;
 
     // 处于非WIFI下下载提示
+    public static final int CODE_DOWNLOADING_NOT_IN_WIFI = 122;
     public static final String TOAST_DOWNLOADING_NOT_IN_WIFI = "正在使用移动网络，下载会耗费流量哦~";
     // 添加了新的下载任务提示
+    public static final int CODE_ADD_NEW_DOWNLOAD_TASK = 123;
     public static final String TOAST_ADD_NEW_DOWNLOAD_TASK = "已添加新的下载任务";
     // 安装文件被移除导致的安装失败提示
-    public static final String TOAST_INSTALL_FAIL_FOR_NO_APK = "安装失败！安装包已被删除，请重新下载";
+    public static final int CODE_INSTALL_FAIL_FOR_NO_APK = 124;
+    public static final String TOAST_INSTALL_FAIL_FOR_NO_APK = "安装失败！安装包已被删除，请重新下载。" + CODE_INSTALL_FAIL_FOR_NO_APK;
     // 安装完删除安装文件提示
+    public static final int CODE_REMOVE_AFTER_SUCCESS_INSTALL = 125;
     public static final String TOAST_REMOVE_AFTER_SUCCESS_INSTALL = "已删除%s安装包，为您节省了%s空间";
 
     // 获取不到分享内容
-    public static final String SHARE_ERROR = "分享内容出错";
+    public static final int CODE_SHARE_ERROR = 126;
+    public static final String TOAST_SHARE_ERROR = "分享内容出错。" + CODE_SHARE_ERROR;
     // 分享成功
+    public static final int CODE_SHARE_SUCCESS = 127;
     public static final String TOAST_SHARE_SUCCESS = "分享成功";
     // 分享失败
-    public static final String TOAST_SHARE_FAILED = "分享失败，请检查网络后重新尝试哦！";
+    public static final int CODE_SHARE_FAILED = 128;
+    public static final String TOAST_SHARE_FAILED = "分享失败，请检查网络后重新尝试哦！" + CODE_SHARE_FAILED;
     // 取消分享
-    public static final String TOAST_SHARE_QUICKED = "分享已取消";
+    public static final int CODE_SHARE_QUICKED = 129;
+    public static final String TOAST_SHARE_QUICKED = "分享已取消。" + CODE_SHARE_QUICKED;
     // 没有提供分享按钮情况下异常触发的提示
-    public static final String TOAST_SHARE_NO_OFFER = "该礼包好像不能分享，去分享其他礼包吧！";
+    public static final int CODE_SHARE_NO_OFFER = 130;
+    public static final String TOAST_SHARE_NO_OFFER = "该礼包好像不能分享，去分享其他礼包吧！" + CODE_SHARE_NO_OFFER;
     // 活动获取发送Token失败
-    public static final String TOAST_GET_TOKEN_FAILED = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_GET_TOKEN_FAILED = 131;
+    public static final String TOAST_GET_TOKEN_FAILED = "呜，网络有点挤，请稍后重试！" + CODE_GET_TOKEN_FAILED;
     // 发表评论成功
+    public static final int CODE_COMMENT_SUCCESS = 132;
     public static final String TOAST_COMMENT_SUCCESS = "发表评论成功";
 
     // 没有关注快讯
+    public static final int CODE_EMPTY_FOCUS_ACTIVITY = 133;
     public static final String TOAST_EMPTY_FOCUS_ACTIVITY = "您还没有关注任何游戏哦～赶紧去关注吧～";
     // 获取关注快讯失败
-    public static final String TOAST_GET_FOCUS_ACTIVITY_FAILED = "呜，网络有点挤，请稍后重试！";
+    public static final int CODE_GET_FOCUS_ACTIVITY_FAILED = 134;
+    public static final String TOAST_GET_FOCUS_ACTIVITY_FAILED = "呜，网络有点挤，请稍后重试！" + CODE_GET_FOCUS_ACTIVITY_FAILED;
     // 点击qq群直接调起qq失败
-    public static final String TOAST_OPEN_QQ_GROUP_FAIL = "未安装QQ，安装QQ后才可以加群哦~";
+    public static final int CODE_OPEN_QQ_GROUP_FAIL = 135;
+    public static final String TOAST_OPEN_QQ_GROUP_FAIL = "未安装QQ，安装QQ后才可以加群哦~" + CODE_OPEN_QQ_GROUP_FAIL;
     // 取消关注成功
+    public static final int CODE_QUICK_FOCUS_SUCCESS = 136;
     public static final String TOAST_QUICK_FOCUS_SUCCESS = "取消关注成功";
     // 头像/昵称等资料修改成功
+    public static final int CODE_MODIFY_SUCCESS = 137;
     public static final String TOAST_MODIFY_SUCCESS = "修改成功";
     // 上传头像等选择图片获取失败
-    public static final String TOAST_GET_PIC_FAILED = "获取图片信息失败，请重新上传哦~";
+    public static final int CODE_GET_PIC_FAILED = 138;
+    public static final String TOAST_GET_PIC_FAILED = "获取图片信息失败，请重新上传哦~" + CODE_GET_PIC_FAILED;
     // 清除缓存后提示
+    public static final int CODE_CLEAR_CACHE_SUCCESS = 139;
     public static final String TOAST_CLEAR_CACHE_SUCCESS = "清除缓存成功，总共释放 %s 空间";
 
     // 提交反馈成功
+    public static final int CODE_FEEDBACK_SUCCESS = 140;
     public static final String TOAST_FEEDBACK_SUCCESS = "反馈成功，感谢您的宝贵建议！";
     // 反馈填写信息不足
+    public static final int CODE_FEEDBACK_LACK = 141;
     public static final String TOAST_FEEDBACK_LACK = "请填写完整反馈内容和联系方式";
     // 反馈内容太少
+    public static final int CODE_FEEDBACK_CONTENT_NOT_ENOUGH = 142;
     public static final String TOAST_FEEDBACK_CONTENT_NOT_ENOUGH
             = "反馈信息不能少于10个字，麻烦说的更详细点哦~我们才能更好的帮您解决问题";
 
     // 密码修改成功提示
+    public static final int CODE_MODIFY_PWD_SUCCESS = 143;
     public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录~";
 
 

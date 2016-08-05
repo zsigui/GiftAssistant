@@ -306,7 +306,10 @@ public class BitmapUtil {
         } else {
             compressFormat = Bitmap.CompressFormat.JPEG;
         }
-        return compressImageForBaos(bitmap, size, compressFormat);
+        ByteArrayOutputStream baos =  compressImageForBaos(bitmap, size, compressFormat);
+        if (bitmap != null)
+            bitmap.recycle();
+        return baos;
     }
 
     /**
@@ -346,13 +349,13 @@ public class BitmapUtil {
         //循环判断如果压缩后图片是否大于等于size,大于等于继续压缩
         while (baos.toByteArray().length >= size) {
             //重置baos即清空baos
-            baos.reset();
             //每次都减少5
             options -= 5;
             //这里压缩options%，把压缩后的数据存放到baos中
             if (options < 50) {
                 break;
             }
+            baos.reset();
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);
         }
         AppDebugConfig.d(AppDebugConfig.TAG_UTIL, String.format(

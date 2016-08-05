@@ -43,6 +43,7 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -347,6 +348,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
                     public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
                         hideLoading();
                         ToastUtil.blurThrow(t);
+                        t.printStackTrace();
                     }
                 });
             }
@@ -430,9 +432,18 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
      * 根据文件获取图片字节数组的Base64编码字符串
      */
     private String generateImageStringParam(String filePath) {
-        ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(filePath, AppConfig.REPLY_PIC_SIZE,
+        ByteArrayOutputStream baos = BitmapUtil.getBitmapForBaos(filePath, AppConfig.REPLY_PIC_SIZE/mPostImg.size(),
                 AppConfig.REPLY_PIC_WIDTH, AppConfig.REPLY_PIC_HEIGHT);
-        return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        if (baos != null) {
+            String s = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+            try {
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+        return "";
     }
 
     private void showLoading() {

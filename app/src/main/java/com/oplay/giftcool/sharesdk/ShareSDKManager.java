@@ -160,7 +160,7 @@ public class ShareSDKManager {
 
     public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data, String from) {
         if (data == null) {
-            ToastUtil.showShort(ConstString.SHARE_ERROR);
+            ToastUtil.showShort(ConstString.TOAST_SHARE_ERROR);
             return;
         }
         String title = data.title;

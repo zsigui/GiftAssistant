@@ -12,6 +12,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
 import retrofit2.Response;
@@ -79,7 +80,8 @@ public class ToastUtil {
 
     public static void blurThrow(Throwable t) {
         AppDebugConfig.w(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, t);
-        ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+        StatisticsManager.getInstance().reportThrowable(t);
+        ToastUtil.showShort(ConstString.TOAST_EXECUTE_ERROR);
     }
 
     public static <T> void blurErrorResp(Response<JsonRespBase<T>> response) {
