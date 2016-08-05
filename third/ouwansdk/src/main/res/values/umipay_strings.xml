@@ -18,6 +18,7 @@
 	<!--ExitDialog-->
 	<string name = "umipay_exitdialog_titile" >退出游戏</string >
 	<string name = "umipay_exitdialog_exit" >确定退出</string >
+	<string name = "umipay_exitdialog_cancel" >取消</string >
 	<string name = "umipay_exitdialog_exit_tocommunity" >前往社区</string >
 	<!--ExitDialog-->
 

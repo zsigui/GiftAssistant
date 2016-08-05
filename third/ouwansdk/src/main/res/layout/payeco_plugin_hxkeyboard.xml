@@ -39,12 +39,12 @@
                 android:orientation="horizontal" >
 
                 <EditText
+                    android:clickable="false"
                     android:id="@+id/payeco_keyboard_password_hx"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="0.2"
                     android:background="@drawable/payeco_plugin_editbg"
-                    android:clickable="false"
                     android:focusable="false"
                     android:gravity="center_vertical"
                     android:hint="请输入号码"
@@ -52,18 +52,17 @@
                     android:paddingRight="10.0dip"
                     android:singleLine="true"
                     android:textColor="#000"
-                    android:textColorHint="#687887"
                     android:textSize="16sp" />
 
                 <Button
+                    android:textColor="#333333"
                     android:id="@+id/payeco_digit_ok_hx"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="10dip"
                     android:layout_weight="0.8"
                     android:background="@drawable/payeco_stand_btnselector"
-                    android:text="确 定"
-                    android:textColor="#333333" />
+                    android:text="确 定" />
             </LinearLayout>
 
             <View
@@ -184,20 +183,24 @@
                             android:layout_weight="1"
                             android:text="0" />
 
-                        <LinearLayout
-                            android:id="@+id/keyboard_back"
-                            style="@style/payeco_keyboardDigitButton_hx"
+                        <FrameLayout
                             android:layout_width="0px"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
-                            android:clickable="true" >
+                            android:background="#C8C7CC" >
+
+                            <Button
+                                android:id="@+id/keyboard_back"
+                                style="@style/payeco_keyboardDigitButton_hx"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:background="@drawable/payeco_plugin_back" />
-                        </LinearLayout>
+                        </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>

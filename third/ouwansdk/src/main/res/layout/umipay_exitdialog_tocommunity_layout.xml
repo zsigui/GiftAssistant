@@ -30,6 +30,15 @@
 				android:text = "@string/umipay_exitdialog_titile"
 				android:textColor = "#505050"
 				android:textSize = "17dp" />
+
+		<ImageButton
+				android:id = "@+id/umipay_exit_cancel_btn"
+				android:layout_width = "17dp"
+				android:layout_height = "17dp"
+				android:layout_alignParentRight = "true"
+				android:layout_centerVertical = "true"
+				android:layout_margin = "12dp"
+				android:background = "@drawable/umipay_exitdialog_btn_close" />
 	</RelativeLayout >
 
 	<View
@@ -53,7 +62,7 @@
 			android:textSize = "17dp" />
 
 	<Button
-			android:id = "@+id/umipay_exit_cancel_btn"
+			android:id = "@+id/umipay_exit_tocommunity_btn"
 			android:layout_width = "match_parent"
 			android:layout_height = "40dp"
 			android:layout_gravity = "center"
@@ -62,8 +71,7 @@
 			android:layout_marginLeft = "29dp"
 			android:layout_marginRight = "29dp"
 			android:background = "@drawable/umipay_exitdialog_btn_tocommunity"
-			android:text = "@string/umipay_exitdialog_cancel"
+			android:text = "@string/umipay_exitdialog_exit_tocommunity"
 			android:textColor = "#ffffff"
 			android:textSize = "17dp" />
-
 </LinearLayout >

@@ -29,6 +29,7 @@ import net.ouwan.umipay.android.manager.ListenerManager;
 import net.youmi.android.libs.common.basic.Basic_StringUtil;
 import net.youmi.android.libs.common.coder.Coder_UrlCoder;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
+import net.youmi.android.libs.webjs.compatibility.SDK_Compatibility_WebChromeClient_v7;
 import net.youmi.android.libs.webjs.download.main.DefaultSDKApkDownloadManager;
 import net.youmi.android.libs.webjs.js.JS_SDK_Handler_Result;
 import net.youmi.android.libs.webjs.js.base.handler.Interface_SDK_Handler;
@@ -68,6 +69,10 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	public static final int ACTION_CODE_DEFAULT = -1;
 	public static final int ACTION_CODE_FAILED = 0;
 	public static final int ACTION_CODE_SUCCESS = 1;
+
+	public static final int REQUEST_CODE_PICK_IMAGE = 100;
+	public static final int REQUEST_CODE_IMAGE_CAPTURE = 101;
+	public static final int FILE_SELECTED = 104;
 
 	/**
 	 * session of Activity，会话，如果会话不存在则自动关闭Activity，这样的做法是为了防止进程结束重启的情况导致业务流程错误。
@@ -539,21 +544,41 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		try {
-			if (resultCode == Constant.RESULTCODE) {
-				//来自汇付宝的activity的返回
-				if (null != data) {
-					data.setAction(JsHandler_Pay_With_WECHAT.WECHAT_PUKGUIN_PAYEND_ACTION);
-					sendBroadcast(data);
-				}
-			} else {
-				//来自UPMP的activity的返回
-				String msg = "default";
-				if (null != data) {
-					msg = data.getExtras().getString("pay_result");
-				}
-				Intent intent = new Intent(JsHandler_Pay_With_UPMP.UPMP_PLUGIN_PAYEND_ACTION);
-				intent.putExtra("msg", msg);
-				sendBroadcast(intent);
+			switch (requestCode){
+				case 10:
+					//来自UPMP的activity的返回
+					String msg = "default";
+					if (null != data) {
+						msg = data.getExtras().getString("pay_result");
+					}
+					Intent intent = new Intent(JsHandler_Pay_With_UPMP.UPMP_PLUGIN_PAYEND_ACTION);
+					intent.putExtra("msg", msg);
+					sendBroadcast(intent);
+					break;
+				case SDK_Compatibility_WebChromeClient_v7.REQUEST_CODE_IMAGE_CAPTURE:
+				case SDK_Compatibility_WebChromeClient_v7.REQUEST_CODE_PICK_IMAGE:
+				case SDK_Compatibility_WebChromeClient_v7.FILE_SELECTED:
+					String uri = null;
+					if(data != null) {
+						uri = String.valueOf(data.getData());
+					}
+					Intent i = new Intent();
+					i.setAction(SDK_Compatibility_WebChromeClient_v7.CHROMECLIENT_ONACTIVITYRESULT_ACTION);
+					i.putExtra("requestCode", requestCode);
+					i.putExtra("resultCode", resultCode);
+					i.putExtra("uri", uri);
+					sendBroadcast(i);
+					break;
+
+				default:
+					if(resultCode == Constant.RESULTCODE){
+						//来自汇付宝的activity的返回
+						if (null != data) {
+							data.setAction(JsHandler_Pay_With_WECHAT.WECHAT_PUKGUIN_PAYEND_ACTION);
+							sendBroadcast(data);
+						}
+						break;
+					}
 			}
 		} catch (Throwable e) {
 			Debug_Log.e(e);

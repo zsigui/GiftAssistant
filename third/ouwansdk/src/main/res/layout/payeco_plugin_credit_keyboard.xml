@@ -5,7 +5,7 @@
     android:background="#70000000"
     android:gravity="bottom" >
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/payeco_keyboardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,20 +43,18 @@
             android:layout_marginTop="1.0dip" >
 
             <TextView
+                android:padding="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="5dp"
                 android:text="@string/payeco_keyboard_tips"
                 android:textColor="#687887"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/payeco_keyboard_msg"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/payeco_keyboardTips"
             android:background="#ebecee"
             android:orientation="vertical" >
 
@@ -86,12 +84,12 @@
                     android:orientation="horizontal" >
 
                     <TextView
+                        android:layout_marginLeft="5dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="0.7"
                         android:background="@null"
-                        android:gravity="left|center"
+                       android:gravity="left|center"
                         android:singleLine="true"
                         android:text="有效期"
                         android:textColor="#333333"
@@ -108,7 +106,6 @@
                         android:paddingLeft="10.0dip"
                         android:singleLine="true"
                         android:textColor="#000"
-                         android:textColorHint="#687887"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -119,12 +116,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/payeco_plugin_ckb_spinnerlayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone" >
+                    android:orientation="horizontal" >
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -138,15 +135,15 @@
                         android:textSize="16sp" />
 
                     <Spinner
-                        android:id="@+id/payeco_cqpAuth_month_edit"
                         style="@style/payeco_pluginSpinnerButton"
+                        android:id="@+id/payeco_cqpAuth_month_edit"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6" />
 
                     <Spinner
-                        android:id="@+id/payeco_cqpAuth_year_edit"
                         style="@style/payeco_pluginSpinnerButton"
+                        android:id="@+id/payeco_cqpAuth_year_edit"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6" />
@@ -160,6 +157,7 @@
                 android:background="#c1c1c1" />
 
             <LinearLayout
+               
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dip"
@@ -169,7 +167,7 @@
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    android:id="@+id/payeco_keyboard_editText"
+                     android:id="@+id/payeco_keyboard_editText"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="0.2"
@@ -179,9 +177,9 @@
                     android:padding="2dp" >
 
                     <TextView
+                        android:layout_marginLeft="5dp"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
                         android:layout_weight="0.6"
                         android:gravity="left|center"
                         android:singleLine="true"
@@ -190,18 +188,17 @@
                         android:textSize="16sp" />
 
                     <EditText
+                        android:focusable="false"
                         android:id="@+id/payeco_keyboard_password"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="0.4"
                         android:background="@null"
-                        android:focusable="false"
                         android:gravity="center"
                         android:hint="@string/payeco_pay_cvn2"
                         android:paddingLeft="5.0dip"
                         android:singleLine="true"
                         android:textColor="#000"
-                        android:textColorHint="#687887"
                         android:textSize="15sp" />
                 </LinearLayout>
 
@@ -216,11 +213,11 @@
                     android:textColor="#333333"
                     android:textSize="16sp" />
             </LinearLayout>
-
-            <View
+            
+             <View
+                 android:layout_marginTop="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_marginTop="5dp"
                 android:background="#c1c1c1" />
         </LinearLayout>
 
@@ -228,7 +225,6 @@
             android:id="@+id/payeco_keyboard"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/payeco_keyboard_msg"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -331,24 +327,28 @@
                             style="@style/payeco_keyboardDigitButton_hx"
                             android:layout_weight="1" />
 
-                        <LinearLayout
-                            android:id="@+id/payeco_digit_clear"
-                            style="@style/payeco_keyboardDigitButton_hx"
+                        <FrameLayout
                             android:layout_width="0px"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
-                            android:clickable="true" >
+                            android:background="#C8C7CC" >
+
+                            <Button
+                                android:id="@+id/payeco_digit_clear"
+                                style="@style/payeco_keyboardDigitButton_hx"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:background="@drawable/payeco_plugin_back" />
-                        </LinearLayout>
+                        </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -121,6 +121,11 @@ public class SDKCacheConfig implements Interface_Serializable {
 	 */
 	private String mExitDialogCommunityBtnText;
 
+	/**
+	 * @Fields mEnableExitToCommunity:是否允许退屏显示跳转偶玩社区按钮
+	 */
+	private boolean mEnableExitToCommunity = false;
+
 	private boolean mHasLocalCache = false;
 
 	private SDKCacheConfig(Context context) {
@@ -179,6 +184,7 @@ public class SDKCacheConfig implements Interface_Serializable {
 		Basic_JSONUtil.put(object, "mOuwanDownloadUrl", mOuwanDownloadUrl);
 		Basic_JSONUtil.put(object, "mExitDialogDownloadBtnText", mExitDialogDownloadBtnText);
 		Basic_JSONUtil.put(object, "mExitDialogCommunityBtnText", mExitDialogCommunityBtnText);
+		Basic_JSONUtil.put(object, "mEnableExitToCommunity", mEnableExitToCommunity);
 		return object.toString();
 	}
 
@@ -225,6 +231,7 @@ public class SDKCacheConfig implements Interface_Serializable {
 			mOuwanDownloadUrl = Basic_JSONUtil.getString(object, "mOuwanDownloadUrl", null);
 			mExitDialogDownloadBtnText = Basic_JSONUtil.getString(object, "mExitDialogDownloadBtnText", null);
 			mExitDialogCommunityBtnText = Basic_JSONUtil.getString(object, "mExitDialogCommunityBtnText", null);
+			mEnableExitToCommunity = Basic_JSONUtil.getBoolean(object, "mEnableExitToCommunity", false);
 			return true;
 		} catch (Throwable e) {
 			Debug_Log.e(e);
@@ -452,6 +459,13 @@ public class SDKCacheConfig implements Interface_Serializable {
 		mExitDialogCommunityBtnText = exitDialogCommunityBtnText;
 	}
 
+	public boolean isEnableExitToCommunity(){
+		return mEnableExitToCommunity;
+	}
+
+	public void setEnableExitToCommunity(boolean isEnableExitWithJump){
+		mEnableExitToCommunity = isEnableExitWithJump;
+	}
 	public boolean isHasLocalCache() {
 		return mHasLocalCache;
 	}

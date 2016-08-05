@@ -15,17 +15,19 @@
 	<!--<uses-permission android:name = "com.android.launcher.permission.UNINSTALL_SHORTCUT" />-->
 	<!--<uses-permission android:name = "com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />-->
 	<!--&lt;!&ndash;银联插件3.1.0新增权限&ndash;&gt;-->
-	<!--<uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />-->
+	<!--<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />-->
 	<!--&lt;!&ndash;易联支付需要权限 &ndash;&gt;-->
-	<!--<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />-->
-	<!--<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />-->
-	<!--<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />-->
-	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
 	<!--<uses-permission android:name = "android.permission.READ_SMS" />-->
 	<!--<uses-permission android:name = "android.permission.RECEIVE_SMS" />-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_COARSE_LOCATION" />-->
+	<!--<uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />-->
+	<!--<uses-permission android:name = "android.permission.RECORD_AUDIO" />-->
+	<!--<uses-permission android:name = "android.permission.CHANGE_WIFI_STATE" />-->
+
 	<!--<uses-feature android:name = "android.hardware.camera" />-->
+	<!--<uses-feature android:name = "android.hardware.camera.autofocus" />-->
+
 	<!--<uses-permission android:name = "android.permission.CAMERA" />-->
-	<!--<uses-permission android:name = "android.hardware.camera.autofocus" />-->
 	<!--<uses-permission android:name = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
 	<!--<uses-permission android:name = "android.permission.RECORD_VIDEO" />-->
 
@@ -36,124 +38,124 @@
 
 
 	<application >
-		<!--<activity
-				android:name = "net.ouwan.umipay.android.api.UmipayActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "landscape"
-				android:theme = "@style/umipay_main_dialog_theme" >
-		</activity >
-		<activity
-				android:name = "net.ouwan.umipay.android.api.UmipayBrowser"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "portrait"
-				android:theme = "@style/UmipayTheme_NoFullscreen" >
-		</activity >
+		<!--<activity-->
+				<!--android:name = "net.ouwan.umipay.android.api.UmipayActivity"-->
+				<!--android:configChanges = "keyboardHidden|orientation|screenSize"-->
+				<!--android:theme = "@style/umipay_main_dialog_theme" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "net.ouwan.umipay.android.api.UmipayBrowser"-->
+				<!--android:configChanges = "keyboardHidden|orientation|screenSize"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--android:theme = "@style/UmipayTheme_NoFullscreen" >-->
+		<!--</activity >-->
 
-		&lt;!&ndash; 新版支付宝需要添加的acticity &ndash;&gt;
-		<activity
-				android:name = "com.alipay.sdk.app.H5PayActivity"
-				android:configChanges = "orientation|keyboardHidden|navigation"
-				android:exported = "false"
-				android:screenOrientation = "behind" >
-		</activity >
-		<activity
-				android:name = "com.alipay.sdk.auth.AuthActivity"
-				android:configChanges = "orientation|keyboardHidden|navigation"
-				android:exported = "false"
-				android:screenOrientation = "behind" >
-		</activity >
-		&lt;!&ndash; 新版支付宝需要添加的acticity&ndash;&gt;
-		&lt;!&ndash;银联支付activity&ndash;&gt;
-		<activity
-				android:name = "com.unionpay.uppay.PayActivity"
-				android:configChanges = "orientation|keyboardHidden|screenSize"
-				android:excludeFromRecents = "true"
-				android:screenOrientation = "portrait" />
-		&lt;!&ndash;银联支付activity&ndash;&gt;
-		&lt;!&ndash; 插件入口界面 &ndash;&gt;
-		<activity
-				android:name="com.payeco.android.plugin.PayecoPluginLoadingActivity"
-				android:launchMode="singleTask"
-				android:screenOrientation="portrait"
-				/>
+		<!--&lt;!&ndash;&lt;!&ndash;银联支付activity&ndash;&gt;&ndash;&gt;-->
+		<!--&lt;!&ndash;<activity&ndash;&gt;-->
+		<!--&lt;!&ndash;android:name = "com.unionpay.uppay.PayActivity"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:configChanges = "orientation|keyboardHidden|screenLayout"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:excludeFromRecents = "true"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:label = "@string/app_name"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:theme = "@style/Theme.UPPay" >&ndash;&gt;-->
+		<!--&lt;!&ndash;</activity >&ndash;&gt;-->
+		<!--&lt;!&ndash;&lt;!&ndash;银联支付activity&ndash;&gt;&ndash;&gt;-->
 
-		&lt;!&ndash; 插件拍照界面 &ndash;&gt;
-		<activity
-				android:name="com.payeco.android.plugin.PayecoCameraActivity"
-				android:screenOrientation="portrait"
-				/>
+		<!--&lt;!&ndash; 新版支付宝需要添加的acticity &ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name = "com.alipay.sdk.app.H5PayActivity"-->
+				<!--android:configChanges = "orientation|keyboardHidden|navigation"-->
+				<!--android:exported = "false"-->
+				<!--android:screenOrientation = "behind" >-->
+		<!--</activity >-->
+		<!--<activity-->
+				<!--android:name = "com.alipay.sdk.auth.AuthActivity"-->
+				<!--android:configChanges = "orientation|keyboardHidden|navigation"-->
+				<!--android:exported = "false"-->
+				<!--android:screenOrientation = "behind" >-->
+		<!--</activity >-->
+		<!--&lt;!&ndash; 新版支付宝需要添加的acticity&ndash;&gt;-->
+		<!--&lt;!&ndash;银联支付activity&ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name="com.unionpay.uppay.PayActivity"-->
+				<!--android:configChanges="orientation|keyboardHidden|screenSize"-->
+				<!--android:excludeFromRecents="true"-->
+				<!--android:screenOrientation="portrait" />-->
+		<!--&lt;!&ndash;银联支付activity&ndash;&gt;-->
+		<!--&lt;!&ndash; 插件入口界面 &ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name = "com.payeco.android.plugin.PayecoPluginLoadingActivity"-->
+				<!--android:launchMode = "singleTask"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--/>-->
+		<!--&lt;!&ndash; 插件拍照界面 &ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name = "com.payeco.android.plugin.PayecoCameraActivity"-->
+				<!--android:screenOrientation = "portrait"-->
+				<!--/>-->
+		<!--&lt;!&ndash; 插件录像界面 &ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name = "com.payeco.android.plugin.PayecoVedioActivity"-->
+				<!--android:process = "com.payeco.android.plugin.vedio"-->
+				<!--android:screenOrientation = "landscape"-->
+				<!--/>-->
+		<!--&lt;!&ndash;易联需要添加的activity&ndash;&gt;-->
+		<!--&lt;!&ndash;汇付宝-微信支付需要添加的activity&ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name="com.heepay.plugin.activity.WeChatNotityActivity"-->
+				<!--android:configChanges="orientation|keyboardHidden|screenSize"-->
+				<!--android:screenOrientation="behind"-->
+				<!--android:theme="@android:style/Theme.NoDisplay" />-->
 
-		&lt;!&ndash; 插件录像界面 &ndash;&gt;
-		<activity
-				android:name="com.payeco.android.plugin.PayecoVedioActivity"
-				android:screenOrientation="landscape"
-				android:process="com.payeco.android.plugin.vedio"
-				/>
+		<!--&lt;!&ndash; qq oauth 第三方登录 &ndash;&gt;-->
+		<!--<activity-->
+				<!--android:name = "com.tencent.tauth.AuthActivity"-->
+				<!--android:launchMode = "singleTask"-->
+				<!--android:noHistory = "true" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "android.intent.action.VIEW" />-->
 
-		&lt;!&ndash;百度插件部分  &ndash;&gt;
-		<service
-				android:name="com.baidu.location.f"
-				android:enabled="true"
-				android:process=":remote" >
-			<intent-filter>
-				<action android:name="com.baidu.location.service_v2.2" >
-				</action>
-			</intent-filter>
-		</service>
-		&lt;!&ndash; meta-data需要写在application中 &ndash;&gt;
-		<meta-data
-				android:name="com.baidu.lbsapi.API_KEY"
-				android:value="DhNxS47YIr3CNdocGoAcy1ts" />
-		&lt;!&ndash;易联需要添加的activity&ndash;&gt;
-		&lt;!&ndash;汇付宝-微信支付需要添加的activity&ndash;&gt;
-		<activity
-				android:name = "com.junnet.heepay.ui.activity.WelcomeActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:excludeFromRecents = "true"
-				android:screenOrientation = "behind"
-				android:theme = "@android:style/Theme.Dialog"
-				android:windowSoftInputMode = "stateAlwaysHidden|adjustResize" />
-		<activity
-				android:name = "com.junnet.heepay.ui.activity.WechatPaymentActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:excludeFromRecents = "true"
-				android:screenOrientation = "behind"
-				android:theme = "@android:style/Theme.Dialog"
-				android:windowSoftInputMode = "stateAlwaysHidden|adjustResize" />
-		<activity
-				android:name = "com.ipaynow.plugin.activity.PayMethodActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:exported = "false"
-				android:screenOrientation = "behind"
-				android:theme = "@android:style/Theme.Dialog" />
+				<!--<category android:name = "android.intent.category.DEFAULT" />-->
+				<!--<category android:name = "android.intent.category.BROWSABLE" />-->
 
-		<activity
-				android:name = "com.ipaynow.plugin.inner_plugin.wechat_plugin.activity.WeChatNotifyActivity"
-				android:configChanges = "keyboardHidden|orientation|screenSize"
-				android:screenOrientation = "behind"
-				android:theme = "@android:style/Theme.NoDisplay" />
+				<!--<data android:scheme = "tencent100378813" />-->
+			<!--</intent-filter >-->
+		<!--</activity >-->
 
-		<service
-				android:name = "net.ouwan.umipay.android.api.UmipayService"
-				android:exported = "false" >
-		</service >
-		&lt;!&ndash;&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;&ndash;&gt;
-		&lt;!&ndash;<receiver android:name = "net.umipay.android.poll.Push_Boot_Receiver" >&ndash;&gt;
-		&lt;!&ndash;<intent-filter >&ndash;&gt;
-		&lt;!&ndash;<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />&ndash;&gt;
-		&lt;!&ndash;</intent-filter >&ndash;&gt;
-		&lt;!&ndash;</receiver >&ndash;&gt;
+		<!--<activity-->
+				<!--android:name="com.tencent.connect.common.AssistActivity"-->
+				<!--android:screenOrientation="behind"-->
+				<!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+				<!--android:configChanges="orientation|keyboardHidden">-->
+		<!--</activity>-->
 
-		&lt;!&ndash; 接听闹钟广播 &ndash;&gt;
-		<receiver
-				android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"
-				android:exported = "false" >
-			<intent-filter >
-				<action android:name = "net.ouwan.umipay.android.poll.push" />
-			</intent-filter >
-			<intent-filter >
-				<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-			</intent-filter >
-		</receiver >-->
+		<!--<service-->
+				<!--android:name = "net.ouwan.umipay.android.api.UmipayService"-->
+				<!--android:exported = "false" >-->
+		<!--</service >-->
+		<!--&lt;!&ndash;&lt;!&ndash; 网络状态改变则启动 &ndash;&gt;&ndash;&gt;-->
+		<!--&lt;!&ndash;<receiver android:name = "net.umipay.android.poll.Push_Boot_Receiver" >&ndash;&gt;-->
+		<!--&lt;!&ndash;<intent-filter >&ndash;&gt;-->
+		<!--&lt;!&ndash;<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />&ndash;&gt;-->
+		<!--&lt;!&ndash;</intent-filter >&ndash;&gt;-->
+		<!--&lt;!&ndash;</receiver >&ndash;&gt;-->
+
+		<!--&lt;!&ndash; 接听闹钟广播 &ndash;&gt;-->
+		<!--<receiver-->
+				<!--android:name = "net.ouwan.umipay.android.api.UmipayAlarmReceiver"-->
+				<!--android:exported = "false" >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "net.ouwan.umipay.android.poll.push" />-->
+			<!--</intent-filter >-->
+			<!--<intent-filter >-->
+				<!--<action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />-->
+			<!--</intent-filter >-->
+		<!--</receiver >-->
+
+		<!--<meta-data-->
+				<!--android:name = "UMIPAY_CHANNEL"-->
+				<!--android:value = "0" />-->
+		<!--<meta-data-->
+				<!--android:name = "UMIPAY_SUBCHANNEL"-->
+				<!--android:value = "0" />-->
 	</application >
 </manifest >

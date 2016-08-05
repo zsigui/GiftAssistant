@@ -7,8 +7,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.ouwan.umipay.android.api.GameParamInfo;
-import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 import net.ouwan.umipay.android.config.SDKCacheConfig;
 import net.ouwan.umipay.android.debug.Debug_Log;
@@ -68,6 +66,7 @@ public class RspParser_Cmd_Init extends CommonRspParser<Gson_Cmd_Init> {
 					cacheConfig.setOuwanDownloadUrl(cmdInitDataConfigOuwan.getDownloadUrl());
 					cacheConfig.setExitDialogCommunityBtnText(cmdInitDataConfigOuwan.getCommunityText());
 					cacheConfig.setExitDialogDownloadBtnText(cmdInitDataConfigOuwan.getDownloadText());
+					cacheConfig.setEnableExitToCommunity(cmdInitDataConfigOuwan.getShowCommunity());
 					cacheConfig.save();
 				}
 				postResult(result);

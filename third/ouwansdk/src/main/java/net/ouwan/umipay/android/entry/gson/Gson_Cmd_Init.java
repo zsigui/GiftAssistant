@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
+import net.ouwan.umipay.android.debug.Debug_Log;
 
 /**
  * Gson_Cmd_Init
@@ -232,6 +233,8 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 		private String mDownloadUrl;
 		@SerializedName("downloadtext")
 		private String mDownloadText;
+		@SerializedName("showCommunity")
+		private boolean mShowCommunity ;
 
 		public String getPackageName() {
 			return mPackageName;
@@ -271,6 +274,14 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 
 		public void setDownloadText(String downloadText) {
 			mDownloadText = downloadText;
+		}
+
+		public boolean getShowCommunity() {
+			return mShowCommunity;
+		}
+
+		public void setShowCommunity(boolean showCommunity) {
+			mShowCommunity = showCommunity;
 		}
 	}
 }

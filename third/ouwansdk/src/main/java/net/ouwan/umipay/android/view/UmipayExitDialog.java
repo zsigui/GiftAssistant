@@ -7,9 +7,10 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.api.ExitDialogCallbackListener;
@@ -24,11 +25,15 @@ public class UmipayExitDialog extends Dialog implements View.OnClickListener {
 
 	Context mContext;
 
-	private ExitDialogCallbackListener mExitDialogCallbackListener;
-	private Button mExitBtn;
-	private Button mExitToCommunityBtn;
-	private ImageButton mCancelBtn;
 	private ViewGroup mRootLayout;
+	private ViewStub mViewStub;
+	private LinearLayout mExitDialogLayout;
+
+	private View mExitBtn;
+	private View mCancelBtn;
+	private Button mExitToCommunityBtn;
+
+	private ExitDialogCallbackListener mExitDialogCallbackListener;
 
 	public UmipayExitDialog(Context context, ExitDialogCallbackListener exitDialogCallbackListener) {
 
@@ -57,32 +62,48 @@ public class UmipayExitDialog extends Dialog implements View.OnClickListener {
 		}
 	}
 
-
 	private void initViews() {
 		if (mContext == null) {
 			return;
 		}
 		try {
 			mRootLayout = (ViewGroup) ViewGroup.inflate(mContext, Util_Resource.getIdByReflection(mContext, "layout",
-					"umipay_exitdialog_layout"), null);
-			mCancelBtn = (ImageButton) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
+					"umipay_exitdialog"), null);
+			String fieldName = SDKCacheConfig.getInstance(mContext).isEnableExitToCommunity() ?
+					"umipay_exitdilog_tocommuniy_viewstub" : "umipay_exitdilog_viewstub";
+
+			mViewStub = (ViewStub) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext,
+					"id",
+					fieldName));
+
+			if (mExitDialogLayout == null && mViewStub != null) {
+				mExitDialogLayout = (LinearLayout) mViewStub.inflate();
+			}
+
+			mCancelBtn = mExitDialogLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
 					"umipay_exit_cancel_btn"));
-			mExitBtn = (Button) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
+			mExitBtn = mExitDialogLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
 					"umipay_exit_btn"));
 
-			String mExitToCommunityBtnText = SDKCacheConfig.getInstance(mContext).getExitDialogCommunityBtnText();
-			String mExitToDownloadBtnText = SDKCacheConfig.getInstance(mContext).getExitDialogDownloadBtnText();
-			String mPackageName = SDKCacheConfig.getInstance(mContext).getOuwanPackageName();
-			mExitToCommunityBtn = (Button) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
-					"umipay_exit_tocommunity_btn"));
-			if (mExitToCommunityBtn != null && mPackageName != null) {
-				if (Util_System_Package.isPakcageInstall(mContext, mPackageName)) {
-					if (mExitToCommunityBtnText != null) {
-						mExitToCommunityBtn.setText(mExitToCommunityBtnText);
-					}
-				} else {
-					if (mExitToCommunityBtnText != null) {
-						mExitToCommunityBtn.setText(mExitToDownloadBtnText);
+			if (SDKCacheConfig.getInstance(mContext).isEnableExitToCommunity()) {
+
+				mExitToCommunityBtn = (Button) mExitDialogLayout.findViewById(Util_Resource.getIdByReflection
+						(mContext, "id",
+								"umipay_exit_tocommunity_btn"));
+				String mExitToCommunityBtnText = SDKCacheConfig.getInstance(mContext)
+						.getExitDialogCommunityBtnText();
+				String mExitToDownloadBtnText = SDKCacheConfig.getInstance(mContext)
+						.getExitDialogDownloadBtnText();
+				String mPackageName = SDKCacheConfig.getInstance(mContext).getOuwanPackageName();
+				if (mExitToCommunityBtn != null && mPackageName != null) {
+					if (Util_System_Package.isPakcageInstall(mContext, mPackageName)) {
+						if (mExitToCommunityBtnText != null) {
+							mExitToCommunityBtn.setText(mExitToCommunityBtnText);
+						}
+					} else {
+						if (mExitToCommunityBtnText != null) {
+							mExitToCommunityBtn.setText(mExitToDownloadBtnText);
+						}
 					}
 				}
 			}
