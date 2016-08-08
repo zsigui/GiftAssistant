@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.heepay.plugin.api.HeepayPlugin;
 
@@ -46,7 +45,6 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 	protected JSONObject toHandler(final Interface_SDK_Handler sdkHandler,
 	                               Interface_Browser_Handler browserHandler, JSONObject params) {
 
-		Log.e("gcool_debug_warn", "toHandler start!");
 		try {
 			if (sdkHandler == null) {
 				return toSimpleCodeJson(Err_Exception);
@@ -73,9 +71,6 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 				agent_id = Basic_JSONUtil.getString(params, "e", null);
 				//订单数据
 				bill_no = Basic_JSONUtil.getString(params, "f", null);
-				Log.e("gcool_debug_warn", "mJsFn = " + mJsFn +", mReqCode"
-				 + mReqCode + ", mReceiverCallPageUrl = " + mReceiverCallPageUrl + ", token_id = " + token_id
-				+ ", agent_id = " + agent_id + ", bill_no = " + bill_no);
 			}
 
 			if (token_id == null || agent_id == null || bill_no == null) {
@@ -87,7 +82,6 @@ public class JsHandler_Pay_With_WECHAT extends JsHandler_abstract_Params_NoPsw_H
 			sdkHandler.getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Log.e("gcool_debug_warn", "param = " + paramStr + ", activity = " + sdkHandler.getActivity());
 					HeepayPlugin.pay(sdkHandler.getActivity(), paramStr);
 				}
 			});

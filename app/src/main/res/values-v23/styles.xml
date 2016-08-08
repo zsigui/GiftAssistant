@@ -1,0 +1,4 @@
+<resources>
+    <!-- 解决NoDisplay在6.0以上崩溃问题，待调试 -->
+    <style name = "CustomNoDisplay" parent="@android:style/Theme.Translucent.NoTitleBar" />
+</resources>

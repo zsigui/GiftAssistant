@@ -467,4 +467,6 @@
     <style name = "DefaultTextView.ItemSubTitle.S1.S2.S4" >
         <item name = "android:textSize" >10sp</item >
     </style >
+
+    <style name = "CustomNoDisplay" parent="@android:style/Theme.NoDisplay" />
 </resources >

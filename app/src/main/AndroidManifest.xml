@@ -430,7 +430,7 @@
                 android:name="com.heepay.plugin.activity.WeChatNotityActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:screenOrientation="behind"
-                android:theme="@android:style/Theme.NoDisplay" />
+                android:theme="@style/CustomNoDisplay" />
 
         <!-- qq oauth 第三方登录 -->
         <!--<activity-->
