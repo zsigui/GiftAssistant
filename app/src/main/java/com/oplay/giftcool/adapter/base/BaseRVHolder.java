@@ -11,11 +11,8 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public abstract class BaseRVHolder extends RecyclerView.ViewHolder {
 
-	public View itemView;
-
 	public BaseRVHolder(View itemView) {
 		super(itemView);
-		this.itemView = itemView;
 	}
 
 	public <VT extends View> VT getViewById(@IdRes int id) {

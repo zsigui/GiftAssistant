@@ -180,7 +180,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         holder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
         holder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
         holder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-        holder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_money);
+        holder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_spend);
         holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
         convertView.setTag(holder);
         return convertView;
@@ -381,7 +381,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
         viewHolder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
         viewHolder.tvPercent = ViewUtil.getViewById(convertView, R.id.tv_percent);
         viewHolder.pbPercent = ViewUtil.getViewById(convertView, R.id.pb_percent);
-        viewHolder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_money);
+        viewHolder.tvMoney = ViewUtil.getViewById(convertView, R.id.tv_spend);
         viewHolder.tvSeizeHint = ViewUtil.getViewById(convertView, R.id.tv_seize_hint);
         convertView.setTag(viewHolder);
         return convertView;

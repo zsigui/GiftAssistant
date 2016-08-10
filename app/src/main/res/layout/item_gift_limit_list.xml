@@ -68,7 +68,7 @@
 
 
 		<com.oplay.giftcool.ui.widget.DeletedTextView
-				android:id = "@+id/tv_money"
+				android:id = "@+id/tv_spend"
 				android:gravity = "center_vertical"
 				android:minWidth = "@dimen/di_item_money_min_width"
 				android:layout_below = "@+id/tv_name"
@@ -82,7 +82,7 @@
 				style = "@style/DefaultTextView.Text"
 				android:padding = "0dp"
 				android:layout_toLeftOf = "@+id/ll_percent"
-				android:layout_below = "@+id/tv_money"
+				android:layout_below = "@+id/tv_spend"
 				android:layout_marginLeft = "@dimen/di_index_item_margin_left"
 				android:layout_toRightOf = "@+id/rl_icon"
 				android:layout_marginTop = "@dimen/di_line_space_extra_normal"
@@ -94,7 +94,7 @@
 				android:layout_below = "@+id/tv_name"
 				android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
 				android:layout_marginTop = "@dimen/di_list_item_gap_small"
-				android:layout_toRightOf = "@+id/tv_money" />
+				android:layout_toRightOf = "@+id/tv_spend" />
 
 		<ProgressBar
 				android:id = "@+id/pb_percent"

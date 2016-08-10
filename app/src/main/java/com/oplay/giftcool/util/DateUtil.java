@@ -151,6 +151,8 @@ public class DateUtil {
     }
 
     /**
+     * 返回相对简略的显示时间方式
+     *
      * @time 单位: s 秒
      */
     public static String formatUserReadDate(long time) {

@@ -104,6 +104,17 @@ public class GiftTypeUtil {
     public static final int BUTTON_TYPE_RESERVED = 9;
     public static final int BUTTON_TYPE_FINISH = 10;
     public static final int BUTTON_TYPE_RESERVE_TAKE = 11;
+    // 显示样式
+    public static final int UI_TYPE_COUNT = 9;
+    public static final int UI_TYPE_LIMIT = 0;
+    public static final int UI_TYPE_NORMAL_SEIZE = 1;
+    public static final int UI_TYPE_NORMAL_SEIZED = 2;
+    public static final int UI_TYPE_NORMAL_WAIT_SEARCH = 3;
+    public static final int UI_TYPE_NORMAL_SEARCH = 4;
+    public static final int UI_TYPE_NORMAL_WAITE_SEIZE = 5;
+    public static final int UI_TYPE_COUPON = 6;
+    public static final int UI_TYPE_FREE_GIFT = 7;
+    public static final int UI_TYPE_FREE_COUPON = 8;
 
     public static int getButtonState(IndexGiftNew gift) {
         switch (gift.seizeStatus) {

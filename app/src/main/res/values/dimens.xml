@@ -97,6 +97,9 @@
 
     <dimen name = "di_gift_common_pb_radius" >3dp</dimen >
     <dimen name = "di_gift_common_pb_diameter" >6dp</dimen >
+    <dimen name = "di_gift_hint_width" >70dp</dimen >
+    <dimen name = "di_gift_pb_width" >40dp</dimen >
+
 
 
     <!-- 主页-礼包页面 -->

@@ -1,7 +1,6 @@
 package com.oplay.giftcool.adapter;
 
 import android.content.Context;
-import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,25 +11,33 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
-import com.oplay.giftcool.model.data.resp.TimeData;
+import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.UiStyleUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mink on 16-03-04.
+ * Created by zsigui on 15-12-24.
  */
-public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> implements View.OnClickListener,
+public class NestedGiftListAdapterNew extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener,
         OnFinishListener {
 
-    private OnItemClickListener<IndexGiftNew> mListener;
-    private ArrayMap<String, String> mCalendar;
 
-    public LimitGiftListNewAdapter(Context context, List<TimeData<IndexGiftNew>> objects) {
+    private OnItemClickListener<IndexGiftNew> mListener;
+
+
+    public NestedGiftListAdapterNew(Context context) {
+        this(context, null);
+    }
+
+    public NestedGiftListAdapterNew(Context context, List<IndexGiftNew> objects) {
         super(context, objects);
     }
 
+    public void updateData(List<IndexGiftNew> data) {
+        this.mData = data;
+        notifyDataSetChanged();
+    }
 
     public OnItemClickListener<IndexGiftNew> getListener() {
         return mListener;
@@ -40,9 +47,12 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
         mListener = listener;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
+    public List<IndexGiftNew> getData() {
+        return mData;
+    }
+
+    public void setData(List<IndexGiftNew> data) {
+        mData = data;
     }
 
     @Override
@@ -56,16 +66,13 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
      */
     @Override
     public int getItemViewType(int position) {
-        return getCount() == 0 ? GiftTypeUtil.UI_TYPE_LIMIT : getDataItem(position).uiStyle;
+        return getCount() == 0 ? GiftTypeUtil.UI_TYPE_LIMIT : getItem(position).uiStyle;
     }
 
-    public IndexGiftNew getDataItem(int position) {
-        return getCount() == 0 ? null : getItem(position).data;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        IndexGiftNew o = getDataItem(position);
+        IndexGiftNew o = getItem(position);
         StyleBaseHolder baseHolder = UiStyleUtil.onCreateHolder(mContext, convertView, parent, o.uiStyle, false);
         UiStyleUtil.bindListener(baseHolder, TAG_POSITION, position, this);
         UiStyleUtil.bindHolderData(mContext, baseHolder, o);
@@ -74,28 +81,15 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
     }
 
     @Override
-    public void updateData(List<TimeData<IndexGiftNew>> data) {
-        mData = data;
-        notifyDataSetChanged();
-    }
-
-    public void addMoreData(ArrayList<TimeData<IndexGiftNew>> data) {
-        if (data == null || mData == null) {
-            return;
-        }
-        mData.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    @Override
     public void onClick(View v) {
         try {
             if (v.getTag(TAG_POSITION) != null) {
                 Integer pos = (Integer) v.getTag(TAG_POSITION);
                 if (mData != null && pos < mData.size()) {
-                    IndexGiftNew gift = mData.get(pos).data;
+                    IndexGiftNew gift = mData.get(pos);
                     if (mListener != null) {
                         mListener.onItemClick(gift, v, pos);
+                        ToastUtil.showShort("pos = " + pos + ", ui = " + gift.uiStyle + ", btn = " + gift.buttonState);
                     }
                 }
             }
@@ -108,13 +102,6 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
     public void release() {
         mContext = null;
         mListener = null;
-        if (mData != null) {
-            mData.clear();
-            mData = null;
-        }
-        if (mCalendar != null) {
-            mCalendar.clear();
-            mCalendar = null;
-        }
+        mData = null;
     }
 }

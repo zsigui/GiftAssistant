@@ -222,6 +222,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             mViewManager.showContent();
             mData = data;
             final IndexGiftNew giftData = data.giftData;
+            giftData.buttonState = (giftData.buttonState == 0 ?
+                    GiftTypeUtil.getButtonState(giftData) : giftData.buttonState);
             setTag(giftData);
 
             int type = GiftTypeUtil.getItemViewType(giftData);
@@ -257,8 +259,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                             && giftData.status != GiftTypeUtil.STATUS_WAIT_SEARCH)) {
                         setRemainProgress(giftData);
                     }
-                    if (giftData.freeStartTime != 0
-                            && giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
+                    if (giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
                         tvSeizeHint.setVisibility(View.VISIBLE);
                         tvSeizeHint.setText(String.format(Locale.CHINA,
                                 ConstString.TEXT_GIFT_FREE_SEIZE,
@@ -277,8 +278,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
                             ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                             setRemainProgress(giftData);
-                            if (giftData.freeStartTime != 0
-                                    && giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
+                            if (giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
                                 tvSeizeHint.setVisibility(View.VISIBLE);
                                 tvSeizeHint.setText(String.format(Locale.CHINA,
                                         ConstString.TEXT_GIFT_FREE_SEIZE,
