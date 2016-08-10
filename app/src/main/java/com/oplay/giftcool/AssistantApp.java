@@ -121,7 +121,7 @@ public class AssistantApp extends Application {
     private OkHttpClient mHttpClient;
     private long mLastLaunchTime;
     private int mPhoneLoginType;
-    private int mPushSdk;
+    private int mPushSdk = PushMessageManager.SdkType.NONE;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -129,6 +129,7 @@ public class AssistantApp extends Application {
     public static AssistantApp getInstance() {
         if (sInstance == null) {
             AppDebugConfig.d(AppDebugConfig.TAG_APP, "AssistantApp is init here!");
+            sInstance = new AssistantApp();
         }
         return sInstance;
     }
