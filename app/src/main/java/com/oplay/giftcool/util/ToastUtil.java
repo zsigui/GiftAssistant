@@ -15,6 +15,8 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 
+import java.util.Locale;
+
 import retrofit2.Response;
 
 /**
@@ -87,10 +89,11 @@ public class ToastUtil {
     public static <T> void blurErrorResp(Response<JsonRespBase<T>> response) {
         AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
         if (response == null || !response.isSuccessful()) {
-            ToastUtil.showShort(ConstString.TOAST_SERVER_ERROR);
+            ToastUtil.showShort(response == null?
+                    ConstString.TOAST_SERVER_ERROR : String.format(Locale.CHINA, "(%d)%s", response.code(), response.message()));
         } else if (response.body() == null || !response.body().isSuccess()) {
             ToastUtil.showShort(response.body() == null ?
-                    ConstString.TOAST_SERVER_BAD_CALLBACK : response.body().getMsg());
+                    ConstString.TOAST_SERVER_BAD_CALLBACK : response.body().error());
         }
 
     }

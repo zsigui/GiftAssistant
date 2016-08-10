@@ -23,45 +23,45 @@ public class AppDebugConfig {
     public static int TEST_CHANNEL_ID = BuildConfig.TEST_CHANNEL_ID;
 
 
-    public static final String TAG_APP = "gcool_debug_app";
+    public static final String TAG_APP = "giftcool_app";
 
-    public static final String TAG_FRAG = "gcool_debug_fragment";
+    public static final String TAG_FRAG = "giftcool_fragment";
 
-    public static final String TAG_UTIL = "gcool_debug_util";
+    public static final String TAG_UTIL = "giftcool_util";
 
-    public static final String TAG_WIDGET = "gcool_debug_widget";
+    public static final String TAG_WIDGET = "giftcool_widget";
 
-    public static final String TAG_RECEIVER = "gcool_debug_receiver";
+    public static final String TAG_RECEIVER = "giftcool_receiver";
 
-    public static final String TAG_ENCRYPT = "gcool_debug_encrypt";
+    public static final String TAG_ENCRYPT = "giftcool_encrypt";
 
-    public static final String TAG_MANAGER = "gcool_debug_manager";
+    public static final String TAG_MANAGER = "giftcool_manager";
 
-    public static final String TAG_WEBVIEW = "gcool_debug_webview";
+    public static final String TAG_WEBVIEW = "giftcool_webview";
 
-    public static final String TAG_ACTIVITY = "gcool_debug_activity";
+    public static final String TAG_ACTIVITY = "giftcool_activity";
 
-    public static final String TAG_SERVICE = "gcool_debug_service";
+    public static final String TAG_SERVICE = "giftcool_service";
 
-    public static final String TAG_ADAPTER = "gcool_debug_adapter";
+    public static final String TAG_ADAPTER = "giftcool_adapter";
 
-    public static final String TAG_CHANNEL = "gcool_debug_channel";
+    public static final String TAG_CHANNEL = "giftcool_channel";
 
-    public static final String TAG_DEBUG_INFO = "gcool_debug_info";
+    public static final String TAG_DEBUG_INFO = "giftcool_info";
     /**
      * 所有注解该TAG的LOG需要进行删除
      */
-    public static final String TAG_WARN = "gcool_debug_warning";
+    public static final String TAG_WARN = "giftcool_warning";
 
-    public static final String TAG_PUSH = "gcool_debug_push";
+    public static final String TAG_PUSH = "giftcool_push";
 
-    public static final String TAG_STATICS = "gcool_debug_statistics";
+    public static final String TAG_STATICS = "giftcool_statistics";
 
-    public static final String TAG_DOWNLOAD = "gcool_debug_download";
+    public static final String TAG_DOWNLOAD = "giftcool_download";
 
-    public static final String TAG_SHARE = "gcool_debug_share";
+    public static final String TAG_SHARE = "giftcool_share";
 
-    public static final String TAG_GALLERY = "gcool_debug_gallery";
+    public static final String TAG_GALLERY = "giftcool_gallery";
 
     public static final int STACKTRACE_INDEX = 6;
 
