@@ -118,7 +118,7 @@ if [ ${PACK_MODE} -eq 1 ]; then
 
 else
 
-    if [ ${NEED_ASSEMBLE} -eq 1]; then
+    if [ ${NEED_ASSEMBLE} -eq 1 ]; then
         echo "need to execute assemble first"
         cd ${APP_PATH} && pwd
         if [ ${PACK_MODE} -eq 2 ]; then ASSEMBLE_VARIANT=RDebugRelease; else ASSEMBLE_VARIANT=RReleaseRelease; fi

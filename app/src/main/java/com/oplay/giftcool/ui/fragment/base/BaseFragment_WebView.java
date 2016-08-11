@@ -3,15 +3,20 @@ package com.oplay.giftcool.ui.fragment.base;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
+import android.webkit.PermissionRequest;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -86,11 +91,13 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
+                AppDebugConfig.v();
                 onWebReceivedError();
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "shouldOverrideUrlLoading.url = " + url);
                 boolean hasFind;
                 Uri mUri = Uri.parse(url);
                 if (mUri == null) {
@@ -117,7 +124,23 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 return hasFind;
             }
 
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                AppDebugConfig.v();
+                super.onLoadResource(view, url);
+            }
 
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(view, handler, error);
+                AppDebugConfig.v();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                AppDebugConfig.v();
+            }
         });
         final WebChromeClient client = new WebChromeClient() {
 
@@ -129,6 +152,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
             @Override
             public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
+                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onJsBeforeUnload.message = " + message + ", jsResult = " + result.toString());
                 return super.onJsBeforeUnload(view, url, message, result);
             }
 
@@ -147,7 +171,23 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 return super.onJsAlert(view, url, message, result);
             }
 
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                AppDebugConfig.v();
+                return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+            }
 
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+                super.onShowCustomView(view, callback);
+                AppDebugConfig.v();
+            }
+
+            @Override
+            public void onPermissionRequest(PermissionRequest request) {
+                super.onPermissionRequest(request);
+                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onPermissionRequest.request = " + request.getOrigin().toString());
+            }
         };
         mWebView.setWebChromeClient(client);
         // 开启硬件加速，否则部分手机（如vivo）WebView会很卡
@@ -363,7 +403,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
     public void loadUrl(String url) {
         mUrl = url;
-        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "url is " + mUrl);
+        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "loadUrl.url = " + mUrl + ", mWebView = " + mWebView);
         if (mWebView != null) {
             if (sScrollMap.get(mUrl) != null) {
                 mScrollY = sScrollMap.get(mUrl);
@@ -377,7 +417,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
      */
     public void postUrl(String url, byte[] postData) {
         mUrl = url;
-        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "url is " + mUrl);
+        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "url = " + mUrl);
         if (mWebView != null) {
             mWebView.postUrl(url, postData);
         }
@@ -385,6 +425,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
 
     protected void onWebProgressChangedMethod(int i) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onWebProgressChangedMethod.i = " + i);
         if (mProgressBar != null) {
             mProgressBar.setProgress(i);
         }
