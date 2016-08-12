@@ -23,7 +23,6 @@ import com.oplay.giftcool.util.AppInfoUtil;
 import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
-import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.log.GCLog;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
@@ -78,7 +77,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             AssistantApp.getInstance().setFirstOpenInThisVersion(true);
         }
     }
-
 
 
     /**
@@ -136,15 +134,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         } catch (Exception e) {
             AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
-        final UserModel finalUser = user;
-        ThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AccountManager.getInstance().notifyUserAll(finalUser);
-            }
-        });
-        // 每次登录请求一次更新用户状态和数据
-        AccountManager.getInstance().updateUserSession();
+        AccountManager.getInstance().notifyUserAll(user);
 
         // 初始化配置，获取更新信息
         if (!initAndCheckUpdate()) {

@@ -9,6 +9,7 @@ import android.os.Build;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.HotFixManager;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
@@ -41,6 +42,10 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
     @Override
     protected Void doInBackground(Object... params) {
         try {
+
+            // 每次登录请求一次更新用户状态和数据
+            AccountManager.getInstance().updateUserSession();
+
             HotFixManager.getInstance().requestPatchFromServer();
             Global.setInstalledAppNames(SystemUtil.getInstalledAppName(mContext));
             // 判断是否今日首次打开APP

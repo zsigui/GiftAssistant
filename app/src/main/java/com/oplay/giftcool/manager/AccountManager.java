@@ -384,8 +384,7 @@ public class AccountManager implements OnFinishListener {
         if (isLogin()) {
             // 当天登录过，无须再次重新更新 session
             long lastTime = AssistantApp.getInstance().getLastLaunchTime();
-            if (lastTime + 14 * 24 * 60 * 60 * 1000 > System.currentTimeMillis()) {
-                // 2周内打开，只更新用户信息
+            if (DateUtil.isToday(lastTime)) {
                 updateUserInfo();
                 return;
             }
