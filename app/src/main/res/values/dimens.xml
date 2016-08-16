@@ -27,6 +27,8 @@
 
     <dimen name = "di_item_money_min_width" >85dp</dimen >
 
+    <dimen name = "di_default_soft_input_height" >277dp</dimen >
+
     <!-- 列表四周间隔 -->
     <dimen name = "di_line_space_extra_normal" >2dp</dimen >
     <dimen name = "di_line_space_extra_big" >4dp</dimen >

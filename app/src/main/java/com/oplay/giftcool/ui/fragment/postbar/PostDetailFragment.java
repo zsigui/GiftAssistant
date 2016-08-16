@@ -70,7 +70,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
     private final String KEY_CONTENT = "content";
     private final String KEY_IMGS = "imgs";
 
-    private int mLastSoftInputHeight = 400;
+    private int mLastSoftInputHeight;
 
     private EditText etContent;
     private ImageView ivImgAdd;
@@ -130,6 +130,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
             ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
+        // 此处设置才能在onGlobalLayout动态监听InputMethod造成的界面视图高度变化
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         int postId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
         String from = getArguments().getString(KeyConfig.KEY_DATA_O, PostDetailActivity.DEFAULT_FROM);

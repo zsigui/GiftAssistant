@@ -657,6 +657,9 @@ public class AssistantApp extends Application {
             mSoftInputHeight = SPUtil.getInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, 0);
             if (activity != null && mSoftInputHeight == 0) {
                 mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
+                if (mSoftInputHeight == 0) {
+                    mSoftInputHeight = activity.getResources().getDimensionPixelSize(R.dimen.di_default_soft_input_height);
+                }
                 setSoftInputHeight(mSoftInputHeight);
             }
         }
