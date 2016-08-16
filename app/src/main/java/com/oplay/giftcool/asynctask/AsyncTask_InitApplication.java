@@ -14,6 +14,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.model.data.req.ReqInitApp;
+import com.oplay.giftcool.model.data.resp.AdInfo;
 import com.oplay.giftcool.model.data.resp.InitAppConfig;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
 import com.oplay.giftcool.model.data.resp.UserModel;
@@ -207,6 +208,21 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                             AssistantApp.getInstance().setStartImg(config.startImgUrl);
                             AssistantApp.getInstance().setBroadcastBanner(config.broadcastBanner);
                             AssistantApp.getInstance().setPhoneLoginType(config.phoneLoginType);
+
+//                            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "set ad config");
+//                            config.adInfo = new AdInfo();
+//                            config.adInfo.showPass = true;
+//                            config.adInfo.displayTime = 6;
+//                            config.adInfo.uri = "lbapp://libao.ouwan.com/gamedetail/?id=11185&data=2";
+//                            config.adInfo.img = "http://owan-img.ymapp.com/giftcool/splash/giftcool_20160803.jpg";
+//                            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "set ad config ： " + config.adInfo);
+                            if (config.adInfo == null && !TextUtils.isEmpty(config.startImgUrl)) {
+                                // 用于兼容1308及之前版本
+                                config.adInfo = new AdInfo();
+                                config.adInfo.img = config.startImgUrl;
+                                config.adInfo.showPass = false;
+                            }
+                            AssistantApp.getInstance().setAdInfo(config.adInfo);
                             // 由于默认未传会被默认为0，所以废除传值的0表示
                             int pushSdk = 2;
                             if (config.pushSdk < 0) {

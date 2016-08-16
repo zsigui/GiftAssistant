@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -33,6 +34,7 @@ import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
+import com.oplay.giftcool.model.data.resp.AdInfo;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.InitQQ;
 import com.oplay.giftcool.model.data.resp.UpdateInfo;
@@ -701,5 +703,34 @@ public class AssistantApp extends Application {
 
     public int getPushSdk() {
         return mPushSdk;
+    }
+
+    private AdInfo mAdInfo;
+
+    public AdInfo getAdInfo() {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "getAdInfo = " + mAdInfo);
+        if (mAdInfo == null) {
+            String s = SPUtil.getString(this, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_AD_SPLASH_INFO, null);
+            if (s != null) {
+                try {
+                    mAdInfo = getGson().fromJson(s, AdInfo.class);
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "getAdInfo = " + mAdInfo.uri + ", " + mAdInfo.displayTime);
+                } catch (JsonSyntaxException e) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_APP, e);
+                }
+            }
+        }
+        return mAdInfo;
+    }
+
+    public void setAdInfo(AdInfo adInfo) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "start to set ad : " + adInfo);
+        if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "start to load ad img : " + adInfo.img);
+            ImageLoader.getInstance().loadImage(adInfo.img, null);
+            mAdInfo = adInfo;
+            String s = getGson().toJson(adInfo, AdInfo.class);
+            SPUtil.putString(this, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_AD_SPLASH_INFO, s);
+        }
     }
 }

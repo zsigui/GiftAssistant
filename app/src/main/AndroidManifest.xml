@@ -88,6 +88,11 @@
             </intent-filter >
         </activity >
 
+        <!--<activity-->
+                <!--android:name = ".ui.activity.AdActivity"-->
+                <!--android:launchMode = "singleTop"-->
+                <!--android:screenOrientation = "sensorPortrait" />-->
+
         <activity
                 android:name = ".ui.activity.MainActivity"
                 android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
