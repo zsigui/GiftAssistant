@@ -75,25 +75,23 @@ public class SplashActivity extends BaseAppCompatActivity {
         Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getApplicationContext()));
         tvPass.setOnClickListener(this);
         ivSplash.setOnClickListener(this);
-        Bitmap b;
+        Bitmap b = null;
         AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ad info  = " +adInfo);
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ad info  = " + adInfo);
         if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
             File f = ImageLoader.getInstance().getDiskCache().get(adInfo.img);
             // 此前f已经验证
             b = BitmapFactory.decodeFile(f.getAbsolutePath());
-            if (b != null) {
-                ivSplash.setImageBitmap(b);
-            }
             remainTime = AssistantApp.getInstance().getAdInfo().displayTime;
-        } else {
+        }
+        if (b == null) {
             b = BitmapFactory.decodeResource(getResources(), R.drawable.pic_splash_2016);
         }
 //        prefixTag = (adInfo == null || adInfo.showPass)? "跳过" : "剩余";
-        if (adInfo != null && !adInfo.showPass) {
+        if (adInfo == null || adInfo.showPass) {
             tvPass.setVisibility(View.GONE);
         }
-        remainTime = (adInfo == null || adInfo.displayTime < 3)? 3 : adInfo.displayTime;
+        remainTime = (adInfo == null || adInfo.displayTime < 3) ? 3 : adInfo.displayTime;
         ivSplash.setImageBitmap(b);
     }
 
@@ -171,9 +169,9 @@ public class SplashActivity extends BaseAppCompatActivity {
         AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
         switch (v.getId()) {
             case R.id.tv_pass:
-                if (adInfo == null || adInfo.showPass) {
-                    jumpToMain();
-                }
+//                if (adInfo == null || adInfo.showPass) {
+                jumpToMain();
+//                }
                 break;
             case R.id.iv_splash:
                 if (adInfo != null && !TextUtils.isEmpty(adInfo.uri)) {

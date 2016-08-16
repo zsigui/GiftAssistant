@@ -11,7 +11,6 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
-import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.UiStyleUtil;
 
 import java.util.List;
@@ -89,7 +88,6 @@ public class NestedGiftListAdapterNew extends BaseListAdapter<IndexGiftNew> impl
                     IndexGiftNew gift = mData.get(pos);
                     if (mListener != null) {
                         mListener.onItemClick(gift, v, pos);
-                        ToastUtil.showShort("pos = " + pos + ", ui = " + gift.uiStyle + ", btn = " + gift.buttonState);
                     }
                 }
             }
