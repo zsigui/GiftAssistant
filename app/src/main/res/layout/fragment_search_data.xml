@@ -1,103 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:id = "@+id/rl_container"
-		android:layout_width = "match_parent"
-		android:layout_height = "match_parent" >
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/rl_container"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent" >
 
-	<ScrollView
-			android:id = "@+id/sv_container"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:background = "@color/co_transparent"
-			android:orientation = "vertical" >
+    <ScrollView
+            android:id = "@+id/sv_container"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:background = "@color/co_transparent"
+            android:orientation = "vertical" >
 
-		<RelativeLayout
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:orientation = "vertical" >
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:orientation = "vertical" >
 
-			<!-- 搜到的游戏 -->
-			<LinearLayout
-					android:id = "@+id/ll_game"
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "7dp" >
+            <!-- 搜到的游戏 -->
+            <LinearLayout
+                    android:id = "@+id/ll_game"
+                    style = "@style/IndexModuleLayout"
+                    android:layout_marginTop = "7dp" >
 
-				<RelativeLayout
-						android:id = "@+id/rl_game"
-						style = "@style/IndexModuleTitleLayout" >
+                <RelativeLayout
+                        android:id = "@+id/rl_game"
+                        style = "@style/IndexModuleTitleLayout" >
 
-					<TextView
-							android:id = "@+id/tv_game_title"
-							style = "@style/DefaultTextView.Header" />
+                    <TextView
+                            android:id = "@+id/tv_game_title"
+                            style = "@style/DefaultTextView.Header" />
 
-				</RelativeLayout >
+                </RelativeLayout >
 
-				<View style="@style/HDividerView" />
+                <View style = "@style/HDividerView" />
 
-				<com.oplay.giftcool.ui.widget.NestedListView
-						android:id = "@+id/lv_game"
-						style = "@style/DefaultListView" />
-			</LinearLayout >
+                <com.oplay.giftcool.ui.widget.NestedListView
+                        android:id = "@+id/lv_game"
+                        style = "@style/DefaultListView" />
+            </LinearLayout >
 
-			<!-- 首充券 -->
-			<LinearLayout
-					android:id = "@+id/ll_item"
-					android:layout_below = "@id/ll_game"
-					style = "@style/IndexModuleLayout"
-					android:layout_marginTop = "7dp" >
+            <!-- 首充券 -->
+            <LinearLayout
+                    android:id = "@+id/ll_item"
+                    android:layout_below = "@id/ll_game"
+                    style = "@style/IndexModuleLayout"
+                    android:background = "@color/co_transparent"
+                    android:layout_marginTop = "7dp" >
 
-				<RelativeLayout
-						android:id = "@+id/rl_like"
-						style = "@style/IndexModuleTitleLayout" >
+                <RelativeLayout
+                        android:id = "@+id/rl_like"
+                        android:background = "@drawable/selector_white_module"
+                        style = "@style/IndexModuleTitleLayout" >
 
-					<TextView
-							android:id = "@+id/tv_like_title"
-							style = "@style/DefaultTextView.Header" />
+                    <TextView
+                            android:id = "@+id/tv_like_title"
+                            style = "@style/DefaultTextView.Header" />
 
-				</RelativeLayout >
+                </RelativeLayout >
 
-				<View style="@style/HDividerView" />
+                <View style = "@style/HDividerView" />
 
-				<com.oplay.giftcool.ui.widget.NestedListView
-						android:id = "@+id/lv_like"
-						style = "@style/DefaultListView" />
-			</LinearLayout >
+                <com.oplay.giftcool.ui.widget.NestedListView
+                        android:id = "@+id/lv_like"
+                        style = "@style/DefaultListView" />
+            </LinearLayout >
 
-			<!-- 搜到的礼包 -->
-			<LinearLayout
-					android:id = "@+id/ll_gift"
-					style = "@style/IndexModuleLayout"
-					android:layout_below = "@+id/ll_item"
-					android:layout_marginTop = "7dp" >
+            <!-- 搜到的礼包 -->
+            <LinearLayout
+                    android:id = "@+id/ll_gift"
+                    style = "@style/IndexModuleLayout"
+                    android:layout_below = "@+id/ll_item"
+                    android:background = "@color/co_transparent"
+                    android:layout_marginTop = "7dp" >
 
-				<RelativeLayout
-						android:id = "@+id/rl_gift"
-						style = "@style/IndexModuleTitleLayout" >
+                <RelativeLayout
+                        android:id = "@+id/rl_gift"
+                        android:background = "@drawable/selector_white_module"
+                        style = "@style/IndexModuleTitleLayout" >
 
-					<TextView
-							android:id = "@+id/tv_gift_title"
-							style = "@style/DefaultTextView.Header" />
+                    <TextView
+                            android:id = "@+id/tv_gift_title"
+                            style = "@style/DefaultTextView.Header" />
 
-				</RelativeLayout >
+                </RelativeLayout >
 
-				<View style="@style/HDividerView" />
+                <View style = "@style/HDividerView" />
 
-				<com.oplay.giftcool.ui.widget.NestedListView
-						android:id = "@+id/lv_gift"
-						style = "@style/DefaultListView" />
-			</LinearLayout >
+                <com.oplay.giftcool.ui.widget.NestedListView
+                        android:id = "@+id/lv_gift"
+                        style = "@style/DefaultListView" />
+            </LinearLayout >
 
-		</RelativeLayout >
-	</ScrollView >
+        </RelativeLayout >
+    </ScrollView >
 
-	<ImageView
-			android:id = "@+id/iv_hope_gift"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:layout_alignParentRight = "true"
-			android:layout_alignParentBottom = "true"
-			android:layout_marginBottom = "100dp"
-			android:src = "@drawable/ic_hope_gift_side" />
+    <ImageView
+            android:id = "@+id/iv_hope_gift"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_alignParentRight = "true"
+            android:layout_alignParentBottom = "true"
+            android:layout_marginBottom = "100dp"
+            android:src = "@drawable/ic_hope_gift_side" />
 
 </RelativeLayout >

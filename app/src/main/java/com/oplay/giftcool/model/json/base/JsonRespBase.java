@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.config.NetStatusCode;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * @author micle
@@ -60,7 +61,7 @@ public class JsonRespBase<T> implements Serializable {
 	}
 
 	public String error() {
-		return "c : " + mCode + ", m : " + mMsg;
+		return String.format(Locale.CHINA, "(%d)%s", mCode, mMsg);
 	}
 
 	public boolean isSuccess() {

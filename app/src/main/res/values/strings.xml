@@ -80,6 +80,7 @@
     <string name = "st_gift_take" >领号</string >
     <string name = "st_gift_free_seize" >正在疯抢</string >
 
+    <string name = "st_gift_reserve_take_hint">预留直接领</string>
     <string name = "st_gift_normal_seize_hint" >进行普通抢号></string >
     <string name = "st_gift_code_copy" >复制</string >
     <!-- 礼包详情 -->

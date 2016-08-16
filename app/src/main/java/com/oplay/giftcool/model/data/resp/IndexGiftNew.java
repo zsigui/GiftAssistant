@@ -112,4 +112,16 @@ public class IndexGiftNew implements Serializable {
 
     @SerializedName("full_img_urls")
     public ArrayList<String> usagePicsBig;
+
+    /**
+     * 布局样式
+     */
+    @SerializedName("ui_style")
+    public int uiStyle;
+
+    /**
+     * 按钮状态
+     */
+    @SerializedName("button_state")
+    public int buttonState;
 }

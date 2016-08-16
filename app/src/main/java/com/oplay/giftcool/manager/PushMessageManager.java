@@ -123,6 +123,7 @@ public class PushMessageManager {
         // 用于状态清除
         byte MI_F = 0x7F;
         byte JPUSH_F = 0x7D;
+        byte NONE = 0x70;
     }
 
     /**
@@ -173,16 +174,17 @@ public class PushMessageManager {
             int pushSdk = AssistantApp.getInstance().getPushSdk();
             AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "推送服务开始初始化，SDK = " + pushSdk);
             switch (pushSdk) {
-                case SdkType.ALL:
+                case SdkType.JPUSH:
                     initJPush(context);
-                    initMPush(context);
                     break;
                 case SdkType.MI:
                     initMPush(context);
                     break;
-                case SdkType.JPUSH:
-                default:
+                case SdkType.ALL:
+                    initMPush(context);
                     initJPush(context);
+                default:
+                    return;
             }
             isInit = true;
             updateJPushTagAndAlias(context);

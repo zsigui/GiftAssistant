@@ -63,7 +63,7 @@
             android:gravity = "center_vertical" />
 
     <com.oplay.giftcool.ui.widget.DeletedTextView
-            android:id = "@+id/tv_money"
+            android:id = "@+id/tv_spend"
             android:gravity = "center_vertical"
             android:minWidth = "@dimen/di_item_money_min_width"
             android:layout_below = "@+id/tv_name"
@@ -89,7 +89,7 @@
             android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
             android:layout_marginTop = "@dimen/di_list_item_gap_small"
             android:visibility = "gone"
-            android:layout_toRightOf = "@+id/tv_money" />
+            android:layout_toRightOf = "@+id/tv_spend" />
 
     <ProgressBar
             android:id = "@+id/pb_percent"

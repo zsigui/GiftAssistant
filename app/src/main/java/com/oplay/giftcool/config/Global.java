@@ -2,7 +2,9 @@ package com.oplay.giftcool.config;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.SparseIntArray;
 
 import com.google.gson.reflect.TypeToken;
@@ -383,5 +385,46 @@ public class Global {
             }
         }
         return mMsgCentralData;
+    }
+
+    private static ImageSpan mScoreSpan;
+    private static ImageSpan mBeanSpan;
+    private static int mGreyColor;
+    private static int mRedColor;
+
+    public static ImageSpan getScoreSpan(Context context) {
+        if (mScoreSpan == null) {
+            mScoreSpan = new ImageSpan(context, R.drawable.ic_score);
+        }
+        return mScoreSpan;
+    }
+
+    public static ImageSpan getBeanSpan(Context context) {
+        if (mBeanSpan == null) {
+            mBeanSpan = new ImageSpan(context, R.drawable.ic_bean);
+        }
+        return mBeanSpan;
+    }
+
+    public static int getRedColor(Context context) {
+        if (mRedColor == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mRedColor = context.getColor(R.color.co_common_app_main_bg);
+            } else {
+                mRedColor = context.getResources().getColor(R.color.co_common_app_main_bg);
+            }
+        }
+        return mRedColor;
+    }
+
+    public static int getGreyColor(Context context) {
+        if (mGreyColor == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mGreyColor = context.getColor(R.color.co_common_text_second);
+            } else {
+                mGreyColor = context.getResources().getColor(R.color.co_common_text_second);
+            }
+        }
+        return mGreyColor;
     }
 }
