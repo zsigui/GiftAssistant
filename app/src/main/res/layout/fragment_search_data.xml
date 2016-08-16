@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.oplay.giftcool.ui.widget.DragView
         xmlns:android = "http://schemas.android.com/apk/res/android"
-        android:id = "@+id/rl_container"
+        android:id = "@+id/dv_container"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent" >
 
@@ -100,8 +100,7 @@
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:layout_alignParentRight = "true"
-            android:layout_alignParentBottom = "true"
-            android:layout_marginBottom = "100dp"
+            android:layout_marginTop = "200dp"
             android:src = "@drawable/ic_hope_gift_side" />
 
-</RelativeLayout >
+</com.oplay.giftcool.ui.widget.DragView >

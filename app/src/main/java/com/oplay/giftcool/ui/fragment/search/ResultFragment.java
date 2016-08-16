@@ -24,6 +24,7 @@ import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.SearchDataResult;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.widget.DragView;
 import com.oplay.giftcool.ui.widget.NestedListView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
@@ -48,6 +49,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
     private LinearLayout llGift;
     private LinearLayout llGuessGift;
     private ImageView ivHopeGift;
+    private DragView dvContainer;
 
     private NestedGameListAdapter mGameAdapter;
     private NestedGiftListAdapterNew mGiftAdapter;
@@ -80,6 +82,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
         llGift = getViewById(R.id.ll_gift);
         llGuessGift = getViewById(R.id.ll_item);
         ivHopeGift = getViewById(R.id.iv_hope_gift);
+        dvContainer = getViewById(R.id.dv_container);
 
         ((TextView) getViewById(R.id.tv_game_title)).setText(TEXT_SEARCH_GAME);
         ((TextView) getViewById(R.id.tv_gift_title)).setText(TEXT_SEARCH_GIFT);
@@ -126,6 +129,7 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
         mGuessGiftView.setAdapter(mGuessGiftAdapter);
         updateData(data, mName, mId);
         mContainer.smoothScrollTo(0, 0);
+        dvContainer.configDragView(ivHopeGift, DragView.Orientation.VERTICAL__RIGHT);
 
     }
 

@@ -13,6 +13,7 @@ import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
+import com.oplay.giftcool.ui.widget.DragView;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.FlowLayout;
 import com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout;
 import com.oplay.giftcool.util.IntentUtil;
@@ -44,6 +45,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 //    private ImageView ivHotError;
     private boolean mHotInError = false;
     private ImageView ivHopeGift;
+    private DragView dvContainer;
     private SearchHistoryAdapter mHistoryAdapter;
 
     // data
@@ -76,6 +78,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
 //        ivHotError = getViewById(R.id.iv_hot_err);
 //        ivLoading = getViewById(R.id.iv_hot_load);
         ivHopeGift = getViewById(R.id.iv_hope_gift);
+        dvContainer = getViewById(R.id.dv_container);
     }
 
     @Override
@@ -95,6 +98,7 @@ public class HistoryFragment extends BaseFragment implements TagFlowLayout.OnTag
         mHistoryAdapter = new SearchHistoryAdapter(getContext(), data);
         tagHistoryView.setAdapter(mHistoryAdapter);
         updateHistoryData(data);
+        dvContainer.configDragView(ivHopeGift, DragView.Orientation.VERTICAL__RIGHT);
     }
 
     @Override
