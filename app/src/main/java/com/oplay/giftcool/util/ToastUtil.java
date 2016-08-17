@@ -90,7 +90,7 @@ public class ToastUtil {
         AppDebugConfig.warnResp(AppDebugConfig.STACKTRACE_INDEX + 1, AppDebugConfig.TAG_DEBUG_INFO, response);
         if (response == null || !response.isSuccessful()) {
             ToastUtil.showShort(response == null?
-                    ConstString.TOAST_SERVER_ERROR : String.format(Locale.CHINA, "(%d)%s", response.code(), response.message()));
+                    ConstString.TOAST_SERVER_ERROR : String.format(Locale.CHINA, "%s(%d)", response.message(), response.code()));
         } else if (response.body() == null || !response.body().isSuccess()) {
             ToastUtil.showShort(response.body() == null ?
                     ConstString.TOAST_SERVER_BAD_CALLBACK : response.body().error());

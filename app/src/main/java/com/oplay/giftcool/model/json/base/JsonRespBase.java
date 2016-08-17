@@ -13,21 +13,21 @@ import java.util.Locale;
  */
 public class JsonRespBase<T> implements Serializable {
 
-	/**
-	 * 错误码, 0为成功
-	 */
+    /**
+     * 错误码, 0为成功
+     */
     @SerializedName("c")
     private int mCode = -1;
 
-	/**
-	 * 数据存放
-	 */
+    /**
+     * 数据存放
+     */
     @SerializedName("d")
     private T mData;
 
-	/**
-	 * 错误消息说明
-	 */
+    /**
+     * 错误消息说明
+     */
     @SerializedName("m")
     private String mMsg;
 
@@ -55,16 +55,16 @@ public class JsonRespBase<T> implements Serializable {
         mMsg = msg;
     }
 
-	@Override
-	public String toString() {
-		return "c : " + mCode + ", m : " + mMsg + ", data : " + mData;
-	}
+    @Override
+    public String toString() {
+        return "c : " + mCode + ", m : " + mMsg + ", data : " + mData;
+    }
 
-	public String error() {
-		return String.format(Locale.CHINA, "(%d)%s", mCode, mMsg);
-	}
+    public String error() {
+        return String.format(Locale.CHINA, "%s(%d)", mMsg, mCode);
+    }
 
-	public boolean isSuccess() {
-		return getCode() == NetStatusCode.SUCCESS;
-	}
+    public boolean isSuccess() {
+        return getCode() == NetStatusCode.SUCCESS;
+    }
 }
