@@ -102,15 +102,11 @@ public class KeyConfig {
     public static final int TYPE_KEY_SEARCH = 2;
     // 已过期
     public static final int TYPE_KEY_OVERTIME = 3;
+    // 已预约
+    public static final int TYPE_KEY_RESERVED = 4;
     /* my coupon list fragment */
     // 礼包类型
     public static final int GIFT_TYPE_GIFT = 0;
     // 首充券类型
     public static final int GIFT_TYPE_COUPON = 1;
-    // 已抢
-    public static final int TYPE_KEY_COUPON_SEIZED = 1;
-    // 已预约
-    public static final int TYPE_KEY_COUPON_RESERVED = 4;
-    // 已过期
-    public static final int TYPE_KEY_COUPON_OVERTIME = 3;
 }

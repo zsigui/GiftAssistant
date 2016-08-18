@@ -61,8 +61,8 @@ public class MyCouponFragment extends BaseFragment implements OnBackPressListene
         mTitles[0] = "已抢";
         mTitles[1] = "我的预约";
         mTitles[2] = "已过期";
-        mFragmentType = new int[]{KeyConfig.TYPE_KEY_COUPON_SEIZED,
-                KeyConfig.TYPE_KEY_COUPON_RESERVED, KeyConfig.TYPE_KEY_COUPON_OVERTIME};
+        mFragmentType = new int[]{KeyConfig.TYPE_KEY_SEIZED,
+                KeyConfig.TYPE_KEY_RESERVED, KeyConfig.TYPE_KEY_OVERTIME};
         mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(new MyCouponPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);
@@ -129,7 +129,7 @@ public class MyCouponFragment extends BaseFragment implements OnBackPressListene
         @Override
         public Fragment getItem(int position) {
             if (mFragments[position] == null) {
-                if (mFragmentType[position] == KeyConfig.TYPE_KEY_COUPON_RESERVED) {
+                if (mFragmentType[position] == KeyConfig.TYPE_KEY_RESERVED) {
                     mFragments[position] = MyCouponReservedFragment.newInstance();
                 } else {
                     mFragments[position] = MyCouponListFragment.newInstance(mFragmentType[position]);

@@ -65,7 +65,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
     @Override
     protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_attention_data);
-        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty,
+        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_hint_empty,
                 (ViewGroup) mContentView.getParent(), false);
         mViewManager.setEmptyView(emptyView);
         btnToGet = getViewById(emptyView, R.id.btn_to_get);

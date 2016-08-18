@@ -50,12 +50,14 @@ public class MyGiftFragment extends BaseFragment {
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mFragments = new Fragment[3];
-        mFragmentType = new int[]{KeyConfig.TYPE_KEY_SEIZED, KeyConfig.TYPE_KEY_SEARCH, KeyConfig.TYPE_KEY_OVERTIME};
-        mTitles = new String[3];
+        mFragments = new Fragment[4];
+        mFragmentType = new int[]{KeyConfig.TYPE_KEY_SEIZED, KeyConfig.TYPE_KEY_SEARCH,
+                KeyConfig.TYPE_KEY_RESERVED, KeyConfig.TYPE_KEY_OVERTIME};
+        mTitles = new String[4];
         mTitles[0] = "已抢";
         mTitles[1] = "已淘";
-        mTitles[2] = "已过期";
+        mTitles[2] = "我的预约";
+        mTitles[3] = "已过期";
         mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(new MyGiftPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);
@@ -83,7 +85,13 @@ public class MyGiftFragment extends BaseFragment {
         @Override
         public Fragment getItem(int position) {
             if (mFragments[position] == null) {
-                mFragments[position] = MyGiftListFragment.newInstance(mFragmentType[position]);
+                if (mFragments[position] == null) {
+                    if (mFragmentType[position] == KeyConfig.TYPE_KEY_RESERVED) {
+                        mFragments[position] = MyGiftReservedFragment.newInstance();
+                    } else {
+                        mFragments[position] = MyGiftListFragment.newInstance(mFragmentType[position]);
+                    }
+                }
             }
             return mFragments[position];
         }

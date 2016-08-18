@@ -50,8 +50,8 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_my_coupon_reserved);
-        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attention_empty,
+        initViewManger(R.layout.fragment_top_hint_lv);
+        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_hint_empty,
                 (ViewGroup) mContentView.getParent(), false);
         TextView tv = getViewById(emptyView, R.id.tv_hint);
         if (tv != null) {
@@ -71,7 +71,7 @@ public class MyCouponReservedFragment extends BaseFragment_Refresh<IndexGiftNew>
     protected void processLogic(Bundle savedInstanceState) {
         ReqPageData data = new ReqPageData();
         data.giftType = KeyConfig.GIFT_TYPE_COUPON;
-        data.type = KeyConfig.TYPE_KEY_COUPON_RESERVED;
+        data.type = KeyConfig.TYPE_KEY_RESERVED;
         mReqPageObj = new JsonReqBase<ReqPageData>(data);
         mAdapter = new NestedGiftListAdapter(getContext());
         mDataView.setAdapter(mAdapter);

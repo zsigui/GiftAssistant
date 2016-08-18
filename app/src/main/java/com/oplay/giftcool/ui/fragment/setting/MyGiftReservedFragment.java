@@ -1,24 +1,30 @@
 package com.oplay.giftcool.ui.fragment.setting;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.MyGiftListAdapter;
+import com.oplay.giftcool.adapter.NestedGiftListAdapterNew;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -29,33 +35,35 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by zsigui on 16-1-7.
+ * Created by zsigui on 16-5-31.
  */
-public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyGiftReservedFragment extends BaseFragment_Refresh<IndexGiftNew> implements
+        OnItemClickListener<IndexGiftNew> {
 
     private ListView mDataView;
-    private MyGiftListAdapter mAdapter;
+    private NestedGiftListAdapterNew mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
-    private int mType;
-    private TextView tvHint;
 
-    public static MyGiftListFragment newInstance(int type) {
-        MyGiftListFragment fragment = new MyGiftListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(KeyConfig.KEY_DATA, type);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static MyGiftReservedFragment newInstance() {
+        return new MyGiftReservedFragment();
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         initViewManger(R.layout.fragment_top_hint_lv);
+        View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_top_hint_empty,
+                (ViewGroup) mContentView.getParent(), false);
+        TextView tv = getViewById(emptyView, R.id.tv_hint);
+        if (tv != null) {
+            tv.setText(getContext().getString(R.string.st_my_coupon_reserved_msg_hint));
+        }
+        mViewManager.setEmptyView(emptyView);
         mDataView = getViewById(R.id.lv_content);
-        tvHint = getViewById(R.id.tv_hint);
     }
 
     @Override
     protected void setListener() {
+        mAdapter.setListener(this);
     }
 
     @Override
@@ -63,25 +71,10 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     protected void processLogic(Bundle savedInstanceState) {
         ReqPageData data = new ReqPageData();
         data.giftType = KeyConfig.GIFT_TYPE_GIFT;
+        data.type = KeyConfig.TYPE_KEY_RESERVED;
         mReqPageObj = new JsonReqBase<ReqPageData>(data);
-
-        if (getArguments() != null) {
-            mType = getArguments().getInt(KeyConfig.KEY_DATA);
-        }
-        mAdapter = new MyGiftListAdapter(getContext(), null, mType);
+        mAdapter = new NestedGiftListAdapterNew(getContext());
         mDataView.setAdapter(mAdapter);
-        switch (mType) {
-            case KeyConfig.TYPE_KEY_SEARCH:
-                tvHint.setText("淘号的礼包不一定可用，祝你好运。");
-                tvHint.setVisibility(View.VISIBLE);
-                break;
-            case KeyConfig.TYPE_KEY_SEIZED:
-                tvHint.setText("抢号结束的普通礼包会进入淘号喔，还没使用的礼包码请尽快打开游戏兑换。");
-                tvHint.setVisibility(View.VISIBLE);
-                break;
-            default:
-                tvHint.setVisibility(View.GONE);
-        }
     }
 
     /**
@@ -104,7 +97,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     mCallRefresh.cancel();
                 }
                 mReqPageObj.data.page = 1;
-                mReqPageObj.data.type = mType;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_GIFT;
                 mCallRefresh = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -124,8 +117,8 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                         if (response != null) {
                             AccountManager.getInstance().judgeIsSessionFailed(response.body());
                         }
-                        refreshFailEnd();
                         AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
+                        refreshFailEnd();
                     }
 
                     @Override
@@ -176,7 +169,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     mCallLoad.cancel();
                 }
                 mReqPageObj.data.page = mLastPage + 1;
-                mReqPageObj.data.type = mType;
+                mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_GIFT;
                 mCallLoad = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
                 mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                     @Override
@@ -229,6 +222,9 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
         if (moreData == null) {
             return;
         }
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
         mData.addAll(moreData);
         mCurY = mDataView.getScrollY();
         mAdapter.updateData(mData);
@@ -238,7 +234,7 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     @Override
     public String getPageName() {
-        return "我的礼包";
+        return null;
     }
 
     @Override
@@ -259,6 +255,18 @@ public class MyGiftListFragment extends BaseFragment_Refresh<IndexGiftNew> {
         if (mDataView != null) {
             mDataView.setAdapter(null);
             mDataView = null;
+        }
+    }
+
+    @Override
+    public void onItemClick(IndexGiftNew item, View view, int position) {
+        switch (view.getId()) {
+            case R.id.rl_recommend:
+                IntentUtil.jumpGiftDetail(getContext(), item.id);
+                break;
+            case R.id.btn_send:
+                PayManager.getInstance().seizeGift(getActivity(), item, (GiftButton) view);
+                break;
         }
     }
 }
