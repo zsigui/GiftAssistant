@@ -65,12 +65,29 @@ public class NestedGiftListAdapterNew extends BaseListAdapter<IndexGiftNew> impl
      */
     @Override
     public int getItemViewType(int position) {
-        return getCount() == 0 ? GiftTypeUtil.UI_TYPE_LIMIT : getItem(position).uiStyle;
+        IndexGiftNew o = getItem(position);
+        if (o == null) {
+            return GiftTypeUtil.UI_TYPE_NORMAL_SEIZE;
+        } else if (o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT) {
+            switch (o.totalType) {
+                case GiftTypeUtil.TOTAL_TYPE_COUPON:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_COUPON_RESERVE;
+                    break;
+                case GiftTypeUtil.TOTAL_TYPE_GIFT_LIMIT:
+                case GiftTypeUtil.TOTAL_TYPE_GIFT:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_FREE_RESERVE;
+                    break;
+                default:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_NORMAL_SEIZE;
+            }
+        }
+        return o.uiStyle;
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        getItemViewType(position);
         IndexGiftNew o = getItem(position);
         StyleBaseHolder baseHolder = UiStyleUtil.onCreateHolder(mContext, convertView, parent, o.uiStyle, false);
         UiStyleUtil.bindListener(baseHolder, TAG_POSITION, position, this);

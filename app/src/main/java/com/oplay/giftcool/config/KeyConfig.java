@@ -95,7 +95,7 @@ public class KeyConfig {
     public static final String CODE_MSG_COMMENT = "msg_comment";
 
 
-    /* my gift list fragment */
+    /* my list fragment */
     // 已抢
     public static final int TYPE_KEY_SEIZED = 1;
     // 已淘

@@ -102,6 +102,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private DownloadButtonView btnDownload;
     private LinearLayout downloadLayout;
     private DeletedTextView tvOriginPrice;
+    private TextView tvBroadcast;
 
     private RelativeLayout rlHeader;
     private ScrollView svContent;
@@ -241,6 +242,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             tvOriginPrice.setVisibility(View.GONE);
 
             tvQQ.setText(String.format(QQ_TEXT, MixUtil.getQQInfo()[0]));
+
+            if (giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
+                tvSeizeHint.setVisibility(View.VISIBLE);
+                tvSeizeHint.setText(String.format(Locale.CHINA,
+                        ConstString.TEXT_GIFT_FREE_SEIZE,
+                        DateUtil.formatUserReadDateForDetail(giftData.freeStartTime)));
+            }
+
             if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
                     || (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
                     && type != GiftTypeUtil.TYPE_CHARGE_SEIZED)) {
@@ -259,12 +268,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                             && giftData.status != GiftTypeUtil.STATUS_WAIT_SEARCH)) {
                         setRemainProgress(giftData);
                     }
-                    if (giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
-                        tvSeizeHint.setVisibility(View.VISIBLE);
-                        tvSeizeHint.setText(String.format(Locale.CHINA,
-                                ConstString.TEXT_GIFT_FREE_SEIZE,
-                                DateUtil.formatUserReadDateForDetail(giftData.freeStartTime)));
-                    }
+
                 } else {
                     switch (type) {
                         case GiftTypeUtil.TYPE_NORMAL_SEARCH:
@@ -278,12 +282,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
                             ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
                             setRemainProgress(giftData);
-                            if (giftData.freeStartTime * 1000 > System.currentTimeMillis()) {
-                                tvSeizeHint.setVisibility(View.VISIBLE);
-                                tvSeizeHint.setText(String.format(Locale.CHINA,
-                                        ConstString.TEXT_GIFT_FREE_SEIZE,
-                                        DateUtil.formatUserReadDate(giftData.freeStartTime)));
-                            }
                             break;
                         case GiftTypeUtil.TYPE_NORMAL_SEIZE:
                             setRemainProgress(giftData);
@@ -450,26 +448,28 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      */
     private void setTag(IndexGiftNew giftData) {
         if (giftData.exclusive == 1) {
-            tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
+            tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tag_exclusive, 0, 0, 0);
         } else {
             tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
 
         if (getActivity() instanceof GiftDetailActivity) {
-            if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
-                ((GiftDetailActivity) getActivity()).showLimitTag(true, R.string.st_gift_tag_limit);
-            } else if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                ((GiftDetailActivity) getActivity()).showLimitTag(true, R.string.st_gift_tag_free);
-            } else {
-                ((GiftDetailActivity) getActivity()).showLimitTag(false, 0);
+            GiftDetailActivity pActivity = (GiftDetailActivity) getActivity();
+            switch (giftData.giftType) {
+                case GiftTypeUtil.GIFT_TYPE_LIMIT:
+                    pActivity.showLimitTag(true, R.string.st_gift_tag_limit);
+                    break;
+                case GiftTypeUtil.GIFT_TYPE_LIMIT_FREE:
+                    pActivity.showLimitTag(true, R.string.st_gift_tag_free);
+                    break;
             }
             int type = GiftTypeUtil.getItemViewType(mData.giftData);
             if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
                     || type == GiftTypeUtil.TYPE_LIMIT_EMPTY
                     || type == GiftTypeUtil.TYPE_NORMAL_FINISHED) {
-                ((GiftDetailActivity) getActivity()).showShareButton(false);
+                pActivity.showShareButton(false);
             } else {
-                ((GiftDetailActivity) getActivity()).showShareButton(true);
+                pActivity.showShareButton(true);
             }
         }
     }

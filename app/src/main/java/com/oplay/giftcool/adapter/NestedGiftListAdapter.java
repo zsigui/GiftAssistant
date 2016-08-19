@@ -344,8 +344,7 @@ public class NestedGiftListAdapter extends BaseListAdapter<IndexGiftNew> impleme
                 cHolder.tvSeize.setVisibility(View.VISIBLE);
                 setSeizeTextUI(cHolder.tvSeize, 0);
                 cHolder.tvReserveDeadline.setVisibility(View.VISIBLE);
-                cHolder.tvReserveDeadline.setText(
-                        String.format("已预留一张首充券到%s", DateUtil.optDate(o.reserveDeadline)));
+                cHolder.tvReserveDeadline.setText("预留直接领");
                 break;
             case GiftTypeUtil.TYPE_CHARGE_SEIZED:
                 cHolder.tvSeizeHint.setVisibility(View.GONE);

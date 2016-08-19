@@ -73,6 +73,9 @@ public class GiftButton extends TextView {
             case GiftTypeUtil.BUTTON_TYPE_FINISH:
                 setText(R.string.st_gift_empty);
                 break;
+            case GiftTypeUtil.BUTTON_TYPE_WAIT_SEARCH:
+                setText(R.string.st_gift_wait_search);
+                break;
             case GiftTypeUtil.BUTTON_TYPE_RESERVE:
             case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
                 setText(R.string.st_gift_reserve);

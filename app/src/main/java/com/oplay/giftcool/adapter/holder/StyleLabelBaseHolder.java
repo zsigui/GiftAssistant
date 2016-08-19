@@ -10,13 +10,13 @@ import com.oplay.giftcool.ui.widget.ClockAnimView;
 /**
  * Created by zsigui on 16-8-9.
  */
-public class StyleFreeBaseHolder extends StyleBaseHolder {
+public class StyleLabelBaseHolder extends StyleBaseHolder {
 
     public TextView tvSeize;
     public ArrowAnimView aavView;
     public ClockAnimView cavView;
 
-    public StyleFreeBaseHolder(View itemView) {
+    public StyleLabelBaseHolder(View itemView) {
         super(itemView);
         tvSeize = getViewById(R.id.tv_seize);
         aavView = getViewById(R.id.aav_view);

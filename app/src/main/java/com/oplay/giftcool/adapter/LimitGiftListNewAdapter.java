@@ -56,7 +56,13 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
      */
     @Override
     public int getItemViewType(int position) {
-        return getCount() == 0 ? GiftTypeUtil.UI_TYPE_LIMIT : getDataItem(position).uiStyle;
+        IndexGiftNew o = getDataItem(position);
+        if (o == null) {
+            return GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE;
+        }
+        o.uiStyle = o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT ?
+                GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE : o.uiStyle;
+        return o.uiStyle;
     }
 
     public IndexGiftNew getDataItem(int position) {
@@ -65,6 +71,7 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        getItemViewType(position);
         IndexGiftNew o = getDataItem(position);
         StyleBaseHolder baseHolder = UiStyleUtil.onCreateHolder(mContext, convertView, parent, o.uiStyle, false);
         UiStyleUtil.bindListener(baseHolder, TAG_POSITION, position, this);

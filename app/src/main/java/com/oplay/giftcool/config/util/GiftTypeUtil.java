@@ -82,7 +82,7 @@ public class GiftTypeUtil {
     public static final int SEIZE_TYPE_SEIZED = 1;
     public static final int SEIZE_TYPE_SEARCHED = 2;
     public static final int SEIZE_TYPE_RESERVED = 3;
-    // 1 普通免费 2 普通 3 限量 4 限量免费 (由0元抢转换)
+    // 1 普通免费 2 普通 3 限量 4 限量免费 (由0元抢转换) 5 活动
     public static final int GIFT_TYPE_NORMAL_FREE = 1;
     public static final int GIFT_TYPE_NORMAL = 2;
     public static final int GIFT_TYPE_LIMIT = 3;
@@ -95,26 +95,37 @@ public class GiftTypeUtil {
     // 统一定义按钮的状态
     public static final int BUTTON_TYPE_WAIT_SEIZE = 1;
     public static final int BUTTON_TYPE_SEIZE = 2;
-    public static final int BUTTON_TYPE_SEIZED = 3;
-    public static final int BUTTON_TYPE_EMPTY = 4;
-    public static final int BUTTON_TYPE_SEARCH = 5;
+    public static final int BUTTON_TYPE_EMPTY = 3;
+    public static final int BUTTON_TYPE_SEARCH = 4;
+    public static final int BUTTON_TYPE_FINISH = 5;
     public static final int BUTTON_TYPE_TAKE_OFF = 6;
     public static final int BUTTON_TYPE_RESERVE = 7;
     public static final int BUTTON_TYPE_RESERVE_EMPTY = 8;
-    public static final int BUTTON_TYPE_RESERVED = 9;
-    public static final int BUTTON_TYPE_FINISH = 10;
+    public static final int BUTTON_TYPE_WAIT_SEARCH = 9;
+    public static final int BUTTON_TYPE_SEIZED = 10;
     public static final int BUTTON_TYPE_RESERVE_TAKE = 11;
+    public static final int BUTTON_TYPE_RESERVED = 12;
     // 显示样式
-    public static final int UI_TYPE_COUNT = 9;
-    public static final int UI_TYPE_LIMIT = 0;
+    public static final int UI_TYPE_COUNT = 19;
+    public static final int UI_TYPE_DEFAULT = 0;
     public static final int UI_TYPE_NORMAL_SEIZE = 1;
-    public static final int UI_TYPE_NORMAL_SEIZED = 2;
+    public static final int UI_TYPE_NORMAL_WAIT_SEIZE = 2;
     public static final int UI_TYPE_NORMAL_WAIT_SEARCH = 3;
     public static final int UI_TYPE_NORMAL_SEARCH = 4;
-    public static final int UI_TYPE_NORMAL_WAITE_SEIZE = 5;
-    public static final int UI_TYPE_COUPON = 6;
-    public static final int UI_TYPE_FREE_GIFT = 7;
-    public static final int UI_TYPE_FREE_COUPON = 8;
+    public static final int UI_TYPE_NORMAL_OTHER = 5;
+    public static final int UI_TYPE_PRECIOUS_SEIZE = 6;
+    public static final int UI_TYPE_PRECIOUS_WAIT_SEIZE = 7;
+    public static final int UI_TYPE_PRECIOUS_WAIT_SEARCH = 8;
+    public static final int UI_TYPE_PRECIOUS_SEARCH = 9;
+    public static final int UI_TYPE_PRECIOUS_OTHER = 10;
+    public static final int UI_TYPE_FREE_SEIZE = 11;
+    public static final int UI_TYPE_FREE_RESERVE = 12;
+    public static final int UI_TYPE_FREE_WAIT_SEARCH = 13;
+    public static final int UI_TYPE_FREE_SEARCH = 14;
+    public static final int UI_TYPE_FREE_OTHER = 15;
+    public static final int UI_TYPE_COUPON_SEIZE = 16;
+    public static final int UI_TYPE_COUPON_RESERVE = 17;
+    public static final int UI_TYPE_COUPON_OTHER = 18;
 
     public static int getButtonState(IndexGiftNew gift) {
         switch (gift.seizeStatus) {
@@ -144,7 +155,12 @@ public class GiftTypeUtil {
                     case STATUS_WAIT_SEIZE:
                         return BUTTON_TYPE_WAIT_SEIZE;
                     case STATUS_WAIT_SEARCH:
-                        return BUTTON_TYPE_EMPTY;
+                        if (gift.giftType == GIFT_TYPE_NORMAL
+                                || gift.giftType == GIFT_TYPE_NORMAL_FREE) {
+                            return BUTTON_TYPE_WAIT_SEARCH;
+                        } else {
+                            return BUTTON_TYPE_EMPTY;
+                        }
                     case STATUS_SEARCH:
                         return BUTTON_TYPE_SEARCH;
                     case STATUS_FINISHED:

@@ -5,20 +5,7 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
-        android:background = "@drawable/selector_white_module"
-        android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
-
-    <View
-            android:layout_width = "@dimen/di_divider_height"
-            android:layout_height = "match_parent"
-            android:background = "@color/co_divider_bg" />
-
-    <View
-            android:layout_width = "match_parent"
-            android:layout_height = "@dimen/di_divider_height"
-            android:layout_alignParentBottom = "true"
-            android:background = "@color/co_divider_bg" />
-
+        android:background = "@drawable/selector_white_module" >
 
     <RelativeLayout
             style = "@style/IndexListItemLayout"
@@ -128,6 +115,7 @@
                 android:layout_alignTop = "@+id/tv_name"
                 android:background = "@drawable/selector_btn_green"
                 android:textColor = "@color/color_btn_green_border"
+                android:visibility = "invisible"
                 android:text = "抢号" />
 
         <TextView
@@ -139,6 +127,7 @@
                 android:layout_width = "@dimen/di_gift_hint_width"
                 android:gravity = "right"
                 android:textSize = "@dimen/di_text_size_small"
+                android:text = "07-21免费抢"
                 android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 

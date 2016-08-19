@@ -79,13 +79,15 @@
     <string name = "st_gift_reserve_disabled" >不可预约</string >
     <string name = "st_gift_take" >领号</string >
     <string name = "st_gift_free_seize" >正在疯抢</string >
+    <string name = "st_gift_free_seized" >免费已抢完</string >
 
     <string name = "st_gift_reserve_take_hint">预留直接领</string>
-    <string name = "st_gift_normal_seize_hint" >进行普通抢号></string >
+    <string name = "st_gift_normal_seize_hint" >去普通抢号></string >
     <string name = "st_gift_code_copy" >复制</string >
     <!-- 礼包详情 -->
     <string name = "st_gift_tag_limit" >珍贵限量</string >
     <string name = "st_gift_tag_free" >限时免费</string >
+    <string name = "st_gift_tag_activity" >活动专属</string >
     <string name = "st_gift_consume" >消耗</string >
     <string name = "st_gift_content" >▌礼包内容</string >
     <string name = "st_gift_deadline" >▌礼包使用期限</string >

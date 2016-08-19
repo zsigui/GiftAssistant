@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         android:id = "@+id/rl_recommend"
+        style = "@style/IndexListItemLayout"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:layout_width = "match_parent"
-        android:layout_height = "@dimen/di_limit_item_height"
-        style = "@style/IndexListItemLayout"
-        android:paddingRight = "@dimen/di_index_list_item_margin_right"
-        android:background = "@drawable/selector_white_module" >
-
+        android:background = "@drawable/selector_white_module"
+        android:paddingRight = "@dimen/di_index_list_item_margin_right" >
 
     <RelativeLayout
             android:id = "@+id/rl_icon"
@@ -25,56 +23,81 @@
                 app:riv_border_width = "@dimen/di_icon_border_size"
                 app:riv_corner_radius = "@dimen/di_icon_radius"
                 app:riv_oval = "false" />
-
     </RelativeLayout >
 
     <TextView
             android:id = "@+id/tv_name"
             style = "@style/DefaultTextView.Header"
-            android:layout_width = "wrap_content"
+            android:layout_width = "match_parent"
             android:layout_alignTop = "@+id/rl_icon"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_marginTop = "4dp"
+            android:layout_toLeftOf = "@+id/btn_send"
             android:layout_toRightOf = "@+id/rl_icon"
-            android:layout_toLeftOf = "@+id/tv_seize_hint"
-            android:maxWidth = "200dp"
             android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
             android:drawablePadding = "4dp"
             android:gravity = "center_vertical"
-            android:drawableLeft = "@drawable/ic_tag_coupon"
             android:text = "[暴打魏蜀吴]新手礼包" />
 
     <TextView
-            android:id = "@+id/tv_platform"
+            android:id = "@+id/tv_count"
             style = "@style/DefaultTextView.Text"
             android:layout_below = "@+id/tv_name"
-            android:layout_toRightOf = "@+id/rl_icon"
-            android:layout_marginLeft = "7dp"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
-            android:textColor = "@color/co_common_app_second_bg_green"
-            android:text = "偶玩版" />
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:visibility = "visible" />
+
+
+    <com.oplay.giftcool.ui.widget.DeletedTextView
+            android:id = "@+id/tv_spend"
+            android:gravity = "center_vertical"
+            android:layout_below = "@+id/tv_name"
+            android:layout_marginLeft = "7dp"
+            android:layout_marginTop = "6dp"
+            android:layout_toRightOf = "@+id/rl_icon"
+            style = "@style/DefaultTextView.Text" />
 
     <LinearLayout
-            android:id = "@+id/ll_price"
-            android:layout_width = "match_parent"
+            android:layout_width = "@dimen/di_gift_hint_width"
             android:layout_height = "wrap_content"
-            android:layout_toLeftOf = "@+id/tv_seize_hint"
-            android:layout_below = "@+id/tv_platform"
             android:orientation = "horizontal"
-            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-            android:layout_toRightOf = "@+id/rl_icon" >
+            android:layout_below = "@+id/tv_name"
+            android:gravity = "right"
+            android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
+            android:layout_toRightOf = "@+id/tv_spend"
+            android:layout_marginTop = "6dp"
+            android:layout_marginRight = "@dimen/di_list_item_gap_big"
+            android:layout_toLeftOf = "@+id/tv_seize_hint" >
 
         <TextView
-                android:id = "@+id/tv_spend"
-                style = "@style/DefaultTextView.Text" />
-
-        <com.oplay.giftcool.ui.widget.DeletedTextView
-                android:id = "@+id/tv_price"
-                android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+                android:id = "@+id/tv_percent"
                 style = "@style/DefaultTextView.Text"
-                android:gravity = "center_vertical" />
+                android:text="剩余4%"
+                android:layout_marginTop = "1dp" />
+
+        <ProgressBar
+                android:id = "@+id/pb_percent"
+                style = "?android:attr/progressBarStyleHorizontal"
+                android:layout_width = "@dimen/di_gift_pb_width"
+                android:layout_height = "@dimen/di_gift_common_pb_diameter"
+                android:layout_marginLeft = "4dp"
+                android:layout_marginTop = "6dp"
+                android:max = "100"
+                android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
     </LinearLayout >
 
+    <com.oplay.giftcool.ui.widget.DeletedTextView
+            android:id = "@+id/tv_price"
+            style = "@style/DefaultTextView.Text"
+            android:padding = "0dp"
+            android:layout_toLeftOf = "@+id/ll_percent"
+            android:layout_below = "@+id/tv_spend"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:layout_marginTop = "@dimen/di_line_space_extra_normal"
+            android:gravity = "center_vertical" />
 
     <com.oplay.giftcool.ui.widget.button.GiftButton
             android:id = "@+id/btn_send"
@@ -82,9 +105,9 @@
             android:layout_height = "@dimen/di_btn_height"
             android:layout_alignParentRight = "true"
             android:layout_alignTop = "@+id/tv_name"
-            android:background = "@drawable/selector_btn_green"
-            android:textColor = "@color/color_btn_green_border"
-            android:text = "抢号" />
+            android:background = "@drawable/selector_btn_orange"
+            android:text = "抢号"
+            android:textColor = "@color/co_white" />
 
     <TextView
             android:id = "@+id/tv_seize_hint"
@@ -92,9 +115,8 @@
             android:layout_alignParentRight = "true"
             android:layout_below = "@+id/btn_send"
             android:layout_width = "@dimen/di_gift_hint_width"
-            android:gravity = "right"
             android:layout_marginTop = "@dimen/di_list_item_gap_normal"
             android:textSize = "@dimen/di_text_size_small"
+            android:gravity = "right"
             android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
-
 </RelativeLayout >

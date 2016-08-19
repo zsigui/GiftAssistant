@@ -88,11 +88,11 @@
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
             android:layout_toRightOf = "@+id/rl_icon"
-            android:text = "@null"
+            android:text = "开抢时间"
             android:visibility = "visible" />
 
     <LinearLayout
-            android:layout_width = "match_parent"
+            android:layout_width = "@dimen/di_gift_hint_width"
             android:layout_height = "wrap_content"
             android:orientation = "horizontal"
             android:layout_below = "@+id/tv_name"
@@ -106,6 +106,7 @@
         <TextView
                 android:id = "@+id/tv_percent"
                 style = "@style/DefaultTextView.Text"
+                android:text="剩余4%"
                 android:layout_marginTop = "1dp" />
 
         <ProgressBar

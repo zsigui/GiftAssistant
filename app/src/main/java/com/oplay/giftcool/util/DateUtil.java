@@ -20,6 +20,9 @@ public class DateUtil {
      * 提取时间，针对 yyyy-MM-dd HH:mm:ss 格式
      */
     public static String optDate(String date) {
+        if (TextUtils.isEmpty(date)) {
+            return "";
+        }
         String result;
         if (isToday(date)) {
             result = "今日 " + date.substring(11, 16);
@@ -156,11 +159,14 @@ public class DateUtil {
      * @time 单位: s 秒
      */
     public static String formatUserReadDate(long time) {
-        if (time == 0) {
-            return "";
+        if (time <= 0) {
+            return "正在";
         }
         // 由 s 转为 ms
         long tCurrent = time * 1000;
+        if (tCurrent <= System.currentTimeMillis()) {
+            return "正在";
+        }
         Date date = new Date(tCurrent);
         Calendar current = Calendar.getInstance();
 
@@ -182,7 +188,7 @@ public class DateUtil {
         SimpleDateFormat format;
         long tDiffToday = tCurrent - today.getTimeInMillis();
         long dayToMilli = 24 * 60 * 60 * 1000;
-        if (tDiffToday < 0) {
+        if (tDiffToday <= 0) {
             return "正在";
         } else if (tDiffToday < dayToMilli) {
             format = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -202,6 +208,10 @@ public class DateUtil {
         }
         // 由 s 转为 ms
         long tCurrent = time * 1000;
+        if (tCurrent <= System.currentTimeMillis()) {
+            return "正在";
+        }
+
         Date date = new Date(tCurrent);
         Calendar current = Calendar.getInstance();
 

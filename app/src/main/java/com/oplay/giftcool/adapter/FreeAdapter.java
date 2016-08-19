@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
@@ -17,9 +15,6 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.TimeData;
-import com.oplay.giftcool.ui.widget.ArrowAnimView;
-import com.oplay.giftcool.ui.widget.ClockAnimView;
-import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersAdapter;
 import com.oplay.giftcool.util.IntentUtil;
@@ -63,7 +58,23 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
      */
     @Override
     public int getItemViewType(int position) {
-        return getCount() == 0 ? GiftTypeUtil.UI_TYPE_LIMIT : getDataItem(position).uiStyle;
+        IndexGiftNew o = getDataItem(position);
+        if (o == null) {
+            return GiftTypeUtil.UI_TYPE_FREE_OTHER;
+        } else if (o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT) {
+            switch (o.totalType) {
+                case GiftTypeUtil.TOTAL_TYPE_COUPON:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_COUPON_OTHER;
+                    break;
+                case GiftTypeUtil.TOTAL_TYPE_GIFT_LIMIT:
+                case GiftTypeUtil.TOTAL_TYPE_GIFT:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE;
+                    break;
+                default:
+                    o.uiStyle = GiftTypeUtil.UI_TYPE_FREE_OTHER;
+            }
+        }
+        return o.uiStyle;
     }
 
 
@@ -73,6 +84,7 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        getItemViewType(position);
         IndexGiftNew o = getDataItem(position);
         StyleBaseHolder baseHolder = UiStyleUtil.onCreateHolder(mContext, convertView, parent, o.uiStyle, true);
         UiStyleUtil.bindListener(baseHolder, TAG_POSITION, position, this);
@@ -236,35 +248,5 @@ public class FreeAdapter extends BaseListAdapter<TimeData<IndexGiftNew>> impleme
     private static class HeaderViewHolder {
         public TextView tv_date;
 
-    }
-
-    private static class GiftHolder {
-        ImageView ivIcon;
-        TextView tvName;
-        TextView tvContent;
-        DeletedTextView tvMoney;
-        TextView tvSpend;
-        TextView tvPercent;
-        ProgressBar pbPercent;
-        TextView tvSeizeHint;
-        TextView tvSeize;
-        ArrowAnimView aavView;
-        ClockAnimView cavView;
-    }
-
-    private static class ChargeHolder {
-        ImageView ivIcon;
-        TextView tvName;
-        DeletedTextView tvPrice;
-        TextView tvSpend;
-        TextView tvPlatform;
-        GiftButton btnSend;
-        TextView tvSeize;
-        TextView tvPercent;
-        ProgressBar pbPercent;
-        TextView tvReserveDeadline;
-        TextView tvSeizeHint;
-        ArrowAnimView aavView;
-        ClockAnimView cavView;
     }
 }

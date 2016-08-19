@@ -67,7 +67,7 @@ public class MyGiftListAdapter extends BaseListAdapter<IndexGiftNew> implements 
         IndexGiftNew o = getItem(position);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
         if (o.exclusive == 1) {
-            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclusive, 0, 0, 0);
+            holder.tvName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tag_exclusive, 0, 0, 0);
         } else {
             holder.tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }

@@ -9,7 +9,7 @@ import com.oplay.giftcool.ui.widget.DeletedTextView;
 /**
  * Created by zsigui on 16-8-8.
  */
-public class StyleCouponHolder extends StyleBaseHolder {
+public class StyleCouponHolder extends StyleLabelBaseHolder {
 
     public DeletedTextView tvPrice;
     public TextView tvPlatform;

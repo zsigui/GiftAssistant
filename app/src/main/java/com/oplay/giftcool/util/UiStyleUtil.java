@@ -2,9 +2,10 @@ package com.oplay.giftcool.util;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.DimenRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +15,17 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.holder.StyleBaseHolder;
 import com.oplay.giftcool.adapter.holder.StyleCouponHolder;
-import com.oplay.giftcool.adapter.holder.StyleFreeBaseHolder;
-import com.oplay.giftcool.adapter.holder.StyleFreeCouponHolder;
-import com.oplay.giftcool.adapter.holder.StyleFreeGiftHolder;
-import com.oplay.giftcool.adapter.holder.StyleLimitHolder;
+import com.oplay.giftcool.adapter.holder.StyleCouponReserveHolder;
+import com.oplay.giftcool.adapter.holder.StyleLabelBaseHolder;
+import com.oplay.giftcool.adapter.holder.StyleFreeHolder;
+import com.oplay.giftcool.adapter.holder.StyleFreeReserveHolder;
 import com.oplay.giftcool.adapter.holder.StyleNormalHolder;
-import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.adapter.holder.StylePreciousHolder;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.ui.widget.ArrowAnimView;
+import com.oplay.giftcool.ui.widget.ClockAnimView;
 
 import java.util.Locale;
 
@@ -44,9 +47,11 @@ public class UiStyleUtil {
      */
     public static void bindListener(StyleBaseHolder holder, int tag, int pos, View.OnClickListener listener) {
         holder.itemView.setTag(tag, pos);
-        holder.btnSend.setTag(tag, pos);
         holder.itemView.setOnClickListener(listener);
-        holder.btnSend.setOnClickListener(listener);
+        if (holder.btnSend != null) {
+            holder.btnSend.setTag(tag, pos);
+            holder.btnSend.setOnClickListener(listener);
+        }
     }
 
     /**
@@ -61,33 +66,46 @@ public class UiStyleUtil {
             switch (uiStyle) {
                 case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
                 case GiftTypeUtil.UI_TYPE_NORMAL_SEIZE:
-                case GiftTypeUtil.UI_TYPE_NORMAL_SEIZED:
+                case GiftTypeUtil.UI_TYPE_NORMAL_OTHER:
                 case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
-                case GiftTypeUtil.UI_TYPE_NORMAL_WAITE_SEIZE:
+                case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEIZE:
                     convertView = inflateView(context, parent,
-                            withLine ? R.layout.item_ui_style_normal_with_line : R.layout.item_ui_style_normal);
+                            withLine ? R.layout.item_ui_style_1_to_5_line : R.layout.item_ui_style_1_to_5);
                     baseHolder = new StyleNormalHolder(convertView);
                     break;
-                case GiftTypeUtil.UI_TYPE_COUPON:
+                case GiftTypeUtil.UI_TYPE_FREE_RESERVE:
                     convertView = inflateView(context, parent,
-                            withLine ? R.layout.item_ui_style_coupon_with_line : R.layout.item_ui_style_coupon);
+                            withLine ? R.layout.item_ui_style_12_line : R.layout.item_ui_style_12);
+                    baseHolder = new StyleFreeReserveHolder(convertView);
+                    break;
+                case GiftTypeUtil.UI_TYPE_FREE_SEIZE:
+                case GiftTypeUtil.UI_TYPE_FREE_WAIT_SEARCH:
+                case GiftTypeUtil.UI_TYPE_FREE_SEARCH:
+                case GiftTypeUtil.UI_TYPE_FREE_OTHER:
+                    convertView = inflateView(context, parent,
+                            withLine ? R.layout.item_ui_style_11_13_to_15_line : R.layout.item_ui_style_11_13_to_15);
+                    baseHolder = new StyleFreeHolder(convertView);
+                    break;
+                case GiftTypeUtil.UI_TYPE_COUPON_RESERVE:
+                    convertView = inflateView(context, parent,
+                            withLine ? R.layout.item_ui_style_17_line : R.layout.item_ui_style_17);
+                    baseHolder = new StyleCouponReserveHolder(convertView);
+                    break;
+                case GiftTypeUtil.UI_TYPE_COUPON_SEIZE:
+                case GiftTypeUtil.UI_TYPE_COUPON_OTHER:
+                    convertView = inflateView(context, parent,
+                            withLine ? R.layout.item_ui_style_16_18_line : R.layout.item_ui_style_16_18);
                     baseHolder = new StyleCouponHolder(convertView);
                     break;
-                case GiftTypeUtil.UI_TYPE_FREE_COUPON:
-                    convertView = inflateView(context, parent,
-                            withLine ? R.layout.item_ui_style_coupon_free_with_line : R.layout.item_ui_style_coupon_free);
-                    baseHolder = new StyleFreeCouponHolder(convertView);
-                    break;
-                case GiftTypeUtil.UI_TYPE_FREE_GIFT:
-                    convertView = inflateView(context, parent,
-                            withLine ? R.layout.item_ui_style_limit_free_with_line : R.layout.item_ui_style_limit_free);
-                    baseHolder = new StyleFreeGiftHolder(convertView);
-                    break;
-                case GiftTypeUtil.UI_TYPE_LIMIT:
+                case GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE:
+                case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEIZE:
+                case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEARCH:
+                case GiftTypeUtil.UI_TYPE_PRECIOUS_SEARCH:
+                case GiftTypeUtil.UI_TYPE_PRECIOUS_OTHER:
                 default:
                     convertView = inflateView(context, parent,
-                            withLine ? R.layout.item_ui_style_normal_with_line : R.layout.item_ui_style_normal);
-                    baseHolder = new StyleLimitHolder(convertView);
+                            withLine ? R.layout.item_ui_style_6_to_10_line : R.layout.item_ui_style_6_to_10);
+                    baseHolder = new StylePreciousHolder(convertView);
 
             }
             convertView.setTag(baseHolder);
@@ -104,131 +122,193 @@ public class UiStyleUtil {
         mContext = context;
         o.buttonState = (o.buttonState == 0 ? GiftTypeUtil.getButtonState(o) : o.buttonState);
         o.platform = (TextUtils.isEmpty(o.platform) ? "偶玩版" : o.platform);
+        bindBaseData(baseHolder, o);
         switch (o.uiStyle) {
             case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
             case GiftTypeUtil.UI_TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.UI_TYPE_NORMAL_SEIZED:
+            case GiftTypeUtil.UI_TYPE_NORMAL_OTHER:
             case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
-            case GiftTypeUtil.UI_TYPE_NORMAL_WAITE_SEIZE:
+            case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEIZE:
                 bindNormalHolder((StyleNormalHolder) baseHolder, o);
                 break;
-            case GiftTypeUtil.UI_TYPE_COUPON:
+            case GiftTypeUtil.UI_TYPE_FREE_RESERVE:
+                bindFreeReserveHolder((StyleFreeReserveHolder) baseHolder, o);
+                break;
+            case GiftTypeUtil.UI_TYPE_FREE_SEIZE:
+            case GiftTypeUtil.UI_TYPE_FREE_WAIT_SEARCH:
+            case GiftTypeUtil.UI_TYPE_FREE_SEARCH:
+            case GiftTypeUtil.UI_TYPE_FREE_OTHER:
+                bindFreeHolder((StyleFreeHolder) baseHolder, o);
+                break;
+            case GiftTypeUtil.UI_TYPE_COUPON_RESERVE:
+                bindCouponReserveHolder((StyleCouponReserveHolder) baseHolder, o);
+                break;
+            case GiftTypeUtil.UI_TYPE_COUPON_SEIZE:
+            case GiftTypeUtil.UI_TYPE_COUPON_OTHER:
                 bindCouponHolder((StyleCouponHolder) baseHolder, o);
                 break;
-            case GiftTypeUtil.UI_TYPE_FREE_COUPON:
-                bindFreeCouponHolder((StyleFreeCouponHolder) baseHolder, o);
-                break;
-            case GiftTypeUtil.UI_TYPE_FREE_GIFT:
-                bindFreeGiftHolder((StyleFreeGiftHolder) baseHolder, o);
-                break;
-            case GiftTypeUtil.UI_TYPE_LIMIT:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEIZE:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEARCH:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_SEARCH:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_OTHER:
             default:
-                bindLimitHolder((StyleLimitHolder) baseHolder, o);
+                bindPreciousHolder((StylePreciousHolder) baseHolder, o);
         }
         mContext = null;
     }
 
-    private static void bindLimitHolder(StyleLimitHolder holder, IndexGiftNew o) {
-        bindBaseData(holder, o);
+    private static void bindCouponReserveHolder(StyleCouponReserveHolder holder, IndexGiftNew o) {
+        holder.tvPlatform.setText(o.platform);
+        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+    }
+
+
+    public static void bindCouponHolder(StyleCouponHolder holder, IndexGiftNew o) {
+        holder.tvPlatform.setText(o.platform);
+        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+        setFreeLabelSeize(holder, o);
+        switch (o.uiStyle) {
+            case GiftTypeUtil.UI_TYPE_COUPON_SEIZE:
+                setProgressBarData(o, holder);
+                break;
+            case GiftTypeUtil.UI_TYPE_COUPON_OTHER:
+            default:
+                holder.tvPercent.setVisibility(View.GONE);
+                holder.pbPercent.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    private static void bindFreeHolder(StyleFreeHolder holder, IndexGiftNew o) {
+        holder.tvContent.setText(o.content);
         holder.pbPercent.setVisibility(View.GONE);
         holder.tvPercent.setVisibility(View.GONE);
         holder.tvCount.setVisibility(View.GONE);
-        holder.tvPrice.setVisibility(View.VISIBLE);
-        holder.tvContent.setText(o.content);
-        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
-        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
-    }
-
-    public static void bindFreeGiftHolder(StyleFreeGiftHolder holder, IndexGiftNew o) {
-        bindBaseData(holder, o);
-        holder.tvPercent.setVisibility(View.GONE);
-        holder.pbPercent.setVisibility(View.GONE);
-        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
-        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
-        holder.tvContent.setText(o.content);
-        setFreeSeize(holder, o);
-    }
-
-    public static void bindFreeCouponHolder(StyleFreeCouponHolder holder, IndexGiftNew o) {
-        bindBaseData(holder, o);
-        holder.tvPlatform.setText(o.platform);
-        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
-        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
-        holder.tvPercent.setVisibility(View.GONE);
-        holder.pbPercent.setVisibility(View.GONE);
-        setFreeSeize(holder, o);
-    }
-
-    public static void bindCouponHolder(StyleCouponHolder holder, IndexGiftNew o) {
-        bindBaseData(holder, o);
-        holder.tvPlatform.setText(o.platform);
-        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
-        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
-    }
-
-    public static void bindNormalHolder(StyleNormalHolder holder, IndexGiftNew o) {
-        holder.tvContent.setText(o.content);
+        holder.tvSpend.setVisibility(View.GONE);
+        holder.tvPrice.setVisibility(View.GONE);
+        setFreeLabelSeize(holder, o);
         switch (o.uiStyle) {
-            case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
-            case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
-            case GiftTypeUtil.UI_TYPE_NORMAL_WAITE_SEIZE:
-                setNormalDisabled(o, holder);
-                switch (o.uiStyle) {
+            case GiftTypeUtil.UI_TYPE_FREE_SEIZE:
+                setProgressBarData(o, holder);
+                ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+                ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+                break;
+            case GiftTypeUtil.UI_TYPE_FREE_WAIT_SEARCH:
+                bindSearchTime(holder.tvCount, o.searchTime);
+                break;
+            case GiftTypeUtil.UI_TYPE_FREE_SEARCH:
+                bindSearchCount(holder.tvCount, String.valueOf(o.searchCount));
+                break;
+            case GiftTypeUtil.UI_TYPE_FREE_OTHER:
+            default:
+                ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+                ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+                break;
+        }
+    }
 
-                    case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
-                        setDisabledText(holder.tvCount, Html.fromHtml(String.format("已淘数：<font " +
-                                        "color='#ffaa17'>%s</font>",
-                                o.searchCount)));
+    private static void bindFreeReserveHolder(StyleFreeReserveHolder holder, IndexGiftNew o) {
+        holder.tvContent.setText(o.content);
+        ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+    }
+
+    private static void bindPreciousHolder(StylePreciousHolder holder, IndexGiftNew o) {
+        holder.pbPercent.setVisibility(View.GONE);
+        holder.tvPercent.setVisibility(View.GONE);
+        holder.tvCount.setVisibility(View.GONE);
+        ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
+        switch (o.uiStyle) {
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEIZE:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_SEARCH:
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEARCH:
+                holder.tvSpend.setVisibility(View.INVISIBLE);
+                switch (o.uiStyle) {
+                    case GiftTypeUtil.UI_TYPE_PRECIOUS_SEARCH:
+                        bindSearchCount(holder.tvCount, String.valueOf(o.searchCount));
                         break;
-                    case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
-                        holder.tvCount.setText(Html.fromHtml(String.format("开淘时间：<font " +
-                                        "color='#ffaa17'>%s</font>",
-                                DateUtil.formatTime(o.searchTime, "yyyy-MM-dd HH:mm"))));
+                    case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEARCH:
+                        bindSearchTime(holder.tvCount, o.searchTime);
                         break;
-                    case GiftTypeUtil.UI_TYPE_NORMAL_WAITE_SEIZE:
-                        holder.tvCount.setText(Html.fromHtml(String.format("开抢时间：<font " +
-                                        "color='#ffaa17'>%s</font>",
-                                DateUtil.formatTime(o.seizeTime, "yyyy-MM-dd HH:mm"))));
+                    case GiftTypeUtil.UI_TYPE_PRECIOUS_WAIT_SEIZE:
+                        bindSeizeTime(holder.tvCount, o.seizeTime);
                         break;
                 }
                 break;
-            case GiftTypeUtil.UI_TYPE_NORMAL_SEIZE:
-                bindBaseData(holder, o);
-                holder.tvSpend.setVisibility(View.VISIBLE);
-                holder.tvCount.setVisibility(View.GONE);
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE:
                 setProgressBarData(o, holder);
                 ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
                 break;
-            case GiftTypeUtil.UI_TYPE_NORMAL_SEIZED:
-                bindBaseData(holder, o);
-                holder.tvPercent.setVisibility(View.GONE);
-                holder.pbPercent.setVisibility(View.GONE);
-                holder.tvSpend.setVisibility(View.VISIBLE);
-                holder.tvCount.setVisibility(View.GONE);
+            case GiftTypeUtil.UI_TYPE_PRECIOUS_OTHER:
+            default:
                 ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
                 break;
         }
     }
 
-    private static void setFreeSeize(StyleFreeBaseHolder holder, IndexGiftNew o) {
-        switch (o.buttonState) {
-            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
-            case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
-            case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
-            case GiftTypeUtil.BUTTON_TYPE_RESERVED:
-                holder.btnSend.setVisibility(View.VISIBLE);
-                holder.tvSeize.setVisibility(View.GONE);
+    public static void bindNormalHolder(StyleNormalHolder holder, IndexGiftNew o) {
+        holder.tvPercent.setVisibility(View.GONE);
+        holder.pbPercent.setVisibility(View.GONE);
+        holder.tvContent.setText(o.content);
+        holder.tvCount.setVisibility(View.GONE);
+        switch (o.uiStyle) {
+            case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
+            case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
+            case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEIZE:
+                holder.tvSpend.setVisibility(View.GONE);
+                switch (o.uiStyle) {
+                    case GiftTypeUtil.UI_TYPE_NORMAL_SEARCH:
+                        bindSearchCount(holder.tvCount, String.valueOf(o.searchCount));
+                        break;
+                    case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEARCH:
+                        bindSearchTime(holder.tvCount, o.searchTime);
+                        break;
+                    case GiftTypeUtil.UI_TYPE_NORMAL_WAIT_SEIZE:
+                        bindSeizeTime(holder.tvCount, o.seizeTime);
+                        break;
+                }
                 break;
-            case GiftTypeUtil.BUTTON_TYPE_SEIZE:
+            case GiftTypeUtil.UI_TYPE_NORMAL_SEIZE:
                 setProgressBarData(o, holder);
-                holder.btnSend.setVisibility(View.INVISIBLE);
-                setSeizeTextUI(holder.tvSeize, o);
-                holder.tvSeizeHint.setText("");
+                ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
                 break;
+            case GiftTypeUtil.UI_TYPE_NORMAL_OTHER:
             default:
-                holder.btnSend.setVisibility(View.INVISIBLE);
-                setSeizeTextUI(holder.tvSeize, o);
+                ViewUtil.siteSpendUI(holder.tvSpend, o.score, o.bean, o.priceType);
+                break;
+        }
+    }
 
+    private static void bindSearchTime(TextView tv, String time) {
+        tv.setVisibility(View.VISIBLE);
+        tv.setText(Html.fromHtml(String.format("开淘时间：<font " +
+                        "color='#ffaa17'>%s</font>",
+                DateUtil.formatTime(time, "yyyy-MM-dd HH:mm"))));
+    }
+
+    private static void bindSeizeTime(TextView tv, String time) {
+        tv.setVisibility(View.VISIBLE);
+        tv.setText(Html.fromHtml(String.format("开抢时间：<font " +
+                        "color='#ffaa17'>%s</font>",
+                DateUtil.formatTime(time, "yyyy-MM-dd HH:mm"))));
+    }
+
+    private static void bindSearchCount(TextView tv, String count) {
+        tv.setVisibility(View.VISIBLE);
+        tv.setText(Html.fromHtml(String.format("已淘数：<font " +
+                "color='#ffaa17'>%s</font>", count)));
+    }
+
+    private static void bindSeizeHint(TextView tv, IndexGiftNew o) {
+        if ((o.freeStartTime != 0 && o.freeStartTime * 1000 > System.currentTimeMillis())
+                || (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE && o.status == GiftTypeUtil.STATUS_SEIZE)) {
+            tv.setText(String.format(Locale.CHINA, "%s免费抢",
+                    DateUtil.formatUserReadDate(o.freeStartTime)));
+        } else {
+            tv.setText("");
         }
     }
 
@@ -241,54 +321,92 @@ public class UiStyleUtil {
         holder.pbPercent.setMax(100);
     }
 
-    private static void setNormalDisabled(IndexGiftNew o, StyleNormalHolder holder) {
-        bindBaseData(holder, o);
-        holder.tvContent.setText(o.content);
-        holder.tvSpend.setVisibility(View.GONE);
-        holder.tvPercent.setVisibility(View.GONE);
-        holder.pbPercent.setVisibility(View.GONE);
-        holder.tvCount.setVisibility(View.VISIBLE);
-    }
-
     private static void bindBaseData(StyleBaseHolder holder, IndexGiftNew o) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-//        holder.btnSend.setState(GiftTypeUtil.getButtonState(o));
-        holder.btnSend.setState(o.buttonState);
+        if (o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+            bindTitleTag(holder.tvName, R.drawable.ic_tag_coupon, R.dimen.di_line_space_extra_big);
+        } else if (o.exclusive == 1) {
+            bindTitleTag(holder.tvName, R.drawable.ic_tag_exclusive, R.dimen.di_line_space_extra_big);
+        } else {
+            bindTitleTag(holder.tvName, 0, 0);
+        }
+        if (holder.btnSend != null) {
+            holder.btnSend.setState(o.buttonState);
+        }
         holder.tvSeizeHint.setVisibility(View.VISIBLE);
         if (o.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE) {
             holder.tvSeizeHint.setText(mContext.getString(R.string.st_gift_reserve_take_hint));
-        } else if (o.freeStartTime * 1000 > System.currentTimeMillis()) {
-            holder.tvSeizeHint.setText(String.format(Locale.CHINA,
-                    ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(o.freeStartTime)));
         } else {
-            holder.tvSeizeHint.setText("");
+            bindSeizeHint(holder.tvSeizeHint, o);
         }
     }
 
-    private static void setDisabledText(TextView tv, Spanned text) {
-        tv.setVisibility(View.VISIBLE);
-        tv.setText(text);
+    private static void bindTitleTag(TextView tv, @DrawableRes int leftTag, @DimenRes int padding) {
+        int pad = (padding != 0 ? mContext.getResources().getDimensionPixelSize(padding) : 0);
+        tv.setCompoundDrawablePadding(pad);
+        tv.setCompoundDrawablesWithIntrinsicBounds(leftTag, 0, 0, 0);
+    }
+
+    /**
+     * 判断按钮为文字标签时对应的显示
+     */
+    private static void setFreeLabelSeize(StyleLabelBaseHolder holder, IndexGiftNew o) {
+        if (holder.btnSend != null) {
+            holder.btnSend.setVisibility(View.INVISIBLE);
+        }
+        setSeizeTextUI(holder.aavView, holder.cavView, holder.tvSeize, holder.tvSeizeHint, o);
+        switch (o.uiStyle) {
+            case GiftTypeUtil.UI_TYPE_FREE_SEIZE:
+            case GiftTypeUtil.UI_TYPE_COUPON_SEIZE:
+                // 显示百分比，隐藏免费抢提示，防止混淆
+                holder.tvSeizeHint.setText("");
+                break;
+            default:
+        }
     }
 
     /**
      * 设置抢号Text的样式
      */
-    private static void setSeizeTextUI(TextView tv, IndexGiftNew o) {
+    private static void setSeizeTextUI(ArrowAnimView aav, ClockAnimView cav, TextView tv, TextView hint, IndexGiftNew
+            o) {
         tv.setVisibility(View.VISIBLE);
-        if (o.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
-                || o.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE) {
-            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_red_right, 0);
+        if ((o.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
+                || o.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE)
+                && o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
             tv.setTextColor(Global.getRedColor(mContext));
             tv.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
             tv.setText(mContext.getString(R.string.st_gift_free_seize));
+            tv.setPadding(0, 0, 0, 0);
+            aav.setViewVisibility(true);
+            cav.setVisibility(View.VISIBLE);
+            hint.setText("");
         } else {
-            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             tv.setTextColor(Global.getGreyColor(mContext));
             tv.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
+            tv.setPadding(0, 0, mContext.getResources().getDimensionPixelSize(R.dimen.di_line_space_extra_big), 0);
+            aav.setViewVisibility(false);
+            cav.setVisibility(View.GONE);
+            if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+                hint.setText("");
+            }
             switch (o.buttonState) {
                 case GiftTypeUtil.BUTTON_TYPE_SEARCH:
                     tv.setText(mContext.getString(R.string.st_gift_search));
+                    break;
+                case GiftTypeUtil.BUTTON_TYPE_WAIT_SEARCH:
+                    tv.setText(mContext.getString(R.string.st_gift_wait_search));
+                    break;
+                case GiftTypeUtil.BUTTON_TYPE_RESERVE:
+                case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
+                    tv.setText(mContext.getString(R.string.st_gift_reserve));
+                    break;
+                case GiftTypeUtil.BUTTON_TYPE_RESERVED:
+                    tv.setText(mContext.getString(R.string.st_gift_reserved));
+                    break;
+                case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
+                    tv.setText(mContext.getString(R.string.st_gift_take));
                     break;
                 case GiftTypeUtil.BUTTON_TYPE_FINISH:
                 case GiftTypeUtil.BUTTON_TYPE_TAKE_OFF:
@@ -299,10 +417,24 @@ public class UiStyleUtil {
                     tv.setText(mContext.getString(R.string.st_gift_seized));
                     break;
                 case GiftTypeUtil.BUTTON_TYPE_WAIT_SEIZE:
-                    tv.setText(String.format(Locale.CHINA, "%s抢",
-                            DateUtil.formatUserReadDate(DateUtil.getTime(o.seizeTime))));
+                    if (o.freeStartTime * 1000 > System.currentTimeMillis()) {
+                        tv.setText(String.format(Locale.CHINA, "%s免费抢",
+                                DateUtil.formatUserReadDate(o.freeStartTime)));
+                        hint.setText("");
+                    } else {
+                        tv.setText(String.format(Locale.CHINA, "%s抢",
+                                DateUtil.formatUserReadDate(DateUtil.getTime(o.seizeTime) / 1000)));
+                    }
                     break;
             }
         }
+        if (o.status == GiftTypeUtil.STATUS_SEIZE && o.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+            hint.setText(mContext.getString(R.string.st_gift_normal_seize_hint));
+            hint.setTextColor(Global.getRedColor(mContext));
+        } else {
+            hint.setTextColor(Global.getGreyColor(mContext));
+        }
     }
+
+
 }

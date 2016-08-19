@@ -70,7 +70,7 @@
 
         <LinearLayout
                 android:id = "@+id/ll_percent"
-                android:layout_width = "100dp"
+                android:layout_width = "@dimen/di_gift_hint_width"
                 android:layout_height = "wrap_content"
                 android:layout_alignParentRight = "true"
                 android:layout_alignTop = "@+id/ll_price"
@@ -109,12 +109,12 @@
                 android:layout_toRightOf = "@+id/rl_icon" >
 
             <TextView
-                    android:id="@+id/tv_spend"
+                    android:id = "@+id/tv_spend"
                     style = "@style/DefaultTextView.Text" />
 
             <com.oplay.giftcool.ui.widget.DeletedTextView
                     android:id = "@+id/tv_price"
-                    android:layout_marginLeft="@dimen/di_index_item_margin_left"
+                    android:layout_marginLeft = "@dimen/di_index_item_margin_left"
                     style = "@style/DefaultTextView.Text"
                     android:gravity = "center_vertical" />
         </LinearLayout >
@@ -128,15 +128,8 @@
                 android:layout_alignTop = "@+id/tv_name"
                 android:background = "@drawable/selector_btn_green"
                 android:textColor = "@color/color_btn_green_border"
+                android:visibility = "invisible"
                 android:text = "抢号" />
-
-
-        <TextView
-                android:id = "@+id/tv_reserve_deadline"
-                style = "@style/DefaultTextView.Text"
-                android:layout_alignParentRight = "true"
-                android:layout_alignTop = "@+id/ll_price"
-                android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
         <TextView
                 android:id = "@+id/tv_seize_hint"
@@ -144,6 +137,8 @@
                 android:layout_alignParentRight = "true"
                 android:layout_below = "@+id/btn_send"
                 android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+                android:layout_width = "@dimen/di_gift_hint_width"
+                android:gravity = "right"
                 android:textSize = "@dimen/di_text_size_small"
                 android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 

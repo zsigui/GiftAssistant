@@ -15,6 +15,7 @@ import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.adapter.holder.StyleBaseHolder;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
@@ -283,7 +284,12 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
             if (mShowFooter && position == getItemCount() - 1) {
                 return TYPE_FOOTER;
             } else {
-                return getItem(position - getHeaderCount()).uiStyle + TYPE_NEW_ITEM_BASE;
+                IndexGiftNew o = getItem(position - getHeaderCount());
+                if (o == null) {
+                    return GiftTypeUtil.UI_TYPE_NORMAL_SEIZE + TYPE_NEW_ITEM_BASE;
+                }
+                o.uiStyle = (o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT ? GiftTypeUtil.UI_TYPE_NORMAL_SEIZE : o.uiStyle);
+                return o.uiStyle + TYPE_NEW_ITEM_BASE;
             }
         } else {
             return TYPE_DEFAULT + position;
@@ -324,6 +330,10 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
                 break;
             case R.id.rl_recommend:
                 if (gift != null) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "uiStyle = " + gift.uiStyle + ", state = " + gift
+                            .buttonState
+                            + ", status = " + gift.status + ", giftType = " + gift.giftType + ", totalType = " + gift
+                            .totalType);
                     IntentUtil.jumpGiftDetail(mContext, gift.id);
                 }
                 break;
