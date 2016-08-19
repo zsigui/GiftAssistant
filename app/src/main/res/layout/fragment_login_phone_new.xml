@@ -51,7 +51,7 @@
     <LinearLayout
             android:id = "@+id/ll_code"
             android:orientation = "vertical"
-            android:visibility = "gone"
+            android:visibility = "visible"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content" >
 
@@ -162,6 +162,28 @@
                 android:textSize = "12sp"
                 android:clickable = "true"
                 android:text = "@string/st_login_has_ouwan_b" />
+    </LinearLayout >
+
+
+    <LinearLayout
+            android:id = "@+id/ll_voice_code"
+            android:orientation = "vertical"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:paddingTop = "60dp"
+            android:gravity = "center_horizontal" >
+
+        <TextView
+                style = "@style/DefaultTextView.Text"
+                android:textSize = "12sp"
+                android:layout_marginBottom = "@dimen/di_line_space_extra_big"
+                android:text = "@string/st_login_voice_phone_code_try" />
+
+        <TextView
+                android:id = "@+id/tv_voice_code"
+                style = "@style/DefaultTextView.LoginPoint"
+                android:clickable = "true"
+                android:text = "@string/st_login_voice_phone_code" />
     </LinearLayout >
 
 </LinearLayout >

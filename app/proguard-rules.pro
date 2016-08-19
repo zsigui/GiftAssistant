@@ -92,6 +92,9 @@
 -keepclassmembers class * extends android.webkit.WebChromeClient {
      *;
 }
+-keepclassmembers class * extends com.oplay.giftcool.ui.fragment.WebFragment {
+    *;
+}
 
 -keep class com.android.** { *; }
 -keep public class com.bigkoo.convenientbanner.ConvenientBanner { public *; }

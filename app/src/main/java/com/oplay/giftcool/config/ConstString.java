@@ -151,6 +151,7 @@ public class ConstString {
     // 密码修改成功提示
     public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录~";
 
+    public static final String TOAST_SEND_CODE_FAILED = "验证码已发送，请稍等重试";
 
     /*------------- 定义Toast显示内容 ----------------*/
 }

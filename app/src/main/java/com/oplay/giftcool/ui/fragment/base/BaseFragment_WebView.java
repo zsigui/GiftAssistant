@@ -408,6 +408,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             if (sScrollMap.get(mUrl) != null) {
                 mScrollY = sScrollMap.get(mUrl);
             }
+            mWebView.invalidate();
             mWebView.loadUrl(mUrl);
         }
     }
