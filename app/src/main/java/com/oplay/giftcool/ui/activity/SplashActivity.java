@@ -1,10 +1,12 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -17,10 +19,10 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.model.data.resp.AdInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
@@ -41,13 +43,16 @@ import java.util.Locale;
  * @email zsigui@foxmail.com
  * @date 2015/12/19
  */
-public class SplashActivity extends BaseAppCompatActivity {
+public class SplashActivity extends BaseAppCompatActivity implements CallbackListener<Bitmap> {
 
     private ImageView ivSplash;
+    private ImageView ivAdLoad;
     private TextView tvPass;
+    private final int DEFAULT_AD_TIME = 4;
 
     private int remainTime;
-//    private String prefixTag;
+    private String mCurrentImg = "";
+    private String prefixTag;
 
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -56,7 +61,8 @@ public class SplashActivity extends BaseAppCompatActivity {
                 jumpToMain();
             } else {
 //                tvPass.setText(String.format(Locale.CHINA, "%s%ds", prefixTag, remainTime));
-                tvPass.setText(String.format(Locale.CHINA, "跳过%ds", remainTime));
+                tvPass.setText(Html.fromHtml(String.format(Locale.CHINA,
+                        "跳过 <font color='#ffaa17'>%ds</font>", remainTime)));
                 remainTime--;
                 ThreadUtil.runOnUiThread(mRunnable, 1000);
             }
@@ -73,26 +79,36 @@ public class SplashActivity extends BaseAppCompatActivity {
     @Override
     protected void processLogic() {
         Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getApplicationContext()));
+
+        AssistantApp.getInstance().setSplashAdListener(this);
         tvPass.setOnClickListener(this);
         ivSplash.setOnClickListener(this);
+        ivAdLoad.setOnClickListener(this);
+
         Bitmap b = null;
         AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ad info  = " + adInfo);
         if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
             File f = ImageLoader.getInstance().getDiskCache().get(adInfo.img);
             // 此前f已经验证
             b = BitmapFactory.decodeFile(f.getAbsolutePath());
             remainTime = AssistantApp.getInstance().getAdInfo().displayTime;
+            mCurrentImg = adInfo.img;
         }
         if (b == null) {
             b = BitmapFactory.decodeResource(getResources(), R.drawable.pic_splash_2016);
         }
-//        prefixTag = (adInfo == null || adInfo.showPass)? "跳过" : "剩余";
-        if (adInfo == null || adInfo.showPass) {
+//        prefixTag = (adInfo != null && adInfo.showPass) ? "跳过" : "剩余";
+        showPass(adInfo);
+        remainTime = (adInfo == null || adInfo.displayTime < DEFAULT_AD_TIME) ? DEFAULT_AD_TIME : adInfo.displayTime;
+        ivSplash.setImageBitmap(b);
+    }
+
+    private void showPass(AdInfo adInfo) {
+        if (adInfo != null && adInfo.showPass) {
+            tvPass.setVisibility(View.VISIBLE);
+        } else {
             tvPass.setVisibility(View.GONE);
         }
-        remainTime = (adInfo == null || adInfo.displayTime < 3) ? 3 : adInfo.displayTime;
-        ivSplash.setImageBitmap(b);
     }
 
     private TestChoiceDialog mDialog;
@@ -150,6 +166,7 @@ public class SplashActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_ad);
         ivSplash = getViewById(R.id.iv_splash);
         tvPass = getViewById(R.id.tv_pass);
+        ivAdLoad = getViewById(R.id.iv_splash_ad);
     }
 
     private void jumpToMain() {
@@ -164,6 +181,12 @@ public class SplashActivity extends BaseAppCompatActivity {
     }
 
     @Override
+    public void release() {
+        super.release();
+        AssistantApp.getInstance().setSplashAdListener(null);
+    }
+
+    @Override
     public void onClick(View v) {
         super.onClick(v);
         AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
@@ -174,6 +197,7 @@ public class SplashActivity extends BaseAppCompatActivity {
 //                }
                 break;
             case R.id.iv_splash:
+            case R.id.iv_splash_ad:
                 if (adInfo != null && !TextUtils.isEmpty(adInfo.uri)) {
                     ThreadUtil.remove(mRunnable);
                     MixUtil.handleViewUri(this, Uri.parse(adInfo.uri));
@@ -200,4 +224,24 @@ public class SplashActivity extends BaseAppCompatActivity {
                 .currentTimeMillis());
     }
 
+    private void disappearView(View iv) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "alpha", 1f, 0f);
+        animator.setDuration(600);
+        animator.start();
+    }
+
+    @Override
+    public void doCallBack(final Bitmap data) {
+        final AdInfo newInfo = AssistantApp.getInstance().getAdInfo();
+        if (!mCurrentImg.equalsIgnoreCase(newInfo.img) && data != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ivAdLoad.setImageBitmap(data);
+                    showPass(newInfo);
+                    disappearView(ivSplash);
+                }
+            });
+        }
+    }
 }

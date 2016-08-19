@@ -3,25 +3,34 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent" >
 
+
     <ImageView
-            android:id = "@+id/iv_splash"
+            style = "@style/DefaultImageView"
+            android:id = "@+id/iv_splash_ad"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
-            android:scaleType = "centerCrop"
-            android:contentDescription = "@null" />
+            android:contentDescription = "@null"/>
+
+    <ImageView
+            style = "@style/DefaultImageView"
+            android:id = "@+id/iv_splash"
+            android:layout_width = "match_parent"
+            android:contentDescription = "@null"
+            android:layout_height = "match_parent"
+            android:src = "@drawable/pic_splash_2016" >
+
+    </ImageView >
 
     <TextView
             android:id = "@+id/tv_pass"
-            android:layout_width = "wrap_content"
-            android:layout_height = "wrap_content"
-            android:minWidth = "60dp"
+            style = "@style/DefaultTextView.NormalBtn"
             android:clickable = "true"
             android:textColor = "@color/co_white"
-            android:background = "@color/co_black"
+            android:background = "@drawable/shape_rect_btn_30_opacity"
             android:textSize = "@dimen/di_text_size_small"
             android:gravity = "center"
             android:layout_alignParentRight = "true"
-            android:layout_marginTop = "30dp"
-            android:layout_marginRight = "20dp"
-            android:padding = "@dimen/di_line_space_extra_big" />
+            android:layout_marginTop = "20dp"
+            android:text="跳过 4s"
+            android:layout_marginRight = "15dp"/>
 </RelativeLayout >

@@ -3,8 +3,10 @@ package com.oplay.giftcool;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +16,8 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.oplay.giftcool.assist.CrashHandler;
@@ -30,6 +34,7 @@ import com.oplay.giftcool.download.DownloadNotificationManager;
 import com.oplay.giftcool.download.silent.SilentDownloadManager;
 import com.oplay.giftcool.ext.gson.NullStringToEmptyAdapterFactory;
 import com.oplay.giftcool.ext.retrofit2.encrypt.GsonConverterFactory;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.manager.SocketIOManager;
@@ -42,6 +47,7 @@ import com.oplay.giftcool.ui.widget.LoadAndRetryViewManager;
 import com.oplay.giftcool.util.ChannelUtil;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.InputMethodUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.SoundPlayer;
 import com.oplay.giftcool.util.ThreadUtil;
@@ -114,9 +120,6 @@ public class AssistantApp extends Application {
     // 说明今日是否推送过消息
     private boolean mIsPushedToday = false;
 
-    // 是否此版本第一次启动
-    private boolean mFirstOpenInThisVersion = false;
-
     // 头部信息
     private String mHeaderValue;
 
@@ -124,6 +127,7 @@ public class AssistantApp extends Application {
     private long mLastLaunchTime;
     private int mPhoneLoginType;
     private int mPushSdk = PushMessageManager.SdkType.NONE;
+    private CallbackListener<Bitmap> mSplashAdListener;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -186,7 +190,9 @@ public class AssistantApp extends Application {
         initLoadingView();
         // 初始化统计工具
         StatisticsManager.getInstance().init(this, getChannelId());
-        Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+        if (MixUtil.isInMainProcess(this)) {
+            Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(this));
+        }
 
     }
 
@@ -305,7 +311,8 @@ public class AssistantApp extends Application {
                                 .addHeader(headerName, getHeaderValue())
                                 .cacheControl(CacheControl.FORCE_NETWORK)
                                 .build();
-//                        AppDebugConfig.d(AppDebugConfig.TAG_APP, "net request url = " + newRequest.url().uri().toString());
+//                        AppDebugConfig.d(AppDebugConfig.TAG_APP, "net request url = " + newRequest.url().uri()
+// .toString());
                         Response response = chain.proceed(newRequest);
 
                         CacheControl cacheControl;
@@ -371,7 +378,7 @@ public class AssistantApp extends Application {
         try {
             final DisplayImageOptions options = Global.getDefaultImgOptions();
             final File cacheDir = StorageUtils.getOwnCacheDirectory(this, Global.IMG_CACHE_PATH);
-            final long maxAgeTimeInSeconds = 7 * 24 * 60 * 60;   // 7 days cache
+            final long maxAgeTimeInSeconds = 30 * 24 * 60 * 60;   // 7 days cache
             final ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                     .threadPoolSize(3)
                     .denyCacheImageMultipleSizesInMemory()
@@ -658,7 +665,8 @@ public class AssistantApp extends Application {
             if (activity != null && mSoftInputHeight == 0) {
                 mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
                 if (mSoftInputHeight == 0) {
-                    mSoftInputHeight = activity.getResources().getDimensionPixelSize(R.dimen.di_default_soft_input_height);
+                    mSoftInputHeight = activity.getResources().getDimensionPixelSize(R.dimen
+                            .di_default_soft_input_height);
                 }
                 setSoftInputHeight(mSoftInputHeight);
             }
@@ -680,14 +688,6 @@ public class AssistantApp extends Application {
                     SPConfig.KEY_LAST_OPEN_APP_TIME, System.currentTimeMillis());
         }
         return mLastLaunchTime;
-    }
-
-    public boolean isFirstOpenInThisVersion() {
-        return mFirstOpenInThisVersion;
-    }
-
-    public void setFirstOpenInThisVersion(boolean firstOpenInThisVersion) {
-        mFirstOpenInThisVersion = firstOpenInThisVersion;
     }
 
     public void setPhoneLoginType(int phoneLoginType) {
@@ -712,13 +712,11 @@ public class AssistantApp extends Application {
     private AdInfo mAdInfo;
 
     public AdInfo getAdInfo() {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "getAdInfo = " + mAdInfo);
         if (mAdInfo == null) {
             String s = SPUtil.getString(this, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_AD_SPLASH_INFO, null);
             if (s != null) {
                 try {
                     mAdInfo = getGson().fromJson(s, AdInfo.class);
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "getAdInfo = " + mAdInfo.uri + ", " + mAdInfo.displayTime);
                 } catch (JsonSyntaxException e) {
                     AppDebugConfig.d(AppDebugConfig.TAG_APP, e);
                 }
@@ -728,13 +726,41 @@ public class AssistantApp extends Application {
     }
 
     public void setAdInfo(AdInfo adInfo) {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "start to set ad : " + adInfo);
         if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "start to load ad img : " + adInfo.img);
-            ImageLoader.getInstance().loadImage(adInfo.img, null);
+            if (mAdInfo == null || !adInfo.img.equalsIgnoreCase(mAdInfo.img)) {
+                AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "start to load ad img : " + adInfo.img);
+                ImageLoader.getInstance().loadImage(adInfo.img, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        AppDebugConfig.w(AppDebugConfig.TAG_APP, failReason.getCause());
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "图片加载完成：mSplashAdListener = " +
+                                mSplashAdListener);
+                        if (mSplashAdListener != null) {
+                            mSplashAdListener.doCallBack(loadedImage);
+                        }
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                    }
+                });
+            }
             mAdInfo = adInfo;
             String s = getGson().toJson(adInfo, AdInfo.class);
             SPUtil.putString(this, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_AD_SPLASH_INFO, s);
         }
+    }
+
+    public void setSplashAdListener(CallbackListener<Bitmap> splashAdListener) {
+        mSplashAdListener = splashAdListener;
     }
 }

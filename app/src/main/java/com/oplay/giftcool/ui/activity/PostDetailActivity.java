@@ -119,9 +119,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
     public void showShareBtn(int visibility, IndexPostNew data) {
         if (mToolbar == null)
             return;
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "visibility = " + visibility + ", data = " + data);
         iniToolRight(null);
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "ivShare = " + ivShare);
         if (ivShare != null) {
             ivShare.setVisibility(visibility);
             if (data != null) {

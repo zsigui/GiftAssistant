@@ -75,7 +75,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
             // 清空今日登录状态
             SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
-            AssistantApp.getInstance().setFirstOpenInThisVersion(true);
         }
     }
 
@@ -120,7 +119,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         }
 
 
-// 获取用户信息
+        // 获取用户信息
         // 该信息使用salt加密存储再SharedPreference中
         UserModel user = null;
         try {
@@ -196,6 +195,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         data.curVersionCode = AppInfoUtil.getAppVerCode(mContext);
         JsonReqBase<ReqInitApp> reqData = new JsonReqBase<>(data);
         try {
+            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "init was called");
             Response<JsonRespBase<InitAppResult>> response = Global.getNetEngine().initAPP(reqData).execute();
             if (response != null && response.isSuccessful()) {
                 if (response.body() != null && response.body().isSuccess()) {
