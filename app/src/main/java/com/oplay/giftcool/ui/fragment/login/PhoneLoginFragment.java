@@ -307,7 +307,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 PermissionUtil.judgeSmsPermission(getContext(), PhoneLoginFragment.this);
-                                ToastUtil.showShort(ConstString.TOAST_PHONE_CODE_SEND);
+                                ToastUtil.showShort(ConstString.TOAST_SMS_CODE_SEND);
                                 mLastSendTime = System.currentTimeMillis();
                                 return;
                             }

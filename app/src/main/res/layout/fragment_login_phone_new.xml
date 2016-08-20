@@ -64,8 +64,7 @@
                 android:paddingBottom = "@dimen/di_login_padding_left_right"
                 android:singleLine = "false"
                 android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
-                android:textColor = "@color/co_common_text_second"
-                android:text = "已向您的手机 138****3294 发送了一条验证短信" />
+                android:textColor = "@color/co_common_text_second" />
 
         <LinearLayout
                 android:orientation = "horizontal"
@@ -174,6 +173,7 @@
             android:gravity = "center_horizontal" >
 
         <TextView
+                android:id="@+id/tv_voice_hint"
                 style = "@style/DefaultTextView.Text"
                 android:textSize = "12sp"
                 android:layout_marginBottom = "@dimen/di_line_space_extra_big"
@@ -183,7 +183,7 @@
                 android:id = "@+id/tv_voice_code"
                 style = "@style/DefaultTextView.LoginPoint"
                 android:clickable = "true"
-                android:text = "@string/st_login_voice_phone_code" />
+                android:text = "@string/st_login_voice_code" />
     </LinearLayout >
 
 </LinearLayout >

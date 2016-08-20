@@ -35,8 +35,8 @@ public class ReqLogin {
     @SerializedName("code")
     private String code;
 
-    @SerializedName("is_voice")
-    public boolean isVoice;
+    @SerializedName("send_type")
+    public String sendType;
 
     public String getPassword() {
         return password;

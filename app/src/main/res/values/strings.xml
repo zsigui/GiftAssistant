@@ -225,11 +225,24 @@
     <string name = "st_login_phone_new_title" >快速登录</string >
     <string name = "st_login_ouwan_title" >偶玩账号登录</string >
     <string name = "st_login_phone_hint" >请输入手机号</string >
-    <string name = "st_login_voice_phone_code" >语音验证码</string >
+    <string name = "st_login_voice_code" >语音验证码</string >
+    <string name = "st_login_sms_code" >短信验证码</string >
     <string name = "st_login_phone_code_hint" >请输入短信验证码</string >
+    <string name = "st_login_sms_code_toast" >
+        <![CDATA[
+        已向您的手机 <font color=\'#20C585\'>%s</font> 发送了一条验证短信
+        ]]>
+    </string >
     <string name = "st_login_voice_code_hint" >请输入语音验证码</string >
     <string name = "st_login_voice_phone_code_try" >收不到短信验证码？试试</string >
-    <string name = "st_login_voice_phone_code_toast" >您的手机 %s 将会受到我们的语音电话，请接听，并输入语音验证码登录。</string >
+    <string name = "st_login_sms_code_try" >不方便接电话？试试</string >
+    <string name = "st_login_voice_code_toast" >
+        <![CDATA[
+        您的手机 <font color=\'#20C585\'>%s</font> 将会受到我们的语音电话，请接听，并输入语音验证码登录。
+        ]]>
+    </string >
+    <string name = "st_login_voice_code_send_hint">请先点击发送语音验证码</string>
+    <string name = "st_login_sms_code_send_hint">请先点击发送短信验证码</string>
     <string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
     <string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
     <string name = "st_login_phone_send_code" >发送验证码</string >
@@ -240,6 +253,8 @@
     <string name = "st_login_no_ouwan_a" >没有偶玩账号? 用</string >
     <string name = "st_login_no_ouwan_b" >手机账号登录</string >
     <string name = "st_login_forget_pwd" >忘记密码</string >
+    <string name = "st_login_phone_btn_next">下一步</string>
+    <string name = "st_login_phone_btn_auto">自动登录中(%d)</string>
     <string name = "st_login_btn_text" >登 录</string >
 
 

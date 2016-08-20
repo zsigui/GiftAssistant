@@ -54,12 +54,12 @@ import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import net.ouwan.umipay.android.view.MaxRowListView;
 import net.youmi.android.libs.common.util.Util_System_Permission;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,9 +85,10 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     private TextView tvCodeHint;
     private LinearLayout llPhone;
     private LinearLayout llCode;
-    private LinearLayout llVoiceCode;
     private ImageView ivMore;
+    private LinearLayout llVoiceCode;
     private TextView tvVoiceCode;
+    private TextView tvVoiceHint;
 
     private PopupWindow mAccountPopup;
     private AccountAdapter mAccountAdapter;
@@ -98,6 +99,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     // 倒计时剩余时间，每次发送后刷新
     private final static int RESEND_DURATION = 60;
     private int sSendCodeRemainTime = 0;
+    // 当前是否正处于短信验证码界面
+    private boolean mInVoice = false;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable setTimeRunnable = new Runnable() {
@@ -107,6 +110,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                 btnSendCode.setEnabled(true);
                 btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_green));
                 btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
+                tickState = STATE_NONE;
             } else {
                 sSendCodeRemainTime--;
                 btnSendCode.setText(
@@ -140,6 +144,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         llPhone = getViewById(R.id.ll_input);
         tvVoiceCode = getViewById(R.id.tv_voice_code);
         llVoiceCode = getViewById(R.id.ll_voice_code);
+        tvVoiceHint = getViewById(R.id.tv_voice_hint);
     }
 
     @Override
@@ -168,11 +173,13 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         etPhone.addTextChangedListener(this);
         etCode.addTextChangedListener(this);
         btnLogin.setEnabled(false);
-        btnSendCode.setEnabled(false);
+        btnSendCode.setEnabled(true);
+        btnSendCode.setTextColor(ViewUtil.getColor(getContext(), R.color.co_btn_green));
         initHint();
         showPhoneView(true);
-        btnLogin.setText("下一步");
+        btnLogin.setText(getContext().getString(R.string.st_login_phone_btn_next));
         registerSmsObserver();
+        changeCodeTypeUI(mInVoice);
     }
 
     private void initHint() {
@@ -224,12 +231,10 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                 if (mIsInFirstStep) {
                     mIsInFirstStep = false;
                     showPhoneView(false);
-                    handleGetCode(false);
-                    tvCodeHint.setText(Html.fromHtml(
-                            String.format(Locale.CHINA,
-                                    "已向您的手机 <font color='#20C585'>%s</font> 发送了一条验证短信",
-                                    etPhone.getText().toString().trim())));
-                    btnLogin.setText("登录");
+                    if (sSendCodeRemainTime == 0) {
+                        handleGetCode(mInVoice);
+                    }
+                    btnLogin.setText(getContext().getString(R.string.st_login_btn_text));
                     btnLogin.setEnabled(false);
                 } else {
                     handleLogin();
@@ -241,21 +246,11 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                     mGetCodeLastClickTime = getCodeCurTime;
                     return;
                 }
-                handleGetCode(false);
+                handleGetCode(mInVoice);
                 break;
             case R.id.tv_voice_code:
-                getCodeCurTime = System.currentTimeMillis();
-                if (getCodeCurTime - mGetCodeLastClickTime < Global.CLICK_TIME_INTERVAL) {
-                    mGetCodeLastClickTime = getCodeCurTime;
-                    return;
-                }
-                if (sSendCodeRemainTime > 0) {
-                    ToastUtil.showShort(ConstString.TOAST_SEND_CODE_FAILED);
-                    return;
-                }
-                ToastUtil.showShort(getContext().getString(R.string.st_login_voice_phone_code_toast));
-                etCode.setHint(getContext().getString(R.string.st_login_voice_code_hint));
-                handleGetCode(true);
+                mInVoice = !mInVoice;
+                changeCodeTypeUI(mInVoice);
                 break;
             case R.id.iv_more:
                 etClearFocus.requestFocus();
@@ -279,8 +274,6 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             case R.id.tv_user_clear:
                 clearText(etCode);
                 clearText(etPhone);
-                btnSendCode.setEnabled(false);
-                btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
                 break;
             case R.id.tv_code_clear:
                 clearText(etCode);
@@ -315,10 +308,15 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
      */
     private Call<JsonRespBase<UserModel>> mCallGetCode;
 
+    public final int STATE_NONE = 0;
+    public final int STATE_SMS = 1;
+    public final int STATE_VOICE = 2;
+    int tickState = STATE_NONE;
+
     /**
      * 处理获取验证码事件
      */
-    private void handleGetCode(boolean isVoice) {
+    private void handleGetCode(final boolean isVoice) {
         final ReqLogin login = new ReqLogin();
         if (!login.setPhoneUser(etPhone.getText().toString())) {
             ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
@@ -328,20 +326,17 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
         btnSendCode.setEnabled(false);
         btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
         mHandler.removeCallbacks(setTimeRunnable);
-        sSendCodeRemainTime = RESEND_DURATION;
-        mHandler.postDelayed(setTimeRunnable, 1000);
-        login.isVoice = isVoice;
+        login.sendType = isVoice ? "voice" : "sms";
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
                 if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
                     hideLoading();
                     ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
-                    sSendCodeRemainTime = 0;
                     mLastSendTime = System.currentTimeMillis();
+                    resetRemain();
                     return;
                 }
-
 
                 if (mCallGetCode != null) {
                     mCallGetCode.cancel();
@@ -360,7 +355,15 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 PermissionUtil.judgeSmsPermission(getActivity(), PhoneLoginNewFragment.this);
-                                ToastUtil.showShort(ConstString.TOAST_PHONE_CODE_SEND);
+                                if (isVoice) {
+                                    ToastUtil.showShort(ConstString.TOAST_VOICE_CODE_SEND);
+                                } else {
+                                    ToastUtil.showShort(ConstString.TOAST_SMS_CODE_SEND);
+                                }
+                                sSendCodeRemainTime = RESEND_DURATION;
+                                tickState = isVoice ? STATE_VOICE : STATE_SMS;
+                                bindCodeHint(isVoice);
+                                mHandler.postDelayed(setTimeRunnable, 1000);
                                 return;
                             }
                         }
@@ -409,7 +412,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             return;
         }
         final ReqLogin login = new ReqLogin();
-        if (!login.setPhoneUser(etPhone.getText().toString(), etCode.getText().toString())) {
+        if (!login.setPhoneUser(etPhone.getText().toString().trim(), etCode.getText().toString().trim())) {
             ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
             return;
         }
@@ -573,15 +576,35 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             etCode.setText("");
             showPhoneView(true);
             etPhone.requestFocus();
-            btnLogin.setText("下一步");
+            btnLogin.setText(getString(R.string.st_login_phone_btn_next));
             btnLogin.setEnabled(true);
             mIsInFirstStep = true;
-            btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_green));
-            btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
-            mHandler.removeCallbacks(setTimeRunnable);
             return true;
         }
         return false;
+    }
+
+
+    private void changeCodeTypeUI(boolean isVoice) {
+        etCode.setHint(getString(isVoice ? R.string.st_login_voice_code_hint : R.string.st_login_phone_code_hint));
+        tvVoiceHint.setText(getString(isVoice ?
+                R.string.st_login_sms_code_try : R.string.st_login_voice_phone_code_try));
+        tvVoiceCode.setText(getString(isVoice ? R.string.st_login_sms_code : R.string.st_login_voice_code));
+        bindCodeHint(isVoice);
+    }
+
+    private void bindCodeHint(boolean isVoice) {
+        if (tickState == STATE_NONE
+                || (tickState == STATE_SMS && isVoice)
+                || (tickState == STATE_VOICE && !isVoice)) {
+            tvCodeHint.setText(getString(isVoice ? R.string.st_login_voice_code_send_hint
+                    : R.string.st_login_sms_code_send_hint));
+        } else {
+            tvCodeHint.setText(Html.fromHtml(
+                    String.format(getString(mInVoice ? R.string.st_login_voice_code_toast
+                                    : R.string.st_login_sms_code_toast),
+                            etPhone.getText().toString().trim())));
+        }
     }
 
     @Override
@@ -651,11 +674,12 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     Runnable autoLoginRunnable = new Runnable() {
         @Override
         public void run() {
-            if (btnLogin != null) {
-                btnLogin.setText(String.format(Locale.CHINA, "自动登录中(%d)", mLoginCountdown));
+            if (btnLogin != null && !mIsInFirstStep && !mInVoice) {
+                // 保证处于短信验证码区时才自动读取
+                btnLogin.setText(String.format(getString(R.string.st_login_phone_btn_auto), mLoginCountdown));
                 if (--mLoginCountdown < 0) {
                     handleLogin();
-                    btnLogin.setText("登录");
+                    btnLogin.setText(getString(R.string.st_login_btn_text));
                 } else {
                     ThreadUtil.runOnUiThread(autoLoginRunnable, 1000);
                 }

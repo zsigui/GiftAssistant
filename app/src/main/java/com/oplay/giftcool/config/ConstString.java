@@ -52,8 +52,10 @@ public class ConstString {
     public static final int CODE_OUWAN_ERROR = 111;
     public static final String TOAST_OUWAN_ERROR = "呜呜，账号密码格式化错误了！请重新输入哦～";
     // 手机短信验证码发送提醒
-    public static final int CODE_PHONE_CODE_SEND = 112;
-    public static final String TOAST_PHONE_CODE_SEND = "短信已经发送，请注意接收";
+    public static final int CODE_SMS_CODE_SEND = 112;
+    public static final String TOAST_SMS_CODE_SEND = "短信已经发送，请注意接收";
+    // 语音验证码发送提醒
+    public static final String TOAST_VOICE_CODE_SEND = "您将接收到我们的语音电话，请注意接听";
     // 点击退出应用的提示
     public static final String TOAST_EXIT_APP = "再点我就离你而去了~~~~(>_<)~~~~";
     // 用户登录态失效
