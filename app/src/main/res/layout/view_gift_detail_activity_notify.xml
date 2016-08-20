@@ -13,8 +13,8 @@
             android:paddingRight = "@dimen/di_list_item_gap_big"
             android:drawablePadding = "@dimen/di_line_space_extra_big"
             android:layout_width = "match_parent"
+            android:clickable = "true"
             android:gravity = "left|center_vertical"
             android:drawableLeft = "@drawable/ic_hint_activity"
-            android:drawableRight = "@drawable/ic_arrow_right"
-            android:text = "【送S级礼包】刀塔西游英雄投票" />
+            android:drawableRight = "@drawable/ic_arrow_right" />
 </merge >

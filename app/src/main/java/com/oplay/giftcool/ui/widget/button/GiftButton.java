@@ -90,6 +90,17 @@ public class GiftButton extends TextView {
                 setRedBg();
                 setEnabled(true);
                 break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_FINISHED:
+                setText(R.string.st_gift_finished);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN:
+                setText(R.string.st_gift_activity_join);
+                setRedBg();
+                setEnabled(true);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_WAIT:
+                setText(R.string.st_gift_activity_wait);
+                break;
             case GiftTypeUtil.BUTTON_TYPE_SEIZE:
             default:
                 setText(R.string.st_gift_seize);

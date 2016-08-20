@@ -124,4 +124,9 @@ public class IndexGiftNew implements Serializable {
      */
     @SerializedName("button_state")
     public int buttonState;
+
+    // 是否为活动礼包
+    public boolean isActivity;
+
+    public int activityId;
 }

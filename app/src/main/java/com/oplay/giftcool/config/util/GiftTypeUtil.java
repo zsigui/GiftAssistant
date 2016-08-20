@@ -105,6 +105,9 @@ public class GiftTypeUtil {
     public static final int BUTTON_TYPE_SEIZED = 10;
     public static final int BUTTON_TYPE_RESERVE_TAKE = 11;
     public static final int BUTTON_TYPE_RESERVED = 12;
+    public static final int BUTTON_TYPE_ACTIVITY_WAIT = 13;
+    public static final int BUTTON_TYPE_ACTIVITY_JOIN = 14;
+    public static final int BUTTON_TYPE_ACTIVITY_FINISHED = 16;
     // 显示样式
     public static final int UI_TYPE_COUNT = 19;
     public static final int UI_TYPE_DEFAULT = 0;
