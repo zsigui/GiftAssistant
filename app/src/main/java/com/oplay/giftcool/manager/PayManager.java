@@ -93,24 +93,26 @@ public class PayManager {
                 StatisticsManager.ID.STR_GIFT_SEIZE_NO_PAY,
                 gift, 0);
         mLastClickTime = nowClickTime;
-        switch (GiftTypeUtil.getItemViewType(gift)) {
-            case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-            case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-            case GiftTypeUtil.TYPE_CHARGE_UN_RESERVE:
+        switch (gift.buttonState) {
+            case GiftTypeUtil.BUTTON_TYPE_SEARCH:
                 handleScorePay(context, gift, button, false);
-                return WebViewInterface.RET_SUCCESS;
-            case GiftTypeUtil.TYPE_CHARGE_RESERVE_EMPTY:
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN:
+                IntentUtil.jumpPostDetail(context, gift.activityId);
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
                 chargeReservedFailed(context, gift);
-                return WebViewInterface.RET_SUCCESS;
-            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-            case GiftTypeUtil.TYPE_LIMIT_FREE_SEIZE:
-            case GiftTypeUtil.TYPE_CHARGE_SEIZE:
-            case GiftTypeUtil.TYPE_CHARGE_TAKE:
-            default:
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
+            case GiftTypeUtil.BUTTON_TYPE_SEIZE:
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
                 chargeGift(context, gift, button, fragment);
-                return WebViewInterface.RET_SUCCESS;
+                break;
+            default:
+                ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)",
+                        ConstString.TOAST_BTN_STATE_ERROR, gift.buttonState));
         }
+        return WebViewInterface.RET_SUCCESS;
     }
 
     /**
@@ -170,7 +172,7 @@ public class PayManager {
             }
         });
         consumeDialog.setConsume(gift.bean, gift.score, gift.priceType);
-        consumeDialog.show(((BaseAppCompatActivity) context).getSupportFragmentManager(),
+        consumeDialog.show(context.getSupportFragmentManager(),
                 GiftConsumeDialog.class.getSimpleName());
     }
 

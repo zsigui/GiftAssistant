@@ -151,6 +151,7 @@ public class ConstString {
     // 密码修改成功提示
     public static final String TOAST_MODIFY_PWD_SUCCESS = "密码修改成功，请使用新密码重新登录~";
 
+    public static final String TOAST_BTN_STATE_ERROR = "哎呦，按钮状态出错了";
 
     /*------------- 定义Toast显示内容 ----------------*/
 }
