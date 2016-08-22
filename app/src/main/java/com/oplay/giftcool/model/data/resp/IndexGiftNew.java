@@ -68,7 +68,7 @@ public class IndexGiftNew implements Serializable {
     @SerializedName("use_end_time")
     public String useEndTime;
     // 特别说明
-	@SerializedName("description")
+    @SerializedName("description")
     public String remark;
     // 礼包兑换方式
     @SerializedName("usage")
@@ -125,8 +125,21 @@ public class IndexGiftNew implements Serializable {
     @SerializedName("button_state")
     public int buttonState;
 
-    // 是否为活动礼包
-    public boolean isActivity;
+    /**
+     * 性质 0 普通 1 活动
+     */
+    @SerializedName("nature")
+    public int nature;
 
+    /**
+     * 跳转的活动ID
+     */
+    @SerializedName("jump_id")
     public int activityId;
+
+    /**
+     * 活动消息内容
+     */
+    @SerializedName("activity_title")
+    public String activityTitle;
 }

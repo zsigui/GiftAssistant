@@ -26,7 +26,8 @@
             android:textColor = "@color/co_common_app_second_bg_orange"
             android:layout_width = "match_parent"
             android:textIsSelectable = "true"
-            android:layout_centerVertical = "false" />
+            android:layout_centerVertical = "false"
+            android:text = "恭喜你获得XXX活动奖励" />
 
 
     <TextView
@@ -38,11 +39,24 @@
             android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
             android:textIsSelectable = "true"
             android:gravity = "left"
+            android:text = "偶玩豆x10，金币x1000，爱奇艺活动账号x1"
             android:textColor = "@color/co_common_text_main" />
 
     <TextView
             android:id = "@+id/tv_time"
             android:layout_below = "@+id/tv_content"
-            android:layout_marginTop = "@dimen/di_list_item_gap_small"
-            style = "@style/DefaultTextView.Text" />
+            android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+            style = "@style/DefaultTextView.Text"
+            android:text = "今天 10:00" />
+
+    <TextView
+            android:id = "@+id/btn_send"
+            style = "@style/DefaultTextView.NormalBtn"
+            android:layout_alignParentRight = "true"
+            android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+            android:background = "@drawable/selector_btn_red"
+            android:layout_below = "@+id/tv_content"
+            android:textColor = "@color/color_btn_red_border"
+            android:text = "领取" />
+
 </RelativeLayout >

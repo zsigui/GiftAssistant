@@ -25,7 +25,7 @@
 
     <dimen name = "di_web_progress_height" >4dp</dimen >
 
-    <dimen name = "di_item_money_min_width" >85dp</dimen >
+    <dimen name = "di_item_money_min_width" >120dp</dimen >
 
     <dimen name = "di_default_soft_input_height" >277dp</dimen >
 

@@ -90,7 +90,7 @@
     <!-- 礼包详情 -->
     <string name = "st_gift_detail_activity_wait">
         <![CDATA[
-        开始时间：<font color=\'#ffaa17\'>%s</font>
+        活动开始时间：<font color=\'#ffaa17\'>%s</font>
         ]]>
     </string>
     <string name = "st_gift_tag_limit" >珍贵限量</string >

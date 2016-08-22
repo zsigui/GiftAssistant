@@ -12,7 +12,7 @@ public class ConstString {
 
     public static final String TEXT_SEIZE = "开抢时间：<font color='#ffaa17'>%s</font>";
     public static final String TEXT_SEARCH = "开淘时间：<font color='#ffaa17'>%s</font>";
-    public static final String TEXT_SEARCHED = "已淘号：<font color='#ffaa17'>%d</font>次";
+    public static final String TEXT_SEARCHED = "已淘号：<font color='#ffaa17'>%s</font>次";
     public static final String TEXT_GIFT_CODE = "礼包码: <font color='#ffaa17'>%s</font>";
     public static final String TEXT_GIFT_TOTAL = "共 <font color='#ffaa17'>%s</font> 款礼包";
     public static final String TEXT_GIFT_FREE_SEIZE = "%s免费抢";

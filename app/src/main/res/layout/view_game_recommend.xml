@@ -33,6 +33,7 @@
                 android:id = "@+id/tv_size"
                 style = "@style/DefaultTextView.Text"
                 android:paddingLeft = "5dp"
+                android:layout_toLeftOf = "@+id/tv_download"
                 android:layout_toRightOf = "@+id/tv_name" />
 
         <TextView

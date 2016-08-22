@@ -365,10 +365,11 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 tvRemark = getViewById(vsGift, R.id.tv_remark);
                 tvRemark.setText(TextUtils.isEmpty(o.remark) ?
                         getContext().getResources().getString(R.string.st_gift_hint_content) : o.remark);
-                if (o.isActivity && tvBroadcast == null) {
+                if (o.nature == GiftTypeUtil.NATURE_ACTIVITY && tvBroadcast == null) {
                     tvBroadcast = getViewById(((ViewStub) getViewById(R.id.vs_broadcast)).inflate(),
                             R.id.tv_activity_hint);
                     tvBroadcast.setOnClickListener(this);
+                    tvBroadcast.setText(o.activityTitle);
                 }
             }
             tvQQ.setOnClickListener(this);
@@ -441,7 +442,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
         if (getActivity() instanceof GiftDetailActivity) {
             GiftDetailActivity pActivity = (GiftDetailActivity) getActivity();
-            if (giftData.isActivity) {
+            if (giftData.nature == GiftTypeUtil.NATURE_ACTIVITY) {
                 pActivity.showLimitTag(true, R.string.st_gift_tag_activity);
             } else {
                 switch (giftData.giftType) {
