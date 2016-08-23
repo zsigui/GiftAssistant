@@ -170,6 +170,7 @@
     <dimen name = "di_dialog_content_item_drawable_gap" >4dp</dimen >
 
     <dimen name = "di_dialog_welcome_content_width" >220dp</dimen >
+    <dimen name = "di_dialog_default_width" >260dp</dimen >
 
     <dimen name = "di_toast_bg_radius" >6dp</dimen >
     <dimen name = "di_toast_bg_width" >280dp</dimen >

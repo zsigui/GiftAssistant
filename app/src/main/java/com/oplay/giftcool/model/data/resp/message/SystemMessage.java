@@ -51,4 +51,16 @@ public class SystemMessage implements Serializable {
     @SerializedName("plan_id")
     public int giftId;
 
+    /**
+     * 消息类型：0 普通 1 领奖
+     */
+    @SerializedName("type")
+    public int type;
+
+    /**
+     * 按钮状态，当type=1时的状态： 0 未领取 1 已领取 2 已过期
+     */
+    @SerializedName("confirm_status")
+    public int confirmStatus;
+
 }

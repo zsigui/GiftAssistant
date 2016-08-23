@@ -2,6 +2,7 @@ package com.oplay.giftcool.manager;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.oplay.giftcool.AssistantApp;
@@ -106,11 +107,8 @@ public class PayManager {
             case GiftTypeUtil.BUTTON_TYPE_RESERVE:
             case GiftTypeUtil.BUTTON_TYPE_SEIZE:
             case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
-                chargeGift(context, gift, button, fragment);
-                break;
             default:
-                ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)",
-                        ConstString.TOAST_BTN_STATE_ERROR, gift.buttonState));
+                chargeGift(context, gift, button, fragment);
         }
         return WebViewInterface.RET_SUCCESS;
     }
@@ -428,9 +426,7 @@ public class PayManager {
             dialog.setTitle(context.getResources().getString(R.string
                     .st_dialog_search_success));
         }
-        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "mFragment = " + fragment
-                + ", mType = " + GiftTypeUtil.getItemViewType(gift));
-        dialog.setCouponCharge(GiftTypeUtil.getItemViewType(gift), fragment);
+        dialog.setCouponCharge(gift, fragment);
         // 统计
         staticsPay(context, StatisticsManager.ID.GIFT_GOLD_SEIZE,
                 StatisticsManager.ID.STR_GIFT_SEIZE_CLICK,
@@ -551,6 +547,44 @@ public class PayManager {
         if (context != null && context instanceof BaseAppCompatActivity) {
             ((BaseAppCompatActivity) context).hideLoadingDialog();
         }
+    }
+
+    public void handleTakeGift(final int id, final FragmentManager fm) {
+        if (!AccountManager.getInstance().isLogin()) {
+            IntentUtil.jumpLogin(AssistantApp.getInstance());
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(fm);
+        ReqPayCode payCode = new ReqPayCode();
+        payCode.id = id;
+        payCode.type = GiftTypeUtil.PAY_TYPE_SCORE;
+        Global.getNetEngine().payGiftCode(new JsonReqBase<ReqPayCode>(payCode))
+                .enqueue(new Callback<JsonRespBase<PayCode>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<PayCode>> call, Response<JsonRespBase<PayCode>>
+                            response) {
+                        DialogManager.getInstance().hideLoadingDialog();
+                        if (call.isCanceled()) {
+                            return;
+                        }
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
+                            dialog.show(fm, GetCodeDialog.class.getSimpleName());
+                            return;
+                        }
+                        ToastUtil.blurErrorResp(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<PayCode>> call, Throwable t) {
+                        DialogManager.getInstance().hideLoadingDialog();
+                        if (call.isCanceled()) {
+                            return;
+                        }
+                        ToastUtil.blurThrow(t);
+                    }
+                });
     }
 
 

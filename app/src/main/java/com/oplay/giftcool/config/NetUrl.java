@@ -14,7 +14,7 @@ public class NetUrl {
     /**
      * 正式地址
      */
-    public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
+    public static final String URL_BASE = "https://lbapi.ouwan.com/api/";
 
     public static String REAL_URL = TEST_URL_BASE;
 

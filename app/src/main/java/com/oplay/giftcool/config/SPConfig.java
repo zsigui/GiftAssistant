@@ -19,6 +19,7 @@ public class SPConfig {
     public static final String SALT_USER_INFO = "ss";
     public static final String KEY_USER_INFO = "kljizckuiqew";
     public static final String KEY_LOGIN_LATEST_OPEN_TIME = "login_latest_open_time";
+    public static final String KEY_USER_AWARD = "kajdkfja";
     // 上次开启应用时间
 //	public static final String KEY_DOWNLOAD_LAST_TIME = "download_last_time";
 //	public static final String KEY_SHARE_LIMIT_LAST_TIME = "share_limit_last_time";

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:layout_height = "match_parent"
+              android:layout_width = "match_parent"
+              android:orientation = "vertical" >
+
+    <RelativeLayout
+            android:orientation = "vertical"
+            android:layout_width = "240dp"
+            android:layout_height = "wrap_content"
+            android:background = "@drawable/shape_rect_round_white" >
+
+        <ImageView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:scaleType = "fitXY"
+                android:src = "@drawable/ic_award_bg" />
+
+        <ImageView
+                android:id = "@+id/iv_icon"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "25dp"
+                android:layout_centerHorizontal = "true"
+                android:scaleType = "centerInside"
+                android:src = "@drawable/ic_award_gift" />
+
+        <TextView
+                android:id = "@+id/tv_hint"
+                style = "@style/DefaultTextView.Header"
+                android:textColor = "@color/co_btn_green"
+                android:layout_centerHorizontal = "true"
+                android:layout_below = "@id/iv_icon"
+                android:textSize = "@dimen/di_text_size_big"
+                android:layout_marginTop = "12dp"
+                android:text = "恭喜您！获得" />
+
+        <TextView
+                android:id = "@+id/tv_content"
+                style = "@style/DefaultTextView.Text"
+                android:textColor = "@color/co_common_text_main"
+                android:layout_centerHorizontal = "true"
+                android:layout_below = "@id/tv_hint"
+                android:layout_marginTop = "16dp"
+                android:layout_marginLeft = "30dp"
+                android:layout_marginRight = "30dp"
+                android:text = "金币x100" />
+
+        <TextView
+                android:id = "@+id/btn_confirm"
+                style = "@style/DefaultTextView.NormalBtn"
+                android:background = "@drawable/selector_btn_bigger_green"
+                android:textColor = "@color/color_btn_white_border"
+                android:layout_height = "@dimen/di_btn_bigger_height"
+                android:layout_width = "match_parent"
+                android:layout_marginLeft = "20dp"
+                android:layout_marginRight = "20dp"
+                android:layout_marginTop = "30dp"
+                android:layout_marginBottom = "16dp"
+                android:layout_centerHorizontal = "true"
+                android:layout_below = "@+id/tv_content"
+                android:text = "领取" />
+    </RelativeLayout >
+</LinearLayout >

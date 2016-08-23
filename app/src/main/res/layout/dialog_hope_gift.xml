@@ -5,7 +5,7 @@
               android:orientation = "vertical" >
 
     <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-                  android:layout_width = "260dp"
+                  android:layout_width = "@dimen/di_dialog_default_width"
                   android:layout_height = "wrap_content"
                   android:background = "@color/co_white"
                   android:orientation = "vertical" >
@@ -33,7 +33,7 @@
                 android:gravity = "left|center_vertical"
                 android:textColor = "@color/co_common_text_main"
                 android:hint = "@string/st_dialog_hope_gift_name_hint"
-                android:background = "@drawable/shape_rect_dialog_hope_light_grey" />
+                android:background = "@drawable/shape_rect_round_light_grey" />
 
         <EditText
                 android:id = "@+id/tv_note"
@@ -48,7 +48,7 @@
                 android:gravity = "left|top"
                 android:textColor = "@color/co_common_text_main"
                 android:hint = "@string/st_dialog_hope_gift_note_hint"
-                android:background = "@drawable/shape_rect_dialog_hope_light_grey" />
+                android:background = "@drawable/shape_rect_round_light_grey" />
 
         <LinearLayout
                 android:layout_width = "match_parent"

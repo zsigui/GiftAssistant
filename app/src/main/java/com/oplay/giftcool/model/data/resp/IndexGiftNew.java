@@ -128,7 +128,7 @@ public class IndexGiftNew implements Serializable {
     /**
      * 性质 0 普通 1 活动
      */
-    @SerializedName("nature")
+    @SerializedName("special")
     public int nature;
 
     /**

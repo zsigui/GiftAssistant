@@ -214,7 +214,7 @@ public class DialogManager {
     /**
      * 显示加载弹窗，指定显示内容
      */
-    public void showLoadingDialog(final FragmentManager fm, final String loadText) {
+    public synchronized void showLoadingDialog(final FragmentManager fm, final String loadText) {
         if (fm == null) {
             return;
         }
@@ -240,7 +240,7 @@ public class DialogManager {
     /**
      * 隐藏加载弹窗，避免出错
      */
-    public void hideLoadingDialog() {
+    public synchronized void hideLoadingDialog() {
         if (mLoadingDialog != null) {
             mLoadingDialog.dismissAllowingStateLoss();
             mLoadingDialog = null;
