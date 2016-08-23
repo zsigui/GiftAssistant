@@ -120,6 +120,6 @@ public class KeyConfig {
     public static final int TYPE_SYS_MSG_AWARD = 1;
     // 领取状态
     public static final int STATE_SYS_MSG_TAKE = 0;
-    public static final int STATE_SYS_MSG_TAKEED = 1;
+    public static final int STATE_SYS_MSG_TAKED = 1;
     public static final int STATE_SYS_MSG_OUTDATE = 2;
 }

@@ -188,7 +188,8 @@
             android:id = "@+id/vs_broadcast"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:layout="@layout/view_gift_detail_activity_notify"/>
+            android:layout_marginTop = "0.1dp"
+            android:layout = "@layout/view_gift_detail_activity_notify" />
 
     <ScrollView
             xmlns:android = "http://schemas.android.com/apk/res/android"

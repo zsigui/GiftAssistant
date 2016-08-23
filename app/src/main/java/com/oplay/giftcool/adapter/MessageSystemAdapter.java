@@ -13,6 +13,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.message.SystemMessage;
 import com.oplay.giftcool.util.DateUtil;
@@ -62,7 +63,7 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
                     holder.btnSend.setText("领取");
                     holder.btnSend.setEnabled(true);
                     break;
-                case KeyConfig.STATE_SYS_MSG_TAKEED:
+                case KeyConfig.STATE_SYS_MSG_TAKED:
                     holder.btnSend.setText("已领取");
                     holder.btnSend.setEnabled(false);
                     break;
@@ -88,16 +89,23 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
         }
         final Integer pos = (Integer) v.getTag(TAG_POSITION);
         final SystemMessage item = getItem(pos);
-        item.isRead = 1;
-        notifyItemChanged(pos);
         if (item.giftId != 0) {
             switch (v.getId()) {
                 case R.id.rl_container:
+                    item.isRead = 1;
+                    notifyItemChanged(pos);
                     IntentUtil.jumpGiftDetail(mContext, item.giftId);
                     break;
                 case R.id.btn_send:
                     if (fm != null) {
-                        PayManager.getInstance().handleTakeGift(item.giftId, fm);
+                        PayManager.getInstance().handleTakeGift(item.id, fm, new CallbackListener<Void>() {
+                            @Override
+                            public void doCallBack(Void data) {
+                                item.confirmStatus = KeyConfig.STATE_SYS_MSG_TAKED;
+                                item.isRead = 1;
+                                notifyItemChanged(pos);
+                            }
+                        });
                     }
                     break;
             }

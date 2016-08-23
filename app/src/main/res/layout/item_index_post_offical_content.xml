@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:id = "@+id/rl_item"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_s_normal"
+                android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
+                android:background = "@drawable/shape_rect_post_content_border" >
+
+    <com.makeramen.roundedimageview.RoundedImageView
+            android:id = "@+id/iv_banner"
+            android:layout_width = "match_parent"
+            android:layout_height = "120dp"
+            android:layout_marginLeft = "@dimen/di_divider_height"
+            android:layout_marginRight = "@dimen/di_divider_height"
+            android:layout_marginTop = "@dimen/di_divider_height"
+            android:scaleType = "centerCrop"
+            app:riv_border_width = "0dp"
+            app:riv_corner_radius_top_left = "@dimen/di_index_post_item_radius"
+            app:riv_corner_radius_top_right = "@dimen/di_index_post_item_radius"
+            app:riv_corner_radius_bottom_left = "0dp"
+            app:riv_corner_radius_bottom_right = "0dp"
+            app:riv_oval = "false" />
+
+    <TextView
+            android:id = "@+id/tv_post_state"
+            style = "@style/DefaultTextView.PostState"
+            android:background = "@drawable/ic_post_enabled"
+            android:text = "@string/st_index_post_text_working" />
+
+
+    <!--<com.makeramen.roundedimageview.RoundedImageView
+            android:id = "@+id/iv_footer"
+            android:layout_width = "match_parent"
+            android:layout_height = "@dimen/di_module_bigger_height"
+            android:layout_below = "@+id/iv_icon"
+            app:riv_border_width = "0dp"
+            android:src = "@color/co_white"
+            app:riv_corner_radius_top_left = "0dp"
+            app:riv_corner_radius_top_right = "0dp"
+            app:riv_corner_radius_bottom_left = "@dimen/di_index_post_item_radius"
+            app:riv_corner_radius_bottom_right = "@dimen/di_index_post_item_radius"
+            app:riv_oval = "false" />-->
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_below = "@+id/iv_banner"
+            android:gravity = "center_vertical"
+            android:paddingLeft = "@dimen/di_list_item_gap_small"
+            android:paddingRight = "@dimen/di_list_item_gap_small"
+            android:paddingTop = "@dimen/di_list_item_gap_s_normal"
+            android:paddingBottom = "@dimen/di_list_item_gap_s_normal"
+            android:background = "@drawable/shape_rect_post_bottom_radius"
+            android:orientation = "horizontal" >
+
+        <TextView
+                android:id = "@+id/tv_title"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_weight = "1"
+                android:textSize = "@dimen/di_text_size_normal"
+                android:textColor = "@color/co_common_text_main"
+                android:paddingRight = "@dimen/di_list_item_gap_small"
+                android:text = "【皇室战争】盖楼回复拿首充卷" />
+
+        <ImageView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:contentDescription = "@null"
+                android:src = "@drawable/ic_more" />
+    </LinearLayout >
+</RelativeLayout >

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android = "http://schemas.android.com/apk/res/android" >
 
-    <TextView
-            android:id = "@+id/tv_activity_hint"
-            style = "@style/DefaultTextView.Text"
-            android:singleLine = "true"
-            android:background = "@color/co_common_hint_bg"
-            android:textSize = "@dimen/di_text_size_normal"
-            android:paddingTop = "@dimen/di_list_item_gap_small"
-            android:paddingBottom = "@dimen/di_list_item_gap_small"
-            android:paddingLeft = "@dimen/di_list_item_gap_big"
-            android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:drawablePadding = "@dimen/di_line_space_extra_big"
-            android:layout_width = "match_parent"
-            android:clickable = "true"
-            android:gravity = "left|center_vertical"
-            android:drawableLeft = "@drawable/ic_hint_activity"
-            android:drawableRight = "@drawable/ic_arrow_right" />
-</merge >
+<TextView
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/tv_activity_hint"
+        style = "@style/DefaultTextView.Text"
+        android:singleLine = "true"
+        android:background = "@color/co_common_hint_bg"
+        android:textSize = "@dimen/di_text_size_normal"
+        android:paddingTop = "@dimen/di_list_item_gap_small"
+        android:paddingBottom = "@dimen/di_list_item_gap_small"
+        android:paddingLeft = "@dimen/di_list_item_gap_big"
+        android:paddingRight = "@dimen/di_list_item_gap_big"
+        android:drawablePadding = "@dimen/di_line_space_extra_big"
+        android:layout_width = "match_parent"
+        android:clickable = "true"
+        android:gravity = "left|center_vertical"
+        android:layout_marginTop = "0.1dp"
+        android:drawableLeft = "@drawable/ic_hint_activity"
+        android:drawableRight = "@drawable/ic_arrow_right" />

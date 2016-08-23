@@ -80,21 +80,21 @@ public class SettingFragment extends BaseFragment {
     protected void processLogic(Bundle savedInstanceState) {
         //setTitleBar(R.string.st_setting_title);
         if (mApp.isShouldPushMsg())
-            mBtnPush.toggleOn();
+            mBtnPush.setToggleOn();
         else
-            mBtnPush.toggleOff();
+            mBtnPush.setToggleOff();
         if (mApp.isShouldAutoCheckUpdate())
-            mBtnAutoCheckUpdate.toggleOn();
+            mBtnAutoCheckUpdate.setToggleOn();
         else
-            mBtnAutoCheckUpdate.toggleOff();
+            mBtnAutoCheckUpdate.setToggleOff();
         if (mApp.isShouldAutoDeleteApk())
-            mBtnAutoDelete.toggleOn();
+            mBtnAutoDelete.setToggleOn();
         else
-            mBtnAutoDelete.toggleOff();
+            mBtnAutoDelete.setToggleOff();
         if (mApp.isShouldAutoFocus()) {
-            mBtnAutoFocus.toggleOn();
+            mBtnAutoFocus.setToggleOn();
         } else {
-            mBtnAutoFocus.toggleOff();
+            mBtnAutoFocus.setToggleOff();
         }
         mVer.setText(AppConfig.SDK_VER_NAME);
         updateData();
@@ -264,7 +264,8 @@ public class SettingFragment extends BaseFragment {
                 }
                 if (getContext() != null) {
                     final String size = DataClearUtil.getFormatSize(cacheSize);
-//                    ToastUtil.showShort(String.format(getContext().getString(R.string.st_setting_auto_clear_cache_hint), size));
+//                    ToastUtil.showShort(String.format(getContext().getString(R.string
+// .st_setting_auto_clear_cache_hint), size));
                     ToastUtil.showShort(String.format(Locale.CHINA, ConstString.TOAST_CLEAR_CACHE_SUCCESS, size));
                 }
             }

@@ -624,4 +624,11 @@ public class IntentUtil {
         Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(in);
     }
+
+    /**
+     * 跳转开测开服列表界面
+     */
+    public static void jumpServerInfo(Context context) {
+
+    }
 }

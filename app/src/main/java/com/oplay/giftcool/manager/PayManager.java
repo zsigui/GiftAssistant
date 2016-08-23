@@ -12,6 +12,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.WebViewInterface;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPayCode;
@@ -373,6 +374,7 @@ public class PayManager {
                     dialog.setContent(response.body().getMsg());
                     dialog.show(context.getSupportFragmentManager(), "search failed");
                 }
+                return;
             }
         }
         ToastUtil.blurErrorResp(response);
@@ -549,7 +551,7 @@ public class PayManager {
         }
     }
 
-    public void handleTakeGift(final int id, final FragmentManager fm) {
+    public void handleTakeGift(final int id, final FragmentManager fm, final CallbackListener<Void> listener) {
         if (!AccountManager.getInstance().isLogin()) {
             IntentUtil.jumpLogin(AssistantApp.getInstance());
             return;
@@ -571,6 +573,9 @@ public class PayManager {
                                 && response.body() != null && response.body().isSuccess()) {
                             GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
                             dialog.show(fm, GetCodeDialog.class.getSimpleName());
+                            if (listener != null) {
+                                listener.doCallBack(null);
+                            }
                             return;
                         }
                         ToastUtil.blurErrorResp(response);

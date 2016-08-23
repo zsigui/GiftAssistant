@@ -568,9 +568,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mJumpGamePos = -1;
         } else if (mJumpPostPos != -1) {
             setCurSelected(INDEX_POST);
-            if (mPostFragment != null) {
-                mPostFragment.setPagePosition(mJumpPostPos);
-            }
             mJumpPostPos = -1;
         } else if (mJumpFreePos != -1) {
             setCurSelected(INDEX_FREE);
@@ -708,9 +705,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             ThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int i = 0;
-                    for (AwardNotify notify : data) {
-                        showAwardDialog(getSupportFragmentManager(), notify, String.valueOf(i++));
+                    for (int i = data.size() - 1; i >= 0; i--) {
+                        AwardNotify notify = data.get(i);
+                        showAwardDialog(getSupportFragmentManager(), notify, String.valueOf(i));
                     }
                 }
             });

@@ -86,7 +86,7 @@ public class AwardDialog extends BaseFragment_Dialog implements BaseFragment_Dia
     public void onConfirm() {
         if (mData.type == KeyConfig.TYPE_AWARD_GIFT && this.fm != null) {
             // 执行领取号码操作
-            PayManager.getInstance().handleTakeGift(mData.id, this.fm);
+            PayManager.getInstance().handleTakeGift(mData.id, this.fm, null);
         }
         dismiss();
     }
