@@ -98,7 +98,7 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
                     break;
                 case R.id.btn_send:
                     if (fm != null) {
-                        PayManager.getInstance().handleTakeGift(item.id, fm, new CallbackListener<Void>() {
+                        PayManager.getInstance().handleTakeGift(item.giftId, fm, new CallbackListener<Void>() {
                             @Override
                             public void doCallBack(Void data) {
                                 item.confirmStatus = KeyConfig.STATE_SYS_MSG_TAKED;

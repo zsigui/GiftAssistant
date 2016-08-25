@@ -332,10 +332,9 @@ public class UiStyleUtil {
             bindTitleTag(holder.tvName, 0, 0);
         }
         if (holder.btnSend != null) {
+            holder.btnSend.setState(o.buttonState);
             if (o.buttonState == GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN) {
                 holder.btnSend.setText(mContext.getString(R.string.st_gift_activity_join_s));
-            } else {
-                holder.btnSend.setState(o.buttonState);
             }
         }
         holder.tvSeizeHint.setVisibility(View.VISIBLE);

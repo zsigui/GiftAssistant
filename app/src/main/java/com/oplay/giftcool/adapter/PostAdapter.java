@@ -33,7 +33,7 @@ import com.oplay.giftcool.util.ViewUtil;
  * <p/>
  * Created by zsigui on 16-4-5.
  */
-public class PostNewAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnClickListener, FooterListener {
+public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnClickListener, FooterListener {
 
     private final int TAG_TYPE = 0x3333FF11;
     private final int TYPE_SIGN_IN = 0;
@@ -49,7 +49,7 @@ public class PostNewAdapter extends BaseRVAdapter<IndexPostNew> implements View.
     private LayoutInflater mInflater;
     private boolean mHasFooter = false;
 
-    public PostNewAdapter(Context context) {
+    public PostAdapter(Context context) {
         super(context);
         TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
         TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
@@ -90,6 +90,9 @@ public class PostNewAdapter extends BaseRVAdapter<IndexPostNew> implements View.
         }
     }
 
+    final int LEFT_SHADOW = 8;
+    final int BOTTOM_SHADOW = 21;
+
     private void setHeaderLayout(int position, HeaderHolder holder) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -97,11 +100,14 @@ public class PostNewAdapter extends BaseRVAdapter<IndexPostNew> implements View.
         float rate = (float) options.outHeight / options.outWidth;
 //        final int width = options.outWidth;
         final int SCREEN_WIDTH = mContext.getResources().getDisplayMetrics().widthPixels;
-        final int GAP_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_very_small);
-        final int LEFT_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_s_normal);
-        final int TOP_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_s_normal);
-        final int width = (SCREEN_WIDTH - LEFT_SIZE - LEFT_SIZE + GAP_SIZE) / 2;
-        final int height = (int) ((width - GAP_SIZE) * rate) + GAP_SIZE;
+        final int RIGHT_PADDING = mContext.getResources().getDimensionPixelSize(R.dimen.di_line_space_extra_normal);
+        final int TOP_PADDING = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_very_small);
+        final int LEFT_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
+        final int TOP_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_line_space_extra_big);
+        // (pic_width + 2 * left_shadow + right_padding) * 2 + (left_size - left_shadow) + (left_size - left_shadow - right_padding) = screen_width
+        // height = pic_width * rate + bottom_shadow + top_padding
+        final int width = (SCREEN_WIDTH - LEFT_SIZE * 2 + 2 * LEFT_SHADOW + RIGHT_PADDING) / 2;
+        final int height = (int) ((width - 2 * LEFT_SHADOW - RIGHT_PADDING) * rate) + BOTTOM_SHADOW + TOP_PADDING;
         LinearLayout.LayoutParams lpOne = (LinearLayout.LayoutParams) holder.flTapOne.getLayoutParams();
         LinearLayout.LayoutParams lpTwo = (LinearLayout.LayoutParams) holder.flTapTwo.getLayoutParams();
         lpOne.width = width;
@@ -109,11 +115,15 @@ public class PostNewAdapter extends BaseRVAdapter<IndexPostNew> implements View.
         lpTwo.width = width;
         lpTwo.height = height;
         lpOne.leftMargin = LEFT_SIZE;
-        lpTwo.rightMargin = LEFT_SIZE - GAP_SIZE;
+        lpTwo.rightMargin = LEFT_SIZE - RIGHT_PADDING;
+        lpOne.rightMargin = lpTwo.leftMargin = 0;
         if (position == 0) {
-            lpOne.topMargin = lpTwo.topMargin = TOP_SIZE - GAP_SIZE;
+            lpOne.topMargin = lpTwo.topMargin = TOP_SIZE + BOTTOM_SHADOW - TOP_PADDING;
+            lpOne.bottomMargin = lpTwo.bottomMargin = 0;
         } else {
-            lpOne.bottomMargin = lpTwo.bottomMargin = TOP_SIZE;
+            lpOne.topMargin = lpTwo.topMargin = -TOP_SIZE;
+            // 此处正常是 BOTTOM_SHADOW，然后由于图片阴影对比没下面明显，显示看起来会宽点，所以减少一点
+            lpOne.bottomMargin = lpTwo.bottomMargin = BOTTOM_SHADOW - LEFT_SHADOW;
         }
         holder.flTapOne.setLayoutParams(lpOne);
         holder.flTapTwo.setLayoutParams(lpTwo);

@@ -356,4 +356,14 @@
     <string name = "st_hint_dialog_login_title" >请先登录</string >
     <string name = "st_hint_dialog_login_content" >是否跳转登录界面？</string >
     <string name = "st_hint_dialog_login_tag" >login</string >
+
+    <!-- 新游开服开测表 -->
+    <string name = "st_server_info_title">开服/开测表</string>
+    <string name = "st_server_info_open_server_title">开服表</string>
+    <string name = "st_server_info_open_test_title">开测表</string>
+    <string name = "st_server_info_content">
+        <![CDATA[
+        <font color=\'#ffaa17\'>%1$s</font>/%2$s
+        ]]>
+    </string>
 </resources >

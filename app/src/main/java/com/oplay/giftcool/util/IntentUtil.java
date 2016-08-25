@@ -27,6 +27,7 @@ import com.oplay.giftcool.ui.activity.MessageActivity;
 import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
+import com.oplay.giftcool.ui.activity.ServerInfoActivity;
 import com.oplay.giftcool.ui.activity.SettingActivity;
 import com.oplay.giftcool.ui.activity.WebActivity;
 
@@ -629,6 +630,11 @@ public class IntentUtil {
      * 跳转开测开服列表界面
      */
     public static void jumpServerInfo(Context context) {
-
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(context, ServerInfoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
     }
 }

@@ -3,7 +3,7 @@
        android:shape = "rectangle" >
 
 	<corners
-			android:radius = "2dp" />
+			android:radius = "@dimen/di_index_post_item_big_pic_radius" />
 	<stroke
 			android:width = "@dimen/di_divider_height"
 			android:color = "@color/co_divider_bg" />

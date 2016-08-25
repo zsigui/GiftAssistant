@@ -20,7 +20,7 @@ import com.oplay.giftcool.util.ViewUtil;
 /**
  * Created by zsigui on 15-12-31.
  */
-public class IndexGameHotWithTitleAdapter extends BaseRVAdapter_Download implements View.OnClickListener {
+public class IndexGameHotWithTitleAdapter extends BaseRVAdapter_Download<IndexGameNew> implements View.OnClickListener {
 
 	public IndexGameHotWithTitleAdapter(Context context) {
 		super(context);

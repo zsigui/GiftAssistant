@@ -106,7 +106,7 @@ public class AssistantApp extends Application {
     private boolean mIsAllowDownload = false;
     // 是否记住密码
     private boolean mIsRememberPwd = true;
-    // 活动页面的游戏资讯是否只查看已关注的
+    // 开服开测表设置是否只查看已关注的
     private boolean mIsReadAttention = false;
 
     // 以下暂无

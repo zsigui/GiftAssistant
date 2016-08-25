@@ -152,6 +152,8 @@ public class NetUrl {
      */
     public static final String GAME_GET_TYPE = "label_apps";
 
+    /* 活动接口 */
+
     /**
      * 获取首页活动数据
      */
@@ -171,6 +173,11 @@ public class NetUrl {
      * 进行活动回复
      */
     public static final String POST_REPLY = "activity/add_comment";
+
+    /**
+     * 获取新游开服开测表数据
+     */
+    public static final String POST_GET_SERVER_INFO = "test";
 
 
 	/* 用户接口 */

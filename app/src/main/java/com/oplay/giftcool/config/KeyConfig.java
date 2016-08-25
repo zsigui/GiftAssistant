@@ -78,6 +78,7 @@ public class KeyConfig {
 
     /* post list activity */
     public static final int TYPE_ID_POST_OFFICIAL = 401;
+    public static final int TYPE_ID_POST_SERVER_INFO = 402;
 
     /* post detail activity */
     public static final int TYPE_ID_POST_REPLY_DETAIL = 403;
@@ -122,4 +123,8 @@ public class KeyConfig {
     public static final int STATE_SYS_MSG_TAKE = 0;
     public static final int STATE_SYS_MSG_TAKED = 1;
     public static final int STATE_SYS_MSG_OUTDATE = 2;
+
+    /* server info fragment */
+    public static final int TYPE_ID_OPEN_SERVER = 0;
+    public static final int TYPE_ID_OPEN_TEST = 1;
 }

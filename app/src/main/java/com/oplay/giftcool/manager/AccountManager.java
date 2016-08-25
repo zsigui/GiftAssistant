@@ -482,6 +482,7 @@ public class AccountManager implements OnFinishListener {
         if (!isLogin()) {
             return;
         }
+        PushMessageManager.getInstance().unsetAlias(mContext, String.valueOf(getUserInfo().uid));
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {

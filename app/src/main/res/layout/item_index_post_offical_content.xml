@@ -5,30 +5,29 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:id = "@+id/rl_item"
-                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
-                android:layout_marginLeft = "@dimen/di_list_item_gap_s_normal"
-                android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
-                android:background = "@drawable/shape_rect_post_content_border" >
+                android:layout_marginBottom = "@dimen/di_line_space_extra_big"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                android:layout_marginRight = "@dimen/di_list_item_gap_small"
+                android:background = "@drawable/layer_radius_4_shadow" >
 
     <com.makeramen.roundedimageview.RoundedImageView
             android:id = "@+id/iv_banner"
             android:layout_width = "match_parent"
             android:layout_height = "120dp"
-            android:layout_marginLeft = "@dimen/di_divider_height"
-            android:layout_marginRight = "@dimen/di_divider_height"
-            android:layout_marginTop = "@dimen/di_divider_height"
             android:scaleType = "centerCrop"
             app:riv_border_width = "0dp"
-            app:riv_corner_radius_top_left = "@dimen/di_index_post_item_radius"
-            app:riv_corner_radius_top_right = "@dimen/di_index_post_item_radius"
+            app:riv_corner_radius_top_left = "@dimen/di_index_post_item_big_pic_radius"
+            app:riv_corner_radius_top_right = "@dimen/di_index_post_item_big_pic_radius"
             app:riv_corner_radius_bottom_left = "0dp"
             app:riv_corner_radius_bottom_right = "0dp"
+            android:src="@drawable/ic_banner_default"
             app:riv_oval = "false" />
 
     <TextView
             android:id = "@+id/tv_post_state"
             style = "@style/DefaultTextView.PostState"
             android:background = "@drawable/ic_post_enabled"
+            android:layout_marginTop = "-1dp"
             android:text = "@string/st_index_post_text_working" />
 
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style = "@style/IndexListItemLayout"
+                android:id = "@+id/rl_recommend"
+                xmlns:android = "http://schemas.android.com/apk/res/android"
+                xmlns:app = "http://schemas.android.com/apk/res-auto"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:background = "@drawable/selector_white_module"
+                android:paddingRight = "@dimen/di_index_list_item_margin_right" >
+
+    <RelativeLayout
+            android:id = "@+id/rl_icon"
+            android:layout_width = "@dimen/di_icon_diameter_smaller"
+            android:layout_height = "@dimen/di_icon_diameter_smaller"
+            android:background = "@color/co_transparent" >
+
+        <com.makeramen.roundedimageview.RoundedImageView
+                android:id = "@+id/iv_icon"
+                style = "@style/DefaultImageView.Icon"
+                app:riv_border_color = "@color/co_stroke_bg"
+                app:riv_border_width = "@dimen/di_icon_border_size"
+                app:riv_corner_radius = "@dimen/di_icon_radius"
+                android:layout_margin = "@dimen/di_game_icon_margin"
+                android:src = "@drawable/ic_avatar_default"
+                app:riv_oval = "false" />
+
+        <!--<ImageView-->
+        <!--android:id = "@+id/iv_gift_hint"-->
+        <!--android:layout_alignParentRight = "true"-->
+        <!--android:contentDescription = "@null"-->
+        <!--android:layout_width = "wrap_content"-->
+        <!--android:layout_height = "wrap_content"-->
+        <!---->
+        <!--android:src = "@drawable/ic_gift" />-->
+    </RelativeLayout >
+
+    <TextView
+            android:id = "@+id/tv_name"
+            style = "@style/DefaultTextView.Header"
+            android:layout_width = "match_parent"
+            android:layout_alignTop = "@+id/rl_icon"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_marginTop = "@dimen/di_list_item_gap_s_normal"
+            android:layout_centerVertical = "false"
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:layout_toLeftOf = "@+id/tv_time"
+            android:text = "暴打魏蜀吴" />
+
+    <TextView
+            android:id = "@+id/tv_time"
+            style = "@style/DefaultTextView.Header"
+            android:layout_width = "wrap_content"
+            android:layout_alignTop = "@+id/tv_name"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_centerVertical = "false"
+            android:layout_toLeftOf = "@+id/tv_download"
+            android:text = "今天 11:00" />
+
+    <TextView
+            android:id = "@+id/tv_content"
+            style = "@style/DefaultTextView.Text"
+            android:layout_centerVertical = "false"
+            android:gravity = "left"
+            android:layout_marginLeft = "@dimen/di_index_item_margin_left"
+            android:layout_marginTop = "@dimen/di_list_item_gap_small"
+            android:textSize = "@dimen/di_text_size_normal"
+            android:layout_toRightOf = "@+id/rl_icon"
+            android:layout_toLeftOf = "@+id/tv_download"
+            android:text = "新服不动明王(S333)/上海游族有限公司"
+            android:layout_below = "@+id/tv_name" />
+
+
+    <TextView
+            android:id = "@+id/tv_download"
+            style = "@style/ButtonText"
+            android:text = "下载"
+            android:layout_centerVertical = "true"
+            android:layout_alignParentRight = "true"
+            android:layout_marginLeft = "@dimen/di_list_item_gap_big"
+            android:background = "@drawable/selector_btn_green"
+            android:textColor = "@color/color_btn_green_border" />
+</RelativeLayout >

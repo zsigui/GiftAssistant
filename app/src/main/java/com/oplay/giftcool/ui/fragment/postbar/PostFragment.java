@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.PostNewAdapter;
+import com.oplay.giftcool.adapter.PostAdapter;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
@@ -40,7 +40,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
 
     // 页面控件
     private RecyclerView rvData;
-    private PostNewAdapter mAdapter;
+    private PostAdapter mAdapter;
 
     public static PostFragment newInstance() {
         return new PostFragment();
@@ -61,7 +61,7 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
     protected void processLogic(Bundle savedInstanceState) {
         LinearLayoutManager llp = new SnapLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvData.setLayoutManager(llp);
-        mAdapter = new PostNewAdapter(getContext());
+        mAdapter = new PostAdapter(getContext());
         rvData.setAdapter(mAdapter);
 
     }

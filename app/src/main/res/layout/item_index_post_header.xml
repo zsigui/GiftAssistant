@@ -3,10 +3,11 @@
               android:orientation = "horizontal"
               android:layout_width = "match_parent"
               android:layout_height = "wrap_content"
+              android:background = "@color/co_common_content_bg"
               android:layout_gravity = "center_horizontal" >
 
     <FrameLayout
-            android:id="@+id/fl_tap_one"
+            android:id = "@+id/fl_tap_one"
             android:layout_width = "0dp"
             android:layout_weight = "1"
             android:layout_height = "wrap_content" >
@@ -16,8 +17,9 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
                 android:clickable = "true"
+                android:background = "@drawable/layer_radius_4_shadow"
                 android:scaleType = "fitXY"
-                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginRight = "@dimen/di_line_space_extra_normal"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:src = "@drawable/pic_sign_in_everyday"
                 android:contentDescription = "@null" />
@@ -32,7 +34,7 @@
     </FrameLayout >
 
     <FrameLayout
-            android:id="@+id/fl_tap_two"
+            android:id = "@+id/fl_tap_two"
             android:layout_width = "0dp"
             android:layout_weight = "1"
             android:layout_height = "wrap_content" >
@@ -42,11 +44,13 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
                 android:src = "@drawable/pic_lottery_everyday"
-                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginRight = "@dimen/di_line_space_extra_normal"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:scaleType = "fitXY"
                 android:clickable = "true"
-                android:contentDescription = "@null" />
+                android:background = "@drawable/layer_radius_4_shadow"
+                android:contentDescription = "@null"
+                android:layout_gravity = "left|bottom" />
 
         <ImageView
                 android:id = "@+id/iv_tap_two_hint"
@@ -55,5 +59,6 @@
                 android:layout_gravity = "right"
                 android:visibility = "gone"
                 android:src = "@drawable/ic_index_gift_like_new" />
+
     </FrameLayout >
 </LinearLayout >

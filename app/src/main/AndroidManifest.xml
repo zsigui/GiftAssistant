@@ -242,6 +242,18 @@
         </activity >
 
         <activity
+                android:name = ".ui.activity.ServerInfoActivity"
+                android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:screenOrientation = "sensorPortrait"
+                android:launchMode = "singleTop"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.SERVERINFO" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
+
+        <activity
                 android:name = ".ui.activity.MessageActivity"
                 android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
                 android:screenOrientation = "sensorPortrait"

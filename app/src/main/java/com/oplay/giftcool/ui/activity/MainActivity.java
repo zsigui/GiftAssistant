@@ -132,6 +132,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         updateToolBar();
         handleIntent(getIntent());
         updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
+        if (mDrawerLayout == null) {
+            createDrawer();
+        }
     }
 
     private void findFragmentByTag(Bundle savedInstanceState) {
@@ -601,9 +604,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 IntentUtil.jumpSearch(MainActivity.this);
                 break;
             case R.id.iv_profile:
-                if (mDrawerLayout == null) {
-                    createDrawer();
-                }
                 if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                     mDrawerLayout.closeDrawer(GravityCompat.START);
                 } else {
@@ -692,7 +692,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     private void judgeAwardShow() {
         if (!AccountManager.getInstance().isLogin()) {
             // 未登录，无须领取
-            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "登录后才需要判断领取状态");
+            AppDebugConfig.v(AppDebugConfig.TAG_DEBUG_INFO, "登录后才需要判断领取状态");
             return;
         }
         String s = SPUtil.getString(this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_AWARD, null);

@@ -3,7 +3,7 @@
 	<corners
 			android:topLeftRadius = "0dp"
 			android:topRightRadius = "0dp"
-			android:bottomRightRadius = "@dimen/di_index_post_item_radius"
-			android:bottomLeftRadius = "@dimen/di_index_post_item_radius" />
+			android:bottomRightRadius = "@dimen/di_index_post_item_big_pic_radius"
+			android:bottomLeftRadius = "@dimen/di_index_post_item_big_pic_radius" />
 	<solid android:color = "@color/co_white" />
 </shape >

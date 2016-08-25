@@ -142,9 +142,13 @@
     <dimen name = "di_index_post_item_official_width" >120dp</dimen >
     <dimen name = "di_index_post_item_official_height" >70dp</dimen >
     <dimen name = "di_index_post_item_radius" >8dp</dimen >
+    <dimen name = "di_index_post_item_big_pic_radius" >6dp</dimen >
     <dimen name = "di_index_post_toolbar_margin" >68dp</dimen >
     <dimen name = "di_index_post_toggle_width" >30dp</dimen >
     <dimen name = "di_index_post_toggle_height" >16dp</dimen >
+
+    <dimen name = "di_item_shadow_padding" >2px</dimen >
+    <dimen name = "di_item_shadow_padding_top" >3px</dimen >
 
     <!-- 礼包详情 页面 -->
     <dimen name = "di_detail_header_margin_left" >14dp</dimen >
