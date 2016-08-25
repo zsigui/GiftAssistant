@@ -15,7 +15,6 @@ import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.DownloadStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
-import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 
@@ -25,22 +24,22 @@ import java.util.HashMap;
 /**
  * Created by zsigui on 16-1-16.
  */
-public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew> implements View.OnClickListener,
+public abstract class BaseRVAdapter_Download<T extends GameDownloadInfo> extends BaseRVAdapter<T> implements View.OnClickListener,
         OnDownloadStatusChangeListener {
 
-    protected HashMap<String, IndexGameNew> mPackageNameMap;
+    protected HashMap<String, T> mPackageNameMap;
     protected HashMap<String, TextView> mUrlDownloadBtn;
 
     protected BaseRVAdapter_Download(Context context) {
         this(context, null);
     }
 
-    protected BaseRVAdapter_Download(Context context, ArrayList<IndexGameNew> data) {
+    protected BaseRVAdapter_Download(Context context, ArrayList<T> data) {
         this(context, data, null);
     }
 
-    protected BaseRVAdapter_Download(Context context, ArrayList<IndexGameNew> data, OnItemClickListener<IndexGameNew>
-            listener) {
+    protected BaseRVAdapter_Download(Context context, ArrayList<T> data,
+                                     OnItemClickListener<T> listener) {
         super(context, data, listener);
         mPackageNameMap = new HashMap<>();
         mUrlDownloadBtn = new HashMap<>();
@@ -105,7 +104,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
                 AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, "position = " + position + ", data = " + mData);
                 return;
             }
-            final IndexGameNew appInfo = mData.get(position);
+            final T appInfo = mData.get(position);
 //			if (mListener != null) {
 //				mListener.onItemClick(appInfo, v, position);
 //			}
@@ -126,7 +125,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
     }
 
     public void updateViewByPackageName(String packageName, DownloadStatus status) {
-        final IndexGameNew app = mPackageNameMap.get(packageName);
+        final T app = mPackageNameMap.get(packageName);
         if (app != null) {
             app.downloadStatus = status;
             app.initAppInfoStatus(mContext);
@@ -135,7 +134,7 @@ public abstract class BaseRVAdapter_Download extends BaseRVAdapter<IndexGameNew>
     }
 
     public void updateViewByPackageName(String packageName) {
-        final IndexGameNew app = mPackageNameMap.get(packageName);
+        final T app = mPackageNameMap.get(packageName);
         if (app != null) {
             app.initAppInfoStatus(mContext);
             notifyDataSetChanged();

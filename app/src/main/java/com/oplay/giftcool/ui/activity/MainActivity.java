@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,21 +21,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
+import com.oplay.giftcool.model.data.resp.message.AwardNotify;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.DrawerFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.AwardDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
@@ -45,8 +50,12 @@ import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.PermissionUtil;
+import com.oplay.giftcool.util.SPUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+
+import java.util.ArrayList;
 
 /**
  * @author micle
@@ -123,6 +132,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         updateToolBar();
         handleIntent(getIntent());
         updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
+        if (mDrawerLayout == null) {
+            createDrawer();
+        }
     }
 
     private void findFragmentByTag(Bundle savedInstanceState) {
@@ -244,6 +256,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     protected void onResume() {
         super.onResume();
         mActive = true;
+        if (!mNotifyAward) {
+            judgeAwardShow();
+        }
     }
 
     @Override
@@ -556,9 +571,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mJumpGamePos = -1;
         } else if (mJumpPostPos != -1) {
             setCurSelected(INDEX_POST);
-            if (mPostFragment != null) {
-                mPostFragment.setPagePosition(mJumpPostPos);
-            }
             mJumpPostPos = -1;
         } else if (mJumpFreePos != -1) {
             setCurSelected(INDEX_FREE);
@@ -592,9 +604,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 IntentUtil.jumpSearch(MainActivity.this);
                 break;
             case R.id.iv_profile:
-                if (mDrawerLayout == null) {
-                    createDrawer();
-                }
                 if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                     mDrawerLayout.closeDrawer(GravityCompat.START);
                 } else {
@@ -674,8 +683,43 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
                 int msgCount = AccountManager.getInstance().getUnreadMessageCount();
                 updateHintState(KeyConfig.TYPE_ID_MSG, msgCount);
+                mNotifyAward = false;
+                judgeAwardShow();
                 break;
         }
+    }
+
+    private void judgeAwardShow() {
+        if (!AccountManager.getInstance().isLogin()) {
+            // 未登录，无须领取
+            AppDebugConfig.v(AppDebugConfig.TAG_DEBUG_INFO, "登录后才需要判断领取状态");
+            return;
+        }
+        String s = SPUtil.getString(this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_AWARD, null);
+        if (!TextUtils.isEmpty(s)) {
+            final ArrayList<AwardNotify> data = AssistantApp.getInstance().getGson()
+                    .fromJson(s, new TypeToken<ArrayList<AwardNotify>>() {
+                    }.getType());
+            SPUtil.putString(this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_AWARD, "");
+            mNotifyAward = true;
+            ThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = data.size() - 1; i >= 0; i--) {
+                        AwardNotify notify = data.get(i);
+                        showAwardDialog(getSupportFragmentManager(), notify, String.valueOf(i));
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean mNotifyAward = false;
+
+    public void showAwardDialog(FragmentManager fm, AwardNotify data, String tag) {
+        AwardDialog dialog = AwardDialog.newInstance(data);
+        dialog.setFm(getSupportFragmentManager());
+        dialog.show(fm, tag);
     }
 
 

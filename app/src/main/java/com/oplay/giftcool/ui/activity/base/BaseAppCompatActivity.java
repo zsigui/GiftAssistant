@@ -356,7 +356,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     }
 
     protected void doBeforeFinish() {
-        AppDebugConfig.d(AppDebugConfig.TAG_ACTIVITY, "doBeforeFinish called");
+        AppDebugConfig.v(AppDebugConfig.TAG_ACTIVITY, "doBeforeFinish called");
         if (MainActivity.sGlobalHolder == null) {
             IntentUtil.jumpHome(this, true);
         }

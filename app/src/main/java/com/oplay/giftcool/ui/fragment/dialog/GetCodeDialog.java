@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
+import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.gift.GiftDetailFragment;
@@ -26,7 +26,7 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
     private PayCode mPayCode;
     private GameDownloadInfo mAppInfo;
     // 用于首充券回调指引判断
-    private int mType;
+    private IndexGiftNew mData;
     private GiftDetailFragment mFragment;
 
     public static GetCodeDialog newInstance(PayCode payCode) {
@@ -40,25 +40,28 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
         setContentView(R.layout.dialog_show_code_new);
         TextView tvContent = getViewById(R.id.tv_content);
         tvGiftCode = getViewById(R.id.tv_gift_code);
-        if ((mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
-                || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {
+        if (mData != null && mData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
+                && (mData.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
+                || mData.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE)) {
             tvContent.setText(Html.fromHtml("兑换码已保存至 <font color='#ffaa17'>我的首充券</font>"));
         } else {
             tvContent.setText(Html.fromHtml("礼包码已保存至 <font color='#ffaa17'>我的礼包</font>"));
         }
         TextView tvHint = getViewById(R.id.tv_hint);
-        switch (mType) {
-            case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-            case GiftTypeUtil.TYPE_NORMAL_SEARCHED:
-                tvHint.setText("已复制到粘贴板，淘号的礼包不一定可以用，祝你好运。");
-                break;
-            case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-            case GiftTypeUtil.TYPE_NORMAL_SEIZED:
-                tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换，否则会进入淘号。");
-                break;
-            default:
-                tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换。");
-                break;
+        if (mData != null) {
+            switch (mData.buttonState) {
+                case GiftTypeUtil.BUTTON_TYPE_SEARCH:
+                    tvHint.setText("已复制到粘贴板，淘号的礼包不一定可以用，祝你好运。");
+                    break;
+                case GiftTypeUtil.BUTTON_TYPE_SEIZE:
+                    tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换，否则会进入淘号。");
+                    break;
+                default:
+                    tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换。");
+                    break;
+            }
+        } else {
+            tvHint.setText("已复制到粘贴板，请尽快打开游戏兑换。");
         }
         setListener(this);
     }
@@ -70,8 +73,9 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
         mPayCode = payCode;
         mAppInfo = payCode.gameInfo;
         if (tvGiftCode != null) {
-            if ((mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
-                    || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {
+            if (mData != null && mData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
+                    && (mData.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
+                    || mData.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE)) {
                 tvGiftCode.setText(Html.fromHtml(
                         String.format("礼包码：<font color='#ffaa17'>%s</font>", mPayCode.giftCode)));
             } else {
@@ -125,17 +129,16 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
     /**
      * 设置首充券回调指引判断的必须属性
      */
-    public void setCouponCharge(int type, GiftDetailFragment fragment) {
-        mType = type;
+    public void setCouponCharge(IndexGiftNew o, GiftDetailFragment fragment) {
+        mData = o;
         mFragment = fragment;
     }
 
     private void showCouponGuide() {
-        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "mFragment = " + mFragment
-        + ", mType = ");
         if (mFragment != null
-                && (mType == GiftTypeUtil.TYPE_CHARGE_SEIZE
-                || mType == GiftTypeUtil.TYPE_CHARGE_TAKE)) {
+                && mData != null && mData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
+                && (mData.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
+                || mData.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE)) {
             mFragment.showGuidePage();
         }
     }

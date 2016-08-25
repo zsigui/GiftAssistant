@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+    <android.support.v7.widget.Toolbar
+            android:id = "@+id/toolbar"
+            xmlns:android = "http://schemas.android.com/apk/res/android"
+            xmlns:app = "http://schemas.android.com/apk/res-auto"
+            android:layout_width = "match_parent"
+            android:layout_height = "?actionBarSize"
+            android:gravity = "center_vertical"
+            app:contentInsetEnd = "0dp"
+            app:contentInsetStart = "0dp"
+            app:popupTheme = "@style/ThemeOverlay.AppCompat.Light"
+            app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:orientation = "horizontal" >
+
+            <ImageView
+                    android:id = "@+id/iv_bar_back"
+                    android:layout_width = "?actionBarSize"
+                    android:layout_height = "?actionBarSize"
+                    android:background = "?actionBarItemBackground"
+                    android:scaleType = "centerInside"
+                    android:src = "@drawable/ic_bar_back" />
+
+
+            <TextView
+                    android:id = "@+id/tv_bar_title"
+                    android:layout_width = "0dp"
+                    android:layout_weight = "1"
+                    android:layout_height = "match_parent"
+                    android:gravity = "center_vertical"
+                    android:singleLine = "true"
+                    android:textColor = "@android:color/white"
+                    android:text = "开服/开测表"
+                    android:textSize = "@dimen/di_tool_bar_title_size" />
+
+            <TextView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "match_parent"
+                    android:gravity = "center_vertical"
+                    android:singleLine = "true"
+                    android:textColor = "@android:color/white"
+                    android:textSize = "@dimen/di_text_size_small"
+                    android:text = "@string/st_index_post_read_attention" />
+
+            <com.oplay.giftcool.ui.widget.ToggleButton
+                    xmlns:app = "http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/tb_focus"
+                    android:layout_gravity = "center_vertical"
+                    android:layout_marginRight = "@dimen/di_list_item_gap_normal"
+                    android:layout_width = "26dp"
+                    android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                    app:tb_onColor = "@color/co_white"
+                    app:tb_offColor = "@color/co_btn_grey"
+                    app:tb_spotColor = "@color/co_btn_orange"
+                    app:tb_offBorderColor = "@color/co_btn_grey"
+                    app:tb_borderWidth = "0.3dp"
+                    android:layout_height = "14dp" />
+        </LinearLayout >
+    </android.support.v7.widget.Toolbar >
+
+    <FrameLayout
+            android:id = "@+id/fl_container"
+            android:background = "@color/co_common_content_bg"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent" />
+</LinearLayout >

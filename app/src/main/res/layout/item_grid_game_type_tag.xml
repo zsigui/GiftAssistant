@@ -8,9 +8,11 @@
               android:background = "@drawable/selector_white_module"
               android:paddingBottom = "9dp" >
 
-	<com.oplay.giftcool.ui.widget.button.TagButton
-			android:id = "@+id/tv_tag"
-			android:clickable = "false"
-			android:layout_width = "80dp"
-			style = "@style/DefaultTextView.NormalBtn" />
+    <com.oplay.giftcool.ui.widget.button.TagButton
+            android:id = "@+id/tv_tag"
+            style = "@style/DefaultTextView.NormalBtn"
+            android:clickable = "false"
+            android:layout_width = "80dp"
+            android:paddingLeft = "0dp"
+            android:paddingRight = "0dp"/>
 </LinearLayout >

@@ -78,6 +78,7 @@ public class KeyConfig {
 
     /* post list activity */
     public static final int TYPE_ID_POST_OFFICIAL = 401;
+    public static final int TYPE_ID_POST_SERVER_INFO = 402;
 
     /* post detail activity */
     public static final int TYPE_ID_POST_REPLY_DETAIL = 403;
@@ -109,4 +110,21 @@ public class KeyConfig {
     public static final int GIFT_TYPE_GIFT = 0;
     // 首充券类型
     public static final int GIFT_TYPE_COUPON = 1;
+
+    /* award dialog type */
+    public static final int TYPE_AWARD_GIFT = 0;
+    public static final int TYPE_AWARD_SCORE = 1;
+    public static final int TYPE_AWARD_BEAN = 2;
+    public static final int TYPE_AWARD_OTHER = 3;
+    /* 系统消息类型 */
+    public static final int TYPE_SYS_MSG_NORMAL = 0;
+    public static final int TYPE_SYS_MSG_AWARD = 1;
+    // 领取状态
+    public static final int STATE_SYS_MSG_TAKE = 0;
+    public static final int STATE_SYS_MSG_TAKED = 1;
+    public static final int STATE_SYS_MSG_OUTDATE = 2;
+
+    /* server info fragment */
+    public static final int TYPE_ID_OPEN_SERVER = 0;
+    public static final int TYPE_ID_OPEN_TEST = 1;
 }

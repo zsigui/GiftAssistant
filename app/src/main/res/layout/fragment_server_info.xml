@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+    <com.oplay.giftcool.ui.widget.layout.RefreshLayout
+            android:id = "@+id/srl_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "1" >
+
+        <android.support.v7.widget.RecyclerView
+                android:id = "@+id/rv_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent" />
+    </com.oplay.giftcool.ui.widget.layout.RefreshLayout >
+
+    <View style = "@style/HDividerView" />
+
+    <LinearLayout
+            android:id = "@+id/ll_anchors"
+            android:layout_width = "match_parent"
+            android:orientation = "horizontal"
+            android:background = "@color/co_tab_index_bg"
+            android:layout_height = "@dimen/di_tab_index_bg_height" >
+
+        <CheckedTextView
+                android:id = "@+id/tv_before"
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:gravity = "center"
+                android:textColor = "@color/color_tab_server_info_two"
+                android:text = "更早" />
+
+        <CheckedTextView
+                android:id = "@+id/tv_yesterday"
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:gravity = "center"
+                android:textColor = "@color/color_tab_server_info_one"
+                android:text = "昨天" />
+
+        <CheckedTextView
+                android:id = "@+id/tv_today"
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:gravity = "center"
+                android:textColor = "@color/color_tab_server_info_one"
+                android:text = "今天" />
+
+        <CheckedTextView
+                android:id = "@+id/tv_tomorrow"
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:gravity = "center"
+                android:textColor = "@color/color_tab_server_info_one"
+                android:text = "明天" />
+
+        <CheckedTextView
+                android:id = "@+id/tv_after"
+                android:layout_width = "0dp"
+                android:layout_height = "match_parent"
+                android:layout_weight = "1"
+                android:gravity = "center"
+                android:textColor = "@color/color_tab_server_info_two"
+                android:text = "以后" />
+    </LinearLayout >
+</LinearLayout >

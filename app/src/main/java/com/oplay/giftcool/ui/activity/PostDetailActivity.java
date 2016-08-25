@@ -152,6 +152,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_bar_back:
+                doBeforeFinish();
                 finish();
                 break;
             case R.id.btn_bar_right:

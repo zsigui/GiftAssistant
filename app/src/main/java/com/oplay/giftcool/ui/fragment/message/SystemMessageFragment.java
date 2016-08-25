@@ -58,6 +58,7 @@ public class SystemMessageFragment extends BaseFragment_Refresh<SystemMessage> {
     protected void processLogic(Bundle savedInstanceState) {
 
         mAdapter = new MessageSystemAdapter(getContext());
+        mAdapter.setFm(getChildFragmentManager());
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvContent.setLayoutManager(llm);
         rvContent.setAdapter(mAdapter);
@@ -179,7 +180,6 @@ public class SystemMessageFragment extends BaseFragment_Refresh<SystemMessage> {
             return;
         }
         Global.updateMsgCentralData(getContext(), KeyConfig.CODE_MSG_SYSTEM, 0, data.get(0).title);
-//		AccountManager.getInstance().obtainUnreadPushMessageCount();
         mViewManager.showContent();
         mHasData = true;
         mData = data;

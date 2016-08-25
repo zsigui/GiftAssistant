@@ -3,17 +3,14 @@ package com.oplay.giftcool.adapter;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
@@ -22,13 +19,11 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.PostTypeUtil;
-import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
-import com.oplay.giftcool.ui.widget.ToggleButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
@@ -40,126 +35,42 @@ import com.oplay.giftcool.util.ViewUtil;
  */
 public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnClickListener, FooterListener {
 
-    private final float HEADER_RIGHT_WH_RATE = 0.62f;
-    /**
-     * 左右间隔的大小
-     */
-    private final int GAP_SIZE;
-    private final int GAP;
-    private final int SCREEN_WIDTH;
+    private final int TAG_TYPE = 0x3333FF11;
+    private final int TYPE_SIGN_IN = 0;
+    private final int TYPE_LOTTERY = 1;
+    private final int TYPE_SERVER_INFO = 2;
+    private final int TYPE_TASK = 3;
 
     // 重复使用的文字类型
     private final String TEXT_STATE_DOING;
     private final String TEXT_STATE_FINISHED;
     private final String TEXT_STATE_WAIT;
-    private final String TEXT_OFFICIAL;
-    private final String TEXT_NOTIFY;
-    private final String TEXT_READ_ATTENTION;
 
-    private ToggleButton tbReadAttention;
     private LayoutInflater mInflater;
-    private CallbackListener<Boolean> mCallbackListener;
     private boolean mHasFooter = false;
 
     public PostAdapter(Context context) {
         super(context);
-        GAP_SIZE = context.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_very_small);
-        GAP = context.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_normal);
-        SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;
         TEXT_STATE_DOING = context.getResources().getString(R.string.st_index_post_text_working);
         TEXT_STATE_FINISHED = context.getResources().getString(R.string.st_index_post_text_finished);
         TEXT_STATE_WAIT = context.getResources().getString(R.string.st_index_post_text_wait);
-        TEXT_OFFICIAL = context.getResources().getString(R.string.st_index_post_official);
-        TEXT_NOTIFY = context.getResources().getString(R.string.st_index_post_notify);
-        TEXT_READ_ATTENTION = context.getResources().getString(R.string.st_index_post_read_attention);
 
         mInflater = LayoutInflater.from(mContext);
     }
-
-    public void setCallbackListener(CallbackListener<Boolean> callbackListener) {
-        mCallbackListener = callbackListener;
-    }
-
-    protected int getItemFooterCount() {
-        return mHasFooter ? 1 : 0;
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case PostTypeUtil.TYPE_HEADER:
-                final HeaderHolder headerHolder = new HeaderHolder(
+                return new HeaderHolder(
                         mInflater.inflate(R.layout.item_index_post_header, parent, false));
-                initHeaderLayoutParams(headerHolder);
-                return headerHolder;
             case PostTypeUtil.TYPE_FOOTER:
                 return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.view_item_footer, parent,
                         false));
-            case PostTypeUtil.TYPE_TITLE_OFFICIAL:
-                final ItemTitleVH titleOneVH = new ItemTitleVH(
-                        mInflater.inflate(R.layout.view_index_item_title_1, parent, false));
-                titleOneVH.tvTitle.setText(TEXT_OFFICIAL);
-                return titleOneVH;
-            case PostTypeUtil.TYPE_TITLE_GAME:
-                final ItemTitleVH titleTwoVH = new ItemTitleVH(
-                        mInflater.inflate(R.layout.view_index_item_title_2, parent, false));
-                titleTwoVH.tvTitle.setText(TEXT_NOTIFY);
-                titleTwoVH.tvNote.setText(TEXT_READ_ATTENTION);
-                tbReadAttention = titleTwoVH.tbAttention;
-                return titleTwoVH;
             case PostTypeUtil.TYPE_CONTENT_OFFICIAL:
-                return new ContentOneHolder(LayoutInflater.from(mContext)
-                        .inflate(R.layout.item_index_post_content_one, parent, false));
-            case PostTypeUtil.TYPE_CONTENT_GAME:
-                return new ContentTwoHolder(LayoutInflater.from(mContext)
-                        .inflate(R.layout.item_index_post_content_two, parent, false));
+                return new ContentOfficialHolder(LayoutInflater.from(mContext)
+                        .inflate(R.layout.item_index_post_offical_content, parent, false));
         }
         return null;
-    }
-
-    /**
-     * 初始化标题头的配置，动态设置3个图片按钮位置和距离
-     */
-    private void initHeaderLayoutParams(HeaderHolder headerHolder) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pic_sign_in_everyday, options);
-        float rate = (float) options.outHeight / options.outWidth;
-//        final int width = options.outWidth;
-        final int width = (SCREEN_WIDTH - 4 * GAP) / 3;
-        final int height = (int) (width * rate);
-        // 设置内层ImageView的布局
-        FrameLayout.LayoutParams flSignIn = (FrameLayout.LayoutParams) headerHolder.ivSignIn.getLayoutParams();
-        flSignIn.width = width;
-        flSignIn.height = height;
-        headerHolder.ivSignIn.setLayoutParams(flSignIn);
-        FrameLayout.LayoutParams flLottery  = (FrameLayout.LayoutParams) headerHolder.ivLottery.getLayoutParams();
-        flLottery.width = width;
-        flLottery.height = height;
-        headerHolder.ivLottery.setLayoutParams(flSignIn);
-        FrameLayout.LayoutParams flTask = (FrameLayout.LayoutParams) headerHolder.ivTask.getLayoutParams();
-        flTask.width = width;
-        flTask.height = height;
-        headerHolder.ivTask.setLayoutParams(flSignIn);
-        // 设置外层FrameLayout的布局
-        LinearLayout.LayoutParams lpSignIn = (LinearLayout.LayoutParams) headerHolder.flSignIn.getLayoutParams();
-        lpSignIn.leftMargin = GAP;
-        lpSignIn.rightMargin = GAP - GAP_SIZE;
-        lpSignIn.width = width + GAP_SIZE;
-        lpSignIn.height = height + GAP_SIZE;
-        headerHolder.flSignIn.setLayoutParams(lpSignIn);
-        LinearLayout.LayoutParams lpLottery = (LinearLayout.LayoutParams) headerHolder.flLottery.getLayoutParams();
-        lpLottery.leftMargin = 0;
-        lpLottery.rightMargin = GAP - GAP_SIZE;
-        lpLottery.width = width + GAP_SIZE;
-        lpLottery.height = height + GAP_SIZE;
-        headerHolder.flLottery.setLayoutParams(lpLottery);
-        LinearLayout.LayoutParams lpTask = (LinearLayout.LayoutParams) headerHolder.flTask.getLayoutParams();
-        lpTask.leftMargin = 0;
-        lpTask.rightMargin = GAP - GAP_SIZE;
-        lpTask.width = width + GAP_SIZE;
-        lpTask.height = height + GAP_SIZE;
-        headerHolder.flTask.setLayoutParams(lpTask);
     }
 
     @Override
@@ -168,74 +79,94 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
         switch (getItemViewType(position)) {
             case PostTypeUtil.TYPE_HEADER:
                 HeaderHolder headerHolder = (HeaderHolder) holder;
-                headerHolder.ivSignIn.setOnClickListener(this);
-                headerHolder.ivLottery.setOnClickListener(this);
-                headerHolder.ivTask.setOnClickListener(this);
-                if (AccountManager.getInstance().isLogin()
-                        && (ScoreManager.getInstance().isSignInTaskFinished() || Global.sHasShowedSignInHint)) {
-                    headerHolder.ivSignInHint.setVisibility(View.GONE);
-                } else {
-                    headerHolder.ivSignInHint.setVisibility(View.VISIBLE);
-                }
-                if (AccountManager.getInstance().isLogin()
-                        && (ScoreManager.getInstance().isFreeLotteryEmpty() || Global.sHasShowedLotteryHint)) {
-                    headerHolder.ivLotteryHint.setVisibility(View.GONE);
-                } else {
-                    headerHolder.ivLotteryHint.setVisibility(View.VISIBLE);
-                }
+                setHeaderLayout(position, headerHolder);
+                bindHeaderInfo(position, headerHolder);
                 break;
             case PostTypeUtil.TYPE_FOOTER:
                 break;
-            case PostTypeUtil.TYPE_TITLE_OFFICIAL:
-                ItemTitleVH titleOneVH = (ItemTitleVH) holder;
-                titleOneVH.rlItem.setOnClickListener(this);
-                // 无处理
-                break;
-            case PostTypeUtil.TYPE_TITLE_GAME:
-                ItemTitleVH titleTwoVH = (ItemTitleVH) holder;
-                titleTwoVH.tbAttention.setOnClickListener(this);
-                if (AssistantApp.getInstance().isReadAttention()) {
-                    titleTwoVH.tbAttention.setToggleOn();
-                } else {
-                    titleTwoVH.tbAttention.setToggleOff();
-                }
-                break;
             case PostTypeUtil.TYPE_CONTENT_OFFICIAL:
-                setContentOneData((ContentOneHolder) holder, position, item);
-                break;
-            case PostTypeUtil.TYPE_CONTENT_GAME:
-            default:
-                setContentTwoData((ContentTwoHolder) holder, position, item);
+                setContentOneData((ContentOfficialHolder) holder, position, item);
                 break;
         }
     }
 
-    /**
-     * 设置类型二的内容
-     */
-    private void setContentTwoData(final ContentTwoHolder holder, final int position, final IndexPostNew item) {
-        if (item.showType == 1) {
-            ViewUtil.showImage(holder.ivIcon, item.banner);
+    final int LEFT_SHADOW = 8;
+    final int BOTTOM_SHADOW = 21;
+
+    private void setHeaderLayout(int position, HeaderHolder holder) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pic_sign_in_everyday, options);
+        float rate = (float) options.outHeight / options.outWidth;
+//        final int width = options.outWidth;
+        final int SCREEN_WIDTH = mContext.getResources().getDisplayMetrics().widthPixels;
+        final int RIGHT_PADDING = mContext.getResources().getDimensionPixelSize(R.dimen.di_line_space_extra_normal);
+        final int TOP_PADDING = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_very_small);
+        final int LEFT_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
+        final int TOP_SIZE = mContext.getResources().getDimensionPixelSize(R.dimen.di_line_space_extra_big);
+        // (pic_width + 2 * left_shadow + right_padding) * 2 + (left_size - left_shadow) + (left_size - left_shadow - right_padding) = screen_width
+        // height = pic_width * rate + bottom_shadow + top_padding
+        final int width = (SCREEN_WIDTH - LEFT_SIZE * 2 + 2 * LEFT_SHADOW + RIGHT_PADDING) / 2;
+        final int height = (int) ((width - 2 * LEFT_SHADOW - RIGHT_PADDING) * rate) + BOTTOM_SHADOW + TOP_PADDING;
+        LinearLayout.LayoutParams lpOne = (LinearLayout.LayoutParams) holder.flTapOne.getLayoutParams();
+        LinearLayout.LayoutParams lpTwo = (LinearLayout.LayoutParams) holder.flTapTwo.getLayoutParams();
+        lpOne.width = width;
+        lpOne.height = height;
+        lpTwo.width = width;
+        lpTwo.height = height;
+        lpOne.leftMargin = LEFT_SIZE;
+        lpTwo.rightMargin = LEFT_SIZE - RIGHT_PADDING;
+        lpOne.rightMargin = lpTwo.leftMargin = 0;
+        if (position == 0) {
+            lpOne.topMargin = lpTwo.topMargin = TOP_SIZE + BOTTOM_SHADOW - TOP_PADDING;
+            lpOne.bottomMargin = lpTwo.bottomMargin = 0;
         } else {
-            ViewUtil.showImage(holder.ivIcon, item.img);
+            lpOne.topMargin = lpTwo.topMargin = -TOP_SIZE;
+            // 此处正常是 BOTTOM_SHADOW，然后由于图片阴影对比没下面明显，显示看起来会宽点，所以减少一点
+            lpOne.bottomMargin = lpTwo.bottomMargin = BOTTOM_SHADOW - LEFT_SHADOW;
         }
-        holder.tvPubTime.setText(item.startTime);
-        holder.tvTitle.setText(item.title);
-        holder.tvContent.setText(item.content);
-        holder.itemView.setOnClickListener(this);
-        holder.itemView.setTag(TAG_POSITION, position);
+        holder.flTapOne.setLayoutParams(lpOne);
+        holder.flTapTwo.setLayoutParams(lpTwo);
+    }
+
+    private void bindHeaderInfo(int position, HeaderHolder headerHolder) {
+        if (position == 0) {
+            headerHolder.ivTapOne.setImageResource(R.drawable.pic_sign_in_everyday);
+            headerHolder.ivTapOne.setOnClickListener(this);
+            headerHolder.ivTapOne.setTag(TAG_TYPE, TYPE_SIGN_IN);
+            headerHolder.ivTapTwo.setImageResource(R.drawable.pic_lottery_everyday);
+            headerHolder.ivTapTwo.setOnClickListener(this);
+            headerHolder.ivTapTwo.setTag(TAG_TYPE, TYPE_LOTTERY);
+            if (AccountManager.getInstance().isLogin()
+                    && (ScoreManager.getInstance().isSignInTaskFinished() || Global.sHasShowedSignInHint)) {
+                headerHolder.ivTapOneHint.setVisibility(View.GONE);
+            } else {
+                headerHolder.ivTapOneHint.setVisibility(View.VISIBLE);
+            }
+            if (AccountManager.getInstance().isLogin()
+                    && (ScoreManager.getInstance().isFreeLotteryEmpty() || Global.sHasShowedLotteryHint)) {
+                headerHolder.ivTapTwoHint.setVisibility(View.GONE);
+            } else {
+                headerHolder.ivTapTwoHint.setVisibility(View.VISIBLE);
+            }
+        } else {
+            headerHolder.ivTapOne.setImageResource(R.drawable.pic_server_info);
+            headerHolder.ivTapOne.setOnClickListener(this);
+            headerHolder.ivTapOne.setTag(TAG_TYPE, TYPE_SERVER_INFO);
+            headerHolder.ivTapTwo.setImageResource(R.drawable.pic_task_everyday);
+            headerHolder.ivTapTwo.setOnClickListener(this);
+            headerHolder.ivTapTwo.setTag(TAG_TYPE, TYPE_TASK);
+            headerHolder.ivTapOneHint.setVisibility(View.GONE);
+            headerHolder.ivTapTwoHint.setVisibility(View.GONE);
+        }
     }
 
     /**
      * 设置类型一的内容
      */
-    private void setContentOneData(final ContentOneHolder holder, final int position, final IndexPostNew item) {
+    private void setContentOneData(final ContentOfficialHolder holder, final int position, final IndexPostNew item) {
         holder.tvTitle.setText(item.title);
-        if (item.showType == 1) {
-            ViewUtil.showImage(holder.ivIcon, item.banner);
-        } else {
-            ViewUtil.showImage(holder.ivIcon, item.img);
-        }
+        ViewUtil.showImage(holder.ivBanner, item.banner);
         switch (item.state) {
             case TypeStatusCode.POST_FINISHED:
                 holder.tvState.setText(TEXT_STATE_FINISHED);
@@ -252,7 +183,6 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
         }
         holder.itemView.setOnClickListener(this);
         holder.itemView.setTag(TAG_POSITION, position);
-        holder.tvContent.setText(Html.fromHtml(item.content));
     }
 
     @Override
@@ -270,14 +200,10 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
         return mHasFooter ? super.getItemCount() + 1 : super.getItemCount();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (mContext == null) {
-            ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
-            return;
-        }
-        switch (v.getId()) {
-            case R.id.iv_sign_in_everyday:
+
+    private void handleHeaderClick(int type) {
+        switch (type) {
+            case TYPE_SIGN_IN:
                 // 跳转签到页面
                 IntentUtil.jumpSignIn(mContext);
                 if (AccountManager.getInstance().isLogin()) {
@@ -288,7 +214,7 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
                         StatisticsManager.ID.SIGN_IN_FROM_ACTIVITY,
                         StatisticsManager.ID.STR_SIGN_IN_FROM_ACTIVITY);
                 break;
-            case R.id.iv_lottery_everyday:
+            case TYPE_LOTTERY:
                 // 跳转每日抽奖页面
                 IntentUtil.jumpLottery(mContext);
                 if (AccountManager.getInstance().isLogin()) {
@@ -299,20 +225,34 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
                         StatisticsManager.ID.LOTTERY_FROM_ACTIVITY,
                         StatisticsManager.ID.STR_LOTTERY_FROM_ACTIVITY);
                 break;
-            case R.id.iv_task_everyday:
+            case TYPE_SERVER_INFO:
+                IntentUtil.jumpServerInfo(mContext);
+                StatisticsManager.getInstance().trace(mContext,
+                        StatisticsManager.ID.SERVER_INFO_FROM_ACTIVITY,
+                        StatisticsManager.ID.STR_SERVER_INFO_FROM_ACTIVITY);
+                break;
+            case TYPE_TASK:
                 // 跳转每日任务列表页面
                 IntentUtil.jumpEarnScore(mContext);
                 StatisticsManager.getInstance().trace(mContext,
                         StatisticsManager.ID.TASK_FROM_ACTIVITY,
                         StatisticsManager.ID.STR_TASK_FROM_ACTIVITY);
                 break;
-            case R.id.tb_read_attention:
-                // 只看我关注的游戏资讯
-                toggleButton(true, true);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mContext == null) {
+            ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
+            return;
+        }
+        switch (v.getId()) {
+            case R.id.iv_tap_one:
+                handleHeaderClick((Integer) v.getTag(TAG_TYPE));
                 break;
-            case R.id.rl_header_item:
-                // 跳转官方活动列表页面
-                IntentUtil.jumpPostOfficialList(mContext);
+            case R.id.iv_tap_two:
+                handleHeaderClick((Integer) v.getTag(TAG_TYPE));
                 break;
             case R.id.rl_item:
                 // 内容项被点击
@@ -341,94 +281,38 @@ public class PostAdapter extends BaseRVAdapter<IndexPostNew> implements View.OnC
         }
     }
 
-    public void toggleButton(boolean toggleState, boolean needCallBack) {
-        boolean isRead = toggleState && !AssistantApp.getInstance().isReadAttention();
-        if (tbReadAttention != null) {
-            if (isRead) {
-                tbReadAttention.toggleOn();
-            } else {
-                tbReadAttention.toggleOff();
-            }
-        }
-        AssistantApp.getInstance().setIsReadAttention(isRead);
-        if (needCallBack && mCallbackListener != null) {
-            mCallbackListener.doCallBack(isRead);
-        }
-    }
-
     private static class HeaderHolder extends BaseRVHolder {
 
-        FrameLayout flSignIn;
-        FrameLayout flLottery;
-        FrameLayout flTask;
-        ImageView ivSignIn;
-        ImageView ivLottery;
-        ImageView ivTask;
-        ImageView ivSignInHint;
-        ImageView ivLotteryHint;
-        ImageView ivTaskHint;
+        ImageView ivTapOne;
+        ImageView ivTapTwo;
+        ImageView ivTapOneHint;
+        ImageView ivTapTwoHint;
+        FrameLayout flTapOne;
+        FrameLayout flTapTwo;
 
         public HeaderHolder(View itemView) {
             super(itemView);
-            flSignIn = getViewById(R.id.fl_sign_in);
-            flLottery = getViewById(R.id.fl_lottery);
-            flTask = getViewById(R.id.fl_task);
-            ivSignIn = getViewById(R.id.iv_sign_in_everyday);
-            ivLottery = getViewById(R.id.iv_lottery_everyday);
-            ivTask = getViewById(R.id.iv_task_everyday);
-            ivSignInHint = getViewById(R.id.iv_sign_in_hint);
-            ivLotteryHint = getViewById(R.id.iv_lottery_hint);
-            ivTaskHint = getViewById(R.id.iv_task_hint);
+            ivTapOne = getViewById(R.id.iv_tap_one);
+            ivTapTwo = getViewById(R.id.iv_tap_two);
+            ivTapOneHint = getViewById(R.id.iv_tap_one_hint);
+            ivTapTwoHint = getViewById(R.id.iv_tap_two_hint);
+            flTapOne = getViewById(R.id.fl_tap_one);
+            flTapTwo = getViewById(R.id.fl_tap_two);
         }
     }
 
-    private static class ItemTitleVH extends BaseRVHolder {
+    private static class ContentOfficialHolder extends BaseRVHolder {
 
-        private TextView tvTitle;
-        private TextView tvNote;
-        private RelativeLayout rlItem;
-        private ToggleButton tbAttention;
-
-        public ItemTitleVH(View itemView) {
-            super(itemView);
-            tvTitle = getViewById(R.id.tv_title);
-            tbAttention = getViewById(R.id.tb_read_attention);
-            tvNote = getViewById(R.id.tv_note);
-            rlItem = getViewById(R.id.rl_header_item);
-        }
-    }
-
-    private static class ContentOneHolder extends BaseRVHolder {
-
-        ImageView ivIcon;
+        ImageView ivBanner;
         TextView tvState;
         TextView tvTitle;
-        TextView tvContent;
 
-        public ContentOneHolder(View itemView) {
+        public ContentOfficialHolder(View itemView) {
             super(itemView);
-            ivIcon = getViewById(R.id.iv_icon);
+            ivBanner = getViewById(R.id.iv_banner);
             tvState = getViewById(R.id.tv_post_state);
             tvTitle = getViewById(R.id.tv_title);
-            tvContent = getViewById(R.id.tv_content);
         }
     }
-
-    private static class ContentTwoHolder extends BaseRVHolder {
-
-        ImageView ivIcon;
-        TextView tvContent;
-        TextView tvTitle;
-        TextView tvPubTime;
-
-        public ContentTwoHolder(View itemView) {
-            super(itemView);
-            ivIcon = getViewById(R.id.iv_icon);
-            tvTitle = getViewById(R.id.tv_title);
-            tvContent = getViewById(R.id.tv_content);
-            tvPubTime = getViewById(R.id.tv_pub_time);
-        }
-    }
-
 
 }

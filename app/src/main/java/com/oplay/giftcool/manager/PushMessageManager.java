@@ -547,4 +547,15 @@ public class PushMessageManager {
             AppDebugConfig.d(AppDebugConfig.TAG_PUSH, "设置极光Alias");
         }
     }
+
+    public void unsetAlias(Context context, String uid) {
+        if (!isInit) {
+            return;
+        }
+        // 使用uid进行别名标记
+        String alias = Coder_Md5.md5(uid);
+        int sdkType = AssistantApp.getInstance().getPushSdk();
+        if (sdkType == SdkType.ALL || sdkType == SdkType.MI)
+            MiPushClient.unsetAlias(context, alias, null);
+    }
 }

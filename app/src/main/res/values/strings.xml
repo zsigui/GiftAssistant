@@ -78,6 +78,9 @@
     <string name = "st_gift_reserve_empty" >预约完</string >
     <string name = "st_gift_reserve_disabled" >不可预约</string >
     <string name = "st_gift_take" >领号</string >
+    <string name = "st_gift_activity_wait" >等开始</string >
+    <string name = "st_gift_activity_join_s" >参与</string >
+    <string name = "st_gift_activity_join" >参与活动</string >
     <string name = "st_gift_free_seize" >正在疯抢</string >
     <string name = "st_gift_free_seized" >免费已抢完</string >
 
@@ -85,6 +88,11 @@
     <string name = "st_gift_normal_seize_hint" >去普通抢号></string >
     <string name = "st_gift_code_copy" >复制</string >
     <!-- 礼包详情 -->
+    <string name = "st_gift_detail_activity_wait">
+        <![CDATA[
+        活动开始时间：<font color=\'#ffaa17\'>%s</font>
+        ]]>
+    </string>
     <string name = "st_gift_tag_limit" >珍贵限量</string >
     <string name = "st_gift_tag_free" >限时免费</string >
     <string name = "st_gift_tag_activity" >活动专属</string >
@@ -367,4 +375,14 @@
     <string name = "st_hint_dialog_login_title" >请先登录</string >
     <string name = "st_hint_dialog_login_content" >是否跳转登录界面？</string >
     <string name = "st_hint_dialog_login_tag" >login</string >
+
+    <!-- 新游开服开测表 -->
+    <string name = "st_server_info_title">开服/开测表</string>
+    <string name = "st_server_info_open_server_title">开服表</string>
+    <string name = "st_server_info_open_test_title">开测表</string>
+    <string name = "st_server_info_content">
+        <![CDATA[
+        <font color=\'#ffaa17\'>%1$s</font>/%2$s
+        ]]>
+    </string>
 </resources >

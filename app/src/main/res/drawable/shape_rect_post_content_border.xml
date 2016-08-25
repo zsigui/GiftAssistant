@@ -3,9 +3,9 @@
        android:shape = "rectangle" >
 
 	<corners
-			android:radius = "@dimen/di_index_post_item_radius" />
+			android:radius = "@dimen/di_index_post_item_big_pic_radius" />
 	<stroke
 			android:width = "@dimen/di_divider_height"
-			android:color = "@color/co_common_content_bg" />
+			android:color = "@color/co_divider_bg" />
 	<solid android:color = "@color/co_transparent" />
 </shape >

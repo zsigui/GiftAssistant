@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Drop Shadow Stack -->
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"
+                    android:left="@dimen/di_item_shadow_padding"
+                    android:right="@dimen/di_item_shadow_padding"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#10cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"
+                    android:left="@dimen/di_item_shadow_padding"
+                    android:right="@dimen/di_item_shadow_padding"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#20cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"
+                    android:left="@dimen/di_item_shadow_padding"
+                    android:right="@dimen/di_item_shadow_padding"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#30cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"
+                    android:left="@dimen/di_item_shadow_padding"
+                    android:right="@dimen/di_item_shadow_padding"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#40cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            padding
+            android:bottom="@dimen/di_item_shadow_padding_top"
+            android:left="@dimen/di_item_shadow_padding"
+            android:right="@dimen/di_item_shadow_padding"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#50cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#60cccccc" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                    android:bottom="@dimen/di_item_shadow_padding_top"/>
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+            <solid android:color="#70cccccc" />
+        </shape>
+    </item>
+    <!-- Background -->
+    <item>
+        <shape>
+            <solid android:color="@color/co_transparent" />
+            <corners android:radius="@dimen/di_index_post_item_big_pic_radius" />
+        </shape>
+    </item>
+</layer-list>

@@ -14,7 +14,7 @@ public class NetUrl {
     /**
      * 正式地址
      */
-    public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
+    public static final String URL_BASE = "https://lbapi.ouwan.com/api/";
 
     public static String REAL_URL = TEST_URL_BASE;
 
@@ -152,6 +152,8 @@ public class NetUrl {
      */
     public static final String GAME_GET_TYPE = "label_apps";
 
+    /* 活动接口 */
+
     /**
      * 获取首页活动数据
      */
@@ -171,6 +173,11 @@ public class NetUrl {
      * 进行活动回复
      */
     public static final String POST_REPLY = "activity/add_comment";
+
+    /**
+     * 获取新游开服开测表数据
+     */
+    public static final String POST_GET_SERVER_INFO = "test";
 
 
 	/* 用户接口 */

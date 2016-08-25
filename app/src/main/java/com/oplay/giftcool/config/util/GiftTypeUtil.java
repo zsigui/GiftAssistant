@@ -105,6 +105,9 @@ public class GiftTypeUtil {
     public static final int BUTTON_TYPE_SEIZED = 10;
     public static final int BUTTON_TYPE_RESERVE_TAKE = 11;
     public static final int BUTTON_TYPE_RESERVED = 12;
+    public static final int BUTTON_TYPE_ACTIVITY_WAIT = 13;
+    public static final int BUTTON_TYPE_ACTIVITY_JOIN = 14;
+    public static final int BUTTON_TYPE_ACTIVITY_FINISHED = 15;
     // 显示样式
     public static final int UI_TYPE_COUNT = 19;
     public static final int UI_TYPE_DEFAULT = 0;
@@ -126,6 +129,10 @@ public class GiftTypeUtil {
     public static final int UI_TYPE_COUPON_SEIZE = 16;
     public static final int UI_TYPE_COUPON_RESERVE = 17;
     public static final int UI_TYPE_COUPON_OTHER = 18;
+
+    // 礼包性质 0 普通 1 活动
+    public static final int NATURE_COMMON = 0;
+    public static final int NATURE_ACTIVITY = 1;
 
     public static int getButtonState(IndexGiftNew gift) {
         switch (gift.seizeStatus) {

@@ -17,38 +17,43 @@ import com.oplay.giftcool.util.ToastUtil;
  */
 public class PostListActivity extends BaseAppCompatActivity {
 
-	private int mType = 0;
+    private int mType = 0;
 
-	@Override
-	protected void processLogic() {
-		if (getIntent() == null) {
-			ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
-			finish();
-			return;
-		}
-		mType = getIntent().getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
-		switch (mType) {
-			case KeyConfig.TYPE_ID_POST_OFFICIAL:
-				replaceFragWithTitle(R.id.fl_container,
-						PostListFragment.newInstance(PostTypeUtil.TYPE_CONTENT_OFFICIAL, NetUrl.POST_GET_LIST),
-						"官方活动");
-				break;
-		}
-	}
+    @Override
+    protected void processLogic() {
+        if (getIntent() == null) {
+            ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
+            finish();
+            return;
+        }
+        mType = getIntent().getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
+        switch (mType) {
+            case KeyConfig.TYPE_ID_POST_OFFICIAL:
+                replaceFragWithTitle(R.id.fl_container,
+                        PostListFragment.newInstance(PostTypeUtil.TYPE_CONTENT_OFFICIAL, NetUrl.POST_GET_LIST),
+                        "官方活动");
+                break;
+            case KeyConfig.TYPE_ID_POST_SERVER_INFO:
+                replaceFragWithTitle(R.id.fl_container,
+                        PostListFragment.newInstance(PostTypeUtil.TYPE_CONTENT_OFFICIAL, NetUrl.POST_GET_LIST),
+                        getString(R.string.st_server_info_content));
+                break;
+        }
+    }
 
-	@Override
-	protected void initView() {
-		setContentView(R.layout.activity_common_with_back);
-	}
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_common_with_back);
+    }
 
-	@Override
-	protected void initMenu(@NonNull Toolbar toolbar) {
-		super.initMenu(toolbar);
-		switch (mType) {
-			case KeyConfig.TYPE_ID_POST_OFFICIAL:
-				setBarTitle("官方活动");
-				break;
-		}
+    @Override
+    protected void initMenu(@NonNull Toolbar toolbar) {
+        super.initMenu(toolbar);
+        switch (mType) {
+            case KeyConfig.TYPE_ID_POST_OFFICIAL:
+                setBarTitle("官方活动");
+                break;
+        }
 
-	}
+    }
 }

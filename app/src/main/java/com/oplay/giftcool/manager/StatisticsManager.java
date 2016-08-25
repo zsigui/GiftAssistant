@@ -96,6 +96,9 @@ public class StatisticsManager {
         // 活动页面的每日任务点击
         String TASK_FROM_ACTIVITY = "jump_task_page_from_activity";
         String STR_TASK_FROM_ACTIVITY = "活动页面的每日任务点击";
+        // 活动页面的开测开服
+        String SERVER_INFO_FROM_ACTIVITY = "jump_server_info_from_activity";
+        String STR_SERVER_INFO_FROM_ACTIVITY = "活动页面的开测开服点击";
     }
 
     private final String TC_APP_KEY = BuildConfig.TD_APPKEY;

@@ -227,10 +227,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     GiftTypeUtil.getButtonState(giftData) : giftData.buttonState);
             setTag(giftData);
 
-            int type = GiftTypeUtil.getItemViewType(giftData);
             inflateVsView(giftData);
 
-            btnSend.setState(GiftTypeUtil.getButtonState(giftData));
+            btnSend.setState(giftData.buttonState);
             tvOr.setVisibility(View.GONE);
             pbPercent.setVisibility(View.GONE);
             tvBean.setVisibility(View.GONE);
@@ -250,66 +249,41 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         DateUtil.formatUserReadDateForDetail(giftData.freeStartTime)));
             }
 
-            if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER
-                    || (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
-                    && type != GiftTypeUtil.TYPE_CHARGE_SEIZED)) {
+            if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
                 tvConsume.setVisibility(View.VISIBLE);
                 tvRemain.setVisibility(View.VISIBLE);
                 setMoneyConsume(giftData);
-                if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_RESERVED
-                        || giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                    ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
-                    tvOriginPrice.setVisibility(View.VISIBLE);
-                    if ((giftData.seizeStatus != GiftTypeUtil.SEIZE_TYPE_RESERVED
-                            || (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_RESERVED
-                            && giftData.status != GiftTypeUtil.STATUS_SEIZE))
-                            && (giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
-                            && giftData.status != GiftTypeUtil.STATUS_FINISHED
-                            && giftData.status != GiftTypeUtil.STATUS_WAIT_SEARCH)) {
-                        setRemainProgress(giftData);
-                    }
-
-                } else {
-                    switch (type) {
-                        case GiftTypeUtil.TYPE_NORMAL_SEARCH:
-                            tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCHED,
-                                    giftData.searchCount)));
-                            break;
-                        case GiftTypeUtil.TYPE_LIMIT_SEIZE:
-                        case GiftTypeUtil.TYPE_LIMIT_EMPTY:
-                        case GiftTypeUtil.TYPE_LIMIT_FREE_EMPTY:
-                        case GiftTypeUtil.TYPE_LIMIT_FINISHED:
-                        case GiftTypeUtil.TYPE_LIMIT_FREE_WAIT_SEIZE:
+                switch (giftData.buttonState) {
+                    case GiftTypeUtil.BUTTON_TYPE_WAIT_SEIZE:
+                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
+                                giftData.seizeTime)));
+                        break;
+                    case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_WAIT:
+                        tvRemain.setText(Html.fromHtml(getString(R.string.st_gift_detail_activity_wait,
+                                giftData.seizeTime)));
+                        break;
+                    case GiftTypeUtil.BUTTON_TYPE_WAIT_SEARCH:
+                        tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
+                                giftData.searchTime)));
+                        break;
+                    case GiftTypeUtil.BUTTON_TYPE_SEARCH:
+                        tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCHED,
+                                giftData.searchCount)));
+                        break;
+                    default:
+                        if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
+                                || giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT) {
+                            // 限量及限量免费
                             ViewUtil.siteValueUI(tvOriginPrice, giftData.originPrice, true);
-                            setRemainProgress(giftData);
-                            break;
-                        case GiftTypeUtil.TYPE_NORMAL_SEIZE:
-                            setRemainProgress(giftData);
-                            break;
-                        case GiftTypeUtil.TYPE_LIMIT_WAIT_SEIZE:
-                        case GiftTypeUtil.TYPE_NORMAL_WAIT_SEIZE:
-                            tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEIZE,
-                                    giftData.seizeTime)));
-                            break;
-                        case GiftTypeUtil.TYPE_NORMAL_WAIT_SEARCH:
-                            tvRemain.setText(Html.fromHtml(String.format(ConstString.TEXT_SEARCH,
-                                    giftData.searchTime)));
-                            break;
-                    }
+                        }
+                        setRemainProgress(giftData);
                 }
-
             } else {
-                tvConsume.setVisibility(View.GONE);
-                tvRemain.setVisibility(View.GONE);
-                tvCode.setVisibility(View.VISIBLE);
-                btnCopy.setVisibility(View.VISIBLE);
-                tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+                showCode(giftData);
             }
-//            setDeadCount();
 
             if (!mIsNotifyRefresh) {
-                if (giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                        && giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+                if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                     tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
                     mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
@@ -326,6 +300,14 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
         }
+    }
+
+    private void showCode(IndexGiftNew giftData) {
+        tvConsume.setVisibility(View.GONE);
+        tvRemain.setVisibility(View.GONE);
+        tvCode.setVisibility(View.VISIBLE);
+        btnCopy.setVisibility(View.VISIBLE);
+        tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
     }
 
     /**
@@ -353,8 +335,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      */
     private void inflateVsView(IndexGiftNew o) {
         if (tvContent == null) {
-            if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE
-                    && o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+            if (o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                 // 首充券
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
@@ -384,6 +365,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 tvRemark = getViewById(vsGift, R.id.tv_remark);
                 tvRemark.setText(TextUtils.isEmpty(o.remark) ?
                         getContext().getResources().getString(R.string.st_gift_hint_content) : o.remark);
+                if (o.nature == GiftTypeUtil.NATURE_ACTIVITY && tvBroadcast == null) {
+                    tvBroadcast = getViewById(((ViewStub) getViewById(R.id.vs_broadcast)).inflate(),
+                            R.id.tv_activity_hint);
+                    tvBroadcast.setOnClickListener(this);
+                    tvBroadcast.setText(o.activityTitle);
+                }
             }
             tvQQ.setOnClickListener(this);
         }
@@ -455,13 +442,17 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
         if (getActivity() instanceof GiftDetailActivity) {
             GiftDetailActivity pActivity = (GiftDetailActivity) getActivity();
-            switch (giftData.giftType) {
-                case GiftTypeUtil.GIFT_TYPE_LIMIT:
-                    pActivity.showLimitTag(true, R.string.st_gift_tag_limit);
-                    break;
-                case GiftTypeUtil.GIFT_TYPE_LIMIT_FREE:
-                    pActivity.showLimitTag(true, R.string.st_gift_tag_free);
-                    break;
+            if (giftData.nature == GiftTypeUtil.NATURE_ACTIVITY) {
+                pActivity.showLimitTag(true, R.string.st_gift_tag_activity);
+            } else {
+                switch (giftData.giftType) {
+                    case GiftTypeUtil.GIFT_TYPE_LIMIT:
+                        pActivity.showLimitTag(true, R.string.st_gift_tag_limit);
+                        break;
+                    case GiftTypeUtil.GIFT_TYPE_LIMIT_FREE:
+                        pActivity.showLimitTag(true, R.string.st_gift_tag_free);
+                        break;
+                }
             }
             int type = GiftTypeUtil.getItemViewType(mData.giftData);
             if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
@@ -527,6 +518,12 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //					return;
 //				}
                 PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend, this);
+                break;
+            case R.id.tv_activity_hint:
+                if (mData == null) {
+                    return;
+                }
+                IntentUtil.jumpPostDetail(getContext(), mData.giftData.activityId);
                 break;
             case R.id.tv_qq:
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);

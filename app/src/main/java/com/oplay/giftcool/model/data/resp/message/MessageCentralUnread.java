@@ -3,6 +3,7 @@ package com.oplay.giftcool.model.data.resp.message;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 消息中心未读消息数量
@@ -58,5 +59,11 @@ public class MessageCentralUnread implements Serializable {
      */
     @SerializedName("jpush_message_content")
     public String newestGift;
+
+    /**
+     * 获奖消息
+     */
+    @SerializedName("confirm_list")
+    public ArrayList<AwardNotify> mAwardNotifies;
 
 }

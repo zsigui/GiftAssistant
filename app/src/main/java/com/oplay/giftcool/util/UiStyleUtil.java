@@ -21,6 +21,7 @@ import com.oplay.giftcool.adapter.holder.StyleFreeHolder;
 import com.oplay.giftcool.adapter.holder.StyleFreeReserveHolder;
 import com.oplay.giftcool.adapter.holder.StyleNormalHolder;
 import com.oplay.giftcool.adapter.holder.StylePreciousHolder;
+import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
@@ -284,22 +285,19 @@ public class UiStyleUtil {
 
     private static void bindSearchTime(TextView tv, String time) {
         tv.setVisibility(View.VISIBLE);
-        tv.setText(Html.fromHtml(String.format("开淘时间：<font " +
-                        "color='#ffaa17'>%s</font>",
+        tv.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCH,
                 DateUtil.formatTime(time, "yyyy-MM-dd HH:mm"))));
     }
 
     private static void bindSeizeTime(TextView tv, String time) {
         tv.setVisibility(View.VISIBLE);
-        tv.setText(Html.fromHtml(String.format("开抢时间：<font " +
-                        "color='#ffaa17'>%s</font>",
+        tv.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEIZE,
                 DateUtil.formatTime(time, "yyyy-MM-dd HH:mm"))));
     }
 
     private static void bindSearchCount(TextView tv, String count) {
         tv.setVisibility(View.VISIBLE);
-        tv.setText(Html.fromHtml(String.format("已淘数：<font " +
-                "color='#ffaa17'>%s</font>", count)));
+        tv.setText(Html.fromHtml(String.format(Locale.CHINA, ConstString.TEXT_SEARCHED, count)));
     }
 
     private static void bindSeizeHint(TextView tv, IndexGiftNew o) {
@@ -324,7 +322,9 @@ public class UiStyleUtil {
     private static void bindBaseData(StyleBaseHolder holder, IndexGiftNew o) {
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvName.setText(String.format("[%s]%s", o.gameName, o.name));
-        if (o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+        if (o.nature == GiftTypeUtil.NATURE_ACTIVITY) {
+            bindTitleTag(holder.tvName, R.drawable.ic_tag_activity, R.dimen.di_line_space_extra_big);
+        } else if (o.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
             bindTitleTag(holder.tvName, R.drawable.ic_tag_coupon, R.dimen.di_line_space_extra_big);
         } else if (o.exclusive == 1) {
             bindTitleTag(holder.tvName, R.drawable.ic_tag_exclusive, R.dimen.di_line_space_extra_big);
@@ -333,6 +333,9 @@ public class UiStyleUtil {
         }
         if (holder.btnSend != null) {
             holder.btnSend.setState(o.buttonState);
+            if (o.buttonState == GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN) {
+                holder.btnSend.setText(mContext.getString(R.string.st_gift_activity_join_s));
+            }
         }
         holder.tvSeizeHint.setVisibility(View.VISIBLE);
         if (o.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE) {
