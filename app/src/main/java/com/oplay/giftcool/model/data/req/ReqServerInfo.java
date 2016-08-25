@@ -1,5 +1,7 @@
 package com.oplay.giftcool.model.data.req;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,9 +9,15 @@ import java.io.Serializable;
  */
 public class ReqServerInfo implements Serializable {
 
-    public boolean isFocus;
+    @SerializedName("is_focus")
+    public boolean isFocus = false;
 
-    public int type;
+    @SerializedName("start_date")
+    public String startDate;
 
-    public String time;
+    @SerializedName("offset")
+    public int offset;
+
+    @SerializedName("pageSize")
+    public int pageSize = 20;
 }

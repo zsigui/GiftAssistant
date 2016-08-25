@@ -246,7 +246,7 @@
     <string name = "st_login_sms_code_try" >不方便接电话？试试</string >
     <string name = "st_login_voice_code_toast" >
         <![CDATA[
-        您的手机 <font color=\'#20C585\'>%s</font> 将会受到我们的语音电话，请接听，并输入语音验证码登录。
+        您的手机 <font color=\'#20C585\'>%s</font> 将会收到我们的语音电话，请接听，并输入语音验证码登录。
         ]]>
     </string >
     <string name = "st_login_voice_code_send_hint">请先点击发送语音验证码</string>

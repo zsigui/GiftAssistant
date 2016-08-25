@@ -256,8 +256,8 @@ public interface NetEngine {
     /**
      * 获取 新游开服开测表 页面数据
      */
-    @POST(NetUrl.POST_GET_SERVER_INFO)
-    Call<JsonRespBase<TimeData<ServerInfo>>> obtainServerInfo(@Body JsonReqBase<ReqServerInfo> reqData);
+    @POST
+    Call<JsonRespBase<OneTypeDataList<ServerInfo>>> obtainServerInfo(@Url String url, @Body JsonReqBase<ReqServerInfo> reqData);
 
     /* ---------------- 用户接口 ----------------- */
 

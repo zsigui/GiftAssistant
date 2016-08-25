@@ -122,6 +122,10 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
         }
     }
 
+    public ArrayList<ServerInfo> getData() {
+        return mData;
+    }
+
     private static class ServerHolder extends BaseRVHolder {
         ImageView ivIcon;
         TextView tvName;
