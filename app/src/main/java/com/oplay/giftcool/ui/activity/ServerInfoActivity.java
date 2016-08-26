@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleButton.OnToggleChanged {
 
     private ArrayList<CallbackListener<Boolean>> mCallbackListeners;
+    private ToggleButton tbFocus;
 
     @Override
     protected void processLogic() {
@@ -34,10 +35,22 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
     @Override
     protected void initMenu(@NonNull Toolbar toolbar) {
         super.initMenu(toolbar);
-        ToggleButton tbFocus = getViewById(toolbar, R.id.tb_focus);
+        tbFocus = getViewById(toolbar, R.id.tb_focus);
         tbFocus.setOnToggleChanged(this);
         // 初始化
         if (AssistantApp.getInstance().isReadAttention()) {
+            tbFocus.setToggleOn();
+        } else {
+            tbFocus.setToggleOff();
+        }
+    }
+
+    /**
+     * 设置ToggleButton状态，不触发onToggleChanged
+     * @param on
+     */
+    public void setTbState(boolean on) {
+        if (on) {
             tbFocus.setToggleOn();
         } else {
             tbFocus.setToggleOff();

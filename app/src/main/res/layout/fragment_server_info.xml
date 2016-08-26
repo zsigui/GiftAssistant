@@ -12,12 +12,9 @@
 
         <android.support.v7.widget.RecyclerView
                 android:id = "@+id/rv_content"
-                android:background="@color/co_btn_orange"
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent" />
     </com.oplay.giftcool.ui.widget.layout.RefreshLayout >
-
-    <View style = "@style/HDividerView" />
 
     <LinearLayout
             android:id = "@+id/ll_anchors"

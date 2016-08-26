@@ -17,6 +17,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.listener.CallbackListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqServerInfo;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.ServerInfo;
@@ -40,8 +41,8 @@ import retrofit2.Response;
 public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> implements CallbackListener<Boolean> {
 
 
-    private final String STR_REFRESH_NEWSET = "当前已是最新数据";
-    private final String STR_LOAD_OLDER = "无更多数据可加载";
+    private final String STR_REFRESH_NEWEST = "当前已是最新数据";
+    private final String STR_LOAD_OLDEST = "无更多数据可加载";
     private final int INDEX_BEFORE = 0;
     private final int INDEX_YESTERDAY = 1;
     private final int INDEX_TODAY = 2;
@@ -56,24 +57,24 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
 
     private RecyclerView rvData;
     private OpenServerAdapter mAdapter;
-    private LinearLayoutManager llm;
     private ArrayList<AnchorTag> mSortedTags;
-    private int mType;
     private String mUrl;
+    private int mCurIndex = -1;
 
     private static class AnchorTag {
         String tag = "";
         int anchor;
+
         CheckedTextView v;
         ArrayList<ServerInfo> data = new ArrayList<>();
-        // 是否有更旧的数据，对于昨/今/明/以后则切换前一个tab
+        // 是否有更多的数据，对于更早/昨/今/明则切换后一个tab
         boolean canLoad;
-        // 是否有更新的数据，对于更早/昨/今/明则切换后一个tab
-        boolean hasNew;
-        // 保存当前页码
-        int offset = 0;
-        // 保存锚点时间
-        String anchorTime = "";
+        // 是否有刷新的数据，对于昨/今/明/以后则切换前一个tab
+        boolean canRefresh;
+
+        // 保存当前刷新加载的页码
+        int offsetLoad = 0;
+        int offsetRefresh = 1;
 
         public AnchorTag(String tag, int anchor, CheckedTextView v) {
             this.tag = tag;
@@ -123,26 +124,26 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         if (getActivity() instanceof ServerInfoActivity) {
             ((ServerInfoActivity) getActivity()).addListener(this);
         }
-        rvData.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int firstItem = llm.findFirstVisibleItemPosition();
-                if (mSortedTags != null) {
-                    for (int i = 0; i < mSortedTags.size(); i++) {
-                        if (firstItem >= mSortedTags.get(i).anchor
-                                && (mSortedTags.size() == i + 1 || firstItem < mSortedTags.get(i + 1).anchor)) {
-                            mSortedTags.get(i).v.setChecked(true);
-                        }
-                    }
-                }
-            }
-        });
+//        rvData.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                int firstItem = llm.findFirstVisibleItemPosition();
+//                if (mSortedTags != null) {
+//                    for (int i = 0; i < mSortedTags.size(); i++) {
+//                        if (firstItem >= mSortedTags.get(i).anchor
+//                                && (mSortedTags.size() == i + 1 || firstItem < mSortedTags.get(i + 1).anchor)) {
+//                            mSortedTags.get(i).v.setChecked(true);
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -151,10 +152,10 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
-        mType = getArguments().getInt(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_OPEN_SERVER);
-        mUrl = (mType == KeyConfig.TYPE_ID_OPEN_SERVER ? NetUrl.POST_GET_OPEN_SERVER : NetUrl.POST_GET_OPEN_TEST);
-        mAdapter = new OpenServerAdapter(getContext(), mType);
-        llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        int type = getArguments().getInt(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_OPEN_SERVER);
+        mUrl = (type == KeyConfig.TYPE_ID_OPEN_SERVER ? NetUrl.POST_GET_OPEN_SERVER : NetUrl.POST_GET_OPEN_TEST);
+        mAdapter = new OpenServerAdapter(getContext(), type);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
         rvData.addItemDecoration(decoration);
         rvData.setLayoutManager(llm);
@@ -167,53 +168,19 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         mSortedTags.add(new AnchorTag(DateUtil.getDate("yyyy-MM-dd", 2), 0, tvAfter));
     }
 
-    JsonReqBase<ReqServerInfo> mReqData;
     Call<JsonRespBase<OneTypeDataList<ServerInfo>>> mCall;
 
     @Override
     protected void lazyLoad() {
-        if (mIsLoading) {
-            return;
-        }
-        Global.THREAD_POOL.execute(new Runnable() {
-            @Override
-            public void run() {
-                refreshInitConfig();
-                // 判断网络情况
-//        if (!NetworkUtil.isConnected(getContext())) {
-//            refreshFailEnd();
-//            return;
-//        }
-                if (mCall != null) {
-                    mCall.cancel();
-                }
-
-                // 设置请求对象的值
-                if (mReqData == null) {
-                    ReqServerInfo data = new ReqServerInfo();
-                    mReqData = new JsonReqBase<>(data);
-                }
-
-                mCall = Global.getNetEngine().obtainServerInfo(mUrl, mReqData);
-                mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<ServerInfo>>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call,
-                                           Response<JsonRespBase<OneTypeDataList<ServerInfo>>> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call, Throwable t) {
-
-                    }
-                });
+        if (AccountManager.getInstance().isLogin()
+                && AssistantApp.getInstance().isReadAttention()) {
+            initFocusData();
+        } else {
+            AssistantApp.getInstance().setIsReadAttention(false);
+            if (getActivity() instanceof ServerInfoActivity) {
+                ((ServerInfoActivity) getActivity()).setTbState(false);
             }
-        });
-    }
-
-    public void doCheck(int index) {
-        for (int i = 0; i < mSortedTags.size(); i++) {
-            mSortedTags.get(i).v.setChecked(i == index);
+            handleCheckClick(INDEX_TODAY);
         }
     }
 
@@ -228,11 +195,6 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         return -1;
     }
 
-
-    JsonReqBase<ReqServerInfo> mFocusReq;
-    int mFocusLoadIndex = 0;
-    int mFocusRefreshIndex = 0;
-
     @Override
     public void onRefresh() {
         if (mRefreshLayout != null) {
@@ -245,91 +207,25 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         if (AssistantApp.getInstance().isReadAttention()) {
             // 正常加载
             refreshFocusData();
-
         } else {
-            // 刷新则跳转到下一Tab，已是最后tab则正常加载
+            // 下拉加载则跳转到上一Tab，已是最后tab则正常加载
             int index = getCheckedAnchorIndex();
-            if (index != INDEX_AFTER && mSortedTags.get(index).hasNew) {
-                // 跳转下一个TAB
-                doCheck(index + 1);
-                if (mSortedTags.get(index + 1).data != null) {
-                    mAdapter.updateData(mSortedTags.get(index + 1).data);
+            if (index != INDEX_BEFORE && mSortedTags.get(index).canRefresh) {
+                // 跳转上一个TAB
+                if (mSortedTags.get(index - 1).data != null) {
+                    mAdapter.updateData(mSortedTags.get(index - 1).data);
                     rvData.scrollToPosition(mAdapter.getItemCount() - 1);
                     mRefreshLayout.setEnabled(true);
-                    mIsSwipeRefresh = false;
+                    mIsLoading = mIsSwipeRefresh = false;
                 } else {
-                    // 下一标签无数据，执行类网络加载操作
-                    refreshData(mSortedTags.get(index + 1), false, null);
+                    // 上一标签无数据，执行类网络加载操作
+                    handleCheckClick(index - 1);
                 }
             } else {
                 // 正常加载
-                refreshData(mSortedTags.get(index), false, null);
+                handleTabRefresh(index);
             }
         }
-    }
-
-    private void refreshFocusData() {
-        if (mCall != null) {
-            mCall.cancel();
-        }
-
-        // 设置请求对象的值
-        if (mFocusReq == null) {
-            mFocusRefreshIndex = 0;
-            ReqServerInfo serverInfo = new ReqServerInfo();
-            serverInfo.isFocus = true;
-            serverInfo.offset = mFocusRefreshIndex;
-            mFocusReq = new JsonReqBase<>(serverInfo);
-        } else {
-            mFocusRefreshIndex = mFocusRefreshIndex + 1;
-            mFocusReq.data.offset = mFocusRefreshIndex;
-        }
-
-        mCall = Global.getNetEngine().obtainServerInfo(mUrl, mFocusReq);
-        mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<ServerInfo>>>() {
-            @Override
-            public void onResponse(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call,
-                                   Response<JsonRespBase<OneTypeDataList<ServerInfo>>> response) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                mIsSwipeRefresh = false;
-                mRefreshLayout.setEnabled(true);
-                mRefreshLayout.setRefreshing(false);
-                if (response != null && response.isSuccessful()
-                        && response.body() != null && response.body().isSuccess()) {
-                    OneTypeDataList<ServerInfo> data = response.body().getData();
-                    if (!data.data.isEmpty()) {
-                        mAdapter.getData().addAll(0, data.data);
-                        mAdapter.notifyItemRangeInserted(0, data.data.size());
-                    }
-                    if (data.isEndPage) {
-                        // 已是最新
-                        ToastUtil.showShort(STR_REFRESH_NEWSET);
-                    }
-                    if (mFocusRefreshIndex == 0) {
-                        mRefreshLayout.setCanShowLoad(true);
-                    }
-                    return;
-                }
-                mFocusRefreshIndex -= 1;
-            }
-
-            @Override
-            public void onFailure(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                ToastUtil.blurThrow(t);
-                mIsSwipeRefresh = false;
-                mRefreshLayout.setEnabled(true);
-                mRefreshLayout.setRefreshing(false);
-                if (mFocusRefreshIndex == 0) {
-                    mRefreshLayout.setCanShowLoad(false);
-                }
-                mFocusRefreshIndex -= 1;
-            }
-        });
     }
 
     @Override
@@ -341,26 +237,106 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         if (AssistantApp.getInstance().isReadAttention()) {
             loadFocusData();
         } else {
-            // 加载到无数据则跳转到上一Tab，已是最后tab则结束
+            // 加载到无数据则跳转到下一Tab，已是最后tab则结束
             int index = getCheckedAnchorIndex();
-            if (index != INDEX_BEFORE && !mSortedTags.get(index).canLoad) {
-                // 跳转上一个TAB
-                doCheck(index - 1);
-                if (mSortedTags.get(index - 1).data != null) {
-                    mAdapter.updateData(mSortedTags.get(index - 1).data);
+            if (index != INDEX_AFTER && !mSortedTags.get(index).canLoad) {
+                // 跳转下一个TAB
+                tabCheck(index + 1);
+                if (mSortedTags.get(index + 1).data != null) {
+                    mAdapter.updateData(mSortedTags.get(index + 1).data);
                     rvData.scrollToPosition(0);
+                    mNoMoreLoad = !mSortedTags.get(index + 1).canLoad;
                     mRefreshLayout.setEnabled(true);
-                    mNoMoreLoad = !mSortedTags.get(index - 1).canLoad;
-                    mIsLoadMore = false;
+                    mRefreshLayout.setLoading(false);
+                    mIsLoading = mIsLoadMore = false;
+                    mRefreshLayout.setCanShowLoad(mNoMoreLoad);
                 } else {
                     // 上一标签无数据，执行类网络加载操作
-                    //refreshData(mSortedTags.get(index - 1), false, null);
+                    handleTabLoad(index + 1);
                 }
             } else {
                 // 正常加载
-                //refreshData(mSortedTags.get(index), false, null);
+                //refreshDataWithCallback(mSortedTags.get(index), false, null);
+                handleTabLoad(index);
             }
         }
+    }
+
+    /* ----------------- 只看我关注的网络加载 START ------------------- */
+
+    // 用于记录关注的
+    JsonReqBase<ReqServerInfo> mFocusReq;
+    int mFocusLoadIndex = 0;
+    int mFocusRefreshIndex = 1;
+
+    private void refreshFocusData() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
+
+        // 设置请求对象的值
+        if (mFocusReq == null) {
+            mFocusRefreshIndex = 1;
+            ReqServerInfo serverInfo = new ReqServerInfo();
+            serverInfo.isFocus = 1;
+            serverInfo.offset = mFocusRefreshIndex - 1;
+            mFocusReq = new JsonReqBase<>(serverInfo);
+        } else {
+            mFocusReq.data.offset = mFocusRefreshIndex - 1;
+        }
+        if (mFocusRefreshIndex == 0) {
+            mHasData = false;
+        }
+
+        mCall = Global.getNetEngine().obtainServerInfo(mUrl, mFocusReq);
+        mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<ServerInfo>>>() {
+            @Override
+            public void onResponse(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call,
+                                   Response<JsonRespBase<OneTypeDataList<ServerInfo>>> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                mIsLoading = mIsSwipeRefresh = false;
+                mRefreshLayout.setEnabled(true);
+                mRefreshLayout.setRefreshing(false);
+                if (response != null && response.isSuccessful()
+                        && response.body() != null && response.body().isSuccess()) {
+                    OneTypeDataList<ServerInfo> data = response.body().getData();
+                    mHasData = true;
+                    mFocusRefreshIndex -= 1;
+                    if (!data.data.isEmpty()) {
+                        if (mFocusRefreshIndex == 0) {
+                            mAdapter.updateData(data.data);
+                        } else {
+                            mAdapter.getData().addAll(0, data.data);
+                            mAdapter.notifyItemRangeInserted(0, data.data.size());
+                        }
+                    } else {
+                        // 已是最新
+                        ToastUtil.showShort(STR_REFRESH_NEWEST);
+                    }
+                    if (mFocusRefreshIndex == 0) {
+                        mRefreshLayout.setCanShowLoad(true);
+                    }
+                    return;
+                }
+                ToastUtil.blurErrorResp(response);
+            }
+
+            @Override
+            public void onFailure(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                ToastUtil.blurThrow(t);
+                mIsLoading = mIsSwipeRefresh = false;
+                mRefreshLayout.setEnabled(true);
+                mRefreshLayout.setRefreshing(false);
+                if (mFocusRefreshIndex == 0) {
+                    mRefreshLayout.setCanShowLoad(false);
+                }
+            }
+        });
     }
 
     private void loadFocusData() {
@@ -372,11 +348,11 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         if (mFocusReq == null) {
             mFocusLoadIndex = 0;
             ReqServerInfo serverInfo = new ReqServerInfo();
-            serverInfo.isFocus = true;
-            serverInfo.offset = mFocusLoadIndex;
+            serverInfo.isFocus = 1;
+            serverInfo.offset = mFocusLoadIndex + 1;
             mFocusReq = new JsonReqBase<>(serverInfo);
         } else {
-            mFocusLoadIndex = mFocusLoadIndex - 1;
+            mFocusLoadIndex = mFocusLoadIndex + 1;
             mFocusReq.data.offset = mFocusLoadIndex;
         }
 
@@ -388,23 +364,25 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 if (call.isCanceled()) {
                     return;
                 }
-                mIsLoadMore = false;
+                mIsLoading = mIsLoadMore = false;
                 mRefreshLayout.setLoading(false);
                 if (response != null && response.isSuccessful()
                         && response.body() != null && response.body().isSuccess()) {
                     OneTypeDataList<ServerInfo> data = response.body().getData();
+                    mFocusLoadIndex += 1;
                     if (!data.data.isEmpty()) {
                         mAdapter.getData().addAll(data.data);
-                        mAdapter.notifyItemRangeInserted(mAdapter.getData().size() - data.data.size(), data.data.size());
+                        mAdapter.notifyItemRangeInserted(mAdapter.getData().size() - data.data.size(), data.data.size
+                                ());
                     }
                     if (data.isEndPage) {
-                        // 已是最新
-                        ToastUtil.showShort(STR_LOAD_OLDER);
+                        // 已是最旧的数据
+                        ToastUtil.showShort(STR_LOAD_OLDEST);
                     }
                     mNoMoreLoad = data.isEndPage;
                     return;
                 }
-                mFocusLoadIndex += 1;
+                ToastUtil.blurErrorResp(response);
             }
 
             @Override
@@ -413,47 +391,32 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                     return;
                 }
                 ToastUtil.blurThrow(t);
-                mIsLoadMore = false;
+                mIsLoading = mIsLoadMore = false;
                 mRefreshLayout.setLoading(false);
-                mFocusLoadIndex -= 1;
             }
         });
     }
+
+     /* ----------------- 只看我关注的网络加载 END ------------------- */
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_before:
-                doCheck(INDEX_BEFORE);
-                mRefreshLayout.setLoading(true);
+                handleCheckClick(INDEX_BEFORE);
                 break;
             case R.id.tv_yesterday:
-                doCheck(INDEX_YESTERDAY);
-                mRefreshLayout.setLoading(true);
+                handleCheckClick(INDEX_YESTERDAY);
                 break;
             case R.id.tv_today:
-                doCheck(INDEX_TODAY);
-                // 由于today默认首次展示，所以默认不影响
-                rvData.smoothScrollToPosition(mSortedTags.get(INDEX_TODAY).anchor);
+                handleCheckClick(INDEX_TODAY);
                 break;
             case R.id.tv_tomorrow:
-                doCheck(INDEX_TOMORROW);
+                handleCheckClick(INDEX_TOMORROW);
                 break;
             case R.id.tv_after:
-                doCheck(INDEX_AFTER);
-                // 判断是否已经加载了数据
-                final AnchorTag after = mSortedTags.get(INDEX_AFTER);
-                refreshData(after, false, new CallbackListener<OneTypeDataList<ServerInfo>>() {
-
-                    @Override
-                    public void doCallBack(OneTypeDataList<ServerInfo> data) {
-                        after.data.addAll(0, data.data);
-                        after.offset += 1;
-                        after.hasNew = !data.isEndPage;
-                        mAdapter.updateData(after.data);
-                    }
-                });
+                handleCheckClick(INDEX_AFTER);
                 break;
         }
     }
@@ -462,7 +425,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
     /**
      * 刷新新数据
      */
-    public void refreshData(final AnchorTag data, final boolean focus, final
+    public void refreshDataWithCallback(final AnchorTag data, final int focus, final
     CallbackListener<OneTypeDataList<ServerInfo>>
             listener) {
         // 判断是否处于加载刷新中
@@ -475,10 +438,9 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
-                refreshInitConfig();
                 // 判断网络情况
                 if (!NetworkUtil.isConnected(getContext())) {
-                    refreshFailEnd();
+                    refreshFailed();
                     return;
                 }
                 if (mCall != null) {
@@ -489,7 +451,82 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 ReqServerInfo serverInfo = new ReqServerInfo();
                 JsonReqBase<ReqServerInfo> reqBase = new JsonReqBase<>(serverInfo);
                 reqBase.data.isFocus = focus;
-                reqBase.data.offset = data.offset + 1;
+                reqBase.data.offset = data.offsetRefresh - 1;
+                reqBase.data.startDate = data.tag;
+                if (reqBase.data.offset == 0) {
+                    mHasData = false;
+                }
+
+                mCall = Global.getNetEngine().obtainServerInfo(mUrl, reqBase);
+                mCall.enqueue(new Callback<JsonRespBase<OneTypeDataList<ServerInfo>>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call,
+                                           Response<JsonRespBase<OneTypeDataList<ServerInfo>>> response) {
+                        if (call.isCanceled()) {
+                            return;
+                        }
+                        refreshFailed();
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            if (listener != null) {
+                                mHasData = true;
+                                listener.doCallBack(response.body().getData());
+                            }
+                            return;
+                        }
+                        ToastUtil.blurErrorResp(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call, Throwable t) {
+                        if (call.isCanceled()) {
+                            return;
+                        }
+                        refreshFailed();
+                        ToastUtil.blurThrow(t);
+                    }
+                });
+            }
+
+            private void refreshFailed() {
+                mRefreshLayout.setEnabled(true);
+                mRefreshLayout.setRefreshing(false);
+                mIsSwipeRefresh = mIsLoading = false;
+            }
+        });
+    }
+
+
+    /**
+     * 刷新新数据
+     */
+    public void loadDataWithCallback(final AnchorTag data, final int focus, final
+    CallbackListener<OneTypeDataList<ServerInfo>>
+            listener) {
+        // 判断是否处于加载刷新中
+        mRefreshLayout.setCanShowLoad(true);
+        mRefreshLayout.setLoading(true);
+        if (mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+        }
+        // 加载数据
+        Global.THREAD_POOL.execute(new Runnable() {
+            @Override
+            public void run() {
+                // 判断网络情况
+                if (!NetworkUtil.isConnected(getContext())) {
+                    loadFailed();
+                    return;
+                }
+                if (mCall != null) {
+                    mCall.cancel();
+                }
+
+                // 设置请求对象的值
+                ReqServerInfo serverInfo = new ReqServerInfo();
+                JsonReqBase<ReqServerInfo> reqBase = new JsonReqBase<>(serverInfo);
+                reqBase.data.isFocus = focus;
+                reqBase.data.offset = data.offsetLoad + 1;
                 reqBase.data.startDate = data.tag;
 
                 mCall = Global.getNetEngine().obtainServerInfo(mUrl, reqBase);
@@ -500,12 +537,15 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                         if (call.isCanceled()) {
                             return;
                         }
+                        loadFailed();
                         if (response != null && response.isSuccessful()
                                 && response.body() != null && response.body().isSuccess()) {
                             if (listener != null) {
                                 listener.doCallBack(response.body().getData());
                             }
+                            return;
                         }
+                        ToastUtil.blurErrorResp(response);
                     }
 
                     @Override
@@ -513,33 +553,131 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                         if (call.isCanceled()) {
                             return;
                         }
+                        loadFailed();
                         ToastUtil.blurThrow(t);
                     }
                 });
             }
+
+            private void loadFailed() {
+                mRefreshLayout.setEnabled(true);
+                mRefreshLayout.setLoading(false);
+                mIsLoading = mIsLoadMore = false;
+            }
         });
     }
 
+    private void insertFirstReserve(ArrayList<ServerInfo> src, ArrayList<ServerInfo> extra) {
+        ArrayList<ServerInfo> tmp = new ArrayList<>(extra.size());
+        for (int i = extra.size() - 1; i >= 0; i--) {
+            tmp.add(extra.get(i));
+        }
+        src.addAll(0, tmp);
+    }
+
+    private void tabCheck(int index) {
+        for (int i = 0; i < mSortedTags.size(); i++) {
+            mSortedTags.get(i).v.setChecked(i == index);
+        }
+    }
+
+    private void handleTabLoad(int index) {
+        final AnchorTag tag = mSortedTags.get(index);
+        mRefreshLayout.setEnabled(false);
+
+        // 进行数据刷新
+        loadDataWithCallback(tag, 0, new CallbackListener<OneTypeDataList<ServerInfo>>() {
+            @Override
+            public void doCallBack(OneTypeDataList<ServerInfo> data) {
+                tag.data.addAll(data.data);
+                mAdapter.setData(tag.data);
+                mAdapter.notifyItemRangeInserted(mAdapter.getData().size() - data.data.size(), data.data.size());
+                tag.canLoad = data.isEndPage;
+                tag.offsetLoad += 1;
+                mRefreshLayout.setCanShowLoad(tag.canLoad);
+            }
+        });
+    }
+
+    private void handleTabRefresh(int index) {
+        // 正常加载
+        mRefreshLayout.setEnabled(false);
+        final AnchorTag tag = mSortedTags.get(index);
+        // 进行数据刷新
+        refreshDataWithCallback(tag, 0, new CallbackListener<OneTypeDataList<ServerInfo>>() {
+            @Override
+            public void doCallBack(OneTypeDataList<ServerInfo> data) {
+                // 数据倒着排，所以刷新时加到前面去
+                if (data.data.isEmpty()) {
+                    tag.canRefresh = false;
+                }
+                insertFirstReserve(tag.data, data.data);
+                mAdapter.updateData(tag.data);
+                tag.canLoad = data.isEndPage;
+                tag.offsetRefresh -= 1;
+                mRefreshLayout.setCanShowLoad(tag.canLoad);
+            }
+        });
+    }
+
+    /**
+     * 处理Tab标签的点击事件
+     */
+    private void handleCheckClick(int index) {
+        tabCheck(index);
+
+        if (index == mCurIndex) {
+            if (mIsLoading) {
+                return;
+            }
+        } else {
+            if (mCall != null) {
+                mCall.cancel();
+            }
+        }
+        final AnchorTag tag = mSortedTags.get(index);
+        if (tag.data.isEmpty()) {
+            // 进行数据刷新
+
+            mRefreshLayout.setEnabled(false);
+            handleTabRefresh(index);
+
+        } else {
+            if (mCurIndex != index) {
+                // 滚动到第一条数据
+                mAdapter.updateData(tag.data);
+            }
+            rvData.smoothScrollToPosition(0);
+        }
+        mCurIndex = index;
+    }
 
     @Override
     public void doCallBack(Boolean data) {
-        if (mCall != null) {
-            mCall.cancel();
-        }
         if (data) {
-            llAnchors.setVisibility(View.GONE);
-            mFocusReq = null;
-            mRefreshLayout.setCanShowLoad(false);
-            if (!mRefreshLayout.isRefreshing())
-                mRefreshLayout.setRefreshing(true);
+            if (AccountManager.getInstance().isLogin()) {
+                initFocusData();
+            } else {
+                // 对于没有登录的，提示先登录才能显示关注
+                ToastUtil.showShort(ConstString.TOAST_LOGIN_FIRST);
+                AssistantApp.getInstance().setIsReadAttention(false);
+                if (getActivity() instanceof ServerInfoActivity) {
+                    ((ServerInfoActivity) getActivity()).setTbState(false);
+                }
+            }
         } else {
             llAnchors.setVisibility(View.VISIBLE);
-            doCheck(INDEX_TODAY);
-            mAdapter.updateData(mSortedTags.get(INDEX_TODAY).data);
-            mRefreshLayout.setLoading(false);
-            mRefreshLayout.setCanShowLoad(mSortedTags.get(INDEX_TODAY).canLoad);
-            // 定位到今天
+            handleCheckClick(INDEX_TODAY);
         }
+    }
+
+    private void initFocusData() {
+        llAnchors.setVisibility(View.GONE);
+        mFocusReq = null;
+        mRefreshLayout.setCanShowLoad(false);
+        if (!mRefreshLayout.isRefreshing())
+            mRefreshLayout.setRefreshing(true);
+        refreshFocusData();
     }
 
     @Override

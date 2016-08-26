@@ -3,7 +3,7 @@
               android:orientation = "horizontal"
               android:layout_width = "match_parent"
               android:layout_height = "wrap_content"
-              android:background = "@color/co_common_content_bg"
+              android:background = "@color/co_white"
               android:layout_gravity = "center_horizontal" >
 
     <FrameLayout
@@ -17,9 +17,8 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
                 android:clickable = "true"
-                android:background = "@drawable/layer_radius_4_shadow"
                 android:scaleType = "fitXY"
-                android:layout_marginRight = "@dimen/di_line_space_extra_normal"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:src = "@drawable/pic_sign_in_everyday"
                 android:contentDescription = "@null" />
@@ -44,11 +43,10 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
                 android:src = "@drawable/pic_lottery_everyday"
-                android:layout_marginRight = "@dimen/di_line_space_extra_normal"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:scaleType = "fitXY"
                 android:clickable = "true"
-                android:background = "@drawable/layer_radius_4_shadow"
                 android:contentDescription = "@null"
                 android:layout_gravity = "left|bottom" />
 

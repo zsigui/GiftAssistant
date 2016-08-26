@@ -5,29 +5,31 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:id = "@+id/rl_item"
-                android:layout_marginBottom = "@dimen/di_line_space_extra_big"
-                android:layout_marginLeft = "@dimen/di_list_item_gap_small"
-                android:layout_marginRight = "@dimen/di_list_item_gap_small"
-                android:background = "@drawable/layer_radius_4_shadow" >
+                android:background = "@color/co_white" >
 
-    <com.makeramen.roundedimageview.RoundedImageView
+    <View
+            android:id="@+id/divider"
+            android:layout_width = "match_parent"
+            android:layout_height = "@dimen/di_list_item_gap_small"
+            android:background = "@color/co_common_content_bg" />
+
+    <ImageView
             android:id = "@+id/iv_banner"
             android:layout_width = "match_parent"
             android:layout_height = "120dp"
             android:scaleType = "centerCrop"
-            app:riv_border_width = "0dp"
-            app:riv_corner_radius_top_left = "@dimen/di_index_post_item_big_pic_radius"
-            app:riv_corner_radius_top_right = "@dimen/di_index_post_item_big_pic_radius"
-            app:riv_corner_radius_bottom_left = "0dp"
-            app:riv_corner_radius_bottom_right = "0dp"
-            android:src="@drawable/ic_banner_default"
-            app:riv_oval = "false" />
+            android:layout_marginLeft = "@dimen/di_list_item_gap_s_normal"
+            android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
+            android:layout_marginTop = "@dimen/di_list_item_gap_s_normal"
+            android:layout_below="@+id/divider"
+            android:src = "@drawable/ic_banner_default" />
 
     <TextView
             android:id = "@+id/tv_post_state"
             style = "@style/DefaultTextView.PostState"
             android:background = "@drawable/ic_post_enabled"
             android:layout_marginTop = "-1dp"
+            android:layout_below="@+id/divider"
             android:text = "@string/st_index_post_text_working" />
 
 
@@ -49,8 +51,8 @@
             android:layout_height = "wrap_content"
             android:layout_below = "@+id/iv_banner"
             android:gravity = "center_vertical"
-            android:paddingLeft = "@dimen/di_list_item_gap_small"
-            android:paddingRight = "@dimen/di_list_item_gap_small"
+            android:paddingLeft = "@dimen/di_list_item_gap_s_normal"
+            android:paddingRight = "@dimen/di_list_item_gap_s_normal"
             android:paddingTop = "@dimen/di_list_item_gap_s_normal"
             android:paddingBottom = "@dimen/di_list_item_gap_s_normal"
             android:background = "@drawable/shape_rect_post_bottom_radius"

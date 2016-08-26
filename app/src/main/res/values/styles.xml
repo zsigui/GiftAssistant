@@ -450,7 +450,7 @@
         <item name = "android:paddingTop" >@dimen/di_line_space_extra_big</item >
         <item name = "android:textStyle" >bold</item >
         <item name = "android:layout_alignParentRight" >true</item >
-        <item name = "android:layout_marginRight" >@dimen/di_list_item_gap_big</item >
+        <item name = "android:layout_marginRight" >@dimen/di_list_item_gap_aw</item >
     </style >
 
     <!-- 礼包首页-猜你喜欢 -->

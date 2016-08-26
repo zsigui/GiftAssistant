@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class ReqServerInfo implements Serializable {
 
     @SerializedName("is_focus")
-    public boolean isFocus = false;
+    public int isFocus = 0;
 
     @SerializedName("start_date")
     public String startDate;
