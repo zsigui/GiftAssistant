@@ -94,6 +94,11 @@ public abstract class NetStatusCode {
      */
     public static final int ERR_UN_LOGIN = 10037;
 
+    /**
+     * 需要从多项中选择一项绑定为主账号，针对手机登录
+     */
+    public static final int ERR_NEED_CHOOSE_MAIN_ACCOUNT = 10043;
+
 	/* **********  求礼包错误码  *********** */
     /**
      * 该款游戏今日求礼包次数达到上限

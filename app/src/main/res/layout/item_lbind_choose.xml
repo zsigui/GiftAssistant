@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "horizontal"
+        style = "@style/IndexModuleTitleLayout.Bigger.LoginInput" >
+
+    <TextView
+            android:id = "@+id/tv_name"
+            style = "@style/DefaultTextView.Login"
+            android:cursorVisible = "true"
+            android:inputType = "text"
+            android:imeOptions = "actionDone"
+            android:hint = "@string/st_lbind_choose_user_name" />
+
+    <CheckedTextView
+            android:id = "@+id/ctv_checked"
+            android:layout_width = "90dp"
+            android:layout_height = "wrap_content"
+            android:textColor = "@color/co_btn_green"
+            android:drawablePadding = "@dimen/di_line_space_extra_normal"
+            android:gravity = "right"
+            android:text = "默认选择"
+            android:drawableRight = "@drawable/ic_item_checked" />
+
+</LinearLayout >

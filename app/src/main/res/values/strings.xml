@@ -265,6 +265,28 @@
     <string name = "st_login_phone_btn_auto">自动登录中(%d)</string>
     <string name = "st_login_btn_text" >登 录</string >
 
+    <!-- 登录-绑定 -->
+    <string name = "st_lbind_owan_pwd_top_hint">
+        <![CDATA[
+        为了您的账号安全，将设置一个偶玩账号\n账号名称: <font color=\'#20C585\'>%s</font>
+        ]]>
+    </string>
+    <string name = "st_lbind_set_pwd">请设置登录密码:</string>
+    <string name = "st_lbind_et_set_pwd_hint">登录密码(6~18位字符)</string>
+    <string name = "st_lbind_owan_user_top_hint">
+        为了您的账号安全和后期使用方便，请设置一个用于登录的偶玩账号
+    </string>
+    <string name = "st_lbind_et_set_user_hint">偶玩账号(6~32位字符或数字)</string>
+    <string name = "st_lbind_choose_top_hint">
+        <![CDATA[
+        系统检测到您的手机 <font color=\'#20C585\'>%s</font> 已绑了如下偶玩账号，请选择一个作为手机默认账号
+        ]]>
+    </string>
+    <string name = "st_lbind_choose_user_name">
+        <![CDATA[
+        <font color=\'#333333\'>%1$s</font> <font color=\'#888888\'>| %2$s</font>
+        ]]>
+    </string>
 
     <!-- 弹窗 -->
     <string name = "st_dialog_hint_title" >提示</string >

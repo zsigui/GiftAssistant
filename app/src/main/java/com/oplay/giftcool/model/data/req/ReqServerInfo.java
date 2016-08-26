@@ -18,6 +18,6 @@ public class ReqServerInfo implements Serializable {
     @SerializedName("offset")
     public int offset;
 
-    @SerializedName("pageSize")
+    @SerializedName("page_size")
     public int pageSize = 20;
 }

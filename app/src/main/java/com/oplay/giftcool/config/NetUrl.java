@@ -177,7 +177,7 @@ public class NetUrl {
     /**
      * 获取新游开服开测表数据
      */
-    public static final String POST_GET_OPEN_SERVER = "test";
+    public static final String POST_GET_OPEN_SERVER = "new_server_list";
 
     public static final String POST_GET_OPEN_TEST = "test";
 

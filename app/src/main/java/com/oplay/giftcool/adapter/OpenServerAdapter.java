@@ -85,7 +85,7 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
             ViewUtil.showImage(viewHolder.ivIcon, o.img);
             ViewUtil.initDownloadBtnStatus(viewHolder.btnDownload, o.appStatus);
         }
-        viewHolder.tvTime.setText(DateUtil.optDate(DateUtil.formatTime(o.time * 1000, "MM-dd HH:mm"), o.time * 1000));
+        viewHolder.tvTime.setText(DateUtil.optDateLong(o.time, DateUtil.getTime(o.time)));
         viewHolder.itemView.setOnClickListener(this);
         viewHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
         viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
@@ -124,6 +124,11 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
 
     public ArrayList<ServerInfo> getData() {
         return mData;
+    }
+
+    public void clearData() {
+        mData = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     private static class ServerHolder extends BaseRVHolder {

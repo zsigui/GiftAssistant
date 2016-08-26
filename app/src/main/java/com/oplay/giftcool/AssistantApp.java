@@ -313,6 +313,7 @@ public class AssistantApp extends Application {
                                 .build();
 //                        AppDebugConfig.d(AppDebugConfig.TAG_APP, "net request url = " + newRequest.url().uri()
 // .toString());
+                        AppDebugConfig.d(AppDebugConfig.TAG_ENCRYPT, "请求地址：" + newRequest.url().uri());
                         Response response = chain.proceed(newRequest);
 
                         CacheControl cacheControl;

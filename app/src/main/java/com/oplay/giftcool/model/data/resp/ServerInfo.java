@@ -7,7 +7,7 @@ public class ServerInfo extends GameDownloadInfo{
 
     public String serverName;
 
-    public long time;
+    public String time;
 
     public String testType;
 

@@ -152,7 +152,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             ToastUtil.showShort(ConstString.TOAST_WRONG_PARAM);
             return;
         }
-        int type = getArguments().getInt(KeyConfig.KEY_DATA, KeyConfig.TYPE_ID_OPEN_SERVER);
+        int type = getArguments().getInt(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_OPEN_SERVER);
         mUrl = (type == KeyConfig.TYPE_ID_OPEN_SERVER ? NetUrl.POST_GET_OPEN_SERVER : NetUrl.POST_GET_OPEN_TEST);
         mAdapter = new OpenServerAdapter(getContext(), type);
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -166,6 +166,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         mSortedTags.add(new AnchorTag(DateUtil.getDate("yyyy-MM-dd", 0), 0, tvToday));
         mSortedTags.add(new AnchorTag(DateUtil.getDate("yyyy-MM-dd", 1), 0, tvTomorrow));
         mSortedTags.add(new AnchorTag(DateUtil.getDate("yyyy-MM-dd", 2), 0, tvAfter));
+        mRefreshLayout.setCanShowLoad(true);
     }
 
     Call<JsonRespBase<OneTypeDataList<ServerInfo>>> mCall;
@@ -197,26 +198,36 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
 
     @Override
     public void onRefresh() {
-        if (mRefreshLayout != null) {
-            mRefreshLayout.setEnabled(false);
-        }
+        mRefreshLayout.setLoading(false);
+        mRefreshLayout.setEnabled(false);
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "onRefresh start: swipe = " + mIsSwipeRefresh + ", loading = " +
+                mIsLoading);
         if (mIsSwipeRefresh || mIsLoading) {
             return;
         }
         mIsSwipeRefresh = true;
+        mRefreshLayout.setCanShowLoad(false);
         if (AssistantApp.getInstance().isReadAttention()) {
             // 正常加载
             refreshFocusData();
         } else {
             // 下拉加载则跳转到上一Tab，已是最后tab则正常加载
+
             int index = getCheckedAnchorIndex();
-            if (index != INDEX_BEFORE && mSortedTags.get(index).canRefresh) {
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "index = " + index + ", canRefresh = " + mSortedTags.get(index)
+                    .canRefresh + ", canload = " + mSortedTags.get(index).canLoad);
+            if (index != INDEX_BEFORE) {
                 // 跳转上一个TAB
-                if (mSortedTags.get(index - 1).data != null) {
+                if (!mSortedTags.get(index - 1).data.isEmpty()) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "有数据");
+                    tabCheck(index - 1);
                     mAdapter.updateData(mSortedTags.get(index - 1).data);
                     rvData.scrollToPosition(mAdapter.getItemCount() - 1);
                     mRefreshLayout.setEnabled(true);
                     mIsLoading = mIsSwipeRefresh = false;
+                    mRefreshLayout.setRefreshing(false);
+                    mRefreshLayout.setCanShowLoad(true);
+                    mCurIndex = index - 1;
                 } else {
                     // 上一标签无数据，执行类网络加载操作
                     handleCheckClick(index - 1);
@@ -224,6 +235,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             } else {
                 // 正常加载
                 handleTabRefresh(index);
+                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "正常加载");
             }
         }
     }
@@ -239,23 +251,26 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         } else {
             // 加载到无数据则跳转到下一Tab，已是最后tab则结束
             int index = getCheckedAnchorIndex();
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "index = " + index + ", canRefresh = " + mSortedTags.get(index)
+                    .canRefresh + ", canload = " + mSortedTags.get(index).canLoad);
             if (index != INDEX_AFTER && !mSortedTags.get(index).canLoad) {
                 // 跳转下一个TAB
-                tabCheck(index + 1);
-                if (mSortedTags.get(index + 1).data != null) {
+                if (!mSortedTags.get(index + 1).data.isEmpty()) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "有数据");
+                    tabCheck(index + 1);
                     mAdapter.updateData(mSortedTags.get(index + 1).data);
                     rvData.scrollToPosition(0);
-                    mNoMoreLoad = !mSortedTags.get(index + 1).canLoad;
                     mRefreshLayout.setEnabled(true);
                     mRefreshLayout.setLoading(false);
                     mIsLoading = mIsLoadMore = false;
-                    mRefreshLayout.setCanShowLoad(mNoMoreLoad);
                 } else {
                     // 上一标签无数据，执行类网络加载操作
-                    handleTabLoad(index + 1);
+                    handleCheckClick(index + 1);
                 }
+                mCurIndex = index + 1;
             } else {
                 // 正常加载
+                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "正常加载");
                 //refreshDataWithCallback(mSortedTags.get(index), false, null);
                 handleTabLoad(index);
             }
@@ -280,6 +295,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             ReqServerInfo serverInfo = new ReqServerInfo();
             serverInfo.isFocus = 1;
             serverInfo.offset = mFocusRefreshIndex - 1;
+            serverInfo.startDate = mSortedTags.get(INDEX_TODAY).tag;
             mFocusReq = new JsonReqBase<>(serverInfo);
         } else {
             mFocusReq.data.offset = mFocusRefreshIndex - 1;
@@ -299,6 +315,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 mIsLoading = mIsSwipeRefresh = false;
                 mRefreshLayout.setEnabled(true);
                 mRefreshLayout.setRefreshing(false);
+                mRefreshLayout.setCanShowLoad(false);
                 if (response != null && response.isSuccessful()
                         && response.body() != null && response.body().isSuccess()) {
                     OneTypeDataList<ServerInfo> data = response.body().getData();
@@ -311,13 +328,15 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                             mAdapter.getData().addAll(0, data.data);
                             mAdapter.notifyItemRangeInserted(0, data.data.size());
                         }
-                    } else {
-                        // 已是最新
-                        ToastUtil.showShort(STR_REFRESH_NEWEST);
-                    }
-                    if (mFocusRefreshIndex == 0) {
                         mRefreshLayout.setCanShowLoad(true);
                     }
+//                    else {
+//                        if (mFocusRefreshIndex == 0) {
+//                        } else {
+//                            // 已是最新
+//                            ToastUtil.showShort(STR_REFRESH_NEWEST);
+//                        }
+//                    }
                     return;
                 }
                 ToastUtil.blurErrorResp(response);
@@ -330,11 +349,9 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 }
                 ToastUtil.blurThrow(t);
                 mIsLoading = mIsSwipeRefresh = false;
+                mRefreshLayout.setCanShowLoad(false);
                 mRefreshLayout.setEnabled(true);
                 mRefreshLayout.setRefreshing(false);
-                if (mFocusRefreshIndex == 0) {
-                    mRefreshLayout.setCanShowLoad(false);
-                }
             }
         });
     }
@@ -350,6 +367,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             ReqServerInfo serverInfo = new ReqServerInfo();
             serverInfo.isFocus = 1;
             serverInfo.offset = mFocusLoadIndex + 1;
+            serverInfo.startDate = mSortedTags.get(INDEX_TODAY).tag;
             mFocusReq = new JsonReqBase<>(serverInfo);
         } else {
             mFocusLoadIndex = mFocusLoadIndex + 1;
@@ -366,6 +384,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 }
                 mIsLoading = mIsLoadMore = false;
                 mRefreshLayout.setLoading(false);
+                mRefreshLayout.setCanShowLoad(true);
                 if (response != null && response.isSuccessful()
                         && response.body() != null && response.body().isSuccess()) {
                     OneTypeDataList<ServerInfo> data = response.body().getData();
@@ -391,6 +410,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                     return;
                 }
                 ToastUtil.blurThrow(t);
+                mRefreshLayout.setCanShowLoad(true);
                 mIsLoading = mIsLoadMore = false;
                 mRefreshLayout.setLoading(false);
             }
@@ -432,7 +452,6 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         if (!mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(true);
         }
-        mRefreshLayout.setCanShowLoad(false);
         mRefreshLayout.setLoading(false);
         // 加载数据
         Global.THREAD_POOL.execute(new Runnable() {
@@ -462,10 +481,10 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                     @Override
                     public void onResponse(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call,
                                            Response<JsonRespBase<OneTypeDataList<ServerInfo>>> response) {
+                        refreshFailed();
                         if (call.isCanceled()) {
                             return;
                         }
-                        refreshFailed();
                         if (response != null && response.isSuccessful()
                                 && response.body() != null && response.body().isSuccess()) {
                             if (listener != null) {
@@ -479,16 +498,17 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
 
                     @Override
                     public void onFailure(Call<JsonRespBase<OneTypeDataList<ServerInfo>>> call, Throwable t) {
+                        refreshFailed();
                         if (call.isCanceled()) {
                             return;
                         }
-                        refreshFailed();
                         ToastUtil.blurThrow(t);
                     }
                 });
             }
 
             private void refreshFailed() {
+                mRefreshLayout.setCanShowLoad(true);
                 mRefreshLayout.setEnabled(true);
                 mRefreshLayout.setRefreshing(false);
                 mIsSwipeRefresh = mIsLoading = false;
@@ -504,7 +524,6 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
     CallbackListener<OneTypeDataList<ServerInfo>>
             listener) {
         // 判断是否处于加载刷新中
-        mRefreshLayout.setCanShowLoad(true);
         mRefreshLayout.setLoading(true);
         if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
@@ -581,7 +600,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         }
     }
 
-    private void handleTabLoad(int index) {
+    private void handleTabLoad(final int index) {
         final AnchorTag tag = mSortedTags.get(index);
         mRefreshLayout.setEnabled(false);
 
@@ -589,17 +608,23 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         loadDataWithCallback(tag, 0, new CallbackListener<OneTypeDataList<ServerInfo>>() {
             @Override
             public void doCallBack(OneTypeDataList<ServerInfo> data) {
-                tag.data.addAll(data.data);
-                mAdapter.setData(tag.data);
-                mAdapter.notifyItemRangeInserted(mAdapter.getData().size() - data.data.size(), data.data.size());
-                tag.canLoad = data.isEndPage;
-                tag.offsetLoad += 1;
-                mRefreshLayout.setCanShowLoad(tag.canLoad);
+                if (!data.data.isEmpty()) {
+                    tag.data.addAll(data.data);
+                    mAdapter.updateData(tag.data);
+//                mAdapter.notifyItemRangeInserted(mAdapter.getData().size() - data.data.size(), data.data.size());
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "isEndPage = " + data.isEndPage);
+                    tag.offsetLoad += 1;
+                } else {
+                    if (index == INDEX_AFTER && data.isEndPage) {
+                        ToastUtil.showShort(STR_REFRESH_NEWEST);
+                    }
+                }
+                tag.canLoad = !data.isEndPage;
             }
         });
     }
 
-    private void handleTabRefresh(int index) {
+    private void handleTabRefresh(final int index) {
         // 正常加载
         mRefreshLayout.setEnabled(false);
         final AnchorTag tag = mSortedTags.get(index);
@@ -610,12 +635,16 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                 // 数据倒着排，所以刷新时加到前面去
                 if (data.data.isEmpty()) {
                     tag.canRefresh = false;
+                    if (index == INDEX_BEFORE) {
+                        ToastUtil.showShort(STR_LOAD_OLDEST);
+                    }
+                } else {
+                    insertFirstReserve(tag.data, data.data);
+                    mAdapter.updateData(tag.data);
+                    tag.offsetRefresh -= 1;
+                    tag.canRefresh = true;
                 }
-                insertFirstReserve(tag.data, data.data);
-                mAdapter.updateData(tag.data);
-                tag.canLoad = data.isEndPage;
-                tag.offsetRefresh -= 1;
-                mRefreshLayout.setCanShowLoad(tag.canLoad);
+                tag.canLoad = !data.isEndPage;
             }
         });
     }
@@ -640,6 +669,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             // 进行数据刷新
 
             mRefreshLayout.setEnabled(false);
+            mAdapter.clearData();
             handleTabRefresh(index);
 
         } else {
@@ -665,7 +695,9 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
                     ((ServerInfoActivity) getActivity()).setTbState(false);
                 }
             }
+            mCurIndex = -1;
         } else {
+            mRefreshLayout.setCanShowLoad(true);
             llAnchors.setVisibility(View.VISIBLE);
             handleCheckClick(INDEX_TODAY);
         }
@@ -674,9 +706,11 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
     private void initFocusData() {
         llAnchors.setVisibility(View.GONE);
         mFocusReq = null;
-        mRefreshLayout.setCanShowLoad(false);
+        mFocusLoadIndex = 0;
+        mFocusRefreshIndex = 1;
         if (!mRefreshLayout.isRefreshing())
             mRefreshLayout.setRefreshing(true);
+        mAdapter.clearData();
         refreshFocusData();
     }
 

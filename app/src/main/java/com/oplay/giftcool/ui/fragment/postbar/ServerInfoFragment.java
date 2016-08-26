@@ -92,7 +92,7 @@ public class ServerInfoFragment extends BaseFragment implements ViewPager.OnPage
                 if (position == 0) {
                     return OpenServerFragment.newInstance(KeyConfig.TYPE_ID_OPEN_SERVER);
                 }
-                return OpenServerFragment.newInstance(KeyConfig.TYPE_ID_OPEN_SERVER);
+                return OpenServerFragment.newInstance(KeyConfig.TYPE_ID_OPEN_TEST);
             }
 
             @Override

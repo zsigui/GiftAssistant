@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
@@ -77,7 +76,8 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
         super(context, attrs);
 
 
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+//        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        mTouchSlop = 50;
 
         mViewFooter = LayoutInflater.from(context).inflate(R.layout.view_item_footer, null,
                 false);
@@ -151,7 +151,9 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
                             @Override
                             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                                 super.onScrolled(recyclerView, dx, dy);
-                                mLastY = dy;
+                                mLastY = mYDown - dy;
+                                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "dy = " + dy);
+                                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "canLoad = " + canLoad());
                                 if (canLoad()) {
                                     //mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
                                     loadData();
@@ -189,6 +191,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                mLastY = (int) ev.getY();
                 // 抬起
                 if (canLoad()) {
                     loadData();
@@ -235,6 +238,7 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
      * @return
      */
     private boolean isPullUp() {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "isPullUp = " + ((mYDown - mLastY) >= mTouchSlop));
         return (mYDown - mLastY) >= mTouchSlop;
     }
 

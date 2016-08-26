@@ -443,7 +443,19 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                doAfterSuccess(response, login);
+                                UserModel um = response.body().getData();
+                                if (um.userInfo.bindOuwanStatus == 1) {
+                                    doAfterSuccess(um, login);
+                                } else {
+                                    // 未绑定偶玩账号，需要绑定
+                                    
+                                }
+                                return;
+                            }
+                            if (response.body() != null
+                                    && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
+                                // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
+
                                 return;
                             }
                         }
@@ -466,8 +478,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
     /**
      * 成功登录后的处理
      */
-    private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
-        UserModel userModel = response.body().getData();
+    private void doAfterSuccess(UserModel userModel, ReqLogin login) {
         userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
         MainActivity.sIsTodayFirstOpen = true;
         AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
