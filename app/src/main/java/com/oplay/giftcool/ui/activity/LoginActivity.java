@@ -2,7 +2,6 @@ package com.oplay.giftcool.ui.activity;
 
 import android.content.Intent;
 import android.support.annotation.IdRes;
-import android.view.View;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
@@ -91,7 +90,7 @@ public class LoginActivity extends BaseAppCompatActivity {
                     ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
                     return;
                 }
-                replaceFragWithTitle(R.id.fl_container, BindOwanFragment.newInstance(um),
+                replaceFragWithTitle(R.id.fl_container, BindOwanFragment.newInstance(um, false),
                         getResources().getString(um.userInfo.phoneCanUseAsUname ?
                                 R.string.st_login_bind_owan_title_1 : R.string.st_login_bind_owan_title_2), false);
                 break;
@@ -106,13 +105,6 @@ public class LoginActivity extends BaseAppCompatActivity {
     public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title, boolean isAddToBackStack) {
         super.replaceFragWithTitle(id, newFrag, title, isAddToBackStack);
         mCurTopFragment = newFrag;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.iv_bar_back) {
-            doLoginBack();
-        }
     }
 
     /**

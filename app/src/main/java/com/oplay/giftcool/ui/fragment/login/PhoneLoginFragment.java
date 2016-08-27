@@ -38,6 +38,7 @@ import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
+import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -394,10 +395,10 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                 } else {
                                     // 未绑定偶玩账号，需要绑定
                                     ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-                                            BindOwanFragment.newInstance(um),
+                                            BindOwanFragment.newInstance(um, true),
                                             getResources().getString(um.userInfo.phoneCanUseAsUname ?
                                                     R.string.st_login_bind_owan_title_1
-                                                    : R.string.st_login_bind_owan_title_2));
+                                                    : R.string.st_login_bind_owan_title_2), false);
                                 }
                                 return;
                             }
@@ -405,9 +406,11 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                                     && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
                                 // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
                                 UserModel um = response.body().getData();
+                                um.userInfo = new UserInfo();
+                                um.userInfo.phone = login.getPhone();
                                 ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
                                         ChooseOwanFragment.newInstance(um),
-                                        getResources().getString(R.string.st_login_choose_owan_title));
+                                        getResources().getString(R.string.st_login_choose_owan_title), false);
                                 return;
                             }
                         }

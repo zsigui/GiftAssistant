@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.OwanChooseAdapter;
 import com.oplay.giftcool.config.ConstString;
@@ -24,6 +25,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -121,7 +123,7 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
         data.cuid = account.uid;
         data.phone = mModel.userInfo.phone;
         data.token = mModel.token;
-        JsonReqBase<ReqBindMainAccount> reqData = new JsonReqBase<>();
+        JsonReqBase<ReqBindMainAccount> reqData = new JsonReqBase<>(data);
         Global.getNetEngine().bindMobileMainAccount(reqData)
                 .enqueue(new Callback<JsonRespBase<UserModel>>() {
                     @Override
@@ -176,6 +178,19 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
 
     @Override
     public boolean onBack() {
-        return false;
+        if (getActivity() != null) {
+            if (AssistantApp.getInstance().getPhoneLoginType() == 1) {
+                ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                        PhoneLoginNewFragment.newInstance(),
+                        getResources().getString(R.string.st_login_phone_new_title),
+                        false);
+            } else {
+                ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                        PhoneLoginFragment.newInstance(),
+                        getResources().getString(R.string.st_login_phone_title),
+                        false);
+            }
+        }
+        return true;
     }
 }

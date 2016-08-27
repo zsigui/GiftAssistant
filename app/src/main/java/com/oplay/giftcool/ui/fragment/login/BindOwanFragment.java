@@ -1,11 +1,14 @@
 package com.oplay.giftcool.ui.fragment.login;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
@@ -17,6 +20,7 @@ import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.LoginActivity;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -28,7 +32,7 @@ import retrofit2.Response;
 /**
  * Created by zsigui on 16-8-26.
  */
-public class BindOwanFragment extends BaseFragment implements OnBackPressListener {
+public class BindOwanFragment extends BaseFragment implements OnBackPressListener, TextWatcher {
 
     private UserModel mData;
 
@@ -38,11 +42,13 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
     private TextView btnSend;
 
     private JsonReqBase<ReqLogin> reqData;
+    private boolean mNeedBackPhoneLogin = false;
 
-    public static BindOwanFragment newInstance(UserModel um) {
+    public static BindOwanFragment newInstance(UserModel um, boolean mNeedBack) {
         BindOwanFragment fragment = new BindOwanFragment();
         Bundle b = new Bundle();
         b.putSerializable(KeyConfig.KEY_DATA, um);
+        b.putBoolean(KeyConfig.KEY_DATA_O, mNeedBack);
         fragment.setArguments(b);
         return fragment;
     }
@@ -55,6 +61,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
             return;
         }
         mData = (UserModel) getArguments().getSerializable(KeyConfig.KEY_DATA);
+        mNeedBackPhoneLogin = getArguments().getBoolean(KeyConfig.KEY_DATA_O);
         if (mData == null) {
             ToastUtil.showShort(ConstString.TOAST_NO_RESPONSE_DATA);
             getActivity().onBackPressed();
@@ -74,6 +81,10 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
     @Override
     protected void setListener() {
         btnSend.setOnClickListener(this);
+        if (etUser != null) {
+            etUser.addTextChangedListener(this);
+        }
+        etPwd.addTextChangedListener(this);
     }
 
     @Override
@@ -83,7 +94,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                     getString(R.string.st_lbind_owan_pwd_top_hint), mData.userInfo.phone)));
         }
         reqData = new JsonReqBase<>(new ReqLogin());
-
+        btnSend.setEnabled(false);
     }
 
     @Override
@@ -126,7 +137,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                         if (call.isCanceled() || !mCanShowUI) {
                             return;
                         }
-                        if (response != null && response.body().isSuccess()
+                        if (response != null && response.isSuccessful()
                                 && response.body() != null && response.body().isSuccess()) {
                             ToastUtil.showShort("成功设置偶玩账号了耶!");
                             ((LoginActivity) getActivity()).doLoginBack();
@@ -152,8 +163,53 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
 
     @Override
     public boolean onBack() {
-        // 回退则通知退出
         AccountManager.getInstance().logout();
-        return false;
+        if (mNeedBackPhoneLogin) {
+            // 回退则通知退出
+            if (getActivity() != null) {
+                if (AssistantApp.getInstance().getPhoneLoginType() == 1) {
+                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                            PhoneLoginNewFragment.newInstance(),
+                            getResources().getString(R.string.st_login_phone_new_title),
+                            false);
+                } else {
+                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                            PhoneLoginFragment.newInstance(),
+                            getResources().getString(R.string.st_login_phone_title),
+                            false);
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (etUser != null) {
+            if (!etUser.getText().toString().trim().isEmpty()
+                    && !etPwd.getText().toString().trim().isEmpty()) {
+                btnSend.setEnabled(true);
+            } else {
+                btnSend.setEnabled(false);
+            }
+        } else {
+            if (!etPwd.getText().toString().trim().isEmpty()) {
+                btnSend.setEnabled(true);
+            } else {
+                btnSend.setEnabled(false);
+            }
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }
