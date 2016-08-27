@@ -388,7 +388,26 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                doAfterSuccess(response, login);
+                                UserModel um = response.body().getData();
+                                if (um.userInfo.bindOuwanStatus == 1) {
+                                    doAfterSuccess(um, login);
+                                } else {
+                                    // 未绑定偶玩账号，需要绑定
+                                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                            BindOwanFragment.newInstance(um),
+                                            getResources().getString(um.userInfo.phoneCanUseAsUname ?
+                                                    R.string.st_login_bind_owan_title_1
+                                                    : R.string.st_login_bind_owan_title_2));
+                                }
+                                return;
+                            }
+                            if (response.body() != null
+                                    && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
+                                // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
+                                UserModel um = response.body().getData();
+                                ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                        ChooseOwanFragment.newInstance(um),
+                                        getResources().getString(R.string.st_login_choose_owan_title));
                                 return;
                             }
                         }
@@ -411,8 +430,7 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
     /**
      * 成功登录后的处理
      */
-    private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
-        UserModel userModel = response.body().getData();
+    private void doAfterSuccess(UserModel userModel, ReqLogin login) {
         userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
         MainActivity.sIsTodayFirstOpen = true;
         AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);

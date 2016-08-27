@@ -50,8 +50,10 @@ public class KeyConfig {
 
     /* login activity */
     public static final int TYPE_ID_LOGIN_MAIN = 151;
-    public static final int TYPE_ID_OUWAN_LOGIN = 0;
-    public static final int TYPE_ID_PHONE_LOGIN = 1;
+    public static final int TYPE_ID_OUWAN_LOGIN = 152;
+    public static final int TYPE_ID_PHONE_LOGIN = 153;
+    public static final int TYPE_ID_BIND_OUWAN = 154;
+    public static final int TYPE_ID_PHONE_BIND_MAIN = 155;
 
     /* gift list activity */
     public static final int TYPE_ID_GIFT_LIMIT = 170;

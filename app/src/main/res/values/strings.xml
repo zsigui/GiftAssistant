@@ -227,6 +227,9 @@
     <string name = "st_my_attention_empty_btn" >去逛逛</string >
 
     <!-- 登录 -->
+    <string name = "st_login_bind_owan_title_1">设置登录密码</string>
+    <string name = "st_login_bind_owan_title_2">设置登录偶玩账号</string>
+    <string name = "st_login_choose_owan_title">选择默认登录账号</string>
     <string name = "st_login_user" >点击登录</string >
     <!--<string name = "st_login_phone_title" >登录礼包酷</string >-->
     <string name = "st_login_phone_title" >手机登录</string >

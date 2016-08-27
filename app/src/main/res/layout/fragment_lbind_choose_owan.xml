@@ -18,8 +18,8 @@
             android:textColor = "@color/co_common_text_second"
             android:text = "@string/st_lbind_choose_top_hint" />
 
-    <ListView
-            android:id = "@+id/lv_user_list"
+    <com.oplay.giftcool.ui.widget.NestedListView
+            android:id = "@+id/lv_content"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:divider = "@color/co_divider_bg"

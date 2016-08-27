@@ -28,6 +28,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.util.DateUtil;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -448,12 +449,16 @@ public class AccountManager implements OnFinishListener {
                                     return;
                                 }
                                 getUserSesion().session = sessionData.session;
-                                notifyUserPart(mUser);
-                                // 请求更新数据
-                                updateUserInfo();
-                                StatisticsManager.getInstance().trace(mContext,
-                                        StatisticsManager.ID.USER_LOGIN_WITH_SESSION,
-                                        StatisticsManager.ID.STR_USER_LOGIN_WITH_SESSION);
+                                if (sessionData.info.bindOuwanStatus == 1) {
+                                    notifyUserPart(mUser);
+                                    // 请求更新数据
+                                    updateUserInfo();
+                                    StatisticsManager.getInstance().trace(mContext,
+                                            StatisticsManager.ID.USER_LOGIN_WITH_SESSION,
+                                            StatisticsManager.ID.STR_USER_LOGIN_WITH_SESSION);
+                                } else {
+                                    IntentUtil.jumpBindOwan(mContext, mUser);
+                                }
                                 return;
                             }
                             judgeIsSessionFailed(response.body());

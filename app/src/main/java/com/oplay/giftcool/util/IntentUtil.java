@@ -16,6 +16,7 @@ import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
@@ -394,6 +395,17 @@ public class IntentUtil {
     public static void jumpLogin(Context context, int type) {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(KeyConfig.KEY_TYPE, type);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳转绑定账号界面
+     */
+    public static void jumpBindOwan(Context context, UserModel um) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_BIND_OUWAN);
+        intent.putExtra(KeyConfig.KEY_DATA, um);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }

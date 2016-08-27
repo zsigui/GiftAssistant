@@ -229,32 +229,40 @@ public class NetUrl {
      */
     public static final String USER_MODIFY_AVATAR = "v2/account/change_account_avatar";
 
-    /**
-     * 修改绑定手机-第一步
-     */
-    public static final String USER_MODIFY_PHONE_FIRST = "account/modify_account_bind_mobile_step_1";
-
-    /**
-     * 修改绑定手机-第二步
-     */
-    public static final String USER_MODIFY_PHONE_SECOND = "account/modify_account_bind_mobile_step_2";
-
-    /**
-     * 修改绑定手机-第三歩
-     */
-    public static final String USER_MODIFY_PHONE_THIRD = "account/modify_account_bind_mobile_step_3";
-
-    /**
-     * 修改绑定手机-第四步
-     */
-    public static final String USER_MODIFY_PHONE_FOUR = "account/modify_account_bind_mobile_step_4";
+//    /**
+//     * 修改绑定手机-第一步
+//     */
+//    public static final String USER_MODIFY_PHONE_FIRST = "account/modify_account_bind_mobile_step_1";
+//
+//    /**
+//     * 修改绑定手机-第二步
+//     */
+//    public static final String USER_MODIFY_PHONE_SECOND = "account/modify_account_bind_mobile_step_2";
+//
+//    /**
+//     * 修改绑定手机-第三歩
+//     */
+//    public static final String USER_MODIFY_PHONE_THIRD = "account/modify_account_bind_mobile_step_3";
+//
+//    /**
+//     * 修改绑定手机-第四步
+//     */
+//    public static final String USER_MODIFY_PHONE_FOUR = "account/modify_account_bind_mobile_step_4";
 
     /**
      * 获取我的礼包
      */
     public static final String USER_GIFT_SEIZED = "my_gift";
 
+    /**
+     * 绑定手机的主账号
+     */
+    public static final String USER_BIND_MOBILE_MAIN_ACCOUNT = "v1/account/bind_mobile_main_account";
 
+    /**
+     * 设置偶玩账号用户名、密码（绑定偶玩账号）
+     */
+    public static final String USER_BIND_OUWAN = "account/setup_ouwan_account";
 
 	/* 任务接口 */
 

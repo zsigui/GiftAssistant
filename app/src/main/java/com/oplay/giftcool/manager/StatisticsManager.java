@@ -66,6 +66,9 @@ public class StatisticsManager {
         // 手机登录
         String USER_PHONE_LOGIN = "user_phone_login";
         String STR_USER_PHONE_LOGIN = "使用手机登录";
+        // 手机绑定主账号
+        String USER_PHONE_BIND_MAIN = "user_phone_bind_main";
+        String STR_USER_PHONE_BIND_MAIN = "手机绑定主账号";
         // 偶玩账号登录
         String USER_OUWAN_LOGIN = "user_ouwan_login";
         String STR_USER_OUWAN_LOGIN = "偶玩账号登录";

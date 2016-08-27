@@ -448,14 +448,21 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                                     doAfterSuccess(um, login);
                                 } else {
                                     // 未绑定偶玩账号，需要绑定
-                                    
+                                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                            BindOwanFragment.newInstance(um),
+                                            getResources().getString(um.userInfo.phoneCanUseAsUname ?
+                                                    R.string.st_login_bind_owan_title_1
+                                                    : R.string.st_login_bind_owan_title_2));
                                 }
                                 return;
                             }
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
                                 // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
-
+                                UserModel um = response.body().getData();
+                                ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                        ChooseOwanFragment.newInstance(um),
+                                        getResources().getString(R.string.st_login_choose_owan_title));
                                 return;
                             }
                         }

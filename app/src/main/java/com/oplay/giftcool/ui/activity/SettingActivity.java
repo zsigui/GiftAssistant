@@ -134,6 +134,7 @@ public class SettingActivity extends BaseAppCompatActivity implements ObserverMa
             ToastUtil.showShort(ConstString.TOAST_SESSION_UNAVAILABLE);
             IntentUtil.jumpLoginNoToast(this);
             finish();
+            return;
         }
         mTypeHierarchy.add(type);
         switch (type) {

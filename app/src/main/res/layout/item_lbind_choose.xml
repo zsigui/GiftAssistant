@@ -7,9 +7,6 @@
     <TextView
             android:id = "@+id/tv_name"
             style = "@style/DefaultTextView.Login"
-            android:cursorVisible = "true"
-            android:inputType = "text"
-            android:imeOptions = "actionDone"
             android:hint = "@string/st_lbind_choose_user_name" />
 
     <CheckedTextView

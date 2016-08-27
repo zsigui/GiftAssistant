@@ -1,6 +1,7 @@
 package com.oplay.giftcool.engine;
 
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.model.data.req.ReqBindMainAccount;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
@@ -303,6 +304,18 @@ public interface NetEngine {
      */
     @POST(NetUrl.USER_GET_PART_INFO)
     Call<JsonRespBase<UserInfo>> getUserPartInfo(@Body JsonReqBase<Void> reqData);
+
+    /**
+     * 设置偶玩账号密码（绑定偶玩账号）
+     */
+    @POST(NetUrl.USER_BIND_OUWAN)
+    Call<JsonRespBase<Void>> bindOwanAccount(@Body JsonReqBase<ReqLogin> reqData);
+
+    /**
+     * 手机绑定主账号
+     */
+    @POST(NetUrl.USER_BIND_MOBILE_MAIN_ACCOUNT)
+    Call<JsonRespBase<UserModel>> bindMobileMainAccount(@Body JsonReqBase<ReqBindMainAccount> reqData);
 
 	/* ---------------- 任务接口  ---------------- */
 

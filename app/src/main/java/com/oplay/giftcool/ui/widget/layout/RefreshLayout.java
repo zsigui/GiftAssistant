@@ -238,7 +238,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
      * @return
      */
     private boolean isPullUp() {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "isPullUp = " + ((mYDown - mLastY) >= mTouchSlop));
         return (mYDown - mLastY) >= mTouchSlop;
     }
 
