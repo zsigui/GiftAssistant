@@ -445,8 +445,9 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 UserModel um = response.body().getData();
+                                doAfterSuccess(um, login);
                                 if (um.userInfo.bindOuwanStatus == 1) {
-                                    doAfterSuccess(um, login);
+                                    ((LoginActivity) getActivity()).doLoginBack();
                                 } else {
                                     // 未绑定偶玩账号，需要绑定
                                     ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
@@ -501,7 +502,6 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                 "手机号:" + userModel.userInfo.phone);
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((LoginActivity) getActivity()).doLoginBack();
     }
 
 

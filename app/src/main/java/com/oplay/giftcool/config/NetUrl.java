@@ -265,7 +265,7 @@ public class NetUrl {
     /**
      * 设置偶玩账号用户名、密码（绑定偶玩账号）
      */
-    public static final String USER_BIND_OUWAN = "account/setup_ouwan_account";
+    public static final String USER_BIND_OUWAN = "v1/account/setup_ouwan_account";
 
 	/* 任务接口 */
 

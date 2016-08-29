@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -110,6 +111,11 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
     }
 
     private void handleBindLogin() {
+        if (!NetworkUtil.isConnected(getContext())) {
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            return;
+        }
+        DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
         final BindAccount account = mAdapter.getCheckedItem();
         if (account == null) {
             ToastUtil.showShort("请选择账号！");
@@ -132,6 +138,7 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
                         if (call.isCanceled() || !mCanShowUI) {
                             return;
                         }
+                        DialogManager.getInstance().hideLoadingDialog();
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
                                 // 绑定并登录成功
@@ -151,6 +158,7 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
                         if (call.isCanceled() || !mCanShowUI) {
                             return;
                         }
+                        DialogManager.getInstance().hideLoadingDialog();
                         ToastUtil.blurThrow(t);
                     }
                 });

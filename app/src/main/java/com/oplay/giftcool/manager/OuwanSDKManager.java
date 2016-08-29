@@ -84,7 +84,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         sdkUser.setOpenId(user.openId);
         UmipayAccount account;
         if (AccountManager.getInstance().isPhoneLogin()) {
-            account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_PHONE);
+            account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_MOBILE);
             account.setUserName(AccountManager.getInstance().getUserInfo().username);
         } else {
             account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_NORMAL);

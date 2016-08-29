@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -124,12 +125,14 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
             ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
             return;
         }
+        DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
         String pwd = etPwd.getText().toString().trim();
         if (mData.userInfo.phoneCanUseAsUname) {
-            reqData.data.setOuwanUser(mData.userInfo.phone, pwd, true);
+            reqData.data.setOuwanUser(mData.userInfo.phone, pwd, false);
         } else {
-            reqData.data.setOuwanUser(etUser.getText().toString().trim(), pwd, true);
+            reqData.data.setOuwanUser(etUser.getText().toString().trim(), pwd, false);
         }
+        mData.userInfo.username = reqData.data.getUsername();
         Global.getNetEngine().bindOwanAccount(reqData)
                 .enqueue(new Callback<JsonRespBase<Void>>() {
                     @Override
@@ -137,9 +140,13 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                         if (call.isCanceled() || !mCanShowUI) {
                             return;
                         }
+                        DialogManager.getInstance().hideLoadingDialog();
                         if (response != null && response.isSuccessful()
                                 && response.body() != null && response.body().isSuccess()) {
                             ToastUtil.showShort("成功设置偶玩账号了耶!");
+                            mData.userInfo.bindOuwanStatus = 1;
+                            AccountManager.getInstance().notifyUserPart(mData);
+                            // 请求更新数据
                             ((LoginActivity) getActivity()).doLoginBack();
                             return;
                         }
@@ -151,6 +158,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                         if (call.isCanceled() || !mCanShowUI) {
                             return;
                         }
+                        DialogManager.getInstance().hideLoadingDialog();
                         ToastUtil.blurThrow(t);
                     }
                 });
