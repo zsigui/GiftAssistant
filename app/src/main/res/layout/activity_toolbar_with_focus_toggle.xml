@@ -57,10 +57,10 @@
                     android:layout_marginRight = "@dimen/di_list_item_gap_normal"
                     android:layout_width = "26dp"
                     android:layout_marginLeft = "@dimen/di_line_space_extra_big"
-                    app:tb_onColor = "@color/co_white"
-                    app:tb_offColor = "@color/co_btn_grey"
-                    app:tb_spotColor = "@color/co_btn_orange"
-                    app:tb_offBorderColor = "@color/co_btn_grey"
+                    app:tb_onColor = "@color/co_btn_orange"
+                    app:tb_offColor = "@color/co_common_content_bg"
+                    app:tb_spotColor = "@color/co_white"
+                    app:tb_offBorderColor = "@color/co_common_content_bg"
                     app:tb_borderWidth = "0.3dp"
                     android:layout_height = "14dp" />
         </LinearLayout >

@@ -29,6 +29,7 @@
             android:textColor = "@color/co_white"
             android:textSize = "@dimen/di_text_size_big"
             android:layout_marginTop = "@dimen/di_line_space_extra_normal"
+            android:layout_toLeftOf = "@+id/iv_arrow"
             android:layout_toRightOf = "@+id/iv_icon" />
 
     <TextView
@@ -36,7 +37,18 @@
             style = "@style/NavDrawerItemText"
             android:layout_toRightOf = "@+id/iv_icon"
             android:layout_marginTop = "@dimen/di_line_space_extra_big"
+            android:layout_toLeftOf = "@+id/iv_arrow"
             android:layout_below = "@+id/tv_nick" />
+
+
+    <ImageView
+            android:id = "@+id/iv_arrow"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_alignParentRight = "true"
+            android:layout_alignBottom = "@+id/tv_nick"
+            android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+            android:src = "@drawable/ic_white_arrow_right" />
 
     <TextView
             android:id = "@+id/tv_score"
@@ -55,4 +67,5 @@
             android:layout_toRightOf = "@+id/tv_score"
             android:drawablePadding = "@dimen/di_line_space_extra_normal"
             android:layout_marginLeft = "@dimen/di_list_item_gap_big" />
+
 </RelativeLayout >

@@ -49,6 +49,7 @@ public class DrawerFragment extends BaseFragment {
     private TextView tvScore;
     private TextView tvBean;
     private RelativeLayout rlFooter;
+    private ImageView ivArrow;
 
     public static DrawerFragment newInstance(DrawerLayout drawerLayout) {
         DrawerFragment fragment = new DrawerFragment();
@@ -68,6 +69,7 @@ public class DrawerFragment extends BaseFragment {
         rvContent = getViewById(R.id.drawer_content);
         tvScore = getViewById(R.id.tv_score);
         tvBean = getViewById(R.id.tv_bean);
+        ivArrow = getViewById(R.id.iv_arrow);
     }
 
     @Override
@@ -106,6 +108,7 @@ public class DrawerFragment extends BaseFragment {
             tvUnLogin.setVisibility(View.VISIBLE);
             tvScore.setVisibility(View.GONE);
             tvBean.setVisibility(View.GONE);
+            ivArrow.setVisibility(View.GONE);
 
         } else {
             String nick;
@@ -121,6 +124,7 @@ public class DrawerFragment extends BaseFragment {
             }
             tvNick.setText(nick);
             tvName.setText(name);
+            ivArrow.setVisibility(View.VISIBLE);
             tvUnLogin.setVisibility(View.GONE);
             tvScore.setVisibility(View.VISIBLE);
             tvBean.setVisibility(View.VISIBLE);
