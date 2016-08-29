@@ -171,6 +171,10 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
 
     @Override
     public boolean onBack() {
+        if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND_CAN_JUMP) {
+            // 可以被跳过，则直接返回
+            return false;
+        }
         AccountManager.getInstance().logout();
         if (mNeedBackPhoneLogin) {
             // 回退则通知退出

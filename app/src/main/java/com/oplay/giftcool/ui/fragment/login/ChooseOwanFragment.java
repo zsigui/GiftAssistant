@@ -12,22 +12,16 @@ import com.oplay.giftcool.adapter.OwanChooseAdapter;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
-import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.manager.ScoreManager;
-import com.oplay.giftcool.manager.SocketIOManager;
-import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqBindMainAccount;
 import com.oplay.giftcool.model.data.resp.BindAccount;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.LoginActivity;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
@@ -142,7 +136,8 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null && response.body().isSuccess()) {
                                 // 绑定并登录成功
-                                doAfterSuccess(response.body().getData());
+                                UserModel um = response.body().getData();
+                                MixUtil.doPhoneLoginSuccessNext(getActivity(), um);
                                 return;
                             }
                             // 连接上但是失败，处理为失败重来
@@ -162,21 +157,6 @@ public class ChooseOwanFragment extends BaseFragment implements OnBackPressListe
                         ToastUtil.blurThrow(t);
                     }
                 });
-    }
-
-    private void doAfterSuccess(UserModel userModel) {
-        userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
-        MainActivity.sIsTodayFirstOpen = true;
-        AccountManager.getInstance().notifyUserAll(userModel);
-        SocketIOManager.getInstance().connectOrReConnect(true);
-        ScoreManager.getInstance().initTaskState();
-        StatisticsManager.getInstance().trace(getContext(),
-                StatisticsManager.ID.USER_PHONE_BIND_MAIN,
-                StatisticsManager.ID.STR_USER_PHONE_BIND_MAIN,
-                "手机号:" + userModel.userInfo.phone + ", 对应绑定偶玩账号: " + userModel.userInfo.username);
-
-        Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((LoginActivity) getActivity()).doLoginBack();
     }
 
     @Override

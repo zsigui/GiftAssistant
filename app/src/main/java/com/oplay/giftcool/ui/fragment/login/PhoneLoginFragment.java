@@ -29,25 +29,20 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.manager.ScoreManager;
-import com.oplay.giftcool.manager.SocketIOManager;
-import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
-import com.oplay.giftcool.ui.activity.LoginActivity;
-import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.InputTextUtil;
+import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.ThreadUtil;
@@ -390,17 +385,8 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 UserModel um = response.body().getData();
-                                doAfterSuccess(um, login);
-                                if (um.userInfo.bindOuwanStatus == 1) {
-                                    ((LoginActivity) getActivity()).doLoginBack();
-                                } else {
-                                    // 未绑定偶玩账号，需要绑定
-                                    ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-                                            BindOwanFragment.newInstance(um, true),
-                                            getResources().getString(um.userInfo.phoneCanUseAsUname ?
-                                                    R.string.st_login_bind_owan_title_1
-                                                    : R.string.st_login_bind_owan_title_2), false);
-                                }
+                                MixUtil.doPhoneLoginSuccessNext(getActivity(), um);
+                                AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
                                 return;
                             }
                             if (response.body() != null
@@ -430,25 +416,6 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
             }
         });
     }
-
-    /**
-     * 成功登录后的处理
-     */
-    private void doAfterSuccess(UserModel userModel, ReqLogin login) {
-        userModel.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
-        MainActivity.sIsTodayFirstOpen = true;
-        AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
-        AccountManager.getInstance().notifyUserAll(userModel);
-        SocketIOManager.getInstance().connectOrReConnect(true);
-        ScoreManager.getInstance().initTaskState();
-        StatisticsManager.getInstance().trace(getContext(),
-                StatisticsManager.ID.USER_PHONE_LOGIN,
-                StatisticsManager.ID.STR_USER_PHONE_LOGIN,
-                "手机号:" + userModel.userInfo.phone);
-
-        Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-    }
-
 
     public void hideLoading() {
         DialogManager.getInstance().hideLoadingDialog();

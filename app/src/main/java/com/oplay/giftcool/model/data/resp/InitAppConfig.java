@@ -45,4 +45,10 @@ public class InitAppConfig implements Serializable {
      */
     @SerializedName("ad_splash")
     public AdInfo adInfo;
+
+    /**
+     * 对 bind_ouwan_status = 0 的用户是否需要弹出设置用户名密码页面， 0：不需要绑定，1：需要绑定，不可跳过，2：需要绑定，但可以跳过
+     */
+    @SerializedName("setup_ouwan_account")
+    public int setupOuwanAccount;
 }

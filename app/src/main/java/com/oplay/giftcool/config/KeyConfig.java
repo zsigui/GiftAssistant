@@ -129,4 +129,11 @@ public class KeyConfig {
     /* server info fragment */
     public static final int TYPE_ID_OPEN_SERVER = 0;
     public static final int TYPE_ID_OPEN_TEST = 1;
+
+    // 不需要绑定
+    public static final int KEY_LOGIN_NOT_BIND = 1;
+    // 需要绑定，不可跳过
+    public static final int KEY_LOGIN_SET_BIND = 2;
+    // 不需要绑定，可以跳过
+    public static final int KEY_LOGIN_SET_BIND_CAN_JUMP = 3;
 }

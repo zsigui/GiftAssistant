@@ -8,6 +8,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
@@ -118,7 +119,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
 
-
         // 获取用户信息
         // 该信息使用salt加密存储再SharedPreference中
         UserModel user = null;
@@ -208,14 +208,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                             AssistantApp.getInstance().setStartImg(config.startImgUrl);
                             AssistantApp.getInstance().setBroadcastBanner(config.broadcastBanner);
                             AssistantApp.getInstance().setPhoneLoginType(config.phoneLoginType);
-
-//                            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "set ad config");
-//                            config.adInfo = new AdInfo();
-//                            config.adInfo.showPass = true;
-//                            config.adInfo.displayTime = 6;
-//                            config.adInfo.uri = "lbapp://libao.ouwan.com/gamedetail/?id=11185&data=2";
-//                            config.adInfo.img = "http://owan-img.ymapp.com/giftcool/splash/giftcool_20160803.jpg";
-//                            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "set ad config ： " + config.adInfo);
                             if (config.adInfo == null && !TextUtils.isEmpty(config.startImgUrl)) {
                                 // 用于兼容1308及之前版本
                                 config.adInfo = new AdInfo();
@@ -232,6 +224,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                             }
                             PushMessageManager.getInstance().initPush(mContext);
                             AssistantApp.getInstance().setPushSdk(pushSdk);
+                            config.setupOuwanAccount = (config.setupOuwanAccount == 0 ?
+                                    KeyConfig.KEY_LOGIN_SET_BIND : config.setupOuwanAccount);
+                            AssistantApp.getInstance().setSetupOuwanAccount(config.setupOuwanAccount);
                         }
                         if (initData.updateInfo != null) {
                             AssistantApp.getInstance().setUpdateInfo(initData.updateInfo);

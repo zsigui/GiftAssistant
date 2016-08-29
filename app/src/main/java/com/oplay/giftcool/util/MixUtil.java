@@ -7,20 +7,32 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
 import com.oplay.giftcool.AssistantApp;
+import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.TaskTypeUtil;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.SocketIOManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.InitQQ;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.task.ShareTask;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
+import com.oplay.giftcool.ui.activity.LoginActivity;
+import com.oplay.giftcool.ui.activity.MainActivity;
+import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.fragment.login.BindOwanFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +208,8 @@ public class MixUtil {
             TaskInfoOne info = new TaskInfoOne();
             String pathAction = uri.getEncodedPath();
             info.action = pathAction.substring(1,
-                    pathAction.lastIndexOf('/') == pathAction.length() - 1? pathAction.length() - 1 : pathAction.length());
+                    pathAction.lastIndexOf('/') == pathAction.length() - 1 ? pathAction.length() - 1 : pathAction
+                            .length());
             info.data = uri.getQueryParameter("data");
             String id = uri.getQueryParameter("id");
             AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data = " + info.data + ", id = " + info.id);
@@ -205,6 +218,34 @@ public class MixUtil {
             IntentUtil.handleJumpInfo(context, info);
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
+        }
+    }
+
+    public static void doPhoneLoginSuccessNext(Context context, UserModel um) {
+        um.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
+        MainActivity.sIsTodayFirstOpen = true;
+        AccountManager.getInstance().notifyUserAll(um);
+        SocketIOManager.getInstance().connectOrReConnect(true);
+        ScoreManager.getInstance().initTaskState();
+        StatisticsManager.getInstance().trace(context,
+                StatisticsManager.ID.USER_PHONE_BIND_MAIN,
+                StatisticsManager.ID.STR_USER_PHONE_BIND_MAIN,
+                "手机号:" + um.userInfo.phone + ", 对应绑定偶玩账号: " + um.userInfo.username);
+
+        Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
+
+        if (context != null && context instanceof LoginActivity) {
+            if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_NOT_BIND
+                    || um.userInfo.bindOuwanStatus == 1) {
+                ((LoginActivity) context).doLoginBack();
+            } else {
+                // 未绑定偶玩账号，需要绑定
+                ((BaseAppCompatActivity) context).replaceFragWithTitle(R.id.fl_container,
+                        BindOwanFragment.newInstance(um, true),
+                        context.getResources().getString(um.userInfo.phoneCanUseAsUname ?
+                                R.string.st_login_bind_owan_title_1
+                                : R.string.st_login_bind_owan_title_2), false);
+            }
         }
     }
 }

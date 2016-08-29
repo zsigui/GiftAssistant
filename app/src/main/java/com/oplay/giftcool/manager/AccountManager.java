@@ -12,6 +12,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -449,7 +450,8 @@ public class AccountManager implements OnFinishListener {
                                     return;
                                 }
                                 getUserSesion().session = sessionData.session;
-                                if (sessionData.info.bindOuwanStatus == 1) {
+                                if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_NOT_BIND
+                                        || sessionData.info.bindOuwanStatus == 1) {
                                     notifyUserPart(mUser);
                                     // 请求更新数据
                                     updateUserInfo();

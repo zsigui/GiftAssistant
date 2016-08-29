@@ -28,6 +28,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -129,6 +130,7 @@ public class AssistantApp extends Application {
     private int mPhoneLoginType;
     private int mPushSdk = PushMessageManager.SdkType.NONE;
     private CallbackListener<Bitmap> mSplashAdListener;
+    private int mSetupOuwanAccount = KeyConfig.KEY_LOGIN_SET_BIND;
 
     // LeakCanary 用于检测内存泄露
 //	private RefWatcher mRefWatcher;
@@ -772,5 +774,13 @@ public class AssistantApp extends Application {
 
     public void setSplashAdListener(CallbackListener<Bitmap> splashAdListener) {
         mSplashAdListener = splashAdListener;
+    }
+
+    public int getSetupOuwanAccount() {
+        return mSetupOuwanAccount;
+    }
+
+    public void setSetupOuwanAccount(int setupOuwanAccount) {
+        mSetupOuwanAccount = setupOuwanAccount;
     }
 }
