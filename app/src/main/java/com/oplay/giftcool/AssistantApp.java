@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
@@ -729,33 +730,41 @@ public class AssistantApp extends Application {
     public void setAdInfo(AdInfo adInfo) {
         if (adInfo != null && !TextUtils.isEmpty(adInfo.img)) {
             if (mAdInfo == null || !adInfo.img.equalsIgnoreCase(mAdInfo.img)) {
-                AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "start to load ad img : " + adInfo.img);
-                ImageLoader.getInstance().loadImage(adInfo.img, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-
+                mAdInfo = adInfo;
+                File f = ImageLoader.getInstance().getDiskCache().get(adInfo.img);
+                AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "start to load ad img : " + adInfo.img + ", f = " + f);
+                if (f != null) {
+                    // 之前已经有该图片
+                    if (mSplashAdListener != null) {
+                        mSplashAdListener.doCallBack(BitmapFactory.decodeFile(f.getAbsolutePath()));
                     }
+                } else {
+                    ImageLoader.getInstance().loadImage(adInfo.img, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
 
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        AppDebugConfig.w(AppDebugConfig.TAG_APP, failReason.getCause());
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "图片加载完成：mSplashAdListener = " +
-                                mSplashAdListener);
-                        if (mSplashAdListener != null) {
-                            mSplashAdListener.doCallBack(loadedImage);
                         }
-                    }
 
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                    }
-                });
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            AppDebugConfig.w(AppDebugConfig.TAG_APP, failReason.getCause());
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "图片加载完成：mSplashAdListener = " +
+                                    mSplashAdListener);
+                            if (mSplashAdListener != null) {
+                                mSplashAdListener.doCallBack(loadedImage);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                        }
+                    });
+                }
             }
-            mAdInfo = adInfo;
             String s = getGson().toJson(adInfo, AdInfo.class);
             SPUtil.putString(this, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_AD_SPLASH_INFO, s);
         }

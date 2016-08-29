@@ -227,6 +227,8 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
                     AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "slip to end ");
                     return true;
                 }
+            } else {
+                return true;
             }
         }
         return false;

@@ -175,11 +175,14 @@ public class NetUrl {
     public static final String POST_REPLY = "activity/add_comment";
 
     /**
-     * 获取新游开服开测表数据
+     * 获取新游开服表数据
      */
     public static final String POST_GET_OPEN_SERVER = "new_server_list";
 
-    public static final String POST_GET_OPEN_TEST = "test";
+    /**
+     * 获取新游开测表数据
+     */
+    public static final String POST_GET_OPEN_TEST = "new_game_list";
 
 
 	/* 用户接口 */

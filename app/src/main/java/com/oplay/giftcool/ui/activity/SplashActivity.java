@@ -19,6 +19,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -240,6 +241,7 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                     ivAdLoad.setImageBitmap(data);
                     showPass(newInfo);
                     disappearView(ivSplash);
+                    mCurrentImg = newInfo.img;
                 }
             });
         }
