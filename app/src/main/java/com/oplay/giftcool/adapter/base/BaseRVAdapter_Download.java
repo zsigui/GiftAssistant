@@ -105,22 +105,24 @@ public abstract class BaseRVAdapter_Download<T extends GameDownloadInfo> extends
                 return;
             }
             final T appInfo = mData.get(position);
-//			if (mListener != null) {
-//				mListener.onItemClick(appInfo, v, position);
-//			}
-            switch (v.getId()) {
-                case R.id.tv_download:
-                    if (mContext != null && mContext instanceof FragmentActivity
-                            && !AppStatus.DISABLE.equals(appInfo.appStatus)) {
-                        appInfo.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
-                    }
-                    break;
-                default:
-                    IntentUtil.jumpGameDetail(mContext, appInfo.id, GameTypeUtil.JUMP_STATUS_DETAIL);
-                    break;
+			if (mListener != null) {
+				mListener.onItemClick(appInfo, v, position);
+			} else {
+                switch (v.getId()) {
+                    case R.id.tv_download:
+                        if (mContext != null && mContext instanceof FragmentActivity
+                                && !AppStatus.DISABLE.equals(appInfo.appStatus)) {
+                            appInfo.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
+                        }
+                        break;
+                    default:
+                        IntentUtil.jumpGameDetail(mContext, appInfo.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+                        break;
+                }
             }
         } catch (Throwable e) {
             AppDebugConfig.w(AppDebugConfig.TAG_ADAPTER, e);
+            e.printStackTrace();
         }
     }
 

@@ -11,10 +11,12 @@ import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.entry.gson.Gson_Cmd_Regist;
 import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.LocalPasswordManager;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
+import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 
 /**
  * RspParser_Cmd_Regist
@@ -104,6 +106,13 @@ public class RspParser_Cmd_Regist extends CommonRspParser<Gson_Cmd_Regist> {
 				LocalPasswordManager.getInstance(context).removePassword(umipayAccount.getUserName());
 			}
 		}
+		long ts = 0;
+		try{
+			ts = System.currentTimeMillis();
+		}catch (Throwable e){
+			Debug_Log.e(e);
+		}
+		UmipayCommonAccountCacheManager.getInstance(context).addCommonAccount(new UmipayCommonAccount(context,umipayAccount,ts),UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
 		try {
 			ListenerManager.getCommandRegistListener().onRegist(UmipayAccount.TYPE_REGIST, code, msg, umipayAccount);
 		} catch (Throwable e) {

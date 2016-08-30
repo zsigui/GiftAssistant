@@ -67,6 +67,9 @@ public class RspParser_Cmd_Init extends CommonRspParser<Gson_Cmd_Init> {
 					cacheConfig.setExitDialogCommunityBtnText(cmdInitDataConfigOuwan.getCommunityText());
 					cacheConfig.setExitDialogDownloadBtnText(cmdInitDataConfigOuwan.getDownloadText());
 					cacheConfig.setEnableExitToCommunity(cmdInitDataConfigOuwan.getShowCommunity());
+					//测试
+					cacheConfig.setIsLightSDK(false);
+//					cacheConfig.setIsLightSDK(cmdInitDataConfigOuwan.getIsLightSDK());
 					cacheConfig.save();
 				}
 				postResult(result);

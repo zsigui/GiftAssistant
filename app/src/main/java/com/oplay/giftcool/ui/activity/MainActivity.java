@@ -301,8 +301,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 } else if (action.equals(Intent.ACTION_VIEW)) {
                     Uri uri = intent.getData();
                     MixUtil.handleViewUri(getApplicationContext(), uri);
+                    MixUtil.judgeShowAccount();
+                } else {
+                    MixUtil.judgeShowAccount();
                 }
+            } else {
+                MixUtil.judgeShowAccount();
             }
+
+
         } catch (Exception e) {
             AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
         }
@@ -611,11 +618,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 }
                 break;
             case R.id.ll_gift_count:
-                if (AccountManager.getInstance().isLogin()) {
-                    IntentUtil.jumpMyGift(MainActivity.this);
-                } else {
-                    IntentUtil.jumpLogin(MainActivity.this);
-                }
+//                if (AccountManager.getInstance().isLogin()) {
+//                    IntentUtil.jumpMyGift(MainActivity.this);
+//                } else {
+//                    IntentUtil.jumpLogin(MainActivity.this);
+//                }
+                AccountManager.getInstance().updateSessionNetRequest();
                 break;
         }
     }

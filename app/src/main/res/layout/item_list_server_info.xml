@@ -67,6 +67,7 @@
             android:layout_toRightOf = "@+id/rl_icon"
             android:layout_toLeftOf = "@+id/tv_download"
             android:text = "新服不动明王(S333)/上海游族有限公司"
+            android:textColor = "@color/co_btn_orange"
             android:layout_below = "@+id/tv_name" />
 
 

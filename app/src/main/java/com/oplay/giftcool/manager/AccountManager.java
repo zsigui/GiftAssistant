@@ -75,6 +75,12 @@ public class AccountManager implements OnFinishListener {
         return mUser;
     }
 
+    public void setUser(UserModel user) {
+        if (user == null) {
+            return;
+        }
+        mUser = user;
+    }
 
     /**
      * 设置当前用户，默认进行 USER_UPDATE_PART 状态通知
@@ -450,6 +456,7 @@ public class AccountManager implements OnFinishListener {
                                     return;
                                 }
                                 getUserSesion().session = sessionData.session;
+                                mUser.userInfo = sessionData.info;
                                 if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_NOT_BIND
                                         || sessionData.info.bindOuwanStatus == 1) {
                                     notifyUserPart(mUser);
@@ -463,7 +470,10 @@ public class AccountManager implements OnFinishListener {
                                 }
                                 return;
                             }
-                            judgeIsSessionFailed(response.body());
+                            if (response.body() != null
+                                    && response.body().getCode() == NetStatusCode.ERR_UN_LOGIN) {
+                                notifyUserAll(null);
+                            }
                         }
                     }
                     AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);

@@ -16,12 +16,14 @@ import net.ouwan.umipay.android.config.SDKCacheConfig;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.global.Global_Url_Params;
 import net.ouwan.umipay.android.manager.ChannelManager;
 import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.PushPullAlarmManager;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
 import net.ouwan.umipay.android.manager.UmipayCommandTaskManager;
+import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 import net.ouwan.umipay.android.view.UmipayExitDialog;
 import net.ouwan.umipay.android.view.UmipayLoginInfoDialog;
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
@@ -148,6 +150,10 @@ public class UmipaySDKManager {
 
 			UmipayCommandTaskManager.getInstance(context).GetAccountListCommandTask();
 
+
+			//开始时先验证原有登录态
+			UmipayCommandTaskManager.getInstance(context).ValiDateSessions();
+
 			//运行push
 			PushPullAlarmManager.getInstance(context).startPolling();
 
@@ -175,11 +181,21 @@ public class UmipaySDKManager {
 				return;
 			}
 
+			UmipayCommonAccount accountToChange = UmipayCommonAccountCacheManager.getInstance(context).popCommonAccountToChange();
 			UmipayAccount lastAccount = UmipayAccountManager.getInstance(context).getFirstAccount();
 			boolean autoLogin = SDKCacheConfig.getInstance(context).isAutoLogin();
 			boolean isLogout = UmipayAccountManager.getInstance(context).isLogout();
 
-			if (!isLogout && autoLogin && lastAccount != null && !TextUtils.isEmpty(lastAccount.getUserName()) &&
+			if(accountToChange != null && !TextUtils.isEmpty(accountToChange.getUserName())) {
+				UmipayLoginInfoDialog dialog = new UmipayLoginInfoDialog(context, accountToChange.getUserName(), "...切换账号中，请稍等...", true,
+						accountToChange);
+				dialog.show(0);
+			}else if(!isLogout && autoLogin && lastAccount != null && lastAccount.getOauthType() == UmipayAccount.TYPE_MOBILE && !TextUtils.isEmpty(lastAccount.getUserName())){
+				//最后使用手机账号登录的，且勾选自动登录的，使用session进行自动登录
+				UmipayLoginInfoDialog dialog = new UmipayLoginInfoDialog(context, "", "...自动登录中，请稍等...", true,
+						lastAccount);
+				dialog.show(0);
+			}else if (!isLogout && autoLogin && lastAccount != null && !TextUtils.isEmpty(lastAccount.getUserName()) &&
 					!TextUtils
 							.isEmpty(lastAccount.getPsw()) &&
 					(lastAccount.getOauthType() == UmipayAccount.TYPE_NORMAL || lastAccount.getOauthType() ==

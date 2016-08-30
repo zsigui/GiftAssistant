@@ -24,6 +24,7 @@ import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.ServerInfo;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
+import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
@@ -66,10 +67,11 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
         }
 
         ServerInfo o = getItem(position);
+        o.initAppInfoStatus(mContext);
         ServerHolder viewHolder = (ServerHolder) holder;
         switch (mShowType) {
             case KeyConfig.TYPE_ID_OPEN_SERVER:
-                viewHolder.tvContent.setText(Html.fromHtml(String.format(CONTENT, o.serverName, o.operator)));
+                viewHolder.tvContent.setText(o.serverName);
                 break;
             case KeyConfig.TYPE_ID_OPEN_TEST:
             default:
@@ -82,9 +84,10 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
             viewHolder.btnDownload.setEnabled(false);
             viewHolder.btnDownload.setText(STR_DOWNLOAD);
         } else {
-            ViewUtil.showImage(viewHolder.ivIcon, o.img);
+            viewHolder.btnDownload.setEnabled(true);
             ViewUtil.initDownloadBtnStatus(viewHolder.btnDownload, o.appStatus);
         }
+        ViewUtil.showImage(viewHolder.ivIcon, o.img);
         viewHolder.tvTime.setText(DateUtil.optDateLong(o.time, DateUtil.getTime(o.time)));
         viewHolder.itemView.setOnClickListener(this);
         viewHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
@@ -118,7 +121,11 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
                 item.handleOnClick(((FragmentActivity) mContext).getSupportFragmentManager());
             }
         } else {
-            IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+            if (item.id == 0) {
+                ToastUtil.showShort(mContext.getString(R.string.st_server_info_no_game_toast));
+            } else {
+                IntentUtil.jumpGameDetail(mContext, item.id, GameTypeUtil.JUMP_STATUS_DETAIL);
+            }
         }
     }
 

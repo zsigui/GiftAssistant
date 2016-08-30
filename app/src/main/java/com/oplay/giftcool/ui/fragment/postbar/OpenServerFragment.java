@@ -154,7 +154,7 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
         }
         int type = getArguments().getInt(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_OPEN_SERVER);
         mUrl = (type == KeyConfig.TYPE_ID_OPEN_SERVER ? NetUrl.POST_GET_OPEN_SERVER : NetUrl.POST_GET_OPEN_TEST);
-        mAdapter = new OpenServerAdapter(getContext(), type);
+        mAdapter = new OpenServerAdapter(getActivity(), type);
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
         rvData.addItemDecoration(decoration);
@@ -508,9 +508,11 @@ public class OpenServerFragment extends BaseFragment_Refresh<ServerInfo> impleme
             }
 
             private void refreshFailed() {
-                mRefreshLayout.setCanShowLoad(true);
-                mRefreshLayout.setEnabled(true);
-                mRefreshLayout.setRefreshing(false);
+                if (mRefreshLayout != null) {
+                    mRefreshLayout.setCanShowLoad(true);
+                    mRefreshLayout.setEnabled(true);
+                    mRefreshLayout.setRefreshing(false);
+                }
                 mIsSwipeRefresh = mIsLoading = false;
             }
         });

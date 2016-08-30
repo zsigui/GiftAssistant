@@ -21,7 +21,9 @@ public class UmipayAccount implements Interface_Serializable {
 	public static final int TYPE_SINA = 2;
 	public static final int TYPE_VISITOR = 3;
 	public static final int TYPE_SLIENT = 4;
-	public static final int TYPE_PHONE = 5;
+	public static final int TYPE_QUICKREGISTER = 5;
+	public static final int TYPE_GIFT_COOL = 8;
+	public static final int TYPE_MOBILE = 9;
 
 	public static final int TYPE_REGIST = 10;
 	public static final int TYPE_QUICK_REGIST = 11;
@@ -70,6 +72,10 @@ public class UmipayAccount implements Interface_Serializable {
 	 */
 	private int mBindMobile = 0;
 	/**
+	 * @Fields mBindOauth : 绑定偶玩账号
+	 */
+	private int mBindOauth = 0;
+	/**
 	 * 本地缓存key
 	 */
 	private String mCacheKey;
@@ -117,6 +123,7 @@ public class UmipayAccount implements Interface_Serializable {
 		this.mCacheKey = account.getCacheKey();
 		this.mGameUserInfo = account.getGameUserInfo();
 		this.mBindMobile = account.getBindMobile();
+		this.mBindOauth = account.getBindOauth();
 	}
 
 	public int getUid() {
@@ -223,6 +230,13 @@ public class UmipayAccount implements Interface_Serializable {
 		mBindMobile = bindMobile;
 	}
 
+	public int getBindOauth() {
+		return mBindOauth;
+	}
+
+	public void setBindOauth(int bindOauth) {
+		mBindOauth = bindOauth;
+	}
 	@Override
 	public String serialize() {
 		JSONObject jo = new JSONObject();

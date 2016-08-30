@@ -3,10 +3,14 @@ package net.ouwan.umipay.android.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.DisplayMetrics;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +29,7 @@ import net.ouwan.umipay.android.asynctask.CommandTask;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.entry.gson.Gson_Login;
 import net.ouwan.umipay.android.interfaces.Interface_Account_Listener_Login;
 import net.ouwan.umipay.android.manager.ListenerManager;
@@ -37,7 +42,7 @@ import net.ouwan.umipay.android.manager.UmipayCommandTaskManager;
  *         date 15-3-10
  *         description
  */
-public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_Listener_Login, View.OnClickListener {
+public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_Listener_Login, View.OnClickListener,Animation.AnimationListener {
 	public static final int NORMAL_LOGIN = 0;
 	public static final int AUTO_LOGIN = 1;
 	public static final int REGISTER_AND_LOGIN = 2;
@@ -47,35 +52,36 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 	private final static long AUTO_LOGIN_TIPS_TIME = 3000;
 	private final static int AUTO_LOGIN_SUCCESS_MSG = 1;
 	private final static int AUTO_LOGIN_HIDE_TIP = 2;
+	private final static int AUTO_LOGIN_HIDE_TIP_ANIMATION = 3;
 
 	private static final int MSG_LOGIN = 1;
 
 	Context mContext;
 	UmipayLoginInfoDialog mDialog;
+	Animation animation_tips_in;
+	Animation animation_process;
+	Animation animation_tips_out;
 
+	TextView mTipsTextView;
+	View mContentLinearLayout;
 	View mProgressView;
 	View mEnterGameTextView;
 	TextView mStatusTextView;
 	TextView mUsernameTextView;
 	Button mCancel;
-	Button mAccountBtn;
 	String mStatus;
 	String mUsername;
 	boolean mIsAutoLogin;
-	UmipayAccount mAccount;
+	Object mAccount;
 	private ViewGroup mRootLayout;
 	private Handler mHandler;
-	private WindowManager mWindowManager;
-	private int mScreenWidth;
-	private int mScreenHeight;
 	private long mStartTime;
-	private long viewtime_ms = 0;
 	private boolean mIsCancel;
 	private InternalHandler mInternalHandler = new InternalHandler(Looper.getMainLooper());
 	private CommandTask mCurrentTask;
 
 	public UmipayLoginInfoDialog(Context context, String username, String status, boolean isAutoLogin,
-	                             UmipayAccount account) {
+	                             Object account) {
 
 		super(context, Util_Resource.getIdByReflection(context, "style",
 				"umipay_progress_dialog_theme"));
@@ -90,49 +96,65 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 		setContentView(mRootLayout);
 		setLayoutParams();
 		initHandler(mContext);
+		initAnimation();
 	}
 
 	private void setLayoutParams() {
 		try {
-			mWindowManager = (WindowManager) mContext.getApplicationContext()
-					.getSystemService(Context.WINDOW_SERVICE);
-			DisplayMetrics displayMetrics = new DisplayMetrics();
-			mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
-			mScreenWidth = displayMetrics.widthPixels;
-			mScreenHeight = displayMetrics.heightPixels;
 			WindowManager.LayoutParams mLayoutParams = getWindow().getAttributes();  //获取对话框当前的参数值
 			mLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-			mLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+			mLayoutParams.width = (int) getContext().getResources().getDimension(Util_Resource.getIdByReflection(getContext(), "dimen", "umipay_main_diglog_width"));
 			getWindow().setAttributes(mLayoutParams);     //设置生效
-			getWindow().getDecorView().setPadding(0, 0, 0, 0);//默认样式有pading,需要修改才能占满
 		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}
 	}
 
 	public void show(long viewtime_ms) {
-		setViewTime(viewtime_ms);
-		Animation animation = AnimationUtils.loadAnimation(mContext, Util_Resource.getIdByReflection(mContext, "anim",
-				"umipay_progress_move"));
-
 		try {
-			if (animation != null) {
-				mProgressView.startAnimation(animation);
-			}
 			if (!mIsAutoLogin) {
-				mCancel.setVisibility(View.GONE);
-				mAccountBtn.setVisibility(View.VISIBLE);
-				mHandler.sendEmptyMessageDelayed(AUTO_LOGIN_HIDE_TIP, viewtime_ms + 500);
+				mHandler.sendEmptyMessageDelayed(AUTO_LOGIN_HIDE_TIP_ANIMATION,viewtime_ms + 500);
+
+				if(mContentLinearLayout != null){
+					mContentLinearLayout.setVisibility(View.GONE);
+				}
+				if(mTipsTextView != null) {
+					if(animation_tips_in != null){
+						mTipsTextView.startAnimation(animation_tips_in);
+					}
+				}
 			} else {
 				//自动登录
-				mCancel.setVisibility(View.VISIBLE);
-				mAccountBtn.setVisibility(View.GONE);
+				//自动登录才播放动画
+				if (animation_process != null) {
+					mProgressView.startAnimation(animation_process);
+				}
+				if(mContentLinearLayout != null){
+					mContentLinearLayout.setVisibility(View.VISIBLE);
+				}
+				if(mTipsTextView != null) {
+					mTipsTextView.setVisibility(View.GONE);
+				}
 				mCancel.setOnClickListener(this);
-				mEnterGameTextView.setVisibility(View.INVISIBLE);
-				if (mAccount.getOauthType() == UmipayAccount.TYPE_NORMAL) {
-					login(mAccount);
-				} else {
-					oauthLogin(mAccount);
+				mStatusTextView.setText("欢迎您!");
+				if(mAccount instanceof  UmipayAccount) {
+					UmipayAccount account= (UmipayAccount)mAccount;
+					if(mUsernameTextView != null) {
+						mUsernameTextView.setText(account.getUserName());
+					}
+					if (account.getOauthType() == UmipayAccount.TYPE_NORMAL) {
+						login(account);
+					} else if (account.getOauthType() == UmipayAccount.TYPE_MOBILE) {
+						autologin(account);
+					} else {
+						oauthLogin(account);
+					}
+				}else if(mAccount instanceof  UmipayCommonAccount){
+					UmipayCommonAccount account= (UmipayCommonAccount)mAccount;
+					if(mUsernameTextView != null) {
+						mUsernameTextView.setText(account.getUserName());
+					}
+					autologin(account);
 				}
 				mStartTime = System.currentTimeMillis();
 			}
@@ -142,28 +164,39 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 		super.show();
 	}
 
-	private void setViewTime(final long time) {
-		viewtime_ms = time;
-	}
-
 	private void initHandler(final Context context) {
 		mHandler = new Handler(context.getMainLooper()) {
 			@Override
 			public void handleMessage(Message msg) {
 				try {
 					if (msg.what == AUTO_LOGIN_SUCCESS_MSG) {
-						sendLoginResultMsg(AUTO_LOGIN, mAccount);
-//						ListenerManager.callbackLoginSuccess(context, mAccount, AUTO_LOGIN);
+						//登录成功只会返回UmipayAccount
+						sendLoginResultMsg(AUTO_LOGIN, (UmipayAccount) mAccount);
 						mHandler.removeMessages(AUTO_LOGIN_SUCCESS_MSG);
-						mHandler.sendEmptyMessageDelayed(AUTO_LOGIN_HIDE_TIP, AUTO_LOGIN_TIPS_TIME);
-						mCancel.setVisibility(View.GONE);
-						mAccountBtn.setVisibility(View.VISIBLE);
-						mEnterGameTextView.setVisibility(View.VISIBLE);
-						String username = ListenerManager.getUserName(mAccount.getUserName(),
-								mAccount.getOauthType());
-						mStatusTextView.setText("欢迎您回来！");
-						mUsernameTextView.setText(username);
+						mHandler.sendEmptyMessageDelayed(AUTO_LOGIN_HIDE_TIP_ANIMATION, AUTO_LOGIN_TIPS_TIME);
+						if(mContentLinearLayout != null){
+							mContentLinearLayout.setVisibility(View.GONE);
+						}
+						if(mProgressView != null && mProgressView.getAnimation() != null){
+							mProgressView.getAnimation().cancel();
+						}
+						if(mTipsTextView != null) {
+								if(animation_tips_in != null){
+									mTipsTextView.startAnimation(animation_tips_in);
+								}
+
+						}
 					}
+					if(msg.what == AUTO_LOGIN_HIDE_TIP_ANIMATION){
+						if(mTipsTextView != null) {
+							if (animation_tips_out != null) {
+								mTipsTextView.startAnimation(animation_tips_out);
+							}
+						}
+						mHandler.removeMessages(AUTO_LOGIN_SUCCESS_MSG);
+						mHandler.removeMessages(AUTO_LOGIN_HIDE_TIP);
+					}
+
 					if (msg.what == AUTO_LOGIN_HIDE_TIP) {
 						dismiss();
 						mHandler.removeMessages(AUTO_LOGIN_SUCCESS_MSG);
@@ -176,12 +209,30 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 		};
 	}
 
+	private void initAnimation(){
+		animation_process = AnimationUtils.loadAnimation(mContext, Util_Resource.getIdByReflection(mContext, "anim",
+				"umipay_progress_move"));
+
+		animation_tips_in = AnimationUtils.loadAnimation(mContext,  Util_Resource.getIdByReflection(mContext, "anim", "umipay_wmtoast_in"));
+		if(animation_tips_in != null) {
+			animation_tips_in.setAnimationListener(this);
+		}
+
+		animation_tips_out = AnimationUtils.loadAnimation(mContext, Util_Resource.getIdByReflection(mContext, "anim", "umipay_wmtoast_out"));
+		if(animation_tips_out != null){
+			animation_tips_out.setAnimationListener(this);
+		}
+	}
 	private void initViews() {
 		if (mContext == null) {
 			return;
 		}
 		mRootLayout = (ViewGroup) ViewGroup.inflate(mContext, Util_Resource.getIdByReflection(mContext, "layout",
 				"umipay_logininfo_layout"), null);
+		mTipsTextView = (TextView) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
+				"umipay_logininfo_tips_tv"));
+		mContentLinearLayout =  mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
+				"umipay_logininfo_content_ll"));
 		mStatusTextView = (TextView) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
 				"umipay_logininfo_status_tv"));
 		mStatusTextView.setText(mStatus);
@@ -194,13 +245,18 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 				"umipay_logininfo_entergame_tv"));
 		mCancel = (Button) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
 				"umipay_logininfo_cancel"));
-		mAccountBtn = (Button) mRootLayout.findViewById(Util_Resource.getIdByReflection(mContext, "id",
-				"umipay_logininfo_account"));
-		mAccountBtn.setOnClickListener(this);
 
 
 	}
 
+	private void autologin(UmipayCommonAccount account) {
+		ListenerManager.setCommandLoginListener(mDialog);
+		mCurrentTask = UmipayCommandTaskManager.getInstance(mContext).AutoLoginCommandTask(account.getUserName(),account.getUid(),account.getSession());
+	}
+	private void autologin(UmipayAccount account) {
+		ListenerManager.setCommandLoginListener(mDialog);
+		mCurrentTask = UmipayCommandTaskManager.getInstance(mContext).AutoLoginCommandTask(account.getUserName(),account.getUid(),account.getSession());
+	}
 
 	private void login(UmipayAccount account) {
 		ListenerManager.setCommandLoginListener(mDialog);
@@ -241,11 +297,6 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			mContext.startActivity(intent);
 			return;
-		}
-		if (v.equals(mAccountBtn)) {
-			mHandler.removeMessages(AUTO_LOGIN_HIDE_TIP);
-			dismiss();
-			UmipaySDKManager.showAccountManagerView(mContext);
 		}
 	}
 
@@ -290,97 +341,44 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 	@Override
 	public void onLogin(int code, String msg, UmipayAccount account) {
 		sendMessage(MSG_LOGIN, new MsgData(code, msg, account));
-//		if (data instanceof Gson_Cmd_Login) {
-//			Gson_Cmd_Login gsonCmdLogin = (Gson_Cmd_Login) data;
-//			int code = gsonCmdLogin.getCode();
-//			String msg = gsonCmdLogin.getMessage();
-//			Gson_Cmd_Login.Cmd_Login_Data cmdLoginData = gsonCmdLogin.getData();
-//			if (code == UmipaySDKStatusCode.SUCCESS) {
-//				String username = mAccount.getUserName();
-//				String psw = mAccount.getPsw();
-//				UmipayAccount umipayAccount = UmipayAccountManager.getInstance(mContext).getAccountByUserName
-//						(username);
-//				if (umipayAccount == null) {
-//					umipayAccount = new UmipayAccount(username, psw);
-//				} else {
-//					umipayAccount.setPsw(psw);
-//				}
-//				GameUserInfo userInfo = new GameUserInfo();
-//				userInfo.setOpenId(cmdLoginData.getOpenid());
-//				userInfo.setSign(cmdLoginData.getSign());
-//				userInfo.setTimestamp_s(cmdLoginData.getTs());
-//				umipayAccount.setGameUserInfo(userInfo);
-//
-//				umipayAccount.setUid(cmdLoginData.getUid());
-//				umipayAccount.setSession(cmdLoginData.getSession());
-//				umipayAccount.setBindMobile(cmdLoginData.getBindmobile());
-//				umipayAccount.setLastLoginTime_ms(System.currentTimeMillis());
-//				umipayAccount.setRemenberPsw(true);
-//
-//				UmipayAccountManager.getInstance(mContext).saveAccount(umipayAccount);
-//				UmipayAccountManager.getInstance(mContext).setCurrentAccount(umipayAccount);
-//				UmipayAccountManager.getInstance(mContext).setLogin(true);
-//				if (umipayAccount.isRemenberPsw()) {
-//					LocalPasswordManager.getInstance(mContext).putPassword(umipayAccount.getUserName(),
-//							umipayAccount.getPsw());
-//				} else {
-//					LocalPasswordManager.getInstance(mContext).removePassword(umipayAccount.getUserName());
-//				}
-//
-//				sendMessage(MSG_LOGIN, new MsgData(UmipaySDKStatusCode.SUCCESS, null, umipayAccount));
-//			} else {
-//				sendMessage(MSG_LOGIN, new MsgData(code, msg, null));
-//			}
-//		}
-//		if (data instanceof Gson_Cmd_OauthLogin) {
-//			Gson_Cmd_OauthLogin cmdOauthLogin = (Gson_Cmd_OauthLogin) data;
-//			int code = cmdOauthLogin.getCode();
-//			String msg = cmdOauthLogin.getMessage();
-//			Gson_Cmd_OauthLogin.Cmd_ThirdLogin_Data cmdThirdLoginData = cmdOauthLogin.getData();
-//			if (code == UmipaySDKStatusCode.SUCCESS) {
-//				String oauthId = mAccount.getOauthID();
-//				String oauthToken = mAccount.getOauthToken();
-//				int oauthType = mAccount.getOauthType();
-//				int oaythExpire = mAccount.getOauthExpire();
-//				UmipayAccount umipayAccount = UmipayAccountManager.getInstance(mContext).getAccountByOauthId
-//						(oauthId, oauthType);
-//				if (umipayAccount == null) {
-//					umipayAccount = new UmipayAccount(oauthId, oauthToken, oauthType);
-//				} else {
-//					umipayAccount.setOauthToken(oauthToken);
-//				}
-//				umipayAccount.setOauthExpire(oaythExpire);
-//
-//				GameUserInfo userInfo = new GameUserInfo();
-//				userInfo.setOpenId(cmdThirdLoginData.getOpenid());
-//				userInfo.setSign(cmdThirdLoginData.getSign());
-//				userInfo.setTimestamp_s(cmdThirdLoginData.getTs());
-//				umipayAccount.setGameUserInfo(userInfo);
-//
-//				umipayAccount.setUserName(cmdThirdLoginData.getUsername());
-//				umipayAccount.setUid(cmdThirdLoginData.getUid());
-//				umipayAccount.setSession(cmdThirdLoginData.getSession());
-//				umipayAccount.setLastLoginTime_ms(System.currentTimeMillis());
-//
-//				UmipayAccountManager.getInstance(mContext).saveAccount(umipayAccount);
-//				UmipayAccountManager.getInstance(mContext).setCurrentAccount(umipayAccount);
-//				UmipayAccountManager.getInstance(mContext).setLogin(true);
-//				if (umipayAccount.isRemenberPsw()) {
-//					LocalPasswordManager.getInstance(mContext).putPassword(umipayAccount.getUserName(),
-//							umipayAccount.getPsw());
-//				} else {
-//					LocalPasswordManager.getInstance(mContext).removePassword(umipayAccount.getUserName());
-//				}
-//
-//				sendMessage(MSG_LOGIN, new MsgData(code, msg, umipayAccount));
-//			} else {
-//				sendMessage(MSG_LOGIN, new MsgData(code, msg, null));
-//			}
-//		}
 	}
 
 	public ViewGroup getRootLayout() {
 		return mRootLayout;
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		if(animation.equals(animation_tips_in)){
+			if(mTipsTextView != null ) {
+				if(mAccount != null) {
+					String username = null;
+					if(mAccount instanceof UmipayAccount){
+						username = ((UmipayAccount)mAccount).getUserName();
+					}else if(mAccount instanceof  UmipayCommonAccount){
+						username = ((UmipayCommonAccount)mAccount).getUserName();
+					}
+					setUserName(mTipsTextView, username);
+				}else{
+					setUserName(mTipsTextView,mUsername);
+				}
+				mTipsTextView.setVisibility(View.VISIBLE);
+			}
+		}
+	}
+
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		if(animation.equals(animation_tips_out)){
+			if(mHandler != null){
+				mHandler.sendEmptyMessage(AUTO_LOGIN_HIDE_TIP);
+			}
+		}
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+
 	}
 
 	private class MsgData {
@@ -447,5 +445,30 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 		loginData.setAccount(account);
 		gsonLogin.setData(loginData);
 		ListenerManager.sendMessage(TaskCMD.MP_CMD_OPENLOGIN, gsonLogin);
+	}
+
+	private void setUserName(TextView tv,String username){
+		if(tv == null || tv.getText() == null || TextUtils.isEmpty(username)){
+			return;
+		}
+		try {
+			StringBuffer username_str = new StringBuffer();
+			StringBuffer content = new StringBuffer();
+			if(username.length() >32){
+				username_str.append(username.substring(0,32)).append("...");
+			}else{
+				username_str.append(username);
+			}
+			content.append(String.format(tv.getText().toString(), username_str.toString()));
+			int start = content.indexOf(username_str.toString());
+			int end = username.length();
+			SpannableString spannableString = new SpannableString(content);
+
+			ForegroundColorSpan span = new ForegroundColorSpan(Color.YELLOW);
+			spannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			tv.setText(spannableString);
+		}catch (Throwable e){
+			Debug_Log.e(e);
+		}
 	}
 }

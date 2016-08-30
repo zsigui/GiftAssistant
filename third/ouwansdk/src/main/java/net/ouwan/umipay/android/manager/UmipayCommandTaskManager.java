@@ -3,6 +3,7 @@ package net.ouwan.umipay.android.manager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import net.ouwan.umipay.android.api.GameRolerInfo;
 import net.ouwan.umipay.android.asynctask.CommandResponse;
@@ -11,19 +12,28 @@ import net.ouwan.umipay.android.asynctask.CommandTask;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
 import net.ouwan.umipay.android.asynctask.UmipayCommandTask;
 import net.ouwan.umipay.android.asynctask.parser.CommonRspParser;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_AutoLogin;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Bind_Oauth;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_DeleteAccount;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_GetAccount;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_GetPush;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_GetRegistrableAccount;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Init;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Login;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Mobile_Login;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Mobile_Login_GetAccountList;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Mobile_Login_GetCode;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_OauthLogin;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_PushGameInfo;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_QuickRegist;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_RedPoint;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_Regist;
+import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_ValiDate_Sessions;
 import net.ouwan.umipay.android.asynctask.parser.RspParser_Cmd_VerificateSMS;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
+import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.youmi.android.libs.common.basic.Basic_JSONUtil;
 import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.global.Global_Runtime_SystemInfo;
@@ -33,8 +43,11 @@ import net.youmi.android.libs.common.util.Util_System_SDCard_Util;
 import net.youmi.android.libs.platform.global.Global_DeveloperConfig;
 import net.youmi.android.libs.platform.global.Global_Runtime_ClientId;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -184,6 +197,64 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		}.execute();
 	}
 
+	public CommandTask BindOauthCommandTask(final String username, final String psw) {
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_BINDOAUTH, this) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				Basic_JSONUtil.put(params, "username", username);
+				Basic_JSONUtil.put(params, "password", psw);
+			}
+		}.execute();
+	}
+	public CommandTask MobileLoginCommandTask(final String calling_code, final String mobile,final int uid, final int ts) {
+		Bundle extResponse= new Bundle();
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_MOBILELOGIN_LOGIN, this, extResponse) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				Basic_JSONUtil.put(params, "calling_code", (TextUtils.isEmpty(calling_code))?"86":calling_code);
+				Basic_JSONUtil.put(params, "mobile", mobile);
+				Basic_JSONUtil.put(params, "uid", uid);
+				Basic_JSONUtil.put(params, "ts", ts);
+			}
+		}.execute();
+	}
+	public CommandTask MobileLoginGetAccountListCommandTask(final String calling_code, final String mobile, final String code) {
+		Bundle extResponse= new Bundle();
+		extResponse.putString("calling_code", calling_code);
+		extResponse.putString("mobile", mobile);
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_MOBILELOGIN_GETACCOUNTLIST, this, extResponse) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				Basic_JSONUtil.put(params, "calling_code", (TextUtils.isEmpty(calling_code))?"86":calling_code);
+				Basic_JSONUtil.put(params, "mobile", mobile);
+				Basic_JSONUtil.put(params, "code", code);
+			}
+		}.execute();
+	}
+	public CommandTask MobileLoginGetSMSCommandTask(final String mobile, final String code,final String sms_type) {
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_GETMOBILELOGINSMS, this) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				Basic_JSONUtil.put(params, "mobile", mobile);
+				//默认国内
+				String calling_code = (code == null) ? "86":code;
+				Basic_JSONUtil.put(params, "calling_code", calling_code);
+				Basic_JSONUtil.put(params, "sms_type", sms_type);
+			}
+		}.execute();
+	}
+
+	public CommandTask AutoLoginCommandTask(final String username,final int uid,final String sid) {
+		Bundle extResponse = new Bundle();
+		extResponse.putString("username", username);
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_AUTOLOGIN, this,extResponse) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				Basic_JSONUtil.put(params, "uid", uid);
+				Basic_JSONUtil.put(params, "sid", sid);
+			}
+		}.execute();
+	}
 	public CommandTask RegistCommandTask(final String username, final String psw, final String phoneNum) {
 		Bundle extResponse = new Bundle();
 		extResponse.putString("username", username);
@@ -207,6 +278,14 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 		}.execute();
 	}
 
+	public CommandTask GetRegistrableAccountCommandTask() {
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_GETREGISTRABLEACCOUNT, this) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+
+			}
+		}.execute();
+	}
 	public CommandTask OauthLoginCommandTask(final int type, final String openid, final String token,
 	                                         final int expire, final String authdata) {
 		Bundle extResponse = new Bundle();
@@ -287,6 +366,48 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 	}
 
 
+//	public CommandTask OpenUmiAppCommandTask(final String packageNamme) {
+//		if (!UmipayAccountManager.getInstance(mContext).isLogin()) {
+//			return null;
+//		}
+//		Bundle extResponse = new Bundle();
+//		extResponse.putString("package_name", packageNamme);
+//		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_SESSION_CONVERT, this,extResponse) {
+//			@Override
+//			public void addSpecificParams(JSONObject params) {
+//				Basic_JSONUtil.put(params, "package_name", packageNamme);
+//			}
+//		}.execute();
+//	}
+	public CommandTask ValiDateSessions() {
+		final ArrayList<UmipayCommonAccount> accountList = (ArrayList<UmipayCommonAccount>) UmipayCommonAccountCacheManager.getInstance(mContext).getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+		if (accountList == null || accountList.isEmpty()) {
+			return null;
+		}
+		final JSONArray ja = new JSONArray();
+		try {
+			for (UmipayCommonAccount item : accountList) {
+				JSONObject jo = new JSONObject();
+				jo.put("uid", item.getUid());
+				jo.put("sid", item.getSession());
+				ja.put(jo);
+			}
+		}catch (JSONException e){
+			Debug_Log.e(e);
+		}
+		return new UmipayCommandTask(mContext, TaskCMD.MP_CMD_VALIDATE_SESSIONS, this) {
+			@Override
+			public void addSpecificParams(JSONObject params) {
+				try {
+					if(ja != null) {
+						params.put("session_data", ja.toString());
+					}
+				} catch (JSONException e) {
+					Debug_Log.e(e);
+				}
+			}
+		}.execute();
+	}
 	@Override
 	public void onResponse(CommandResponse response, Bundle... extResponse) {
 		if (response == null) {
@@ -304,14 +425,32 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 			case TaskCMD.MP_CMD_OPENLOGIN:
 				parser = new RspParser_Cmd_Login(mContext);
 				break;
+			case TaskCMD.MP_CMD_MOBILELOGIN_GETACCOUNTLIST:
+				parser = new RspParser_Cmd_Mobile_Login_GetAccountList(mContext);
+				break;
+			case TaskCMD.MP_CMD_MOBILELOGIN_LOGIN:
+				parser = new RspParser_Cmd_Mobile_Login(mContext);
+				break;
+			case TaskCMD.MP_CMD_BINDOAUTH:
+				parser = new RspParser_Cmd_Bind_Oauth(mContext);
+				break;
+			case TaskCMD.MP_CMD_AUTOLOGIN:
+				parser = new RspParser_Cmd_AutoLogin(mContext);
+				break;
 			case TaskCMD.MP_CMD_SMSOP:
 				parser = new RspParser_Cmd_VerificateSMS(mContext);
+				break;
+			case TaskCMD.MP_CMD_GETMOBILELOGINSMS:
+				parser = new RspParser_Cmd_Mobile_Login_GetCode(mContext);
 				break;
 			case TaskCMD.MP_CMD_OPENREGISTER:
 				parser = new RspParser_Cmd_Regist(mContext);
 				break;
 			case TaskCMD.MP_CMD_QUICKREGISTER:
 				parser = new RspParser_Cmd_QuickRegist(mContext);
+				break;
+			case TaskCMD.MP_CMD_GETREGISTRABLEACCOUNT:
+				parser = new RspParser_Cmd_GetRegistrableAccount(mContext);
 				break;
 			case TaskCMD.MP_CMD_OPENTHIRDLOGIN:
 				parser = new RspParser_Cmd_OauthLogin(mContext);
@@ -327,6 +466,12 @@ public class UmipayCommandTaskManager implements CommandResponseListener {
 				break;
 			case TaskCMD.MP_CMD_REDPOINT:
 				parser = new RspParser_Cmd_RedPoint(mContext);
+				break;
+//			case TaskCMD.MP_CMD_SESSION_CONVERT:
+//				parser = new RspParser_Cmd_Session_Convert(mContext);
+//				break;
+			case TaskCMD.MP_CMD_VALIDATE_SESSIONS:
+				parser = new RspParser_Cmd_ValiDate_Sessions(mContext);
 				break;
 		}
 

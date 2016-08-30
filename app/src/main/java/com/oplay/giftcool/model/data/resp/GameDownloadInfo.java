@@ -21,7 +21,7 @@ import com.oplay.giftcool.util.InstallAppUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
-import net.youmi.android.libs.common.util.Util_System_Intent;
+import net.ouwan.umipay.android.Utils.Util_Package;
 import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.common.v2.download.model.IFileDownloadTaskExtendObject;
 
@@ -228,7 +228,7 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
 
     public void startApp() {
         try {
-            Util_System_Intent.startActivityByPackageName(mContext, packageName);
+            Util_Package.startUmiAppWithSession(mContext, packageName);
             handlePlayDownloadTask(getContext(), packageName);
         } catch (Throwable e) {
             AppDebugConfig.w(AppDebugConfig.TAG_DOWNLOAD, e);

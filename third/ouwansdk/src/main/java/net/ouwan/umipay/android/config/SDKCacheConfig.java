@@ -126,6 +126,16 @@ public class SDKCacheConfig implements Interface_Serializable {
 	 */
 	private boolean mEnableExitToCommunity = false;
 
+	/**
+	 * @Fields mIsLightSDK:是否轻sdk
+	 */
+	private boolean mIsLightSDK = false;
+
+	/**
+	 * @Fields mIsMobileLogin:是否默认手机登录
+	 */
+	private boolean mIsMobileLogin = true;
+
 	private boolean mHasLocalCache = false;
 
 	private SDKCacheConfig(Context context) {
@@ -185,6 +195,8 @@ public class SDKCacheConfig implements Interface_Serializable {
 		Basic_JSONUtil.put(object, "mExitDialogDownloadBtnText", mExitDialogDownloadBtnText);
 		Basic_JSONUtil.put(object, "mExitDialogCommunityBtnText", mExitDialogCommunityBtnText);
 		Basic_JSONUtil.put(object, "mEnableExitToCommunity", mEnableExitToCommunity);
+		Basic_JSONUtil.put(object, "mIsLightSDK", mIsLightSDK);
+		Basic_JSONUtil.put(object, "mIsMobileLogin", mIsMobileLogin);
 		return object.toString();
 	}
 
@@ -232,6 +244,8 @@ public class SDKCacheConfig implements Interface_Serializable {
 			mExitDialogDownloadBtnText = Basic_JSONUtil.getString(object, "mExitDialogDownloadBtnText", null);
 			mExitDialogCommunityBtnText = Basic_JSONUtil.getString(object, "mExitDialogCommunityBtnText", null);
 			mEnableExitToCommunity = Basic_JSONUtil.getBoolean(object, "mEnableExitToCommunity", false);
+			mIsLightSDK = Basic_JSONUtil.getBoolean(object, "mIsLightSDK", false);
+			mIsMobileLogin = Basic_JSONUtil.getBoolean(object, "mIsMobileLogin", true);
 			return true;
 		} catch (Throwable e) {
 			Debug_Log.e(e);
@@ -465,6 +479,20 @@ public class SDKCacheConfig implements Interface_Serializable {
 
 	public void setEnableExitToCommunity(boolean isEnableExitWithJump){
 		mEnableExitToCommunity = isEnableExitWithJump;
+	}
+
+	public boolean isLightSDK(){
+		return mIsLightSDK;
+	}
+	public void setIsLightSDK(boolean isLightSDK){
+		mIsLightSDK = isLightSDK;
+	}
+
+	public boolean isMobileLogin(){
+		return mIsMobileLogin;
+	}
+	public void setMobileLogin(boolean isMobileLogin){
+		mIsMobileLogin = isMobileLogin;
 	}
 	public boolean isHasLocalCache() {
 		return mHasLocalCache;

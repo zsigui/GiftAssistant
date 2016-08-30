@@ -2,42 +2,44 @@
 <RelativeLayout
 		android:id = "@+id/umipay_main_content_layout"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:layout_width = "@dimen/umipay_main_diglog_width"
-		android:layout_height = "240dp"
-		android:layout_marginTop="-2dp"
-		android:layout_gravity = "center_horizontal"
-		android:background = "@drawable/umipay_background_stroke" >
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:layout_gravity = "center_horizontal" >
+
+	<include
+			android:id = "@+id/umipay_login_title"
+			layout = "@layout/umipay_ouwan_title"/>
 
 	<RelativeLayout
-			android:id = "@+id/umipay_account_box_layout"
+			android:id = "@+id/umipay_input_box_layout"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:layout_centerHorizontal = "true"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
-			android:layout_marginTop = "20dp" >
+			android:background = "@drawable/umipay_edittext_background_radius"
+			android:layout_below="@id/umipay_login_title"
+			android:padding="2dp"
+			android:layout_marginTop = "20dp">
 
 		<EditText
 				android:id = "@+id/umipay_name_box"
-				android:layout_width = "fill_parent"
+				android:layout_width = "match_parent"
 				android:layout_height = "43dp"
-				android:background = "@drawable/umipay_edittext_background_radius"
-				android:gravity = "center_vertical|left"
 				android:hint = "@string/umipay_login_name_hint"
 				android:imeOptions = "flagNoExtractUi|actionNext|flagNoFullscreen"
 				android:inputType = "textEmailAddress"
 				android:maxLength = "32"
 				android:paddingLeft = "35dp"
 				android:singleLine = "true"
-				android:textColor = "#434343"
-				android:textColorHint = "#959595"
+				android:background="@color/strip"
+				android:textColor = "@color/umipay_dark_state_gray"
+				android:textColorHint = "@color/umipay_gray"
 				android:textSize = "14sp" />
 
 		<ImageView
 				android:layout_width = "13dp"
 				android:layout_height = "13dp"
-				android:layout_centerVertical = "true"
+				android:layout_alignParentTop="true"
 				android:layout_marginLeft = "10dp"
+				android:layout_marginTop="15dp"
 				android:contentDescription = "@string/umipay_account_logo"
 				android:src = "@drawable/umipay_account" />
 
@@ -52,23 +54,22 @@
 				android:layout_marginRight="2dp"
 				android:scaleType = "centerCrop"
 				android:src = "@drawable/umipay_btn_select_account" />
-	</RelativeLayout >
 
-	<RelativeLayout
-			android:id = "@+id/umipay_password_box_layout"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:layout_below = "@id/umipay_account_box_layout"
-			android:layout_centerHorizontal = "true"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
-			android:layout_marginTop = "4dp" >
+		<View
+				android:id="@+id/umipay_login_layout_devider"
+				android:layout_width = "match_parent"
+				android:layout_height = "1dp"
+				android:background = "@color/umipay_gainsboro"
+				android:layout_below="@id/umipay_name_box"
+		        android:layout_marginLeft="2dp"
+		        android:layout_marginRight="2dp"
+				/>
 
 		<EditText
 				android:id = "@+id/umipay_psw_box"
 				android:layout_width = "fill_parent"
 				android:layout_height = "43dp"
-				android:background = "@drawable/umipay_edittext_background_radius"
+				android:layout_below="@id/umipay_login_layout_devider"
 				android:gravity = "center_vertical|left"
 				android:hint = "@string/umipay_login_psw_hint"
 				android:imeOptions = "flagNoExtractUi|actionDone|flagNoFullscreen"
@@ -76,15 +77,17 @@
 				android:maxLength = "32"
 				android:paddingLeft = "35dp"
 				android:singleLine = "true"
-				android:textColor = "#434343"
-				android:textColorHint = "#959595"
+				android:background="@color/strip"
+				android:textColor = "@color/umipay_dark_state_gray"
+				android:textColorHint = "@color/umipay_gray"
 				android:textSize = "14sp" />
 
 		<ImageView
 				android:layout_width = "13dp"
 				android:layout_height = "13dp"
-				android:layout_centerVertical = "true"
 				android:layout_marginLeft = "10dp"
+				android:layout_marginTop = "15dp"
+				android:layout_below="@id/umipay_login_layout_devider"
 				android:contentDescription = "@string/umipay_pw_logo"
 				android:src = "@drawable/umipay_password" />
 
@@ -92,6 +95,8 @@
 				android:id = "@+id/umipay_psw_cb_layout"
 				android:layout_width = "40dp"
 				android:layout_height = "39dp"
+				android:layout_marginTop="3dp"
+				android:layout_below="@id/umipay_name_box"
 				android:layout_alignRight = "@id/umipay_psw_box"
 				android:gravity = "center" >
 
@@ -107,13 +112,12 @@
 		</LinearLayout >
 	</RelativeLayout >
 
+
 	<RelativeLayout
 			android:id = "@+id/umipay_checkbox_layout"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:layout_below = "@id/umipay_password_box_layout"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp" >
+			android:layout_below = "@id/umipay_input_box_layout" >
 
 		<LinearLayout
 				android:id = "@+id/umipay_remember_pw_layout"
@@ -122,8 +126,7 @@
 				android:layout_centerVertical = "true"
 				android:background = "@null"
 				android:gravity = "center_vertical"
-				android:orientation = "horizontal"
-				android:padding = "4dp" >
+				android:orientation = "horizontal" >
 
 			<CheckBox
 					android:id = "@+id/umipay_remember_pw_cb"
@@ -142,7 +145,7 @@
 					android:clickable = "false"
 					android:singleLine = "true"
 					android:text = "@string/umipay_remember_pw"
-					android:textColor = "#717171"
+					android:textColor = "@color/umipay_slate_gray"
 					android:textSize = "12sp" />
 		</LinearLayout >
 
@@ -151,7 +154,6 @@
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:layout_centerVertical = "true"
-				android:layout_marginLeft = "@dimen/umipay_main_diglog_autologin_marginleft"
 				android:layout_toRightOf = "@id/umipay_remember_pw_layout"
 				android:background = "@null"
 				android:gravity = "center_vertical"
@@ -174,7 +176,7 @@
 					android:clickable = "false"
 					android:singleLine = "true"
 					android:text = "@string/umipay_auto_login"
-					android:textColor = "#717171"
+					android:textColor = "@color/umipay_slate_gray"
 					android:textSize = "12sp" />
 		</LinearLayout >
 
@@ -188,66 +190,79 @@
 				android:paddingBottom = "4dp"
 				android:paddingTop = "4dp"
 				android:text = "@string/umipay_forget_password"
-				android:textColor = "#1badf6"
-				android:textColorLink = "#1badf6"
+				android:textColor = "@color/umipay_dodger_blue"
+				android:textColorLink = "@color/umipay_dodger_blue"
 				android:textSize = "12sp" />
 	</RelativeLayout >
 
-	<Button
-			android:id = "@+id/umipay_login_btn"
+	<LinearLayout
+			android:id = "@+id/umipay_login_ll"
 			android:layout_width = "match_parent"
 			android:layout_height = "40dp"
-			android:layout_below="@id/umipay_checkbox_layout"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight="30dp"
-			android:layout_marginTop="12dp"
+			android:orientation="horizontal"
+			android:layout_marginTop="10dp"
+			android:layout_below="@id/umipay_checkbox_layout">
+		<RelativeLayout
+				android:id = "@+id/umipay_switch_login_type_btn"
+				android:layout_weight="1"
+				android:layout_width = "0dp"
+				android:layout_height = "match_parent"
+				android:background = "@drawable/umipay_btn_blue">
+			<LinearLayout
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					android:orientation="horizontal"
+					android:layout_centerVertical = "true"
+					android:layout_centerHorizontal = "true" >
+				<View
+						android:layout_width = "15dp"
+						android:layout_height = "15dp"
+						android:layout_gravity="center_vertical"
+						android:background="@drawable/umipay_btn_switch"
+						android:layout_marginRight="4dp"/>
+				<TextView
+						android:layout_width = "wrap_content"
+						android:layout_height = "40dp"
+						android:gravity="center"
+						android:text = "手机登录"
+						android:textColor = "@color/umipay_white"
+						android:textSize = "15sp"/>
+			</LinearLayout >
+		</RelativeLayout >
+
+	<Button
+			android:id = "@+id/umipay_login_btn"
+			android:layout_weight="1"
+			android:layout_width = "0dp"
+			android:layout_height = "match_parent"
+			android:layout_marginLeft="15dp"
 			android:background = "@drawable/umipay_btn_yellow"
 			android:enabled = "false"
 			android:text = "@string/umipay_login"
-			android:textColor = "#ffffff"
-			android:textSize = "15sp" />
-
-	<!--<LinearLayout-->
-			<!--android:id = "@+id/umipay_reg_log_layout"-->
-			<!--android:layout_width = "match_parent"-->
-			<!--android:layout_height = "wrap_content"-->
-			<!--android:layout_below = "@id/umipay_checkbox_layout"-->
-			<!--android:layout_marginLeft = "30dp"-->
-			<!--android:layout_marginRight = "30dp"-->
-			<!--android:layout_marginTop = "12dp"-->
-			<!--android:orientation = "horizontal" >-->
-
-		<!--<Button-->
-				<!--android:id = "@+id/umipay_quick_register_btn"-->
-				<!--android:layout_width = "wrap_content"-->
-				<!--android:layout_height = "40dp"-->
-				<!--android:layout_marginRight = "15dp"-->
-				<!--android:layout_weight = "0.4"-->
-				<!--android:background = "@drawable/umipay_btn_blue"-->
-				<!--android:text = "@string/umipay_quick_register"-->
-				<!--android:textColor = "#ffffff"-->
-				<!--android:textSize = "15sp" />-->
-
-		<!--<Button-->
-				<!--android:id = "@+id/umipay_login_btn"-->
-				<!--android:layout_width = "wrap_content"-->
-				<!--android:layout_height = "40dp"-->
-				<!--android:layout_marginLeft = "15dp"-->
-				<!--android:layout_weight = "1"-->
-				<!--android:background = "@drawable/umipay_btn_yellow"-->
-				<!--android:enabled = "false"-->
-				<!--android:text = "@string/umipay_login"-->
-				<!--android:textColor = "#ffffff"-->
-				<!--android:textSize = "15sp" />-->
-	<!--</LinearLayout >-->
+			android:textColor = "@color/umipay_white"
+			android:textSize = "15sp"/>
+	</LinearLayout >
 
 	<RelativeLayout
-			android:layout_width = "match_parent"
+			android:layout_width = "wrap_content"
 			android:layout_height = "30dp"
-			android:layout_below = "@id/umipay_login_btn"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
-			android:layout_marginTop = "16dp" >
+			android:layout_below = "@id/umipay_login_ll"
+			android:layout_marginTop = "10dp" >
+		<TextView
+			android:id ="@+id/umipay_login_to_register_tv"
+			android:layout_width = "wrap_content"
+			android:layout_height = "match_parent"
+			android:gravity="center"
+			android:layout_alignParentRight = "true"
+			android:layout_centerVertical = "true"
+			android:background = "@drawable/umipay_layout_pressed"
+			android:paddingBottom = "4dp"
+			android:paddingTop = "4dp"
+			android:textColorHighlight="@color/umipay_dodger_blue"
+			android:text = "@string/umipay_login_to_reg"
+			android:textColor = "@color/umipay_dodger_blue"
+			android:textColorLink = "@color/umipay_dodger_blue"
+			android:textSize = "@dimen/umipay_main_diglog_text_size" />
 
 		<TextView
 				android:id = "@+id/umipay_other_login_tv"
@@ -255,15 +270,15 @@
 				android:layout_height = "wrap_content"
 				android:layout_centerVertical = "true"
 				android:text = "@string/umipay_other_login"
-				android:textColor = "#959595"
-				android:textSize = "11sp" />
+				android:textColor = "@color/umipay_gray"
+				android:textSize = "@dimen/umipay_main_diglog_text_size" />
 
 		<CheckBox
 				android:id = "@+id/umipay_other_login_btn"
 				android:layout_width = "18dp"
 				android:layout_height = "18dp"
 				android:layout_centerVertical = "true"
-				android:layout_margin = "4dp"
+				android:layout_margin = "2dp"
 				android:layout_toRightOf = "@id/umipay_other_login_tv"
 				android:background = "@drawable/umipay_btn_arrow"
 				android:button = "@null"
@@ -273,18 +288,17 @@
 				android:id = "@+id/umipay_other_login_layout"
 				android:layout_width = "wrap_content"
 				android:layout_height = "30dp"
-				android:layout_centerVertical = "true"
-				android:layout_toRightOf = "@id/umipay_other_login_btn"
 				android:background = "@drawable/umipay_other_login_bg"
 				android:gravity = "center_vertical"
-				android:orientation = "horizontal" >
+				android:orientation = "horizontal"
+				android:layout_alignParentTop = "true"
+				android:layout_toRightOf = "@+id/umipay_other_login_btn" >
 
 			<ImageView
 					android:id = "@+id/umipay_qq_oauth"
 					android:layout_width = "24dp"
 					android:layout_height = "22dp"
-					android:layout_marginLeft = "12dp"
-					android:layout_marginRight = "10dp"
+					android:layout_marginLeft = "11dp"
 					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_qq_logo" />
@@ -293,8 +307,7 @@
 					android:id = "@+id/umipay_sina_oauth"
 					android:layout_width = "24dp"
 					android:layout_height = "22dp"
-					android:layout_marginLeft = "10dp"
-					android:layout_marginRight = "12dp"
+					android:layout_marginLeft = "11dp"
 					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_sina_logo" />
@@ -303,13 +316,12 @@
 					android:id = "@+id/umipay_trial_imageview"
 					android:layout_width = "24dp"
 					android:layout_height = "22dp"
-					android:layout_marginLeft = "10dp"
-					android:layout_marginRight = "12dp"
+					android:layout_marginLeft = "11dp"
+					android:layout_marginRight = "11dp"
 					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_trial_icon" />
 
 		</LinearLayout >
 	</RelativeLayout >
-
 </RelativeLayout >

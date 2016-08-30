@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
 	<declare-styleable name = "MaxAdapterView" >
-		<attr name = "android_maxRows" format = "integer" ></attr >
+		<attr name = "android_maxRows" format = "integer" />
 	</declare-styleable >
 </resources >

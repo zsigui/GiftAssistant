@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
+
+	<include
+			android:id = "@+id/umipay_change_account_title"
+			layout = "@layout/umipay_ouwan_title"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginTop = "20dp"
+			android:layout_marginLeft="16dp"/>
+	<TextView
+			android:id = "@+id/umipay_change_account_title_tv"
+			android:text= "%s请求切换到偶玩账号%s,确认切换后将登出当前偶玩账号并回到游戏登录界面重新登录"
+			android:layout_below="@+id/umipay_change_account_title"
+			android:layout_centerVertical="true"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:layout_gravity = "center"
+			android:layout_marginTop="20dp"
+			android:layout_centerInParent="true"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="16dp"
+			android:textSize="18sp"/>
+
+	<LinearLayout
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:layout_below="@+id/umipay_change_account_title_tv"
+			android:layout_centerVertical="true"
+			android:layout_marginTop="20dp"
+			android:orientation="horizontal">
+		<Button
+				android:id = "@+id/umipay_change_account_cancel_btn"
+				android:layout_weight="1"
+				android:layout_width = "0dp"
+				android:layout_height = "40dp"
+				android:layout_gravity = "center"
+				android:layout_marginTop="10dp"
+				android:layout_marginBottom = "20dp"
+				android:layout_marginLeft = "16dp"
+				android:layout_marginRight = "16dp"
+				android:background = "@drawable/umipay_exitdialog_button_stroke"
+				android:text = "@string/umipay_exitdialog_cancel"
+				android:textColor = "@drawable/umipay_exitdialog_btn_exit_text"
+				android:textSize = "17dp" />
+		<Button
+				android:id = "@+id/umipay_change_account_btn"
+				android:layout_weight="1"
+				android:layout_width = "0dp"
+				android:layout_height = "40dp"
+				android:layout_gravity = "center"
+				android:layout_marginBottom = "10dp"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp"
+				android:background = "@drawable/umipay_exitdialog_btn_tocommunity"
+				android:text = "@string/umipay_confirm"
+				android:textColor = "#ffffff"
+				android:textSize = "17dp"/>
+	</LinearLayout >
+
+</RelativeLayout >

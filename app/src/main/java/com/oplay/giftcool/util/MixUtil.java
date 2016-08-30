@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -223,14 +224,19 @@ public class MixUtil {
 
     public static void doPhoneLoginSuccessNext(Context context, UserModel um) {
         um.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
-        MainActivity.sIsTodayFirstOpen = true;
-        AccountManager.getInstance().notifyUserAll(um);
-        SocketIOManager.getInstance().connectOrReConnect(true);
-        ScoreManager.getInstance().initTaskState();
+        doLoginSuccessNext(context, um);
+
         StatisticsManager.getInstance().trace(context,
                 StatisticsManager.ID.USER_PHONE_BIND_MAIN,
                 StatisticsManager.ID.STR_USER_PHONE_BIND_MAIN,
                 "手机号:" + um.userInfo.phone + ", 对应绑定偶玩账号: " + um.userInfo.username);
+    }
+
+    public static void doLoginSuccessNext(Context context, UserModel um) {
+        MainActivity.sIsTodayFirstOpen = true;
+        AccountManager.getInstance().notifyUserAll(um);
+        SocketIOManager.getInstance().connectOrReConnect(true);
+        ScoreManager.getInstance().initTaskState();
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
 
@@ -246,6 +252,21 @@ public class MixUtil {
                                 R.string.st_login_bind_owan_title_1
                                 : R.string.st_login_bind_owan_title_2), false);
             }
+        }
+//        else {
+//            if (AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+//                    && um.userInfo.bindOuwanStatus == 0) {
+//                IntentUtil.jumpBindOwan(context, um);
+//            }
+//        }
+    }
+
+    public static void judgeShowAccount() {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "judgeShowAccount");
+        if (AccountManager.getInstance().isLogin()) {
+            OuwanSDKManager.getInstance().changeAccount();
+        } else {
+            OuwanSDKManager.getInstance().selectCommonAccount();
         }
     }
 }

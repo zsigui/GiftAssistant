@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
-		android:id = "@+id/umipay_main_content_layout"
+		android:id = "@+id/umipay_main_content_rl"
 		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:layout_width = "@dimen/umipay_main_diglog_width"
-		android:layout_height = "260dp"
-		android:layout_gravity = "center_horizontal"
-		android:background = "@drawable/umipay_background_stroke" >
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		android:layout_gravity = "center_horizontal">
 
 	<LinearLayout
 			android:id="@+id/umipay_reg_success_title_layout"
@@ -38,13 +37,11 @@
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
 			android:layout_below="@id/umipay_reg_success_title_layout"
-			android:layout_centerHorizontal = "true"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp" >
+			android:layout_centerHorizontal = "true" >
 
 		<EditText
 				android:id = "@+id/umipay_reg_success_account_box"
-				android:layout_width = "fill_parent"
+				android:layout_width = "match_parent"
 				android:layout_height = "43dp"
 				android:background = "@drawable/umipay_edittext_background_radius"
 				android:digits = "0123456789"
@@ -73,13 +70,11 @@
 			android:layout_height = "wrap_content"
 			android:layout_below = "@id/umipay_reg_success_account_layout"
 			android:layout_centerHorizontal = "true"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
 			android:layout_marginTop = "4dp" >
 
 		<EditText
 				android:id = "@+id/umipay_reg_success_psw_box"
-				android:layout_width = "fill_parent"
+				android:layout_width = "match_parent"
 				android:layout_height = "43dp"
 				android:background = "@drawable/umipay_edittext_background_radius"
 				android:gravity = "center_vertical|left"
@@ -107,8 +102,6 @@
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			android:layout_below = "@id/umipay_reg_success_psw_layout"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
 			android:layout_marginTop = "10dp"
 			android:text = "@string/umipay_reg_success_notify"
 			android:textColor = "#1badf6"
@@ -118,8 +111,6 @@
 			android:id = "@+id/umipay_reg_success_entergame_btn"
 			android:layout_width = "match_parent"
 			android:layout_height = "40dp"
-			android:layout_marginLeft = "30dp"
-			android:layout_marginRight = "30dp"
 			android:layout_marginTop="20dp"
 			android:layout_below="@id/umipay_reg_success_notify_tv"
 			android:background = "@drawable/umipay_btn_yellow"

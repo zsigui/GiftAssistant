@@ -1,38 +1,57 @@
 package com.oplay.giftcool.manager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.model.data.resp.UserInfo;
+import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
+import com.oplay.giftcool.model.json.base.JsonReqBase;
+import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.util.MixUtil;
+import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
 import net.ouwan.umipay.android.api.ActionCallbackListener;
+import net.ouwan.umipay.android.api.CommonAccountViewListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
 import net.ouwan.umipay.android.api.PayCallbackListener;
+import net.ouwan.umipay.android.api.UmipayActivity;
 import net.ouwan.umipay.android.api.UmipayBrowser;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 import net.ouwan.umipay.android.config.SDKConstantConfig;
 import net.ouwan.umipay.android.entry.UmipayAccount;
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.global.Global_Url_Params;
 import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
+import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 import net.youmi.android.libs.webjs.view.webview.Flags_Browser_Config;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zsigui on 16-1-14.
  */
-public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener, PayCallbackListener {
+public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener, PayCallbackListener,
+        CommonAccountViewListener {
 
     private Context mContext = AssistantApp.getInstance().getApplicationContext();
     private Handler mHandler = new Handler(mContext.getMainLooper());
@@ -52,8 +71,8 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         GameParamInfo gameParamInfo = new GameParamInfo();
         gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
         gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
-//		gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
-        gameParamInfo.setTestMode(false);
+        gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
+//        gameParamInfo.setTestMode(false);
         gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
         gameParamInfo.setSubChannelId("0");
         UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
@@ -64,13 +83,16 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
             @Override
             public void onLogout(int code, Object params) {
-                // 修改密码，可能会调用该登出接口
-                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "onLogout = " + code + ", " + params);
-                AccountManager.getInstance().logout();
+                if (code == UmipaySDKStatusCode.SUCCESS) {
+                    // 修改密码，可能会调用该登出接口（看JS选择）
+                    AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "onLogout = " + code + ", " + params);
+                    AccountManager.getInstance().logout();
+                }
             }
         });
         ListenerManager.setPayCallbackListener(this);
         ListenerManager.setActionCallbackListener(this);
+        ListenerManager.setCommonAccountViewListener(this);
     }
 
     public void login() {
@@ -95,12 +117,28 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         UmipayAccountManager.getInstance(mContext).setCurrentAccount(account);
         UmipayAccountManager.getInstance(mContext).setIsLogout(false);
         UmipayAccountManager.getInstance(mContext).setLogin(true);
+        UmipayCommonAccountCacheManager.getInstance(mContext)
+                .addCommonAccount(new UmipayCommonAccount(mContext, account, System.currentTimeMillis()),
+                        UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
     }
 
     public void logout() {
+        clearSelfAccountInfo();
         UmipayAccountManager.getInstance(mContext).setCurrentAccount(null);
         UmipayAccountManager.getInstance(mContext).setIsLogout(true);
         UmipayAccountManager.getInstance(mContext).setLogin(false);
+    }
+
+    /**
+     * 清除自身的登录状态
+     */
+    private void clearSelfAccountInfo() {
+        UmipayCommonAccountCacheManager.getInstance(mContext).removeCommonAccount(
+                UmipayCommonAccountCacheManager.getInstance(mContext)
+                        .getCommonAccountByPackageName(mContext.getPackageName(),
+                                UmipayCommonAccountCacheManager.COMMON_ACCOUNT),
+                UmipayCommonAccountCacheManager.COMMON_ACCOUNT
+        );
     }
 
     /**
@@ -117,6 +155,68 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
             // 再次执行，最多重试三次
             if (mRetryTime++ < 3) {
                 init();
+            }
+        }
+//        else {
+            // 获取SDK信息
+//            ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
+//                    .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+//            for (UmipayCommonAccount account : accounts) {
+//                AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO,
+//                        String.format(Locale.CHINA, "---------当前用户信息--------\n" +
+//                                        "uid : %s\n" +
+//                                        "uname : %s\n" +
+//                                        "session : %s\n" +
+//                                        "dest_package : %s\n" +
+//                                        "origin_apk : %s\n" +
+//                                        "origin_package : %s\n" +
+//                                        "----------------------------",
+//                                account.getUid(), account.getUserName(), account.getSession(),
+//                                account.getDestPackageName(),
+//                                account.getOriginApkName(),
+//                                account.getOriginPackageName()));
+//            }
+
+            // 判断登录状态并跳转选择弹窗
+//        }
+    }
+
+    /**
+     * 账号变更
+     */
+    public void changeAccount() {
+        if (!AccountManager.getInstance().isLogin())
+            return;
+
+        UmipayCommonAccount account = UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountByPackageName(mContext.getPackageName(),
+                        UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
+
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "change account = " + account);
+        if (account != null && account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
+            UmipayActivity.showChangeAccountDialog(mContext);
+        }
+    }
+
+
+    /**
+     * 从多个已登录账号中选择一个
+     */
+    public void selectCommonAccount() {
+        if (AccountManager.getInstance().isLogin())
+            return;
+
+        ArrayList<UmipayCommonAccount> mCommonAccountList = UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+        if (mCommonAccountList != null && mCommonAccountList.size() > 0) {
+            if (mCommonAccountList.size() == 1) {
+                // 直接使用该账号登录
+                handleAccountLogin(mCommonAccountList.get(0), null);
+            } else {
+                Intent intent = new Intent(mContext, UmipayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                mContext.startActivity(intent);
             }
         }
     }
@@ -222,5 +322,132 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         if (code == UmipaySDKStatusCode.PAY_FINISH) {
             AccountManager.getInstance().updatePartUserInfo();
         }
+    }
+
+    @Override
+    public void onChooseAccount(int code, UmipayCommonAccount account, final ResultActionCallback callback) {
+        switch (code) {
+            case CommonAccountViewListener.CODE_CHANGE_ACCOUNT:
+                if (account != null) {
+                    // 执行切换账号操作
+                    if (AccountManager.getInstance().isLogin()) {
+                        // 先退出当前账号
+                        AccountManager.getInstance().logout();
+                    }
+                    handleAccountLogin(account, new ResultActionCallback() {
+                        @Override
+                        public void onSuccess(Object obj) {
+                            ToastUtil.showShort("切换账号成功");
+                            if (callback != null) {
+                                callback.onSuccess(obj);
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int code, String msg) {
+//                            ToastUtil.showShort("切换账号失败，请重新登录");
+                            AccountManager.getInstance().notifyUserAll(null);
+                            if (callback != null) {
+                                callback.onFailed(code, msg);
+                            }
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            if (callback != null) {
+                                callback.onCancel();
+                            }
+                        }
+                    });
+                }
+                break;
+            case CommonAccountViewListener.CODE_SELECT_ACCOUNT:
+                handleAccountLogin(account, new ResultActionCallback() {
+                    @Override
+                    public void onSuccess(Object obj) {
+                        if (callback != null) {
+                            callback.onSuccess(obj);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int code, String msg) {
+                        if (callback != null) {
+                            callback.onFailed(code, msg);
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        if (callback != null) {
+                            callback.onCancel();
+                        }
+                    }
+                });
+                break;
+        }
+    }
+
+    /**
+     * 处理通用账号登录
+     *
+     * @param account
+     * @param callback
+     */
+    private void handleAccountLogin(UmipayCommonAccount account,
+                                    final CommonAccountViewListener.ResultActionCallback callback) {
+        UserModel um = new UserModel();
+        UserSession session = new UserSession();
+        session.uid = account.getUid();
+        session.session = account.getSession();
+        um.userSession = session;
+        UserInfo info = new UserInfo();
+        info.uid = session.uid;
+        um.userInfo = info;
+        AccountManager.getInstance().setUser(um);
+        NetDataEncrypt.getInstance().initDecryptDataModel(account.getUid(), account.getSession());
+        Global.getNetEngine().getUserInfo(new JsonReqBase<Void>())
+                .enqueue(new Callback<JsonRespBase<UserModel>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase
+                            <UserModel>> response) {
+                        if (call.isCanceled()) {
+                            if (callback != null) {
+                                callback.onCancel();
+                            }
+                            return;
+                        }
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            UserModel user = AccountManager.getInstance().getUser();
+                            user.userInfo = response.body().getData().userInfo;
+                            MixUtil.doLoginSuccessNext(mContext, user);
+
+                            if (callback != null) {
+                                callback.onSuccess(response.body().getData());
+                            }
+                            return;
+                        }
+                        ToastUtil.blurErrorResp(response);
+                        if (callback != null) {
+                            callback.onFailed(-1, "");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                        if (call.isCanceled()) {
+                            if (callback != null) {
+                                callback.onCancel();
+                            }
+                            return;
+                        }
+                        AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
+                        ToastUtil.blurThrow(t);
+                        if (callback != null) {
+                            callback.onFailed(-1, t.toString());
+                        }
+                    }
+                });
     }
 }

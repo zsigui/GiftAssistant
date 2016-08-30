@@ -128,6 +128,7 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 			String imsi = Global_Runtime_SystemInfo.getImsi(mContext);
 			String cid = new Global_Runtime_ClientId(mContext).getCid();
 			String mac = Global_Runtime_SystemInfo.getMac(mContext);
+			String bbsid = Global_Runtime_SystemInfo.getBssid(mContext);
 			String sig = Util_Package.getPackageSignature(mContext);
 			int chn = Integer.valueOf(GameParamInfo.getInstance(mContext).getChannelId());
 			int subchn = Integer.valueOf(GameParamInfo.getInstance(mContext).getSubChannelId());
@@ -144,6 +145,7 @@ public abstract class UmipayCommandTask extends CommandTask<Void, CommandRespons
 			Basic_JSONUtil.put(mParams, "chn", chn);
 			Basic_JSONUtil.put(mParams, "subchn", subchn);
 			Basic_JSONUtil.put(mParams, "gsid", gsid);
+			Basic_JSONUtil.put(mParams, "bbsid", bbsid);
 		} catch (Throwable e) {
 			Debug_Log.e(e);
 		}

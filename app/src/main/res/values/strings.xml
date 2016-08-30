@@ -405,9 +405,10 @@
     <string name = "st_server_info_title">开服/开测表</string>
     <string name = "st_server_info_open_server_title">开服表</string>
     <string name = "st_server_info_open_test_title">开测表</string>
+    <string name = "st_server_info_no_game_toast">对不起，小酷没有收录该游戏信息</string>
     <string name = "st_server_info_content">
         <![CDATA[
-        <font color=\'#ffaa17\'>%1$s</font>/%2$s
+        %1$s<font color=\'#888888\'>/%2$s</font>
         ]]>
     </string>
 </resources >
