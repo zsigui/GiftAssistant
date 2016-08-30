@@ -8,6 +8,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
@@ -71,7 +72,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         GameParamInfo gameParamInfo = new GameParamInfo();
         gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
         gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
-        gameParamInfo.setTestMode(AppConfig.TEST_MODE); //设置测试模式，模式非测试模式
+        gameParamInfo.setTestMode(!NetUrl.getBaseUrl().equalsIgnoreCase(NetUrl.URL_BASE)); //设置测试模式，模式非测试模式
 //        gameParamInfo.setTestMode(false);
         gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
         gameParamInfo.setSubChannelId("0");
@@ -133,12 +134,15 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
      * 清除自身的登录状态
      */
     private void clearSelfAccountInfo() {
-        UmipayCommonAccountCacheManager.getInstance(mContext).removeCommonAccount(
-                UmipayCommonAccountCacheManager.getInstance(mContext)
-                        .getCommonAccountByPackageName(mContext.getPackageName(),
-                                UmipayCommonAccountCacheManager.COMMON_ACCOUNT),
-                UmipayCommonAccountCacheManager.COMMON_ACCOUNT
-        );
+        UmipayCommonAccount account = UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountByPackageName(mContext.getPackageName(),
+                        UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+        if (account != null) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "account = " + account + ", " + account.getUid());
+            UmipayCommonAccountCacheManager.getInstance(mContext).removeCommonAccount(
+                    account, UmipayCommonAccountCacheManager.COMMON_ACCOUNT
+            );
+        }
     }
 
     /**

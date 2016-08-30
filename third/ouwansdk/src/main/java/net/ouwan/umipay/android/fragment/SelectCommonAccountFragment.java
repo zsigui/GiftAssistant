@@ -145,13 +145,7 @@ public class SelectCommonAccountFragment extends BaseFragment implements Adapter
 //            } else {
 //                replaceFragmentFromActivityFragmentManager(RegisterFragment.newInstance());
 //            }
-            if(ListenerManager.getCommonAccountViewListener() != null) {
-                ListenerManager.getCommonAccountViewListener().onChooseAccount(
-                        CommonAccountViewListener.CODE_SELECT_ACCOUNT,
-                        null,
-                        this
-                );
-            }
+            getActivity().finish();
         }
     }
 

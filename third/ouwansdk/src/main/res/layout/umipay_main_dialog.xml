@@ -7,11 +7,11 @@
                 android:paddingRight = "@dimen/umipay_main_diglog_marginRight"
                 android:background = "@drawable/umipay_background_stroke" >
 
-	<FrameLayout
-			android:id = "@+id/umipay_main_content"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent"
-			android:layout_centerHorizontal = "true"
-			android:layout_centerVertical = "true"
-			/>
+    <FrameLayout
+            android:id = "@+id/umipay_main_content"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:layout_centerHorizontal = "true"
+            android:layout_centerVertical = "true"
+            />
 </RelativeLayout >

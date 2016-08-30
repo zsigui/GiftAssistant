@@ -580,28 +580,6 @@ public class AccountManager implements OnFinishListener {
                                     + unread.unreadCommentCount + unread.unreadSystemCount;
                             setUnreadMessageCount(count);
                             Global.updateMsgCentralData(mContext, unread);
-//                            if ((int)(Math.random() * 2) == 0) {
-//                                // 测试数据
-//                                unread.mAwardNotifies = new ArrayList<AwardNotify>();
-//                                for (int i = 0; i < 3; i++) {
-//                                    AwardNotify notify = new AwardNotify();
-//                                    notify.type = KeyConfig.TYPE_AWARD_GIFT;
-//                                    switch (notify.type){
-//                                        case KeyConfig.TYPE_AWARD_GIFT:
-//                                            notify.description = "【刀塔传奇】白金礼包X1";
-//                                            break;
-//                                        case KeyConfig.TYPE_AWARD_BEAN:
-//                                            notify.description = "金币X" + ((int)(Math.random() * 100) + 100);
-//                                            break;
-//                                        case KeyConfig.TYPE_AWARD_SCORE:
-//                                            notify.description = "偶玩豆X" + ((int)(Math.random() * 10) + 10);
-//                                            break;
-//                                        default:
-//                                            notify.description = "爱奇艺账号X1";
-//                                    }
-//                                    unread.mAwardNotifies.add(notify);
-//                                }
-//                            }
                             if (unread.mAwardNotifies != null && unread.mAwardNotifies.size() > 0) {
                                 AppDebugConfig.d(AppDebugConfig.TAG_WARN, "award is write : " + unread.mAwardNotifies.size());
                                 String s = AssistantApp.getInstance().getGson().toJson(unread.mAwardNotifies,

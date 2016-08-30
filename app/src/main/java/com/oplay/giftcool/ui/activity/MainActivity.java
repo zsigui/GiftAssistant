@@ -618,12 +618,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 }
                 break;
             case R.id.ll_gift_count:
-//                if (AccountManager.getInstance().isLogin()) {
-//                    IntentUtil.jumpMyGift(MainActivity.this);
-//                } else {
-//                    IntentUtil.jumpLogin(MainActivity.this);
-//                }
-                AccountManager.getInstance().updateSessionNetRequest();
+                if (AccountManager.getInstance().isLogin()) {
+                    IntentUtil.jumpMyGift(MainActivity.this);
+                } else {
+                    IntentUtil.jumpLogin(MainActivity.this);
+                }
                 break;
         }
     }
