@@ -15,8 +15,8 @@ public class ReqServerInfo implements Serializable {
     @SerializedName("start_date")
     public String startDate;
 
-    @SerializedName("offset")
-    public int offset;
+    @SerializedName("page_id")
+    public int page;
 
     @SerializedName("page_size")
     public int pageSize = 20;

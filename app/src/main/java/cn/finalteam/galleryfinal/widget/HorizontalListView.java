@@ -506,7 +506,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         // Force the OS to redraw this view
         invalidate();
 
-        // If the data changed then reset everything and render from scratch at the same offset as last time
+        // If the data changed then reset everything and render from scratch at the same page as last time
         if (mDataChanged) {
             int oldCurrentX = mCurrentX;
             initView();
@@ -700,9 +700,9 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
         // Loop removing the leftmost child, until that child is on the screen
         while (child != null && child.getRight() + dx <= 0) {
-            // The child is being completely removed so remove its width from the display offset and its divider if it has one.
-            // To remove add the size of the child and its divider (if it has one) to the offset.
-            // You need to add since its being removed from the left side, i.e. shifting the offset to the right.
+            // The child is being completely removed so remove its width from the display page and its divider if it has one.
+            // To remove add the size of the child and its divider (if it has one) to the page.
+            // You need to add since its being removed from the left side, i.e. shifting the page to the right.
             mDisplayOffset += isLastItemInAdapter(mLeftViewAdapterIndex) ? child.getMeasuredWidth() : mDividerWidth + child.getMeasuredWidth();
 
             // Add the removed view to the cache
@@ -785,7 +785,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 // Layout the child
                 child.layout(left, top, right, bottom);
 
-                // Increment our offset by added child's size and divider width
+                // Increment our page by added child's size and divider width
                 leftOffset += child.getMeasuredWidth() + mDividerWidth;
             }
         }
@@ -850,7 +850,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         return getWidth() - getPaddingLeft() - getPaddingRight();
     }
 
-    /** Scroll to the provided offset */
+    /** Scroll to the provided page */
     public void scrollTo(int x) {
         mFlingTracker.startScroll(mNextX, 0, x - mNextX, 0);
         setCurrentScrollState(OnScrollStateChangedListener.ScrollState.SCROLL_STATE_FLING);
@@ -1236,9 +1236,9 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
     }
 
     /**
-     * Updates the over scroll animation based on the scrolled offset.
+     * Updates the over scroll animation based on the scrolled page.
      *
-     * @param scrolledOffset The scroll offset
+     * @param scrolledOffset The scroll page
      */
     private void updateOverscrollAnimation(final int scrolledOffset) {
         if (mEdgeGlowLeft == null || mEdgeGlowRight == null) return;
@@ -1246,7 +1246,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         // Calculate where the next scroll position would be
         int nextScrollPosition = mCurrentX + scrolledOffset;
 
-        // If not currently in a fling (Don't want to allow fling offset updates to cause over scroll animation)
+        // If not currently in a fling (Don't want to allow fling page updates to cause over scroll animation)
         if (mFlingTracker == null || mFlingTracker.isFinished()) {
             // If currently scrolled off the left side of the list and the adapter is not empty
             if (nextScrollPosition < 0) {
@@ -1254,7 +1254,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 // Calculate the amount we have scrolled since last frame
                 int overscroll = Math.abs(scrolledOffset);
 
-                // Tell the edge glow to redraw itself at the new offset
+                // Tell the edge glow to redraw itself at the new page
                 mEdgeGlowLeft.onPull((float) overscroll / getRenderWidth());
 
                 // Cancel animating right glow
@@ -1267,7 +1267,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 // Calculate the amount we have scrolled since last frame
                 int overscroll = Math.abs(scrolledOffset);
 
-                // Tell the edge glow to redraw itself at the new offset
+                // Tell the edge glow to redraw itself at the new page
                 mEdgeGlowRight.onPull((float) overscroll / getRenderWidth());
 
                 // Cancel animating left glow
