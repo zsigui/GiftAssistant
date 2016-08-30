@@ -321,8 +321,8 @@ public class UmipayCommonAccountCacheManager {
 						if(!TextUtils.isEmpty(json)) {
 							UmipayCommonAccount item = new UmipayCommonAccount(json);
 							if(account.equals(item)) {
-								jsonArray.put(i,null);
-								return;
+								jsonArray.put(i, null);
+								break;
 							}
 						}
 					} catch (Throwable e) {

@@ -262,7 +262,6 @@ public class MixUtil {
     }
 
     public static void judgeShowAccount() {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "judgeShowAccount");
         if (AccountManager.getInstance().isLogin()) {
             OuwanSDKManager.getInstance().changeAccount();
         } else {

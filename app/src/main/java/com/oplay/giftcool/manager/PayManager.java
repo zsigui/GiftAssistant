@@ -82,6 +82,10 @@ public class PayManager {
 //            ToastUtil.showShort("哎呦，执行出了点小问题，要不重启试试？");
             return WebViewInterface.RET_PARAM_ERR;
         }
+        if (gift.buttonState == GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN) {
+            IntentUtil.jumpPostDetail(context, gift.activityId);
+            return WebViewInterface.RET_SUCCESS;
+        }
         if (!AccountManager.getInstance().isLogin()) {
             IntentUtil.jumpLogin(context);
             return WebViewInterface.RET_OTHER_ERR;
@@ -98,9 +102,6 @@ public class PayManager {
         switch (gift.buttonState) {
             case GiftTypeUtil.BUTTON_TYPE_SEARCH:
                 handleScorePay(context, gift, button, false);
-                break;
-            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN:
-                IntentUtil.jumpPostDetail(context, gift.activityId);
                 break;
             case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
                 chargeReservedFailed(context, gift);

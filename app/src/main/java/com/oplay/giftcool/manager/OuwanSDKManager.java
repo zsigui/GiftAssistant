@@ -8,7 +8,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
@@ -43,6 +43,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,8 +73,8 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         GameParamInfo gameParamInfo = new GameParamInfo();
         gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
         gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
-        gameParamInfo.setTestMode(!NetUrl.getBaseUrl().equalsIgnoreCase(NetUrl.URL_BASE)); //设置测试模式，模式非测试模式
-//        gameParamInfo.setTestMode(false);
+//        gameParamInfo.setTestMode(!NetUrl.getBaseUrl().equalsIgnoreCase(NetUrl.URL_BASE)); //设置测试模式，模式非测试模式
+        gameParamInfo.setTestMode(true);
         gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
         gameParamInfo.setSubChannelId("0");
         UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
@@ -124,7 +125,9 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     }
 
     public void logout() {
+        showStoredAccount();
         clearSelfAccountInfo();
+        showStoredAccount();
         UmipayAccountManager.getInstance(mContext).setCurrentAccount(null);
         UmipayAccountManager.getInstance(mContext).setIsLogout(true);
         UmipayAccountManager.getInstance(mContext).setLogin(false);
@@ -161,28 +164,25 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 init();
             }
         }
-//        else {
-            // 获取SDK信息
-//            ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
-//                    .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
-//            for (UmipayCommonAccount account : accounts) {
-//                AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO,
-//                        String.format(Locale.CHINA, "---------当前用户信息--------\n" +
-//                                        "uid : %s\n" +
-//                                        "uname : %s\n" +
-//                                        "session : %s\n" +
-//                                        "dest_package : %s\n" +
-//                                        "origin_apk : %s\n" +
-//                                        "origin_package : %s\n" +
-//                                        "----------------------------",
-//                                account.getUid(), account.getUserName(), account.getSession(),
-//                                account.getDestPackageName(),
-//                                account.getOriginApkName(),
-//                                account.getOriginPackageName()));
-//            }
+    }
 
-            // 判断登录状态并跳转选择弹窗
-//        }
+    private void showStoredAccount() {
+        ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+        int i = 0;
+        for (UmipayCommonAccount account : accounts) {
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN,
+                    String.format(Locale.CHINA,i++ + " : uid = %s, " +
+                                    "uname = %s, " +
+                                    "session = %s, " +
+                                    "dest_package = %s, " +
+                                    "origin_apk = %s, " +
+                                    "origin_package = %s",
+                            account.getUid(), account.getUserName(), account.getSession(),
+                            account.getDestPackageName(),
+                            account.getOriginApkName(),
+                            account.getOriginPackageName()));
+        }
     }
 
     /**
@@ -196,7 +196,6 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 .getCommonAccountByPackageName(mContext.getPackageName(),
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
 
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "change account = " + account);
         if (account != null && account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
             UmipayActivity.showChangeAccountDialog(mContext);
         }
@@ -213,15 +212,10 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         ArrayList<UmipayCommonAccount> mCommonAccountList = UmipayCommonAccountCacheManager.getInstance(mContext)
                 .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
         if (mCommonAccountList != null && mCommonAccountList.size() > 0) {
-            if (mCommonAccountList.size() == 1) {
-                // 直接使用该账号登录
-                handleAccountLogin(mCommonAccountList.get(0), null);
-            } else {
-                Intent intent = new Intent(mContext, UmipayActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                mContext.startActivity(intent);
-            }
+            Intent intent = new Intent(mContext, UmipayActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            mContext.startActivity(intent);
         }
     }
 
@@ -329,7 +323,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     }
 
     @Override
-    public void onChooseAccount(int code, UmipayCommonAccount account, final ResultActionCallback callback) {
+    public void onChooseAccount(int code, final UmipayCommonAccount account, final ResultActionCallback callback) {
         switch (code) {
             case CommonAccountViewListener.CODE_CHANGE_ACCOUNT:
                 if (account != null) {
@@ -349,11 +343,17 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
                         @Override
                         public void onFailed(int code, String msg) {
-//                            ToastUtil.showShort("切换账号失败，请重新登录");
+                            if (code == NetStatusCode.ERR_UN_LOGIN) {
+                                // 未登录，清除该状态
+                                ToastUtil.showShort("对不起，该登录状态失效！");
+                            } else if (code > 0) {
+                                ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)", msg, code));
+                            }
                             AccountManager.getInstance().notifyUserAll(null);
                             if (callback != null) {
                                 callback.onFailed(code, msg);
                             }
+
                         }
 
                         @Override
@@ -376,6 +376,14 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
                     @Override
                     public void onFailed(int code, String msg) {
+                        if (code == NetStatusCode.ERR_UN_LOGIN) {
+                            // 未登录，清除该状态
+                            ToastUtil.showShort("对不起，该登录状态失效！");
+                            UmipayCommonAccountCacheManager.getInstance(mContext)
+                                    .removeCommonAccount(account, UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+                        } else if (code > 0) {
+                            ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)", msg, code));
+                        }
                         if (callback != null) {
                             callback.onFailed(code, msg);
                         }
@@ -421,16 +429,23 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                             }
                             return;
                         }
-                        if (response != null && response.isSuccessful()
-                                && response.body() != null && response.body().isSuccess()) {
-                            UserModel user = AccountManager.getInstance().getUser();
-                            user.userInfo = response.body().getData().userInfo;
-                            MixUtil.doLoginSuccessNext(mContext, user);
+                        if (response != null && response.isSuccessful()) {
+                            if (response.body() != null) {
+                                if (response.body().isSuccess()) {
+                                    UserModel user = AccountManager.getInstance().getUser();
+                                    user.userInfo = response.body().getData().userInfo;
+                                    MixUtil.doLoginSuccessNext(mContext, user);
 
-                            if (callback != null) {
-                                callback.onSuccess(response.body().getData());
+                                    if (callback != null) {
+                                        callback.onSuccess(response.body().getData());
+                                    }
+                                    return;
+                                }
+                                if (callback != null) {
+                                    callback.onFailed(response.body().getCode(), response.body().getMsg());
+                                }
+                                return;
                             }
-                            return;
                         }
                         ToastUtil.blurErrorResp(response);
                         if (callback != null) {
