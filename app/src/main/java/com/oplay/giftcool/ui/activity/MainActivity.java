@@ -33,6 +33,7 @@ import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.message.AwardNotify;
@@ -301,12 +302,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 } else if (action.equals(Intent.ACTION_VIEW)) {
                     Uri uri = intent.getData();
                     MixUtil.handleViewUri(getApplicationContext(), uri);
-                    MixUtil.judgeShowAccount();
-                } else {
-                    MixUtil.judgeShowAccount();
                 }
-            } else {
-                MixUtil.judgeShowAccount();
+            }
+            if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()) {
+                OuwanSDKManager.getInstance().showSelectAccountView();
             }
 
 

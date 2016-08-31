@@ -48,6 +48,7 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
     private ArrayList<ServerInfoListFragment> mFragments;
     private ArrayList<String> mStartDates;
     private ArrayList<CheckedTextView> mViews;
+    private int mLastIndex = INDEX_TODAY;
 
     public static OpenServerFragment newInstance(int type) {
         OpenServerFragment fragment = new OpenServerFragment();
@@ -102,7 +103,11 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
         mViews.add(tvTomorrow);
         mViews.add(tvAfter);
 
-        handleCheckClick(INDEX_TODAY);
+        if(AssistantApp.getInstance().isReadAttention()) {
+            handleCheckClick(INDEX_FOCUS);
+        } else {
+            handleCheckClick(INDEX_TODAY);
+        }
     }
 
     @Override
@@ -124,7 +129,15 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
                 }
             }
         } else {
-            handleCheckClick(INDEX_TODAY);
+            handleCheckClick(mLastIndex);
+        }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (getActivity() instanceof ServerInfoActivity) {
+            ((ServerInfoActivity) getActivity()).removeListener(this);
         }
     }
 
@@ -155,11 +168,12 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
             for (int i = 0; i < mViews.size(); i++) {
                 mViews.get(i).setChecked(i == index);
             }
+            mLastIndex = index;
         }
         if (mFragments.get(index) == null) {
             mFragments.set(index, ServerInfoListFragment.newInstance(mType, index == INDEX_FOCUS, mStartDates.get(index)));
         }
-        replaceFrag(R.id.fl_content, mFragments.get(index), mStartDates.get(index), false);
+        replaceFrag(R.id.fl_content, mFragments.get(index), mStartDates.get(index) + index, false);
         if (llAnchors != null) {
             llAnchors.setVisibility((index == INDEX_FOCUS ? View.GONE : View.VISIBLE));
         }

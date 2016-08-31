@@ -124,13 +124,12 @@
 			android:clickable = "true" />
 
 	<LinearLayout
-			android:id = "@+id/umipay_agreement"
+			android:id = "@+id/umipay_agreement_ll"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			android:layout_toRightOf = "@id/umipay_agreement_cb"
 			android:layout_below = "@id/umipay_input_box_layout"
-			android:layout_marginTop = "22dp"
-			android:background = "@drawable/umipay_layout_pressed" >
+			android:layout_marginTop = "22dp">
 
 
 		<TextView
@@ -143,20 +142,22 @@
 				android:textSize = "12sp" />
 
 		<TextView
+				android:id = "@+id/umipay_agreement"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
 				android:clickable = "false"
 				android:singleLine = "true"
 				android:text = "@string/umipay_register_ouwan_ag"
 				android:textColor = "@color/umipay_dodger_blue"
-				android:textSize = "12sp" />
+				android:textSize = "12sp"
+				android:background = "@drawable/umipay_layout_pressed"  />
 	</LinearLayout >
 
 	<LinearLayout
 			android:id = "@+id/umipay_register_ll"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
-			android:layout_below = "@id/umipay_agreement"
+			android:layout_below = "@id/umipay_agreement_ll"
 			android:layout_marginTop = "14dp"
 			android:orientation = "horizontal" >
 

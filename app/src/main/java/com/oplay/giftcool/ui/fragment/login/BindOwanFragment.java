@@ -175,7 +175,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
             // 可以被跳过，则直接返回
             return false;
         }
-        AccountManager.getInstance().logout();
+        AccountManager.getInstance().logout(false);
         if (mNeedBackPhoneLogin) {
             // 回退则通知退出
             if (getActivity() != null) {

@@ -9,6 +9,7 @@ import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
@@ -55,6 +56,9 @@ import retrofit2.Response;
 public class OuwanSDKManager implements InitCallbackListener, ActionCallbackListener, PayCallbackListener,
         CommonAccountViewListener {
 
+    // 判断是否调起切换账号操作
+    public static boolean sIsWakeChangeAccountAction = false;
+
     private Context mContext = AssistantApp.getInstance().getApplicationContext();
     private Handler mHandler = new Handler(mContext.getMainLooper());
 
@@ -73,14 +77,16 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         GameParamInfo gameParamInfo = new GameParamInfo();
         gameParamInfo.setAppId(AppConfig.APP_KEY);//设置AppID
         gameParamInfo.setAppSecret(AppConfig.APP_SECRET);//设置AppSecret
-//        gameParamInfo.setTestMode(!NetUrl.getBaseUrl().equalsIgnoreCase(NetUrl.URL_BASE)); //设置测试模式，模式非测试模式
-        gameParamInfo.setTestMode(true);
+        gameParamInfo.setTestMode(!NetUrl.getBaseUrl().equalsIgnoreCase(NetUrl.URL_BASE)); //设置测试模式，模式非测试模式
         gameParamInfo.setChannelId(AssistantApp.getInstance().getChannelId() + "");
         gameParamInfo.setSubChannelId("0");
         UmipaySDKManager.initSDK(mContext, gameParamInfo, this, new AccountCallbackListener() {
             @Override
             public void onLogin(int code, GameUserInfo userInfo) {
                 AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "onLogin = " + code);
+                if (code == UmipaySDKStatusCode.CHANGE_ACCOUNT) {
+                    showChangeAccountView();
+                }
             }
 
             @Override
@@ -88,7 +94,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 if (code == UmipaySDKStatusCode.SUCCESS) {
                     // 修改密码，可能会调用该登出接口（看JS选择）
                     AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "onLogout = " + code + ", " + params);
-                    AccountManager.getInstance().logout();
+                    AccountManager.getInstance().logout(false);
                 }
             }
         });
@@ -125,9 +131,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     }
 
     public void logout() {
-        showStoredAccount();
         clearSelfAccountInfo();
-        showStoredAccount();
         UmipayAccountManager.getInstance(mContext).setCurrentAccount(null);
         UmipayAccountManager.getInstance(mContext).setIsLogout(true);
         UmipayAccountManager.getInstance(mContext).setLogin(false);
@@ -141,11 +145,20 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 .getCommonAccountByPackageName(mContext.getPackageName(),
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
         if (account != null) {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "account = " + account + ", " + account.getUid());
             UmipayCommonAccountCacheManager.getInstance(mContext).removeCommonAccount(
                     account, UmipayCommonAccountCacheManager.COMMON_ACCOUNT
             );
         }
+    }
+
+    public void clearAccountBySession(int uid, String session) {
+        UmipayCommonAccount account = new UmipayCommonAccount(mContext, null, 0);
+        account.setUid(uid);
+        account.setSession(session);
+        UmipayCommonAccountCacheManager.getInstance(mContext)
+                .removeCommonAccountsByIdAndSession(account, UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+        UmipayCommonAccountCacheManager.getInstance(mContext)
+                .removeCommonAccountsByIdAndSession(account, UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
     }
 
     /**
@@ -163,6 +176,8 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
             if (mRetryTime++ < 3) {
                 init();
             }
+        } else {
+            showStoredAccount();
         }
     }
 
@@ -172,7 +187,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         int i = 0;
         for (UmipayCommonAccount account : accounts) {
             AppDebugConfig.d(AppDebugConfig.TAG_WARN,
-                    String.format(Locale.CHINA,i++ + " : uid = %s, " +
+                    String.format(Locale.CHINA, i++ + " : uid = %s, " +
                                     "uname = %s, " +
                                     "session = %s, " +
                                     "dest_package = %s, " +
@@ -188,16 +203,28 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     /**
      * 账号变更
      */
-    public void changeAccount() {
-        if (!AccountManager.getInstance().isLogin())
-            return;
-
+    public void showChangeAccountView() {
+        sIsWakeChangeAccountAction = true;
         UmipayCommonAccount account = UmipayCommonAccountCacheManager.getInstance(mContext)
                 .getCommonAccountByPackageName(mContext.getPackageName(),
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
-
-        if (account != null && account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
-            UmipayActivity.showChangeAccountDialog(mContext);
+        if (account != null) {
+            if (AccountManager.getInstance().isLogin()) {
+                // 处理登录清空下
+                if (account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
+                    // 账号不同唤起切换界面
+                    UmipayActivity.showChangeAccountDialog(mContext);
+                } else {
+                    // 账号相同不切换，清除唤起状态
+                    UmipayCommonAccountCacheManager.getInstance(mContext).popCommonAccountToChange();
+                    sIsWakeChangeAccountAction = false;
+                }
+            } else {
+                // 无登录下，直接用该账号登录
+                handleAccountLogin(account, null);
+            }
+        } else {
+            sIsWakeChangeAccountAction = false;
         }
     }
 
@@ -205,7 +232,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
     /**
      * 从多个已登录账号中选择一个
      */
-    public void selectCommonAccount() {
+    public void showSelectAccountView() {
         if (AccountManager.getInstance().isLogin())
             return;
 
@@ -330,7 +357,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                     // 执行切换账号操作
                     if (AccountManager.getInstance().isLogin()) {
                         // 先退出当前账号
-                        AccountManager.getInstance().logout();
+                        AccountManager.getInstance().logout(false);
                     }
                     handleAccountLogin(account, new ResultActionCallback() {
                         @Override
@@ -423,6 +450,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                     @Override
                     public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase
                             <UserModel>> response) {
+                        sIsWakeChangeAccountAction = false;
                         if (call.isCanceled()) {
                             if (callback != null) {
                                 callback.onCancel();
@@ -434,6 +462,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                                 if (response.body().isSuccess()) {
                                     UserModel user = AccountManager.getInstance().getUser();
                                     user.userInfo = response.body().getData().userInfo;
+                                    user.userSession.openId = user.userInfo.openId;
                                     MixUtil.doLoginSuccessNext(mContext, user);
 
                                     if (callback != null) {
@@ -455,6 +484,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
                     @Override
                     public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                        sIsWakeChangeAccountAction = false;
                         if (call.isCanceled()) {
                             if (callback != null) {
                                 callback.onCancel();

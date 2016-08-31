@@ -40,7 +40,7 @@
             android:layout_width = "match_parent"
             android:layout_alignTop = "@+id/rl_icon"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-            android:layout_marginTop = "@dimen/di_list_item_gap_s_normal"
+            android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
             android:layout_centerVertical = "false"
             android:layout_toRightOf = "@+id/rl_icon"
             android:layout_toLeftOf = "@+id/tv_time"

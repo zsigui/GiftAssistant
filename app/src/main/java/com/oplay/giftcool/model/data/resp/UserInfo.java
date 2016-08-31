@@ -18,6 +18,9 @@ public class UserInfo implements Serializable {
      */
     @SerializedName("third_openid")
     public String thirdOpenId;
+
+    @SerializedName("openid")
+    public String openId;
     /**
      * 0未绑定 1绑定，表示第三方（手机）登陆时候，是否绑定偶玩账号
      */

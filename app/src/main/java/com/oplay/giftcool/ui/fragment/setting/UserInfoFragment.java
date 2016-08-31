@@ -236,7 +236,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
             case ObserverManager.UserActionListener.ACTION_MODIFY_PSW:
                 if (code == ObserverManager.UserActionListener.ACTION_CODE_SUCCESS) {
                     ToastUtil.showShort(ConstString.TOAST_MODIFY_PWD_SUCCESS);
-                    AccountManager.getInstance().logout();
+                    AccountManager.getInstance().logout(false);
                 }
                 return;
         }

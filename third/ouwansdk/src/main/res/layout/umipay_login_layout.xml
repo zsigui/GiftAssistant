@@ -299,7 +299,6 @@
 					android:layout_width = "24dp"
 					android:layout_height = "22dp"
 					android:layout_marginLeft = "11dp"
-					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_qq_logo" />
 
@@ -308,7 +307,6 @@
 					android:layout_width = "24dp"
 					android:layout_height = "22dp"
 					android:layout_marginLeft = "11dp"
-					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_sina_logo" />
 
@@ -318,7 +316,6 @@
 					android:layout_height = "22dp"
 					android:layout_marginLeft = "11dp"
 					android:layout_marginRight = "11dp"
-					android:alpha = "0.5"
 					android:background = "@drawable/umipay_layout_pressed"
 					android:src = "@drawable/umipay_trial_icon" />
 

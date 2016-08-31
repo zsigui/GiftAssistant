@@ -27,6 +27,11 @@ public class UmipaySDKStatusCode {
      */
     public static final int EXIT_FINISH = 4;
     /**
+     * @Fields CHANGE_ACCOUNT : 切换账号
+     */
+    public static final int CHANGE_ACCOUNT = 5;
+
+    /**
      * Err -998: 未定义
      */
     public static final int ERR_DEFAULT = -998;

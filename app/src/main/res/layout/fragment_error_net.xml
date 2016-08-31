@@ -16,15 +16,15 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
-			android:background="@drawable/selector_btn_orange"
-			android:text="@string/err_setting"
+			android:background="@drawable/selector_btn_red"
+			android:text="@string/err_click_to_refersh"
 			android:layout_marginTop="10dp"
 			android:textSize="@dimen/di_common_text"
 			android:paddingLeft="@dimen/di_common_text_padding_left_right"
 			android:paddingRight="@dimen/di_common_text_padding_left_right"
 			android:paddingTop="@dimen/di_common_text_padding_top_bottom"
 			android:paddingBottom="@dimen/di_common_text_padding_top_bottom"
-			android:textColor="@color/color_btn_orange_border"
+			android:textColor="@color/color_btn_red_border"
 			android:layout_below="@+id/v_err"/>
 
 </RelativeLayout>

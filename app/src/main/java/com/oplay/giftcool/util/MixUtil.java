@@ -18,7 +18,6 @@ import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
-import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -259,13 +258,5 @@ public class MixUtil {
 //                IntentUtil.jumpBindOwan(context, um);
 //            }
 //        }
-    }
-
-    public static void judgeShowAccount() {
-        if (AccountManager.getInstance().isLogin()) {
-            OuwanSDKManager.getInstance().changeAccount();
-        } else {
-            OuwanSDKManager.getInstance().selectCommonAccount();
-        }
     }
 }

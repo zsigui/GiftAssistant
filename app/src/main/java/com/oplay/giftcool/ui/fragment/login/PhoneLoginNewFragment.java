@@ -105,7 +105,8 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
             if (sSendCodeRemainTime == 0) {
                 btnSendCode.setEnabled(true);
                 btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_green));
-                btnSendCode.setText(getResources().getString(R.string.st_login_phone_send_code));
+                btnSendCode.setText(getResources().getString(mInVoice ?
+                        R.string.st_login_send_voice_code : R.string.st_login_send_sms_code));
                 tickState = STATE_NONE;
             } else {
                 sSendCodeRemainTime--;

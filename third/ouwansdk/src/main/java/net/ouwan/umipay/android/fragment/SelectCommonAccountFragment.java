@@ -69,7 +69,7 @@ public class SelectCommonAccountFragment extends BaseFragment implements Adapter
             mLoginBtn = (Button) mRootLayout.findViewById(Util_Resource
                     .getIdByReflection(getActivity(), "id", "umipay_login_btn"));
             mReturnBtn = (Button) mRootLayout.findViewById(Util_Resource
-                    .getIdByReflection(getActivity(), "id", "umipay_cancel_btn"));
+                    .getIdByReflection(getActivity(), "id", "umipay_return_btn"));
             mCommonAccountListView = (ListView) mRootLayout.findViewById(Util_Resource.getIdByReflection
                     (getActivity(),
                             "id",

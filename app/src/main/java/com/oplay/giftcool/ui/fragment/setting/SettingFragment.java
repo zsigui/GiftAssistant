@@ -225,7 +225,7 @@ public class SettingFragment extends BaseFragment {
 
                     @Override
                     public void onConfirm() {
-                        AccountManager.getInstance().logout();
+                        AccountManager.getInstance().logout(true);
                         logoutDialog.dismissAllowingStateLoss();
                         getActivity().finish();
                     }

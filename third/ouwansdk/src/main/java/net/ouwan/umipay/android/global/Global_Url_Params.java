@@ -1,6 +1,7 @@
 package net.ouwan.umipay.android.global;
 
 import android.content.Context;
+import android.util.Log;
 
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
@@ -49,9 +50,11 @@ public class Global_Url_Params {
 				channel = gameParamInfo.getChannelId();
 				childChannel = gameParamInfo.getSubChannelId();
 			}
+			Log.d("giftcool_warn", "account = " + account + ", gameParamInfo = " + gameParamInfo + ", userInfo = " + userInfo);
 			if (userInfo != null) {
 				openid = userInfo.getOpenId();
 				session = account.getSession();
+			Log.d("giftcool_warn", "openid = " + openid + ", session = " + session);
 			}
 			paramsList.add(new BasicNameValuePair("appkey", appkey));
 			paramsList.add(new BasicNameValuePair("chnid", channel));

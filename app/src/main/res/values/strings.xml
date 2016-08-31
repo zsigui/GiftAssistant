@@ -8,7 +8,7 @@
     <!-- ToolBar -->
     <string name = "toolbar_title" >默认</string >
     <!-- -->
-    <string name = "err_setting" >去设置</string >
+    <string name = "err_click_to_refersh" >点击刷新</string >
 
     <string name = "st_title_stress" >▌</string >
 
@@ -80,7 +80,7 @@
     <string name = "st_gift_take" >领号</string >
     <string name = "st_gift_activity_wait" >等开始</string >
     <string name = "st_gift_activity_join_s" >参与</string >
-    <string name = "st_gift_activity_join" >参与活动</string >
+    <string name = "st_gift_activity_join" >参与活动领取</string >
     <string name = "st_gift_free_seize" >正在疯抢</string >
     <string name = "st_gift_free_seized" >免费已抢完</string >
 
@@ -256,7 +256,9 @@
     <string name = "st_login_sms_code_send_hint">请先点击发送短信验证码</string>
     <string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
     <string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
-    <string name = "st_login_phone_send_code" >发送验证码</string >
+    <string name = "st_login_send_code" >发送验证码</string >
+    <string name = "st_login_send_sms_code" >发送短信验证码</string >
+    <string name = "st_login_send_voice_code" >发送语音验证码</string >
     <string name = "st_login_phone_resend_code" >重新发送(%ds)</string >
     <string name = "st_login_remember_pwd" >记住密码</string >
     <string name = "st_login_has_ouwan_a" >已有偶玩账号? 用</string >

@@ -213,6 +213,7 @@ public class AccountManager implements OnFinishListener {
                                     }
                                     UserModel user = getUser();
                                     user.userInfo = userModel.userInfo;
+                                    user.userSession.openId = user.userInfo.openId;
                                     notifyUserAll(user);
 //                                    updateJPushTagAndAlias();
                                     return;
@@ -494,34 +495,40 @@ public class AccountManager implements OnFinishListener {
 
     /**
      * 登出当前账号，会通知服务器并刷新整个页面
+     * @param isForce 强制通知服务器退出，会清空该Session所有信息
      */
-    public void logout() {
+    public void logout(boolean isForce) {
         if (!isLogin()) {
             return;
         }
         PushMessageManager.getInstance().unsetAlias(mContext, String.valueOf(getUserInfo().uid));
-        Global.THREAD_POOL.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (mCallLogout != null) {
-                    mCallLogout.cancel();
-                    mCallLogout = mCallLogout.clone();
-                } else {
-                    mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
-                }
-                mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-                        AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
+        if (isForce) {
+            final String session = getUserSesion().session;
+            final int uid = getUserSesion().uid;
+            Global.THREAD_POOL.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (mCallLogout != null) {
+                        mCallLogout.cancel();
+                        mCallLogout = mCallLogout.clone();
+                    } else {
+                        mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
                     }
+                    mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
+                        @Override
+                        public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+                            AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
+                            OuwanSDKManager.getInstance().clearAccountBySession(uid, session);
+                        }
 
-                    @Override
-                    public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                        AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
-                    }
-                });
-            }
-        });
+                        @Override
+                        public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
+                        }
+                    });
+                }
+            });
+        }
         AccountManager.getInstance().notifyUserAll(null);
         SocketIOManager.getInstance().close();
     }

@@ -85,6 +85,7 @@ public class MobileLoginFragment extends BaseFragment implements TextView.OnEdit
 	private CheckBox mGetVoiceCheckBox;
 
 	private CheckBox mOtherLoginCheckBox;
+	private View mOtherLoginTv;
 	private View mOtherLoginLayout;
 	private View mQQOauth;
 	private View mSinaOauth;
@@ -260,6 +261,8 @@ public class MobileLoginFragment extends BaseFragment implements TextView.OnEdit
 					.getIdByReflection(getActivity(), "id", "umipay_other_login_layout"));
 			mGetVoiceCodeLayout = mRootLayout.findViewById(Util_Resource
 					.getIdByReflection(getActivity(), "id", "umipay_getvoice_code_ll"));
+			mOtherLoginTv = mRootLayout.findViewById(Util_Resource
+					.getIdByReflection(getActivity(), "id", "umipay_other_login_tv"));
 			mSwitchLoginTypeBtn = mRootLayout.findViewById(Util_Resource
 					.getIdByReflection(getActivity(), "id", "umipay_switch_login_type_btn"));
 			mLoginBtn = (Button) mRootLayout.findViewById(Util_Resource
@@ -344,6 +347,9 @@ public class MobileLoginFragment extends BaseFragment implements TextView.OnEdit
 
 	private void initListener() {
 		//切换登陆方式按钮
+		if(mOtherLoginTv != null){
+			mOtherLoginTv.setOnClickListener(this);
+		}
 		if (mSwitchLoginTypeBtn != null) {
 			mSwitchLoginTypeBtn.setOnClickListener(this);
 		}
@@ -573,7 +579,19 @@ public class MobileLoginFragment extends BaseFragment implements TextView.OnEdit
 		}
 		mCountdownText = -1;
 		if (mGetCodeTv != null) {
-			mGetCodeTv.setText("重获验证码");
+			String btnText = VERIFICATE_VOICE.equals(mVerificateType)?"重获语音验证码":"重获验证码";
+			mGetCodeTv.setText(btnText);
+		}
+		if (mCodeEditor != null) {
+			String hintText = "";
+			hintText = VERIFICATE_VOICE.equals(mVerificateType)?getActivity().getResources().getString(Util_Resource
+					.getIdByReflection(getActivity(),
+							"string",
+							"umipay_get_voice_code_hint")):getActivity().getResources().getString(Util_Resource
+					.getIdByReflection(getActivity(),
+							"string",
+							"umipay_bindmobile_code_hint"));
+			mCodeEditor.setHint(hintText);
 		}
 	}
 
@@ -655,7 +673,27 @@ public class MobileLoginFragment extends BaseFragment implements TextView.OnEdit
 			return;
 		}
 		// 第三方登录
-		if (v.equals(mOtherLoginCheckBox)) {
+
+		if(v.equals(mOtherLoginTv) && mOtherLoginCheckBox != null){
+
+			//此时checkbox未改
+			if (!mOtherLoginCheckBox.isChecked()) {
+				mOtherLoginLayout.setVisibility(View.VISIBLE);
+				mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
+								"umipay_other_login_show")
+				));
+				mOtherLoginCheckBox.setChecked(true);
+			} else {
+				mOtherLoginLayout.setVisibility(View.INVISIBLE);
+				mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
+						getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
+								"umipay_other_login_hide")
+				));
+				mOtherLoginCheckBox.setChecked(false);
+			}
+		}
+		if (v.equals(mOtherLoginCheckBox) ) {
 			if (mOtherLoginLayout != null) {
 				if (mOtherLoginCheckBox.isChecked()) {
 					mOtherLoginLayout.setVisibility(View.VISIBLE);

@@ -74,6 +74,7 @@ public class LoginFragment extends BaseFragment implements TextView.OnEditorActi
 	private TextView mTitleTv;
 
 	private Button mLoginBtn;
+	private View mOtherLoginTv;
 	private View mSwitchLoginTypeBtn;
 	private View mGoRegisterBtn;
 	private View mAutoLoginLayout;
@@ -259,6 +260,8 @@ public class LoginFragment extends BaseFragment implements TextView.OnEditorActi
 							"umipay_other_login_btn"));
 			mOtherLoginLayout = mRootLayout.findViewById(Util_Resource
 					.getIdByReflection(getActivity(), "id", "umipay_other_login_layout"));
+			mOtherLoginTv = mRootLayout.findViewById(Util_Resource
+					.getIdByReflection(getActivity(), "id", "umipay_other_login_tv"));
 			mSwitchLoginTypeBtn = mRootLayout.findViewById(Util_Resource
 					.getIdByReflection(getActivity(), "id", "umipay_switch_login_type_btn"));
 			mLoginBtn = (Button) mRootLayout.findViewById(Util_Resource
@@ -378,6 +381,10 @@ public class LoginFragment extends BaseFragment implements TextView.OnEditorActi
 
 	private void initListener() {
 		//切换登陆方式按钮
+		//切换登陆方式按钮
+		if(mOtherLoginTv != null){
+			mOtherLoginTv.setOnClickListener(this);
+		}
 		if (mSwitchLoginTypeBtn != null) {
 			mSwitchLoginTypeBtn.setOnClickListener(this);
 		}
@@ -583,20 +590,41 @@ public class LoginFragment extends BaseFragment implements TextView.OnEditorActi
 			mViewPswLayout.setOnClickListener(this);
 		}
 		// 第三方登录
-		if (v.equals(mOtherLoginCheckBox)) {
-			if (mOtherLoginLayout != null && mOtherLoginCheckBox.isChecked()) {
+		if(v.equals(mOtherLoginTv) && mOtherLoginCheckBox != null){
+
+			//此时checkbox未改
+			if (!mOtherLoginCheckBox.isChecked()) {
 				mOtherLoginLayout.setVisibility(View.VISIBLE);
 				mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
 						getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
 								"umipay_other_login_show")
 				));
-				mOtherLoginCheckBox.setChecked(false);
-			} else if (mOtherLoginLayout != null) {
+				mOtherLoginCheckBox.setChecked(true);
+			} else {
 				mOtherLoginLayout.setVisibility(View.INVISIBLE);
 				mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
 						getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
 								"umipay_other_login_hide")
 				));
+				mOtherLoginCheckBox.setChecked(false);
+			}
+		}
+		if (v.equals(mOtherLoginCheckBox) ) {
+			//checkbox点击会自动切换
+			if (mOtherLoginLayout != null) {
+				if (mOtherLoginCheckBox.isChecked()) {
+					mOtherLoginLayout.setVisibility(View.VISIBLE);
+					mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
+							getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
+									"umipay_other_login_show")
+					));
+				} else {
+					mOtherLoginLayout.setVisibility(View.INVISIBLE);
+					mOtherLoginLayout.startAnimation(AnimationUtils.loadAnimation(
+							getActivity(), Util_Resource.getIdByReflection(getActivity(), "anim",
+									"umipay_other_login_hide")
+					));
+				}
 			}
 			return;
 		}
