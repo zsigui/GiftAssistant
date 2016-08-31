@@ -40,6 +40,7 @@ import com.oplay.giftcool.model.data.resp.MissionReward;
 import com.oplay.giftcool.model.data.resp.ModifyAvatar;
 import com.oplay.giftcool.model.data.resp.ModifyNick;
 import com.oplay.giftcool.model.data.resp.MyAttention;
+import com.oplay.giftcool.model.data.resp.MyCouponDetail;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.data.resp.PayCode;
 import com.oplay.giftcool.model.data.resp.PostToken;
@@ -185,6 +186,13 @@ public interface NetEngine {
      */
     @POST
     Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainGiftList(@Url String url, @Body
+    JsonReqBase<ReqPageData> reqData);
+
+    /**
+     * 获取 礼包 单列表数据
+     */
+    @POST(NetUrl.USER_GIFT_SEIZED)
+    Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> obtainMyCouponList(@Body
     JsonReqBase<ReqPageData> reqData);
 
     /**

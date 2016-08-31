@@ -176,29 +176,27 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
             if (mRetryTime++ < 3) {
                 init();
             }
-        } else {
-            showStoredAccount();
         }
     }
 
-    private void showStoredAccount() {
-        ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
-                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
-        int i = 0;
-        for (UmipayCommonAccount account : accounts) {
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN,
-                    String.format(Locale.CHINA, i++ + " : uid = %s, " +
-                                    "uname = %s, " +
-                                    "session = %s, " +
-                                    "dest_package = %s, " +
-                                    "origin_apk = %s, " +
-                                    "origin_package = %s",
-                            account.getUid(), account.getUserName(), account.getSession(),
-                            account.getDestPackageName(),
-                            account.getOriginApkName(),
-                            account.getOriginPackageName()));
-        }
-    }
+//    private void showStoredAccount() {
+//        ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
+//                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+//        int i = 0;
+//        for (UmipayCommonAccount account : accounts) {
+//            AppDebugConfig.d(AppDebugConfig.TAG_WARN,
+//                    String.format(Locale.CHINA, i++ + " : uid = %s, " +
+//                                    "uname = %s, " +
+//                                    "session = %s, " +
+//                                    "dest_package = %s, " +
+//                                    "origin_apk = %s, " +
+//                                    "origin_package = %s",
+//                            account.getUid(), account.getUserName(), account.getSession(),
+//                            account.getDestPackageName(),
+//                            account.getOriginApkName(),
+//                            account.getOriginPackageName()));
+//        }
+//    }
 
     /**
      * 账号变更

@@ -56,13 +56,12 @@ public class MyCouponFragment extends BaseFragment implements OnBackPressListene
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mFragments = new Fragment[3];
-        mTitles = new String[3];
+        mFragments = new Fragment[2];
+        mTitles = new String[2];
         mTitles[0] = "已抢";
         mTitles[1] = "我的预约";
-        mTitles[2] = "已过期";
         mFragmentType = new int[]{KeyConfig.TYPE_KEY_SEIZED,
-                KeyConfig.TYPE_KEY_RESERVED, KeyConfig.TYPE_KEY_OVERTIME};
+                KeyConfig.TYPE_KEY_RESERVED};
         mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(new MyCouponPagerAdapter(getChildFragmentManager()));
         mTabLayout.setViewPager(mPager);

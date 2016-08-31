@@ -1,35 +1,27 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.GiftDetailPicsAdapter;
-import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.assist.CountTimer;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
+import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
@@ -63,7 +55,6 @@ import com.oplay.giftcool.util.ViewUtil;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import cn.finalteam.galleryfinal.GalleryFinal;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +68,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private final static String PAGE_NAME = "礼包详情";
 
     // 用于防止重复打开指引
-    static boolean mIsFirstOpenPage = true;
+//    static boolean mIsFirstOpenPage = true;
 
     private ImageView ivIcon;
     private TextView tvName;
@@ -90,9 +81,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvContent;
     private TextView tvDeadline;
     private TextView tvUsage;
-    private LinearLayout llUsageTitle;
-    private RecyclerView rvUsage;
-    private GiftDetailPicsAdapter mAdapter;
     private GiftButton btnSend;
     private ProgressBar pbPercent;
     private TextView tvCode;
@@ -104,8 +92,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private DeletedTextView tvOriginPrice;
     private TextView tvBroadcast;
 
-    private RelativeLayout rlHeader;
-    private ScrollView svContent;
 
     private GiftDetail mData;
     private IndexGameNew mAppInfo;
@@ -141,9 +127,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         btnSend = getViewById(R.id.btn_send);
         btnDownload = getViewById(R.id.btn_download);
         downloadLayout = getViewById(R.id.ll_download);
-
-        rlHeader = getViewById(R.id.rl_header);
-        svContent = getViewById(R.id.sv_content);
 
     }
 
@@ -282,14 +265,15 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 showCode(giftData);
             }
 
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mIsNotifyRefresh = " + mIsNotifyRefresh + ", game = " + mData.gameData);
             if (!mIsNotifyRefresh) {
                 if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                     tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
-                    mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
+//                    mAdapter.updateData(giftData.usagePicsThumb, giftData.usagePicsBig);
                 } else {
                     tvName.setText(giftData.name);
-                    ViewUtil.handleLink(tvUsage, giftData.usage, WebViewUrl.PROTOCOL);
                 }
+                ViewUtil.handleLink(tvUsage, giftData.usage, WebViewUrl.PROTOCOL);
                 tvContent.setText(giftData.content);
                 tvDeadline.setText(String.format("%s ~ %s",
                         DateUtil.formatTime(giftData.useStartTime, "yyyy-MM-dd HH:mm"),
@@ -306,8 +290,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         tvConsume.setVisibility(View.GONE);
         tvRemain.setVisibility(View.GONE);
         tvCode.setVisibility(View.VISIBLE);
-        btnCopy.setVisibility(View.VISIBLE);
-        tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+        if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+            btnCopy.setVisibility(View.INVISIBLE);
+            tvCode.setText(Html.fromHtml(getString(R.string.st_gift_detail_coupon_seized)));
+        } else {
+            btnCopy.setVisibility(View.VISIBLE);
+            tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+        }
     }
 
     /**
@@ -340,18 +329,8 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 View vsCharge = ((ViewStub) getViewById(R.id.vs_first_charge)).inflate();
                 tvContent = getViewById(vsCharge, R.id.tv_content);
                 tvDeadline = getViewById(vsCharge, R.id.tv_deadline);
-                llUsageTitle = getViewById(vsCharge, R.id.ll_usage_title);
+                tvUsage = getViewById(vsCharge, R.id.tv_usage);
                 tvRemark = getViewById(vsCharge, R.id.tv_remark);
-                LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                DividerItemDecoration decoration = new DividerItemDecoration(getContext(),
-                        llm.getOrientation(),
-                        ViewUtil.getColor(getContext(), R.color.co_transparent),
-                        getContext().getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small));
-                rvUsage = getViewById(vsCharge, R.id.rv_usage);
-                rvUsage.setLayoutManager(llm);
-                rvUsage.addItemDecoration(decoration);
-                mAdapter = new GiftDetailPicsAdapter(getContext());
-                rvUsage.setAdapter(mAdapter);
                 tvRemark.setText(TextUtils.isEmpty(o.remark) ?
                         getContext().getResources().getString(R.string.st_coupon_hint_content) : o.remark);
                 tvQQ = getViewById(vsCharge, R.id.tv_qq);
@@ -369,7 +348,19 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     tvBroadcast = getViewById(((ViewStub) getViewById(R.id.vs_broadcast)).inflate(),
                             R.id.tv_activity_hint);
                     tvBroadcast.setOnClickListener(this);
-                    tvBroadcast.setText(o.activityTitle);
+                    String text = o.activityTitle;
+                    switch (o.activityStatus) {
+                        case TypeStatusCode.POST_WAIT:
+                            text += " <font color='#ffaa17'>[等开始]</font>";
+                            break;
+                        case TypeStatusCode.POST_BEING:
+                            text += " <font color='#f85454'>[进行中]</font>";
+                            break;
+                        case TypeStatusCode.POST_FINISHED:
+                            text += " <font color='#888888'>[已结束]</font>";
+                            break;
+                    }
+                    tvBroadcast.setText(Html.fromHtml(text));
                 }
             }
             tvQQ.setOnClickListener(this);
@@ -466,6 +457,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     }
 
     public void initDownload(IndexGameNew game) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "game = " + game);
         if (getActivity() == null || game == null || btnDownload == null) {
             return;
         }
@@ -533,69 +525,17 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                     IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
                 }
                 break;
-            case R.id.iv_confirm:
-                mDialog.cancel();
-                break;
-            case R.id.ll_content:
-                if (mAdapter != null) {
-                    GalleryFinal.openMultiPhoto(0, mAdapter.getPics());
-                }
-                mDialog.cancel();
-                break;
+//            case R.id.iv_confirm:
+//                mDialog.cancel();
+//                break;
+//            case R.id.ll_content:
+//                if (mAdapter != null) {
+//                    GalleryFinal.openMultiPhoto(0, mAdapter.getPics());
+//                }
+//                mDialog.cancel();
+//                break;
         }
     }
-
-//    /**
-//     * 判断是否安装了游戏，如果没有，弹窗提示下载安装
-//     */
-//	private boolean isInstalledGame() {
-//		HashSet<String> appNames = Global.getInstalledAppNames();
-//		for (String name : appNames) {
-//			if (mData.gameData.name.startsWith(name)) {
-//				// 前缀匹配成功，表明有安装该游戏，返回成功
-//				return true;
-//			}
-//		}
-//		if (mAppInfo == null) {
-//			ToastUtil.showShort("页面信息错误，请重新进入");
-//			return false;
-//		}
-//		final ConfirmDialog mDialog = ConfirmDialog.newInstance();
-//		mDialog.setTitle("小贴士");
-//		mDialog.setContent(Html.fromHtml(String.format("下载「<font color='#ffaa17'>%s</font>」安装，马上参与0元抢购！",
-//				mData.gameData.name)));
-//		if (mAppInfo.downloadStatus != null && mAppInfo.getAppStatus(mAppInfo.downloadStatus) == AppStatus
-//				.INSTALLABLE) {
-//			mDialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_install));
-//			mDialog.setPositiveBtnBackground(R.drawable.selector_btn_download_blue);
-//		} else {
-//			mDialog.setPositiveBtnText(mApp.getResources().getString(R.string.st_dialog_btn_download));
-//		}
-//		mDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-//			@Override
-//			public void onCancel() {
-//				mDialog.dismissAllowingStateLoss();
-//			}
-//
-//			@Override
-//			public void onConfirm() {
-//				if (mAppInfo != null) {
-//					if (mAppInfo.downloadStatus != null) {
-//						if (mAppInfo.downloadStatus == DownloadStatus.DOWNLOADING) {
-//							ToastUtil.showShort("已经在下载中，请等待下载完成");
-//							mDialog.dismissAllowingStateLoss();
-//							return;
-//						}
-//						mAppInfo.appStatus = mAppInfo.getAppStatus(mAppInfo.downloadStatus);
-//					}
-//					mAppInfo.handleOnClick(getChildFragmentManager());
-//				}
-//				mDialog.dismissAllowingStateLoss();
-//			}
-//		});
-//		mDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
-//		return false;
-//	}
 
     private Runnable mProgressRunnable;
 
@@ -659,7 +599,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         btnDownload = null;
         downloadLayout = null;
         tvOriginPrice = null;
-        rvUsage = null;
         mData = null;
         mAppInfo = null;
         if (mDataRunnable != null && mDataRunnable.mCall != null) {
@@ -735,45 +674,44 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         }
     }
 
-
-    private Dialog mDialog;
-
-    /**
-     * 显示首充券使用的指引页面
-     */
-    public void showGuidePage() {
-        if (mDialog == null) {
-            mDialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
-            View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.overlay_hint_gift_detail_usage, (ViewGroup) mContentView.getParent(), false);
-            View llTop = getViewById(v, R.id.ll_top);
-            View llContent = getViewById(v, R.id.ll_content);
-            final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()
-                    - svContent.getScrollY();
-            final int padding = getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
-
-            if (llTop != null) {
-                ViewGroup.LayoutParams lp = llTop.getLayoutParams();
-                lp.height = top + llUsageTitle.getTop() + padding;
-                llTop.setLayoutParams(lp);
-            }
-            if (llContent != null) {
-                ViewGroup.LayoutParams lp = llContent.getLayoutParams();
-                lp.height = rvUsage.getBottom() - llUsageTitle.getTop() + padding;
-                llContent.setLayoutParams(lp);
-                llContent.setOnClickListener(this);
-            }
-            ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
-            if (ivConfirm != null) {
-                ivConfirm.setOnClickListener(this);
-            }
-            mDialog.setCancelable(true);
-            mDialog.setCanceledOnTouchOutside(false);
-            mDialog.setContentView(v);
-            mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-                    .MATCH_PARENT);
-        }
-        mDialog.show();
-        mIsFirstOpenPage = false;
-    }
+//    private Dialog mDialog;
+//
+//    /**
+//     * 显示首充券使用的指引页面
+//     */
+//    public void showGuidePage() {
+//        if (mDialog == null) {
+//            mDialog = new Dialog(getContext(), R.style.DefaultCustomDialog_NoDim);
+//            View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+//                    .inflate(R.layout.overlay_hint_gift_detail_usage, (ViewGroup) mContentView.getParent(), false);
+//            View llTop = getViewById(v, R.id.ll_top);
+//            View llContent = getViewById(v, R.id.ll_content);
+//            final int top = getResources().getDimensionPixelSize(R.dimen.di_tool_bar_bg_height) + rlHeader.getHeight()
+//                    - svContent.getScrollY();
+//            final int padding = getResources().getDimensionPixelSize(R.dimen.di_list_item_gap_small);
+//
+//            if (llTop != null) {
+//                ViewGroup.LayoutParams lp = llTop.getLayoutParams();
+//                lp.height = top + llUsageTitle.getTop() + padding;
+//                llTop.setLayoutParams(lp);
+//            }
+//            if (llContent != null) {
+//                ViewGroup.LayoutParams lp = llContent.getLayoutParams();
+//                lp.height = rvUsage.getBottom() - llUsageTitle.getTop() + padding;
+//                llContent.setLayoutParams(lp);
+//                llContent.setOnClickListener(this);
+//            }
+//            ImageView ivConfirm = ViewUtil.getViewById(v, R.id.iv_confirm);
+//            if (ivConfirm != null) {
+//                ivConfirm.setOnClickListener(this);
+//            }
+//            mDialog.setCancelable(true);
+//            mDialog.setCanceledOnTouchOutside(false);
+//            mDialog.setContentView(v);
+//            mDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
+//                    .MATCH_PARENT);
+//        }
+//        mDialog.show();
+//        mIsFirstOpenPage = false;
+//    }
 }

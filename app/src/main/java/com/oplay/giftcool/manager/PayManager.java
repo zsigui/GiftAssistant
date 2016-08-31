@@ -429,7 +429,7 @@ public class PayManager {
             dialog.setTitle(context.getResources().getString(R.string
                     .st_dialog_search_success));
         }
-        dialog.setCouponCharge(gift, fragment);
+        dialog.setCouponCharge(gift);
         // 统计
         staticsPay(context, StatisticsManager.ID.GIFT_GOLD_SEIZE,
                 StatisticsManager.ID.STR_GIFT_SEIZE_CLICK,

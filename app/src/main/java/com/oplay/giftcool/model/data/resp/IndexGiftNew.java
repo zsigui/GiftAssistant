@@ -142,4 +142,10 @@ public class IndexGiftNew implements Serializable {
      */
     @SerializedName("activity_title")
     public String activityTitle;
+
+    /**
+     * 活动状态
+     */
+    @SerializedName("activity_status")
+    public int activityStatus;
 }

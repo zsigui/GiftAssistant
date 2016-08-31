@@ -1,9 +1,7 @@
 package com.oplay.giftcool.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.text.Html;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,12 +9,10 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
-import com.oplay.giftcool.config.ConstString;
-import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.MyCouponDetail;
+import com.oplay.giftcool.ui.fragment.dialog.UsageCouponHintDialog;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.IntentUtil;
-import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
@@ -24,19 +20,19 @@ import java.util.List;
 
 /**
  * 我的首充券列表内容适配器
- *
+ * <p/>
  * Created by zsigui on 16-1-7.
  */
-public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implements View.OnClickListener {
+public class MyCouponListAdapter extends BaseListAdapter<MyCouponDetail> implements View.OnClickListener {
 
-	private int mType;
+    private FragmentManager mManager;
 
-    public MyCouponListAdapter(Context context, List<IndexGiftNew> objects, int type) {
+    public MyCouponListAdapter(Context context, List<MyCouponDetail> objects, FragmentManager fm) {
         super(context, objects);
-        this.mType = type;
+        mManager = fm;
     }
 
-    public void updateData(ArrayList<IndexGiftNew> data) {
+    public void updateData(ArrayList<MyCouponDetail> data) {
         if (data == null) {
             return;
         }
@@ -59,30 +55,36 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
             holder.tvPlatform = ViewUtil.getViewById(convertView, R.id.tv_platform);
             holder.tvPrice = ViewUtil.getViewById(convertView, R.id.tv_price);
             holder.tvDeadline = ViewUtil.getViewById(convertView, R.id.tv_deadline);
-            holder.tvGiftCode = ViewUtil.getViewById(convertView, R.id.tv_gift_code);
-            holder.btnCopy = ViewUtil.getViewById(convertView, R.id.btn_copy);
+            holder.btnSend = ViewUtil.getViewById(convertView, R.id.btn_send);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        IndexGiftNew o = getItem(position);
-        holder.tvName.setText(o.gameName);
+        MyCouponDetail o = getItem(position);
+        holder.tvName.setText(o.name);
         ViewUtil.showImage(holder.ivIcon, o.img);
         holder.tvPlatform.setText(o.platform);
         ViewUtil.siteValueUI(holder.tvPrice, o.originPrice, true);
         holder.tvDeadline.setText(String.format("%s ~ %s", DateUtil.formatTime(o.useStartTime, "yyyy.MM.dd HH:mm"),
                 DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
-        holder.tvGiftCode.setText(Html.fromHtml(String.format("兑换码: <font color='#ffaa17'>%s</font>", o.code)));
-        if (mType == KeyConfig.TYPE_KEY_OVERTIME) {
-            holder.btnCopy.setEnabled(false);
-            holder.btnCopy.setText("已结束");
-        } else {
-            holder.btnCopy.setEnabled(true);
-            holder.btnCopy.setText("复制");
+
+        switch (o.usageStatus) {
+            case 0:
+                holder.btnSend.setText("去使用");
+                holder.btnSend.setEnabled(true);
+                break;
+            case 1:
+                holder.btnSend.setText("已使用");
+                holder.btnSend.setEnabled(false);
+                break;
+            case 2:
+                holder.btnSend.setText("已过期");
+                holder.btnSend.setEnabled(false);
+                break;
         }
-        holder.btnCopy.setOnClickListener(this);
-        holder.btnCopy.setTag(TAG_POSITION, position);
+        holder.btnSend.setOnClickListener(this);
+        holder.btnSend.setTag(TAG_POSITION, position);
         convertView.setOnClickListener(this);
         convertView.setTag(TAG_POSITION, position);
         return convertView;
@@ -93,12 +95,14 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         if (mData == null || v.getTag(TAG_POSITION) == null) {
             return;
         }
-        IndexGiftNew item = getItem((Integer)v.getTag(TAG_POSITION));
+        MyCouponDetail item = getItem((Integer) v.getTag(TAG_POSITION));
         switch (v.getId()) {
-            case R.id.btn_copy:
-                ClipboardManager cmb = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                cmb.setPrimaryClip(ClipData.newPlainText("兑换码", item.code));
-                ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
+            case R.id.btn_send:
+                if (mManager != null) {
+                    UsageCouponHintDialog.newInstance(item).show(
+                            mManager,
+                            UsageCouponHintDialog.class.getSimpleName());
+                }
                 break;
             case R.id.rl_recommend:
                 IntentUtil.jumpGiftDetail(mContext, item.id);
@@ -112,7 +116,6 @@ public class MyCouponListAdapter extends BaseListAdapter<IndexGiftNew> implement
         TextView tvPlatform;
         TextView tvPrice;
         TextView tvDeadline;
-        TextView tvGiftCode;
-        TextView btnCopy;
+        TextView btnSend;
     }
 }

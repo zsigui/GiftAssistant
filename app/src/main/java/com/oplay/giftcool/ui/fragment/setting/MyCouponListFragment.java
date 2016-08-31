@@ -9,10 +9,9 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
-import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
-import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.model.data.resp.MyCouponDetail;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
@@ -31,7 +30,7 @@ import retrofit2.Response;
  * <p/>
  * Created by zsigui on 16-5-31.
  */
-public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class MyCouponListFragment extends BaseFragment_Refresh<MyCouponDetail> {
 
     private ListView mDataView;
     private MyCouponListAdapter mAdapter;
@@ -61,19 +60,19 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     protected void processLogic(Bundle savedInstanceState) {
         ReqPageData data = new ReqPageData();
         data.giftType = KeyConfig.GIFT_TYPE_COUPON;
-        mReqPageObj = new JsonReqBase<ReqPageData>(data);
+        mReqPageObj = new JsonReqBase<>(data);
 
         if (getArguments() != null) {
             mType = getArguments().getInt(KeyConfig.KEY_DATA);
         }
-        mAdapter = new MyCouponListAdapter(getContext(), null, mType);
+        mAdapter = new MyCouponListAdapter(getContext(), null, getChildFragmentManager());
         mDataView.setAdapter(mAdapter);
     }
 
     /**
      * 刷新礼包列表信息的网络请求声明
      */
-    private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallRefresh;
+    private Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> mCallRefresh;
 
     @Override
     protected void lazyLoad() {
@@ -92,18 +91,18 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                 mReqPageObj.data.page = 1;
                 mReqPageObj.data.type = mType;
                 mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
-                mCallRefresh = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
-                mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+                mCallRefresh = Global.getNetEngine().obtainMyCouponList(mReqPageObj);
+                mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<MyCouponDetail>>>() {
                     @Override
-                    public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
-                                           Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
+                    public void onResponse(Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> call,
+                                           Response<JsonRespBase<OneTypeDataList<MyCouponDetail>>> response) {
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
                         if (response != null && response.isSuccessful() && response.body() != null &&
                                 response.body().getCode() == NetStatusCode.SUCCESS) {
                             refreshSuccessEnd();
-                            OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+                            OneTypeDataList<MyCouponDetail> backObj = response.body().getData();
                             refreshLoadState(backObj.data, backObj.isEndPage);
                             updateData(backObj.data);
                             return;
@@ -116,7 +115,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     }
 
                     @Override
-                    public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
+                    public void onFailure(Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> call, Throwable t) {
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
@@ -141,7 +140,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
     /**
      * 加载更多礼包列表网络请求声明
      */
-    private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallLoad;
+    private Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> mCallLoad;
 
     /**
      * 加载更多数据
@@ -165,18 +164,18 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                 mReqPageObj.data.page = mLastPage + 1;
                 mReqPageObj.data.type = mType;
                 mReqPageObj.data.giftType = KeyConfig.GIFT_TYPE_COUPON;
-                mCallLoad = Global.getNetEngine().obtainGiftList(NetUrl.USER_GIFT_SEIZED, mReqPageObj);
-                mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
+                mCallLoad = Global.getNetEngine().obtainMyCouponList(mReqPageObj);
+                mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<MyCouponDetail>>>() {
                     @Override
-                    public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
-                                           Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
+                    public void onResponse(Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> call,
+                                           Response<JsonRespBase<OneTypeDataList<MyCouponDetail>>> response) {
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
                         if (response != null && response.isSuccessful() && response.body() != null &&
                                 response.body().getCode() == NetStatusCode.SUCCESS) {
                             moreLoadSuccessEnd();
-                            OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
+                            OneTypeDataList<MyCouponDetail> backObj = response.body().getData();
                             setLoadState(backObj.data, backObj.isEndPage);
                             addMoreData(backObj.data);
                             return;
@@ -185,7 +184,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
                     }
 
                     @Override
-                    public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
+                    public void onFailure(Call<JsonRespBase<OneTypeDataList<MyCouponDetail>>> call, Throwable t) {
                         if (!mCanShowUI || call.isCanceled()) {
                             return;
                         }
@@ -199,7 +198,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     private int mCurY;
 
-    public void updateData(ArrayList<IndexGiftNew> data) {
+    public void updateData(ArrayList<MyCouponDetail> data) {
         if (data == null || data.size() == 0) {
             mViewManager.showEmpty();
             return;
@@ -213,7 +212,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<IndexGiftNew> {
         mLastPage = 1;
     }
 
-    private void addMoreData(ArrayList<IndexGiftNew> moreData) {
+    private void addMoreData(ArrayList<MyCouponDetail> moreData) {
         if (moreData == null) {
             return;
         }

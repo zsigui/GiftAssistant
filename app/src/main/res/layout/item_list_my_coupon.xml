@@ -45,6 +45,7 @@
             android:layout_alignParentTop = "true"
             android:layout_marginTop = "@dimen/di_index_item_margin_left"
             android:layout_toRightOf = "@+id/rl_icon"
+            android:layout_toLeftOf = "@+id/btn_send"
             android:layout_marginLeft = "@dimen/di_list_item_gap_small"
             android:drawablePadding = "@dimen/di_line_space_extra_big"
             android:drawableLeft = "@drawable/ic_tag_coupon"
@@ -67,6 +68,7 @@
             android:layout_below = "@+id/tv_name"
             android:layout_marginTop = "@dimen/di_line_space_extra_normal"
             android:layout_toRightOf = "@+id/tv_platform"
+            android:layout_toLeftOf = "@+id/btn_send"
             android:layout_marginLeft = "@dimen/di_list_item_gap_big"
             android:gravity = "center_vertical"
             android:text = "价值" />
@@ -80,34 +82,14 @@
             android:layout_toRightOf = "@+id/rl_icon"
             android:text = "有效期：2015.10.30 10:00 ~ 2016.10.30 10:00" />
 
-    <LinearLayout
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:layout_alignLeft = "@+id/rl_icon"
-            android:layout_below = "@+id/rl_icon"
-            android:orientation = "horizontal"
-            android:layout_marginBottom = "5dp"
-            android:layout_marginTop = "8dp" >
-
-        <TextView
-                android:id = "@+id/tv_gift_code"
-                style = "@style/DefaultTextView.Text"
-                android:layout_width = "0dp"
-                android:layout_weight = "1"
-                android:layout_height = "33dp"
-                android:layout_marginRight = "25dp"
-                android:background = "@color/co_gift_code_bg"
-                android:gravity = "left|center_vertical"
-                android:paddingLeft = "10dp"
-                android:paddingRight = "10dp"
-                android:text = "兑换码：123456789KKKKKKKK" />
-
-        <TextView
-                android:id = "@+id/btn_copy"
-                style = "@style/DefaultTextView"
-                android:layout_height = "@dimen/di_btn_height"
-                android:background = "@drawable/selector_btn_red"
-                android:text = "@string/st_gift_code_copy"
-                android:textColor = "@color/color_btn_red_border" />
-    </LinearLayout >
+    <TextView
+            android:id = "@+id/btn_send"
+            style = "@style/DefaultTextView"
+            android:layout_height = "@dimen/di_btn_height"
+            android:layout_alignParentRight = "true"
+            android:layout_alignTop = "@+id/tv_name"
+            android:background = "@drawable/selector_btn_red"
+            android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
+            android:text = "去使用"
+            android:textColor = "@color/co_btn_red" />
 </RelativeLayout >

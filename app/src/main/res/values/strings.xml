@@ -93,9 +93,14 @@
         活动开始时间：<font color=\'#ffaa17\'>%s</font>
         ]]>
     </string>
+    <string name = "st_gift_detail_coupon_seized">
+        <![CDATA[
+        <font color=\'#ffaa17\'>请登录偶玩版游戏直接使用</font>
+        ]]>
+    </string>
     <string name = "st_gift_tag_limit" >珍贵限量</string >
     <string name = "st_gift_tag_free" >限时免费</string >
-    <string name = "st_gift_tag_activity" >活动专属</string >
+    <string name = "st_gift_tag_activity" >活动</string >
     <string name = "st_gift_consume" >消耗</string >
     <string name = "st_gift_content" >▌礼包内容</string >
     <string name = "st_gift_deadline" >▌礼包使用期限</string >
@@ -106,7 +111,7 @@
     <!-- 首充券详情 -->
     <string name = "st_coupon_content" >▌首充券内容</string >
     <string name = "st_coupon_deadline" >▌使用期限</string >
-    <string name = "st_coupon_usage" >▌兑换步骤</string >
+    <string name = "st_coupon_usage" >▌使用方法</string >
     <string name = "st_coupon_usage_hint" >（点击下方查看图文步骤）</string >
     <string name = "st_coupon_hint_content" >1、首充券只能在首次充值时用于抵扣充值金额，每个偶玩账号可兑换使用一次。\n2、首充券的有效时间较短，抢号后请马上兑换，并到游戏中消费使用。</string >
     <!-- 游戏状态 -->

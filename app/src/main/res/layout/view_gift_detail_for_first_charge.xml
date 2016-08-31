@@ -38,32 +38,19 @@
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big" />
 
-    <LinearLayout
-            android:id = "@+id/ll_usage_title"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:orientation = "horizontal" >
-
-        <TextView
-                style = "@style/DefaultTextView.DetailTitle"
-                android:layout_width = "wrap_content"
-                android:paddingLeft = "@dimen/di_list_item_gap_big"
-                android:text = "@string/st_coupon_usage" />
-
-        <TextView
-                style = "@style/DefaultTextView.Text"
-                android:textColor = "@color/co_common_app_second_bg_orange"
-                android:layout_marginTop = "19dp"
-                android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
-                android:text = "@string/st_coupon_usage_hint" />
-    </LinearLayout >
-
-    <com.oplay.giftcool.ui.widget.layout.GCRecyclerView
-            android:id = "@+id/rv_usage"
+    <TextView
+            style = "@style/DefaultTextView.DetailTitle"
             android:paddingLeft = "@dimen/di_list_item_gap_big"
             android:paddingRight = "@dimen/di_list_item_gap_big"
-            android:layout_width = "match_parent"
-            android:layout_height = "@dimen/di_detail_usage_pic_length" />
+            android:text = "@string/st_coupon_usage" />
+
+    <TextView
+            android:id = "@+id/tv_usage"
+            style = "@style/DefaultTextView.Detail"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:textIsSelectable = "true"
+            android:singleLine = "false" />
 
     <TextView
             style = "@style/DefaultTextView.DetailTitle"
