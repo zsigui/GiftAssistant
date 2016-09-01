@@ -517,7 +517,7 @@ public class WebViewInterface extends Observable {
             }
             return RET_INTERNAL_ERR;
         } catch (Throwable t) {
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN, t);
+            AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, t);
             return RET_PARAM_ERR;
         }
     }

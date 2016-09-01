@@ -588,7 +588,6 @@ public class AccountManager implements OnFinishListener {
                             setUnreadMessageCount(count);
                             Global.updateMsgCentralData(mContext, unread);
                             if (unread.mAwardNotifies != null && unread.mAwardNotifies.size() > 0) {
-                                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "award is write : " + unread.mAwardNotifies.size());
                                 String s = AssistantApp.getInstance().getGson().toJson(unread.mAwardNotifies,
                                         new TypeToken<ArrayList<AwardNotify>>(){}.getType());
                                 SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_AWARD, s);

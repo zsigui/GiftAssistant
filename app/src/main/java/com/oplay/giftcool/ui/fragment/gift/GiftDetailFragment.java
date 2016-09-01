@@ -265,7 +265,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 showCode(giftData);
             }
 
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mIsNotifyRefresh = " + mIsNotifyRefresh + ", game = " + mData.gameData);
             if (!mIsNotifyRefresh) {
                 if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
                     tvName.setText(String.format("%s(%s)", giftData.name, giftData.platform));
@@ -457,7 +456,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     }
 
     public void initDownload(IndexGameNew game) {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "game = " + game);
         if (getActivity() == null || game == null || btnDownload == null) {
             return;
         }

@@ -353,10 +353,10 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
             case CommonAccountViewListener.CODE_CHANGE_ACCOUNT:
                 if (account != null) {
                     // 执行切换账号操作
-                    if (AccountManager.getInstance().isLogin()) {
-                        // 先退出当前账号
-                        AccountManager.getInstance().logout(false);
-                    }
+//                    if (AccountManager.getInstance().isLogin()) {
+//                        // 先退出当前账号
+//                        AccountManager.getInstance().logout(false);
+//                    }
                     handleAccountLogin(account, new ResultActionCallback() {
                         @Override
                         public void onSuccess(Object obj) {
@@ -433,7 +433,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
      */
     private void handleAccountLogin(UmipayCommonAccount account,
                                     final CommonAccountViewListener.ResultActionCallback callback) {
-        UserModel um = new UserModel();
+        final UserModel um = new UserModel();
         UserSession session = new UserSession();
         session.uid = account.getUid();
         session.session = account.getSession();
@@ -458,13 +458,27 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                         if (response != null && response.isSuccessful()) {
                             if (response.body() != null) {
                                 if (response.body().isSuccess()) {
+                                    UserInfo info = response.body().getData().userInfo;
+                                    if (info == null) {
+                                        if (callback != null) {
+                                            callback.onFailed(NetStatusCode.ERR_UN_LOGIN, "");
+                                        }
+                                        return;
+                                    }
                                     UserModel user = AccountManager.getInstance().getUser();
-                                    user.userInfo = response.body().getData().userInfo;
+                                    if (user == null) {
+                                        user = new UserModel();
+                                        UserSession session = new UserSession();
+                                        session.uid = info.uid;
+                                        session.openId = info.openId;
+                                        user.userSession = session;
+                                    }
+                                    user.userInfo = info;
                                     user.userSession.openId = user.userInfo.openId;
                                     MixUtil.doLoginSuccessNext(mContext, user);
 
                                     if (callback != null) {
-                                        callback.onSuccess(response.body().getData());
+                                        callback.onSuccess(info);
                                     }
                                     return;
                                 }

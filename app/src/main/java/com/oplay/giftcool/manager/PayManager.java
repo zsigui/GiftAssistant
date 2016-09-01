@@ -319,7 +319,6 @@ public class PayManager {
                                 if (call.isCanceled()) {
                                     return;
                                 }
-                                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "mFragment = " + fragment);
                                 scorePayBack(response, isSeize, context, gift, button, fragment);
                             }
 

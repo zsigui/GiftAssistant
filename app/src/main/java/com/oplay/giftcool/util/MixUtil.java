@@ -212,7 +212,6 @@ public class MixUtil {
                             .length());
             info.data = uri.getQueryParameter("data");
             String id = uri.getQueryParameter("id");
-            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data = " + info.data + ", id = " + info.id);
             info.id = (TextUtils.isEmpty(id) ? 0 : Integer.parseInt(id));
 
             IntentUtil.handleJumpInfo(context, info);

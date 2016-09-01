@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.api.CommonAccountViewListener;
-import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.manager.ListenerManager;
@@ -123,7 +122,6 @@ public class ChangeAccountFragment extends BaseFragment {
     protected void handleOnClick(View v) {
         try {
             if (v.equals(mChangeBtn)) {
-                UmipaySDKManager.logoutAccount(getActivity(), null);
                 if (ListenerManager.getCommonAccountViewListener() != null) {
                     UmipayCommonAccount account = UmipayCommonAccountCacheManager.getInstance(getContext())
                             .popCommonAccountToChange();
