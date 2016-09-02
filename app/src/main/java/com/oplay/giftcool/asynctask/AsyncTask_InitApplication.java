@@ -43,6 +43,7 @@ import retrofit2.Response;
  */
 public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> {
     private Context mContext;
+    private boolean mNeedUpdateSession = false;
 
     public AsyncTask_InitApplication(Context context) {
         mContext = context.getApplicationContext();
@@ -66,12 +67,13 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
      */
     public void doClearWorkForOldVer() {
         int oldVer = SPUtil.getInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, 0);
-        if (oldVer != AppConfig.SDK_VER) {
+        if (oldVer < AppConfig.SDK_VER) {
             if (oldVer < 3) {
                 // 清除旧版的账号存储信息
                 SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_PHONE, "");
                 SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_OUWAN, "");
             }
+            mNeedUpdateSession = true;
             // 写入最新版本信息
             SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
             // 清空今日登录状态
@@ -135,6 +137,10 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         AccountManager.getInstance().notifyUserAll(user);
+
+        if (mNeedUpdateSession) {
+            AccountManager.getInstance().updateUserSession(true);
+        }
 
         // 初始化配置，获取更新信息
         if (!initAndCheckUpdate()) {

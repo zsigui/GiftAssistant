@@ -282,11 +282,15 @@
         ]]>
     </string>
     <string name = "st_lbind_set_pwd">请设置登录密码:</string>
-    <string name = "st_lbind_et_set_pwd_hint">登录密码(6~18位字符)</string>
     <string name = "st_lbind_owan_user_top_hint">
-        为了您的账号安全和后期使用方便，请设置一个用于登录的偶玩账号
+        完善账号信息，抢礼包更容易哦！
     </string>
-    <string name = "st_lbind_et_set_user_hint">偶玩账号(6~32位字符或数字)</string>
+    <string name = "st_lbind_et_user_hint">用户名 : </string>
+    <string name = "st_lbind_et_pwd_hint">密\u0020\u0020\u0020\u0020码 : </string>
+    <string name = "st_lbind_et_set_user_hint">请设置(6~32位字符或数字)</string>
+    <string name = "st_lbind_et_set_pwd_hint">请设置(6~32位字符)</string>
+    <string name = "st_lbind_et_set_pwd_award_hint">设置密码后可获得50金币</string>
+    <string name = "st_lbind_set_pwd_login">完成登录</string>
     <string name = "st_lbind_choose_top_hint">
         <![CDATA[
         系统检测到您的手机 <font color=\'#20C585\'>%s</font> 已绑了如下偶玩账号，请选择一个作为手机默认账号
@@ -297,6 +301,11 @@
         <font color=\'#333333\'>%1$s</font> <font color=\'#888888\'>| %2$s</font>
         ]]>
     </string>
+    <string name = "st_lbind_dialog_title">确认放弃登录？</string>
+    <string name = "st_lbind_dialog_content">还有一步就可以完成登录了，真的要退出吗？</string>
+    <string name = "st_lbind_dialog_ok">退出</string>
+    <string name = "st_lbind_dialog_quick">取消</string>
+
 
     <!-- 弹窗 -->
     <string name = "st_dialog_hint_title" >提示</string >
@@ -378,7 +387,7 @@
     <string name = "st_user_unbind" >未绑定</string >
     <string name = "st_user_modify_pwd" >修改登录密码</string >
     <string name = "st_user_ouwan_hint" >小提示： 绑定手机号码可以找回登录密码，有效保障账号安全</string >
-    <string name = "st_user_phone_hint" >小提示： 登陆手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string >
+    <string name = "st_user_phone_hint" >小提示： 登录手机号默认是偶玩账号的绑定手机号码，可以通过登录手机号找回偶玩账号的登录密码</string >
     <string name = "st_login_notice" >手机号直接登录，无须注册</string >
 
     <!-- 设置头像 -->

@@ -32,7 +32,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
     private final static String PAGE_NAME = "用户信息";
     private RelativeLayout rlAvatar;
     private LinearLayout llNick;
-    private LinearLayout llLogin;
+//    private LinearLayout llLogin;
     private LinearLayout llBind;
     private ImageView ivLogin;
     private ImageView ivBind;
@@ -64,7 +64,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
         setContentView(R.layout.fragment_user_info);
         rlAvatar = getViewById(R.id.rl_avatar);
         llNick = getViewById(R.id.ll_nick);
-        llLogin = getViewById(R.id.rl_login);
+//        llLogin = getViewById(R.id.rl_login);
         llBind = getViewById(R.id.rl_bind);
         ivIcon = getViewById(R.id.iv_icon);
         tvNick = getViewById(R.id.tv_nick);
@@ -84,7 +84,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
         ObserverManager.getInstance().addUserActionListener(this);
         rlAvatar.setOnClickListener(this);
         llNick.setOnClickListener(this);
-        llLogin.setOnClickListener(this);
+//        llLogin.setOnClickListener(this);
         llBind.setOnClickListener(this);
         rlModifyPwd.setOnClickListener(this);
     }
@@ -113,7 +113,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
         UserInfo user = AccountManager.getInstance().getUserInfo();
         ViewUtil.showAvatarImage(user.avatar, ivIcon, true);
         String nick;
-        if (!TextUtils.isEmpty(user.thirdOpenId)) {
+        if (user.loginType == UserTypeUtil.TYPE_POHNE) {
             nick = (TextUtils.isEmpty(user.nick) ? StringUtil.transePhone(user.phone) : user.nick);
             tvLoginTitle.setText(mContext.getResources().getString(R.string.st_user_phone_login));
             tvLogin.setText(StringUtil.transePhone(user.phone));
@@ -169,22 +169,19 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
                             SetNickFragment.newInstance(), getResources().getString(R.string.st_user_set_nick_title));
                 }
                 break;
-            case R.id.rl_login:
-                if (user.loginType == UserTypeUtil.TYPE_POHNE) {
-                    if (user.bindOuwanStatus == 1) {
-                        // 更换手机账号
-                        OuwanSDKManager.getInstance().showBindPhoneView(getContext());
-                    } else {
-                        ToastUtil.showLong("需要先绑定偶玩账号才能更换登录手机号码");
-                    }
-                }
-                break;
+//            case R.id.rl_login:
+//                if (user.loginType == UserTypeUtil.TYPE_POHNE) {
+//                    if (user.bindOuwanStatus == 1) {
+//                        // 更换手机账号
+//                        OuwanSDKManager.getInstance().showBindPhoneView(getContext());
+//                    } else {
+//                        ToastUtil.showLong("需要先绑定偶玩账号才能更换登录手机号码");
+//                    }
+//                }
+//                break;
             case R.id.rl_bind:
-                if (!TextUtils.isEmpty(user.thirdOpenId)) {
-                    if (user.bindOuwanStatus == 0) {
-                        // 绑定偶玩账号
-                        OuwanSDKManager.getInstance().showBindOuwanView(getContext());
-                    }
+                if (user.loginType == UserTypeUtil.TYPE_POHNE && user.bindOuwanStatus == 0) {
+                    IntentUtil.jumpBindOwan(mContext, AccountManager.getInstance().getUser());
                 } else {
                     // 调用偶玩绑定手机号码
                     OuwanSDKManager.getInstance().showChangePhoneView(getContext());

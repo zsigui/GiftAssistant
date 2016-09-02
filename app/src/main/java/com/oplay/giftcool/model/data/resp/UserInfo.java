@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class UserInfo implements Serializable {
 
     /**
-     * 登陆类型(采用何种方式登录)
+     * 登录类型(采用何种方式登录)
      */
     public int loginType;
     /**
@@ -22,7 +22,7 @@ public class UserInfo implements Serializable {
     @SerializedName("openid")
     public String openId;
     /**
-     * 0未绑定 1绑定，表示第三方（手机）登陆时候，是否绑定偶玩账号
+     * 0未绑定 1绑定，表示第三方（手机）登录时候，是否绑定偶玩账号
      */
     @SerializedName("bind_ouwan_status")
     public int bindOuwanStatus;

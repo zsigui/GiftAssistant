@@ -649,4 +649,16 @@ public class IntentUtil {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
+
+    /**
+     * 唤醒url指定应用
+     */
+    public static void jumpUri(Context context, String url) {
+        Intent intent = new Intent();
+        intent.addCategory(Intent.CATEGORY_APP_BROWSER);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        context.startActivity(intent);
+    }
 }

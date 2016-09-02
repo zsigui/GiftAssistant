@@ -392,6 +392,22 @@ public class WebViewInterface extends Observable {
         return RET_INTERNAL_ERR;
     }
 
+    /**
+     *
+     * 供js调用执行URI操作
+     *
+     * @param url 进行发送的uri
+     * @return
+     */
+    @JavascriptInterface
+    public int execURICall(String url) {
+        if (mHostActivity == null) {
+            return RET_INTERNAL_ERR;
+        }
+        IntentUtil.jumpUri(mHostActivity, url);
+        return RET_SUCCESS;
+    }
+
     private Call<Object> mCall;
 
     /**

@@ -16,7 +16,6 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.DrawerAdapter;
 import com.oplay.giftcool.config.KeyConfig;
-import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -114,10 +113,9 @@ public class DrawerFragment extends BaseFragment {
             String nick;
             String name;
             UserInfo user = AccountManager.getInstance().getUserInfo();
-            if (user.loginType == UserTypeUtil.TYPE_POHNE
-                    || (user.loginType != UserTypeUtil.TYPE_OUWAN && user.bindOuwanStatus == 0)) {
+            if (TextUtils.isEmpty(user.username)) {
                 nick = (TextUtils.isEmpty(user.nick) ? StringUtil.transePhone(user.phone) : user.nick);
-                name = "登陆手机：" + StringUtil.transePhone(user.phone);
+                name = "登录手机：" + StringUtil.transePhone(user.phone);
             } else {
                 nick = (TextUtils.isEmpty(user.nick) ? user.username : user.nick);
                 name = "偶玩账号：" + user.username;

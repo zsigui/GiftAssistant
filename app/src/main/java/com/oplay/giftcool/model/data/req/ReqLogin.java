@@ -64,8 +64,18 @@ public class ReqLogin {
      */
     public boolean setOuwanUser(String username, String password, boolean needEncrypt) {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO,
+                    "at least one is null : username = " + username + ", password = " + password);
             return false;
         }
+//        // 交给服务器验证
+//        String pattern = "[\\w\\\\-\\._]{6,32}";
+//        if (!StringUtil.matches(username, pattern, false)
+//                || !StringUtil.matches(password, pattern, false)) {
+//            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO,
+//                    "at least one not match pattern : username = " + username + ", password = " + password);
+//            return false;
+//        }
         if (!needEncrypt) {
             // 使用记住密码的方式，这时不需要再次加密
             this.username = username;

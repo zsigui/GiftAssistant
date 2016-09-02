@@ -195,7 +195,12 @@
                 android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
                 android:launchMode = "singleTop"
                 android:screenOrientation = "sensorPortrait"
-                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" >
+            <intent-filter >
+                <action android:name = "${applicationId}.action.LOGIN" />
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter >
+        </activity >
 
         <activity
                 android:name = ".ui.activity.WebActivity"

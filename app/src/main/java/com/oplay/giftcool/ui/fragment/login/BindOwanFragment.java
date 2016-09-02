@@ -2,10 +2,10 @@ package com.oplay.giftcool.ui.fragment.login;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
@@ -13,6 +13,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
@@ -25,6 +26,7 @@ import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,8 +41,10 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
 
     private EditText etUser;
     private EditText etPwd;
-    private TextView tvHint;
+    //    private TextView tvHint;
     private TextView btnSend;
+    private LinearLayout llUser;
+    private TextView tvAward;
 
     private JsonReqBase<ReqLogin> reqData;
     private boolean mNeedBackPhoneLogin = false;
@@ -68,15 +72,13 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
             getActivity().onBackPressed();
             return;
         }
-        if (mData.userInfo.phoneCanUseAsUname) {
-            setContentView(R.layout.fragment_lbind_owan_pwd);
-            tvHint = getViewById(R.id.tv_top_hint);
-        } else {
-            setContentView(R.layout.fragment_lbind_owan_user);
-            etUser = getViewById(R.id.et_user);
-        }
+
+        setContentView(R.layout.fragment_lbind_owan_user);
+        etUser = getViewById(R.id.et_user);
         etPwd = getViewById(R.id.et_pwd);
+        llUser = getViewById(R.id.ll_user);
         btnSend = getViewById(R.id.btn_send);
+        tvAward = getViewById(R.id.tv_award);
     }
 
     @Override
@@ -91,11 +93,14 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         if (mData.userInfo.phoneCanUseAsUname) {
-            tvHint.setText(Html.fromHtml(String.format(
-                    getString(R.string.st_lbind_owan_pwd_top_hint), mData.userInfo.phone)));
+            etUser.setTextColor(ViewUtil.getColor(getContext(), R.color.co_btn_green));
+            etUser.setEnabled(false);
+            etUser.setText(mData.userInfo.phone);
+            llUser.setBackgroundColor(ViewUtil.getColor(getContext(), R.color.co_transparent));
         }
         reqData = new JsonReqBase<>(new ReqLogin());
         btnSend.setEnabled(false);
+        tvAward.setVisibility(mData.userInfo.isFirstLogin ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -121,18 +126,19 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
     }
 
     private void handleBindOwan() {
+        String user = etUser.getText().toString().trim();
+        String pwd = etPwd.getText().toString().trim();
+        boolean canPass = reqData.data.setOuwanUser(user, pwd, false);
+        if (!canPass) {
+            ToastUtil.showShort(ConstString.TOAST_OUWAN_ERROR);
+            return;
+        }
+        mData.userInfo.username = user;
+        DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
         if (!NetworkUtil.isConnected(getContext())) {
             ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
             return;
         }
-        DialogManager.getInstance().showLoadingDialog(getChildFragmentManager());
-        String pwd = etPwd.getText().toString().trim();
-        if (mData.userInfo.phoneCanUseAsUname) {
-            reqData.data.setOuwanUser(mData.userInfo.phone, pwd, false);
-        } else {
-            reqData.data.setOuwanUser(etUser.getText().toString().trim(), pwd, false);
-        }
-        mData.userInfo.username = reqData.data.getUsername();
         Global.getNetEngine().bindOwanAccount(reqData)
                 .enqueue(new Callback<JsonRespBase<Void>>() {
                     @Override
@@ -145,7 +151,13 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                                 && response.body() != null && response.body().isSuccess()) {
                             ToastUtil.showShort("成功设置偶玩账号了耶!");
                             mData.userInfo.bindOuwanStatus = 1;
+                            mData.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
+                            mData.userInfo.isFirstLogin = false;
                             AccountManager.getInstance().notifyUserPart(mData);
+                            AccountManager.getInstance().writeOuwanAccount(reqData.data.getUsername() + ","
+                                            + reqData.data.getPassword(), AccountManager.getInstance()
+                                    .readOuwanAccount(),
+                                    false);
                             // 请求更新数据
                             ((LoginActivity) getActivity()).doLoginBack();
                             return;
@@ -204,19 +216,11 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (etUser != null) {
-            if (!etUser.getText().toString().trim().isEmpty()
-                    && !etPwd.getText().toString().trim().isEmpty()) {
-                btnSend.setEnabled(true);
-            } else {
-                btnSend.setEnabled(false);
-            }
+        if (!etUser.getText().toString().trim().isEmpty()
+                && !etPwd.getText().toString().trim().isEmpty()) {
+            btnSend.setEnabled(true);
         } else {
-            if (!etPwd.getText().toString().trim().isEmpty()) {
-                btnSend.setEnabled(true);
-            } else {
-                btnSend.setEnabled(false);
-            }
+            btnSend.setEnabled(false);
         }
     }
 

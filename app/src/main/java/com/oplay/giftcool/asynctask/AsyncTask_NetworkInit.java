@@ -44,7 +44,7 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
         try {
 
             // 每次登录请求一次更新用户状态和数据
-            AccountManager.getInstance().updateUserSession();
+            AccountManager.getInstance().updateUserSession(false);
 
             HotFixManager.getInstance().requestPatchFromServer();
             Global.setInstalledAppNames(SystemUtil.getInstalledAppName(mContext));

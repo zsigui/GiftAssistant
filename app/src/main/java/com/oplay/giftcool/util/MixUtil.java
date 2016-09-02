@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.util.TaskTypeUtil;
 import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.manager.SocketIOManager;
 import com.oplay.giftcool.manager.StatisticsManager;
@@ -33,6 +34,9 @@ import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.login.BindOwanFragment;
+
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
+import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,14 +211,29 @@ public class MixUtil {
         try {
             TaskInfoOne info = new TaskInfoOne();
             String pathAction = uri.getEncodedPath();
-            info.action = pathAction.substring(1,
-                    pathAction.lastIndexOf('/') == pathAction.length() - 1 ? pathAction.length() - 1 : pathAction
-                            .length());
-            info.data = uri.getQueryParameter("data");
-            String id = uri.getQueryParameter("id");
-            info.id = (TextUtils.isEmpty(id) ? 0 : Integer.parseInt(id));
-
-            IntentUtil.handleJumpInfo(context, info);
+            int index = pathAction.indexOf('/', 1);
+            info.action = pathAction.substring(1, index);
+            if ("AutoLogin".equalsIgnoreCase(info.action)) {
+                // 跳转切换账号登录形式
+                String apkName = uri.getQueryParameter("apkname");
+                int uid = Integer.parseInt(uri.getQueryParameter("cuid"));
+                String sid = uri.getQueryParameter("sid");
+                String uname = uri.getQueryParameter("uname");
+                String packname = uri.getQueryParameter("packname");
+                UmipayCommonAccount account = new UmipayCommonAccount(context.getPackageName(), packname, apkName, 0);
+                account.setUid(uid);
+                account.setSession(sid);
+                account.setUserName(uname);
+                UmipayCommonAccountCacheManager.getInstance(context).addCommonAccount(account,
+                        UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
+                OuwanSDKManager.getInstance().showChangeAccountView();
+            } else {
+                info.data = uri.getQueryParameter("data");
+                String id = uri.getQueryParameter("id");
+                info.id = (TextUtils.isEmpty(id) ? 0 : Integer.parseInt(id));
+                IntentUtil.handleJumpInfo(context, info);
+                OuwanSDKManager.getInstance().showChangeAccountView();
+            }
         } catch (Throwable t) {
             AppDebugConfig.w(AppDebugConfig.TAG_UTIL, t);
         }

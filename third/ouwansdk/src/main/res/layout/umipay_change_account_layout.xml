@@ -14,7 +14,7 @@
 			android:layout_marginLeft="16dp"/>
 	<TextView
 			android:id = "@+id/umipay_change_account_title_tv"
-			android:text= "%s请求切换到偶玩账号%s,确认切换后将登出当前偶玩账号并回到游戏登录界面重新登录"
+			android:text= "%s请求切换到偶玩账号%s,确认切换后将使用新账号重新登录"
 			android:layout_below="@+id/umipay_change_account_title"
 			android:layout_centerVertical="true"
 			android:layout_width = "match_parent"

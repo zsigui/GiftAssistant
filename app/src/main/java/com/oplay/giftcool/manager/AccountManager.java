@@ -391,13 +391,15 @@ public class AccountManager implements OnFinishListener {
     /**
      * 更新用户的Session
      */
-    public void updateUserSession() {
+    public void updateUserSession(boolean forceUpdateSession) {
         if (isLogin()) {
-            // 当天登录过，无须再次重新更新 session
-            long lastTime = AssistantApp.getInstance().getLastLaunchTime();
-            if (DateUtil.isToday(lastTime)) {
-                updateUserInfo();
-                return;
+            if (!forceUpdateSession) {
+                // 当天登录过，无须再次重新更新 session
+                long lastTime = AssistantApp.getInstance().getLastLaunchTime();
+                if (DateUtil.isToday(lastTime)) {
+                    updateUserInfo();
+                    return;
+                }
             }
             // session只能保持7天，一旦超时，需要重新登录
             // 不对超时做处理

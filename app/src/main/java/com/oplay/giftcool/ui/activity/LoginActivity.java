@@ -12,6 +12,8 @@ import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.login.BindOwanFragment;
 import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
 import com.oplay.giftcool.ui.fragment.login.PhoneLoginFragment;
@@ -105,6 +107,57 @@ public class LoginActivity extends BaseAppCompatActivity {
     public void replaceFragWithTitle(@IdRes int id, BaseFragment newFrag, String title, boolean isAddToBackStack) {
         super.replaceFragWithTitle(id, newFrag, title, isAddToBackStack);
         mCurTopFragment = newFrag;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mCurTopFragment != null
+                && mCurTopFragment instanceof BindOwanFragment
+                && AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND) {
+            showBindBackConfirmDialog();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private ConfirmDialog mDialog;
+
+    private void showBindBackConfirmDialog() {
+        if (mDialog == null) {
+            mDialog = ConfirmDialog.newInstance();
+            mDialog.setTitle(getString(R.string.st_lbind_dialog_title));
+            mDialog.setContent(getString(R.string.st_lbind_dialog_content));
+            mDialog.setPositiveBtnText(getString(R.string.st_lbind_dialog_quick));
+            mDialog.setNegativeBtnText(getString(R.string.st_lbind_dialog_ok));
+            mDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
+                @Override
+                public void onCancel() {
+                    mDialog.dismiss();
+                    mDialog = null;
+                    onBack();
+                }
+
+                @Override
+                public void onConfirm() {
+                    mDialog.dismiss();
+                    mDialog = null;
+                }
+            });
+            mDialog.show(getSupportFragmentManager(), "bind_hint");
+        } else {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        if (mDialog != null && mDialog.isVisible()) {
+            mDialog.dismissAllowingStateLoss();
+        }
+        mDialog = null;
     }
 
     /**

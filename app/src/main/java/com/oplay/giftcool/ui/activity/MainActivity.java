@@ -302,7 +302,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 } else if (action.equals(Intent.ACTION_VIEW)) {
                     Uri uri = intent.getData();
                     MixUtil.handleViewUri(getApplicationContext(), uri);
-                    OuwanSDKManager.getInstance().showChangeAccountView();
                 }
             }
             if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()) {
