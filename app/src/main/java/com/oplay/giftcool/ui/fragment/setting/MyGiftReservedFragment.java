@@ -8,7 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.NestedGiftListAdapterNew;
+import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -41,7 +41,7 @@ public class MyGiftReservedFragment extends BaseFragment_Refresh<IndexGiftNew> i
         OnItemClickListener<IndexGiftNew> {
 
     private ListView mDataView;
-    private NestedGiftListAdapterNew mAdapter;
+    private NestedGiftListAdapter mAdapter;
     private JsonReqBase<ReqPageData> mReqPageObj;
 
     public static MyGiftReservedFragment newInstance() {
@@ -73,7 +73,7 @@ public class MyGiftReservedFragment extends BaseFragment_Refresh<IndexGiftNew> i
         data.giftType = KeyConfig.GIFT_TYPE_GIFT;
         data.type = KeyConfig.TYPE_KEY_RESERVED;
         mReqPageObj = new JsonReqBase<ReqPageData>(data);
-        mAdapter = new NestedGiftListAdapterNew(getContext());
+        mAdapter = new NestedGiftListAdapter(getContext());
         mDataView.setAdapter(mAdapter);
     }
 

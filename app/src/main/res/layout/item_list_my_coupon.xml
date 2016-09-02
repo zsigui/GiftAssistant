@@ -91,5 +91,6 @@
             android:background = "@drawable/selector_btn_red"
             android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
             android:text = "去使用"
-            android:textColor = "@color/co_btn_red" />
+            android:enabled="false"
+            android:textColor = "@color/color_btn_red_border" />
 </RelativeLayout >

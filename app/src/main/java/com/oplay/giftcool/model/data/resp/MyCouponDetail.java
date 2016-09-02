@@ -58,6 +58,6 @@ public class MyCouponDetail extends GameDownloadInfo {
     /**
      * 首充券使用状态：0 未使用 1 已使用 2 已过期
      */
-    @SerializedName("usage_status")
+    @SerializedName("use_status")
     public int usageStatus;
 }

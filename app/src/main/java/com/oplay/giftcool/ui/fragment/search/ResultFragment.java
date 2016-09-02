@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.NestedGameListAdapter;
-import com.oplay.giftcool.adapter.NestedGiftListAdapterNew;
+import com.oplay.giftcool.adapter.NestedGiftListAdapter;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
@@ -52,8 +52,8 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
     private DragView dvContainer;
 
     private NestedGameListAdapter mGameAdapter;
-    private NestedGiftListAdapterNew mGiftAdapter;
-    private NestedGiftListAdapterNew mGuessGiftAdapter;
+    private NestedGiftListAdapter mGiftAdapter;
+    private NestedGiftListAdapter mGuessGiftAdapter;
 
     private int mId;
     private String mName;
@@ -117,8 +117,8 @@ public class ResultFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         mGameAdapter = new NestedGameListAdapter(getContext(), null, this);
-        mGiftAdapter = new NestedGiftListAdapterNew(getContext());
-        mGuessGiftAdapter = new NestedGiftListAdapterNew(getContext());
+        mGiftAdapter = new NestedGiftListAdapter(getContext());
+        mGuessGiftAdapter = new NestedGiftListAdapter(getContext());
 
         SearchDataResult data = null;
         if (getArguments() != null) {

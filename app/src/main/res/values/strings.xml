@@ -337,6 +337,11 @@
     <string name = "st_welcome_unlogin_btn" >马上登录</string >
     <string name = "st_welcome_login_lottery_btn" >马上参与抽奖</string >
     <string name = "st_welcome_update_title" >新版特性：</string >
+    <string name = "st_welcome_update_title_downloaded" >
+        <![CDATA[
+        新版特性：<font color=\'#f85454\'>(免流量更新)</font>
+        ]]>
+    </string >
     <string name = "st_welcome_update_people_hint" >的玩家选择了更新</string >
     <string name = "st_welcome_update_cancel" >狠狠拒绝</string >
     <string name = "st_welcome_update_confirm" >马上更新</string >

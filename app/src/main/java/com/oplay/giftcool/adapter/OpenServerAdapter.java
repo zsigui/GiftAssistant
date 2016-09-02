@@ -88,7 +88,7 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
             ViewUtil.initDownloadBtnStatus(viewHolder.btnDownload, o.appStatus);
         }
         ViewUtil.showImage(viewHolder.ivIcon, o.img);
-        viewHolder.tvTime.setText(DateUtil.optDateLong(o.time, DateUtil.getTime(o.time)));
+        viewHolder.tvTime.setText(DateUtil.optDate(o.time));
         viewHolder.itemView.setOnClickListener(this);
         viewHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
         viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);

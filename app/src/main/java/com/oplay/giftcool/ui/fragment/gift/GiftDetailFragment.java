@@ -232,7 +232,10 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         DateUtil.formatUserReadDateForDetail(giftData.freeStartTime)));
             }
 
-            if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_NEVER) {
+            if (giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEARCHED
+                    || giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
+                showCode(giftData);
+            } else {
                 tvConsume.setVisibility(View.VISIBLE);
                 tvRemain.setVisibility(View.VISIBLE);
                 setMoneyConsume(giftData);
@@ -261,8 +264,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         }
                         setRemainProgress(giftData);
                 }
-            } else {
-                showCode(giftData);
             }
 
             if (!mIsNotifyRefresh) {
@@ -289,6 +290,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         tvConsume.setVisibility(View.GONE);
         tvRemain.setVisibility(View.GONE);
         tvCode.setVisibility(View.VISIBLE);
+        tvSeizeHint.setVisibility(View.GONE);
         if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
             btnCopy.setVisibility(View.INVISIBLE);
             tvCode.setText(Html.fromHtml(getString(R.string.st_gift_detail_coupon_seized)));
@@ -379,48 +381,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     }
 
     /**
-     * 设置0元抢的倒计时
-     */
-//    private void setDeadCount() {
-//        if (mData.giftData.status != GiftTypeUtil.STATUS_WAIT_SEIZE
-//                || mData.giftData.seizeStatus == GiftTypeUtil.SEIZE_TYPE_SEIZED) {
-//            return;
-//        }
-//        if (mTimer != null) {
-//            mTimer.cancel();
-//        }
-//        btnSend.setState(GiftTypeUtil.STATUS_WAIT_SEIZE);
-//        final long remainTime = DateUtil.getTime(mData.giftData.seizeTime)
-//                - System.currentTimeMillis() + Global.sServerTimeDiffLocal;
-//        mTimer = new CountTimer(remainTime, Global.COUNTDOWN_INTERVAL) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                btnSend.setText(DateUtil.formatTime(millisUntilFinished, "HH:mm:ss"));
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                mData.giftData.status = GiftTypeUtil.STATUS_SEIZE;
-//                if (getActivity() != null) {
-//                    ((BaseAppCompatActivity) getActivity()).getHandler().postDelayed(new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-//                            ToastUtil.showShort("自动刷新抢ing");
-//                            if (!mIsNotifyRefresh) {
-//                                mIsNotifyRefresh = true;
-//                                lazyLoad();
-//                            }
-//                        }
-//                    }, 2500);
-//                }
-//            }
-//        };
-//        mTimer.start();
-//    }
-
-
-    /**
      * 设置礼包标识
      */
     private void setTag(IndexGiftNew giftData) {
@@ -444,13 +404,15 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                         break;
                 }
             }
-            int type = GiftTypeUtil.getItemViewType(mData.giftData);
-            if (type == GiftTypeUtil.TYPE_LIMIT_FINISHED
-                    || type == GiftTypeUtil.TYPE_LIMIT_EMPTY
-                    || type == GiftTypeUtil.TYPE_NORMAL_FINISHED) {
-                pActivity.showShareButton(false);
-            } else {
-                pActivity.showShareButton(true);
+            switch (mData.giftData.buttonState) {
+                case GiftTypeUtil.BUTTON_TYPE_FINISH:
+                case GiftTypeUtil.BUTTON_TYPE_EMPTY:
+                case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_FINISHED:
+                case GiftTypeUtil.BUTTON_TYPE_TAKE_OFF:
+                    pActivity.showShareButton(false);
+                    break;
+                default:
+                    pActivity.showShareButton(true);
             }
         }
     }

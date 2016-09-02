@@ -61,7 +61,7 @@ public class LimitGiftListNewAdapter extends BaseListAdapter<TimeData<IndexGiftN
             return GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE;
         }
         o.uiStyle = o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT ?
-                GiftTypeUtil.UI_TYPE_PRECIOUS_SEIZE : o.uiStyle;
+                GiftTypeUtil.getUiStyle(o) : o.uiStyle;
         return o.uiStyle;
     }
 

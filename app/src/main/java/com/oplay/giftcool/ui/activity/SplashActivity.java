@@ -164,7 +164,7 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_ad);
+        setContentView(R.layout.activity_splash);
         ivSplash = getViewById(R.id.iv_splash);
         tvPass = getViewById(R.id.tv_pass);
         ivAdLoad = getViewById(R.id.iv_splash_ad);

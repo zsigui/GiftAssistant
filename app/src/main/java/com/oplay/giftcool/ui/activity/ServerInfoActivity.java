@@ -1,14 +1,18 @@
 package com.oplay.giftcool.ui.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.ConstString;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.postbar.ServerInfoFragment;
 import com.oplay.giftcool.ui.widget.ToggleButton;
+import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -22,14 +26,32 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
 
     @Override
     protected void processLogic() {
-        replaceFragWithTitle(R.id.fl_container,
-                ServerInfoFragment.newInstance(),
-                getString(R.string.st_server_info_title));
+        handleIntent(getIntent());
     }
 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_toolbar_with_focus_toggle);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) {
+            ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
+            return;
+        }
+        int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
+        switch (type) {
+            default:
+                replaceFragWithTitle(R.id.fl_container,
+                        ServerInfoFragment.newInstance(),
+                        getString(R.string.st_server_info_title), false);
+        }
     }
 
     @Override
@@ -47,6 +69,7 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
 
     /**
      * 设置ToggleButton状态，不触发onToggleChanged
+     *
      * @param on
      */
     public void setTbState(boolean on) {
@@ -57,7 +80,7 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
         }
     }
 
-    public synchronized void addListener(CallbackListener<Boolean> listener){
+    public synchronized void addListener(CallbackListener<Boolean> listener) {
         if (mCallbackListeners == null) {
             mCallbackListeners = new ArrayList<>();
         }

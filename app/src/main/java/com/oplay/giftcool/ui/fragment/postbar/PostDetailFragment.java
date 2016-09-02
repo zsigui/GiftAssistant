@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -131,7 +130,7 @@ public class PostDetailFragment extends BaseFragment_WebView implements TextWatc
             return;
         }
         // 此处设置才能在onGlobalLayout动态监听InputMethod造成的界面视图高度变化
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         int postId = getArguments().getInt(KeyConfig.KEY_DATA, 0);
         String from = getArguments().getString(KeyConfig.KEY_DATA_O, PostDetailActivity.DEFAULT_FROM);
         mAdapter = new PostReplyAdapter(getContext(), mPostImg);

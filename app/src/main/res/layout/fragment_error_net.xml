@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rl_err_404"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-	<ImageView
-			android:id="@+id/v_err"
-			android:contentDescription="@null"
-			android:src="@drawable/pic_error_net"
-			android:scaleType="centerInside"
-			android:layout_centerInParent="true"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
-	<TextView
-			android:id="@+id/v_wifi"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
-			android:background="@drawable/selector_btn_red"
-			android:text="@string/err_click_to_refersh"
-			android:layout_marginTop="10dp"
-			android:textSize="@dimen/di_common_text"
-			android:paddingLeft="@dimen/di_common_text_padding_left_right"
-			android:paddingRight="@dimen/di_common_text_padding_left_right"
-			android:paddingTop="@dimen/di_common_text_padding_top_bottom"
-			android:paddingBottom="@dimen/di_common_text_padding_top_bottom"
-			android:textColor="@color/color_btn_red_border"
-			android:layout_below="@+id/v_err"/>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:id = "@+id/rl_err_404"
+              android:orientation = "vertical"
+              android:gravity = "center"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
 
-</RelativeLayout>
+    <ImageView
+            android:id = "@+id/v_err"
+            android:contentDescription = "@null"
+            android:src = "@drawable/pic_error_net"
+            android:scaleType = "centerInside"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content" />
+
+    <TextView
+            android:id = "@+id/v_wifi"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:background = "@drawable/selector_btn_red"
+            android:text = "@string/err_click_to_refersh"
+            android:layout_marginTop = "10dp"
+            android:textSize = "@dimen/di_common_text"
+            android:paddingLeft = "@dimen/di_common_text_padding_left_right"
+            android:paddingRight = "@dimen/di_common_text_padding_left_right"
+            android:paddingTop = "@dimen/di_common_text_padding_top_bottom"
+            android:paddingBottom = "@dimen/di_common_text_padding_top_bottom"
+            android:textColor = "@color/color_btn_red_border" />
+
+</LinearLayout >

@@ -104,7 +104,6 @@ public class PostCommentFragment extends BaseFragment_WebView implements ShowBot
             getActivity().onBackPressed();
             return;
         }
-//        mLastSoftInputHeight = getContext().getResources().getDimensionPixelSize(R.dimen.di_default_soft_input_height);
         mPostId = getArguments().getInt(KEY_POST);
         final int commentId = getArguments().getInt(KEY_COMMENT);
         reqToken.postId = mPostId;

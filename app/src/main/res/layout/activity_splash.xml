@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-             android:layout_width = "match_parent"
-             android:layout_height = "match_parent" >
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent" >
+
+
+    <ImageView
+            style = "@style/DefaultImageView"
+            android:id = "@+id/iv_splash_ad"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:contentDescription = "@null"/>
 
     <ImageView
             style = "@style/DefaultImageView"
@@ -9,15 +17,20 @@
             android:layout_width = "match_parent"
             android:contentDescription = "@null"
             android:layout_height = "match_parent"
-            android:src = "@null" >
+            android:src = "@drawable/pic_splash_2016" >
 
     </ImageView >
 
-    <ImageView
-            style = "@style/DefaultImageView"
-            android:id = "@+id/iv_splash_ad"
-            android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            android:contentDescription = "@null"
-            android:src = "@null" />
-</FrameLayout >
+    <TextView
+            android:id = "@+id/tv_pass"
+            style = "@style/DefaultTextView.NormalBtn"
+            android:clickable = "true"
+            android:textColor = "@color/co_white"
+            android:background = "@drawable/shape_rect_btn_30_opacity"
+            android:textSize = "@dimen/di_text_size_small"
+            android:gravity = "center"
+            android:layout_alignParentRight = "true"
+            android:layout_marginTop = "20dp"
+            android:text="跳过 4s"
+            android:layout_marginRight = "15dp"/>
+</RelativeLayout >

@@ -99,7 +99,7 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
                 case ACTION_ERROR_REPORT: {
                     errorReport(intent);
                     break;
-                }
+}
                 case ACTION_RESTART_CHANGE_ACCOUNT: {
                     if (ListenerManager.getAccountCallbackListener() != null) {
                         ListenerManager.getAccountCallbackListener().onLogin(UmipaySDKStatusCode.CHANGE_ACCOUNT, null);

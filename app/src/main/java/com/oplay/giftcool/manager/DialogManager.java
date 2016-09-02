@@ -26,9 +26,7 @@ import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HintDialog;
 import com.oplay.giftcool.ui.fragment.dialog.HopeGiftDialog;
 import com.oplay.giftcool.ui.fragment.dialog.LoadingDialog;
-import com.oplay.giftcool.ui.fragment.dialog.PicDialog;
 import com.oplay.giftcool.ui.fragment.dialog.WelcomeDialog;
-import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -275,7 +273,7 @@ public class DialogManager {
             if (forceShow || appInfo.isFileExists()) {
                 appInfo.initAppInfoStatus(context);
                 BaseFragment_Dialog confirmDialog = getUpdateDialog(context, appInfo, updateInfo.content,
-                        updateInfo.updatePercent);
+                        updateInfo.updatePercent, appInfo.isFileExists());
                 confirmDialog.show(fm, "update");
                 return true;
             } else {
@@ -298,9 +296,11 @@ public class DialogManager {
      * 根据传入内容获取更新弹窗
      */
     private WelcomeDialog getUpdateDialog(final Context context, final IndexGameNew appInfo,
-                                          final String content, int updatePercent) {
+                                          final String content, int updatePercent, boolean hasDownload) {
         final WelcomeDialog confirmDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_update);
         confirmDialog.setTitle(content);
+        confirmDialog.setTitleHint(context.getString(hasDownload ?
+                R.string.st_welcome_update_title_downloaded : R.string.st_welcome_update_title));
         confirmDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_update_confirm));
         confirmDialog.setNegativeBtnText(context.getResources().getString(R.string.st_welcome_update_cancel));
         confirmDialog.setPercent(updatePercent);
@@ -332,27 +332,27 @@ public class DialogManager {
         return confirmDialog;
     }
 
-    /**
-     * 显示签到弹窗
-     */
-    public void showSignInDialog(final boolean canShow, final Context context, final FragmentManager fm) {
-        if (canShow) {
-            final PicDialog dialog = PicDialog.newInstance("drawable://" + R.drawable.pic_lottery_everyday);
-            dialog.setDialogClickListener(new BaseFragment_Dialog.OnDialogClickListener() {
-                @Override
-                public void onCancel() {
-                    dialog.dismissAllowingStateLoss();
-                }
-
-                @Override
-                public void onConfirm() {
-                    IntentUtil.jumpSignIn(context);
-                    dialog.dismissAllowingStateLoss();
-                }
-            });
-            dialog.show(fm, "signin");
-        }
-    }
+//    /**
+//     * 显示签到弹窗
+//     */
+//    public void showSignInDialog(final boolean canShow, final Context context, final FragmentManager fm) {
+//        if (canShow) {
+//            final PicDialog dialog = PicDialog.newInstance("drawable://" + R.drawable.pic_lottery_everyday);
+//            dialog.setDialogClickListener(new BaseFragment_Dialog.OnDialogClickListener() {
+//                @Override
+//                public void onCancel() {
+//                    dialog.dismissAllowingStateLoss();
+//                }
+//
+//                @Override
+//                public void onConfirm() {
+//                    IntentUtil.jumpSignIn(context);
+//                    dialog.dismissAllowingStateLoss();
+//                }
+//            });
+//            dialog.show(fm, "signin");
+//        }
+//    }
 
 
     /**

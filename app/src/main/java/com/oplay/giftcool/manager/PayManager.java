@@ -101,12 +101,12 @@ public class PayManager {
         mLastClickTime = nowClickTime;
         switch (gift.buttonState) {
             case GiftTypeUtil.BUTTON_TYPE_SEARCH:
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
                 handleScorePay(context, gift, button, false);
                 break;
             case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
                 chargeReservedFailed(context, gift);
                 break;
-            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
             case GiftTypeUtil.BUTTON_TYPE_SEIZE:
             case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
             default:
@@ -342,7 +342,7 @@ public class PayManager {
                               IndexGiftNew gift, GiftButton button, GiftDetailFragment fragment) {
         if (response != null && response.isSuccessful()) {
             if (response.body() != null && response.body().isSuccess()) {
-                if (GiftTypeUtil.getItemViewType(gift) == GiftTypeUtil.TYPE_CHARGE_UN_RESERVE) {
+                if (gift.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE) {
                     chargeReservedSuccess(context, gift, button);
                 } else {
                     scorePaySuccess(response.body().getData(), isSeize, context, gift, button, fragment);
@@ -355,7 +355,7 @@ public class PayManager {
                     IntentUtil.jumpLoginNoToast(context);
                     return;
                 }
-                if (GiftTypeUtil.getItemViewType(gift) == GiftTypeUtil.TYPE_CHARGE_UN_RESERVE) {
+                if (gift.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE) {
                     // 预约首充券失败提示
                     chargeReservedFailed(context, gift);
                 } else {
@@ -386,9 +386,9 @@ public class PayManager {
     private void chargeReservedSuccess(FragmentActivity context, IndexGiftNew gift, GiftButton button) {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "恭喜，预约成功！",
-                String.format(Locale.CHINA, "已为您预留一枚首充券兑换码到%s", DateUtil.optDate(gift.reserveDeadline)),
+                String.format(Locale.CHINA, "已为您预留一枚兑换码到%s", DateUtil.optDate(gift.reserveDeadline)),
                 String.format(Locale.CHINA,
-                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
+                        "%s开抢", DateUtil.optDate(gift.seizeTime)),
                 "reserve_hint");
         gift.seizeStatus = GiftTypeUtil.SEIZE_TYPE_RESERVED;
         if (button != null) {
@@ -403,9 +403,9 @@ public class PayManager {
     private void chargeReservedFailed(FragmentActivity context, IndexGiftNew gift) {
         DialogManager.getInstance().showHintDialog(context.getSupportFragmentManager(),
                 "天啦，预约号被抢光了！",
-                "预约号已满，免费开抢时间再来抢吧！",
+                "预约号已满，开抢时间再来抢吧！",
                 String.format(Locale.CHINA,
-                        ConstString.TEXT_GIFT_FREE_SEIZE, DateUtil.formatUserReadDate(gift.freeStartTime)),
+                        "%s开抢", DateUtil.optDate(gift.seizeTime)),
                 "reserve_hint");
     }
 
