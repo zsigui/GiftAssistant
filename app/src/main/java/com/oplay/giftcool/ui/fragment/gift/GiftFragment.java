@@ -187,8 +187,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 }
 
                 ReqIndexGift data = new ReqIndexGift();
-                // 解除已安装应用信息获取
-//                data.appNames = Global.getInstalledAppNames();
                 JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
                 mCallRefresh = Global.getNetEngine().obtainIndexGift(reqData);
                 mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGift>>() {
@@ -373,7 +371,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                             if (response != null && response.isSuccessful()) {
                                 if (response.body() != null && response.body().isSuccess()) {
                                     refreshSuccessEnd();
-                                    mLikeData = response.body().getData().data;
+                                    GiftLikeList data = response.body().getData();
+                                    Global.setInstalledPackageNames(data.packageNames);
+                                    Global.setInstalledAppNames(data.appNames);
+                                    mLikeData = data.data;
                                     AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求到猜你喜欢数据: " + mLikeData);
                                     updateData(mGiftData, 1, 1);
                                     FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
@@ -521,6 +522,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                     }
                 }
             });
+            return;
+        }
+        if (action == ObserverManager.STATUS.GIFT_UPDATE_LIKE) {
+            requestLikeData();
         }
     }
 

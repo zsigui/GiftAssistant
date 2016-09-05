@@ -291,6 +291,11 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
                 return o.uiStyle + TYPE_NEW_ITEM_BASE;
             }
         } else {
+            if (mData.like == null || mData.like.isEmpty()) {
+                if (position > 0) {
+                    return TYPE_DEFAULT + position + 1;
+                }
+            }
             return TYPE_DEFAULT + position;
         }
 

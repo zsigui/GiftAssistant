@@ -111,6 +111,9 @@ public class ScoreManager {
      * 初始化抽奖、签到等的提示状态
      */
     public void initTaskState() {
+        if (!AccountManager.getInstance().isLogin()) {
+            return;
+        }
         JsonReqBase<Void> reqData = new JsonReqBase<>();
         Global.getNetEngine().obtainDailyTaskStateInfo(reqData)
                 .enqueue(new Callback<JsonRespBase<TaskStateInfo>>() {

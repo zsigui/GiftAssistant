@@ -1,7 +1,6 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
@@ -19,7 +18,6 @@ import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +33,6 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
     private ListView mDataView;
     private GiftLikeListAdapter mAdapter;
-    private String mGameKey;
     private JsonReqBase<ReqGiftLike> mReqPageObj;
 
     public static GiftLikeListFragment newInstance() {
@@ -66,20 +63,14 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     @SuppressWarnings("unchecked")
     protected void processLogic(Bundle savedInstanceState) {
         ReqGiftLike data = new ReqGiftLike();
-        mReqPageObj = new JsonReqBase<ReqGiftLike>(data);
+        data.appNames = Global.getInstalledAppNames();
+        data.packageName = Global.getInstalledPackageNames();
+        mReqPageObj = new JsonReqBase<>(data);
 
-        if (getArguments() != null) {
-            mGameKey = getArguments().getString(KEY_DATA);
-        }
         mLastPage = 1;
 
-        if (TextUtils.isEmpty(mGameKey)) {
-            mReqPageObj.data.appNames = Global.getInstalledAppNames();
-        } else {
-            HashSet<String> s = new HashSet<>();
-            s.add(mGameKey);
-            mReqPageObj.data.appNames = s;
-        }
+        mReqPageObj.data.appNames = Global.getInstalledAppNames();
+        mReqPageObj.data.packageName = Global.getInstalledPackageNames();
         mAdapter = new GiftLikeListAdapter(getContext(), null);
         mDataView.setAdapter(mAdapter);
 
@@ -113,8 +104,12 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
                 if (response != null && response.isSuccessful()) {
                     if (response.body() != null && response.body().isSuccess()) {
                         refreshSuccessEnd();
-                        OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+                        GiftLikeList backObj = response.body().getData();
                         refreshLoadState(backObj.data, backObj.isEndPage);
+                        Global.setInstalledAppNames(backObj.appNames);
+                        Global.setInstalledPackageNames(backObj.packageNames);
+                        mReqPageObj.data.appNames = backObj.appNames;
+                        mReqPageObj.data.packageName = backObj.packageNames;
                         updateData(backObj.data);
                         FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
                                 backObj.data, true);

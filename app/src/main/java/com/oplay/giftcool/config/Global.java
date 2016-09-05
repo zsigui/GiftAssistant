@@ -170,11 +170,11 @@ public class Global {
      * @param appName
      */
     public static void setInstalledAppNames(HashSet<String> appName) {
-        if (appName == null || appName.isEmpty()) {
-            return;
-        }
+        String s = "";
         sAppName = appName;
-        final String s = AssistantApp.getInstance().getGson().toJson(sAppName);
+        if (appName != null) {
+            s = AssistantApp.getInstance().getGson().toJson(sAppName);
+        }
         SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
                 SPConfig.SP_APP_INFO_FILE,
                 SPConfig.KEY_INSTALL_APP_NAMES, s);
@@ -218,11 +218,11 @@ public class Global {
     }
 
     public static void setInstalledPackageNames(HashSet<String> packageName) {
-        if (packageName == null || packageName.isEmpty()) {
-            return;
-        }
+        String s = "";
         sPackageName = packageName;
-        final String s = AssistantApp.getInstance().getGson().toJson(sPackageName);
+        if (packageName != null) {
+            s = AssistantApp.getInstance().getGson().toJson(sPackageName);
+        }
         SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
                 SPConfig.SP_APP_INFO_FILE,
                 SPConfig.KEY_INSTALL_PACKAGE_NAMES, s);

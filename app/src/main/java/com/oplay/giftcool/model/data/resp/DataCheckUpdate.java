@@ -28,7 +28,7 @@ public class DataCheckUpdate implements Serializable {
     private int mNoDialog;
     @SerializedName("apk")
     private String mApkUrl;
-    @SerializedName("packageName")
+    @SerializedName("packageNames")
     private String mPackName;
     @SerializedName("versionCode")
     private int mVersionCode;

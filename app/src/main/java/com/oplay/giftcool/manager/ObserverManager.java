@@ -166,6 +166,7 @@ public class ObserverManager {
         int DEFAULT_FOR_ALL = 0x0;
         int GIFT_UPDATE_ALL = 0x010;
         int GIFT_UPDATE_PART = 0x11;
+        int GIFT_UPDATE_LIKE = 0x12;
         int USER_UPDATE_ALL = 0x020;
         int USER_UPDATE_PART = 0x021;
         int USER_UPDATE_TASK = 0x022;

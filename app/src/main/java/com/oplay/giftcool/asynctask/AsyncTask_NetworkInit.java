@@ -15,6 +15,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.HotFixManager;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.AppBaseInfo;
 import com.oplay.giftcool.model.data.req.ReqReportedInfo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -39,10 +40,6 @@ import retrofit2.Response;
 public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
 
     private Context mContext;
-    private HashSet<String> mOldSrcPackage;
-    private HashSet<String> mOldSrcName;
-    private HashSet<String> mDiffPackage;
-    private HashSet<String> mDiffName;
 
     public AsyncTask_NetworkInit(Context context) {
         mContext = context;
@@ -131,26 +128,28 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
      * 获取已安装应用信息
      */
     private ArrayList<AppBaseInfo> getAppInfos(Context context) {
+
+        // 获取存储的用于差分的源文件总目录——所有文件名
         String nameSrc = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_INSTALL_SRC_APP_NAMES, "");
-        if (TextUtils.isEmpty(nameSrc)) {
-            mOldSrcName = new HashSet<>();
-        } else {
-            mOldSrcName = AssistantApp.getInstance().getGson()
+        HashSet<String> oldSrcName = null;
+        if (!TextUtils.isEmpty(nameSrc)) {
+            oldSrcName = AssistantApp.getInstance().getGson()
                     .fromJson(nameSrc, new TypeToken<HashSet<String>>() {
                     }.getType());
         }
+        // 获取存储的用于差分的源文件总目录——所有包名
         String packageSrc = SPUtil.getString(context, SPConfig.SP_APP_INFO_FILE, SPConfig
                 .KEY_INSTALL_SRC_PACKAGE_NAMES, "");
-        if (TextUtils.isEmpty(packageSrc)) {
-            mOldSrcPackage = new HashSet<>();
-        } else {
-            mOldSrcPackage = AssistantApp.getInstance().getGson()
+        HashSet<String> oldSrcPackage = null;
+        if (!TextUtils.isEmpty(packageSrc)) {
+            oldSrcPackage = AssistantApp.getInstance().getGson()
                     .fromJson(packageSrc, new TypeToken<HashSet<String>>() {
                     }.getType());
         }
 
-        mDiffName = Global.getInstalledAppNames();
-        mDiffPackage = Global.getInstalledPackageNames();
+        // 用于提交的差分结果，当前获取上一次的，若为第一次，则获取为Null
+        HashSet<String> diffName = Global.getInstalledAppNames();
+        HashSet<String> diffPackage = Global.getInstalledPackageNames();
 
         HashSet<String> newSrcName = new HashSet<>();
         HashSet<String> newSrcPackage = new HashSet<>();
@@ -175,8 +174,6 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
             }
         }
 
-        HashSet<String> nameSetCopy = new HashSet<>(newSrcName);
-        HashSet<String> packageSetCopy = new HashSet<>(newSrcPackage);
 
         // 将原始集合写入文件
         Gson gson = AssistantApp.getInstance().getGson();
@@ -185,23 +182,47 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
         SPUtil.putString(context, SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_INSTALL_SRC_PACKAGE_NAMES,
                 gson.toJson(newSrcPackage));
 
-        // new剩余新增的文件集合
-        newSrcName.removeAll(mOldSrcName);
-        newSrcPackage.removeAll(mOldSrcPackage);
+        try {
+            if ((diffName == null || diffName.isEmpty())
+                    || (diffPackage == null || diffPackage.isEmpty())) {
+                // 如果第一次加载，则为空
+                Global.setInstalledAppNames(newSrcName);
+                Global.setInstalledPackageNames(newSrcPackage);
+            } else {
 
-        // old剩余被删除的文件集合
-        mOldSrcPackage.removeAll(packageSetCopy);
-        // 已差分的减去被删除的
-        mDiffPackage.removeAll(mOldSrcPackage);
-        // 已差分的添加新增加的
-        mDiffPackage.addAll(newSrcPackage);
+                HashSet<String> nameSetCopy = new HashSet<>(newSrcName);
+                HashSet<String> packageSetCopy = new HashSet<>(newSrcPackage);
 
-        mOldSrcName.removeAll(nameSetCopy);
-        mDiffName.removeAll(mOldSrcName);
-        mDiffName.addAll(newSrcName);
+                // 防止两者为null，造成差分崩溃
+                if (oldSrcPackage == null) {
+                    oldSrcPackage = new HashSet<>();
+                }
+                if (oldSrcName == null) {
+                    oldSrcName = new HashSet<>();
+                }
 
-        Global.setInstalledAppNames(mDiffName);
-        Global.setInstalledPackageNames(mDiffPackage);
+                // new剩余新增的文件集合
+                newSrcName.removeAll(oldSrcName);
+                newSrcPackage.removeAll(oldSrcPackage);
+
+                // old剩余被删除的文件集合
+                oldSrcPackage.removeAll(packageSetCopy);
+                // 已差分的减去被删除的
+                diffPackage.removeAll(oldSrcPackage);
+                // 已差分的添加新增加的
+                diffPackage.addAll(newSrcPackage);
+
+                oldSrcName.removeAll(nameSetCopy);
+                diffName.removeAll(oldSrcName);
+                diffName.addAll(newSrcName);
+
+                Global.setInstalledAppNames(diffName);
+                Global.setInstalledPackageNames(diffPackage);
+                ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_LIKE);
+            }
+        } catch (Throwable t) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, t);
+        }
 
         return result;
     }

@@ -161,7 +161,7 @@ public class AboutFragment extends BaseFragment {
 //        appInfo.img = mUpdateInfo.downloadUrl;
 //        appInfo.downloadUrl = mUpdateInfo.downloadUrl;
 //        appInfo.destUrl = mUpdateInfo.downloadUrl;
-//        appInfo.packageName = mUpdateInfo.packageName;
+//        appInfo.packageNames = mUpdateInfo.packageNames;
 //        appInfo.versionName = mUpdateInfo.versionName;
 //        appInfo.size = appInfo.getApkFileSizeStr();
 //        appInfo.initAppInfoStatus(getContext());

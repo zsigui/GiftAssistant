@@ -630,6 +630,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     @Override
     public void onBackPressed() {
 
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
+
         if (System.currentTimeMillis() - mLastClickTime <= 3000) {
             mApp.appExit();
             // 发送退出指令

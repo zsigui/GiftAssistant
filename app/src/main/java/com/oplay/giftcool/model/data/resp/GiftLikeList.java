@@ -9,9 +9,9 @@ import java.util.HashSet;
  */
 public class GiftLikeList extends OneTypeDataList<IndexGiftLike> {
 
-    @SerializedName("games")
+    @SerializedName("names")
     public HashSet<String> appNames;
 
     @SerializedName("packages")
-    public HashSet<String> packageName;
+    public HashSet<String> packageNames;
 }
