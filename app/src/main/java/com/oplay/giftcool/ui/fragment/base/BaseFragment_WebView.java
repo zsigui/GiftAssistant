@@ -34,6 +34,7 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.SystemUtil;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.io.File;
@@ -68,6 +69,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
         return mContentView;
     }
 
+    long staticsTime = 0;
+    long cTime = 0;
+
     private void initWebView() {
         mProgressBar = getViewById(R.id.pb_percent);
         mWebView = getViewById(R.id.wv_container);
@@ -76,6 +80,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 onWebPageStarted();
+                staticsTime = System.currentTimeMillis();
+                cTime = staticsTime;
             }
 
             @Override
@@ -85,6 +91,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 if (!mSettings.getLoadsImagesAutomatically()) {
                     mSettings.setLoadsImagesAutomatically(true);
                 }
+                long t = System.currentTimeMillis();
+                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "time = " + (t - cTime) + "ms, total = " + (t - staticsTime) + "ms");
             }
 
 
@@ -126,20 +134,30 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
             @Override
             public void onLoadResource(WebView view, String url) {
-                AppDebugConfig.v();
+                long t = System.currentTimeMillis();
+                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "onLoadResource: " + url + ", time = " + (t - cTime) + "ms");
                 super.onLoadResource(view, url);
+                cTime = t;
             }
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 super.onReceivedSslError(view, handler, error);
-                AppDebugConfig.v();
+                AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, "onReceivedSslError :" + error.getUrl()
+                        + "(" + error.getPrimaryError() + ")");
+                onWebReceivedError();
+                handler.proceed();
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                AppDebugConfig.v();
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, "onReceivedError : " + error.getDescription()
+                            + "(" + error.getErrorCode() + ")");
+
+                }
+                onWebReceivedError();
             }
         });
         final WebChromeClient client = new WebChromeClient() {
@@ -152,7 +170,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
 
             @Override
             public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onJsBeforeUnload.message = " + message + ", jsResult = " + result.toString());
+                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onJsBeforeUnload.message = " + message + ", jsResult = " +
+                        "" + result.toString());
                 return super.onJsBeforeUnload(view, url, message, result);
             }
 
@@ -186,7 +205,6 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             @Override
             public void onPermissionRequest(PermissionRequest request) {
                 super.onPermissionRequest(request);
-                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "onPermissionRequest.request = " + request.getOrigin().toString());
             }
         };
         mWebView.setWebChromeClient(client);
@@ -402,15 +420,24 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
     }
 
     public void loadUrl(String url) {
-        mUrl = url;
-        AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "loadUrl.url = " + mUrl + ", mWebView = " + mWebView);
-        if (mWebView != null) {
-            if (sScrollMap.get(mUrl) != null) {
-                mScrollY = sScrollMap.get(mUrl);
-            }
-            mWebView.invalidate();
-            mWebView.loadUrl(mUrl);
+        if (TextUtils.isEmpty(url)) {
+            ToastUtil.showShort("跳转链接出错!");
+            return;
         }
+        mUrl = url;
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, "loadUrl.url = " + mUrl + ", mWebView = " + mWebView);
+                if (mWebView != null) {
+                    if (sScrollMap.get(mUrl) != null) {
+                        mScrollY = sScrollMap.get(mUrl);
+                    }
+                    mWebView.invalidate();
+                    mWebView.loadUrl(mUrl);
+                }
+            }
+        });
     }
 
     /**

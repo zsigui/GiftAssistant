@@ -231,12 +231,15 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
      * 从多个已登录账号中选择一个
      */
     public void showSelectAccountView() {
-        if (AccountManager.getInstance().isLogin())
+        if (AccountManager.getInstance().isLogin()
+                || sIsWakeChangeAccountAction)
             return;
 
         ArrayList<UmipayCommonAccount> mCommonAccountList = UmipayCommonAccountCacheManager.getInstance(mContext)
-                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+                .getCommonAccountListExceptWithPacakge(
+                        UmipayCommonAccountCacheManager.COMMON_ACCOUNT, mContext.getPackageName());
         if (mCommonAccountList != null && mCommonAccountList.size() > 0) {
+
             Intent intent = new Intent(mContext, UmipayActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -368,13 +371,14 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
 
                         @Override
                         public void onFailed(int code, String msg) {
-                            if (code == NetStatusCode.ERR_UN_LOGIN) {
-                                // 未登录，清除该状态
-                                ToastUtil.showShort("对不起，该登录状态失效！");
-                            } else if (code > 0) {
-                                ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)", msg, code));
-                            }
-                            AccountManager.getInstance().notifyUserAll(null);
+//                            if (code == NetStatusCode.ERR_UN_LOGIN) {
+//                                // 未登录，清除该状态
+//                                ToastUtil.showShort("对不起，该登录状态失效！");
+//                            } else if (code > 0) {
+//                                ToastUtil.showShort(String.format(Locale.CHINA, "%s(%d)", msg, code));
+//                            }
+//                            AccountManager.getInstance().notifyUserAll(null);
+                            ToastUtil.showShort("切换账号失败");
                             if (callback != null) {
                                 callback.onFailed(code, msg);
                             }

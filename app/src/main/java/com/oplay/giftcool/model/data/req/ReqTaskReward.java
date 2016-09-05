@@ -26,7 +26,7 @@ public class ReqTaskReward {
 	public String appId;
 
 	/**
-	 * 当任务为签到时写入，空则取今日
+	 * 当任务为签到时写入，空则取今天
 	 */
 	@SerializedName("date")
 	public String date;

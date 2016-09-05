@@ -76,8 +76,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             mNeedUpdateSession = true;
             // 写入最新版本信息
             SPUtil.putInt(mContext, SPConfig.SP_APP_CONFIG_FILE, SPConfig.KEY_STORE_VER, AppConfig.SDK_VER);
-            // 清空今日登录状态
+            // 清空今天登录状态
             SPUtil.putLong(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
+            AssistantApp.getInstance().setIsReadAttention(false);
         }
     }
 

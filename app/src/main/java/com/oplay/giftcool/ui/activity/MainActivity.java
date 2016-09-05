@@ -81,7 +81,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     // 保持一个Activity的全局对象
     public static MainActivity sGlobalHolder;
-    // 判断是否今日首次打开APP
+    // 判断是否今天首次打开APP
     public static boolean sIsTodayFirstOpen = false;
     public static boolean sIsTodayFirstOpenForBroadcast = false;
     // 判断并显示弹窗
@@ -305,7 +305,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 }
             }
             if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()) {
-                OuwanSDKManager.getInstance().showSelectAccountView();
+//                OuwanSDKManager.getInstance().showSelectAccountView();
+                MixUtil.sendSelectAccountBroadcast(this);
             }
 
 

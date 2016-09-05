@@ -33,7 +33,7 @@ public class TaskInfoDownload extends TaskInfoThree {
 	}
 
 	/**
-	 * 判断任务的时间是否今日，非今日的任务予以清除
+	 * 判断任务的时间是否今天，非今天的任务予以清除
 	 */
 	public boolean isToday() {
 		return DateUtil.isToday(taskTime);

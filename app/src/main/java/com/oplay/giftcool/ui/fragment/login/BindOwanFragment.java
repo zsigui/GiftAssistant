@@ -100,7 +100,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
         }
         reqData = new JsonReqBase<>(new ReqLogin());
         btnSend.setEnabled(false);
-        tvAward.setVisibility(mData.userInfo.isFirstLogin ? View.VISIBLE : View.GONE);
+        tvAward.setVisibility(mData.userInfo.isFirstLogin ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
     }
 
     private void handleBindOwan() {
-        String user = etUser.getText().toString().trim();
+        final String user = etUser.getText().toString().trim();
         String pwd = etPwd.getText().toString().trim();
         boolean canPass = reqData.data.setOuwanUser(user, pwd, false);
         if (!canPass) {
@@ -152,8 +152,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                             ToastUtil.showShort("成功设置偶玩账号了耶!");
                             mData.userInfo.bindOuwanStatus = 1;
                             mData.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
-                            mData.userInfo.isFirstLogin = false;
-                            AccountManager.getInstance().notifyUserPart(mData);
+                            AccountManager.getInstance().notifyUserAll(mData);
                             AccountManager.getInstance().writeOuwanAccount(reqData.data.getUsername() + ","
                                             + reqData.data.getPassword(), AccountManager.getInstance()
                                     .readOuwanAccount(),

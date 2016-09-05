@@ -63,6 +63,9 @@ public class SPConfig {
     public static final String SP_APP_INFO_FILE = "infofile";
     public static final String KEY_TODAY_DOWNLOAD_TASK = "current_download_task";
     public static final String KEY_MSG_CENTRAL_LIST = "message_central_list";
-    public static final String KEY_INSTALL_APP_NAMES = "app_install_names";
+    public static final String KEY_INSTALL_APP_NAMES = "app_install_app_names";
+    public static final String KEY_INSTALL_PACKAGE_NAMES = "app_install_pack_names";
+    public static final String KEY_INSTALL_SRC_APP_NAMES = "app_install_src_app_names";
+    public static final String KEY_INSTALL_SRC_PACKAGE_NAMES = "app_install_src_pack_names";
     public static final String KEY_AD_SPLASH_INFO = "ad_splash_info";
 }

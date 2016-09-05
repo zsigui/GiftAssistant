@@ -19,15 +19,11 @@ import net.ouwan.umipay.android.Utils.Util_ImageLoader;
 import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.PushInfo;
-import net.ouwan.umipay.android.entry.UmipayAccount;
-import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.interfaces.Interface_GetPush_Listener;
 import net.ouwan.umipay.android.manager.ErrorReportManager;
 import net.ouwan.umipay.android.manager.ListenerManager;
 import net.ouwan.umipay.android.manager.ProxyPushCacheManager;
-import net.ouwan.umipay.android.manager.UmipayAccountManager;
 import net.ouwan.umipay.android.manager.UmipayCommandTaskManager;
-import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.webjs.view.webview.Flags_Browser_Config;
 
@@ -103,22 +99,6 @@ public class UmipayService extends IntentService implements Interface_GetPush_Li
                 case ACTION_RESTART_CHANGE_ACCOUNT: {
                     if (ListenerManager.getAccountCallbackListener() != null) {
                         ListenerManager.getAccountCallbackListener().onLogin(UmipaySDKStatusCode.CHANGE_ACCOUNT, null);
-                    } else {
-                        if (UmipayAccountManager.getInstance(this).isLogin()) {
-                            UmipayCommonAccount account = UmipayCommonAccountCacheManager.getInstance(this)
-                                    .getCommonAccountByPackageName(this.getPackageName(),
-                                            UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
-                            UmipayAccount currentAccount = UmipayAccountManager.getInstance(this).getCurrentAccount();
-                            if (account != null && currentAccount != null) {
-                                if (currentAccount.getUid() != account.getUid()) {
-                                    //账号不同时调出切换账号界面
-                                    UmipayActivity.showChangeAccountDialog(this);
-                                } else {
-                                    //账号相同时pop出登录态不处理
-                                    UmipayCommonAccountCacheManager.getInstance(this).popCommonAccountToChange();
-                                }
-                            }
-                        }
                     }
                     break;
                 }

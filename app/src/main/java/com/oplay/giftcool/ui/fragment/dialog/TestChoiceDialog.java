@@ -40,9 +40,15 @@ public class TestChoiceDialog extends BaseFragment_Dialog {
         String data = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
                 SPConfig.SP_APP_DEVICE_FILE,
                 SPConfig.KEY_TEST_REQUEST_URI,
-                String.format("%s\n%s", NetUrl.TEST_URL_BASE, WebViewUrl.TEST_URL_BASE));
-        tvNormal.setText(String.format("正式地址：\nnet->%s\nweb->%s", NetUrl.URL_BASE, WebViewUrl.URL_BASE));
-        tvTest.setText(String.format("测试地址：\nnet->%s\nweb->%s", NetUrl.TEST_URL_BASE, WebViewUrl.TEST_URL_BASE));
+                String.format("%s\n%s\n%s", NetUrl.TEST_URL_BASE,
+                        WebViewUrl.TEST_URL_BASE,
+                        NetUrl.TEST_SOCKET_IO_URL));
+        tvNormal.setText(String.format("正式地址：\nnet->%s\nweb->%s\nio->%s", NetUrl.URL_BASE,
+                WebViewUrl.URL_BASE,
+                NetUrl.SOCKET_IO_URL));
+        tvTest.setText(String.format("测试地址：\nnet->%s\nweb->%s\nio->%s", NetUrl.TEST_URL_BASE,
+                WebViewUrl.TEST_URL_BASE,
+                NetUrl.TEST_SOCKET_IO_URL));
         if (!TextUtils.isEmpty(data)) {
             tvContent.setText(data);
         }
@@ -57,10 +63,12 @@ public class TestChoiceDialog extends BaseFragment_Dialog {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_normal:
-                tvContent.setText(String.format("%s\n%s", NetUrl.URL_BASE, WebViewUrl.URL_BASE));
+                tvContent.setText(String.format("%s\n%s\n%s", NetUrl.URL_BASE,
+                        WebViewUrl.URL_BASE, NetUrl.SOCKET_IO_URL));
                 break;
             case R.id.tv_test:
-                tvContent.setText(String.format("%s\n%s", NetUrl.TEST_URL_BASE, WebViewUrl.TEST_URL_BASE));
+                tvContent.setText(String.format("%s\n%s\n%s", NetUrl.TEST_URL_BASE,
+                        WebViewUrl.TEST_URL_BASE, NetUrl.TEST_SOCKET_IO_URL));
                 break;
         }
     }

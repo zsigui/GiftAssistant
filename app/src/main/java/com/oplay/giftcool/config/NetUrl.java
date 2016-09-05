@@ -5,18 +5,26 @@ package com.oplay.giftcool.config;
  */
 public class NetUrl {
 
-    //public static final String TEST_URL_BASE = "http://172.16.3.239:8888/api/";
-    //public static final String TEST_URL_BASE = "http://172.16.3.68:7000/";
     /**
      * 测试地址
      */
-    public static final String TEST_URL_BASE = "http://test.lbapi.ouwan.com/api/";
+    public static final String TEST_URL_BASE = "https://test.lbapi.ouwan.com/api/";
     /**
      * 正式地址
      */
-    public static final String URL_BASE = "https://lbapi.ouwan.com/api/";
+    public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
+
+    public static final String TEST_SOCKET_IO_URL = "http://test.lbapi.ouwan.com/ws";
+
+    public static final String SOCKET_IO_URL = "https://lbsio.ouwan.com/ws";
 
     public static String REAL_URL = TEST_URL_BASE;
+
+    public static String REAL_SOCKET_URL = TEST_SOCKET_IO_URL;
+
+    public static String getSocketUrl() {
+        return AppConfig.TEST_MODE ? REAL_SOCKET_URL : SOCKET_IO_URL;
+    }
 
     public static String getBaseUrl() {
         return AppConfig.TEST_MODE ? REAL_URL : URL_BASE;

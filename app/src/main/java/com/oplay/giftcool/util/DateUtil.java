@@ -24,22 +24,47 @@ public class DateUtil {
             return "";
         }
         String result;
-        if (isToday(date)) {
-            result = "今日 " + date.substring(11, 16);
-        } else {
-            result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10),
-                    date.substring(11, 16));
+
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            long milliOfOneDay = 24 * 3600 * 1000;
+            Date d = sdf.parse(date);
+            if (isToday(d.getTime())) {
+                result = "今天 " + date.substring(11, 16);
+            } else if (isToday(d.getTime() + milliOfOneDay)) {
+                result = "昨天 " + date.substring(11, 16);
+            } else if (isToday(d.getTime() - milliOfOneDay)) {
+                result = "明天 " + date.substring(11, 16);
+            } else {
+                result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10),
+                        date.substring(11, 16));
+            }
+            return result;
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return result;
+        return "";
     }
 
     /**
      * 提取时间，针对 MM-dd HH:mm 格式
      */
     public static String optDate(String date, long time) {
+        if (TextUtils.isEmpty(date)) {
+            return "";
+        }
         String result;
-        if (isToday(time)) {
-            result = "今日 " + date.substring(6, date.length());
+
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+        long milliOfOneDay = 24 * 3600 * 1000;
+        Date d = new Date(time);
+        if (isToday(d.getTime())) {
+            result = "今天 " + date.substring(6, date.length());
+        } else if (isToday(d.getTime() + milliOfOneDay)) {
+            result = "明天 " + date.substring(6, date.length());
+        } else if (isToday(d.getTime() - milliOfOneDay)) {
+            result = "昨天 " + date.substring(6, date.length());
         } else {
             result = String.format("%s月%s日 %s", date.substring(0, 2), date.substring(3, 5),
                     date.substring(6, date.length()));
@@ -53,7 +78,7 @@ public class DateUtil {
     public static String optDateLong(String date, long time) {
         String result;
         if (isToday(time)) {
-            result = "今日 " + date.substring(11, 16);
+            result = "今天 " + date.substring(11, 16);
         } else {
             result = String.format("%s月%s日 %s", date.substring(5, 7), date.substring(8, 10),
                     date.substring(11, 16));

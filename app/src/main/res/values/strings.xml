@@ -122,7 +122,7 @@
 
     <string name = "st_index_gift_all" >全部</string >
     <string name = "st_index_gift_like" >猜你喜欢</string >
-    <string name = "st_index_gift_like_new_add" >今日新增</string >
+    <string name = "st_index_gift_like_new_add" >今天新增</string >
     <string name = "st_index_gift_limit" >珍贵限量</string >
     <string name = "st_index_gift_limit_remain" >剩余</string >
     <string name = "st_index_gift_new" >新鲜出炉</string >

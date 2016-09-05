@@ -158,6 +158,10 @@ public class Global {
      * 手机已安装应用名Hash列表
      */
     private static HashSet<String> sAppName = null;
+    /**
+     * 手机已安装应用包名Hash列表
+     */
+    private static HashSet<String> sPackageName = null;
 
 
     /**
@@ -194,6 +198,34 @@ public class Global {
 
         }
         return sAppName;
+    }
+
+    public static HashSet<String> getInstalledPackageNames() {
+        if (sPackageName == null || sPackageName.isEmpty()) {
+            try {
+                final String s = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
+                        SPConfig.SP_APP_INFO_FILE, SPConfig.KEY_INSTALL_PACKAGE_NAMES, null);
+                if (!TextUtils.isEmpty(s)) {
+                    sPackageName = AssistantApp.getInstance().getGson().fromJson(s, new TypeToken<HashSet<String>>() {
+                    }.getType());
+                }
+            } catch (Throwable t) {
+                AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, t);
+            }
+
+        }
+        return sPackageName;
+    }
+
+    public static void setInstalledPackageNames(HashSet<String> packageName) {
+        if (packageName == null || packageName.isEmpty()) {
+            return;
+        }
+        sPackageName = packageName;
+        final String s = AssistantApp.getInstance().getGson().toJson(sPackageName);
+        SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
+                SPConfig.SP_APP_INFO_FILE,
+                SPConfig.KEY_INSTALL_PACKAGE_NAMES, s);
     }
 
     private static int sBannerHeight = 0;
@@ -427,4 +459,6 @@ public class Global {
         }
         return mGreyColor;
     }
+
+
 }

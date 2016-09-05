@@ -92,7 +92,7 @@
 						android:layout_marginTop = "@dimen/di_list_item_gap_small"
 						android:layout_alignLeft = "@+id/tv_name"
 						android:layout_below = "@+id/tv_play"
-						android:text = "今日新增:"
+						android:text = "今天新增:"
 						android:textSize = "@dimen/di_text_size_small" />
 
 				<TextView

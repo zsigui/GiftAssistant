@@ -2,6 +2,7 @@ package com.oplay.giftcool.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.task.ShareTask;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
+import com.oplay.giftcool.receiver.AccountReceiver;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
@@ -276,5 +278,13 @@ public class MixUtil {
 //                IntentUtil.jumpBindOwan(context, um);
 //            }
 //        }
+    }
+
+    public static void sendSelectAccountBroadcast(Context context) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(AccountReceiver.ACTION_SELECT);
+        broadcastIntent.setPackage(context.getPackageName());
+        //发送广播
+        context.sendBroadcast(broadcastIntent);
     }
 }

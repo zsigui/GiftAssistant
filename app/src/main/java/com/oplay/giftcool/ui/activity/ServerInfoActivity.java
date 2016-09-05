@@ -9,9 +9,12 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.CallbackListener;
+import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.postbar.ServerInfoFragment;
 import com.oplay.giftcool.ui.widget.ToggleButton;
+import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -19,7 +22,8 @@ import java.util.ArrayList;
 /**
  * Created by zsigui on 16-8-24.
  */
-public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleButton.OnToggleChanged {
+public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleButton.OnToggleChanged,
+        ObserverManager.UserUpdateListener {
 
     private ArrayList<CallbackListener<Boolean>> mCallbackListeners;
     private ToggleButton tbFocus;
@@ -27,6 +31,7 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
     @Override
     protected void processLogic() {
         handleIntent(getIntent());
+        ObserverManager.getInstance().addUserUpdateListener(this);
     }
 
     @Override
@@ -97,6 +102,13 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
     }
 
     @Override
+    public void release() {
+        super.release();
+        tbFocus = null;
+        ObserverManager.getInstance().removeUserUpdateListener(this);
+    }
+
+    @Override
     public void onToggle(boolean on) {
 
         AssistantApp.getInstance().setIsReadAttention(on);
@@ -104,6 +116,27 @@ public class ServerInfoActivity extends BaseAppCompatActivity implements ToggleB
             for (CallbackListener<Boolean> listener : mCallbackListeners) {
                 listener.doCallBack(on);
             }
+        }
+    }
+
+    @Override
+    public void onUserUpdate(int action) {
+        if (action == ObserverManager.STATUS.GIFT_UPDATE_ALL
+                && tbFocus != null) {
+            ThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (AccountManager.getInstance().isLogin()) {
+                        if (AssistantApp.getInstance().isReadAttention()) {
+                            tbFocus.toggleOn();
+                        } else {
+                            tbFocus.toggleOff();
+                        }
+                    } else {
+                        tbFocus.toggleOff();
+                    }
+                }
+            });
         }
     }
 }

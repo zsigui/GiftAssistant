@@ -370,6 +370,15 @@
             </intent-filter >
         </receiver >
 
+        <receiver
+                android:name = ".receiver.AccountReceiver"
+                android:exported = "true" >
+            <intent-filter >
+                <action android:name = "net.ouwan.umipay.android.account.change" />
+                <action android:name = "${applicationId}.account.select" />
+            </intent-filter >
+        </receiver >
+
         <!-- GalleryFinal Start -->
         <activity
                 android:name = "cn.finalteam.galleryfinal.PhotoSelectActivity"
@@ -389,7 +398,8 @@
         <activity
                 android:name = "net.ouwan.umipay.android.api.UmipayActivity"
                 android:configChanges = "keyboardHidden|orientation|screenSize"
-                android:theme = "@style/umipay_main_dialog_theme" >
+                android:theme = "@style/umipay_main_dialog_theme"
+                android:launchMode = "singleTop" >
         </activity >
         <activity
                 android:name = "net.ouwan.umipay.android.api.UmipayBrowser"
@@ -496,15 +506,6 @@
             </intent-filter >
             <intent-filter >
                 <action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter >
-        </receiver >
-
-        <!-- 切换账号广播 -->
-        <receiver
-                android:name = "net.ouwan.umipay.android.api.UmipayAccountChangeReceiver"
-                android:exported = "true" >
-            <intent-filter >
-                <action android:name = "net.ouwan.umipay.android.account.change" />
             </intent-filter >
         </receiver >
 

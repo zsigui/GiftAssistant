@@ -113,7 +113,7 @@ public class DrawerFragment extends BaseFragment {
             String nick;
             String name;
             UserInfo user = AccountManager.getInstance().getUserInfo();
-            if (TextUtils.isEmpty(user.username)) {
+            if (user.bindOuwanStatus == 0) {
                 nick = (TextUtils.isEmpty(user.nick) ? StringUtil.transePhone(user.phone) : user.nick);
                 name = "登录手机：" + StringUtil.transePhone(user.phone);
             } else {

@@ -119,7 +119,7 @@ public class AssistantApp extends Application {
     // 是否启用下载完成提示音
     private boolean mIsPlayDownloadComplete = false;
 
-    // 说明今日是否推送过消息
+    // 说明今天是否推送过消息
     private boolean mIsPushedToday = false;
 
     // 头部信息
@@ -634,7 +634,7 @@ public class AssistantApp extends Application {
     }
 
     /**
-     * 今日是否已经进行了推送
+     * 今天是否已经进行了推送
      */
     public boolean isPushedToday() {
         if (!mIsPushedToday) {
@@ -647,7 +647,7 @@ public class AssistantApp extends Application {
     }
 
     /**
-     * 设置今日已经进行了推送
+     * 设置今天已经进行了推送
      */
     public void setPushedToday() {
         mIsPushedToday = true;

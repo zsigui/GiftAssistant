@@ -6,7 +6,7 @@ package com.oplay.giftcool.config;
 public class WebViewUrl {
 
 	public static final String URL_DOMAIN = ".ouwan.com";
-	public static final String TEST_URL_BASE = "http://test.giftcool.ouwan.com/";
+	public static final String TEST_URL_BASE = "https://test.giftcool.ouwan.com/";
 	public static final String URL_BASE = "https://libao.ouwan.com/";
 	// 分享的Icon地址
 	public static final String ICON_GCOOL = "http://lb-cdn.ymapp.com/static/img/icon192_192.png";

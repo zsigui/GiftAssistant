@@ -23,8 +23,10 @@ import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.StatisticsManager;
+import com.oplay.giftcool.model.data.req.ReqGiftLike;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
+import com.oplay.giftcool.model.data.resp.GiftLikeList;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
@@ -46,7 +48,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
 
 /**
  * 主页-礼包页面主要内容页
@@ -354,15 +355,16 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         if (!mIsLoadLike) {
             AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求猜你喜欢数据");
             mIsLoadLike = true;
-            JsonReqBase<ReqIndexGift> req = new JsonReqBase<>();
-            req.data = new ReqIndexGift();
+            JsonReqBase<ReqGiftLike> req = new JsonReqBase<>();
+            req.data = new ReqGiftLike();
             req.data.page = 1;
             req.data.appNames = Global.getInstalledAppNames();
+            req.data.packageName = Global.getInstalledPackageNames();
             Global.getNetEngine().obtainGiftLike(req)
-                    .enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+                    .enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
                         @Override
-                        public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
-                                               Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+                        public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
+                                               Response<JsonRespBase<GiftLikeList>> response) {
                             mIsLoadLike = false;
                             if (!mCanShowUI || call.isCanceled()) {
                                 return;
@@ -381,7 +383,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         }
 
                         @Override
-                        public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+                        public void onFailure(Call<JsonRespBase<GiftLikeList>> call, Throwable t) {
                             mIsLoadLike = false;
                             if (!mCanShowUI || call.isCanceled()) {
                                 return;

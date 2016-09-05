@@ -101,7 +101,7 @@ public abstract class NetStatusCode {
 
 	/* **********  求礼包错误码  *********** */
     /**
-     * 该款游戏今日求礼包次数达到上限
+     * 该款游戏今天求礼包次数达到上限
      */
     public static final int ERR_GAME_HOPE_GIFT_LIMIT = 11002;
     /**

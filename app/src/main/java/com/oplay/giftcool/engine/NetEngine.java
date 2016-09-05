@@ -7,6 +7,7 @@ import com.oplay.giftcool.model.data.req.ReqChangeMessageStatus;
 import com.oplay.giftcool.model.data.req.ReqFeedBack;
 import com.oplay.giftcool.model.data.req.ReqGetCode;
 import com.oplay.giftcool.model.data.req.ReqGiftDetail;
+import com.oplay.giftcool.model.data.req.ReqGiftLike;
 import com.oplay.giftcool.model.data.req.ReqHopeGift;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
 import com.oplay.giftcool.model.data.req.ReqIndexPost;
@@ -27,10 +28,10 @@ import com.oplay.giftcool.model.data.req.ReqTaskReward;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.model.data.resp.GameTypeMain;
 import com.oplay.giftcool.model.data.resp.GiftDetail;
+import com.oplay.giftcool.model.data.resp.GiftLikeList;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGameSuper;
 import com.oplay.giftcool.model.data.resp.IndexGift;
-import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.IndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
@@ -146,7 +147,7 @@ public interface NetEngine {
      * 获取 首页-礼包-猜你喜欢 页面的数据
      */
     @POST(NetUrl.GIFT_GET_ALL_LIKE)
-    Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> obtainGiftLike(@Body JsonReqBase<ReqIndexGift> reqData);
+    Call<JsonRespBase<GiftLikeList>> obtainGiftLike(@Body JsonReqBase<ReqGiftLike> reqData);
 
     /**
      * 获取 首页-礼包-每日限量礼包 页面的数据

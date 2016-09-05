@@ -8,7 +8,8 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftLikeListAdapter;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.model.data.req.ReqIndexGift;
+import com.oplay.giftcool.model.data.req.ReqGiftLike;
+import com.oplay.giftcool.model.data.resp.GiftLikeList;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -35,7 +36,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     private ListView mDataView;
     private GiftLikeListAdapter mAdapter;
     private String mGameKey;
-    private JsonReqBase<ReqIndexGift> mReqPageObj;
+    private JsonReqBase<ReqGiftLike> mReqPageObj;
 
     public static GiftLikeListFragment newInstance() {
         return new GiftLikeListFragment();
@@ -64,8 +65,8 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     @Override
     @SuppressWarnings("unchecked")
     protected void processLogic(Bundle savedInstanceState) {
-        ReqIndexGift data = new ReqIndexGift();
-        mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
+        ReqGiftLike data = new ReqGiftLike();
+        mReqPageObj = new JsonReqBase<ReqGiftLike>(data);
 
         if (getArguments() != null) {
             mGameKey = getArguments().getString(KEY_DATA);
@@ -87,7 +88,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     /**
      * 刷新猜你喜欢数据的网络请求声明
      */
-    private Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> mCallRefresh;
+    private Call<JsonRespBase<GiftLikeList>> mCallRefresh;
 
     @Override
     protected void lazyLoad() {
@@ -102,10 +103,10 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
         }
         mReqPageObj.data.page = 1;
         mCallRefresh = Global.getNetEngine().obtainGiftLike(mReqPageObj);
-        mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+        mCallRefresh.enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
             @Override
-            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
-                                   Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+            public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
+                                   Response<JsonRespBase<GiftLikeList>> response) {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
@@ -124,7 +125,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
             }
 
             @Override
-            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+            public void onFailure(Call<JsonRespBase<GiftLikeList>> call, Throwable t) {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
@@ -136,7 +137,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     /**
      * 加载更多猜你喜欢数据的网络请求声明
      */
-    private Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> mCallLoad;
+    private Call<JsonRespBase<GiftLikeList>> mCallLoad;
 
     /**
      * 加载更多数据
@@ -154,10 +155,10 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
             }
             mReqPageObj.data.page = mLastPage + 1;
             mCallLoad = Global.getNetEngine().obtainGiftLike(mReqPageObj);
-            mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftLike>>>() {
+            mCallLoad.enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
                 @Override
-                public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call,
-                                       Response<JsonRespBase<OneTypeDataList<IndexGiftLike>>> response) {
+                public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
+                                       Response<JsonRespBase<GiftLikeList>> response) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
@@ -174,7 +175,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
                 }
 
                 @Override
-                public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftLike>>> call, Throwable t) {
+                public void onFailure(Call<JsonRespBase<GiftLikeList>> call, Throwable t) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }

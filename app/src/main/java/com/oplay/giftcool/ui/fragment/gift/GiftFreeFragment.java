@@ -364,8 +364,8 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            o.platform = "偶玩版";
 //            o.bean = (int) (Math.random() * 100);
 //            o.score = 500;
-//            o.content = "测试首充的今日显示";
-//            o.gameName = "今日测试" + i * 10;
+//            o.content = "测试首充的今天显示";
+//            o.gameName = "今天测试" + i * 10;
 //            o.freeStartTime = (int) System.currentTimeMillis() - 3600;
 //            o.id = 135;
 //            o.img = "http://owan-img.ymapp.com/app/10792/icon/icon_1451902693.png_128_128_70.png";
@@ -473,8 +473,8 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            o.platform = "偶玩版";
 //            o.bean = (int) (Math.random() * 100);
 //            o.score = 500;
-//            o.content = "测试首充的今日显示";
-//            o.gameName = "今日测试" + i * 10;
+//            o.content = "测试首充的今天显示";
+//            o.gameName = "今天测试" + i * 10;
 //            o.freeStartTime =  System.currentTimeMillis() + 60 *3600;
 //            o.id = 135;
 //            o.reserveDeadline = "12:00";
@@ -495,8 +495,8 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            o.platform = "偶玩版";
 //            o.bean = (int) (Math.random() * 100);
 //            o.score = 500;
-//            o.content = "测试首充的今日显示";
-//            o.gameName = "今日测试" + i * 10;
+//            o.content = "测试首充的今天显示";
+//            o.gameName = "今天测试" + i * 10;
 //            o.freeStartTime = System.currentTimeMillis() - 3600;
 //            o.id = 135;
 //            o.reserveDeadline = "12:00";
@@ -539,8 +539,8 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            o.totalCount = 10;
 //            o.bean = (int) (Math.random() * 100);
 //            o.score = 500;
-//            o.content = "测试首充的明日显示";
-//            o.gameName = "明日测试" + i;
+//            o.content = "测试首充的明天显示";
+//            o.gameName = "明天测试" + i;
 //            o.platform = "偶玩版";
 //            o.freeStartTime = System.currentTimeMillis() + (time - 27) * 3600 * 24 * 1000;
 //            o.id = 136;
@@ -561,8 +561,8 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 //            o.totalCount = 10;
 //            o.bean = (int) (Math.random() * 100);
 //            o.score = 500;
-//            o.content = "测试首充的昨日显示";
-//            o.gameName = "昨日测试" + i;
+//            o.content = "测试首充的昨天显示";
+//            o.gameName = "昨天测试" + i;
 //            o.platform = "偶玩版";
 //            o.freeStartTime = System.currentTimeMillis() - (27 - time) * 3600 * 24 * 1000;
 //            o.id = 136;

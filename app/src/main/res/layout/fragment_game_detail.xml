@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:orientation = "vertical"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent" >
 
-<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-                android:layout_width = "match_parent"
-                android:layout_height = "match_parent" >
+    <ProgressBar
+            style = "?android:attr/progressBarStyleHorizontal"
+            android:id = "@+id/pb_percent"
+            android:max = "100"
+            android:scrollbarStyle = "insideOverlay"
+            android:layout_width = "match_parent"
+            android:layout_height = "@dimen/di_web_progress_height"
+            android:visibility = "gone"
+            android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
 
-	<WebView
-			android:id = "@+id/wv_container"
-			android:layout_above = "@+id/ll_download"
-			android:layout_width = "match_parent"
-			android:layout_height = "match_parent" />
+    <WebView
+            android:id = "@+id/wv_container"
+            android:layout_above = "@+id/ll_download"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "1" />
 
-	<ProgressBar
-			style = "?android:attr/progressBarStyleHorizontal"
-			android:id = "@+id/pb_percent"
-			android:max = "100"
-			android:scrollbarStyle = "insideOverlay"
-			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_web_progress_height"
-			android:visibility = "gone"
-			android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
-	<LinearLayout
-			android:id = "@+id/ll_download"
-			android:layout_alignParentBottom = "true"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:gravity = "center"
-			android:orientation = "vertical"
-			android:visibility = "gone" >
+    <LinearLayout
+            android:id = "@+id/ll_download"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "center"
+            android:orientation = "vertical"
+            android:visibility = "gone" >
 
-		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
-				android:id = "@+id/btn_download"
-				android:layout_marginTop = "10dp"
-				android:layout_marginBottom = "10dp"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content" />
-	</LinearLayout >
-</RelativeLayout >
+        <com.oplay.giftcool.ui.widget.button.DownloadButtonView
+                android:id = "@+id/btn_download"
+                android:layout_marginTop = "10dp"
+                android:layout_marginBottom = "10dp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content" />
+    </LinearLayout >
+</LinearLayout >

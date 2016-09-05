@@ -26,12 +26,12 @@ import io.socket.engineio.client.transports.Polling;
  */
 public class SocketIOManager {
 
-    private final String URI_WS = "/ws";
     private static SocketIOManager manager;
     private boolean mIsConnecting = false;
 
 
-    private SocketIOManager() {}
+    private SocketIOManager() {
+    }
 
     public static SocketIOManager getInstance() {
         if (manager == null) {
@@ -42,10 +42,6 @@ public class SocketIOManager {
 
     private Socket mSocket;
     private ArrayList<MissionReward> mCandidateList = new ArrayList<>();
-
-    private String getRealUrl() {
-        return NetUrl.getBaseUrl().substring(0, NetUrl.getBaseUrl().indexOf("/", 8)) + URI_WS;
-    }
 
     public void connectOrReConnect(boolean forceNew) {
         if (mIsConnecting) {
@@ -71,7 +67,7 @@ public class SocketIOManager {
             opts.reconnectionAttempts = 3;
 //				// 断开后，间隔30秒再次重试
             opts.reconnectionDelay = 30 * 1000;
-            mSocket = IO.socket(getRealUrl(), opts);
+            mSocket = IO.socket(NetUrl.getSocketUrl(), opts);
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -170,7 +166,7 @@ public class SocketIOManager {
                     }
                 }
             });
-            GCLog.d(AppDebugConfig.TAG_MANAGER, "IOSocket start to connect " + getRealUrl());
+            GCLog.d(AppDebugConfig.TAG_MANAGER, "IOSocket start to connect " + NetUrl.getSocketUrl());
             mSocket.connect();
         } catch (URISyntaxException e) {
             AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, e);

@@ -19,7 +19,6 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
-import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -135,7 +134,10 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                     ToastUtil.showShort("使用新的地址重新加载");
                     String[] s = mDialog.getContent().split("\n");
                     NetUrl.REAL_URL = s[0].trim();
-                    if (s.length > 1) {
+                    if (s.length > 2) {
+                        WebViewUrl.REAL_URL = s[1].trim();
+                        NetUrl.REAL_SOCKET_URL = s[2].trim();
+                    } else if (s.length > 1) {
                         WebViewUrl.REAL_URL = s[1].trim();
                     }
                     SPUtil.putString(AssistantApp.getInstance().getApplicationContext(),
@@ -211,13 +213,13 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
     }
 
     /**
-     * 判断是否今日首次登录<br/>
-     * 防止由于后台初始化原因导致该值一直为今日，故设置为此处执行
+     * 判断是否今天首次登录<br/>
+     * 防止由于后台初始化原因导致该值一直为今天，故设置为此处执行
      */
     public void judgeFirstOpenToday() {
         long lastOpenTime = SPUtil.getLong(SplashActivity.this,
                 SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
-        // 今日首次登录，首次打开APP并不显示
+        // 今天首次登录，首次打开APP并不显示
         MainActivity.sIsTodayFirstOpen = (lastOpenTime != 0 && !DateUtil.isToday(lastOpenTime));
         MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
         // 写入当前时间
