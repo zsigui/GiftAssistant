@@ -336,7 +336,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
     public void updateData(IndexGift data, int start, int end) {
         if (data == null) {
-            if (!mHasData) {
+            if (mGiftData == null) {
                 mViewManager.showErrorRetry();
             } else {
                 mAdapter.updateData(mGiftData, start, end);
@@ -344,6 +344,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             }
             return;
         }
+        mGiftData = data;
+        mHasData = true;
+
         if ((data.limit == null || data.limit.size() == 0)
                 && (data.news == null || data.news.size() == 0)) {
             // 数据为空
@@ -354,8 +357,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
         data.like = mLikeData;
         mViewManager.showContent();
-        mHasData = true;
-        mGiftData = data;
         mAdapter.updateData(mGiftData, start, end);
     }
 

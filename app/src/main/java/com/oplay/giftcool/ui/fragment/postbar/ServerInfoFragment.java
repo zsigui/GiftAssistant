@@ -28,7 +28,7 @@ public class ServerInfoFragment extends BaseFragment implements ViewPager.OnPage
 
         @Override
         protected void initView(Bundle savedInstanceState) {
-            setContentView(R.layout.fragment_vp_container);
+            setContentView(R.layout.fragment_games);
             mPager = getViewById(R.id.vp_container);
             mTabLayout = getViewById(R.id.tab_layout);
         }

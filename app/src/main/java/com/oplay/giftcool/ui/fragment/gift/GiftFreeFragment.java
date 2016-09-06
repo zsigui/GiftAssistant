@@ -154,16 +154,21 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
     //刷新重置页面
     public void refreshData(ArrayList<TimeData<IndexGiftNew>> data) {
         if (data == null) {
+            if (mData == null) {
+                mViewManager.showErrorRetry();
+            } else {
+                mAdapter.updateData(mData);
+                mViewManager.showContent();
+            }
             return;
         }
+        mData = data;
         if (data.size() == 0) {
             mViewManager.showEmpty();
-        } else {
-            mViewManager.showContent();
         }
         mHasData = true;
-        mData = data;
         mAdapter.updateData(mData);
+        mViewManager.showContent();
     }
 
     //加载更多数据后更新

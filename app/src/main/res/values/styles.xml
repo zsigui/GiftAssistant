@@ -403,6 +403,12 @@
         <item name = "android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="TranslucentActivity" parent="AppTheme">
+        <item name = "android:windowBackground">@color/co_transparent</item>
+        <item name = "android:windowNoTitle">true</item>
+        <item name = "android:windowIsTranslucent">true</item>
+    </style>
+
     <!-- 登录 -->
     <style name = "AccountEditor" >
         <item name = "android:popupBackground" >@color/co_common_content_bg</item >

@@ -73,7 +73,7 @@
             android:layout_width = "wrap_content"
             android:layout_below = "@+id/tv_name"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-            android:layout_marginTop = "12dp"
+            android:layout_marginTop = "@dimen/di_list_item_gap_small"
             android:layout_toRightOf = "@+id/rl_icon"
             android:gravity = "center_vertical" />
 
@@ -93,7 +93,7 @@
             android:gravity = "left"
             android:layout_below = "@+id/tv_content"
             android:layout_marginLeft = "7dp"
-            android:layout_marginTop = "6dp"
+            android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
             android:layout_toRightOf = "@+id/rl_icon" />
 
 

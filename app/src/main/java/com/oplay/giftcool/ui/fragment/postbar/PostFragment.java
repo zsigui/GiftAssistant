@@ -191,6 +191,12 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
 
     public void updateData(ArrayList<IndexPostNew> data) {
         if (data == null) {
+            if (mData == null) {
+                mViewManager.showErrorRetry();
+            } else {
+                mAdapter.updateData(data);
+                mViewManager.showContent();
+            }
             return;
         }
         if (data.isEmpty()) {

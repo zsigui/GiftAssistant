@@ -284,13 +284,22 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
     }
 
     public void updateData(ArrayList<IndexGameNew> data) {
-        if (data == null || data.size() == 0) {
+        if (data == null) {
+            if (mData == null) {
+                mViewManager.showErrorRetry();
+            } else {
+                mAdapter.updateData(mData);
+                mViewManager.showContent();
+            }
+            return;
+        }
+        mData = data;
+        if (data.size() == 0) {
             mViewManager.showEmpty();
             return;
         }
         mViewManager.showContent();
         mHasData = true;
-        mData = data;
         mAdapter.updateData(mData);
         mLastPage = 1;
     }
