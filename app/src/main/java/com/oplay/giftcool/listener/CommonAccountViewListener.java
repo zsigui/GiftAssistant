@@ -1,9 +1,9 @@
-package net.ouwan.umipay.android.api;
+package com.oplay.giftcool.listener;
 
 import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 
 /**
- * Created by zsigui on 16-8-30.
+ * Created by zsigui on 16-9-6.
  */
 public interface CommonAccountViewListener {
 

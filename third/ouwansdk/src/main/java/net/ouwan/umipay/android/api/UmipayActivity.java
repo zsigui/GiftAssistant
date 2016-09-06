@@ -30,8 +30,6 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
     private View mRootLayout;
 
     private static final String ACTION_RESTART_CHANGE_ACCOUNT = "change_account";
-    // 防止唤醒时出现多个
-    private static boolean sSingletonShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +39,6 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
         mRootLayout = findViewById(Util_Resource.getIdByReflection(this, "id",
                 "umipay_main_content_rl"));
         mFragmentManager = getSupportFragmentManager();
-        if (sSingletonShow) {
-            finish();
-            return;
-        }
-        sSingletonShow = true;
         setDefaultFragment();
     }
 
@@ -53,7 +46,6 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sSingletonShow = false;
     }
 
     public void setDefaultFragment() {

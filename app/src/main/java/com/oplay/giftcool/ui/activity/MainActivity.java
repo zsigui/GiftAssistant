@@ -128,6 +128,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 //		AssistantApp.getInstance().appInit();
         findFragmentByTag(savedInstanceState);
         super.onCreate(savedInstanceState);
+
         PermissionUtil.judgePermission(this);
         sGlobalHolder = MainActivity.this;
         updateToolBar();
@@ -304,7 +305,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                     MixUtil.handleViewUri(getApplicationContext(), uri);
                 }
             }
-            if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()) {
+            if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()
+                    && AssistantApp.getInstance().isGlobalInit()) {
 //                OuwanSDKManager.getInstance().showSelectAccountView();
                 MixUtil.sendSelectAccountBroadcast(this);
             }
@@ -312,6 +314,21 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
         } catch (Exception e) {
             AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KeyConfig.KEY_DATA, mCurSelectedItem);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            int index = savedInstanceState.getInt(KeyConfig.KEY_DATA, INDEX_DEFAULT);
+            setCurSelected(index);
         }
     }
 

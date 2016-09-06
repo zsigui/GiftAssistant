@@ -218,7 +218,12 @@ public class AsyncTask_NetworkInit extends AsyncTask<Object, Integer, Void> {
 
                 Global.setInstalledAppNames(diffName);
                 Global.setInstalledPackageNames(diffPackage);
-                ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_LIKE);
+
+                if (!oldSrcPackage.isEmpty() || !newSrcPackage.isEmpty()
+                        || !oldSrcName.isEmpty() || !newSrcName.isEmpty()) {
+                    // 有发生变化，主动通知
+                    ObserverManager.getInstance().notifyGiftUpdate(ObserverManager.STATUS.GIFT_UPDATE_LIKE);
+                }
             }
         } catch (Throwable t) {
             AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, t);

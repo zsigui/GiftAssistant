@@ -291,15 +291,18 @@
     <string name = "st_lbind_et_set_pwd_hint">请设置(6~32位字符)</string>
     <string name = "st_lbind_et_set_pwd_award_hint">设置密码后可获得50金币</string>
     <string name = "st_lbind_set_pwd_login">完成登录</string>
+
+    <!-- 多账号选择 -->
+    <string name = "st_lbind_choose_title">选择手机默认登录账号</string>
+    <string name = "st_lbind_choose_login_title">选择登录账号</string>
+    <string name = "st_lbind_choose_ctv_default">默认</string>
     <string name = "st_lbind_choose_top_hint">
         <![CDATA[
         系统检测到您的手机 <font color=\'#20C585\'>%s</font> 已绑了如下偶玩账号，请选择一个作为手机默认账号
         ]]>
     </string>
-    <string name = "st_lbind_choose_user_name">
-        <![CDATA[
-        <font color=\'#333333\'>%1$s</font> <font color=\'#888888\'>| %2$s</font>
-        ]]>
+    <string name = "st_lbind_choose_top_login_hint">
+        系统检测到您的手机登录过如下的偶玩账号，请选择一个账号登录礼包酷
     </string>
     <string name = "st_lbind_dialog_title">确认放弃登录？</string>
     <string name = "st_lbind_dialog_content">还有一步就可以完成登录了，真的要退出吗？</string>
@@ -432,4 +435,15 @@
         %1$s<font color=\'#888888\'>/%2$s</font>
         ]]>
     </string>
+
+    <!-- 切换账号弹窗 -->
+    <string name = "st_dialog_change_account_title">切换账号</string>
+    <string name = "st_dialog_change_account_content">
+        <![CDATA[
+        是否使用<font color=\'#ffaa17\'>%1$s</font>的账号<font color=\'#ffaa17\'>%2$s</font>登录礼包酷？
+        ]]>
+    </string>
+    <string name = "st_dialog_change_account_hint">切换后将退出原来的账号%s</string>
+    <string name = "st_dialog_change_account_ok">确认切换</string>
+    <string name = "st_dialog_change_account_cancel">保持原账号状态</string>
 </resources >

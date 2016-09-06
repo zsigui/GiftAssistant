@@ -9,6 +9,7 @@ import com.oplay.giftcool.adapter.PostAdapter;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
@@ -23,6 +24,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -64,6 +66,21 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
         mAdapter = new PostAdapter(getContext());
         rvData.setAdapter(mAdapter);
 
+        if (savedInstanceState != null) {
+            Serializable s = savedInstanceState.getSerializable(KeyConfig.KEY_DATA);
+            if (s != null) {
+                mHasData = true;
+                updateData((ArrayList<IndexPostNew>) s);
+                mLastPage = savedInstanceState.getInt(KeyConfig.KEY_DATA_O);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KeyConfig.KEY_DATA, mData);
+        outState.putInt(KeyConfig.KEY_DATA_O, mLastPage);
     }
 
     @Override

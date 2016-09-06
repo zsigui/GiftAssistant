@@ -13,6 +13,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GameTagAdapter;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.IndexTypeUtil;
@@ -23,6 +24,7 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.FileUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -37,6 +39,7 @@ public class GameTypeFragment extends BaseFragment {
     private final static String PAGE_NAME = "游戏分类";
     private RecyclerView mTagView;
     private GameTagAdapter mTagAdapter;
+    private ArrayList<GameTypeMain> mData;
 
     private int[] mResIds = new int[]{R.drawable.ic_tag_arpg, R.drawable.ic_tag_card, R.drawable.ic_tag_supernatural,
             R.drawable.ic_tag_action, R.drawable.ic_tag_stategy, R.drawable.ic_tag_round};
@@ -79,6 +82,20 @@ public class GameTypeFragment extends BaseFragment {
          * 设置列表项的分隔符
 		 */
         mTagView.addItemDecoration(new TagDividerItemDecoration());
+
+        if (savedInstanceState != null) {
+            Serializable s = savedInstanceState.getSerializable(KeyConfig.KEY_DATA);
+            if (s != null) {
+                mHasData = true;
+                updateData((ArrayList<GameTypeMain>) s);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KeyConfig.KEY_DATA, mData);
     }
 
     /**
@@ -152,6 +169,7 @@ public class GameTypeFragment extends BaseFragment {
             mViewManager.showEmpty();
             return;
         }
+        mData = data;
         mHasData = true;
         mViewManager.showContent();
         int headerCount = (data.size() < IndexTypeUtil.ITEM_GAME_TYPE_HEADER_COUNT ?

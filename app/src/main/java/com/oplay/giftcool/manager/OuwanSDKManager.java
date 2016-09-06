@@ -1,7 +1,6 @@
 package com.oplay.giftcool.manager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 
 import com.oplay.giftcool.AssistantApp;
@@ -10,23 +9,24 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.CommonAccountViewListener;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.UserSession;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
+import com.oplay.giftcool.ui.activity.DialogActivity;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
 import net.ouwan.umipay.android.api.ActionCallbackListener;
-import net.ouwan.umipay.android.api.CommonAccountViewListener;
 import net.ouwan.umipay.android.api.GameParamInfo;
 import net.ouwan.umipay.android.api.GameUserInfo;
 import net.ouwan.umipay.android.api.InitCallbackListener;
 import net.ouwan.umipay.android.api.PayCallbackListener;
-import net.ouwan.umipay.android.api.UmipayActivity;
 import net.ouwan.umipay.android.api.UmipayBrowser;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
@@ -100,7 +100,6 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         });
         ListenerManager.setPayCallbackListener(this);
         ListenerManager.setActionCallbackListener(this);
-        ListenerManager.setCommonAccountViewListener(this);
     }
 
     public void login() {
@@ -151,6 +150,9 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         }
     }
 
+    /**
+     * 清除所有与自身uid与session相同的登录状态
+     */
     public void clearAccountBySession(int uid, String session) {
         UmipayCommonAccount account = new UmipayCommonAccount(mContext, null, 0);
         account.setUid(uid);
@@ -211,7 +213,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 // 处理登录清空下
                 if (account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
                     // 账号不同唤起切换界面
-                    UmipayActivity.showChangeAccountDialog(mContext);
+                    DialogActivity.showChangeAccount(mContext);
                 } else {
                     // 账号相同不切换，清除唤起状态
                     UmipayCommonAccountCacheManager.getInstance(mContext).popCommonAccountToChange();
@@ -240,10 +242,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT, mContext.getPackageName());
         if (mCommonAccountList != null && mCommonAccountList.size() > 0) {
 
-            Intent intent = new Intent(mContext, UmipayActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            mContext.startActivity(intent);
+            IntentUtil.jumpSelectAccount(mContext);
         }
     }
 

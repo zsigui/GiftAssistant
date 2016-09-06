@@ -661,4 +661,14 @@ public class IntentUtil {
         intent.setData(Uri.parse(url));
         context.startActivity(intent);
     }
+
+    /**
+     * 跳转选择登录账号界面
+     */
+    public static void jumpSelectAccount(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_SELECT_ACCOUNT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
 }

@@ -11,6 +11,7 @@ import com.oplay.giftcool.adapter.GameNoticeAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.listener.CallbackListener;
@@ -23,6 +24,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -127,6 +129,23 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
         if (mHandler == null) {
             mHandler = new Handler();
         }
+
+        if (savedInstanceState != null) {
+            Serializable s = savedInstanceState.getSerializable(KeyConfig.KEY_DATA);
+            if (s != null) {
+                mHasData = true;
+                updateData((ArrayList<IndexGameNew>) s);
+                mLastPage = savedInstanceState.getInt(KeyConfig.KEY_DATA_O);
+            }
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KeyConfig.KEY_DATA, mData);
+        outState.putInt(KeyConfig.KEY_DATA_O, mLastPage);
     }
 
     /**

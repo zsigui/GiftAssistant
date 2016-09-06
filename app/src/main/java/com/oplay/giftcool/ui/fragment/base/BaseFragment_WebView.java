@@ -135,7 +135,9 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             @Override
             public void onLoadResource(WebView view, String url) {
                 long t = System.currentTimeMillis();
-                AppDebugConfig.d(AppDebugConfig.TAG_WARN, "onLoadResource: " + url + ", time = " + (t - cTime) + "ms");
+                if (AppDebugConfig.IS_DEBUG) {
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "onLoadResource: " + url + ", time = " + (t - cTime) + "ms");
+                }
                 super.onLoadResource(view, url);
                 cTime = t;
             }

@@ -396,6 +396,13 @@
         <item name = "android:windowFullscreen" >false</item >
     </style >
 
+    <!-- 去掉Activity背景 -->
+    <style name = "Opacity70Activity" parent="AppTheme">
+        <item name = "android:windowBackground">@color/co_opacity_70</item>
+        <item name = "android:windowNoTitle">true</item>
+        <item name = "android:windowIsTranslucent">true</item>
+    </style>
+
     <!-- 登录 -->
     <style name = "AccountEditor" >
         <item name = "android:popupBackground" >@color/co_common_content_bg</item >

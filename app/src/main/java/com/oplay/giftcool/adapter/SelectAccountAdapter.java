@@ -10,22 +10,18 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.model.data.resp.BindAccount;
+
+import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 
 import java.util.List;
 
 /**
- * Created by zsigui on 16-8-27.
+ * Created by zsigui on 16-9-6.
  */
-public class OwanChooseAdapter extends BaseListAdapter<BindAccount> implements View.OnClickListener {
-
+public class SelectAccountAdapter extends BaseListAdapter<UmipayCommonAccount> implements View.OnClickListener{
     private int mCurChecked = 0;
-    private boolean mIsFirst = true;
-    private final String TEXT_CHOOSE;
-
-    public OwanChooseAdapter(Context context, List<BindAccount> objects) {
+    public SelectAccountAdapter(Context context, List<UmipayCommonAccount> objects) {
         super(context, objects);
-        TEXT_CHOOSE = context.getString(R.string.st_lbind_choose_ctv_default);
     }
 
     @Override
@@ -38,12 +34,12 @@ public class OwanChooseAdapter extends BaseListAdapter<BindAccount> implements V
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        BindAccount o = getItem(position);
-        holder.tvName.setText(o.username);
-        holder.tvGameName.setText(o.regAppName);
+        UmipayCommonAccount o = getItem(position);
+        holder.tvName.setText(o.getUserName());
+        holder.tvGameName.setText(o.getOriginApkName());
         if (position == mCurChecked) {
-            holder.ctvCheck.setText(mIsFirst ? TEXT_CHOOSE : "");
             holder.ctvCheck.setVisibility(View.VISIBLE);
+            holder.ctvCheck.setText("");
         } else {
             holder.ctvCheck.setVisibility(View.INVISIBLE);
         }
@@ -60,12 +56,11 @@ public class OwanChooseAdapter extends BaseListAdapter<BindAccount> implements V
         int pos = (int) v.getTag(TAG_POSITION);
         if (pos != mCurChecked) {
             mCurChecked = pos;
-            mIsFirst = false;
             notifyDataSetChanged();
         }
     }
 
-    public BindAccount getCheckedItem() {
+    public UmipayCommonAccount getCheckedItem() {
         return getCount() == 0 ? null : getItem(mCurChecked);
     }
 

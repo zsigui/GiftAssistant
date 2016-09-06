@@ -9,6 +9,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
+import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -18,6 +19,7 @@ import com.oplay.giftcool.ui.fragment.login.BindOwanFragment;
 import com.oplay.giftcool.ui.fragment.login.OuwanLoginFragment;
 import com.oplay.giftcool.ui.fragment.login.PhoneLoginFragment;
 import com.oplay.giftcool.ui.fragment.login.PhoneLoginNewFragment;
+import com.oplay.giftcool.ui.fragment.login.SelectAccountFragment;
 import com.oplay.giftcool.util.InputMethodUtil;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -95,6 +97,14 @@ public class LoginActivity extends BaseAppCompatActivity {
                 replaceFragWithTitle(R.id.fl_container, BindOwanFragment.newInstance(um, false),
                         getResources().getString(um.userInfo.phoneCanUseAsUname ?
                                 R.string.st_login_bind_owan_title_1 : R.string.st_login_bind_owan_title_2), false);
+                break;
+            case KeyConfig.TYPE_ID_SELECT_ACCOUNT:
+                if (AccountManager.getInstance().isLogin()) {
+                    finish();
+                    return;
+                }
+                replaceFragWithTitle(R.id.fl_container, SelectAccountFragment.newInstance(),
+                        getResources().getString(R.string.st_lbind_choose_login_title), false);
                 break;
             default:
                 mTypeHierarchy.remove(mTypeHierarchy.size() - 1);

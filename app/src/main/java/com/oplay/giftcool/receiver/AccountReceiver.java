@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 
 import net.ouwan.umipay.android.debug.Debug_Log;
@@ -21,6 +22,7 @@ public class AccountReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
             String action = intent.getAction();
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN, "receiver action = " + action);
             if (UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE.equalsIgnoreCase(action)) {
                 OuwanSDKManager.getInstance().showChangeAccountView();
             } else if (ACTION_SELECT.equalsIgnoreCase(action)) {

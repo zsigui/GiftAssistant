@@ -504,33 +504,34 @@ public class AccountManager implements OnFinishListener {
             return;
         }
         PushMessageManager.getInstance().unsetAlias(mContext, String.valueOf(getUserInfo().uid));
-        if (isForce) {
-            final String session = getUserSesion().session;
-            final int uid = getUserSesion().uid;
-            Global.THREAD_POOL.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mCallLogout != null) {
-                        mCallLogout.cancel();
-                        mCallLogout = mCallLogout.clone();
-                    } else {
-                        mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
-                    }
-                    mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
-                        @Override
-                        public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
-                            AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
-                            OuwanSDKManager.getInstance().clearAccountBySession(uid, session);
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
-                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
-                        }
-                    });
-                }
-            });
-        }
+        // 由于涉及到清除逻辑太麻烦，故只清除本身的登录状态，不通知服务器
+//        if (isForce) {
+//            final String session = getUserSesion().session;
+//            final int uid = getUserSesion().uid;
+//            Global.THREAD_POOL.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (mCallLogout != null) {
+//                        mCallLogout.cancel();
+//                        mCallLogout = mCallLogout.clone();
+//                    } else {
+//                        mCallLogout = Global.getNetEngine().logout(new JsonReqBase<Object>());
+//                    }
+//                    mCallLogout.enqueue(new Callback<JsonRespBase<Void>>() {
+//                        @Override
+//                        public void onResponse(Call<JsonRespBase<Void>> call, Response<JsonRespBase<Void>> response) {
+//                            AppDebugConfig.warnResp(AppDebugConfig.TAG_MANAGER, response);
+//                            OuwanSDKManager.getInstance().clearAccountBySession(uid, session);
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<JsonRespBase<Void>> call, Throwable t) {
+//                            AppDebugConfig.w(AppDebugConfig.TAG_MANAGER, t);
+//                        }
+//                    });
+//                }
+//            });
+//        }
         AccountManager.getInstance().notifyUserAll(null);
         SocketIOManager.getInstance().close();
     }

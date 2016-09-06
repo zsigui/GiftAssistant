@@ -131,7 +131,7 @@ public class SocketIOManager {
                         close();
                     }
                     AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "msg = " + (args != null && args.length > 0 ? args[0] :
-                            null));
+                            null) + ", isLogin = " + AccountManager.getInstance().isLogin());
                 }
             }).on(CustomSocket.EVENT_AUTH_SUCCESS, new Emitter.Listener() {
                 @Override

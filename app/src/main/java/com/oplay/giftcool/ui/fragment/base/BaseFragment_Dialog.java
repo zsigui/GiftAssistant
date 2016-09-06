@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -68,10 +69,15 @@ public abstract class BaseFragment_Dialog extends DialogFragment implements View
         setNegativeEnabled(mNegativeEnabled);
 
         processLogic();
-        return new AlertDialog.Builder(getContext(), R.style.DefaultCustomDialog)
+        return new AlertDialog.Builder(getContext(), getDialogStyle())
                 .setView(mContentView)
+                .setCancelable(isCancelable())
                 .setOnCancelListener(this)
                 .create();
+    }
+
+    protected @StyleRes int getDialogStyle() {
+        return R.style.DefaultCustomDialog;
     }
 
     /**

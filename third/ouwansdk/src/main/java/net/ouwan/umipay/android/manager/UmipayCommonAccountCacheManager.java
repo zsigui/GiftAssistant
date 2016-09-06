@@ -200,7 +200,8 @@ public class UmipayCommonAccountCacheManager {
                         String json = Basic_JSONUtil.getString(jsonArray, i, "");
                         if (!TextUtils.isEmpty(json)) {
                             UmipayCommonAccount account = new UmipayCommonAccount(json);
-                            if (checkDate(account) && !account.getDestPackageName().equalsIgnoreCase(execptPackage)) {
+                            if (checkDate(account) && (!account.getDestPackageName().equalsIgnoreCase(execptPackage)
+                                    || !account.getOriginPackageName().equalsIgnoreCase(execptPackage))) {
                                 umipayCommonAccountArrayList.add(account);
                             }
                         }

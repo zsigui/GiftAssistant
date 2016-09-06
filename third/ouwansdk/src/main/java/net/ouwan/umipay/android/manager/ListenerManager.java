@@ -6,7 +6,6 @@ import android.os.Message;
 
 import net.ouwan.umipay.android.api.AccountCallbackListener;
 import net.ouwan.umipay.android.api.ActionCallbackListener;
-import net.ouwan.umipay.android.api.CommonAccountViewListener;
 import net.ouwan.umipay.android.api.InitCallbackListener;
 import net.ouwan.umipay.android.api.PayCallbackListener;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
@@ -66,8 +65,6 @@ public class ListenerManager {
     private static Interface_Account_Listener_Validate_Session mCommanValidateSession;
 
     private static Handler mHandler = new InternalHandler(Looper.getMainLooper());
-
-    private static CommonAccountViewListener mCommonAccountViewListener;
 
     public static AccountCallbackListener getAccountCallbackListener() {
         return mAccountCallbackListener;
@@ -172,14 +169,6 @@ public class ListenerManager {
 
     public static void setCommanValidateSession(Interface_Account_Listener_Validate_Session interface_account_listener_validate_session){
         mCommanValidateSession = interface_account_listener_validate_session;
-    }
-
-    public static CommonAccountViewListener getCommonAccountViewListener() {
-        return mCommonAccountViewListener;
-    }
-
-    public static void setCommonAccountViewListener(CommonAccountViewListener commonAccountViewListener) {
-        mCommonAccountViewListener = commonAccountViewListener;
     }
 
     public static void callbackInitFinish(int code, String msg) {

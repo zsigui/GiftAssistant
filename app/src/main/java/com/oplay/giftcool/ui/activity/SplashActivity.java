@@ -19,6 +19,7 @@ import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -135,6 +136,7 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                     String[] s = mDialog.getContent().split("\n");
                     NetUrl.REAL_URL = s[0].trim();
                     if (s.length > 2) {
+                        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "s[2] = " + s[2]);
                         WebViewUrl.REAL_URL = s[1].trim();
                         NetUrl.REAL_SOCKET_URL = s[2].trim();
                     } else if (s.length > 1) {

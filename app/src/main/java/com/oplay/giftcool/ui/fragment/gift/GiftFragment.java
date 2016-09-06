@@ -15,6 +15,7 @@ import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
@@ -40,6 +41,7 @@ import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -158,6 +160,16 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
         mLastPage = PAGE_FIRST;
         readLikeCacheData();
+
+        if (savedInstanceState != null) {
+            Serializable s = savedInstanceState.getSerializable(KeyConfig.KEY_DATA);
+            if (s != null) {
+                mGiftData = (IndexGift) s;
+                mHasData = true;
+                updateData(mGiftData, 0, -1);
+                mLastPage = savedInstanceState.getInt(KeyConfig.KEY_DATA_O);
+            }
+        }
     }
 
     /**
@@ -235,7 +247,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "加载的猜你喜欢数据: " + data);
                         mLikeData = data;
                     }
-                }, new TypeToken<ArrayList<IndexGiftLike>>(){}.getType());
+                }, new TypeToken<ArrayList<IndexGiftLike>>() {
+                }.getType());
     }
 
     private void readCacheData() {
@@ -349,6 +362,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     private boolean mIsLoadLike = false;
 
     private void requestLikeData() {
+
 
         if (!mIsLoadLike) {
             AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求猜你喜欢数据");
@@ -525,8 +539,20 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             return;
         }
         if (action == ObserverManager.STATUS.GIFT_UPDATE_LIKE) {
-            requestLikeData();
+            ThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    requestLikeData();
+                }
+            });
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KeyConfig.KEY_DATA, mGiftData);
+        outState.putInt(KeyConfig.KEY_DATA_O, mLastPage);
     }
 
     /**

@@ -54,6 +54,7 @@ public class KeyConfig {
     public static final int TYPE_ID_PHONE_LOGIN = 153;
     public static final int TYPE_ID_BIND_OUWAN = 154;
     public static final int TYPE_ID_PHONE_BIND_MAIN = 155;
+    public static final int TYPE_ID_SELECT_ACCOUNT = 156;
 
     /* gift list activity */
     public static final int TYPE_ID_GIFT_LIMIT = 170;

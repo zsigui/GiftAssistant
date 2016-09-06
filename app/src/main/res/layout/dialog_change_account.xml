@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              android:layout_width = "match_parent"
+              android:layout_height = "match_parent"
+              android:orientation = "vertical" >
+
+    <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+                  android:layout_width = "@dimen/di_dialog_default_width"
+                  android:layout_height = "wrap_content"
+                  android:background = "@color/co_white"
+                  android:orientation = "vertical" >
+
+        <TextView
+                android:id = "@+id/tv_title"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:paddingBottom = "@dimen/di_dialog_title_padding_top_bottom"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingTop = "@dimen/di_dialog_title_padding_top_bottom"
+                android:text = "@string/st_dialog_change_account_title"
+                android:textColor = "@color/co_common_app_second_bg_green" />
+
+        <View style = "@style/HDividerView" />
+
+        <TextView
+                android:id = "@+id/tv_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:padding = "@dimen/di_dialog_title_padding_left"
+                android:singleLine = "false"
+                android:text = "@string/st_dialog_change_account_content"
+                android:textColor = "@color/co_black" />
+
+        <TextView
+                android:id = "@+id/tv_hint"
+                style = "@style/DefaultTextView.Text"
+                android:layout_width = "match_parent"
+                android:gravity = "left|center_vertical"
+                android:paddingBottom = "@dimen/di_dialog_title_padding_left"
+                android:paddingLeft = "@dimen/di_dialog_title_padding_left"
+                android:paddingRight = "@dimen/di_dialog_title_padding_left"
+                android:singleLine = "false"
+                android:text = "@string/st_dialog_change_account_hint" />
+
+        <View style = "@style/HDividerView" />
+
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:gravity = "center"
+                android:orientation = "horizontal" >
+
+            <TextView
+                    android:id = "@+id/btn_cancel"
+                    style = "@style/NewButtonText"
+                    android:text = "@string/st_dialog_change_account_cancel"
+                    android:textColor = "@color/co_common_text_main" />
+
+            <View style = "@style/VDividerView" />
+
+            <TextView
+                    android:id = "@+id/btn_confirm"
+                    style = "@style/NewButtonText"
+                    android:text = "@string/st_dialog_change_account_ok"
+                    android:textColor = "@color/co_common_app_second_bg_green" />
+        </LinearLayout >
+
+    </LinearLayout >
+</LinearLayout >

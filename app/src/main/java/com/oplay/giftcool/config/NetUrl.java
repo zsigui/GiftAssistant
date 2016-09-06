@@ -8,11 +8,11 @@ public class NetUrl {
     /**
      * 测试地址
      */
-    public static final String TEST_URL_BASE = "https://test.lbapi.ouwan.com/api/";
+    public static final String TEST_URL_BASE = "http://test.lbapi.ouwan.com/api/";
     /**
      * 正式地址
      */
-    public static final String URL_BASE = "http://lbapi.ouwan.com/api/";
+    public static final String URL_BASE = "https://lbapi.ouwan.com/api/";
 
     public static final String TEST_SOCKET_IO_URL = "http://test.lbapi.ouwan.com/ws";
 
