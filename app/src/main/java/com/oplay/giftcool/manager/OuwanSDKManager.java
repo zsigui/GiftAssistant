@@ -253,7 +253,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
             result = new ArrayList<>();
             for (UmipayCommonAccount account : accountList) {
                 if (account != null && account.getUid() != 0
-                        && account.getDestPackageName().equalsIgnoreCase(packageName)) {
+                        && !account.getDestPackageName().equalsIgnoreCase(packageName)) {
                     result.add(account);
                 }
             }

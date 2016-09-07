@@ -103,12 +103,7 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
         mViews.add(tvTomorrow);
         mViews.add(tvAfter);
 
-        if(AssistantApp.getInstance().isReadAttention()) {
-            handleCheckClick(INDEX_FOCUS);
-        } else {
-            handleCheckClick(INDEX_TODAY);
-        }
-        handleCheckClick((mType != KeyConfig.TYPE_ID_OPEN_TEST && AssistantApp.getInstance().isReadAttention())?
+        handleCheckClick((mType != KeyConfig.TYPE_ID_OPEN_TEST && AssistantApp.getInstance().isReadAttention()) ?
                 INDEX_FOCUS : INDEX_TODAY);
     }
 
@@ -173,7 +168,8 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
             mLastIndex = index;
         }
         if (mFragments.get(index) == null) {
-            mFragments.set(index, ServerInfoListFragment.newInstance(mType, index == INDEX_FOCUS, mStartDates.get(index)));
+            mFragments.set(index, ServerInfoListFragment.newInstance(mType, index == INDEX_FOCUS, mStartDates.get
+                    (index)));
         }
         replaceFrag(R.id.fl_content, mFragments.get(index), mStartDates.get(index) + index, false);
         if (llAnchors != null) {
