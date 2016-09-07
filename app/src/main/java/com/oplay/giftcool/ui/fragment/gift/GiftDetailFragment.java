@@ -425,7 +425,13 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         ((BaseAppCompatActivity) getActivity()).setBarTitle(mAppInfo.name);
         ViewUtil.showImage(ivIcon, mAppInfo.img);
         if (AssistantApp.getInstance().isAllowDownload()) {
-            mAppInfo.initAppInfoStatus(getActivity());
+            if (mAppInfo != null && mAppInfo.downloadState == 1
+                    && !TextUtils.isEmpty(mAppInfo.downloadUrl)) {
+                btnDownload.setEnabled(true);
+                mAppInfo.initAppInfoStatus(getActivity());
+            } else {
+                btnDownload.setEnabled(false);
+            }
             int progress = ApkDownloadManager.getInstance(getActivity()).getProgressByUrl(mAppInfo
                     .downloadUrl);
             btnDownload.setStatus(mAppInfo.appStatus, "");

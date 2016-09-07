@@ -96,7 +96,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
         holder.tvDownload.setOnClickListener(this);
         holder.tvDownload.setTag(TAG_POSITION, position);
         holder.tvDownload.setTag(TAG_URL, o.downloadUrl);
-        ViewUtil.initDownloadBtnStatus(holder.tvDownload, o.appStatus);
+        ViewUtil.enableDownload(holder.tvDownload, o);
         mPackageNameMap.put(o.packageName, o);
         mUrlDownloadBtn.put(o.downloadUrl, holder.tvDownload);
         return convertView;

@@ -109,9 +109,10 @@ public class GameNoticeAdapter extends BaseRVAdapter_Download<IndexGameNew> impl
         }
         viewHolder.tvSize.setText(o.size);
         ViewUtil.showImage(viewHolder.ivIcon, o.img);
-        ViewUtil.initDownloadBtnStatus(viewHolder.btnDownload, o.appStatus);
         viewHolder.itemView.setOnClickListener(this);
         viewHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
+
+        ViewUtil.enableDownload(viewHolder.btnDownload, o);
         viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
         viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
         viewHolder.btnDownload.setOnClickListener(this);

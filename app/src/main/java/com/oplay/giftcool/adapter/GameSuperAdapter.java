@@ -20,9 +20,9 @@ import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
 import com.oplay.giftcool.adapter.itemdecoration.HeaderFooterDividerItemDecoration;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.config.util.GameTypeUtil;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.download.listener.OnDownloadStatusChangeListener;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
@@ -274,13 +274,12 @@ public class GameSuperAdapter extends BaseRVAdapter_Download implements OnDownlo
         }
         normalVH.tvSize.setText(o.size);
         ViewUtil.showImage(normalVH.ivIcon, o.img);
-        ViewUtil.initDownloadBtnStatus(normalVH.btnDownload, o.appStatus);
         normalVH.itemView.setOnClickListener(this);
         normalVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
         normalVH.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
         normalVH.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
         normalVH.btnDownload.setOnClickListener(this);
-
+        ViewUtil.enableDownload(normalVH.btnDownload, o);
         mPackageNameMap.put(o.packageName, o);
         mUrlDownloadBtn.put(o.downloadUrl, normalVH.btnDownload);
     }

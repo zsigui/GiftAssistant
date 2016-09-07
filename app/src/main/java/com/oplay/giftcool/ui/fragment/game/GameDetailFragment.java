@@ -1,6 +1,7 @@
 package com.oplay.giftcool.ui.fragment.game;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -112,6 +113,8 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
             return;
         }
         if (AssistantApp.getInstance().isAllowDownload()) {
+//                && mAppInfo != null && mAppInfo.downloadState != 0
+//                && !TextUtils.isEmpty(mAppInfo.downloadUrl)) {
             ThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -121,7 +124,13 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
                         downloadLayout.setVisibility(visible);
                     }
                     if (isShow && btnDownload != null) {
-                        mAppInfo.initAppInfoStatus(getContext());
+                        if (mAppInfo != null && mAppInfo.downloadState == 1
+                                && !TextUtils.isEmpty(mAppInfo.downloadUrl)) {
+                            btnDownload.setEnabled(true);
+                            mAppInfo.initAppInfoStatus(getActivity());
+                        } else {
+                            btnDownload.setEnabled(false);
+                        }
                         int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
                                 .downloadUrl);
                         btnDownload.setStatus(mAppInfo.appStatus, "");

@@ -81,6 +81,12 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
     @SerializedName("version_name")
     public String versionName;
 
+    /**
+     * 下载状态 1 开启 0 关闭
+     */
+    @SerializedName("download")
+    public int downloadState;
+
     @Override
     public boolean isExtendObjectValid() {
         return true;

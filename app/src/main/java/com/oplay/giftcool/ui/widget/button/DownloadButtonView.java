@@ -70,6 +70,15 @@ public class DownloadButtonView extends RelativeLayout {
         setText(s);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (!enabled) {
+            setText("下载");
+        }
+        mDownloadTextView.setEnabled(enabled);
+    }
+
     public AppStatus handleOnClick() {
         try {
             switch (mAppStatus) {

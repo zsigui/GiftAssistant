@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter_Download;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
@@ -79,21 +79,19 @@ public class OpenServerAdapter extends BaseRVAdapter_Download<ServerInfo> implem
                 break;
         }
         viewHolder.tvName.setText(o.name);
-        if (TextUtils.isEmpty(o.downloadUrl)) {
-            // 没有下载
-            viewHolder.btnDownload.setEnabled(false);
-            viewHolder.btnDownload.setText(STR_DOWNLOAD);
-        } else {
-            viewHolder.btnDownload.setEnabled(true);
-            ViewUtil.initDownloadBtnStatus(viewHolder.btnDownload, o.appStatus);
-        }
         ViewUtil.showImage(viewHolder.ivIcon, o.img);
         viewHolder.tvTime.setText(DateUtil.optDate(o.time));
         viewHolder.itemView.setOnClickListener(this);
         viewHolder.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
-        viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
-        viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
-        viewHolder.btnDownload.setOnClickListener(this);
+        if (AssistantApp.getInstance().isAllowDownload()) {
+            ViewUtil.enableDownload(viewHolder.btnDownload, o);
+            viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
+            viewHolder.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
+            viewHolder.btnDownload.setOnClickListener(this);
+            viewHolder.btnDownload.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.btnDownload.setVisibility(View.INVISIBLE);
+        }
         mPackageNameMap.put(o.packageName, o);
         mUrlDownloadBtn.put(o.downloadUrl, viewHolder.btnDownload);
     }

@@ -22,6 +22,7 @@ import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 
 import java.util.Locale;
@@ -74,6 +75,17 @@ public class ViewUtil {
                 view.setBackgroundResource(R.drawable.selector_btn_grey);
                 view.setTextColor(getColorState(view.getContext(), R.color.color_btn_grey_border));
                 break;
+        }
+    }
+
+    public static void enableDownload(TextView tv, GameDownloadInfo o) {
+        if (o.downloadState == 0 || TextUtils.isEmpty(o.downloadUrl)) {
+            // 没有下载
+            tv.setEnabled(false);
+            tv.setText("下载");
+        } else {
+            tv.setEnabled(true);
+            ViewUtil.initDownloadBtnStatus(tv, o.appStatus);
         }
     }
 

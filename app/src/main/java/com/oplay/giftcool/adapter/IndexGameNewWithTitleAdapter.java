@@ -78,12 +78,12 @@ public class IndexGameNewWithTitleAdapter extends BaseRVAdapter_Download<IndexGa
                 }
                 normalVH.tvSize.setText(o.size);
                 ViewUtil.showImage(normalVH.ivIcon, o.img);
-                ViewUtil.initDownloadBtnStatus(normalVH.btnDownload, o.appStatus);
                 normalVH.itemView.setOnClickListener(this);
                 normalVH.itemView.setTag(IndexTypeUtil.TAG_POSITION, position);
                 normalVH.btnDownload.setTag(IndexTypeUtil.TAG_POSITION, position);
                 normalVH.btnDownload.setTag(IndexTypeUtil.TAG_URL, o.downloadUrl);
                 normalVH.btnDownload.setOnClickListener(this);
+                ViewUtil.enableDownload(normalVH.btnDownload, o);
 
                 mPackageNameMap.put(o.packageName, o);
                 mUrlDownloadBtn.put(o.downloadUrl, normalVH.btnDownload);
