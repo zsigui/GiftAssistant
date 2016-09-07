@@ -58,8 +58,7 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
             return;
         } else {
             ArrayList<UmipayCommonAccount> mCommonAccountList = UmipayCommonAccountCacheManager.getInstance
-                    (getApplicationContext()).getCommonAccountListExceptWithPacakge(
-                    UmipayCommonAccountCacheManager.COMMON_ACCOUNT, getPackageName());
+                    (getApplicationContext()).getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
             UmipayAccount account = UmipayAccountManager.getInstance(this).getCurrentAccount();
             if (mCommonAccountList != null && mCommonAccountList.size() > 0
                     && account == null) {

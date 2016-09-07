@@ -54,8 +54,8 @@ public class SelectAccountFragment extends BaseFragment implements CommonAccount
             getActivity().finish();
             return;
         }
-        ArrayList<UmipayCommonAccount> data = UmipayCommonAccountCacheManager.getInstance(getActivity())
-                .getCommonAccountListExceptWithPacakge(UmipayCommonAccountCacheManager.COMMON_ACCOUNT,
+        ArrayList<UmipayCommonAccount> data = OuwanSDKManager.getInstance()
+                .getAccountExceptPackage(UmipayCommonAccountCacheManager.COMMON_ACCOUNT,
                         getContext().getPackageName());
         if (data == null || data.isEmpty()) {
             getActivity().finish();

@@ -153,6 +153,7 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                             mData.userInfo.bindOuwanStatus = 1;
                             mData.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
                             AccountManager.getInstance().notifyUserAll(mData);
+                            reqData.data.setOuwanUser(reqData.data.getUsername(), reqData.data.getPassword(), true);
                             AccountManager.getInstance().writeOuwanAccount(reqData.data.getUsername() + ","
                                             + reqData.data.getPassword(), AccountManager.getInstance()
                                     .readOuwanAccount(),

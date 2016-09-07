@@ -148,6 +148,7 @@ public class SocketIOManager {
                             final MissionReward reward = gson.fromJson(args[0].toString(), MissionReward.class);
                             // 处于前台中，直接发送通知
                             if (reward != null) {
+                                AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "接收到奖励消息：" + reward.toString());
                                 if (SystemUtil.isMyAppInForeground()) {
                                     ThreadUtil.runOnUiThread(new Runnable() {
                                         @Override

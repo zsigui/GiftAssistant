@@ -186,34 +186,6 @@ public class UmipayCommonAccountCacheManager {
         return true;
     }
 
-
-    public synchronized ArrayList<UmipayCommonAccount> getCommonAccountListExceptWithPacakge(
-            int accountType, String execptPackage) {
-        ArrayList<UmipayCommonAccount> umipayCommonAccountArrayList = new ArrayList<UmipayCommonAccount>();
-        String fileName = (accountType == COMMON_ACCOUNT) ? COMMON_ACCOUNT_FILE : COMMON_ACCOUNT_TOCHANGE_FILE;
-        UmipayCommonAccountData umipayCommonAccountData = readUmipayCommonAccountData(fileName);
-        if (umipayCommonAccountData != null) {
-            JSONArray jsonArray = umipayCommonAccountData.getCommonAccountJSONArray();
-            if (jsonArray != null) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    try {
-                        String json = Basic_JSONUtil.getString(jsonArray, i, "");
-                        if (!TextUtils.isEmpty(json)) {
-                            UmipayCommonAccount account = new UmipayCommonAccount(json);
-                            if (checkDate(account) && (!account.getDestPackageName().equalsIgnoreCase(execptPackage)
-                                    || !account.getOriginPackageName().equalsIgnoreCase(execptPackage))) {
-                                umipayCommonAccountArrayList.add(account);
-                            }
-                        }
-                    } catch (Throwable e) {
-                        Debug_Log.e(e);
-                    }
-                }
-            }
-        }
-        return umipayCommonAccountArrayList;
-    }
-
     public synchronized ArrayList<UmipayCommonAccount> getCommonAccountList(int accountType) {
         ArrayList<UmipayCommonAccount> umipayCommonAccountArrayList = new ArrayList<UmipayCommonAccount>();
         String fileName = (accountType == COMMON_ACCOUNT) ? COMMON_ACCOUNT_FILE : COMMON_ACCOUNT_TOCHANGE_FILE;
@@ -292,7 +264,7 @@ public class UmipayCommonAccountCacheManager {
                                 account.setSession(umipayCommonAccount.getSession());
                                 account.setUserName(umipayCommonAccount.getUserName());
                                 account.setTimestamp_s(umipayCommonAccount.getTimestamp_s());
-                                jsonArray.put(i, account);
+                                jsonArray.put(i, new JSONObject(account.serialize()));
                             }
                         }
                     } catch (Throwable e) {

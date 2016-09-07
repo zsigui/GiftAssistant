@@ -157,6 +157,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
         ReqIndexGift data = new ReqIndexGift();
         data.pageSize = 20;
+        data.appNames = new HashSet<>();
         mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
         mLastPage = PAGE_FIRST;
         readLikeCacheData();

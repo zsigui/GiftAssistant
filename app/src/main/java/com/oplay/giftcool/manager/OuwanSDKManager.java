@@ -114,10 +114,10 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         UmipayAccount account;
         if (AccountManager.getInstance().isPhoneLogin()) {
             account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_MOBILE);
-            account.setUserName(AccountManager.getInstance().getUserInfo().username);
         } else {
             account = new UmipayAccount(user.openId, null, UmipayAccount.TYPE_NORMAL);
         }
+        account.setUserName(AccountManager.getInstance().getUserInfo().username);
         account.setSession(user.session);
         account.setUid(user.uid);
         account.setGameUserInfo(sdkUser);
@@ -181,24 +181,24 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         }
     }
 
-//    private void showStoredAccount() {
-//        ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
-//                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
-//        int i = 0;
-//        for (UmipayCommonAccount account : accounts) {
-//            AppDebugConfig.d(AppDebugConfig.TAG_WARN,
-//                    String.format(Locale.CHINA, i++ + " : uid = %s, " +
-//                                    "uname = %s, " +
-//                                    "session = %s, " +
-//                                    "dest_package = %s, " +
-//                                    "origin_apk = %s, " +
-//                                    "origin_package = %s",
-//                            account.getUid(), account.getUserName(), account.getSession(),
-//                            account.getDestPackageName(),
-//                            account.getOriginApkName(),
-//                            account.getOriginPackageName()));
-//        }
-//    }
+    private void showStoredAccount() {
+        ArrayList<UmipayCommonAccount> accounts = UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountList(UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
+        int i = 0;
+        for (UmipayCommonAccount account : accounts) {
+            AppDebugConfig.d(AppDebugConfig.TAG_WARN,
+                    String.format(Locale.CHINA, "showStoredAccount " + i++ + " : uid = %s, " +
+                                    "uname = %s, " +
+                                    "session = %s, " +
+                                    "dest_package = %s, " +
+                                    "origin_apk = %s, " +
+                                    "origin_package = %s",
+                            account.getUid(), account.getUserName(), account.getSession(),
+                            account.getDestPackageName(),
+                            account.getOriginApkName(),
+                            account.getOriginPackageName()));
+        }
+    }
 
     /**
      * 账号变更
@@ -237,13 +237,28 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 || sIsWakeChangeAccountAction)
             return;
 
-        ArrayList<UmipayCommonAccount> mCommonAccountList = UmipayCommonAccountCacheManager.getInstance(mContext)
-                .getCommonAccountListExceptWithPacakge(
+        ArrayList<UmipayCommonAccount> mCommonAccountList = getAccountExceptPackage(
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT, mContext.getPackageName());
         if (mCommonAccountList != null && mCommonAccountList.size() > 0) {
 
             IntentUtil.jumpSelectAccount(mContext);
         }
+    }
+
+    public ArrayList<UmipayCommonAccount> getAccountExceptPackage(int type, String packageName) {
+        ArrayList<UmipayCommonAccount> result = null;
+        ArrayList<UmipayCommonAccount> accountList =  UmipayCommonAccountCacheManager.getInstance(mContext)
+                .getCommonAccountList(type);
+        if (accountList != null && !accountList.isEmpty()) {
+            result = new ArrayList<>();
+            for (UmipayCommonAccount account : accountList) {
+                if (account != null && account.getUid() != 0
+                        && account.getDestPackageName().equalsIgnoreCase(packageName)) {
+                    result.add(account);
+                }
+            }
+        }
+        return result;
     }
 
     /**

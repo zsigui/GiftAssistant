@@ -82,6 +82,7 @@ public class PayManager {
 //            ToastUtil.showShort("哎呦，执行出了点小问题，要不重启试试？");
             return WebViewInterface.RET_PARAM_ERR;
         }
+        gift.buttonState = (gift.buttonState == 0 ? GiftTypeUtil.getButtonState(gift) : gift.buttonState);
         if (gift.buttonState == GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN) {
             IntentUtil.jumpPostDetail(context, gift.activityId);
             return WebViewInterface.RET_SUCCESS;
