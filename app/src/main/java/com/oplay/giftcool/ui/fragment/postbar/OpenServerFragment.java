@@ -76,7 +76,7 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
         tvToday.setOnClickListener(this);
         tvTomorrow.setOnClickListener(this);
         tvAfter.setOnClickListener(this);
-        if (getActivity() instanceof ServerInfoActivity) {
+        if (mType != KeyConfig.TYPE_ID_OPEN_TEST && getActivity() instanceof ServerInfoActivity) {
             ((ServerInfoActivity) getActivity()).addListener(this);
         }
     }
@@ -108,6 +108,8 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
         } else {
             handleCheckClick(INDEX_TODAY);
         }
+        handleCheckClick((mType != KeyConfig.TYPE_ID_OPEN_TEST && AssistantApp.getInstance().isReadAttention())?
+                INDEX_FOCUS : INDEX_TODAY);
     }
 
     @Override
@@ -136,7 +138,7 @@ public class OpenServerFragment extends BaseFragment implements CallbackListener
     @Override
     public void release() {
         super.release();
-        if (getActivity() instanceof ServerInfoActivity) {
+        if (mType != KeyConfig.TYPE_ID_OPEN_TEST && getActivity() instanceof ServerInfoActivity) {
             ((ServerInfoActivity) getActivity()).removeListener(this);
         }
     }

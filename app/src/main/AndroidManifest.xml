@@ -515,6 +515,9 @@
                 <action android:name = "android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter >
         </receiver >
+        <!-- 切换账号广播，此处只作为空壳 -->
+        <receiver
+                android:name = "net.ouwan.umipay.android.api.UmipayAccountChangeReceiver" />
 
         <meta-data
                 android:name = "UMIPAY_CHANNEL"
