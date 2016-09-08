@@ -108,6 +108,7 @@ public class NetworkUtil {
      * 是否存在有效的WIFI连接
      */
     public static boolean isWifiConnected(Context context) {
+        if (context == null) return false;
         NetworkInfo net = getConnectivityManager(context.getApplicationContext()).getActiveNetworkInfo();
         return net != null && net.getType() == ConnectivityManager.TYPE_WIFI && net.isConnected();
     }

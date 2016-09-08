@@ -182,7 +182,10 @@ public class AssistantApp extends Application {
                     String.format("%s\n%s", NetUrl.TEST_URL_BASE, WebViewUrl.TEST_URL_BASE));
             String[] s = data.split("\n");
             NetUrl.REAL_URL = s[0].trim();
-            if (s.length > 1) {
+            if (s.length > 2) {
+                WebViewUrl.REAL_URL = s[1].trim();
+                NetUrl.REAL_SOCKET_URL = s[2].trim();
+            } else if (s.length > 1) {
                 WebViewUrl.REAL_URL = s[1].trim();
             }
         }

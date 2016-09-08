@@ -2,7 +2,7 @@
 
 
     <!-- Base application theme. -->
-    <style name = "AppTheme" parent = "Theme.AppCompat.Light.NoActionBar" >
+    <style name = "AppCustomBaseTheme" parent = "Theme.AppCompat.Light.NoActionBar" >
         <item name = "colorPrimary" >@color/co_common_app_main_bg</item >
         <item name = "colorPrimaryDark" >@color/co_status_bar_bg</item >
         <item name = "colorAccent" >@color/co_tool_bar_item_bg</item >
@@ -22,6 +22,7 @@
         <item name = "windowNoTitle" >true</item >
         <item name = "android:windowBackground" >@color/co_transparent</item >
         <item name = "android:background" >@color/co_transparent</item >
+        <item name = "android:windowIsTranslucent">true</item>
 
         <!-- actionBarSize changed in Lolipop -->
         <item name = "android:actionBarSize" >@dimen/di_tool_bar_bg_height</item >
@@ -39,12 +40,17 @@
         <!--<item code = "android:windowTranslucentStatus" >true</item >-->
         <!--<item code = "android:fitsSystemWindows" >true</item >-->
 
-
-        <item name = "android:activityOpenEnterAnimation" >@anim/show_fade_in</item >
-        <item name = "android:activityCloseEnterAnimation" >@anim/show_fade_in</item >
-        <item name = "android:activityOpenExitAnimation" >@anim/show_fade_out</item >
-        <item name = "android:activityCloseExitAnimation" >@anim/show_fade_out</item >
+        <item name = "android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style >
+
+    <style name="AppTheme" parent="AppCustomBaseTheme" />
+
+    <style name = "ActivityAnimation" parent="@android:style/Animation.Translucent">
+        <item name="android:activityOpenEnterAnimation">@anim/open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/close_exit</item>
+    </style>
 
     <style name = "ActionButton.AppTheme" parent = "Widget.AppCompat.Light.ActionButton" >
         <item name = "android:minWidth" >?actionBarSize</item >
@@ -380,7 +386,7 @@
     </style >
 
     <!-- 弹窗去掉背景样式 -->
-    <style name = "DefaultCustomDialog" parent = "@android:style/Theme.Dialog" >
+    <style name = "DefaultCustomDialog" parent = "Theme.AppCompat.Dialog" >
         <item name = "android:windowFrame" >@null</item >
         <item name = "android:windowIsFloating" >true</item >
         <item name = "android:windowIsTranslucent" >true</item >
@@ -399,12 +405,6 @@
     <!-- 去掉Activity背景 -->
     <style name = "Opacity70Activity" parent="AppTheme">
         <item name = "android:windowBackground">@color/co_opacity_70</item>
-        <item name = "android:windowNoTitle">true</item>
-        <item name = "android:windowIsTranslucent">true</item>
-    </style>
-
-    <style name="TranslucentActivity" parent="AppTheme">
-        <item name = "android:windowBackground">@color/co_transparent</item>
         <item name = "android:windowNoTitle">true</item>
         <item name = "android:windowIsTranslucent">true</item>
     </style>

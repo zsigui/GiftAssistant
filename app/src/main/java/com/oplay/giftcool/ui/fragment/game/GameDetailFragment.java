@@ -113,8 +113,6 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
             return;
         }
         if (AssistantApp.getInstance().isAllowDownload()) {
-//                && mAppInfo != null && mAppInfo.downloadState != 0
-//                && !TextUtils.isEmpty(mAppInfo.downloadUrl)) {
             ThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -124,17 +122,17 @@ public class GameDetailFragment extends BaseFragment_WebView implements OnDownlo
                         downloadLayout.setVisibility(visible);
                     }
                     if (isShow && btnDownload != null) {
-                        if (mAppInfo != null && mAppInfo.downloadState == 1
+                        if (mAppInfo.downloadState == 1
                                 && !TextUtils.isEmpty(mAppInfo.downloadUrl)) {
-                            btnDownload.setEnabled(true);
                             mAppInfo.initAppInfoStatus(getActivity());
+                            btnDownload.setEnabled(true);
+                            int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
+                                    .downloadUrl);
+                            btnDownload.setStatus(mAppInfo.appStatus, "");
+                            btnDownload.setProgress(progress);
                         } else {
                             btnDownload.setEnabled(false);
                         }
-                        int progress = ApkDownloadManager.getInstance(getContext()).getProgressByUrl(mAppInfo
-                                .downloadUrl);
-                        btnDownload.setStatus(mAppInfo.appStatus, "");
-                        btnDownload.setProgress(progress);
                     }
                 }
             });
