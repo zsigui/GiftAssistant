@@ -20,7 +20,7 @@ public class DecryptDataModel {
 	/**
 	 * SDK版本号，默认
 	 */
-	private int mSdkVer = AppConfig.SDK_VER;
+	private int mSdkVer = AppConfig.SDK_VER();
 	/**
 	 * 平台系统，默认
 	 */

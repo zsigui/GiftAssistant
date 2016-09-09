@@ -279,7 +279,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         try {
             if (intent != null && intent.getAction() != null) {
                 String action = intent.getAction();
-                if (action.equals(AppConfig.PACKAGE_NAME + ".action.MAIN")) {
+                if (action.equals(AppConfig.PACKAGE_NAME() + ".action.MAIN")) {
                     int type = intent.getIntExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_DEFAULT);
                     String dStr = intent.getStringExtra(KeyConfig.KEY_DATA);
                     int data = Integer.parseInt(TextUtils.isEmpty(dStr) ? "0" : dStr);

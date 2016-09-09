@@ -57,7 +57,7 @@ public class CommonUtil {
 			model.setDd(Global_Runtime_SystemInfo.getDeviceModel());
 			model.setDv(Global_Runtime_SystemInfo.getManufacturerInfo());
 			model.setOs(Global_Runtime_SystemInfo.getDeviceOsRelease());
-			model.setVersion(AppConfig.SDK_VER);
+			model.setVersion(AppConfig.SDK_VER());
 			if (TextUtils.isEmpty(model.getImei()) || TextUtils.isEmpty(model.getImsi())
 					|| TextUtils.isEmpty(model.getCid()) || TextUtils.isEmpty(model.getMac())
 					|| model.getChn() == -1 || TextUtils.isEmpty(model.getApn())

@@ -8,10 +8,10 @@ import com.oplay.giftcool.BuildConfig;
 public class AppConfig {
 
     /* APP版本信息 */
-    public static final int SDK_VER = BuildConfig.VERSION_CODE;
-    public static final String SDK_VER_NAME = BuildConfig.VERSION_NAME;
-    public static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
-    public static final String OUWAN_SDK_VER = BuildConfig.OUWAN_SDK_VERSION;
+    public static int SDK_VER() { return BuildConfig.VERSION_CODE; }
+    public static String SDK_VER_NAME() { return BuildConfig.VERSION_NAME; }
+    public static String PACKAGE_NAME() { return BuildConfig.APPLICATION_ID; }
+    public static String OUWAN_SDK_VER() { return BuildConfig.OUWAN_SDK_VERSION; }
 
     /* 测试环境 */
     public static boolean TEST_MODE = BuildConfig.TEST_MODE;

@@ -16,7 +16,7 @@ import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
  */
 public class AccountReceiver extends BroadcastReceiver {
 
-    public static final String ACTION_SELECT = AppConfig.PACKAGE_NAME + ".account.select";
+    public static final String ACTION_SELECT = AppConfig.PACKAGE_NAME() + ".account.select";
 
     @Override
     public void onReceive(Context context, Intent intent) {

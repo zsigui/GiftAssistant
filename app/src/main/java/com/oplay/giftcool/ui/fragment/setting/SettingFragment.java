@@ -96,7 +96,7 @@ public class SettingFragment extends BaseFragment {
         } else {
             mBtnAutoFocus.setToggleOff();
         }
-        mVer.setText(AppConfig.SDK_VER_NAME);
+        mVer.setText(AppConfig.SDK_VER_NAME());
         updateData();
     }
 

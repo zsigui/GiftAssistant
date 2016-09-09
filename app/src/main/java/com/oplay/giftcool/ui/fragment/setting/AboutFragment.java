@@ -66,7 +66,7 @@ public class AboutFragment extends BaseFragment {
     protected void processLogic(Bundle savedInstanceState) {
         mContext = getContext();
         tvUpdate.setText(mContext.getResources().getString(R.string.st_about_checking_update));
-        tvVersion.setText("礼包酷 " + AppConfig.SDK_VER_NAME);
+        tvVersion.setText("礼包酷 " + AppConfig.SDK_VER_NAME());
         tvQQ.setText(MixUtil.getQQInfo()[0]);
     }
 

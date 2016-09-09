@@ -130,8 +130,8 @@ public class PushMessageManager {
      * 部分自定义推送Action
      */
     public interface Action {
-        String M_RECEIVED = AppConfig.PACKAGE_NAME + ".mipush.RECEIVE_ARRIVED";
-        String M_OPENED = AppConfig.PACKAGE_NAME + ".mipush.RECEIVE_MESSAGE";
+        String M_RECEIVED = AppConfig.PACKAGE_NAME() + ".mipush.RECEIVE_ARRIVED";
+        String M_OPENED = AppConfig.PACKAGE_NAME() + ".mipush.RECEIVE_MESSAGE";
     }
 
     // 本地JPUSH推送的Id

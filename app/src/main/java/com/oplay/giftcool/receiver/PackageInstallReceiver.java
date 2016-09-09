@@ -56,7 +56,7 @@ public class PackageInstallReceiver extends BroadcastReceiver {
                 if (Global.getInstalledAppNames() != null) {
                     Global.getInstalledAppNames().remove(SystemUtil.getAppNameByPackName(context, packName));
                 }
-                if (AppConfig.PACKAGE_NAME.equals(packName)) {
+                if (AppConfig.PACKAGE_NAME().equals(packName)) {
                     AppDebugConfig.d(AppDebugConfig.TAG_DOWNLOAD, "package_removed : " + packName);
                     Util_System_Intent.startActivityByPackageName(context, packName,
                             Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);

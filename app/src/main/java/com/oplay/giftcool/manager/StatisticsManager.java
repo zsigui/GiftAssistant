@@ -180,7 +180,7 @@ public class StatisticsManager {
             TCAgent.LOG_ON = true;
             TCAgent.init(context, TC_APP_KEY, String.valueOf(channelId));
             TCAgent.setReportUncaughtExceptions(false);
-            TCAgent.setAdditionalVersionNameAndCode(AppConfig.SDK_VER_NAME, AppConfig.SDK_VER);
+            TCAgent.setAdditionalVersionNameAndCode(AppConfig.SDK_VER_NAME(), AppConfig.SDK_VER());
             TCAgent.setPushDisabled();
             AppDebugConfig.d(AppDebugConfig.TAG_STATICS, "Talking Data init");
         } catch (Throwable t) {

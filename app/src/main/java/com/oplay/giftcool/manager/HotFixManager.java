@@ -31,7 +31,7 @@ public class HotFixManager {
 
     private HotFixManager() {
         mPatchManager = new PatchManager(AssistantApp.getInstance());
-        mPatchManager.init(String.valueOf(AppConfig.SDK_VER));
+        mPatchManager.init(String.valueOf(AppConfig.SDK_VER()));
         mPatchManager.loadPatch();
 //        RocooFix.init(AssistantApp.getInstance());
         AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "初始化HotFixManager实例");
@@ -44,9 +44,9 @@ public class HotFixManager {
     private PatchManager mPatchManager = null;
 
     public void requestPatchFromServer() {
-        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "请求补丁文件，当前版本号：" + AppConfig.SDK_VER);
+        AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "请求补丁文件，当前版本号：" + AppConfig.SDK_VER());
         ReqPatchInfo info = new ReqPatchInfo();
-        info.verCode = AppConfig.SDK_VER;
+        info.verCode = AppConfig.SDK_VER();
         Global.getNetEngine().requestPatch(new JsonReqBase<ReqPatchInfo>(info))
                 .enqueue(new Callback<JsonRespBase<GameDownloadInfo>>() {
                     @Override

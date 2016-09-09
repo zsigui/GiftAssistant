@@ -296,8 +296,8 @@ public class AssistantApp extends Application {
     public String getHeaderValue() {
         if (TextUtils.isEmpty(mHeaderValue)) {
             mHeaderValue = String.format(Locale.CHINA, ConstString.TEXT_HEADER,
-                    AppConfig.PACKAGE_NAME, AppConfig.SDK_VER,
-                    AppConfig.SDK_VER_NAME, getChannelId(), AppConfig.OUWAN_SDK_VER);
+                    AppConfig.PACKAGE_NAME(), AppConfig.SDK_VER(),
+                    AppConfig.SDK_VER_NAME(), getChannelId(), AppConfig.OUWAN_SDK_VER());
         }
         return mHeaderValue;
     }

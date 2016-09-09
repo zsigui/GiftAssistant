@@ -160,11 +160,11 @@ public class AlarmClockManager {
     }
 
     public interface Action {
-        String ALARM_WAKE = AppConfig.PACKAGE_NAME + ".clock_action.ALARM_WAKE";
+        String ALARM_WAKE = AppConfig.PACKAGE_NAME() + ".clock_action.ALARM_WAKE";
 //		String ALARM_PLAY_GAME = AppConfig.PACKAGE_NAME + ".clock_action.PLAY_GAME";
     }
 
     public interface Category {
-        String GCOOL_DEFAULT = AppConfig.PACKAGE_NAME;
+        String GCOOL_DEFAULT = AppConfig.PACKAGE_NAME();
     }
 }

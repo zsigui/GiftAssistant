@@ -38,7 +38,7 @@ public class DownloadNotificationManager {
     public static final int REQUEST_ID_USERMESSAGE = 1024;
 
     public static final String ACTION_OPEN_DOWNLOAD_FRAGMENT = "giftcool.action.download.SHOW_VIEW";
-    public static final String CATEGORY_DOWNLOAD = AppConfig.PACKAGE_NAME;
+    public static final String CATEGORY_DOWNLOAD = AppConfig.PACKAGE_NAME();
 
     public static class DownloadReceiver extends BroadcastReceiver {
 

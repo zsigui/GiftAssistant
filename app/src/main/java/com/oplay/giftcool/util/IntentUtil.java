@@ -475,7 +475,7 @@ public class IntentUtil {
     public static void jumpHome(Context context, int type, int data) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setAction(AppConfig.PACKAGE_NAME + ".action.Main");
+        intent.setAction(AppConfig.PACKAGE_NAME() + ".action.Main");
         intent.putExtra(KeyConfig.KEY_TYPE, type);
         intent.putExtra(KeyConfig.KEY_DATA, String.valueOf(data));
         context.startActivity(intent);
@@ -597,7 +597,7 @@ public class IntentUtil {
      * 处理额外信息类型为一(进行页面跳转)的数据
      */
     public static void handleJumpInfo(Context context, TaskInfoOne taskInfo) {
-        final String ACTION_PREFIX = AppConfig.PACKAGE_NAME + ".action.";
+        final String ACTION_PREFIX = AppConfig.PACKAGE_NAME() + ".action.";
         if ("GameDetail".equalsIgnoreCase(taskInfo.action)) {
             IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));
         } else if ("GiftDetail".equalsIgnoreCase(taskInfo.action)) {

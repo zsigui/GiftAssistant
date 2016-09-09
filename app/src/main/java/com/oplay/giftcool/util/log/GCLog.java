@@ -187,8 +187,8 @@ public class GCLog {
             String methodNameShort = methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(DateUtil.formatTime(System.currentTimeMillis(), "MM-dd HH:mm:ss.sss "));
-            stringBuilder.append("V/").append(AppConfig.PACKAGE_NAME).append("(").append(AppConfig.SDK_VER).append(")" +
-                    " ");
+            stringBuilder.append("V/").append(AppConfig.PACKAGE_NAME()).append("(")
+                    .append(AppConfig.SDK_VER()).append(") ");
             stringBuilder.append("D/").append(tagStr == null ? "DEFAULT" : tagStr).append(": ");
             stringBuilder.append("[ (").append(className).append(":")
                     .append(lineNumber).append(")#").append(methodNameShort).append(" ] ");
