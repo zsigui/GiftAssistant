@@ -41,7 +41,10 @@ import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * 混杂工具类，用于放置一些重复的方法
@@ -245,10 +248,16 @@ public class MixUtil {
         um.userInfo.loginType = UserTypeUtil.TYPE_POHNE;
         doLoginSuccessNext(context, um);
 
-        StatisticsManager.getInstance().trace(context,
-                StatisticsManager.ID.USER_PHONE_BIND_MAIN,
-                StatisticsManager.ID.STR_USER_PHONE_BIND_MAIN,
-                "手机号:" + um.userInfo.phone + ", 对应绑定偶玩账号: " + um.userInfo.username);
+        if (AppDebugConfig.IS_STATISTICS_SHOW) {
+            Map<String, String> keyVal = new HashMap<>();
+            // 手机号: %s, 对应绑定偶玩账号: %s, 是否首次登录: %b, 绑定情况: %d, 是否空Context: %b
+            keyVal.put("登录信息", String.format(Locale.CHINA, "p:%s, u:%s, i:%b, b:%d, c:%b",
+                    um.userInfo.phone, um.userInfo.username,
+                    um.userInfo.isFirstLogin, um.userInfo.bindOuwanStatus, (context == null)));
+            StatisticsManager.getInstance().trace(context,
+                    StatisticsManager.ID.USER_PHONE_LOGIN,
+                    StatisticsManager.ID.STR_USER_PHONE_LOGIN, "手机登录", keyVal, 0);
+        }
     }
 
     public static void doLoginSuccessNext(Context context, UserModel um) {
@@ -259,17 +268,32 @@ public class MixUtil {
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
 
-        if (context != null && context instanceof LoginActivity) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "context = " + (context instanceof LoginActivity) + ", activity = "
+                + context);
+        if (context != null) {
             if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_NOT_BIND
                     || um.userInfo.bindOuwanStatus == 1) {
-                ((LoginActivity) context).doLoginBack();
+                if (context instanceof LoginActivity) {
+                    ((LoginActivity) context).doLoginBack();
+                } else if (context instanceof BaseAppCompatActivity) {
+                    ((BaseAppCompatActivity) context).finish();
+                }
             } else {
-                // 未绑定偶玩账号，需要绑定
-                ((BaseAppCompatActivity) context).replaceFragWithTitle(R.id.fl_container,
-                        BindOwanFragment.newInstance(um, true),
-                        context.getResources().getString(um.userInfo.phoneCanUseAsUname ?
-                                R.string.st_login_bind_owan_title_1
-                                : R.string.st_login_bind_owan_title_2), false);
+                if (context instanceof LoginActivity) {
+                    // 未绑定偶玩账号，需要绑定
+                    ((BaseAppCompatActivity) context).replaceFragWithTitle(R.id.fl_container,
+                            BindOwanFragment.newInstance(um, true),
+                            context.getResources().getString(um.userInfo.phoneCanUseAsUname ?
+                                    R.string.st_login_bind_owan_title_1
+                                    : R.string.st_login_bind_owan_title_2), false);
+                } else {
+                    IntentUtil.jumpBindOwan(AssistantApp.getInstance(), um);
+                }
+            }
+        } else {
+            if (AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+                    && um.userInfo.bindOuwanStatus != 1) {
+                IntentUtil.jumpBindOwan(AssistantApp.getInstance(), um);
             }
         }
 //        else {

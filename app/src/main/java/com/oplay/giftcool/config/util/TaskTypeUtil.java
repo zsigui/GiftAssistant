@@ -105,4 +105,8 @@ public class TaskTypeUtil {
      * 使用偶玩豆购买礼包
      */
     public static final String ID_BUG_GIFT_USE_OUWAN = "BUG_GIFT_USE_OUWAN_DOU";
+    /**
+     * 绑定偶玩账号
+     */
+    public static final String ID_SETUP_OUWAN_ACCOUNT = "SETUP_OUWAN_ACCOUNT";
 }

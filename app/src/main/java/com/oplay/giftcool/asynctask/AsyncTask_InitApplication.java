@@ -141,6 +141,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
         if (mNeedUpdateSession) {
             AccountManager.getInstance().updateUserSession(true);
+            mNeedUpdateSession = false;
         }
 
         // 初始化配置，获取更新信息

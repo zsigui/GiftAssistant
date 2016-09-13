@@ -441,7 +441,7 @@ public class PhoneLoginNewFragment extends BaseFragment implements TextView.OnEd
                             if (response.body() != null
                                     && response.body().getCode() == NetStatusCode.SUCCESS) {
                                 UserModel um = response.body().getData();
-                                MixUtil.doPhoneLoginSuccessNext(getActivity(), um);
+                                MixUtil.doPhoneLoginSuccessNext(getContext(), um);
                                 AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
                                 return;
                             }

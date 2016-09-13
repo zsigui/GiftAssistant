@@ -52,6 +52,8 @@ public class ScoreManager {
     public String mRewardCode = null;
 
 
+
+
     public String getRewardCode() {
         return mRewardCode;
     }
@@ -59,18 +61,6 @@ public class ScoreManager {
     public void setRewardCode(String rewardCode) {
         mRewardCode = rewardCode;
     }
-
-//	@Deprecated
-//	public void toastByCallback(TaskReward task, boolean needNotify) {
-//		if (task != null && task.rewardPoints != 0 && AccountManager.getInstance().isLogin()) {
-//			// 评论任务完成，奖励金币
-//			ToastUtil.showScoreReward(task.taskName, task.rewardPoints);
-//			if (needNotify) {
-//				// 通知刷新金币
-//				AccountManager.getInstance().updatePartUserInfo();
-//			}
-//		}
-//	}
 
     public void toastByCallback(MissionReward reward, boolean needNotify) {
         if (reward != null && reward.code == 0 && reward.data != null) {
@@ -147,60 +137,6 @@ public class ScoreManager {
                     }
                 });
     }
-
-
-//	/**
-//	 * 每天首次启动APP显示欢迎弹窗
-//	 */
-//	public void showWelComeDialog(final FragmentManager fm, final Context context, final TaskReward task) {
-//		if (task == null) {
-//			// 未登录 task == null
-//			final WelcomeDialog unloginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_unlogin);
-//			unloginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_unlogin_btn));
-//			unloginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-//				@Override
-//				public void onCancel() {
-//					unloginDialog.dismissAllowingStateLoss();
-//				}
-//
-//				@Override
-//				public void onConfirm() {
-//					IntentUtil.jumpLoginNoToast(context);
-//					unloginDialog.dismissAllowingStateLoss();
-//				}
-//			});
-//			unloginDialog.show(fm, WelcomeDialog.class.getSimpleName());
-//		}
-//		if (task != null && task.rewardPoints > 0) {
-//			final WelcomeDialog loginDialog;
-//			if (task.rewardPoints >= 100) {
-//				// 首次登录金币 >= 100
-//				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login_first);
-//			} else {
-//				// 再次登录金币 < 100
-//				loginDialog = WelcomeDialog.newInstance(R.layout.dialog_welcome_login);
-//			}
-//			loginDialog.setScore(task.rewardPoints);
-//			loginDialog.setPositiveBtnText(context.getResources().getString(R.string.st_welcome_login_btn));
-//			loginDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-//				@Override
-//				public void onCancel() {
-//					loginDialog.dismissAllowingStateLoss();
-//				}
-//
-//				@Override
-//				public void onConfirm() {
-//					IntentUtil.jumpEarnScore(context);
-//					loginDialog.dismissAllowingStateLoss();
-//				}
-//			});
-//			loginDialog.show(fm, WelcomeDialog.class.getSimpleName());
-//			if (AccountManager.getInstance().isLogin()) {
-//				// 清除登录信息
-//				UserModel user = AccountManager.getInstance().getUser();
-//			}
-//		}
-//	}
 
     /**
      * 通知任务完成的请求实体
@@ -382,5 +318,9 @@ public class ScoreManager {
      */
     public void setTaskFinished(boolean taskFinished) {
         mTaskFinished = taskFinished;
+    }
+
+    public boolean isBindOuwanTask() {
+        return TaskTypeUtil.ID_SETUP_OUWAN_ACCOUNT.equalsIgnoreCase(getRewardCode());
     }
 }

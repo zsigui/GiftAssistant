@@ -86,6 +86,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     public static boolean sIsTodayFirstOpenForBroadcast = false;
     // 判断并显示弹窗
     public static boolean sIsLoginStateUnavailableShow = false;
+    private boolean mHasJudgeBind = false;
 
     private long mLastClickTime = 0;
     private int mCurSelectedItem = INDEX_DEFAULT;
@@ -261,6 +262,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         if (!mNotifyAward) {
             judgeAwardShow();
         }
+        if (!mHasJudgeBind && AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+                && AccountManager.getInstance().isLogin()
+                && AccountManager.getInstance().getUserInfo().bindOuwanStatus != 1) {
+            IntentUtil.jumpBindOwan(this, AccountManager.getInstance().getUser());
+        }
+        mHasJudgeBind = true;
     }
 
     @Override

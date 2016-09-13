@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.AccountAdapter;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.NetStatusCode;
@@ -45,6 +46,8 @@ import com.oplay.giftcool.util.ToastUtil;
 import net.ouwan.umipay.android.view.MaxRowListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -313,6 +316,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
     private void doAfterSuccess(Response<JsonRespBase<UserModel>> response, ReqLogin login) {
         UserModel userModel = response.body().getData();
         userModel.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
+        userModel.userInfo.bindOuwanStatus = 1;
         MainActivity.sIsTodayFirstOpen = true;
         if (AssistantApp.getInstance().isRememberPwd()) {
             AccountManager.getInstance().writeOuwanAccount(login.getUsername() + ","
@@ -324,10 +328,14 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
         SocketIOManager.getInstance().connectOrReConnect(true);
         AccountManager.getInstance().notifyUserAll(userModel);
         ScoreManager.getInstance().initTaskState();
-        StatisticsManager.getInstance().trace(getContext(),
-                StatisticsManager.ID.USER_OUWAN_LOGIN,
-                StatisticsManager.ID.STR_USER_OUWAN_LOGIN,
-                "用户名:" + userModel.userInfo.username);
+        if (AppDebugConfig.IS_STATISTICS_SHOW) {
+            Map<String, String> keyVal = new HashMap<>();
+            keyVal.put("登录信息", userModel.userInfo.username);
+            StatisticsManager.getInstance().trace(getContext(),
+                    StatisticsManager.ID.USER_OUWAN_LOGIN,
+                    StatisticsManager.ID.STR_USER_OUWAN_LOGIN,
+                    "", keyVal, 0);
+        }
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
         ((LoginActivity)getActivity()).doLoginBack();

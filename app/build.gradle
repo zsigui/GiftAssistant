@@ -113,6 +113,16 @@ android {
 	}
 
 	useLibrary 'org.apache.http.legacy'
+
+	// 过滤只打包 armeabi 下的 so 文件进入 apk 中
+	splits {
+		abi {
+			enable true
+			reset()
+			include('armeabi')
+			universalApk true
+		}
+	}
 }
 
 //repositories {

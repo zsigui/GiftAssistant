@@ -10,6 +10,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
+import com.oplay.giftcool.manager.ScoreManager;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
@@ -91,8 +92,12 @@ public class LoginActivity extends BaseAppCompatActivity {
             case KeyConfig.TYPE_ID_BIND_OUWAN:
                 UserModel um = (UserModel) intent.getSerializableExtra(KeyConfig.KEY_DATA);
                 if (um == null || um.userInfo == null || um.userSession == null) {
-                    ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
-                    return;
+                    if (AccountManager.getInstance().isLogin()) {
+                        um = AccountManager.getInstance().getUser();
+                    } else {
+                        ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
+                        return;
+                    }
                 }
                 replaceFragWithTitle(R.id.fl_container, BindOwanFragment.newInstance(um, false),
                         getResources().getString(um.userInfo.phoneCanUseAsUname ?
@@ -122,11 +127,14 @@ public class LoginActivity extends BaseAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mCurTopFragment != null
-                && mCurTopFragment instanceof BindOwanFragment
-                && AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND) {
-            showBindBackConfirmDialog();
-            return;
+        if (!ScoreManager.getInstance().isBindOuwanTask()) {
+            // 并非通过任务方式进行的判断
+            if (mCurTopFragment != null
+                    && mCurTopFragment instanceof BindOwanFragment
+                    && AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND) {
+                showBindBackConfirmDialog();
+                return;
+            }
         }
         super.onBackPressed();
     }

@@ -64,14 +64,14 @@ public class StatisticsManager {
         String USER_HOPE_GIFT_QUICK = "request_gift_quick";
         String STR_USER_HOPE_GIFT_QUICK = "求礼包-取消";
         // 手机登录
-        String USER_PHONE_LOGIN = "user_phone_login";
-        String STR_USER_PHONE_LOGIN = "使用手机登录";
+        String USER_PHONE_LOGIN = "user_phone_login_1400";
+        String STR_USER_PHONE_LOGIN = "使用手机登录v1400";
         // 手机绑定主账号
         String USER_PHONE_BIND_MAIN = "user_phone_bind_main";
         String STR_USER_PHONE_BIND_MAIN = "手机绑定主账号";
         // 偶玩账号登录
-        String USER_OUWAN_LOGIN = "user_ouwan_login";
-        String STR_USER_OUWAN_LOGIN = "偶玩账号登录";
+        String USER_OUWAN_LOGIN = "user_ouwan_login_1400";
+        String STR_USER_OUWAN_LOGIN = "偶玩账号登录v1400";
         // 每日自动登录
         String USER_LOGIN_WITH_SESSION = "auto_login_with_session";
         String STR_USER_LOGIN_WITH_SESSION = "每日自动登录";

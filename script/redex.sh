@@ -41,7 +41,7 @@ setDefaultVar()
         [ -z ${INPUT_APK_PATH} ] && INPUT_APK_PATH=$APP_PATH"/app/build/outputs/apk/app-rDebug-release.apk"
         [ -z ${OUTPUT_APK_PATH} ] && OUTPUT_APK_PATH=$APP_PATH"/apk/src/app-rDebug.encrypt.apk"
     elif [ ${PACK_MODE} -eq 3 ]; then
-        [ -z ${INPUT_APK_PATH} ] && INPUT_APK_PATH=$APP_PATH"/app/build/outputs/apk/app-rRelease-release.apk"
+        [ -z ${INPUT_APK_PATH} ] && INPUT_APK_PATH=$APP_PATH"/app/build/outputs/apk/app-rRelease-armeabi-release.apk"
         [ -z ${OUTPUT_APK_PATH} ] && OUTPUT_APK_PATH=$APP_PATH"/apk/src/app-rRelease.encrypt.apk"
     fi
 }

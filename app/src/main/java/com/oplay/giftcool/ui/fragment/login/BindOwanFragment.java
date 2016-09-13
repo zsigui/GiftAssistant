@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
@@ -17,6 +18,8 @@ import com.oplay.giftcool.config.util.UserTypeUtil;
 import com.oplay.giftcool.listener.OnBackPressListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.manager.ScoreManager;
+import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqLogin;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -27,6 +30,10 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ToastUtil;
 import com.oplay.giftcool.util.ViewUtil;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -154,10 +161,23 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
                             mData.userInfo.loginType = UserTypeUtil.TYPE_OUWAN;
                             AccountManager.getInstance().notifyUserAll(mData);
                             reqData.data.setOuwanUser(reqData.data.getUsername(), reqData.data.getPassword(), true);
+
                             AccountManager.getInstance().writeOuwanAccount(reqData.data.getUsername() + ","
                                             + reqData.data.getPassword(), AccountManager.getInstance()
                                     .readOuwanAccount(),
                                     false);
+
+                            if (AppDebugConfig.IS_STATISTICS_SHOW) {
+                                Map<String, String> keyVal = new HashMap<>();
+                                // 手机号: %s, 对应绑定偶玩账号: %s, 是否首次登录: %b, 绑定情况: %d, 是否空Context: %b
+                                keyVal.put("设置信息", String.format(Locale.CHINA, "p:%s, u:%s, i:%b, b:%d, c:%b",
+                                        mData.userInfo.phone, mData.userInfo.username,
+                                        mData.userInfo.isFirstLogin, mData.userInfo.bindOuwanStatus, (getContext() == null)));
+                                StatisticsManager.getInstance().trace(getContext(),
+                                        StatisticsManager.ID.USER_PHONE_LOGIN,
+                                        StatisticsManager.ID.STR_USER_PHONE_LOGIN, "设置账号", keyVal, 0);
+                            }
+
                             // 请求更新数据
                             ((LoginActivity) getActivity()).doLoginBack();
                             return;
@@ -183,7 +203,8 @@ public class BindOwanFragment extends BaseFragment implements OnBackPressListene
 
     @Override
     public boolean onBack() {
-        if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND_CAN_JUMP) {
+        if (ScoreManager.getInstance().isBindOuwanTask()
+                || AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_SET_BIND_CAN_JUMP) {
             // 可以被跳过，则直接返回
             return false;
         }

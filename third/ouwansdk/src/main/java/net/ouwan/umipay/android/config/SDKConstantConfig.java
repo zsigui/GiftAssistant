@@ -3,7 +3,6 @@ package net.ouwan.umipay.android.config;
 import android.content.Context;
 
 import net.ouwan.umipay.android.api.GameParamInfo;
-import net.ouwan.umipay.android.debug.Debug_Log;
 import net.youmi.android.libs.platform.coder.Coder_SDKPswCoder;
 
 /**
@@ -14,7 +13,7 @@ import net.youmi.android.libs.platform.coder.Coder_SDKPswCoder;
  *         description
  */
 public class SDKConstantConfig {
-	public static final int UMIPAY_SDK_VERSION = 357;
+	public static final int UMIPAY_SDK_VERSION = 400;
 	public static final int SDK_ID = 13;
 	public static final int API_SDK_VERSION = 103;
 	public static final int SDK_PLATFORM_ANDROID = 3;

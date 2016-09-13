@@ -215,7 +215,10 @@ public class AccountManager implements OnFinishListener {
                                     user.userInfo = userModel.userInfo;
                                     user.userSession.openId = user.userInfo.openId;
                                     notifyUserAll(user);
-//                                    updateJPushTagAndAlias();
+                                    if (AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+                                            && userModel.userInfo.bindOuwanStatus != 1) {
+                                        IntentUtil.jumpBindOwan(mContext, mUser);
+                                    }
                                     return;
                                 }
                                 // 登录状态失效，原因包括: 已在其他地方登录，更新失败
