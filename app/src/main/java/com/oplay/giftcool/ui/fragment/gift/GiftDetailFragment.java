@@ -345,24 +345,24 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 tvRemark = getViewById(vsGift, R.id.tv_remark);
                 tvRemark.setText(TextUtils.isEmpty(o.remark) ?
                         getContext().getResources().getString(R.string.st_gift_hint_content) : o.remark);
-                if (o.nature == GiftTypeUtil.NATURE_ACTIVITY && tvBroadcast == null) {
-                    tvBroadcast = getViewById(((ViewStub) getViewById(R.id.vs_broadcast)).inflate(),
-                            R.id.tv_activity_hint);
-                    tvBroadcast.setOnClickListener(this);
-                    String text = o.activityTitle;
-                    switch (o.activityStatus) {
-                        case TypeStatusCode.POST_WAIT:
-                            text += " <font color='#ffaa17'>[等开始]</font>";
-                            break;
-                        case TypeStatusCode.POST_BEING:
-                            text += " <font color='#f85454'>[进行中]</font>";
-                            break;
-                        case TypeStatusCode.POST_FINISHED:
-                            text += " <font color='#888888'>[已结束]</font>";
-                            break;
-                    }
-                    tvBroadcast.setText(Html.fromHtml(text));
+            }
+            if (o.nature == GiftTypeUtil.NATURE_ACTIVITY && tvBroadcast == null) {
+                tvBroadcast = getViewById(((ViewStub) getViewById(R.id.vs_broadcast)).inflate(),
+                        R.id.tv_activity_hint);
+                tvBroadcast.setOnClickListener(this);
+                String text = o.activityTitle;
+                switch (o.activityStatus) {
+                    case TypeStatusCode.POST_WAIT:
+                        text += " <font color='#ffaa17'>[等开始]</font>";
+                        break;
+                    case TypeStatusCode.POST_BEING:
+                        text += " <font color='#f85454'>[进行中]</font>";
+                        break;
+                    case TypeStatusCode.POST_FINISHED:
+                        text += " <font color='#888888'>[已结束]</font>";
+                        break;
                 }
+                tvBroadcast.setText(Html.fromHtml(text));
             }
             tvQQ.setOnClickListener(this);
         }
@@ -419,6 +419,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 
     public void initDownload(IndexGameNew game) {
         if (getActivity() == null || game == null || btnDownload == null) {
+            if (btnDownload != null) {
+                btnDownload.setEnabled(false);
+            }
             return;
         }
         mAppInfo = game;
