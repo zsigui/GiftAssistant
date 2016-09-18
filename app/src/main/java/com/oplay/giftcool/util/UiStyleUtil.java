@@ -394,48 +394,66 @@ public class UiStyleUtil {
             if (o.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
                 hint.setText("");
             }
-            switch (o.buttonState) {
-                case GiftTypeUtil.BUTTON_TYPE_SEARCH:
-                    tv.setText(mContext.getString(R.string.st_gift_search));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_WAIT_SEARCH:
-                    tv.setText(mContext.getString(R.string.st_gift_wait_search));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_RESERVE:
-                case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
-                    tv.setText(mContext.getString(R.string.st_gift_reserve));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_RESERVED:
-                    tv.setText(mContext.getString(R.string.st_gift_reserved));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
-                    tv.setText(mContext.getString(R.string.st_gift_take));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_FINISH:
-                case GiftTypeUtil.BUTTON_TYPE_TAKE_OFF:
-                case GiftTypeUtil.BUTTON_TYPE_EMPTY:
-                    tv.setText(mContext.getString(R.string.st_gift_empty));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_SEIZED:
-                    tv.setText(mContext.getString(R.string.st_gift_seized));
-                    break;
-                case GiftTypeUtil.BUTTON_TYPE_WAIT_SEIZE:
-                    if (o.freeStartTime * 1000 > System.currentTimeMillis()) {
-                        tv.setText(String.format(Locale.CHINA, "%s免费抢",
-                                DateUtil.formatUserReadDate(o.freeStartTime)));
-                        hint.setText("");
-                    } else {
-                        tv.setText(String.format(Locale.CHINA, "%s抢",
-                                DateUtil.formatUserReadDate(DateUtil.getTime(o.seizeTime) / 1000)));
-                    }
-                    break;
-            }
+            judgeLabelState(tv, hint, o);
         }
         if (o.status == GiftTypeUtil.STATUS_SEIZE && o.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
             hint.setText(mContext.getString(R.string.st_gift_normal_seize_hint));
             hint.setTextColor(Global.getRedColor(mContext));
         } else {
             hint.setTextColor(Global.getGreyColor(mContext));
+        }
+    }
+
+    /**
+     * 当布局的抢号按钮为标签时进行的判断
+     */
+    private static void judgeLabelState(TextView tv, TextView hint, IndexGiftNew o) {
+        switch (o.buttonState) {
+            case GiftTypeUtil.BUTTON_TYPE_SEARCH:
+                tv.setText(mContext.getString(R.string.st_gift_search));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_WAIT_SEARCH:
+                tv.setText(mContext.getString(R.string.st_gift_wait_search));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE:
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_EMPTY:
+                tv.setText(mContext.getString(R.string.st_gift_reserve));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVED:
+                tv.setText(mContext.getString(R.string.st_gift_reserved));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE:
+                tv.setText(mContext.getString(R.string.st_gift_take));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_FINISH:
+            case GiftTypeUtil.BUTTON_TYPE_TAKE_OFF:
+            case GiftTypeUtil.BUTTON_TYPE_EMPTY:
+                tv.setText(mContext.getString(R.string.st_gift_empty));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_SEIZED:
+                tv.setText(mContext.getString(R.string.st_gift_seized));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_WAIT_SEIZE:
+                if (o.freeStartTime * 1000 > System.currentTimeMillis()) {
+                    tv.setText(String.format(Locale.CHINA, "%s免费抢",
+                            DateUtil.formatUserReadDate(o.freeStartTime)));
+                    hint.setText("");
+                } else {
+                    tv.setText(String.format(Locale.CHINA, "%s抢",
+                            DateUtil.formatUserReadDate(DateUtil.getTime(o.seizeTime) / 1000)));
+                }
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_FINISHED:
+                tv.setText(mContext.getString(R.string.st_gift_finished));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_JOIN:
+                tv.setText(mContext.getString(R.string.st_gift_activity_join_s));
+                break;
+            case GiftTypeUtil.BUTTON_TYPE_ACTIVITY_WAIT:
+                tv.setText(mContext.getString(R.string.st_gift_activity_wait));
+                break;
+            default:
+                tv.setText("");
         }
     }
 
