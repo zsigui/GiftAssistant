@@ -35,8 +35,12 @@ public class AppConfig {
 
 
     /* Retrofit 访问网络连接超时时间，单位 ms */
-    public static final int NET_CONNECT_TIMEOUT = 8_000;
-    public static final int NET_READ_TIMEOUT = 60_000;
-    public static final int NET_WRITE_TIMEOUT = 120_000;
+    public static final int NET_CONNECT_TIMEOUT = 10_000;
+    public static final int NET_READ_TIMEOUT = 40_000;
+    public static final int NET_WRITE_TIMEOUT = 40_000;
+    /* 针对发布图片文字的超时时间 */
+    public static final int NET_POST_CONNECT_TIMEOUT = 10_000;
+    public static final int NET_POST_READ_TIMEOUT = 80_000;
+    public static final int NET_POST_WRITE_TIMEOUT = 80_000;
 
 }

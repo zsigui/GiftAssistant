@@ -173,51 +173,54 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
     @Override
     protected void lazyLoad() {
         refreshInitConfig();
+        if (mGameData == null) {
+            readCacheData();
+        }
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
-                if (NetworkUtil.isConnected(getContext())) {
-                    if (mCallRefresh != null) {
-                        mCallRefresh.cancel();
-                        mCallRefresh = mCallRefresh.clone();
-                    } else {
-                        mCallRefresh = Global.getNetEngine().obtainIndexGameSuper(new JsonReqBase<Void>());
-                    }
-                    mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGameSuper>>() {
-
-                        @Override
-                        public void onResponse(Call<JsonRespBase<IndexGameSuper>> call,
-                                               Response<JsonRespBase<IndexGameSuper>> response) {
-                            if (!mCanShowUI || call.isCanceled()) {
-                                return;
-                            }
-                            if (response != null && response.isSuccessful()) {
-                                if (response.body() != null && response.body().getCode() == NetStatusCode
-                                        .SUCCESS) {
-                                    IndexGameSuper data = response.body().getData();
-                                    updateData(data);
-                                    refreshSuccessEnd();
-                                    FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_SUPER, data);
-                                    return;
-                                }
-                            }
-                            // 出错
-//									refreshFailEnd();
-                            readCacheData();
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonRespBase<IndexGameSuper>> call, Throwable t) {
-                            if (!mCanShowUI || call.isCanceled()) {
-                                return;
-                            }
-//									refreshFailEnd();
-                            readCacheData();
-                        }
-                    });
-                } else {
-                    refreshFailEnd();
+                if (!NetworkUtil.isConnected(getContext())) {
+                    readCacheData();
+                    return;
                 }
+                if (mCallRefresh != null) {
+                    mCallRefresh.cancel();
+                    mCallRefresh = mCallRefresh.clone();
+                } else {
+                    mCallRefresh = Global.getNetEngine().obtainIndexGameSuper(new JsonReqBase<Void>());
+                }
+                mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGameSuper>>() {
+
+                    @Override
+                    public void onResponse(Call<JsonRespBase<IndexGameSuper>> call,
+                                           Response<JsonRespBase<IndexGameSuper>> response) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+                        if (response != null && response.isSuccessful()) {
+                            if (response.body() != null && response.body().getCode() == NetStatusCode
+                                    .SUCCESS) {
+                                IndexGameSuper data = response.body().getData();
+                                updateData(data);
+                                refreshSuccessEnd();
+                                FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_SUPER, data);
+                                return;
+                            }
+                        }
+                        // 出错
+//									refreshFailEnd();
+                        readCacheData();
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<IndexGameSuper>> call, Throwable t) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+//									refreshFailEnd();
+                        readCacheData();
+                    }
+                });
             }
         });
     }
@@ -228,7 +231,7 @@ public class GameSuperFragment extends BaseFragment_Refresh implements View.OnCl
 
                     @Override
                     public void doCallBack(IndexGameSuper data) {
-                        if (data != null) {
+                        if (mGameData == null && data != null) {
                             // 获取数据成功
                             updateData(data);
                             refreshSuccessEnd();

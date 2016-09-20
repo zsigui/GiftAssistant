@@ -190,6 +190,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             @Override
             public void run() {
                 refreshInitConfig();
+                if (mGiftData == null) {
+                    readCacheData();
+                }
                 // 判断网络情况
                 if (!NetworkUtil.isConnected(getContext())) {
                     readCacheData();
@@ -258,13 +261,17 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
                     @Override
                     public void doCallBack(IndexGift data) {
-                        if (data != null) {
-                            // 获取数据成功
-                            refreshSuccessEnd();
-                            updateData(data, 0, -1);
-                            mLastPage = PAGE_FIRST;
+                        if (mGiftData == null) {
+                            if (data != null) {
+                                // 获取数据成功
+                                refreshSuccessEnd();
+                                updateData(data, 0, -1);
+                                mLastPage = PAGE_FIRST;
+                            } else {
+                                refreshFailEnd();
+                            }
                         } else {
-                            refreshFailEnd();
+                            refreshCacheFailEnd();
                         }
                     }
                 }, IndexGift.class);

@@ -18,6 +18,7 @@ import com.oplay.giftcool.ui.widget.ScoreText;
 import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by zsigui on 16-1-7.
@@ -99,7 +100,6 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
                     holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
                     holder.stScore = ViewUtil.getViewById(convertView, R.id.st_score);
                     holder.btnToDo = ViewUtil.getViewById(convertView, R.id.btn_todo);
-                    holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
                     break;
                 default:
                     throw new IllegalStateException("error value of type : " + type);
@@ -126,8 +126,7 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
                     ViewUtil.showImage(holder.ivIcon, mission.icon);
                 }
                 holder.tvName.setText(mission.name);
-                holder.tvContent.setText(mission.description);
-                holder.stScore.setText(String.valueOf(mission.reward));
+                holder.stScore.setText(String.format(Locale.CHINA, "+%d", mission.reward));
 
                 // 根据任务类型以及完成状态设置
                 // 先清除原有的点击监听事件
@@ -183,7 +182,6 @@ public class ScoreTaskAdapter extends BaseAdapter implements View.OnClickListene
         TextView tvName;
         ScoreText stScore;
         TextView btnToDo;
-        TextView tvContent;
     }
 
 }

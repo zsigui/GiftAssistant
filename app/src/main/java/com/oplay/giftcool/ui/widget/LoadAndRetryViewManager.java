@@ -212,6 +212,9 @@ public class LoadAndRetryViewManager {
         return Looper.myLooper() == Looper.getMainLooper();
     }
 
+    public boolean isShowContent() {
+        return mLastType == TYPE_CONTENT;
+    }
 
     private void show(int type) {
         if (mLastType != TYPE_DEFAULT

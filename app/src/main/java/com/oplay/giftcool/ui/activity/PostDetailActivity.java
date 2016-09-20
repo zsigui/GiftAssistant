@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
@@ -37,9 +38,16 @@ import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.ToastUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -75,7 +83,7 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
         mTypeHierarchy = new ArrayList<>(5);
         mEngine = new Retrofit.Builder()
                 .baseUrl(NetUrl.getBaseUrl())
-                .client(AssistantApp.getInstance().getHttpClient())
+                .client(getHttpClient())
                 .addConverterFactory(DefaultGsonConverterFactory.create(AssistantApp.getInstance().getGson()))
                 .build()
                 .create(NoEncryptEngine.class);
@@ -299,5 +307,30 @@ public class PostDetailActivity extends BaseAppCompatActivity implements Toolbar
 
     public void setPostId(int postId) {
         mPostId = postId;
+    }
+
+    public OkHttpClient getHttpClient() {
+        Interceptor cacheInterceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                // 请求时携带版本信息
+                String headerName = "X-Client-Info";
+                Request newRequest;
+                newRequest = chain.request().newBuilder()
+                        .addHeader(headerName, AssistantApp.getInstance().getHeaderValue())
+                        .cacheControl(CacheControl.FORCE_NETWORK)
+                        .build();
+                AppDebugConfig.d(AppDebugConfig.TAG_ENCRYPT, "请求地址：" + newRequest.url().uri());
+                Response response = chain.proceed(newRequest);
+                return response.newBuilder().build();
+            }
+        };
+        return new OkHttpClient.Builder()
+                .connectTimeout(AppConfig.NET_POST_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(AppConfig.NET_POST_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(AppConfig.NET_POST_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                .addInterceptor(cacheInterceptor)
+                .retryOnConnectionFailure(false)
+                .build();
     }
 }

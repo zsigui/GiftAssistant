@@ -107,7 +107,7 @@ public class ObserverManager {
      *
      * @param action 执行动作
      */
-    public void notifyGiftUpdate(int action) {
+    public synchronized void notifyGiftUpdate(int action) {
         for (GiftUpdateListener observer : mGiftObservers.values()) {
             if (observer != null) {
                 if (observer instanceof Fragment && ((Fragment) observer).isRemoving()) {
@@ -127,7 +127,7 @@ public class ObserverManager {
         }
     }
 
-    public void notifyUserActionUpdate(int action, int code) {
+    public synchronized void notifyUserActionUpdate(int action, int code) {
         for (UserActionListener observer : mUserActionListeners.values()) {
             if (observer != null) {
                 if (observer instanceof Fragment && ((Fragment) observer).isRemoving()) {

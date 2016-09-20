@@ -31,7 +31,7 @@
 			android:id = "@+id/lv_container"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
-			android:dividerHeight = "@dimen/di_index_module_gap"
+			android:dividerHeight = "@dimen/di_divider_height"
 			android:headerDividersEnabled = "true"
 			android:divider = "@color/co_divider_bg" />
 

@@ -74,6 +74,21 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
         }
     }
 
+    protected void refreshCacheFailEnd() {
+        if (mIsSwipeRefresh) {
+            if (NetworkUtil.isConnected(getContext())) {
+                ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
+            } else {
+                ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            }
+        }
+        mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setEnabled(true);
+            mRefreshLayout.setRefreshing(false);
+        }
+    }
+
     protected void refreshSuccessEnd() {
         super.refreshSuccessEnd();
         mLastPage = PAGE_FIRST;

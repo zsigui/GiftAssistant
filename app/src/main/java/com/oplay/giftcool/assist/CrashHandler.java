@@ -3,6 +3,7 @@ package com.oplay.giftcool.assist;
 import android.os.Process;
 
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.manager.StatisticsManager;
 
 /**
  * Created by zsigui on 16-7-11.
@@ -29,6 +30,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         try {
+            StatisticsManager.getInstance().reportThrowable(ex);
             if (!handleThrowable(ex) && mDefaultHandler != null) {
                 AppDebugConfig.e(AppDebugConfig.TAG_DEBUG_INFO, "UncaughtException is handled by System DefaultHandler");
                 mDefaultHandler.uncaughtException(thread, ex);

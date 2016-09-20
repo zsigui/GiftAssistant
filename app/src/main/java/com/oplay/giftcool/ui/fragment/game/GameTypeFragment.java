@@ -106,6 +106,9 @@ public class GameTypeFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         refreshInitConfig();
+        if (mData == null) {
+            readCacheData();
+        }
         if (mCallRefresh != null) {
             mCallRefresh.cancel();
             mCallRefresh = mCallRefresh.clone();
@@ -149,7 +152,7 @@ public class GameTypeFragment extends BaseFragment {
 
                     @Override
                     public void doCallBack(ArrayList<GameTypeMain> data) {
-                        if (data != null) {
+                        if (mData == null && data != null) {
                             // 获取数据成功
                             updateData(data);
                             refreshSuccessEnd();

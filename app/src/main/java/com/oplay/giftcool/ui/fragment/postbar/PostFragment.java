@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.PostAdapter;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
@@ -15,7 +16,6 @@ import com.oplay.giftcool.config.util.PostTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqIndexPost;
-import com.oplay.giftcool.model.data.resp.IndexPost;
 import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
@@ -100,11 +100,9 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
             @Override
             public void run() {
                 refreshInitConfig();
-                // 判断网络情况
-//        if (!NetworkUtil.isConnected(getContext())) {
-//            refreshFailEnd();
-//            return;
-//        }
+                if (mData == null) {
+                    readCacheData();
+                }
                 if (mCallRefresh != null) {
                     mCallRefresh.cancel();
                 }
@@ -160,16 +158,19 @@ public class PostFragment extends BaseFragment_Refresh<IndexPostNew>{
 
                     @Override
                     public void doCallBack(ArrayList<IndexPostNew> data) {
-                        if (data != null) {
-                            // 获取数据成功
-                            refreshSuccessEnd();
-                            addHeaderData(data);
-                            updateData(mData);
+                        if (mData == null) {
+                            if (data != null) {
+                                // 获取数据成功
+                                refreshSuccessEnd();
+                                updateData(data);
+                            } else {
+                                refreshFailEnd();
+                            }
                         } else {
-                            refreshFailEnd();
+                            refreshCacheFailEnd();
                         }
                     }
-                }, IndexPost.class);
+                }, new TypeToken<ArrayList<IndexPostNew>>(){}.getType());
     }
 
     /**

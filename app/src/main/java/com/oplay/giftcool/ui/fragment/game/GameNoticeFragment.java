@@ -157,51 +157,54 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
     protected void lazyLoad() {
         refreshInitConfig();
 
+        if (mData == null) {
+            readCacheData();
+        }
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
-                if (NetworkUtil.isConnected(getContext())) {
-                    if (mCallRefresh != null) {
-                        mCallRefresh.cancel();
-                    }
-                    mReqPageObj.data.page = 1;
-                    mCallRefresh = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
-                    mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-                        @Override
-                        public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
-                                               Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
-                                                       response) {
-                            if (!mCanShowUI || call.isCanceled()) {
-                                return;
-                            }
-                            if (response != null && response.isSuccessful()) {
-                                if (response.body() != null &&
-                                        response.body().getCode() == NetStatusCode.SUCCESS) {
-                                    refreshSuccessEnd();
-                                    OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-                                    refreshLoadState(backObj.data, backObj.isEndPage);
-                                    updateData(backObj.data);
-                                    FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_NOTICE, backObj);
-                                    return;
-                                }
-                            }
-                            AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
-                            readCacheData();
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
-                                              Throwable t) {
-                            if (!mCanShowUI || call.isCanceled()) {
-                                return;
-                            }
-                            AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
-                            readCacheData();
-                        }
-                    });
-                } else {
+                if (!NetworkUtil.isConnected(getContext())) {
                     readCacheData();
+                    return;
                 }
+                if (mCallRefresh != null) {
+                    mCallRefresh.cancel();
+                }
+                mReqPageObj.data.page = 1;
+                mCallRefresh = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
+                mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+                                           Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
+                                                   response) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+                        if (response != null && response.isSuccessful()) {
+                            if (response.body() != null &&
+                                    response.body().getCode() == NetStatusCode.SUCCESS) {
+                                refreshSuccessEnd();
+                                OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+                                refreshLoadState(backObj.data, backObj.isEndPage);
+                                updateData(backObj.data);
+                                FileUtil.writeCacheByKey(getContext(), NetUrl.GAME_GET_INDEX_NOTICE, backObj);
+                                return;
+                            }
+                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
+                        readCacheData();
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+                                          Throwable t) {
+                        if (!mCanShowUI || call.isCanceled()) {
+                            return;
+                        }
+                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
+                        readCacheData();
+                    }
+                });
             }
         });
     }
@@ -212,7 +215,7 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
 
                     @Override
                     public void doCallBack(OneTypeDataList<IndexGameNew> data) {
-                        if (data != null) {
+                        if (mData == null && data != null) {
                             // 获取数据成功
                             refreshSuccessEnd();
                             refreshLoadState(data.data, data.isEndPage);
@@ -236,48 +239,43 @@ public class GameNoticeFragment extends BaseFragment_Refresh<IndexGameNew> {
     @Override
     protected void loadMoreData() {
         if (!mNoMoreLoad && !mIsLoadMore) {
+            if (!NetworkUtil.isConnected(getContext())) {
+                moreLoadFailEnd();
+                return;
+            }
+            if (mCallLoad != null) {
+                mCallLoad.cancel();
+            }
             mIsLoadMore = true;
             mReqPageObj.data.page = mLastPage + 1;
-            Global.THREAD_POOL.execute(new Runnable() {
+            mCallLoad = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
+            mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
                 @Override
-                public void run() {
-                    if (NetworkUtil.isConnected(getContext())) {
-                        if (mCallLoad != null) {
-                            mCallLoad.cancel();
-                        }
-                        mCallLoad = Global.getNetEngine().obtainGameList(NetUrl.GAME_GET_INDEX_NOTICE, mReqPageObj);
-                        mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGameNew>>>() {
-                            @Override
-                            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
-                                                   Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
-                                                           response) {
-                                if (!mCanShowUI || call.isCanceled()) {
-                                    return;
-                                }
-                                if (response != null && response.isSuccessful()) {
-                                    if (response.body() != null && response.body().isSuccess()) {
-                                        moreLoadSuccessEnd();
-                                        OneTypeDataList<IndexGameNew> backObj = response.body().getData();
-                                        setLoadState(backObj.data, backObj.isEndPage);
-                                        addMoreData(backObj.data);
-                                        return;
-                                    }
-                                }
-                                moreLoadFailEnd();
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable
-                                    t) {
-                                if (!mCanShowUI || call.isCanceled()) {
-                                    return;
-                                }
-                                moreLoadFailEnd();
-                            }
-                        });
-                    } else {
-                        moreLoadFailEnd();
+                public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call,
+                                       Response<JsonRespBase<OneTypeDataList<IndexGameNew>>>
+                                               response) {
+                    if (!mCanShowUI || call.isCanceled()) {
+                        return;
                     }
+                    if (response != null && response.isSuccessful()) {
+                        if (response.body() != null && response.body().isSuccess()) {
+                            moreLoadSuccessEnd();
+                            OneTypeDataList<IndexGameNew> backObj = response.body().getData();
+                            setLoadState(backObj.data, backObj.isEndPage);
+                            addMoreData(backObj.data);
+                            return;
+                        }
+                    }
+                    moreLoadFailEnd();
+                }
+
+                @Override
+                public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGameNew>>> call, Throwable
+                        t) {
+                    if (!mCanShowUI || call.isCanceled()) {
+                        return;
+                    }
+                    moreLoadFailEnd();
                 }
             });
         }

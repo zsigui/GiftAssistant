@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.FreeAdapter;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
+import com.oplay.giftcool.config.NetUrl;
+import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.req.ReqRefreshGift;
@@ -19,6 +22,7 @@ import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
 import com.oplay.giftcool.ui.widget.stickylistheaders.StickyListHeadersListView;
+import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.io.Serializable;
@@ -94,7 +98,32 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
     @Override
     protected void lazyLoad() {
         refreshInitConfig();
+        if (mData == null) {
+            readCacheData();
+        }
         Global.THREAD_POOL.execute(new LoadDataByPageRunnable(1, mPageSize));
+    }
+
+    private void readCacheData() {
+        FileUtil.readCacheByKey(getContext(), NetUrl.GIFT_GET_FREE_BY_PAGE,
+                new CallbackListener<ArrayList<TimeData<IndexGiftNew>>>() {
+
+                    @Override
+                    public void doCallBack(ArrayList<TimeData<IndexGiftNew>> data) {
+                        if (mData == null) {
+                            if (data != null) {
+                                // 获取数据成功
+                                refreshSuccessEnd();
+                                refreshData(data);
+                                mLastPage = PAGE_FIRST;
+                            } else {
+                                refreshFailEnd();
+                            }
+                        } else {
+                            refreshCacheFailEnd();
+                        }
+                    }
+                }, new TypeToken<ArrayList<TimeData<IndexGiftNew>>>() {}.getType());
     }
 
     @Override
@@ -243,7 +272,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
             }
             if (!NetworkUtil.isConnected(getContext())) {
                 if (mReqPageObj.data.page == 1) {
-                    refreshFailEnd();
+                    readCacheData();
                 } else {
                     moreLoadFailEnd();
                 }
@@ -269,6 +298,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
                             refreshLoadState(mData, false);//是否最后一页
                             mLastPage = 1;
                             refreshData(mData);
+                            FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_FREE_BY_PAGE, mData);
                         } else {
                             //加载更多成功
                             setLoadState(data.data, data.isEndPage);
@@ -279,7 +309,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
                     }
 					if (mReqPageObj.data.page == 1) {
 						//刷新失败
-						refreshFailEnd();
+                        readCacheData();
 					} else {
 						//加载更多失败
 						moreLoadFailEnd();
@@ -293,7 +323,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
                     }
 					if (mReqPageObj.data.page == 1) {
 						//刷新失败
-						refreshFailEnd();
+                        readCacheData();
 					} else {
 						//加载更多失败
 						moreLoadFailEnd();
