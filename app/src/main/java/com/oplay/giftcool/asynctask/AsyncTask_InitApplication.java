@@ -18,7 +18,6 @@ import com.oplay.giftcool.model.data.req.ReqInitApp;
 import com.oplay.giftcool.model.data.resp.AdInfo;
 import com.oplay.giftcool.model.data.resp.InitAppConfig;
 import com.oplay.giftcool.model.data.resp.InitAppResult;
-import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.util.AppInfoUtil;
@@ -26,8 +25,6 @@ import com.oplay.giftcool.util.CommonUtil;
 import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.log.GCLog;
-
-import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.io.File;
 
@@ -124,20 +121,7 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
 
         // 获取用户信息
         // 该信息使用salt加密存储再SharedPreference中
-        UserModel user = null;
-        try {
-            String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
-                    SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
-            AppDebugConfig.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
-            user = AssistantApp.getInstance().getGson().fromJson(userJson, UserModel.class);
-            if (user != null && user.userInfo != null) {
-                // 将首次登录状态清掉，再次获取已经不属于首次登录
-                user.userInfo.isFirstLogin = false;
-            }
-        } catch (Exception e) {
-            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
-        }
-        AccountManager.getInstance().notifyUserAll(user);
+        AccountManager.getInstance().getUserFromDisk();
 
         if (mNeedUpdateSession) {
             AccountManager.getInstance().updateUserSession(true);

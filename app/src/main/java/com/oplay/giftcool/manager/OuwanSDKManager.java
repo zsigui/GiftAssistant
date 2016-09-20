@@ -209,6 +209,10 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 .getCommonAccountByPackageName(mContext.getPackageName(),
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
         if (account != null) {
+            if (!AccountManager.getInstance().isLogin()) {
+                // 读取硬盘中用户信息文件，以确保不会因为首次唤起而失效
+                AccountManager.getInstance().getUserFromDisk();
+            }
             if (AccountManager.getInstance().isLogin()) {
                 // 处理登录清空下
                 if (account.getUid() != AccountManager.getInstance().getUserInfo().uid) {
@@ -236,6 +240,13 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         if (AccountManager.getInstance().isLogin()
                 || sIsWakeChangeAccountAction)
             return;
+
+        // 读取用户信息文件
+        AccountManager.getInstance().getUserFromDisk();
+        if (AccountManager.getInstance().isLogin()) {
+            // 再次确保用户未登录
+            return;
+        }
 
         ArrayList<UmipayCommonAccount> mCommonAccountList = getAccountExceptPackage(
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT, mContext.getPackageName());

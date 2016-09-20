@@ -171,6 +171,30 @@ public class AccountManager implements OnFinishListener {
     }
 
     /**
+     * 从SP读取存储的用户信息(该操作会通知更新用户状态，覆盖当前用户信息)
+     *
+     * @return
+     */
+    public UserModel getUserFromDisk() {
+        UserModel user = null;
+        try {
+            String userJson = Global_SharePreferences.getStringFromSharedPreferences(mContext,
+                    SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_INFO, SPConfig.SALT_USER_INFO, null);
+            AppDebugConfig.d(AppDebugConfig.TAG_APP, "get from sp: user = " + userJson);
+            user = AssistantApp.getInstance().getGson().fromJson(userJson, UserModel.class);
+            if (user != null && user.userInfo != null) {
+                // 将首次登录状态清掉，再次获取已经不属于首次登录
+                user.userInfo.isFirstLogin = false;
+            }
+        } catch (Exception e) {
+            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
+        }
+        mUser = user;
+        AccountManager.getInstance().notifyUserAll(user);
+        return user;
+    }
+
+    /**
      * 获取用户全部信息的网络请求声明
      */
     private Call<JsonRespBase<UserModel>> mCallGetUserInfo;
@@ -215,7 +239,8 @@ public class AccountManager implements OnFinishListener {
                                     user.userInfo = userModel.userInfo;
                                     user.userSession.openId = user.userInfo.openId;
                                     notifyUserAll(user);
-                                    if (AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+                                    if (AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig
+                                            .KEY_LOGIN_NOT_BIND
                                             && userModel.userInfo.bindOuwanStatus != 1) {
                                         IntentUtil.jumpBindOwan(mContext, mUser);
                                     }
@@ -264,6 +289,7 @@ public class AccountManager implements OnFinishListener {
     private Call<JsonRespBase<UserInfo>> mCallUpdatePartInfo;
 
     private boolean isUpdatePart = false;
+
     /**
      * 更新用户部分信息: 偶玩豆，金币，礼包数
      */
@@ -500,6 +526,7 @@ public class AccountManager implements OnFinishListener {
 
     /**
      * 登出当前账号，会通知服务器并刷新整个页面
+     *
      * @param isForce 强制通知服务器退出，会清空该Session所有信息
      */
     public void logout(boolean isForce) {
@@ -595,7 +622,8 @@ public class AccountManager implements OnFinishListener {
                             Global.updateMsgCentralData(mContext, unread);
                             if (unread.mAwardNotifies != null && unread.mAwardNotifies.size() > 0) {
                                 String s = AssistantApp.getInstance().getGson().toJson(unread.mAwardNotifies,
-                                        new TypeToken<ArrayList<AwardNotify>>(){}.getType());
+                                        new TypeToken<ArrayList<AwardNotify>>() {
+                                        }.getType());
                                 SPUtil.putString(mContext, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_USER_AWARD, s);
                             }
                             ObserverManager.getInstance().notifyUserUpdate(ObserverManager.STATUS
