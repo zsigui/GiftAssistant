@@ -273,9 +273,10 @@
         <activity
                 android:name = ".ui.activity.DialogActivity"
                 android:screenOrientation = "portrait"
-                android:theme="@style/Opacity70Activity"
+                android:theme = "@style/Opacity70Activity"
                 android:configChanges = "keyboard|keyboardHidden|navigation|orientation|screenSize"
-                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden"/>
+                android:launchMode = "singleTop"
+                android:windowSoftInputMode = "adjustPan|stateAlwaysHidden" />
 
         <service
                 android:name = ".service.ClockService"
@@ -518,7 +519,7 @@
         <!-- 切换账号广播，此处只作为空壳 -->
         <receiver
                 android:name = "net.ouwan.umipay.android.api.UmipayAccountChangeReceiver"
-                android:exported="true" />
+                android:exported = "true" />
 
         <meta-data
                 android:name = "UMIPAY_CHANNEL"

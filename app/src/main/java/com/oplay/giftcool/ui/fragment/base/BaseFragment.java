@@ -155,7 +155,7 @@ public abstract class BaseFragment extends BaseFragmentLog implements View.OnCli
 
     protected void refreshInitConfig() {
         mIsLoading = true;
-        if (!mIsSwipeRefresh && !mIsNotifyRefresh) {
+        if (!mIsSwipeRefresh && !mIsNotifyRefresh && !mHasData) {
             if (mViewManager != null) {
                 mViewManager.showLoading();
             }

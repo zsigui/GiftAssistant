@@ -152,12 +152,16 @@ public class GameTypeFragment extends BaseFragment {
 
                     @Override
                     public void doCallBack(ArrayList<GameTypeMain> data) {
-                        if (mData == null && data != null) {
-                            // 获取数据成功
-                            updateData(data);
-                            refreshSuccessEnd();
+                        if (mData == null) {
+                            if (data != null) {
+                                // 获取数据成功
+                                updateData(data);
+                                refreshSuccessEnd();
+                            } else {
+                                refreshFailEnd();
+                            }
                         } else {
-                            refreshFailEnd();
+                            mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
                         }
                     }
                 }, new TypeToken<ArrayList<GameTypeMain>>() {

@@ -25,6 +25,7 @@ public class DialogActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onCreate, sSingleShow = " + sSingletonShow);
         handleIntent(getIntent());
     }
 
@@ -32,12 +33,26 @@ public class DialogActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         sSingletonShow = false;
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onDestroy");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onNewIntent, sSingleShow = " + sSingletonShow);
         handleIntent(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onStop");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onPause");
     }
 
     private void handleIntent(Intent intent) {
@@ -73,10 +88,11 @@ public class DialogActivity extends FragmentActivity {
     }
 
     public static void showChangeAccount(Context context) {
-        if (DialogActivity.sSingletonShow) {
-            // 避免重复调用
-            return;
-        }
+//        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "activity onNewIntent, sSingleShow = " + sSingletonShow);
+//        if (DialogActivity.sSingletonShow) {
+//            // 避免重复调用
+//            return;
+//        }
         Intent intent = new Intent(context, DialogActivity.class);
         intent.setAction(ACTION_CHANGE_ACCOUNT);
         intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);

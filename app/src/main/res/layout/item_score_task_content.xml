@@ -12,6 +12,7 @@
             style = "@style/DefaultTextView.Header"
             android:singleLine = "false"
             android:maxLines = "4"
+            android:paddingRight = "@dimen/di_list_item_gap_very_small"
             android:layout_width = "0dp"
             android:layout_weight = "1" />
 

@@ -225,6 +225,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                 }
             } else {
                 // 无登录下，直接用该账号登录
+                UmipayCommonAccountCacheManager.getInstance(mContext).popCommonAccountToChange();
                 handleAccountLogin(account, null);
             }
         } else {
@@ -470,6 +471,8 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
         UserInfo info = new UserInfo();
         info.uid = session.uid;
         um.userInfo = info;
+        info.bindOuwanStatus = 1; // 避免唤醒绑定内容
+        final UserModel originUM = AccountManager.getInstance().getUser();
         AccountManager.getInstance().setUser(um);
         NetDataEncrypt.getInstance().initDecryptDataModel(account.getUid(), account.getSession());
         Global.getNetEngine().getUserInfo(new JsonReqBase<Void>())
@@ -481,6 +484,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                         if (call.isCanceled()) {
                             if (callback != null) {
                                 callback.onCancel();
+                                resetOriginState(originUM);
                             }
                             return;
                         }
@@ -491,6 +495,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                                     if (info == null) {
                                         if (callback != null) {
                                             callback.onFailed(NetStatusCode.ERR_UN_LOGIN, "");
+                                            resetOriginState(originUM);
                                         }
                                         return;
                                     }
@@ -513,6 +518,7 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                                 }
                                 if (callback != null) {
                                     callback.onFailed(response.body().getCode(), response.body().getMsg());
+                                    resetOriginState(originUM);
                                 }
                                 return;
                             }
@@ -520,12 +526,14 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                         ToastUtil.blurErrorResp(response);
                         if (callback != null) {
                             callback.onFailed(-1, "");
+                            resetOriginState(originUM);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
                         sIsWakeChangeAccountAction = false;
+                        resetOriginState(originUM);
                         if (call.isCanceled()) {
                             if (callback != null) {
                                 callback.onCancel();
@@ -539,5 +547,9 @@ public class OuwanSDKManager implements InitCallbackListener, ActionCallbackList
                         }
                     }
                 });
+    }
+
+    private void resetOriginState(UserModel um) {
+        AccountManager.getInstance().notifyUserAll(um);
     }
 }

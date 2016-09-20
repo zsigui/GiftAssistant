@@ -270,58 +270,52 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
             ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
             return;
         }
+        if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            mLastSendTime = System.currentTimeMillis();
+            resetRemain();
+            return;
+        }
         showLoading();
         btnSendCode.setEnabled(false);
         btnSendCode.setTextColor(AssistantApp.getInstance().getResources().getColor(R.color.co_btn_grey));
         sSendCodeRemainTime = RESEND_DURATION;
         mHandler.postDelayed(setTimeRunnable, 1000);
-        Global.THREAD_POOL.execute(new Runnable() {
+
+        if (mCallGetCode != null) {
+            mCallGetCode.cancel();
+        }
+        mCallGetCode = Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_FIRST, new JsonReqBase<ReqLogin>
+                (login));
+        mCallGetCode.enqueue(new Callback<JsonRespBase<UserModel>>() {
             @Override
-            public void run() {
-                if (!NetworkUtil.isConnected(AssistantApp.getInstance().getApplicationContext())) {
-                    hideLoading();
-                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
-                    sSendCodeRemainTime = 0;
+            public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase<UserModel>>
+                    response) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-
-
-                if (mCallGetCode != null) {
-                    mCallGetCode.cancel();
+                hideLoading();
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null
+                            && response.body().getCode() == NetStatusCode.SUCCESS) {
+                        PermissionUtil.judgeSmsPermission(getContext(), PhoneLoginFragment.this);
+                        ToastUtil.showShort(ConstString.TOAST_SMS_CODE_SEND);
+                        mLastSendTime = System.currentTimeMillis();
+                        return;
+                    }
                 }
-                mCallGetCode = Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_FIRST, new JsonReqBase<ReqLogin>
-                        (login));
-                mCallGetCode.enqueue(new Callback<JsonRespBase<UserModel>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase<UserModel>>
-                            response) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        if (response != null && response.isSuccessful()) {
-                            if (response.body() != null
-                                    && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                PermissionUtil.judgeSmsPermission(getContext(), PhoneLoginFragment.this);
-                                ToastUtil.showShort(ConstString.TOAST_SMS_CODE_SEND);
-                                mLastSendTime = System.currentTimeMillis();
-                                return;
-                            }
-                        }
-                        ToastUtil.blurErrorResp(response);
-                        resetRemain();
-                    }
+                ToastUtil.blurErrorResp(response);
+                resetRemain();
+            }
 
-                    @Override
-                    public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        ToastUtil.blurThrow(t);
-                        resetRemain();
-                    }
-                });
+            @Override
+            public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                hideLoading();
+                ToastUtil.blurThrow(t);
+                resetRemain();
             }
         });
     }
@@ -357,62 +351,57 @@ public class PhoneLoginFragment extends BaseFragment implements TextView.OnEdito
             ToastUtil.showShort(ConstString.TOAST_PHONE_ERROR);
             return;
         }
+        if (!NetworkUtil.isConnected(getContext())) {
+            hideLoading();
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            return;
+        }
         showLoading();
         etCode.requestFocus();
         etCode.setSelection(etCode.getText().toString().length());
-        Global.THREAD_POOL.execute(new Runnable() {
+        if (mCallLogin != null) {
+            mCallLogin.cancel();
+        }
+        mCallLogin = Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_SECOND, new JsonReqBase<ReqLogin>
+                (login));
+        mCallLogin.enqueue(new Callback<JsonRespBase<UserModel>>() {
             @Override
-            public void run() {
-                if (!NetworkUtil.isConnected(getContext())) {
-                    hideLoading();
-                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase<UserModel>>
+                    response) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                if (mCallLogin != null) {
-                    mCallLogin.cancel();
+                hideLoading();
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null
+                            && response.body().getCode() == NetStatusCode.SUCCESS) {
+                        UserModel um = response.body().getData();
+                        MixUtil.doPhoneLoginSuccessNext(getContext(), um);
+                        AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
+                        return;
+                    }
+                    if (response.body() != null
+                            && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
+                        // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
+                        UserModel um = response.body().getData();
+                        um.userInfo = new UserInfo();
+                        um.userInfo.phone = login.getPhone();
+                        ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
+                                ChooseOwanFragment.newInstance(um),
+                                getResources().getString(R.string.st_login_choose_owan_title), false);
+                        return;
+                    }
                 }
-                mCallLogin = Global.getNetEngine().login(NetUrl.USER_PHONE_LOGIN_SECOND, new JsonReqBase<ReqLogin>
-                        (login));
-                mCallLogin.enqueue(new Callback<JsonRespBase<UserModel>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<UserModel>> call, Response<JsonRespBase<UserModel>>
-                            response) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        if (response != null && response.isSuccessful()) {
-                            if (response.body() != null
-                                    && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                UserModel um = response.body().getData();
-                                MixUtil.doPhoneLoginSuccessNext(getContext(), um);
-                                AccountManager.getInstance().writePhoneAccount(login.getPhone(), mData, false);
-                                return;
-                            }
-                            if (response.body() != null
-                                    && response.body().getCode() == NetStatusCode.ERR_NEED_CHOOSE_MAIN_ACCOUNT) {
-                                // 有多个绑定账号且无主账号，需要跳转绑定主账号界面
-                                UserModel um = response.body().getData();
-                                um.userInfo = new UserInfo();
-                                um.userInfo.phone = login.getPhone();
-                                ((BaseAppCompatActivity) getActivity()).replaceFragWithTitle(R.id.fl_container,
-                                        ChooseOwanFragment.newInstance(um),
-                                        getResources().getString(R.string.st_login_choose_owan_title), false);
-                                return;
-                            }
-                        }
-                        ToastUtil.blurErrorResp(response);
-                    }
+                ToastUtil.blurErrorResp(response);
+            }
 
-                    @Override
-                    public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        ToastUtil.blurThrow(t);
-                    }
-                });
+            @Override
+            public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                hideLoading();
+                ToastUtil.blurThrow(t);
             }
         });
     }

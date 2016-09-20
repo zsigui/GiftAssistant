@@ -150,7 +150,7 @@ public class LoadAndRetryViewManager {
         if (mContainer.getChildCount() != 0 && mContainer.getChildAt(0).isShown()
                 && mContainer.getChildAt(0).getVisibility() == View.VISIBLE
                 && !(mContainer.getChildAt(0) instanceof RefreshLayout)) {
-            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, "no need to replace");
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, "no need to replace: " + mLastType);
             return;
         }
         showThread(mLastType);

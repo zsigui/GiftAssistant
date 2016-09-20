@@ -83,6 +83,9 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
             }
         }
         mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
+        if (mViewManager != null && !mViewManager.isShowContent()) {
+            mViewManager.showContent();
+        }
         if (mRefreshLayout != null) {
             mRefreshLayout.setEnabled(true);
             mRefreshLayout.setRefreshing(false);

@@ -186,59 +186,54 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
         sLastTime = System.currentTimeMillis();
         sCurrentTime = sLastTime;
-        Global.THREAD_POOL.execute(new Runnable() {
+        refreshInitConfig();
+        // 判断网络情况
+        if (!NetworkUtil.isConnected(getContext())) {
+            readCacheData();
+            return;
+        }
+        if (mGiftData == null) {
+            readCacheData();
+        }
+        if (mCallRefresh != null) {
+            mCallRefresh.cancel();
+        }
+
+        ReqIndexGift data = new ReqIndexGift();
+        JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
+        mCallRefresh = Global.getNetEngine().obtainIndexGift(reqData);
+        mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGift>>() {
             @Override
-            public void run() {
-                refreshInitConfig();
-                if (mGiftData == null) {
-                    readCacheData();
-                }
-                // 判断网络情况
-                if (!NetworkUtil.isConnected(getContext())) {
-                    readCacheData();
+            public void onResponse(Call<JsonRespBase<IndexGift>> call, Response<JsonRespBase<IndexGift>>
+                    response) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-                if (mCallRefresh != null) {
-                    mCallRefresh.cancel();
+                if (response != null && response.isSuccessful()) {
+                    Global.sServerTimeDiffLocal = System.currentTimeMillis() - response.headers().getDate
+                            ("Date").getTime();
+                    if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
+                        // 获取数据成功
+                        refreshSuccessEnd();
+                        IndexGift data = response.body().getData();
+                        updateData(data, 0, -1);
+                        mLastPage = PAGE_FIRST;
+                        FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
+                        requestLikeData();
+                        return;
+                    }
                 }
+                AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
+                readCacheData();
+            }
 
-                ReqIndexGift data = new ReqIndexGift();
-                JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
-                mCallRefresh = Global.getNetEngine().obtainIndexGift(reqData);
-                mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGift>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<IndexGift>> call, Response<JsonRespBase<IndexGift>>
-                            response) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        if (response != null && response.isSuccessful()) {
-                            Global.sServerTimeDiffLocal = System.currentTimeMillis() - response.headers().getDate
-                                    ("Date").getTime();
-                            if (response.body() != null && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                // 获取数据成功
-                                refreshSuccessEnd();
-                                IndexGift data = response.body().getData();
-                                updateData(data, 0, -1);
-                                mLastPage = PAGE_FIRST;
-                                FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
-                                requestLikeData();
-                                return;
-                            }
-                        }
-                        AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
-                        readCacheData();
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonRespBase<IndexGift>> call, Throwable t) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
-                        readCacheData();
-                    }
-                });
+            @Override
+            public void onFailure(Call<JsonRespBase<IndexGift>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
+                readCacheData();
             }
         });
     }
@@ -374,7 +369,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
 
         if (!mIsLoadLike) {
-            AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求猜你喜欢数据");
             mIsLoadLike = true;
             JsonReqBase<ReqGiftLike> req = new JsonReqBase<>();
             req.data = new ReqGiftLike();

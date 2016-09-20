@@ -267,9 +267,6 @@ public class MixUtil {
         ScoreManager.getInstance().initTaskState();
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "context = " + (context instanceof LoginActivity) + ", activity = "
-                + context);
         if (context != null) {
             if (AssistantApp.getInstance().getSetupOuwanAccount() == KeyConfig.KEY_LOGIN_NOT_BIND
                     || um.userInfo.bindOuwanStatus == 1) {

@@ -265,47 +265,40 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
             ToastUtil.showShort(ConstString.TOAST_OUWAN_ERROR);
             return;
         }
+        if (!NetworkUtil.isConnected(getContext())) {
+            ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            return;
+        }
         showLoading();
-        Global.THREAD_POOL.execute(new Runnable() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
+        mCall = Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login));
+        mCall.enqueue(new Callback<JsonRespBase<UserModel>>() {
             @Override
-            public void run() {
-                if (!NetworkUtil.isConnected(getContext())) {
-                    hideLoading();
-                    ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
+            public void onResponse(Call<JsonRespBase<UserModel>> call,
+                                   Response<JsonRespBase<UserModel>> response) {
+                if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
-
-                if (mCall != null) {
-                    mCall.cancel();
+                hideLoading();
+                if (response != null && response.isSuccessful()) {
+                    if (response.body() != null
+                            && response.body().getCode() == NetStatusCode.SUCCESS) {
+                        doAfterSuccess(response, login);
+                        return;
+                    }
                 }
-                mCall = Global.getNetEngine().login(NetUrl.USER_OUWAN_LOGIN, new JsonReqBase<ReqLogin>(login));
-                mCall.enqueue(new Callback<JsonRespBase<UserModel>>() {
-                    @Override
-                    public void onResponse(Call<JsonRespBase<UserModel>> call,
-                                           Response<JsonRespBase<UserModel>> response) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        if (response != null && response.isSuccessful()) {
-                            if (response.body() != null
-                                    && response.body().getCode() == NetStatusCode.SUCCESS) {
-                                doAfterSuccess(response, login);
-                                return;
-                            }
-                        }
-                        ToastUtil.blurErrorResp(response);
-                    }
+                ToastUtil.blurErrorResp(response);
+            }
 
-                    @Override
-                    public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
-                        if (!mCanShowUI || call.isCanceled()) {
-                            return;
-                        }
-                        hideLoading();
-                        ToastUtil.blurThrow(t);
-                    }
-                });
+            @Override
+            public void onFailure(Call<JsonRespBase<UserModel>> call, Throwable t) {
+                if (!mCanShowUI || call.isCanceled()) {
+                    return;
+                }
+                hideLoading();
+                ToastUtil.blurThrow(t);
             }
         });
     }
@@ -338,7 +331,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
         }
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
-        ((LoginActivity)getActivity()).doLoginBack();
+        ((LoginActivity) getActivity()).doLoginBack();
     }
 
     public void hideLoading() {
