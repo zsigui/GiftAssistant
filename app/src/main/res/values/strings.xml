@@ -321,7 +321,9 @@
     <string name = "st_dialog_pay_score" >金币支付</string >
     <string name = "st_dialog_pay_bean" >偶玩豆支付</string >
     <string name = "st_dialog_seize_success" >恭喜，抢号成功！</string >
+    <string name = "st_dialog_seize_coupon_success" >恭喜，领券成功！</string >
     <string name = "st_dialog_seize_failed" >很遗憾，抢号失败！</string >
+    <string name = "st_dialog_seize_coupon_failed" >很遗憾，领券失败！</string >
     <string name = "st_dialog_search_success" >恭喜，淘号成功！</string >
     <string name = "st_dialog_search_failed" >很遗憾，淘号失败</string >
     <string name = "st_dialog_btn_ok" >我知道了</string >

@@ -76,6 +76,10 @@ public class GiftTypeUtil {
     public static final int UI_TYPE_COUPON_SEIZE = 16;
     public static final int UI_TYPE_COUPON_RESERVE = 17;
     public static final int UI_TYPE_COUPON_OTHER = 18;
+    // 首充券使用状态
+    public static final int COUPON_USAGE_NEVER = 0;
+    public static final int COUPON_USAGE_USED = 1;
+    public static final int COUPON_USAGE_OVER = 2;
 
     // 礼包性质 0 普通 1 活动
     public static final int NATURE_COMMON = 0;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseListAdapter;
+import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.model.data.resp.MyCouponDetail;
 import com.oplay.giftcool.ui.fragment.dialog.UsageCouponHintDialog;
 import com.oplay.giftcool.util.DateUtil;
@@ -70,15 +71,15 @@ public class MyCouponListAdapter extends BaseListAdapter<MyCouponDetail> impleme
                 DateUtil.formatTime(o.useEndTime, "yyyy.MM.dd HH:mm")));
 
         switch (o.usageStatus) {
-            case 0:
+            case GiftTypeUtil.COUPON_USAGE_NEVER:
                 holder.btnSend.setText("去使用");
                 holder.btnSend.setEnabled(true);
                 break;
-            case 1:
+            case GiftTypeUtil.COUPON_USAGE_USED:
                 holder.btnSend.setText("已使用");
                 holder.btnSend.setEnabled(false);
                 break;
-            case 2:
+            case GiftTypeUtil.COUPON_USAGE_OVER:
                 holder.btnSend.setText("已过期");
                 holder.btnSend.setEnabled(false);
                 break;

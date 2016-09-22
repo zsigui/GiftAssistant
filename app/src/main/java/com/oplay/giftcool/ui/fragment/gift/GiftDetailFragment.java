@@ -42,6 +42,7 @@ import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.dialog.UsageCouponHintDialog;
 import com.oplay.giftcool.ui.widget.DeletedTextView;
 import com.oplay.giftcool.ui.widget.button.DownloadButtonView;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
@@ -292,11 +293,26 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         tvCode.setVisibility(View.VISIBLE);
         tvSeizeHint.setVisibility(View.GONE);
         if (giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
-            btnCopy.setVisibility(View.INVISIBLE);
             tvCode.setText(Html.fromHtml(getString(R.string.st_gift_detail_coupon_seized)));
+            btnCopy.setVisibility(View.INVISIBLE);
+            btnSend.setState(GiftTypeUtil.BUTTON_TYPE_SEIZE);
+            switch (giftData.usageStatus) {
+                case GiftTypeUtil.COUPON_USAGE_NEVER:
+                    btnSend.setText("去使用");
+                    btnSend.setEnabled(true);
+                    break;
+                case GiftTypeUtil.COUPON_USAGE_USED:
+                    btnSend.setText("已使用");
+                    btnSend.setEnabled(false);
+                    break;
+                case GiftTypeUtil.COUPON_USAGE_OVER:
+                    btnSend.setText("已过期");
+                    btnSend.setEnabled(false);
+                    break;
+            }
         } else {
-            btnCopy.setVisibility(View.VISIBLE);
             tvCode.setText(Html.fromHtml(String.format(ConstString.TEXT_GIFT_CODE, giftData.code)));
+            btnCopy.setVisibility(View.VISIBLE);
         }
     }
 
@@ -465,12 +481,16 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 }
                 break;
             case R.id.btn_copy:
+                if (mData == null || mData.giftData == null) {
+                    return;
+                }
                 ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setPrimaryClip(ClipData.newPlainText("礼包码", mData.giftData.code));
                 ToastUtil.showShort(ConstString.TOAST_COPY_CODE);
                 break;
             case R.id.btn_send:
-                if (mData == null) {
+                if (mData == null || mData.giftData == null) {
+                    ToastUtil.showShort(ConstString.TOAST_MISS_STATE);
                     return;
                 }
                 // 取消强制要求下载的模块
@@ -478,7 +498,17 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
 //						&& mData.giftData.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
 //					return;
 //				}
-                PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend, this);
+                if (mData.giftData.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZED
+                        && mData.giftData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON) {
+                    if (mData.gameData == null) {
+                        return;
+                    }
+                    UsageCouponHintDialog.newInstance(mData.gameData).show(
+                            getChildFragmentManager(),
+                            UsageCouponHintDialog.class.getSimpleName());
+                } else {
+                    PayManager.getInstance().seizeGift(getActivity(), mData.giftData, btnSend, this);
+                }
                 break;
             case R.id.tv_activity_hint:
                 if (mData == null) {

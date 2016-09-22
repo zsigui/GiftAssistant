@@ -12,7 +12,7 @@ import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.model.AppStatus;
-import com.oplay.giftcool.model.data.resp.MyCouponDetail;
+import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.util.ToastUtil;
 
@@ -29,9 +29,9 @@ public class UsageCouponHintDialog extends BaseFragment_Dialog implements BaseFr
 	private Spanned mSpanned;
 	private int mPositiveVisibility = View.VISIBLE;
 	private int mNegativeVisibility = View.VISIBLE;
-	private MyCouponDetail mAppInfo;
+	private GameDownloadInfo mAppInfo;
 
-	public static UsageCouponHintDialog newInstance(MyCouponDetail mAppInfo) {
+	public static UsageCouponHintDialog newInstance(GameDownloadInfo mAppInfo) {
 		UsageCouponHintDialog dialog =  new UsageCouponHintDialog();
 		Bundle b = new Bundle();
 		b.putSerializable(KeyConfig.KEY_DATA, mAppInfo);
@@ -52,7 +52,7 @@ public class UsageCouponHintDialog extends BaseFragment_Dialog implements BaseFr
 			dismiss();
 			return;
 		}
-		mAppInfo = (MyCouponDetail) getArguments().getSerializable(KeyConfig.KEY_DATA);
+		mAppInfo = (GameDownloadInfo) getArguments().getSerializable(KeyConfig.KEY_DATA);
 
 		setListener(this);
 		if (mSpanned != null) {

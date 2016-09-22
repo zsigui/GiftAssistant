@@ -236,8 +236,8 @@ public class PayManager {
                     return;
                 }
                 ConfirmDialog dialog = ConfirmDialog.newInstance();
-                dialog.setTitle(context.getResources().getString(R.string
-                        .st_dialog_seize_failed));
+                dialog.setTitle(context.getResources().getString(gift.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON ?
+                        R.string.st_dialog_seize_coupon_failed : R.string.st_dialog_seize_failed));
                 dialog.setNegativeVisibility(View.GONE);
                 dialog.setPositiveVisibility(View.VISIBLE);
                 dialog.setPositiveBtnText(context.getResources().getString(R.string
@@ -259,8 +259,8 @@ public class PayManager {
         AccountManager.getInstance().updatePartUserInfo();
         // 构造支付弹窗
         GetCodeDialog dialog = GetCodeDialog.newInstance(codeData);
-        dialog.setTitle(context.getResources().getString(R.string
-                .st_dialog_seize_success));
+        dialog.setTitle(context.getResources().getString(gift.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON ?
+                R.string.st_dialog_seize_coupon_success : R.string.st_dialog_seize_success));
         dialog.show(context.getSupportFragmentManager(), GetCodeDialog.class.getSimpleName());
         // 统计
         staticsPay(context, StatisticsManager.ID.GIFT_BEAN_SEIZE,
@@ -362,8 +362,8 @@ public class PayManager {
                 } else {
                     ConfirmDialog dialog = ConfirmDialog.newInstance();
                     if (isSeize) {
-                        dialog.setTitle(context.getResources().getString(R.string
-                                .st_dialog_seize_failed));
+                        dialog.setTitle(context.getResources().getString(gift.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON ?
+                                R.string.st_dialog_seize_coupon_failed : R.string.st_dialog_seize_failed));
                     } else {
                         dialog.setTitle(context.getResources().getString(R.string
                                 .st_dialog_search_failed));
@@ -423,8 +423,8 @@ public class PayManager {
             doFocusOperation(codeData.gameInfo.id);
         }
         if (isSeize) {
-            dialog.setTitle(context.getResources().getString(R.string
-                    .st_dialog_seize_success));
+            dialog.setTitle(context.getResources().getString(gift.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON ?
+                    R.string.st_dialog_seize_coupon_success : R.string.st_dialog_seize_success));
         } else {
             dialog.setTitle(context.getResources().getString(R.string
                     .st_dialog_search_success));
