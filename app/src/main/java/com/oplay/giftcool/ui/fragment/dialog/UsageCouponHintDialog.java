@@ -78,7 +78,7 @@ public class UsageCouponHintDialog extends BaseFragment_Dialog implements BaseFr
 				setPositiveBtnText("确认");
 			}
 		}
-		setContent(String.format(Locale.CHINA, "请使用您的礼包酷账号(%s)登录游戏后直接使用",
+		setContent(String.format(Locale.CHINA, "请使用您的偶玩账号(%s)登录游戏后直接使用",
 				AccountManager.getInstance().getUserInfo().username));
 	}
 

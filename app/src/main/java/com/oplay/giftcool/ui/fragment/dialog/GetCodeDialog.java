@@ -46,7 +46,7 @@ public class GetCodeDialog extends BaseFragment_Dialog implements BaseFragment_D
         if (mData != null && mData.totalType == GiftTypeUtil.TOTAL_TYPE_COUPON
                 && (mData.buttonState == GiftTypeUtil.BUTTON_TYPE_SEIZE
                 || mData.buttonState == GiftTypeUtil.BUTTON_TYPE_RESERVE_TAKE)) {
-            tvContent.setText(Html.fromHtml("兑换码已添加到您的游戏账号"));
+            tvContent.setText(Html.fromHtml("首充券已添加到您的游戏账号"));
             tvHint.setText(String.format(Locale.CHINA, "请使用偶玩账号(%s)登录游戏后直接使用",
                     AccountManager.getInstance().getUserInfo().username));
         } else {
