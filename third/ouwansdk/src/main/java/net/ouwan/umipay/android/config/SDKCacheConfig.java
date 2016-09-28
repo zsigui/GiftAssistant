@@ -137,6 +137,10 @@ public class SDKCacheConfig implements Interface_Serializable {
 	private boolean mIsMobileLogin = true;
 
 	private boolean mHasLocalCache = false;
+	/**
+	 *  @Fields mHasAnnouncement:是否有公告
+	 */
+	private boolean mShowBoard = false;
 
 	private SDKCacheConfig(Context context) {
 		read(context);
@@ -197,6 +201,7 @@ public class SDKCacheConfig implements Interface_Serializable {
 		Basic_JSONUtil.put(object, "mEnableExitToCommunity", mEnableExitToCommunity);
 		Basic_JSONUtil.put(object, "mIsLightSDK", mIsLightSDK);
 		Basic_JSONUtil.put(object, "mIsMobileLogin", mIsMobileLogin);
+		Basic_JSONUtil.put(object, "mShowBoard", mShowBoard);
 		return object.toString();
 	}
 
@@ -494,6 +499,14 @@ public class SDKCacheConfig implements Interface_Serializable {
 	public void setMobileLogin(boolean isMobileLogin){
 		mIsMobileLogin = isMobileLogin;
 	}
+
+	public boolean isShowBoard(){
+		return mShowBoard;
+	}
+	public void setShowBoard(boolean showBoard){
+		mShowBoard = showBoard;
+	}
+
 	public boolean isHasLocalCache() {
 		return mHasLocalCache;
 	}

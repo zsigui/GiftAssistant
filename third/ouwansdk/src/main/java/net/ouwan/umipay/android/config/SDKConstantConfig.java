@@ -80,6 +80,9 @@ public class SDKConstantConfig {
 	private static final String UMIPAY_CACHE_URL = Coder_SDKPswCoder.decode(ConstantString.UMIPAY_CACHE_URL,
 			ConstantString.SERVER_URL_KEY);
 
+	private static final String UMIPAY_ANNOUNCEMENT_URL = Coder_SDKPswCoder.decode(ConstantString.UMIPAY_ANNOUNCEMENT_URL,
+			ConstantString.SERVER_URL_KEY);
+
 
 	public static String get_HOST_URL(Context context) {
 		if (isTestMode(context)) {
@@ -175,6 +178,22 @@ public class SDKConstantConfig {
 				return HOST_HTTPS + UMIPAY_PAY_URL;
 			} else {
 				return HOST_HTTP + UMIPAY_PAY_URL;
+			}
+		}
+	}
+
+	public static String get_UMIPAY_ANNOUNCEMENT_URL(Context context) {
+		if (isTestMode(context)) {
+			if (isEnableHttps(context)) {
+				return HOST4TEST_HTTPS + UMIPAY_ANNOUNCEMENT_URL;
+			} else {
+				return HOST4TEST_HTTP + UMIPAY_ANNOUNCEMENT_URL;
+			}
+		} else {
+			if (isEnableHttps(context)) {
+				return HOST_HTTPS + UMIPAY_ANNOUNCEMENT_URL;
+			} else {
+				return HOST_HTTP + UMIPAY_ANNOUNCEMENT_URL;
 			}
 		}
 	}

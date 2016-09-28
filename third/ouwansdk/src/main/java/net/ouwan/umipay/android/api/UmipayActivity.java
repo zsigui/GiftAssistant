@@ -20,6 +20,7 @@ import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.fragment.BaseFragment;
 import net.ouwan.umipay.android.fragment.ChangeAccountFragment;
 import net.ouwan.umipay.android.fragment.SelectCommonAccountFragment;
+import net.ouwan.umipay.android.fragment.UmipayAnnouncementFragment;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
 import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 
@@ -30,6 +31,7 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
     private View mRootLayout;
 
     private static final String ACTION_RESTART_CHANGE_ACCOUNT = "change_account";
+    public static final String ACTION_ANNOUNCEMENT = "show_announcement";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,20 +146,30 @@ public class UmipayActivity extends FragmentActivity implements FragmentNavigati
     /**
      * 重新调整布局大小
      */
-    protected void resize() {
+    public void resize() {
         try {
             //直接获取dimens对应的width和marginLeft，更新横竖屏切换后布局的大小
-            int width = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
-                    "umipay_main_diglog_width"));
             int paddingLeft = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
                     "umipay_main_diglog_marginLeft"));
             int paddingRight = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
                     "umipay_main_diglog_marginRight"));
+            int paddingTop = mRootLayout.getPaddingTop();
+            int paddingBottom = mRootLayout.getPaddingBottom();
             if (mRootLayout != null) {
                 ViewGroup.LayoutParams lp = mRootLayout.getLayoutParams();
-                lp.width = width;
-                int paddingTop = mRootLayout.getPaddingTop();
-                int paddingBottom = mRootLayout.getPaddingBottom();
+                if(getTopFragment() instanceof UmipayAnnouncementFragment){
+                    lp.width = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
+                            "umipay_announcement_diglog_width"));
+                    lp.height = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
+                            "umipay_announcement_diglog_height"));
+                    paddingLeft = 0;
+                    paddingTop= 0 ;
+                    paddingRight = 0;
+                    paddingBottom = 0;
+                }else {
+                    lp.width = (int) getResources().getDimension(Util_Resource.getIdByReflection(this, "dimen",
+                            "umipay_main_diglog_width"));
+                }
                 mRootLayout.setPadding(paddingLeft, paddingTop, paddingRight,
                         paddingBottom);
                 mRootLayout.setLayoutParams(lp);

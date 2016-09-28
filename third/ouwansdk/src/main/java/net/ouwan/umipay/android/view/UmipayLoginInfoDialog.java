@@ -186,6 +186,10 @@ public class UmipayLoginInfoDialog extends Dialog implements Interface_Account_L
 								}
 
 						}
+						Intent intent = new Intent(mContext, UmipayActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						intent.setAction(UmipayActivity.ACTION_ANNOUNCEMENT);
+						mContext.startActivity(intent);
 					}
 					if(msg.what == AUTO_LOGIN_HIDE_TIP_ANIMATION){
 						if(mTipsTextView != null) {

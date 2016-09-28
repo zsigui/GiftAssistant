@@ -1,5 +1,6 @@
 package net.ouwan.umipay.android.handler;
 
+import net.ouwan.umipay.android.asynctask.handler.JsHandler_LoadUrlInNewBrowser;
 import net.youmi.android.libs.webjs.js.base.extendjs.JsModel_Browser_Target_Basic_Extend_Js_Interface_Factory;
 import net.youmi.android.libs.webjs.js.interfaces.Interface_Js_Handler;
 
@@ -65,6 +66,8 @@ public class JsModel_Browser_PayExtent_Js_Interface_Factory extends
 					return new JsHandler_Pay_With_WECHAT();
 				case 16:
 					return new JsHandler_ChangeCommonAccount_SaveSession();
+				case 17:
+					return new JsHandler_LoadUrlInNewBrowser();
 				default:
 					break;
 			}

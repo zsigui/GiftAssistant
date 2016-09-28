@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -151,6 +152,19 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 	public static void postUrl(Context context, String title, String url, List<NameValuePair> paramsList,
 	                           int flags, String allPageLoadJsCode, String allPageLoadJsFileUrl, int payType) {
 		try {
+			String postdata = null;
+			if (paramsList != null && paramsList.size() > 0) {
+				postdata = generatePostData(paramsList);
+			}
+			postUrl(context,title,url,postdata,flags,allPageLoadJsCode,allPageLoadJsFileUrl,payType);
+		} catch (Throwable e) {
+			Debug_Log.e(e);
+		}
+	}
+
+	public static void postUrl(Context context, String title, String url, String postdata,
+	                           int flags, String allPageLoadJsCode, String allPageLoadJsFileUrl, int payType) {
+		try {
 			Intent intent = new Intent(context, UmipayBrowser.class);
 			intent.putExtra(KEY_TITLE, title);
 			intent.putExtra(KEY_URL, url);
@@ -166,8 +180,8 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 						allPageLoadJsFileUrl);
 			}
 
-			if (paramsList != null && paramsList.size() > 0) {
-				intent.putExtra(KEY_POST_DATA, generatePostData(paramsList));
+			if (!TextUtils.isEmpty(postdata)) {
+				intent.putExtra(KEY_POST_DATA, postdata);
 			}
 
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -297,7 +311,27 @@ public class UmipayBrowser extends Activity implements Interface_SDK_Handler, In
 				Flags_Browser_Config.FLAG_SUPPORT_CUSTOM_CONFIRM;
 
 		JsModel_Browser_PayExtent_Js_Interface_Factory factory = new JsModel_Browser_PayExtent_Js_Interface_Factory();
-		mWebPage = new View_SDKWebPage(this, this, mFlags, this, mAllPageJsCode, mAllPageLoadJsFileUrl, 0, factory);
+		mWebPage = new View_SDKWebPage(this, this, mFlags, this, mAllPageJsCode, mAllPageLoadJsFileUrl, 0, factory){
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view,String url){
+
+				try {
+					if (!TextUtils.isEmpty(url) && url.contains("weixin://wap/pay?")) {
+						Intent intent = new Intent();
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse(url));
+						startActivity(intent);
+						//当前webview不再加载包含微信协议的url且关闭浏览器
+						finish();
+						return true;
+					}
+				}catch (Throwable e){
+					Debug_Log.e(e);
+				}
+
+				return super.shouldOverrideUrlLoading(view,url);
+			}
+		};
 		mWebPage.setYoumiWebViewClient(new UmipayWebViewClinet());
 		mWebPage.getCurrentView().setPadding(0, 0, 0, 0);
 		if (Build.VERSION.SDK_INT >= 19) {

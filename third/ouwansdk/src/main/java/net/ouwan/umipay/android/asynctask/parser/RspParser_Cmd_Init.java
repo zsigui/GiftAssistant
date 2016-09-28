@@ -58,6 +58,7 @@ public class RspParser_Cmd_Init extends CommonRspParser<Gson_Cmd_Init> {
 					cacheConfig.setShowBbs(cmdInitDataConfig.getShowbbs() == 1);
 					cacheConfig.setShowHelp(cmdInitDataConfig.getShowhelp() == 1);
 					cacheConfig.setShowAccount(cmdInitDataConfig.getShowaccount() == 1);
+					cacheConfig.setShowBoard(cmdInitDataConfig.isShowBoard() == 1);
 
 					cacheConfig.setRedpointTime(cmdInitDataConfig.getRedpointtime());
 					cacheConfig.setEpayIdentify(cmdInitDataConfig.getEpayidentify());
@@ -68,8 +69,7 @@ public class RspParser_Cmd_Init extends CommonRspParser<Gson_Cmd_Init> {
 					cacheConfig.setExitDialogDownloadBtnText(cmdInitDataConfigOuwan.getDownloadText());
 					cacheConfig.setEnableExitToCommunity(cmdInitDataConfigOuwan.getShowCommunity());
 					//测试
-					cacheConfig.setIsLightSDK(false);
-//					cacheConfig.setIsLightSDK(cmdInitDataConfigOuwan.getIsLightSDK());
+					cacheConfig.setIsLightSDK(cmdInitDataConfigOuwan.getIsLightSDK());
 					cacheConfig.save();
 				}
 				postResult(result);

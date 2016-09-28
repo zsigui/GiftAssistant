@@ -16,6 +16,7 @@ import net.ouwan.umipay.android.Utils.Util_Resource;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
+import net.ouwan.umipay.android.config.SDKCacheConfig;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
 import net.ouwan.umipay.android.entry.gson.Gson_Cmd_VerificateSMS;
@@ -296,7 +297,11 @@ public class BindMobileFragment extends BaseFragment implements TextView.OnEdito
 			if (mCurrentVerificateType == Interface_Verificate_SMS_Listener.TYPE_VERIFICATE_SMS) {
 				if (code == UmipaySDKStatusCode.SUCCESS) {
 					sendLoginResultMsg(code, null, mUmipayAccount.getOauthType(), mUmipayAccount);
-					getActivity().finish();
+					if(SDKCacheConfig.getInstance(getActivity()).isShowBoard()) {
+						replaceFragmentFromActivityFragmentManager(UmipayAnnouncementFragment.newInstance());
+					}else {
+						getActivity().finish();
+					}
 				} else {
 					msg = UmipaySDKStatusCode.handlerMessage(code, msg);
 					toast("验证验证码失败(" + msg + ")");

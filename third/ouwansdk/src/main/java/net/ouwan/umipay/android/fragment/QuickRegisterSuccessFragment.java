@@ -14,6 +14,7 @@ import net.ouwan.umipay.android.Utils.Util_ScreenShot;
 import net.ouwan.umipay.android.api.UmipaySDKManager;
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
 import net.ouwan.umipay.android.asynctask.TaskCMD;
+import net.ouwan.umipay.android.config.SDKCacheConfig;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayAccount;
 import net.ouwan.umipay.android.entry.gson.Gson_Login;
@@ -119,7 +120,11 @@ public class QuickRegisterSuccessFragment extends BaseFragment {
 	// 一键注册 进入游戏
 	private void enterGame() {
 		sendLoginResultMsg(UmipaySDKStatusCode.SUCCESS, null, UmipayLoginInfoDialog.QUCIK_REGISTER, mLoginAccount);
-		getActivity().finish();
+		if(SDKCacheConfig.getInstance(getActivity()).isShowBoard()) {
+			replaceFragmentFromActivityFragmentManager(UmipayAnnouncementFragment.newInstance());
+		}else {
+			getActivity().finish();
+		}
 	}
 
 	private void sendLoginResultMsg(int code, String msg, int loginType, UmipayAccount account) {

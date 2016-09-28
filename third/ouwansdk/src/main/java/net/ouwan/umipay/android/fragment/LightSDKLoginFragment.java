@@ -325,8 +325,11 @@ public class LightSDKLoginFragment extends BaseFragment implements TextView.OnEd
 						} else {
 							sendLoginResultMsg(UmipaySDKStatusCode.SUCCESS, null, UmipayLoginInfoDialog.NORMAL_LOGIN,
 									account);
-
-							getActivity().finish();
+							if(SDKCacheConfig.getInstance(getActivity()).isShowBoard()) {
+								replaceFragmentFromActivityFragmentManager(UmipayAnnouncementFragment.newInstance());
+							}else {
+								getActivity().finish();
+							}
 						}
 					} catch (Throwable e) {
 						Debug_Log.e(e);

@@ -5,7 +5,6 @@ import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 
 import net.ouwan.umipay.android.api.UmipaySDKStatusCode;
-import net.ouwan.umipay.android.debug.Debug_Log;
 
 /**
  * Gson_Cmd_Init
@@ -82,6 +81,8 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 		private int redpointtime;
 		@SerializedName("epayidentify")
 		private String epayidentify;
+		@SerializedName("showboard")
+		private int showboard;
 		@SerializedName("ouwan")
 		private Cmd_Init_Data_Config_Ouwan ouwan;
 
@@ -220,6 +221,13 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 		public int getEnableErrorReport(){
 			return this.uploaderrmsg;
 		}
+
+		public int isShowBoard(){
+			return showboard;
+		}
+		public void setShowBoard(int showBoard){
+			this.showboard = showBoard;
+		}
 	}
 
 	public class Cmd_Init_Data_Config_Ouwan {
@@ -235,6 +243,8 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 		private String mDownloadText;
 		@SerializedName("showCommunity")
 		private boolean mShowCommunity ;
+		@SerializedName("islightsdk")
+		private boolean islightsdk;
 
 		public String getPackageName() {
 			return mPackageName;
@@ -282,6 +292,14 @@ public class Gson_Cmd_Init extends Gson_Base<Gson_Cmd_Init.Cmd_Init_Data> {
 
 		public void setShowCommunity(boolean showCommunity) {
 			mShowCommunity = showCommunity;
+		}
+
+		public void setIsLightSDK(boolean islightsdk){
+			this.islightsdk = islightsdk;
+		}
+
+		public boolean getIsLightSDK(){
+			return this.islightsdk;
 		}
 	}
 }

@@ -61,6 +61,8 @@ public class ConstantString {
 	public static final String UMIPAY_JUMP_URL = "4c0c165c464b0b105940";
 	//  /pay/cache
 	public static final String UMIPAY_CACHE_URL = "4c160248190700065c55";
+	//  /jump/board
+	public static final String UMIPAY_ANNOUNCEMENT_URL = "4c0c165c464b030a554206";
 
 	public static final String SO_LIB_NAME_KEY = "ONRuxMnz";
 	// libymfx.so
