@@ -1,15 +1,21 @@
 package com.oplay.giftcool.receiver;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.AppDebugConfig;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 
+import net.ouwan.umipay.android.api.UmipayFloatMenu;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
+import net.youmi.android.libs.common.util.Util_System_Intent;
 
 /**
  * Created by zsigui on 16-9-5.
@@ -23,8 +29,38 @@ public class AccountReceiver extends BroadcastReceiver {
         try {
             String action = intent.getAction();
             AppDebugConfig.d(AppDebugConfig.TAG_WARN, "receiver action = " + action);
-            if (UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE.equalsIgnoreCase(action)) {
+            if (UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE.equals(action)) {
                 OuwanSDKManager.getInstance().showChangeAccountView();
+            } else if (UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK.equals(action)) {
+                Intent newIntent = new Intent();
+                String _packageName = intent.getExtras().getString(UmipayFloatMenu.DEST_PACKAGENAME);
+                String _className = intent.getExtras().getString(UmipayFloatMenu.DEST_CLASSNAME);
+                int taskid = 0;
+                try {
+                    taskid = intent.getExtras().getInt(UmipayFloatMenu.DEST_TASKID);
+                } catch (Throwable e) {
+                    Debug_Log.e(e);
+                }
+                if (taskid != 0) {
+                    //要求当前应用有android.permission.REORDER_TASKS权限
+                    ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                    am.moveTaskToFront(taskid, 0);
+                    context.unregisterReceiver(this);
+                } else if (_packageName != null && _className != null) {
+                    //要求被打开activity的exported属性为true或者设置相同android:sharedUserId
+                    ComponentName componentName = new ComponentName(_packageName, _className);
+                    newIntent.setComponent(componentName);
+                    newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                            | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    newIntent.setAction("change_account");
+                    context.startActivity(newIntent);
+                    context.unregisterReceiver(this);
+                }
+            } else if (UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK_TIMEOUT.equals(action)) {
+                if (!TextUtils.isEmpty(Global.sCachePackageName)) {
+                    Util_System_Intent.startActivityByPackageName(context, Global.sCachePackageName);
+                    Global.sCachePackageName = null;
+                }
             } else if (ACTION_SELECT.equalsIgnoreCase(action)) {
                 OuwanSDKManager.getInstance().showSelectAccountView();
             }

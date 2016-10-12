@@ -10,6 +10,7 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.TypeStatusCode;
 import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
@@ -570,14 +571,20 @@ public class PayManager {
                         if (call.isCanceled()) {
                             return;
                         }
-                        if (response != null && response.isSuccessful()
-                                && response.body() != null && response.body().isSuccess()) {
-                            GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
-                            dialog.show(fm, GetCodeDialog.class.getSimpleName());
-                            if (listener != null) {
-                                listener.doCallBack(null);
+                        if (response != null && response.isSuccessful()) {
+                            if (response.body() != null && response.body().isSuccess()) {
+                                GetCodeDialog dialog = GetCodeDialog.newInstance(response.body().getData());
+                                dialog.show(fm, GetCodeDialog.class.getSimpleName());
+                                if (listener != null) {
+                                    listener.doCallBack(null);
+                                }
+                                return;
                             }
-                            return;
+                            if (response.body() != null && response.body().getCode() == NetStatusCode.ERR_HAS_SEIZED
+                                    && listener != null) {
+                                listener.doCallBack(null);
+                                return;
+                            }
                         }
                         ToastUtil.blurErrorResp(response);
                     }

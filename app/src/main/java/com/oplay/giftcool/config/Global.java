@@ -122,6 +122,7 @@ public class Global {
     public static boolean sHasShowedSignInHint = false;
 
     private static SparseIntArray sLikeNewTime;
+    public static String sCachePackageName;
 
     public static SparseIntArray getLikeNewTimeArray() {
         if (sLikeNewTime == null) {

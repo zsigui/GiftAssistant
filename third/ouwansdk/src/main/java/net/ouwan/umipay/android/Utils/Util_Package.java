@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.text.TextUtils;
 
+import net.ouwan.umipay.android.api.UmipayFloatMenu;
 import net.ouwan.umipay.android.debug.Debug_Log;
 import net.ouwan.umipay.android.entry.UmipayCommonAccount;
 import net.ouwan.umipay.android.manager.UmipayAccountManager;
@@ -13,6 +14,7 @@ import net.ouwan.umipay.android.manager.UmipayCommonAccountCacheManager;
 import net.youmi.android.libs.common.coder.Coder_Md5;
 import net.youmi.android.libs.common.util.Util_System_Intent;
 import net.youmi.android.libs.common.util.Util_System_Package;
+import net.youmi.android.libs.common.util.Util_System_Runtime;
 
 /**
  * Utils_Package
@@ -34,7 +36,8 @@ public class Util_Package {
         }
     }
 
-    public synchronized static void startUmiAppWithSession(Context context, String packageName) {
+    public synchronized static void startUmiAppWithSession(final Context context, final String packageName,
+                                                           final long timeout) {
         if (context == null || TextUtils.isEmpty(packageName)) {
             return;
         }
@@ -48,15 +51,26 @@ public class Util_Package {
                 account.setUserName(UmipayAccountManager.getInstance(context).getCurrentAccount().getUserName());
                 UmipayCommonAccountCacheManager.getInstance(context).addCommonAccount(account,
                         UmipayCommonAccountCacheManager.COMMON_ACCOUNT_TO_CHANGE);
-
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE);
                 broadcastIntent.setPackage(packageName);
-                //实际还要打开app
-                if (Util_System_Intent.startActivityByPackageName(context, packageName)) {
-                    //发送广播
-                    context.sendBroadcast(broadcastIntent);
-                }
+                broadcastIntent.putExtra(UmipayFloatMenu.SRC_PACKAGENAME, context.getApplicationInfo().packageName);
+                broadcastIntent.putExtra(UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK, UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK);
+                //发送广播
+                context.sendBroadcast(broadcastIntent);
+                Util_System_Runtime.getInstance().runInUiThreadDelayed_ms(new Runnable(){
+                    public void run() {
+                        //execute the task
+                        try{
+                            Intent broadcastIntent = new Intent();
+                            broadcastIntent.setAction(UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK_TIMEOUT);
+                            broadcastIntent.setPackage(context.getPackageName());
+                            context.sendBroadcast(broadcastIntent);
+                        }catch (Throwable e){
+
+                        }
+                    }
+                },timeout);
             } else {
                 // 未登录情况下跳转，直接打开即可
                 Util_System_Intent.startActivityByPackageName(context, packageName);

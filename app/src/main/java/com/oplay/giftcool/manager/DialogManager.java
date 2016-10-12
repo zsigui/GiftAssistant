@@ -252,6 +252,7 @@ public class DialogManager {
         return showUpdateDialog(context, fm, forceShow, AssistantApp.getInstance().getUpdateInfo());
     }
 
+    private int showUpdateCountLimit = 6;
     /**
      * 显示更新弹窗，有更新弹窗并返回true，没则直接返回false
      */
@@ -286,6 +287,12 @@ public class DialogManager {
                     info.setMd5Sum(appInfo.apkMd5);
                     info.setIsDownload(true);
                     SilentDownloadManager.getInstance().startDownload(info);
+                } else {
+                    if (NetworkUtil.isMobileConnected(context) && showUpdateCountLimit -- <= 0) {
+                        // 当多次重复达到此处，同时网络连接依然处于手机网络状态，直接强制执行
+                        SilentDownloadManager.getInstance().setForceDownload(true);
+                        SilentDownloadManager.getInstance().startDownload();
+                    }
                 }
             }
         }

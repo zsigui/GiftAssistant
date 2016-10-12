@@ -384,6 +384,8 @@
                 android:exported = "true" >
             <intent-filter >
                 <action android:name = "net.ouwan.umipay.android.account.change" />
+                <action android:name = "action_account_change_timeout" />
+                <action android:name = "action_callback" />
                 <action android:name = "${applicationId}.account.select" />
             </intent-filter >
         </receiver >

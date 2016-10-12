@@ -148,7 +148,7 @@ public class Util_System_Intent {
 				Intent intent = pm.getLaunchIntentForPackage(packageName);
 
 				if (intent != null) {
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 					context.startActivity(intent);
 					return true;
 				}

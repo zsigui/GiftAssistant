@@ -167,6 +167,10 @@ public class SilentDownloadManager implements ObserverManager.UserActionListener
         mIsRunning = true;
     }
 
+    public void setForceDownload(boolean forceDownload) {
+        mForceDownload = forceDownload;
+    }
+
     /**
      * 读取下载配置文件的信息，然后存储到Map中
      *
