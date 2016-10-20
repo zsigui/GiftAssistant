@@ -90,7 +90,8 @@ public class UmipayFloatMenu implements SensorEventListener {
 						mContext = activity.getApplicationContext();
 						mBroadcastReceiver = new UmipayAccountChangeBroadcastReceiver();
 						IntentFilter filter = new IntentFilter();
-						filter.addAction(UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE);
+						// 礼包酷直接自定义了接收方式，不采用SDK的
+//						filter.addAction(UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE);
 						mContext.registerReceiver(mBroadcastReceiver,filter);
 						setUpdateBubbleTimeInterval(SDKCacheConfig.getInstance(activity).getRedpointTime());
 						initTimer();

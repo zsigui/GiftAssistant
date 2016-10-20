@@ -182,6 +182,7 @@ public class UmipaySDKManager {
 			}
 
 			UmipayCommonAccount accountToChange = UmipayCommonAccountCacheManager.getInstance(context).popCommonAccountToChange();
+			UmipayCommonAccount lastCommonAccount = UmipayCommonAccountCacheManager.getInstance(context).getCommonAccountByPackageName(context.getPackageName(),UmipayCommonAccountCacheManager.COMMON_ACCOUNT);
 			UmipayAccount lastAccount = UmipayAccountManager.getInstance(context).getFirstAccount();
 			boolean autoLogin = SDKCacheConfig.getInstance(context).isAutoLogin();
 			boolean isLogout = UmipayAccountManager.getInstance(context).isLogout();
@@ -190,10 +191,10 @@ public class UmipaySDKManager {
 				UmipayLoginInfoDialog dialog = new UmipayLoginInfoDialog(context, accountToChange.getUserName(), "...切换账号中，请稍等...", true,
 						accountToChange);
 				dialog.show(0);
-			}else if(!isLogout && autoLogin && lastAccount != null && lastAccount.getOauthType() == UmipayAccount.TYPE_MOBILE && !TextUtils.isEmpty(lastAccount.getUserName())){
-				//最后使用手机账号登录的，且勾选自动登录的，使用session进行自动登录
+			}else if(!isLogout && autoLogin && lastCommonAccount != null && lastCommonAccount.getUid() != 0 && !TextUtils.isEmpty(lastCommonAccount.getSession())){
+				//自动登录优先使用通用登录态(包括手机登录)
 				UmipayLoginInfoDialog dialog = new UmipayLoginInfoDialog(context, "", "...自动登录中，请稍等...", true,
-						lastAccount);
+						lastCommonAccount);
 				dialog.show(0);
 			}else if (!isLogout && autoLogin && lastAccount != null && !TextUtils.isEmpty(lastAccount.getUserName()) &&
 					!TextUtils

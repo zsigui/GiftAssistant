@@ -41,12 +41,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by zsigui on 16-1-14.
  */
 public abstract class BaseFragment_WebView extends BaseFragment implements DownloadListener, OnBackPressListener {
 
+    static final String STR_ERR_SSL  = "请求地址SSL加载失败";
 
     protected WebView mWebView;
     private WebSettings mSettings;
@@ -100,7 +102,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 AppDebugConfig.v();
-                onWebReceivedError();
+                onWebReceivedError(errorCode, description);
             }
 
             @Override
@@ -147,7 +149,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 super.onReceivedSslError(view, handler, error);
                 AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, "onReceivedSslError :" + error.getUrl()
                         + "(" + error.getPrimaryError() + ")");
-                onWebReceivedError();
+                onWebReceivedError(error.getPrimaryError(), STR_ERR_SSL);
                 handler.proceed();
             }
 
@@ -157,9 +159,8 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                     AppDebugConfig.w(AppDebugConfig.TAG_WEBVIEW, "onReceivedError : " + error.getDescription()
                             + "(" + error.getErrorCode() + ")");
-
+                    onWebReceivedError(error.getErrorCode(), error.getDescription().toString());
                 }
-                onWebReceivedError();
             }
         });
         final WebChromeClient client = new WebChromeClient() {
@@ -306,7 +307,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
     }
 
 
-    protected void onWebReceivedError() {
+    protected void onWebReceivedError(int errorCode, String description) {
         AppDebugConfig.v();
         mIsLoadingFailed = true;
         if (mViewManager != null) {
@@ -315,6 +316,7 @@ public abstract class BaseFragment_WebView extends BaseFragment implements Downl
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);
         }
+        ToastUtil.showShort(String.format(Locale.CHINA, "加载网页失败！(%d : %s)", errorCode, description));
     }
 
     protected void onWebPageFinished() {

@@ -39,11 +39,22 @@ import retrofit2.Response;
  *         description
  */
 public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> {
+    private static boolean sIsInitialing = false;
     private Context mContext;
     private boolean mNeedUpdateSession = false;
 
     public AsyncTask_InitApplication(Context context) {
         mContext = context.getApplicationContext();
+    }
+
+    public static boolean isIniting() {
+        return sIsInitialing;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        sIsInitialing = true;
     }
 
     @Override
@@ -57,6 +68,12 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        sIsInitialing = false;
     }
 
     /**

@@ -7,6 +7,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.FreeAdapter;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.NetUrl;
@@ -182,6 +183,7 @@ public class GiftFreeFragment extends BaseFragment_Refresh<TimeData<IndexGiftNew
 
     //刷新重置页面
     public void refreshData(ArrayList<TimeData<IndexGiftNew>> data) {
+        AppDebugConfig.w(AppDebugConfig.TAG_WARN, "show data = " + data);
         if (data == null) {
             if (mData == null) {
                 mViewManager.showErrorRetry();

@@ -20,9 +20,9 @@
         <item name = "windowActionBar" >false</item >
         <item name = "android:windowNoTitle" >true</item >
         <item name = "windowNoTitle" >true</item >
-        <item name = "android:windowBackground" >@color/co_transparent</item >
+        <item name = "android:windowBackground" >@color/co_common_content_bg</item >
         <item name = "android:background" >@color/co_transparent</item >
-        <item name = "android:windowIsTranslucent">true</item>
+        <item name = "android:windowIsTranslucent">false</item>
 
         <!-- actionBarSize changed in Lolipop -->
         <item name = "android:actionBarSize" >@dimen/di_tool_bar_bg_height</item >
@@ -40,6 +40,7 @@
         <!--<item code = "android:windowTranslucentStatus" >true</item >-->
         <!--<item code = "android:fitsSystemWindows" >true</item >-->
 
+        <!-- 暂时机子卡顿会出现前后动画不衔接问题，先去除 -->
         <item name = "android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style >
 

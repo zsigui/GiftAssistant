@@ -152,7 +152,9 @@ public class AssistantApp extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
+
 //		mRefWatcher = LeakCanary.install(this);
         // enabled StrictMode only in TEST
         sInstance = this;
@@ -175,6 +177,7 @@ public class AssistantApp extends Application {
         if (mIsGlobalInit) {
             return;
         }
+        GCLog.init(AppDebugConfig.IS_DEBUG);
         if (AppDebugConfig.IS_DEBUG) {
             String data = SPUtil.getString(AssistantApp.getInstance().getApplicationContext(),
                     SPConfig.SP_APP_DEVICE_FILE,
@@ -190,7 +193,7 @@ public class AssistantApp extends Application {
             }
         }
         CrashHandler.getInstance().init();
-        GCLog.init(AppDebugConfig.IS_DEBUG);
+
         initImageLoader();
         // 初始配置加载列表
         initLoadingView();

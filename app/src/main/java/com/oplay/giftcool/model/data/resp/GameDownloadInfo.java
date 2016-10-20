@@ -8,7 +8,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
-import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.download.ApkDownloadDir;
 import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.download.DownloadNotificationManager;
@@ -235,7 +234,6 @@ public class GameDownloadInfo implements IFileDownloadTaskExtendObject {
 
     public void startApp() {
         try {
-            Global.sCachePackageName = packageName;
             Util_Package.startUmiAppWithSession(mContext, packageName, 800);
             handlePlayDownloadTask(getContext(), packageName);
         } catch (Throwable e) {

@@ -489,7 +489,7 @@ public class PushMessageManager {
      */
     public void exit(Context context) {
         JPushInterface.clearLocalNotifications(context);
-        JPushInterface.onKillProcess(context);
+//        JPushInterface.onKillProcess(context);
         isInit = false;
     }
 

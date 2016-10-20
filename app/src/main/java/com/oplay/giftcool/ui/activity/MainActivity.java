@@ -43,6 +43,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AwardDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
+import com.oplay.giftcool.ui.fragment.dialog.SplashFragment;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
@@ -123,6 +124,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mHandler = new Handler(Looper.myLooper());
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,6 +343,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     @Override
     protected void processLogic() {
+
         ObserverManager.getInstance().addUserUpdateListener(this);
 
         for (CheckedTextView ctv : mCtvs) {
@@ -551,12 +554,15 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         super.onPostResume();
         jumpFragment();
 
-
         //没更新才显示欢迎
         if (sIsLoginStateUnavailableShow) {
             handleLoginUnavailable();
         } else if (!handleUpdateApp()) {
             handleFirstOpen();
+        }
+
+        if (!SplashFragment.sHasShow) {
+            new SplashFragment().show(getSupportFragmentManager(), "splash");
         }
     }
 
@@ -663,7 +669,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mApp.appExit();
             // 发送退出指令
             finish();
-            System.exit(0);
+            SplashFragment.sHasShow = false;
+//            System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
             ToastUtil.showShort(ConstString.TOAST_EXIT_APP);

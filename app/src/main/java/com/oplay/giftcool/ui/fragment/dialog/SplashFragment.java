@@ -1,32 +1,38 @@
-package com.oplay.giftcool.ui.activity;
+package com.oplay.giftcool.ui.fragment.dialog;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.asynctask.AsyncTask_InitApplication;
 import com.oplay.giftcool.asynctask.AsyncTask_NetworkInit;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.SPConfig;
 import com.oplay.giftcool.config.WebViewUrl;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.model.data.resp.AdInfo;
-import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
-import com.oplay.giftcool.ui.fragment.dialog.TestChoiceDialog;
 import com.oplay.giftcool.util.DateUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.SPUtil;
@@ -38,25 +44,32 @@ import net.youmi.android.libs.common.compatibility.Compatibility_AsyncTask;
 import java.io.File;
 import java.util.Locale;
 
-/**
- * @author micle
- * @email zsigui@foxmail.com
- * @date 2015/12/19
- */
-public class SplashActivity extends BaseAppCompatActivity implements CallbackListener<Bitmap> {
+import static com.oplay.giftcool.util.ThreadUtil.runOnUiThread;
 
+/**
+ * Created by zsigui on 16-10-19.
+ */
+
+public class SplashFragment extends DialogFragment implements CallbackListener<Bitmap>, View.OnClickListener {
+
+    public static boolean sHasShow = false;
+    private View mContentView;
     private ImageView ivSplash;
     private ImageView ivAdLoad;
     private TextView tvPass;
+    private TestChoiceDialog mDialog;
+
     private final int DEFAULT_AD_TIME = 4;
 
     private int remainTime;
     private String mCurrentImg = "";
-    private String prefixTag;
 
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
+            if (isRemoving()) {
+                return;
+            }
             if (remainTime == 0) {
                 jumpToMain();
             } else {
@@ -64,21 +77,55 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                 tvPass.setText(Html.fromHtml(String.format(Locale.CHINA,
                         "跳过 <font color='#ffaa17'>%ds</font>", remainTime)));
                 remainTime--;
-                ThreadUtil.runOnUiThread(mRunnable, 1000);
+                runOnUiThread(mRunnable, 1000);
             }
         }
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @NonNull
     @Override
-    protected void processLogic() {
-        Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getApplicationContext()));
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
+            savedInstanceState) {
+        if (mContentView == null) {
+            mContentView = inflater.inflate(R.layout.activity_splash, container);
+            initView();
+            processLogic();
+        }
+        return mContentView;
+    }
+
+    private void initView() {
+        ivSplash = getViewById(R.id.iv_splash);
+        tvPass = getViewById(R.id.tv_pass);
+        ivAdLoad = getViewById(R.id.iv_splash_ad);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends View> T getViewById(@IdRes int id) {
+        return (T) mContentView.findViewById(id);
+    }
+
+    private void processLogic() {
+        if (!AssistantApp.getInstance().isGlobalInit()
+                && !AsyncTask_InitApplication.isIniting()) {
+            AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "app async task initial!");
+            Compatibility_AsyncTask.executeParallel(new AsyncTask_InitApplication(getContext()));
+        }
+        Compatibility_AsyncTask.executeParallel(new AsyncTask_NetworkInit(getContext()));
 
         AssistantApp.getInstance().setSplashAdListener(this);
         tvPass.setOnClickListener(this);
@@ -103,18 +150,8 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
         ivSplash.setImageBitmap(b);
     }
 
-    private void showPass(AdInfo adInfo) {
-        if (adInfo != null && adInfo.showPass) {
-            tvPass.setVisibility(View.VISIBLE);
-        } else {
-            tvPass.setVisibility(View.GONE);
-        }
-    }
-
-    private TestChoiceDialog mDialog;
-
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (AppConfig.TEST_MODE) {
             if (mDialog != null) {
@@ -145,92 +182,48 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                             SPConfig.KEY_TEST_REQUEST_URI,
                             mDialog.getContent());
                     AssistantApp.getInstance().setGlobalInit(false);
-                    mApp.appInit();
+                    AssistantApp.getInstance().appInit();
                     initAction();
                     mDialog.dismissAllowingStateLoss();
                 }
             });
             mDialog.setCancelable(false);
-            mDialog.show(getSupportFragmentManager(), "init");
+            mDialog.show(getChildFragmentManager(), "init");
             ToastUtil.showShort("当前渠道号: " + AssistantApp.getInstance().getChannelId());
         } else {
             initAction();
         }
-
-    }
-
-    private void initAction() {
-        judgeFirstOpenToday();
-        ThreadUtil.runOnUiThread(mRunnable);
     }
 
     @Override
-    protected void initView() {
-        setContentView(R.layout.activity_splash);
-        ivSplash = getViewById(R.id.iv_splash);
-        tvPass = getViewById(R.id.tv_pass);
-        ivAdLoad = getViewById(R.id.iv_splash_ad);
-    }
-
-    private void jumpToMain() {
-        ThreadUtil.remove(mRunnable);
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        this.finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        // 不处理按钮回退事件
-    }
-
-    @Override
-    public void release() {
-        super.release();
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
         AssistantApp.getInstance().setSplashAdListener(null);
     }
 
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
-        switch (v.getId()) {
-            case R.id.tv_pass:
-//                if (adInfo == null || adInfo.showPass) {
-                jumpToMain();
-//                }
-                break;
-            case R.id.iv_splash:
-            case R.id.iv_splash_ad:
-                if (adInfo != null && !TextUtils.isEmpty(adInfo.uri)) {
-                    ThreadUtil.remove(mRunnable);
-                    MixUtil.handleViewUri(this, Uri.parse(adInfo.uri));
-                    finish();
-                } else {
-                    jumpToMain();
-                }
-                break;
-        }
-    }
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    /**
-     * 判断是否今天首次登录<br/>
-     * 防止由于后台初始化原因导致该值一直为今天，故设置为此处执行
-     */
-    public void judgeFirstOpenToday() {
-        long lastOpenTime = SPUtil.getLong(SplashActivity.this,
-                SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
-        // 今天首次登录，首次打开APP并不显示
-        MainActivity.sIsTodayFirstOpen = (lastOpenTime != 0 && !DateUtil.isToday(lastOpenTime));
-        MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
-        // 写入当前时间
-        SPUtil.putLong(SplashActivity.this, SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System
-                .currentTimeMillis());
     }
 
     private void disappearView(View iv) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "alpha", 1f, 0f);
         animator.setDuration(600);
         animator.start();
+    }
+
+    private void showPass(AdInfo adInfo) {
+        if (adInfo != null && adInfo.showPass) {
+            tvPass.setVisibility(View.VISIBLE);
+        } else {
+            tvPass.setVisibility(View.GONE);
+        }
+    }
+
+    private void jumpToMain() {
+        ThreadUtil.remove(mRunnable);
+        this.dismiss();
     }
 
     @Override
@@ -247,5 +240,47 @@ public class SplashActivity extends BaseAppCompatActivity implements CallbackLis
                 }
             });
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        AdInfo adInfo = AssistantApp.getInstance().getAdInfo();
+        switch (v.getId()) {
+            case R.id.tv_pass:
+//                if (adInfo == null || adInfo.showPass) {
+                jumpToMain();
+//                }
+                break;
+            case R.id.iv_splash:
+            case R.id.iv_splash_ad:
+                if (adInfo != null && !TextUtils.isEmpty(adInfo.uri)) {
+                    ThreadUtil.remove(mRunnable);
+                    this.dismiss();
+                    MixUtil.handleViewUri(getContext(), Uri.parse(adInfo.uri));
+                } else {
+                    jumpToMain();
+                }
+                break;
+        }
+    }
+
+    private void initAction() {
+        judgeFirstOpenToday();
+        ThreadUtil.runOnUiThread(mRunnable);
+    }
+
+    /**
+     * 判断是否今天首次登录<br/>
+     * 防止由于后台初始化原因导致该值一直为今天，故设置为此处执行
+     */
+    public void judgeFirstOpenToday() {
+        long lastOpenTime = SPUtil.getLong(getContext(),
+                SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, 0);
+        // 今天首次登录，首次打开APP并不显示
+        MainActivity.sIsTodayFirstOpen = (lastOpenTime != 0 && !DateUtil.isToday(lastOpenTime));
+        MainActivity.sIsTodayFirstOpenForBroadcast = MainActivity.sIsTodayFirstOpen;
+        // 写入当前时间
+        SPUtil.putLong(getContext(), SPConfig.SP_USER_INFO_FILE, SPConfig.KEY_LOGIN_LATEST_OPEN_TIME, System
+                .currentTimeMillis());
     }
 }

@@ -221,55 +221,56 @@ public class LoadAndRetryViewManager {
                 && mLastType == type) {
             return;
         }
-        // 防止重复请求过来
-        mLastType = type;
-        mContainer.removeAllViews();
-        switch (type) {
-            case TYPE_LOAD:
-            case TYPE_DEFAULT:
-                if (mLoadingView == null && mIdLoadingView != DEFAULT_NO_VIEW_ID) {
-                    mLoadingView = inflateView(mIdLoadingView);
-                }
-                if (mLoadingView != null) {
-                    mContainer.addView(mLoadingView);
-                    mLastType = TYPE_LOAD;
-                }
-                break;
-            case TYPE_CONTENT:
-                if (mContentView == null && mIdContentView != DEFAULT_NO_VIEW_ID) {
-                    mContentView = inflateView(mIdContentView);
-                }
-                if (mContentView != null) {
-                    mContainer.addView(mContentView);
-                    mLastType = TYPE_CONTENT;
-                }
-                break;
-            case TYPE_EMPTY:
-                if (mEmptyView == null && mIdEmptyView != DEFAULT_NO_VIEW_ID) {
-                    mEmptyView = inflateView(mIdEmptyView);
-                }
-                if (mEmptyView != null) {
-                    mContainer.addView(mEmptyView);
-                    mLastType = TYPE_EMPTY;
-                    if (mOnRetryListener != null) {
-                        mOnRetryListener.onEmpty(mEmptyView);
+        synchronized (this) {
+            // 防止重复请求过来
+            mLastType = type;
+            mContainer.removeAllViews();
+            switch (type) {
+                case TYPE_LOAD:
+                case TYPE_DEFAULT:
+                    if (mLoadingView == null && mIdLoadingView != DEFAULT_NO_VIEW_ID) {
+                        mLoadingView = inflateView(mIdLoadingView);
                     }
-                }
-                break;
-            case TYPE_ERROR_RETRY:
-                if (mErrorRetryView == null && mIdErrorRetryView != DEFAULT_NO_VIEW_ID) {
-                    mErrorRetryView = inflateView(mIdErrorRetryView);
-                }
-                if (mErrorRetryView != null) {
-                    mContainer.addView(mErrorRetryView);
-                    mLastType = TYPE_ERROR_RETRY;
-                    if (mOnRetryListener != null) {
-                        mOnRetryListener.onRetry(mErrorRetryView);
+                    if (mLoadingView != null) {
+                        mContainer.addView(mLoadingView);
+                        mLastType = TYPE_LOAD;
                     }
-                }
-                break;
+                    break;
+                case TYPE_CONTENT:
+                    if (mContentView == null && mIdContentView != DEFAULT_NO_VIEW_ID) {
+                        mContentView = inflateView(mIdContentView);
+                    }
+                    if (mContentView != null) {
+                        mContainer.addView(mContentView);
+                        mLastType = TYPE_CONTENT;
+                    }
+                    break;
+                case TYPE_EMPTY:
+                    if (mEmptyView == null && mIdEmptyView != DEFAULT_NO_VIEW_ID) {
+                        mEmptyView = inflateView(mIdEmptyView);
+                    }
+                    if (mEmptyView != null) {
+                        mContainer.addView(mEmptyView);
+                        mLastType = TYPE_EMPTY;
+                        if (mOnRetryListener != null) {
+                            mOnRetryListener.onEmpty(mEmptyView);
+                        }
+                    }
+                    break;
+                case TYPE_ERROR_RETRY:
+                    if (mErrorRetryView == null && mIdErrorRetryView != DEFAULT_NO_VIEW_ID) {
+                        mErrorRetryView = inflateView(mIdErrorRetryView);
+                    }
+                    if (mErrorRetryView != null) {
+                        mContainer.addView(mErrorRetryView);
+                        mLastType = TYPE_ERROR_RETRY;
+                        if (mOnRetryListener != null) {
+                            mOnRetryListener.onRetry(mErrorRetryView);
+                        }
+                    }
+                    break;
+            }
         }
-        mContainer.invalidate();
     }
 
     private View inflateView(@LayoutRes int id) {

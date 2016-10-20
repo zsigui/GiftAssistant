@@ -59,6 +59,7 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     private Fragment mFragmentForResult;
     private int mFragmentRequestCode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

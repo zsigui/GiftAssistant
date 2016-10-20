@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -20,20 +21,20 @@ import java.util.Queue;
  * Created by liangpeixing on 5/26/15.
  */
 public class Util_Loadlib {
+    private static final String SUPPORT_CPU_ABI_LIST[] = {"armeabi","armeabi-v7a","arm64-v8a","x86","mips"};
     public static boolean loadlib(Context context, String libName) {
 
+        if (context == null) {
+            return false;
+        }
         Queue<String> existQueue = new PriorityQueue<String>(4, new MyComparator());
         Queue<String> copytQueue = new PriorityQueue<String>(4, new MyComparator());
         //先尝试加载已经存在的so库,校验并尝试加载
-        existQueue.add("armeabi");
-        existQueue.add("armeabi-v7a");
-	    existQueue.add("arm64-v8a");
-        existQueue.add("x86");
-        existQueue.add("mips");
 
+        Collections.addAll(existQueue, SUPPORT_CPU_ABI_LIST);
         while (existQueue.size() != 0) {
             String cpuType = existQueue.poll();
-            String libPath = "/data/data/" + context.getPackageName() + "/files/" + cpuType + "_" + libName;
+            String libPath = context.getFilesDir().getPath()+ File.separator + cpuType + "_" + libName;
             File localFile = new File(libPath);
             if (localFile.exists()) {
                 try {
@@ -48,15 +49,11 @@ public class Util_Loadlib {
         }
 
         //不存在时，从assets中复制、改名并尝试加载
-        copytQueue.add("armeabi");
-        copytQueue.add("armeabi-v7a");
-	    copytQueue.add("arm64-v8a");
-        copytQueue.add("x86");
-        copytQueue.add("mips");
+        Collections.addAll(existQueue, SUPPORT_CPU_ABI_LIST);
 
         while (copytQueue.size() != 0) {
             String cpuType = copytQueue.poll();
-            String libPath = "/data/data/" + context.getPackageName() + "/files/" + cpuType + "_" + libName;
+            String libPath = context.getFilesDir().getPath()+ File.separator + cpuType + "_" + libName;
             if (copyAndLoadLib(context, libName, cpuType, libPath)) {
                 return true;
             }

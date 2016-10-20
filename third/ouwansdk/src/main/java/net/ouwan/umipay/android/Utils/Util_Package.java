@@ -16,6 +16,8 @@ import net.youmi.android.libs.common.util.Util_System_Intent;
 import net.youmi.android.libs.common.util.Util_System_Package;
 import net.youmi.android.libs.common.util.Util_System_Runtime;
 
+import static net.ouwan.umipay.android.api.UmipayFloatMenu.DEST_ACTIVITY_REORDER_TO_FRONT;
+
 /**
  * Utils_Package
  *
@@ -24,6 +26,9 @@ import net.youmi.android.libs.common.util.Util_System_Runtime;
  *         description
  */
 public class Util_Package {
+
+
+    public static boolean sNeedStopExecute;
 
     public static String getPackageSignature(Context context) {
         try {
@@ -55,22 +60,22 @@ public class Util_Package {
                 broadcastIntent.setAction(UmipayCommonAccountCacheManager.ACTION_ACCOUNT_CHANGE);
                 broadcastIntent.setPackage(packageName);
                 broadcastIntent.putExtra(UmipayFloatMenu.SRC_PACKAGENAME, context.getApplicationInfo().packageName);
-                broadcastIntent.putExtra(UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK, UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK);
+                broadcastIntent.putExtra(UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK, UmipayFloatMenu
+                        .ACTION_ACCOUNT_CHANGE_CALLBACK);
                 //发送广播
+                broadcastIntent.putExtra(DEST_ACTIVITY_REORDER_TO_FRONT, true);
                 context.sendBroadcast(broadcastIntent);
-                Util_System_Runtime.getInstance().runInUiThreadDelayed_ms(new Runnable(){
+                sNeedStopExecute = true;
+                Util_System_Runtime.getInstance().runInUiThreadDelayed_ms(new Runnable() {
                     public void run() {
                         //execute the task
-                        try{
-                            Intent broadcastIntent = new Intent();
-                            broadcastIntent.setAction(UmipayFloatMenu.ACTION_ACCOUNT_CHANGE_CALLBACK_TIMEOUT);
-                            broadcastIntent.setPackage(context.getPackageName());
-                            context.sendBroadcast(broadcastIntent);
-                        }catch (Throwable e){
-
+                        if (sNeedStopExecute) {
+                            if (!TextUtils.isEmpty(packageName)) {
+                                Util_System_Intent.startActivityByPackageName(context, packageName);
+                            }
                         }
                     }
-                },timeout);
+                }, timeout);
             } else {
                 // 未登录情况下跳转，直接打开即可
                 Util_System_Intent.startActivityByPackageName(context, packageName);
