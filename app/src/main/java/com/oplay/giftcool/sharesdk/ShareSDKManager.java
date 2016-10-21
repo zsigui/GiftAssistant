@@ -155,6 +155,7 @@ public class ShareSDKManager {
 
     public void shareActivity(final Context context, final FragmentManager fm, final IndexPostNew data) {
         ScoreManager.getInstance().setRewardCode(TaskTypeUtil.ID_ACTIVITY_SHARE);
+        ScoreManager.getInstance().setActivityId(String.valueOf(data.id));
         shareActivity(context, fm, data, "share");
     }
 

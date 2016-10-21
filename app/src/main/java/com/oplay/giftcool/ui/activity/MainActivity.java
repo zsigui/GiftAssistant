@@ -43,7 +43,7 @@ import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AwardDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
-import com.oplay.giftcool.ui.fragment.dialog.SplashFragment;
+import com.oplay.giftcool.ui.fragment.dialog.SplashFragmentDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
@@ -561,8 +561,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             handleFirstOpen();
         }
 
-        if (!SplashFragment.sHasShow) {
-            new SplashFragment().show(getSupportFragmentManager(), "splash");
+        if (!SplashFragmentDialog.sHasShow) {
+            new SplashFragmentDialog().show(getSupportFragmentManager(), "splash");
         }
     }
 
@@ -669,7 +669,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mApp.appExit();
             // 发送退出指令
             finish();
-            SplashFragment.sHasShow = false;
+            SplashFragmentDialog.sHasShow = false;
 //            System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();

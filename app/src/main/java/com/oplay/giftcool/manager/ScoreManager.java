@@ -49,10 +49,17 @@ public class ScoreManager {
         return manager;
     }
 
-    public String mRewardCode = null;
+    private String mRewardCode = null;
 
+    private String mActivityId = null;
 
+    public String getActivityId() {
+        return mActivityId;
+    }
 
+    public void setActivityId(String activityId) {
+        mActivityId = activityId;
+    }
 
     public String getRewardCode() {
         return mRewardCode;
@@ -144,7 +151,7 @@ public class ScoreManager {
     private JsonReqBase<ReqTaskReward> mRewardReqBase;
 
     public boolean reward(String ptype, final boolean replayImdiate) {
-        return reward(ptype, "", replayImdiate);
+        return reward(ptype, null, null, replayImdiate);
     }
 
     /**
@@ -153,7 +160,8 @@ public class ScoreManager {
      * @param ptype         分享类型采用setRewardType并设置该值为RewardType.NOTHING
      * @param replayImdiate 是否立即返回结果
      */
-    public synchronized boolean reward(String ptype, final String appId, final boolean replayImdiate) {
+    public synchronized boolean reward(String ptype, final String appId, final String activityId,
+                                       final boolean replayImdiate) {
         if (!AccountManager.getInstance().isLogin()) {
             return false;
         }
@@ -163,6 +171,7 @@ public class ScoreManager {
         } else {
             code = ptype;
         }
+
         Global.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
@@ -172,7 +181,9 @@ public class ScoreManager {
                 }
                 mRewardReqBase.data.code = code;
                 mRewardReqBase.data.appId = appId;
+                mRewardReqBase.data.activityId = (activityId == null? getActivityId() : activityId);
                 mRewardReqBase.data.replyNotify = (replayImdiate ? 1 : 0);
+                setActivityId(null);
                 Global.getNetEngine().obtainTaskReward(mRewardReqBase)
                         .enqueue(new Callback<JsonRespBase<MissionReward>>() {
                             @Override
@@ -286,7 +297,7 @@ public class ScoreManager {
                 } else {
                     if (info.isFinished()) {
                         AppDebugConfig.d(AppDebugConfig.TAG_MANAGER, "task : 通知任务已经完成 " + info.appId);
-                        reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), true);
+                        reward(TaskTypeUtil.ID_PLAY_GAME, String.valueOf(info.appId), null, true);
                         it.remove();
                         setTaskFinished(true);
                     }

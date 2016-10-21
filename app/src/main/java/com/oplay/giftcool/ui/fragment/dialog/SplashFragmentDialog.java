@@ -50,7 +50,7 @@ import static com.oplay.giftcool.util.ThreadUtil.runOnUiThread;
  * Created by zsigui on 16-10-19.
  */
 
-public class SplashFragment extends DialogFragment implements CallbackListener<Bitmap>, View.OnClickListener {
+public class SplashFragmentDialog extends DialogFragment implements CallbackListener<Bitmap>, View.OnClickListener {
 
     public static boolean sHasShow = false;
     private View mContentView;
@@ -199,6 +199,7 @@ public class SplashFragment extends DialogFragment implements CallbackListener<B
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         AssistantApp.getInstance().setSplashAdListener(null);
+        sHasShow = true;
     }
 
     @Override

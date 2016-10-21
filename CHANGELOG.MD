@@ -8,6 +8,8 @@
 
     [modify] 闪屏界面由Activity改为Fragment形式，优化启动速度
 
+    [modify] 分享活动添加分享特定ID标志
+
 ## V1.4.3 -> V1.4.4
 
 ### 改动内容:
