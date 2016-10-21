@@ -88,6 +88,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     // 判断并显示弹窗
     public static boolean sIsLoginStateUnavailableShow = false;
     private boolean mHasJudgeBind = false;
+    private boolean mHasShowSelecteUser = false;
+    private boolean mHasShowSplash = false;
 
     private long mLastClickTime = 0;
     private int mCurSelectedItem = INDEX_DEFAULT;
@@ -264,12 +266,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         if (!mNotifyAward) {
             judgeAwardShow();
         }
-        if (!mHasJudgeBind && AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
+        judgeBindOrSelectUser();
+    }
+
+    public void judgeBindOrSelectUser() {
+        if (!mHasJudgeBind && mHasShowSplash
+                && AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
                 && AccountManager.getInstance().isLogin()
                 && AccountManager.getInstance().getUserInfo().bindOuwanStatus != 1) {
             IntentUtil.jumpBindOwan(this, AccountManager.getInstance().getUser());
+            mHasJudgeBind = true;
+        } else if (!mHasShowSelecteUser && mHasShowSplash
+                && !OuwanSDKManager.sIsWakeChangeAccountAction
+                && !AccountManager.getInstance().isLogin()) {
+//                OuwanSDKManager.getInstance().showSelectAccountView();
+            MixUtil.sendSelectAccountBroadcast(this);
+            mHasShowSelecteUser = true;
         }
-        mHasJudgeBind = true;
     }
 
     @Override
@@ -314,12 +327,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                     MixUtil.handleViewUri(getApplicationContext(), uri);
                 }
             }
-            if (!OuwanSDKManager.sIsWakeChangeAccountAction && !AccountManager.getInstance().isLogin()
-                    && AssistantApp.getInstance().isGlobalInit()) {
-//                OuwanSDKManager.getInstance().showSelectAccountView();
-                MixUtil.sendSelectAccountBroadcast(this);
-            }
-
 
         } catch (Exception e) {
             AppDebugConfig.w(AppDebugConfig.TAG_ACTIVITY, e);
@@ -560,9 +567,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         } else if (!handleUpdateApp()) {
             handleFirstOpen();
         }
-
-        if (!SplashFragmentDialog.sHasShow) {
+        if (!mHasShowSplash) {
             new SplashFragmentDialog().show(getSupportFragmentManager(), "splash");
+            mHasShowSplash = true;
         }
     }
 
@@ -659,7 +666,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     @Override
     public void onBackPressed() {
-
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return;
@@ -669,7 +675,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mApp.appExit();
             // 发送退出指令
             finish();
-            SplashFragmentDialog.sHasShow = false;
+            mHasShowSplash = false;
 //            System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
