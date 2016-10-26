@@ -52,6 +52,8 @@ import static com.oplay.giftcool.util.ThreadUtil.runOnUiThread;
 
 public class SplashFragmentDialog extends DialogFragment implements CallbackListener<Bitmap>, View.OnClickListener {
 
+
+    public static boolean sHasShow = false;
     private View mContentView;
     private ImageView ivSplash;
     private ImageView ivAdLoad;
@@ -198,6 +200,7 @@ public class SplashFragmentDialog extends DialogFragment implements CallbackList
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         AssistantApp.getInstance().setSplashAdListener(null);
+        SplashFragmentDialog.sHasShow = true;
         // 保证闪屏之后唤起切换判断，略丑陋
         if (MainActivity.sGlobalHolder != null) {
             MainActivity.sGlobalHolder.judgeBindOrSelectUser();

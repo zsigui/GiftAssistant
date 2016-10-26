@@ -89,7 +89,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     public static boolean sIsLoginStateUnavailableShow = false;
     private boolean mHasJudgeBind = false;
     private boolean mHasShowSelecteUser = false;
-    private boolean mHasShowSplash = false;
 
     private long mLastClickTime = 0;
     private int mCurSelectedItem = INDEX_DEFAULT;
@@ -270,13 +269,13 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     }
 
     public void judgeBindOrSelectUser() {
-        if (!mHasJudgeBind && mHasShowSplash
+        if (!mHasJudgeBind && SplashFragmentDialog.sHasShow
                 && AssistantApp.getInstance().getSetupOuwanAccount() != KeyConfig.KEY_LOGIN_NOT_BIND
                 && AccountManager.getInstance().isLogin()
                 && AccountManager.getInstance().getUserInfo().bindOuwanStatus != 1) {
             IntentUtil.jumpBindOwan(this, AccountManager.getInstance().getUser());
             mHasJudgeBind = true;
-        } else if (!mHasShowSelecteUser && mHasShowSplash
+        } else if (!mHasShowSelecteUser && SplashFragmentDialog.sHasShow
                 && !OuwanSDKManager.sIsWakeChangeAccountAction
                 && !AccountManager.getInstance().isLogin()) {
 //                OuwanSDKManager.getInstance().showSelectAccountView();
@@ -567,9 +566,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         } else if (!handleUpdateApp()) {
             handleFirstOpen();
         }
-        if (!mHasShowSplash) {
+        if (!SplashFragmentDialog.sHasShow) {
             new SplashFragmentDialog().show(getSupportFragmentManager(), "splash");
-            mHasShowSplash = true;
         }
     }
 
@@ -675,7 +673,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             mApp.appExit();
             // 发送退出指令
             finish();
-            mHasShowSplash = false;
+            SplashFragmentDialog.sHasShow = false;
 //            System.exit(0);
         } else {
             mLastClickTime = System.currentTimeMillis();
