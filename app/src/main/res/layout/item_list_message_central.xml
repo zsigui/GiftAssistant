@@ -29,7 +29,7 @@
 
 	<TextView
 			android:id = "@+id/tv_item_count"
-			style = "@style/NavDrawerItemText"
+			style = "@style/MyText"
 			android:textColor = "@color/co_white"
 			android:textSize = "@dimen/di_text_size_small"
 			android:layout_alignParentRight = "true"

@@ -54,7 +54,7 @@ public class NetUrl {
     /**
      * 礼包首页-新鲜出炉列表
      */
-    public static final String GIFT_GET_INDEX_NEW = "new_gift_list";
+    public static final String GIFT_GET_NEW_BY_PAGE = "new_gift_list";
 
     /**
      * 礼包-刷新数据

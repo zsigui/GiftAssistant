@@ -3,6 +3,7 @@ package com.oplay.giftcool.ui.fragment.gift;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.GiftAdapter;
+import com.oplay.giftcool.adapter.GiftAdapterNew;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -20,19 +21,15 @@ import com.oplay.giftcool.config.NetStatusCode;
 import com.oplay.giftcool.config.NetUrl;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
 import com.oplay.giftcool.listener.CallbackListener;
-import com.oplay.giftcool.listener.OnFinishListener;
 import com.oplay.giftcool.manager.AlarmClockManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.req.ReqGiftLike;
 import com.oplay.giftcool.model.data.req.ReqIndexGift;
-import com.oplay.giftcool.model.data.req.ReqRefreshGift;
 import com.oplay.giftcool.model.data.resp.GiftLikeList;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
 import com.oplay.giftcool.model.data.resp.IndexGift;
 import com.oplay.giftcool.model.data.resp.IndexGiftLike;
-import com.oplay.giftcool.model.data.resp.IndexGiftNew;
-import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
@@ -40,11 +37,8 @@ import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -61,34 +55,19 @@ import retrofit2.Response;
 public class GiftFragment extends BaseFragment_Refresh implements OnItemClickListener {
 
     private final static String PAGE_NAME = "礼包首页";
-    private static final int ID_UPDATE = 6;
 
     public static final int POS_BANNER = 0;
-    public static final int POS_ZERO = 1;
     public static final int POS_LIKE = 2;
     public static final int POS_LIMIT = 3;
     public static final int POS_NEW = 4;
+    public static final int POS_FREE = 5;
 
     private RecyclerView rvContainer;
-    private GiftAdapter mAdapter;
-
-    // 礼物界面数据
-    private IndexGift mGiftData;
-    // 请求后游戏键值的MD5串
-    private String mGameKey;
+    private GiftAdapterNew mAdapter;
 
     // ‘猜你喜欢’ 分离出来的数据
+    private IndexGift mGiftData;
     private ArrayList<IndexGiftLike> mLikeData;
-    private JsonReqBase<ReqIndexGift> mReqPageObj;
-    // 每隔5分钟刷新一次
-    private Runnable mRefreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mIsNotifyRefresh = true;
-            lazyLoad();
-            ThreadUtil.runOnUiThread(this, 5 * 60 * 1000);
-        }
-    };
 
     public static GiftFragment newInstance() {
         return new GiftFragment();
@@ -150,25 +129,20 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 llm.getOrientation());
         rvContainer.setLayoutManager(llm);
         rvContainer.addItemDecoration(dividerItemDecoration);
-        mAdapter = new GiftAdapter(getActivity());
+        mAdapter = new GiftAdapterNew(getActivity());
+        mAdapter.setOnBannerItemClickListener(this);
         rvContainer.setAdapter(mAdapter);
-        mIsPrepared = true;
-        ThreadUtil.runOnUiThread(mRefreshRunnable, 5 * 60 * 1000);
-
-        ReqIndexGift data = new ReqIndexGift();
-        data.pageSize = 20;
-        data.appNames = new HashSet<>();
-        mReqPageObj = new JsonReqBase<ReqIndexGift>(data);
-        mLastPage = PAGE_FIRST;
         readLikeCacheData();
-
+        mRefreshLayout.setCanShowLoad(false);
+        mRefreshLayout.setOnLoadListener(null);
         if (savedInstanceState != null) {
             Serializable s = savedInstanceState.getSerializable(KeyConfig.KEY_DATA);
             if (s != null) {
-                mGiftData = (IndexGift) s;
                 mHasData = true;
-                updateData(mGiftData, 0, -1);
-                mLastPage = savedInstanceState.getInt(KeyConfig.KEY_DATA_O);
+                mGiftData = (IndexGift) s;
+                mLikeData = mGiftData.like;
+                updateData(mGiftData);
+                mViewManager.showContent();
             }
         }
     }
@@ -192,8 +166,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             readCacheData();
             return;
         }
-        if (mGiftData == null) {
+        if (mData == null) {
             readCacheData();
+        } else if (mLikeData == null) {
+            requestLikeData();
         }
         if (mCallRefresh != null) {
             mCallRefresh.cancel();
@@ -216,7 +192,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         // 获取数据成功
                         refreshSuccessEnd();
                         IndexGift data = response.body().getData();
-                        updateData(data, 0, -1);
+                        updateData(data);
                         mLastPage = PAGE_FIRST;
                         FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
                         requestLikeData();
@@ -256,11 +232,11 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
                     @Override
                     public void doCallBack(IndexGift data) {
-                        if (mGiftData == null) {
+                        if (mLikeData == null) {
                             if (data != null) {
                                 // 获取数据成功
                                 refreshSuccessEnd();
-                                updateData(data, 0, -1);
+                                updateData(data);
                                 mLastPage = PAGE_FIRST;
                             } else {
                                 refreshFailEnd();
@@ -272,102 +248,79 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 }, IndexGift.class);
     }
 
-    private void addMoreData(ArrayList<IndexGiftNew> moreData) {
-        if (moreData == null) {
-            return;
-        }
-        int lastCount = mAdapter.getItemCount();
-        mGiftData.news.addAll(moreData);
-        mAdapter.updateData(mGiftData, lastCount, -1);
-        mLastPage += 1;
-    }
-
-    /**
-     * 首页加载更多数据的网络请求声明
-     */
-    private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallLoad;
-
-    /**
-     * 加载更多数据
-     */
-    @Override
-    protected void loadMoreData() {
-        if (!mNoMoreLoad && !mIsLoadMore) {
-            if (!NetworkUtil.isConnected(getContext())) {
-                moreLoadFailEnd();
-                return;
-            }
-            if (mCallLoad != null) {
-                mCallLoad.cancel();
-            }
-            mIsLoadMore = true;
-            mReqPageObj.data.page = mLastPage + 1;
-            mCallLoad = Global.getNetEngine().obtainIndexGiftNew(mReqPageObj);
-            mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
-                @Override
-                public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
-                                       Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
-                    if (!mCanShowUI || call.isCanceled()) {
-                        return;
-                    }
-                    if (response != null && response.isSuccessful()) {
-                        if (response.body() != null && response.body().isSuccess()) {
-                            moreLoadSuccessEnd();
-                            OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
-                            setLoadState(backObj.data, backObj.isEndPage);
-                            addMoreData(backObj.data);
-                            return;
-                        }
-                    }
-                    AppDebugConfig.warnResp(AppDebugConfig.TAG_FRAG, response);
-                    moreLoadFailEnd();
-                }
-
-                @Override
-                public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
-                    if (!mCanShowUI || call.isCanceled()) {
-                        return;
-                    }
-                    AppDebugConfig.w(AppDebugConfig.TAG_FRAG, t);
-                    moreLoadFailEnd();
-                }
-            });
-        }
-    }
-
-	/* 更新控件数据 start */
-
-    public void updateData(IndexGift data, int start, int end) {
+    /* 更新控件数据 start */
+    @SuppressWarnings("unchecked")
+    public void updateData(IndexGift data) {
         if (data == null) {
-            if (mGiftData == null) {
+            if (mData == null) {
                 mViewManager.showErrorRetry();
             } else {
-                mAdapter.updateData(mGiftData, start, end);
+                mAdapter.updateData(mData);
                 mViewManager.showContent();
             }
             return;
         }
-        mGiftData = data;
         mHasData = true;
-
-        if ((data.limit == null || data.limit.size() == 0)
-                && (data.news == null || data.news.size() == 0)) {
+        mGiftData = data;
+        if ((data.free == null || data.free.isEmpty())
+                && (data.limit == null || data.limit.isEmpty())
+                && (data.news == null || data.news.isEmpty())) {
             // 数据为空
             mViewManager.showEmpty();
             return;
         }
 
+        mPosArray.clear();
 
-        data.like = mLikeData;
+        if (mData == null) {
+            mData = new ArrayList();
+        } else {
+            mData.clear();
+        }
+        if (data.banner != null) {
+            mData.add(data.banner);
+        } else {
+            mData.add(new ArrayList<IndexBanner>());
+        }
+        mPosArray.append(POS_BANNER, 0);
+
+        if (data.icons != null) {
+            mData.add(data.icons);
+        } else {
+            mData.add(new ArrayList<String>());
+        }
+
+        int pos = 2;
+        if (data.like != null && !data.like.isEmpty()) {
+            mData.add(GiftAdapterNew.TYPE_HEADER_LIKE);
+            mData.addAll(mLikeData);
+            mPosArray.append(POS_LIKE, pos);
+            pos += data.like.size() + 1;
+        }
+        if (data.limit != null && !data.limit.isEmpty()) {
+            mData.add(GiftAdapterNew.TYPE_HEADER_LIMIT);
+            mData.addAll(data.limit);
+            mPosArray.append(POS_LIMIT, pos);
+            pos += data.limit.size() + 1;
+        }
+        if (data.free != null && !data.free.isEmpty()) {
+            mData.add(GiftAdapterNew.TYPE_HEADER_FREE);
+            mData.addAll(data.free);
+            mPosArray.append(POS_NEW, pos);
+            pos += data.free.size() + 1;
+        }
+        if (data.news != null && !data.news.isEmpty()) {
+            mData.add(GiftAdapterNew.TYPE_HEADER_NEW);
+            mData.addAll(data.news);
+            mPosArray.append(POS_NEW, pos);
+        }
         mViewManager.showContent();
-        mAdapter.updateData(mGiftData, start, end);
+        mAdapter.updateData(mData);
     }
 
     private boolean mIsLoadLike = false;
 
     private void requestLikeData() {
-
-
         if (!mIsLoadLike) {
             mIsLoadLike = true;
             JsonReqBase<ReqGiftLike> req = new JsonReqBase<>();
@@ -378,6 +331,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             Global.getNetEngine().obtainGiftLike(req)
                     .enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
                         @Override
+                        @SuppressWarnings("unchecked")
                         public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
                                                Response<JsonRespBase<GiftLikeList>> response) {
                             mIsLoadLike = false;
@@ -393,9 +347,10 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                     Global.setInstalledAppNames(data.appNames);
                                     mLikeData = data.data;
                                     AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求到猜你喜欢数据: " + mLikeData);
-                                    updateData(mGiftData, 1, 1);
                                     FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
                                             mLikeData, true);
+                                    mGiftData.like = mLikeData;
+                                    updateData(mGiftData);
                                 }
                             }
                         }
@@ -460,12 +415,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         mIsVisible = false;
     }
 
-
-    /**
-     * 轮询局部刷新礼包页面的网络请求声明
-     */
-    private Call<JsonRespBase<HashMap<String, IndexGiftNew>>> mCallRefreshCircle = null;
-
     @Override
     public void onGiftUpdate(int action) {
         if (!mIsPrepared) {
@@ -477,68 +426,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 return;
             }
             onRefresh();
-            return;
-        }
-        if (action == ObserverManager.STATUS.GIFT_UPDATE_PART) {
-            if (mIsSwipeRefresh || mIsNotifyRefresh || mGiftData == null) {
-                return;
-            }
-            mIsNotifyRefresh = true;
-            Global.THREAD_POOL.execute(new Runnable() {
-                @Override
-                public void run() {
-//                    if (!NetworkUtil.isConnected(getContext())) {
-//                        mIsNotifyRefresh = false;
-//                        return;
-//                    }
-                    if (mCallRefreshCircle != null) {
-                        mCallRefreshCircle.cancel();
-                    }
-                    HashSet<Integer> ids = new HashSet<Integer>();
-                    if (mGiftData.limit != null) {
-                        for (IndexGiftNew gift : mGiftData.limit) {
-                            ids.add(gift.id);
-                        }
-                    }
-                    if (mGiftData.news != null) {
-                        for (IndexGiftNew gift : mGiftData.news) {
-                            ids.add(gift.id);
-                        }
-                    }
-                    ReqRefreshGift reqData = new ReqRefreshGift();
-                    reqData.ids = ids;
-                    mCallRefreshCircle = Global.getNetEngine().refreshGift(new JsonReqBase<ReqRefreshGift>(reqData));
-                    try {
-                        Response<JsonRespBase<HashMap<String, IndexGiftNew>>> response = mCallRefreshCircle.execute();
-                        if (response != null && response.isSuccessful() && mCanShowUI) {
-                            if (response.body() != null && response.body().isSuccess()) {
-                                // 数据刷新成功，进行更新
-                                HashMap<String, IndexGiftNew> respData = response.body().getData();
-                                ArrayList<Integer> waitDelIndexs = new ArrayList<Integer>();
-                                waitDelIndexs.clear();
-                                updateCircle(respData, waitDelIndexs, mGiftData.limit);
-                                delIndex(mGiftData.limit, waitDelIndexs);
-                                waitDelIndexs.clear();
-                                updateCircle(respData, waitDelIndexs, mGiftData.news);
-                                delIndex(mGiftData.news, waitDelIndexs);
-                                ThreadUtil.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int y = rvContainer.getScrollY();
-//                                        refreshSuccessEnd();
-                                        updateData(mGiftData, 1, -1);
-                                        rvContainer.smoothScrollBy(0, y);
-                                    }
-                                });
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        mIsNotifyRefresh = false;
-                    }
-                }
-            });
             return;
         }
         if (action == ObserverManager.STATUS.GIFT_UPDATE_LIKE) {
@@ -554,10 +441,15 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KeyConfig.KEY_DATA, mGiftData);
-        outState.putInt(KeyConfig.KEY_DATA_O, mLastPage);
+        if (mLikeData != null) {
+            outState.putSerializable(KeyConfig.KEY_DATA_O, mLikeData);
+        }
+        if (mGiftData != null) {
+            outState.putSerializable(KeyConfig.KEY_DATA, mGiftData);
+        }
     }
 
+    private SparseIntArray mPosArray = new SparseIntArray();
     /**
      * 移到到指定位置
      *
@@ -567,75 +459,11 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         ThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                switch (type) {
-                    case POS_BANNER:
-                        if (rvContainer != null) {
-                            rvContainer.smoothScrollToPosition(0);
-                        }
-                        break;
-                    case POS_LIKE:
-                        if (rvContainer != null) {
-                            rvContainer.smoothScrollToPosition(1);
-                        }
-                        break;
-                    case POS_LIMIT:
-                        if (rvContainer != null) {
-                            rvContainer.smoothScrollToPosition(2);
-                        }
-                        break;
-                    case POS_NEW:
-                        if (rvContainer != null) {
-                            rvContainer.smoothScrollToPosition(3);
-                        }
+                if (rvContainer != null && mPosArray != null) {
+                    rvContainer.smoothScrollToPosition(mPosArray.get(type));
                 }
             }
         });
-    }
-
-    /**
-     * 删除已失效的索引
-     *
-     * @param data          已经有的数据列表
-     * @param waitDelIndexs 待删除的下标索引列表
-     */
-    private void delIndex(ArrayList<IndexGiftNew> data, ArrayList<Integer> waitDelIndexs) {
-        for (int i = waitDelIndexs.size() - 1; i >= 0; i--) {
-            data.remove(waitDelIndexs.get(i).intValue());
-        }
-    }
-
-    /**
-     * 遍历更新所有礼包的状态
-     */
-    private void updateCircle(HashMap<String, IndexGiftNew> respData, ArrayList<Integer> waitDelIndexs,
-                              ArrayList<IndexGiftNew> gifts) {
-        int i = 0;
-        for (IndexGiftNew gift : gifts) {
-            if (respData.get(gift.id + "") != null) {
-                IndexGiftNew item = respData.get(gift.id + "");
-                setGiftUpdateInfo(gift, item);
-            } else {
-                // 找不到，需要被移除
-                waitDelIndexs.add(i);
-            }
-            i++;
-        }
-    }
-
-    /**
-     * 更新礼包状态项内容
-     *
-     * @param toBeSet 待更新的礼包项
-     * @param data    用于更新的数据
-     */
-    private void setGiftUpdateInfo(IndexGiftNew toBeSet, IndexGiftNew data) {
-        toBeSet.status = data.status;
-        toBeSet.seizeStatus = data.seizeStatus;
-        toBeSet.searchCount = data.searchCount;
-        toBeSet.searchTime = data.searchTime;
-        toBeSet.totalCount = data.totalCount;
-        toBeSet.remainCount = data.remainCount;
-        toBeSet.code = data.code;
     }
 
     @Override
@@ -647,15 +475,11 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     @Override
     public void release() {
         super.release();
-        if (mAdapter != null && mAdapter instanceof OnFinishListener) {
-            ((OnFinishListener) mAdapter).release();
+        if (mAdapter != null) {
+            mAdapter.release();
         }
         mAdapter = null;
         rvContainer = null;
-        if (mCallLoad != null) {
-            mCallLoad.cancel();
-            mCallLoad = null;
-        }
         if (mCallRefresh != null) {
             mCallRefresh.cancel();
             mCallRefresh = null;
@@ -663,11 +487,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onItemClick(int position) {
-        if (mGiftData == null || mGiftData.banner == null || mGiftData.banner.size() <= position) {
+        if (mData == null || mData.size() < 1) {
             return;
         }
-        IndexBanner banner = mGiftData.banner.get(position);
+        IndexBanner banner = ((ArrayList<IndexBanner>) mData.get(0)).get(position);
         StatisticsManager.getInstance().trace(getContext(), StatisticsManager.ID.GIFT_BANNER,
                 StatisticsManager.ID.STR_GIFT_BANNER,
                 String.format(Locale.CHINA, "第%d推广位，标题：%s", position, banner.title));

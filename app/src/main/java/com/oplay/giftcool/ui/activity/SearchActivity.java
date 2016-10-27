@@ -325,6 +325,12 @@ public class SearchActivity extends BaseAppCompatActivity implements OnSearchLis
         ft.commit();
     }
 
+    public void reSearch() {
+        if (mSearchLayout != null) {
+            mSearchLayout.reSearch();
+        }
+    }
+
     public void sendSearchRequest(String keyword, int id) {
         mSearchLayout.setAutoPopupPrompt(false);
         mSearchLayout.setText(keyword);

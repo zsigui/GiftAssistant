@@ -3,9 +3,11 @@
         android:id = "@+id/rl_recommend"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
-        android:background = "@drawable/selector_white_module" >
+        android:background = "@drawable/selector_white_module"
+        tools:ignore = "RtlSymmetry" >
 
     <RelativeLayout
             style = "@style/IndexListItemLayout"
@@ -43,7 +45,7 @@
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
-                android:text = "[暴打魏蜀吴]新手礼包" />
+                tools:text = "[暴打魏蜀吴]新手礼包" />
 
 
         <TextView
@@ -59,8 +61,8 @@
                 android:gravity = "center_vertical"
                 android:layout_below = "@+id/tv_name"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
-                android:text = "￥6.00"
+                android:layout_marginTop = "5dp"
+                tools:text = "￥6.00"
                 android:layout_toRightOf = "@+id/tv_spend"
                 style = "@style/DefaultTextView.Text" />
 
@@ -85,7 +87,7 @@
                 android:layout_alignTop = "@+id/tv_name"
                 android:background = "@drawable/selector_btn_green"
                 android:textColor = "@color/color_btn_green_border"
-                android:text = "抢号" />
+                android:text = "@string/st_gift_seize" />
 
         <TextView
                 android:id = "@+id/tv_seize_hint"

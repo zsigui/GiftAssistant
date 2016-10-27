@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -89,9 +88,9 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
     private TextView tvRemark;
     private TextView tvQQ;
     private DownloadButtonView btnDownload;
-    private LinearLayout downloadLayout;
     private DeletedTextView tvOriginPrice;
     private TextView tvBroadcast;
+    private TextView btnMore;
 
 
     private GiftDetail mData;
@@ -127,8 +126,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         tvCode = getViewById(R.id.tv_gift_code);
         btnSend = getViewById(R.id.btn_send);
         btnDownload = getViewById(R.id.btn_download);
-        downloadLayout = getViewById(R.id.ll_download);
-
+        btnMore = getViewById(R.id.btn_more);
     }
 
     @Override
@@ -137,6 +135,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         btnSend.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
         ivIcon.setOnClickListener(this);
+        btnMore.setOnClickListener(this);
         ObserverManager.getInstance().addGiftUpdateListener(this);
         ApkDownloadManager.getInstance(getActivity()).addDownloadStatusListener(this);
         ApkDownloadManager.getInstance(getActivity()).addProgressUpdateListener(this);
@@ -171,11 +170,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         }
         mId = getArguments().getInt(KeyConfig.KEY_DATA);
         AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "transfer id = " + mId);
-        if (!AssistantApp.getInstance().isAllowDownload()) {
-            downloadLayout.setVisibility(View.GONE);
-        } else {
-            downloadLayout.setVisibility(View.VISIBLE);
-        }
+        btnDownload.setVisibility(AssistantApp.getInstance().isAllowDownload() ? View.VISIBLE : View.GONE);
         mViewManager.showLoading();
         QQ_TEXT = getResources().getString(R.string.st_gift_qq);
     }
@@ -520,6 +515,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
                 IntentUtil.joinQQGroup(getContext(), MixUtil.getQQInfo()[1]);
                 break;
             case R.id.iv_icon:
+            case R.id.btn_more:
                 if (mData != null && mData.gameData != null) {
                     IntentUtil.jumpGameDetail(getContext(), mData.gameData.id, GameTypeUtil.JUMP_STATUS_GIFT);
                 }
@@ -547,7 +543,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             @Override
             public void run() {
 
-                if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+                if (btnDownload != null && btnDownload.getVisibility() == View.VISIBLE) {
                     mAppInfo.downloadStatus = appInfo.downloadStatus;
                     mAppInfo.initAppInfoStatus(getContext());
                     btnDownload.setStatus(mAppInfo.appStatus, "");
@@ -566,7 +562,7 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (downloadLayout != null && downloadLayout.getVisibility() == View.VISIBLE) {
+                    if (btnDownload != null && btnDownload.getVisibility() == View.VISIBLE) {
                         btnDownload.setProgress(percent);
                     }
                 }
@@ -596,7 +592,6 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
         tvCode = null;
         btnCopy = null;
         btnDownload = null;
-        downloadLayout = null;
         tvOriginPrice = null;
         mData = null;
         mAppInfo = null;

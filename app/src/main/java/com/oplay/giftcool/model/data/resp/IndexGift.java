@@ -10,15 +10,21 @@ import java.util.ArrayList;
  */
 public class IndexGift implements Serializable {
 
-	@SerializedName("banner")
-	public ArrayList<IndexBanner> banner;
+    @SerializedName("banner")
+    public ArrayList<IndexBanner> banner;
 
-	@SerializedName("like")
-	public ArrayList<IndexGiftLike> like;
+    @SerializedName("item_icon")
+    public ArrayList<String> icons;
 
-	@SerializedName("limit")
-	public ArrayList<IndexGiftNew> limit;
+    @SerializedName("zero")
+    public ArrayList<IndexGiftLike> free;
 
-	@SerializedName("new")
-	public ArrayList<IndexGiftNew> news;
+    @SerializedName("like")
+    public ArrayList<IndexGiftLike> like;
+
+    @SerializedName("limit")
+    public ArrayList<IndexGiftNew> limit;
+
+    @SerializedName("new")
+    public ArrayList<IndexGiftNew> news;
 }

@@ -23,7 +23,6 @@ import com.oplay.giftcool.config.util.GiftTypeUtil;
 import com.oplay.giftcool.config.util.IndexTypeUtil;
 import com.oplay.giftcool.model.AppStatus;
 import com.oplay.giftcool.model.data.resp.GameDownloadInfo;
-import com.oplay.giftcool.ui.widget.DeletedTextView;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -93,25 +92,32 @@ public class ViewUtil {
     /**
      * 设置礼包'￥5.00'的显示方式
      */
-    public static void siteValueUI(TextView tv, int value, boolean delete) {
+    public static void siteValueUI(TextView tv, float value, boolean delete) {
         if (tv == null) {
             return;
         }
+//        Context context = tv.getContext();
+//        final int originSize = 4;
+//        final String s = String.format(Locale.CHINA, "￥%.2f", value);
+//        final int moneyLength = s.length() - originSize;
+//        SpannableString ss = new SpannableString(s);
+//        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2),
+//                0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S3),
+//                1, 2 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S4),
+//                2 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        tv.setText(ss, TextView.BufferType.NORMAL);
+//        if (delete && tv instanceof DeletedTextView) {
+//            ((DeletedTextView) tv).setPaint(getColor(context, R.color.co_btn_grey_pressed), 3);
+//        }
+//        tv.setVisibility(View.VISIBLE);
         Context context = tv.getContext();
-        final int originSize = 4;
-        final String s = String.format(Locale.CHINA, "￥%d.00", value);
-        final int moneyLength = s.length() - originSize;
+        final String s = String.format(Locale.CHINA, "价值: %.0f元", value);
         SpannableString ss = new SpannableString(s);
         ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2),
-                0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S3),
-                1, 2 + moneyLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2_S4),
-                2 + moneyLength, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                4, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tv.setText(ss, TextView.BufferType.NORMAL);
-        if (delete && tv instanceof DeletedTextView) {
-            ((DeletedTextView) tv).setPaint(getColor(context, R.color.co_btn_grey_pressed), 3);
-        }
         tv.setVisibility(View.VISIBLE);
     }
 
@@ -201,7 +207,7 @@ public class ViewUtil {
             if (isLogin) {
                 ivIcon.setImageResource(R.drawable.ic_avatar_default);
             } else {
-                ivIcon.setImageResource(R.drawable.ic_avator_unlogin);
+                ivIcon.setImageResource(R.drawable.ic_avatar_un_login);
             }
         } else {
             try {

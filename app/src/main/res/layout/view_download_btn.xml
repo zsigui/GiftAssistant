@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:layout_width = "wrap_content"
-		android:layout_height = "wrap_content" >
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content" >
 
-	<ProgressBar
-			android:id = "@+id/pb_download"
-			style = "?android:attr/progressBarStyleHorizontal"
-			android:layout_width = "220dp"
-			android:layout_height = "@dimen/di_btn_bigger_height"
-			android:max = "100"
-			android:progressDrawable = "@drawable/selector_progress_bar_download_green"
-			android:visibility = "gone" />
+    <ProgressBar
+            android:id = "@+id/pb_download"
+            style = "?android:attr/progressBarStyleHorizontal"
+            android:layout_width = "220dp"
+            android:minWidth = "150dp"
+            android:layout_height = "@dimen/di_btn_bigger_height"
+            android:max = "100"
+            android:progressDrawable = "@drawable/selector_progress_bar_download_green"
+            android:visibility = "gone" />
 
-	<TextView
-			android:id = "@+id/btn_download_text"
-			android:layout_width = "220dp"
-			android:layout_height = "@dimen/di_btn_bigger_height"
-			android:layout_centerInParent = "true"
-			android:gravity = "center"
-			android:text = "下载"
-			android:background = "@drawable/selector_btn_download_green"
-			android:textColor = "@color/co_white" />
+    <TextView
+            android:id = "@+id/btn_download_text"
+            android:layout_width = "220dp"
+            android:minWidth = "150dp"
+            android:layout_height = "@dimen/di_btn_bigger_height"
+            android:layout_centerInParent = "true"
+            android:gravity = "center"
+            android:text = "下载"
+            android:background = "@drawable/selector_btn_download_green"
+            android:textColor = "@color/co_white" />
 
 
 </RelativeLayout >

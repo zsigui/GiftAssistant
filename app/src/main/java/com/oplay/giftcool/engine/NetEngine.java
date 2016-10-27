@@ -140,8 +140,14 @@ public interface NetEngine {
     /**
      * 获取 首页-新鲜出炉礼包列表 页面的数据
      */
-    @POST(NetUrl.GIFT_GET_INDEX_NEW)
+    @POST(NetUrl.GIFT_GET_NEW_BY_PAGE)
     Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainIndexGiftNew(@Body JsonReqBase<ReqIndexGift> reqData);
+
+    /**
+     * 获取 首页-新鲜出炉礼包列表 页面的数据
+     */
+    @POST(NetUrl.GIFT_GET_NEW_BY_PAGE)
+    Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> obtainGiftNewByPage(@Body JsonReqBase<ReqPageData> reqData);
 
     /**
      * 获取 首页-礼包-猜你喜欢 页面的数据

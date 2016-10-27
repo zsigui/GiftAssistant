@@ -47,7 +47,7 @@ public class MyCouponListFragment extends BaseFragment_Refresh<MyCouponDetail> {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initViewManger(R.layout.fragment_refresh_lv_container);
+        initViewManger(R.layout.fragment_refresh_lv_container_with_white_bg);
         mDataView = getViewById(R.id.lv_content);
     }
 

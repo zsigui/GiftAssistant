@@ -23,7 +23,7 @@
     <string name = "st_drawer_tag_sign_in" >签到</string >
     <string name = "st_drawer_tag_has_signed" >已签</string >
 
-    <string name = "st_drawer_header_un_login" >点击注册/登录</string >
+    <string name = "st_drawer_header_un_login" >点击登录/注册</string >
 
     <string name = "st_drawer_my_gift" >我的礼包</string >
     <string name = "st_drawer_my_coupon" >我的首充券</string >
@@ -33,6 +33,8 @@
     <string name = "st_drawer_msg" >消息中心</string >
     <string name = "st_drawer_download" >下载管理</string >
     <string name = "st_drawer_setting" >设置</string >
+    <string name = "st_drawer_money_score" >金币</string >
+    <string name = "st_drawer_money_bean" >偶玩豆</string >
 
     <!--礼包 -->
     <string name = "st_search_hint" >搜索游戏和礼包</string >
@@ -84,20 +86,20 @@
     <string name = "st_gift_free_seize" >正在疯抢</string >
     <string name = "st_gift_free_seized" >免费已抢完</string >
 
-    <string name = "st_gift_reserve_take_hint">预留直接领</string>
+    <string name = "st_gift_reserve_take_hint" >预留直接领</string >
     <string name = "st_gift_normal_seize_hint" >去普通抢号></string >
     <string name = "st_gift_code_copy" >复制</string >
     <!-- 礼包详情 -->
-    <string name = "st_gift_detail_activity_wait">
+    <string name = "st_gift_detail_activity_wait" >
         <![CDATA[
         活动开始时间：<font color=\'#ffaa17\'>%s</font>
         ]]>
-    </string>
-    <string name = "st_gift_detail_coupon_seized">
+    </string >
+    <string name = "st_gift_detail_coupon_seized" >
         <![CDATA[
         <font color=\'#ffaa17\'>请登录偶玩版游戏直接使用</font>
         ]]>
-    </string>
+    </string >
     <string name = "st_gift_tag_limit" >珍贵限量</string >
     <string name = "st_gift_tag_free" >限时免费</string >
     <string name = "st_gift_tag_activity" >活动</string >
@@ -108,6 +110,7 @@
     <string name = "st_gift_remark" >▌特别说明</string >
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
     <string name = "st_gift_hint_content" >1、此类型礼包同一个账号只能使用1次，多次兑换无效。\n2、抢号后请马上使用，非礼包码本身问题，概不退回积分或者偶玩豆。</string >
+    <string name = "st_gift_more">更多礼包</string>
     <!-- 首充券详情 -->
     <string name = "st_coupon_content" >▌首充券内容</string >
     <string name = "st_coupon_deadline" >▌使用期限</string >
@@ -116,7 +119,7 @@
     <string name = "st_coupon_hint_content" >1、首充券只能在首次充值时用于抵扣充值金额，每个偶玩账号可兑换使用一次。\n2、首充券的有效时间较短，抢号后请马上兑换，并到游戏中消费使用。</string >
     <!-- 游戏状态 -->
     <string name = "st_tabs_home_gift" >礼包</string >
-    <string name = "st_tabs_home_free" >限时免费</string >
+    <string name = "st_tabs_home_my" >我的</string >
     <string name = "st_tabs_index_game" >游戏</string >
     <string name = "st_tabs_index_post" >活动</string >
 
@@ -124,8 +127,10 @@
     <string name = "st_index_gift_like" >猜你喜欢</string >
     <string name = "st_index_gift_like_new_add" >今天新增</string >
     <string name = "st_index_gift_limit" >珍贵限量</string >
+    <string name = "st_index_gift_free" >限时免费</string >
     <string name = "st_index_gift_limit_remain" >剩余</string >
     <string name = "st_index_gift_new" >新鲜出炉</string >
+    <string name = "st_index_gift_sign" >每日签到</string >
 
     <string name = "st_tabs_game_hot" >热门游戏</string >
     <string name = "st_tabs_game_week" >本周热榜</string >
@@ -232,9 +237,9 @@
     <string name = "st_my_attention_empty_btn" >去逛逛</string >
 
     <!-- 登录 -->
-    <string name = "st_login_bind_owan_title_1">设置登录密码</string>
-    <string name = "st_login_bind_owan_title_2">设置登录偶玩账号</string>
-    <string name = "st_login_choose_owan_title">选择默认登录账号</string>
+    <string name = "st_login_bind_owan_title_1" >设置登录密码</string >
+    <string name = "st_login_bind_owan_title_2" >设置登录偶玩账号</string >
+    <string name = "st_login_choose_owan_title" >选择默认登录账号</string >
     <string name = "st_login_user" >点击登录</string >
     <!--<string name = "st_login_phone_title" >登录礼包酷</string >-->
     <string name = "st_login_phone_title" >手机登录</string >
@@ -257,8 +262,8 @@
         您的手机 <font color=\'#20C585\'>%s</font> 将会收到我们的语音电话，请接听，并输入语音验证码登录。
         ]]>
     </string >
-    <string name = "st_login_voice_code_send_hint">请先点击发送语音验证码</string>
-    <string name = "st_login_sms_code_send_hint">请先点击发送短信验证码</string>
+    <string name = "st_login_voice_code_send_hint" >请先点击发送语音验证码</string >
+    <string name = "st_login_sms_code_send_hint" >请先点击发送短信验证码</string >
     <string name = "st_login_ouwan_user_hint" >请输入偶玩账号</string >
     <string name = "st_login_ouwan_pwd_hint" >请输入密码</string >
     <string name = "st_login_send_code" >发送验证码</string >
@@ -271,43 +276,43 @@
     <string name = "st_login_no_ouwan_a" >没有偶玩账号? 用</string >
     <string name = "st_login_no_ouwan_b" >手机账号登录</string >
     <string name = "st_login_forget_pwd" >忘记密码</string >
-    <string name = "st_login_phone_btn_next">下一步</string>
-    <string name = "st_login_phone_btn_auto">自动登录中(%d)</string>
+    <string name = "st_login_phone_btn_next" >下一步</string >
+    <string name = "st_login_phone_btn_auto" >自动登录中(%d)</string >
     <string name = "st_login_btn_text" >登 录</string >
 
     <!-- 登录-绑定 -->
-    <string name = "st_lbind_owan_pwd_top_hint">
+    <string name = "st_lbind_owan_pwd_top_hint" >
         <![CDATA[
         为了您的账号安全，将设置一个偶玩账号\n账号名称: <font color=\'#20C585\'>%s</font>
         ]]>
-    </string>
-    <string name = "st_lbind_set_pwd">请设置登录密码:</string>
-    <string name = "st_lbind_owan_user_top_hint">
+    </string >
+    <string name = "st_lbind_set_pwd" >请设置登录密码:</string >
+    <string name = "st_lbind_owan_user_top_hint" >
         完善账号信息，抢礼包更容易哦！
-    </string>
-    <string name = "st_lbind_et_user_hint">用户名 : </string>
-    <string name = "st_lbind_et_pwd_hint">密\u0020\u0020\u0020\u0020码 : </string>
-    <string name = "st_lbind_et_set_user_hint">请设置(6~32位字符或数字)</string>
-    <string name = "st_lbind_et_set_pwd_hint">请设置(6~32位字符)</string>
-    <string name = "st_lbind_et_set_pwd_award_hint">设置密码后可获得50金币</string>
-    <string name = "st_lbind_set_pwd_login">完成登录</string>
+    </string >
+    <string name = "st_lbind_et_user_hint" >用户名 : </string >
+    <string name = "st_lbind_et_pwd_hint" >密\u0020\u0020\u0020\u0020码 : </string >
+    <string name = "st_lbind_et_set_user_hint" >请设置(6~32位字符或数字)</string >
+    <string name = "st_lbind_et_set_pwd_hint" >请设置(6~32位字符)</string >
+    <string name = "st_lbind_et_set_pwd_award_hint" >设置密码后可获得50金币</string >
+    <string name = "st_lbind_set_pwd_login" >完成登录</string >
 
     <!-- 多账号选择 -->
-    <string name = "st_lbind_choose_title">选择手机默认登录账号</string>
-    <string name = "st_lbind_choose_login_title">选择登录账号</string>
-    <string name = "st_lbind_choose_ctv_default">默认</string>
-    <string name = "st_lbind_choose_top_hint">
+    <string name = "st_lbind_choose_title" >选择手机默认登录账号</string >
+    <string name = "st_lbind_choose_login_title" >选择登录账号</string >
+    <string name = "st_lbind_choose_ctv_default" >默认</string >
+    <string name = "st_lbind_choose_top_hint" >
         <![CDATA[
         系统检测到您的手机 <font color=\'#20C585\'>%s</font> 已绑了如下偶玩账号，请选择一个作为手机默认账号
         ]]>
-    </string>
-    <string name = "st_lbind_choose_top_login_hint">
+    </string >
+    <string name = "st_lbind_choose_top_login_hint" >
         系统检测到您的手机登录过如下的偶玩账号，请选择一个账号登录礼包酷
-    </string>
-    <string name = "st_lbind_dialog_title">确认放弃登录？</string>
-    <string name = "st_lbind_dialog_content">还有一步就可以完成登录了，真的要退出吗？</string>
-    <string name = "st_lbind_dialog_ok">退出</string>
-    <string name = "st_lbind_dialog_quick">取消</string>
+    </string >
+    <string name = "st_lbind_dialog_title" >确认放弃登录？</string >
+    <string name = "st_lbind_dialog_content" >还有一步就可以完成登录了，真的要退出吗？</string >
+    <string name = "st_lbind_dialog_ok" >退出</string >
+    <string name = "st_lbind_dialog_quick" >取消</string >
 
 
     <!-- 弹窗 -->
@@ -428,24 +433,28 @@
     <string name = "st_hint_dialog_login_tag" >login</string >
 
     <!-- 新游开服开测表 -->
-    <string name = "st_server_info_title">开服/开测表</string>
-    <string name = "st_server_info_open_server_title">开服表</string>
-    <string name = "st_server_info_open_test_title">开测表</string>
-    <string name = "st_server_info_no_game_toast">对不起，小酷没有收录该游戏信息</string>
-    <string name = "st_server_info_content">
+    <string name = "st_server_info_title" >开服/开测表</string >
+    <string name = "st_server_info_open_server_title" >开服表</string >
+    <string name = "st_server_info_open_test_title" >开测表</string >
+    <string name = "st_server_info_no_game_toast" >对不起，小酷没有收录该游戏信息</string >
+    <string name = "st_server_info_content" >
         <![CDATA[
         %1$s<font color=\'#888888\'>/%2$s</font>
         ]]>
-    </string>
+    </string >
 
     <!-- 切换账号弹窗 -->
-    <string name = "st_dialog_change_account_title">切换账号</string>
-    <string name = "st_dialog_change_account_content">
+    <string name = "st_dialog_change_account_title" >切换账号</string >
+    <string name = "st_dialog_change_account_content" >
         <![CDATA[
         是否使用<font color=\'#ffaa17\'>%1$s</font>的账号<font color=\'#ffaa17\'>%2$s</font>登录礼包酷？
         ]]>
-    </string>
-    <string name = "st_dialog_change_account_hint">切换后将退出原来的账号%s</string>
-    <string name = "st_dialog_change_account_ok">确认切换</string>
-    <string name = "st_dialog_change_account_cancel">保持原账号状态</string>
+    </string >
+    <string name = "st_dialog_change_account_hint" >切换后将退出原来的账号%s</string >
+    <string name = "st_dialog_change_account_ok" >确认切换</string >
+    <string name = "st_dialog_change_account_cancel" >保持原账号状态</string >
+
+    <!-- 部分按钮文字 -->
+    <string name = "st_btn_download" >下载</string >
+    <string name = "st_btn_checkout" >查看</string >
 </resources >

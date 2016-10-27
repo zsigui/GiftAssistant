@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+              xmlns:tools = "http://schemas.android.com/tools"
               android:id = "@+id/ll_item"
               android:background = "@color/co_transparent"
-              style = "@style/IndexModuleLayout" >
+              style = "@style/IndexModuleLayout"
+              tools:ignore = "HardcodedText, RtlHardcoded" >
 
-	<View
-			android:background = "@color/co_divider_bg"
-			android:layout_width = "match_parent"
-			android:layout_height = "@dimen/di_index_module_gap" />
+    <View
+            android:background = "@color/co_divider_bg"
+            android:layout_width = "match_parent"
+            android:layout_height = "@dimen/di_index_module_gap" />
 
-	<RelativeLayout
-			android:id = "@+id/rl_header_item"
-			style = "@style/IndexModuleTitleLayout"
-			android:background = "@drawable/selector_white_module"
-			android:clickable = "true" >
+    <RelativeLayout
+            android:id = "@+id/rl_header_item"
+            style = "@style/IndexModuleTitleLayout"
+            android:background = "@drawable/selector_white_module"
+            android:clickable = "true" >
 
-		<TextView
-				android:id = "@+id/tv_highlight"
-				style = "@style/DefaultTextView.Header"
-				android:text = "▌"
-				android:textColor = "@color/co_common_app_main_bg" />
+        <TextView
+                android:id = "@+id/tv_highlight"
+                style = "@style/DefaultTextView.Header"
+                android:text = "▌"
+                android:textColor = "@color/co_common_app_main_bg" />
 
-		<TextView
-				android:layout_toRightOf = "@id/tv_highlight"
-				android:id = "@+id/tv_title"
-				style = "@style/DefaultTextView.Header" />
+        <TextView
+                android:layout_toRightOf = "@id/tv_highlight"
+                android:id = "@+id/tv_title"
+                tools:text="猜你喜欢"
+                style = "@style/DefaultTextView.Header" />
 
-		<TextView style = "@style/DefaultTextView.More" />
+        <TextView
+                android:id="@+id/tv_more"
+                style = "@style/DefaultTextView.More" />
 
-	</RelativeLayout >
+    </RelativeLayout >
 
 </LinearLayout >

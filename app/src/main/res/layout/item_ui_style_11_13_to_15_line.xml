@@ -3,10 +3,12 @@
         android:id = "@+id/rl_recommend"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
         android:background = "@drawable/selector_white_module"
-        android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
+        android:paddingLeft = "@dimen/di_list_item_gap_very_small"
+        tools:ignore = "RtlSymmetry, ContentDescription" >
 
     <View
             android:layout_width = "@dimen/di_divider_height"
@@ -24,6 +26,7 @@
             style = "@style/IndexListItemLayout"
             android:paddingRight = "@dimen/di_index_list_item_margin_right"
             android:background = "@color/co_transparent" >
+
         <RelativeLayout
                 android:id = "@+id/rl_icon"
                 android:layout_width = "@dimen/di_icon_diameter"
@@ -55,7 +58,7 @@
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
-                android:text = "[暴打魏蜀吴]新手礼包" />
+                tools:text = "[暴打魏蜀吴]新手礼包" />
 
 
         <TextView
@@ -71,8 +74,8 @@
                 android:gravity = "center_vertical"
                 android:layout_below = "@+id/tv_name"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
-                android:text = "￥6.00"
+                android:layout_marginTop = "5dp"
+                tools:text = "￥6.00"
                 android:layout_toRightOf = "@+id/tv_spend"
                 style = "@style/DefaultTextView.Text" />
 
@@ -108,20 +111,16 @@
             <TextView
                     android:id = "@+id/tv_percent"
                     style = "@style/DefaultTextView.Text"
-                    android:layout_below = "@+id/tv_name"
                     android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
-                    android:text = "剩余50%" />
+                    tools:text = "剩余50%" />
 
             <ProgressBar
                     android:id = "@+id/pb_percent"
                     style = "?android:attr/progressBarStyleHorizontal"
                     android:layout_width = "match_parent"
                     android:layout_height = "@dimen/di_gift_common_pb_diameter"
-                    android:layout_alignTop = "@+id/tv_percent"
                     android:layout_marginLeft = "4dp"
                     android:layout_gravity = "center_vertical"
-                    android:layout_toLeftOf = "@+id/btn_send"
-                    android:layout_toRightOf = "@+id/tv_percent"
                     android:max = "100"
                     android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
@@ -148,7 +147,7 @@
                 android:layout_marginTop = "@dimen/di_list_item_gap_normal"
                 android:textSize = "@dimen/di_text_size_small"
                 android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
-                android:text="07-21免费抢"/>
+                tools:text = "07-21免费抢" />
 
     </RelativeLayout >
 

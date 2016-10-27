@@ -91,6 +91,10 @@ android {
 		}
 	}
 
+	dataBinding {
+		enabled true
+	}
+
 //	dexcount {
 //		format = "list"
 //		includeClasses = false

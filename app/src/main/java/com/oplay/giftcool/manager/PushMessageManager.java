@@ -55,8 +55,8 @@ public class PushMessageManager {
      */
     public static abstract class Status {
 
-        // 0元礼包推送
-        public static final int ACTION_GIFT_ZERO = 1;
+        // 限时免费礼包推送，由0元礼包推送修改，1406
+        public static final int ACTION_GIFT_FREE = 1;
         // 每日限量礼包推送
         public static final int ACTION_GIFT_LIMIT = 2;
         // 普通礼包
@@ -289,7 +289,7 @@ public class PushMessageManager {
             data.status = GameTypeUtil.JUMP_STATUS_DETAIL;
         }
         if (isGift) {
-            IntentUtil.jumpGiftDetail(context, data.id, true);
+            IntentUtil.jumpGiftDetail(context, data.id);
         } else {
             IntentUtil.jumpGameDetail(context, data.id, data.status);
         }
@@ -301,14 +301,14 @@ public class PushMessageManager {
     public void handleNotifyMessage(Context context, PushMessageExtra data) {
 
         switch (data.type) {
-            case Status.ACTION_GIFT_ZERO:
+            case Status.ACTION_GIFT_FREE:
                 IntentUtil.jumpHome(context, true);
                 if (MainActivity.sGlobalHolder != null) {
-                    MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_ZERO);
+                    MainActivity.sGlobalHolder.jumpToIndexGift(GiftFragment.POS_FREE);
                 }
                 break;
             case Status.ACTION_GIFT_LIMIT:
-                IntentUtil.jumpGiftLimitList(context, true);
+                IntentUtil.jumpGiftLimitList(context);
                 break;
             case Status.ACTION_GIFT_NEW:
                 IntentUtil.jumpHome(context, true);

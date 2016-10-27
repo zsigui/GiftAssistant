@@ -275,7 +275,7 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
         switch (v.getId()) {
             case R.id.btn_to_get:
                 // 跳转猜你喜欢列表界面
-                IntentUtil.jumpGiftHotList(getContext(), null);
+                IntentUtil.jumpGiftHotList(getContext());
                 break;
         }
     }

@@ -3,11 +3,13 @@
         android:id = "@+id/rl_recommend"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
         style = "@style/IndexListItemLayout"
         android:paddingRight = "@dimen/di_index_list_item_margin_right"
-        android:background = "@drawable/selector_white_module" >
+        android:background = "@drawable/selector_white_module"
+        tools:ignore = "RtlSymmetry" >
 
 
     <RelativeLayout
@@ -42,7 +44,7 @@
             android:drawablePadding = "4dp"
             android:gravity = "center_vertical"
             android:drawableLeft = "@drawable/ic_tag_coupon"
-            android:text = "[暴打魏蜀吴]新手礼包" />
+            tools:text = "[暴打魏蜀吴]新手礼包" />
 
     <TextView
             android:id = "@+id/tv_platform"
@@ -52,7 +54,7 @@
             android:layout_marginLeft = "7dp"
             android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
             android:textColor = "@color/co_common_app_second_bg_green"
-            android:text = "偶玩版" />
+            tools:text = "偶玩版" />
 
     <LinearLayout
             android:id = "@+id/ll_price"
@@ -84,7 +86,7 @@
             android:layout_alignTop = "@+id/tv_name"
             android:background = "@drawable/selector_btn_green"
             android:textColor = "@color/color_btn_green_border"
-            android:text = "抢号" />
+            android:text = "@string/st_gift_seize" />
 
     <TextView
             android:id = "@+id/tv_seize_hint"
@@ -96,6 +98,6 @@
             android:layout_marginTop = "@dimen/di_list_item_gap_normal"
             android:textSize = "@dimen/di_text_size_small"
             android:layout_marginLeft = "@dimen/di_gift_percent_margin_left"
-            android:text="07-21免费抢"/>
+            tools:text = "07-21免费抢" />
 
 </RelativeLayout >

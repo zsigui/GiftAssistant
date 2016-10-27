@@ -83,7 +83,7 @@ public class IndexGiftNew implements Serializable {
     public int giftType;
     // 原价
     @SerializedName("original_price")
-    public int originPrice;
+    public float originPrice;
     // 剩余开抢时间，单位:s
     @SerializedName("remain_time")
     public int remainStartTime;

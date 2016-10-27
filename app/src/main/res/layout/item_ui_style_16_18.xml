@@ -3,9 +3,11 @@
         android:id = "@+id/rl_recommend"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
-        android:background = "@drawable/selector_white_module" >
+        android:background = "@drawable/selector_white_module"
+        tools:ignore = "RtlSymmetry, contentDescription" >
 
     <RelativeLayout
             style = "@style/IndexListItemLayout"
@@ -43,7 +45,7 @@
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
                 android:drawableLeft = "@drawable/ic_tag_coupon"
-                android:text = "[暴打魏蜀吴]新手礼包" />
+                tools:text = "[暴打魏蜀吴]新手礼包" />
 
         <TextView
                 android:id = "@+id/tv_platform"
@@ -53,7 +55,7 @@
                 android:layout_marginLeft = "7dp"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:textColor = "@color/co_common_app_second_bg_green"
-                android:text = "偶玩版" />
+                tools:text = "偶玩版" />
 
         <LinearLayout
                 android:id = "@+id/ll_percent"
@@ -66,7 +68,6 @@
             <TextView
                     android:id = "@+id/tv_percent"
                     style = "@style/DefaultTextView.Text"
-                    android:layout_below = "@+id/tv_name"
                     android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
             <ProgressBar
@@ -74,11 +75,8 @@
                     style = "?android:attr/progressBarStyleHorizontal"
                     android:layout_width = "match_parent"
                     android:layout_height = "@dimen/di_gift_common_pb_diameter"
-                    android:layout_alignTop = "@+id/tv_percent"
                     android:layout_marginLeft = "4dp"
                     android:layout_gravity = "center_vertical"
-                    android:layout_toLeftOf = "@+id/btn_send"
-                    android:layout_toRightOf = "@+id/tv_percent"
                     android:max = "100"
                     android:progressDrawable = "@drawable/shape_progress_bar_orange" />
 
@@ -116,7 +114,7 @@
                 android:background = "@drawable/selector_btn_green"
                 android:textColor = "@color/color_btn_green_border"
                 android:visibility = "invisible"
-                android:text = "抢号" />
+                android:text = "@string/st_gift_seize" />
 
         <TextView
                 android:id = "@+id/tv_seize_hint"
@@ -127,7 +125,7 @@
                 android:layout_width = "@dimen/di_gift_hint_width"
                 android:gravity = "right"
                 android:textSize = "@dimen/di_text_size_small"
-                android:text = "07-21免费抢"
+                tools:text = "07-21免费抢"
                 android:layout_marginLeft = "@dimen/di_gift_percent_margin_left" />
 
 

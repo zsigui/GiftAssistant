@@ -3,6 +3,7 @@
         android:id = "@+id/toolbar"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "?actionBarSize"
         android:gravity = "center_vertical"
@@ -10,7 +11,8 @@
         app:contentInsetEnd = "0dp"
         app:contentInsetStart = "0dp"
         app:popupTheme = "@style/ThemeOverlay.AppCompat.Light"
-        app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+        app:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        tools:ignore = "RtlHardcoded,RtlSymmetry,ContentDescription" >
 
     <LinearLayout
             android:layout_width = "match_parent"
@@ -19,86 +21,92 @@
             android:gravity = "center_vertical"
             android:orientation = "horizontal" >
 
-        <RelativeLayout
-                android:layout_width = "47dp"
-                android:layout_height = "wrap_content"
-                android:layout_marginRight = "@dimen/di_tool_bar_profile_margin_right" >
-
-            <com.makeramen.roundedimageview.RoundedImageView
-                    android:id = "@+id/iv_profile"
-                    style = "@style/DefaultImageView.Icon"
-                    android:layout_width = "@dimen/di_tool_bar_profile_diameter"
-                    android:layout_height = "@dimen/di_tool_bar_profile_diameter"
-                    android:clickable = "true"
-                    android:scaleType = "centerCrop"
-                    android:src = "@drawable/ic_avatar_default"
-                    app:riv_oval = "true" />
-
-            <ImageView
-                    android:id = "@+id/iv_hint"
-                    style = "@style/DefaultImageView"
-                    android:src = "@drawable/ic_toolbar_hint"
-                    android:layout_alignParentTop = "true"
-                    android:layout_alignParentRight = "true"
-                    android:visibility = "gone"
-                    android:contentDescription = "@null" />
-        </RelativeLayout >
-
-        <TextView
-                android:id = "@+id/tv_title"
-                style = "@style/DefaultTextView.Header"
-                android:layout_width = "0dp"
-                android:layout_height = "wrap_content"
-                android:layout_weight = "1"
-                android:layout_marginRight = "@dimen/di_index_post_toolbar_margin"
-                android:gravity = "center"
-                android:visibility = "gone"
-                android:textSize = "@dimen/di_tool_bar_title_size"
-                android:textColor = "@color/co_white"
-                android:text = "@string/st_index_post_toolbar_title" />
-
-        <ImageView
-                android:id = "@+id/iv_title"
-                android:layout_width = "0dp"
-                android:layout_height = "wrap_content"
-                android:layout_marginRight = "@dimen/di_index_post_toolbar_margin"
-                android:layout_weight = "1"
-                android:visibility = "gone"
-                android:gravity = "center"
-                android:src = "@drawable/ic_limit_free_title" />
-
-        <include
-                layout = "@layout/view_search"
-                android:layout_width = "0dp"
-                android:layout_height = "@dimen/di_search_bar_height"
-                android:layout_weight = "1" />
+        <!--<include-->
+        <!--layout = "@layout/view_search"-->
+        <!--android:layout_width = "0dp"-->
+        <!--android:layout_height = "@dimen/di_search_bar_height"-->
+        <!--android:layout_weight = "1" />-->
 
         <LinearLayout
-                android:id = "@+id/ll_gift_count"
-                android:layout_height = "@dimen/di_tool_bar_profile_diameter"
-                android:visibility = "gone"
-                android:background = "@drawable/shape_toolbar_right"
+                android:id="@+id/ll_search"
+                android:layout_width = "0dp"
+                android:layout_height = "@dimen/di_search_bar_height"
+                android:layout_weight = "1"
+                android:gravity = "center_vertical"
+                android:background = "@drawable/shape_rect_search" >
+
+            <ImageView
+                    android:id = "@+id/tv_search_icon"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:contentDescription = "@null"
+                    android:enabled = "false"
+                    android:src = "@drawable/ic_search" />
+
+            <TextView
+                    android:id = "@+id/actv_search_input"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:maxLines = "1"
+                    android:paddingLeft = "@dimen/di_list_item_gap_small"
+                    android:textSize = "@dimen/di_common_text"
+                    android:hint = "@string/st_search_hint"
+                    android:textColorHint = "@color/co_search_bar_hint" />
+        </LinearLayout >
+
+        <FrameLayout
+                android:id = "@+id/fl_msg"
                 android:layout_width = "wrap_content"
-                android:layout_marginLeft = "7dp"
-                android:clickable = "true"
-                android:gravity = "center_vertical" >
+                android:layout_height = "match_parent"
+                android:background = "@drawable/selector_opacity_05" >
 
             <ImageView
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_toolbar_gift"
-                    android:paddingRight = "5dp"
-                    android:contentDescription = "@null" />
+                    android:src = "@drawable/ic_toolbar_msg"
+                    android:layout_gravity = "center"
+                    android:layout_marginLeft = "@dimen/di_list_item_gap_big"
+                    android:layout_marginRight = "@dimen/di_list_item_gap_big" />
 
-            <TextView
-                    android:id = "@+id/tv_gift_count"
+            <ImageView
+                    android:id = "@+id/iv_msg_hint"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
-                    android:textColor = "@color/co_white"
-                    android:text = "5"
-                    android:textSize = "@dimen/di_common_text" />
+                    android:visibility = "gone"
+                    android:layout_gravity = "right|center_vertical"
+                    android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                    android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
+                    tools:visibility = "visible"
+                    android:src = "@drawable/ic_toolbar_hint" />
+        </FrameLayout >
 
-        </LinearLayout >
+        <!--<LinearLayout-->
+        <!--android:id = "@+id/ll_gift_count"-->
+        <!--android:layout_height = "@dimen/di_tool_bar_profile_diameter"-->
+        <!--android:visibility = "gone"-->
+        <!--android:background = "@drawable/shape_toolbar_right"-->
+        <!--android:layout_width = "wrap_content"-->
+        <!--android:layout_marginLeft = "7dp"-->
+        <!--android:clickable = "true"-->
+        <!--tools:visibility = "visible"-->
+        <!--android:gravity = "center_vertical" >-->
+
+        <!--<ImageView-->
+        <!--android:layout_width = "wrap_content"-->
+        <!--android:layout_height = "wrap_content"-->
+        <!--android:src = "@drawable/ic_toolbar_gift"-->
+        <!--android:paddingRight = "5dp"-->
+        <!--android:contentDescription = "@null" />-->
+
+        <!--<TextView-->
+        <!--android:id = "@+id/tv_gift_count"-->
+        <!--android:layout_width = "wrap_content"-->
+        <!--android:layout_height = "wrap_content"-->
+        <!--android:textColor = "@color/co_white"-->
+        <!--tools:text = "5"-->
+        <!--android:textSize = "@dimen/di_common_text" />-->
+
+        <!--</LinearLayout >-->
     </LinearLayout >
 
 </android.support.v7.widget.Toolbar >

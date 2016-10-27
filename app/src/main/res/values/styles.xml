@@ -22,7 +22,7 @@
         <item name = "windowNoTitle" >true</item >
         <item name = "android:windowBackground" >@color/co_common_content_bg</item >
         <item name = "android:background" >@color/co_transparent</item >
-        <item name = "android:windowIsTranslucent">false</item>
+        <item name = "android:windowIsTranslucent" >false</item >
 
         <!-- actionBarSize changed in Lolipop -->
         <item name = "android:actionBarSize" >@dimen/di_tool_bar_bg_height</item >
@@ -41,17 +41,18 @@
         <!--<item code = "android:fitsSystemWindows" >true</item >-->
 
         <!-- 暂时机子卡顿会出现前后动画不衔接问题，先去除 -->
-        <item name = "android:windowAnimationStyle">@style/ActivityAnimation</item>
+        <item name = "android:windowAnimationStyle" >@style/ActivityAnimation</item >
     </style >
 
-    <style name="AppTheme" parent="AppCustomBaseTheme" />
+    <style name = "AppTheme" parent = "AppCustomBaseTheme" />
 
-    <style name = "ActivityAnimation" parent="@android:style/Animation.Translucent">
-        <item name="android:activityOpenEnterAnimation">@anim/open_enter</item>
-        <item name="android:activityOpenExitAnimation">@anim/open_exit</item>
-        <item name="android:activityCloseEnterAnimation">@anim/close_enter</item>
-        <item name="android:activityCloseExitAnimation">@anim/close_exit</item>
-    </style>
+    <!-- 注意 windowEnterAnimation 和 windowExitAnimation 会覆盖 activityXXAnimation 效果 -->
+    <style name = "ActivityAnimation" >
+        <item name = "android:activityOpenEnterAnimation" >@anim/open_enter</item >
+        <item name = "android:activityOpenExitAnimation" >@anim/open_exit</item >
+        <item name = "android:activityCloseEnterAnimation" >@anim/close_enter</item >
+        <item name = "android:activityCloseExitAnimation" >@anim/close_exit</item >
+    </style >
 
     <style name = "ActionButton.AppTheme" parent = "Widget.AppCompat.Light.ActionButton" >
         <item name = "android:minWidth" >?actionBarSize</item >
@@ -132,8 +133,8 @@
         <item name = "android:paddingBottom" >@dimen/di_index_hoz_module_top_bottom</item >
         <item name = "android:paddingTop" >@dimen/di_index_hoz_module_top_bottom</item >
         <item name = "android:background" >@drawable/selector_opacity_05</item >
-        <item name = "android:paddingLeft" >8dp</item >
-        <item name = "android:paddingRight" >8dp</item >
+        <item name = "android:paddingLeft" >@dimen/di_list_item_gap_small</item >
+        <item name = "android:paddingRight" >@dimen/di_list_item_gap_normal</item >
     </style >
 
     <style name = "IndexListItemLayout.Horizontal" >
@@ -344,7 +345,7 @@
     <style name = "DefaultTextView.WalletMoney" >
         <item name = "android:textColor" >@color/co_white</item >
         <item name = "android:textSize" >24sp</item >
-        <item name = "android:paddingTop" >8dp</item >
+        <item name = "android:paddingTop" >@dimen/di_list_item_gap_small</item >
         <item name = "android:shadowDx" >2</item >
         <item name = "android:shadowDy" >4</item >
         <item name = "android:shadowRadius" >2</item >
@@ -404,18 +405,18 @@
     </style >
 
     <!-- 去掉Activity背景 -->
-    <style name = "Opacity70Activity" parent="AppTheme">
-        <item name = "android:windowBackground">@color/co_opacity_70</item>
-        <item name = "android:windowNoTitle">true</item>
-        <item name = "android:windowIsTranslucent">true</item>
-    </style>
+    <style name = "Opacity70Activity" parent = "AppTheme" >
+        <item name = "android:windowBackground" >@color/co_opacity_70</item >
+        <item name = "android:windowNoTitle" >true</item >
+        <item name = "android:windowIsTranslucent" >true</item >
+    </style >
 
     <!-- 登录 -->
     <style name = "AccountEditor" >
         <item name = "android:popupBackground" >@color/co_common_content_bg</item >
         <item name = "android:dropDownAnchor" >@null</item >
         <item name = "android:layout_width" >match_parent</item >
-        <item name = "android:layout_height" >38dp</item >
+        <item name = "android:layout_height" >@dimen/di_list_item_gap_small</item >
         <item name = "android:background" >@color/co_white</item >
         <item name = "android:textColorHint" >@color/co_common_text_second</item >
         <item name = "android:textColor" >@color/co_common_text_main</item >
@@ -431,7 +432,7 @@
     <style name = "IndexModuleTitleLayout.Bigger.LoginInput" >
         <item name = "android:gravity" >center_vertical</item >
         <item name = "android:paddingLeft" >@dimen/di_login_padding_left_right</item >
-        <item name = "android:paddingRight" >8dp</item >
+        <item name = "android:paddingRight" >@dimen/di_list_item_gap_small</item >
     </style >
 
     <style name = "DefaultTextView.Login" >
@@ -465,6 +466,18 @@
         <item name = "android:textStyle" >bold</item >
         <item name = "android:layout_alignParentRight" >true</item >
         <item name = "android:layout_marginRight" >@dimen/di_list_item_gap_aw</item >
+    </style >
+
+    <!-- 礼包首页 -->
+    <style name = "LinearLayoutIndexIconBar" >
+        <item name = "android:layout_width" >0dp</item >
+        <item name = "android:layout_weight" >1</item >
+        <item name = "android:layout_height" >wrap_content</item >
+        <item name = "android:paddingTop" >@dimen/di_list_item_gap_big</item >
+        <item name = "android:paddingBottom" >@dimen/di_list_item_gap_big</item >
+        <item name = "android:gravity" >center</item >
+        <item name = "android:orientation" >vertical</item >
+        <item name = "android:background" >@drawable/selector_opacity_05</item >
     </style >
 
     <!-- 礼包首页-猜你喜欢 -->

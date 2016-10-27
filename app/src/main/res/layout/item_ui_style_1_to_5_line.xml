@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+        xmlns:tools = "http://schemas.android.com/tools"
         android:id = "@+id/rl_recommend"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:layout_width = "match_parent"
         android:layout_height = "@dimen/di_limit_item_height"
         android:background = "@drawable/selector_white_module"
-        android:paddingLeft = "@dimen/di_list_item_gap_very_small" >
+        android:paddingLeft = "@dimen/di_list_item_gap_very_small"
+        tools:ignore = "RtlSymmetry" >
 
     <View
             android:layout_width = "@dimen/di_divider_height"
@@ -65,7 +67,7 @@
                 android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
                 android:drawablePadding = "4dp"
                 android:gravity = "center_vertical"
-                android:text = "[暴打魏蜀吴]新手礼包" />
+                tools:text = "[暴打魏蜀吴]新手礼包" />
 
         <TextView
                 android:id = "@+id/tv_content"
@@ -144,7 +146,7 @@
                 android:layout_alignParentRight = "true"
                 android:layout_alignTop = "@+id/tv_name"
                 android:background = "@drawable/selector_btn_orange"
-                android:text = "抢号"
+                tools:text = "抢号"
                 android:textColor = "@color/co_white" />
 
         <TextView

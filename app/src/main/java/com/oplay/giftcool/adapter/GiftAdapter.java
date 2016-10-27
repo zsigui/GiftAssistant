@@ -327,10 +327,10 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         }
         switch (v.getId()) {
             case R.id.rl_like_all:
-                IntentUtil.jumpGiftHotList(mContext, null);
+                IntentUtil.jumpGiftHotList(mContext);
                 break;
             case R.id.rl_limit_all:
-                IntentUtil.jumpGiftLimitList(mContext, false);
+                IntentUtil.jumpGiftLimitList(mContext);
                 break;
             case R.id.rl_recommend:
                 if (gift != null) {

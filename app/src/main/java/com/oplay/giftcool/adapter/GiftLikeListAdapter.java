@@ -52,11 +52,12 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
             convertView = mLayoutInflater.inflate(R.layout.item_list_gift_like, parent, false);
             holder.ivIcon = ViewUtil.getViewById(convertView, R.id.iv_icon);
             holder.tvName = ViewUtil.getViewById(convertView, R.id.tv_name);
-            holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
+//            holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
             holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
             holder.tvCount = ViewUtil.getViewById(convertView, R.id.tv_count);
-            holder.tvRemain = ViewUtil.getViewById(convertView, R.id.tv_new_add);
+            holder.tvNewAdd = ViewUtil.getViewById(convertView, R.id.tv_new_add);
             holder.ivHint = ViewUtil.getViewById(convertView, R.id.iv_hint);
+            holder.btnCheckout = ViewUtil.getViewById(convertView, R.id.btn_checkout);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -64,13 +65,6 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
 
         IndexGiftLike o = getItem(position);
         holder.tvName.setText(o.name);
-        if (o.playCount > 10000) {
-            holder.tvContent.setText(Html.fromHtml(
-                    String.format(Locale.CHINA, "<font color='#ffaa17'>%.1f万人</font>在玩", (float) o.playCount / 10000)));
-        } else {
-            holder.tvContent.setText(Html.fromHtml(
-                    String.format(Locale.CHINA, "<font color='#ffaa17'>%d人</font>在玩", o.playCount)));
-        }
         if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
                 o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime() / 1000) {
             holder.ivHint.setVisibility(View.VISIBLE);
@@ -78,12 +72,14 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
             holder.ivHint.setVisibility(View.GONE);
         }
         holder.tvSize.setText(o.size);
-        holder.tvCount.setText(Html.fromHtml(String.format(Locale.CHINA, "共<font color='#ffaa17'>%d</font>款礼包", o
+        holder.tvCount.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%d</font>款礼包", o
                 .totalCount)));
-        holder.tvRemain.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%s</font>", o
-		        .giftName)));
+        holder.tvNewAdd.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%s</font>", o
+                .giftName)));
         ViewUtil.showImage(holder.ivIcon, o.img);
         convertView.setOnClickListener(this);
+        holder.btnCheckout.setOnClickListener(this);
+        holder.btnCheckout.setTag(TAG_POSITION, position);
         convertView.setTag(TAG_POSITION, position);
         return convertView;
     }
@@ -103,10 +99,11 @@ public class GiftLikeListAdapter extends BaseListAdapter<IndexGiftLike> implemen
     static class ViewHolder {
         ImageView ivHint;
         TextView tvName;
-        TextView tvContent;
+        //        TextView tvContent;
         TextView tvSize;
         TextView tvCount;
-        TextView tvRemain;
+        TextView tvNewAdd;
         ImageView ivIcon;
+        TextView btnCheckout;
     }
 }

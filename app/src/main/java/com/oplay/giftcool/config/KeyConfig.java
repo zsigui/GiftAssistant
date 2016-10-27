@@ -26,7 +26,8 @@ public class KeyConfig {
     public static final int TYPE_ID_INDEX_GIFT = 1;
     public static final int TYPE_ID_INDEX_GAME = 2;
     public static final int TYPE_ID_INDEX_POST = 3;
-    public static final int TYPE_ID_INDEX_FREE = 4;
+//    public static final int TYPE_ID_INDEX_FREE = 4; // 1406开始废除
+    public static final int TYPE_ID_INDEX_MY = 5;
     public static final int TYPE_ID_INDEX_UPGRADE = 100;
 
     /* setting activity  */
@@ -60,6 +61,7 @@ public class KeyConfig {
     public static final int TYPE_ID_GIFT_LIMIT = 170;
     public static final int TYPE_ID_GIFT_NEW = 171;
     public static final int TYPE_ID_GIFT_LIKE = 172;
+    public static final int TYPE_ID_GIFT_FREE = 173;
 
     /* web activity */
     public static final int TYPE_ID_LOTTERY = 173;

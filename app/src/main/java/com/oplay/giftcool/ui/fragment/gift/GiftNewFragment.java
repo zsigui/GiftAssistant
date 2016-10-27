@@ -4,17 +4,14 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.GiftLikeListAdapter;
+import com.oplay.giftcool.adapter.GiftListAdapter;
 import com.oplay.giftcool.config.Global;
-import com.oplay.giftcool.config.NetUrl;
-import com.oplay.giftcool.model.data.req.ReqGiftLike;
-import com.oplay.giftcool.model.data.resp.GiftLikeList;
-import com.oplay.giftcool.model.data.resp.IndexGiftLike;
+import com.oplay.giftcool.model.data.req.ReqPageData;
+import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
-import com.oplay.giftcool.util.FileUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -24,27 +21,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by zsigui on 15-12-30.
+ * Created by zsigui on 16-10-27.
  */
-public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
+public class GiftNewFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
-    private final static String PAGE_NAME = "猜你喜欢";
-    private static final String KEY_DATA = "key_like_game";
 
     private ListView mDataView;
-    private GiftLikeListAdapter mAdapter;
-    private JsonReqBase<ReqGiftLike> mReqPageObj;
+    private GiftListAdapter mAdapter;
+    private JsonReqBase<ReqPageData> mReqPageObj;
 
-    public static GiftLikeListFragment newInstance() {
-        return new GiftLikeListFragment();
-    }
-
-    public static GiftLikeListFragment newInstance(String gameKey) {
-        GiftLikeListFragment fragment = new GiftLikeListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(KEY_DATA, gameKey);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static GiftNewFragment newInstance() {
+        return new GiftNewFragment();
     }
 
 
@@ -62,24 +49,18 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     @Override
     @SuppressWarnings("unchecked")
     protected void processLogic(Bundle savedInstanceState) {
-        ReqGiftLike data = new ReqGiftLike();
-        data.appNames = Global.getInstalledAppNames();
-        data.packageName = Global.getInstalledPackageNames();
-        mReqPageObj = new JsonReqBase<>(data);
+        mReqPageObj = new JsonReqBase<>(new ReqPageData());
 
         mLastPage = 1;
-
-        mReqPageObj.data.appNames = Global.getInstalledAppNames();
-        mReqPageObj.data.packageName = Global.getInstalledPackageNames();
-        mAdapter = new GiftLikeListAdapter(getContext(), null);
+        mAdapter = new GiftListAdapter(getContext(), null);
         mDataView.setAdapter(mAdapter);
 
     }
 
     /**
-     * 刷新猜你喜欢数据的网络请求声明
+     * 刷新新鲜出炉数据的网络请求声明
      */
-    private Call<JsonRespBase<GiftLikeList>> mCallRefresh;
+    private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallRefresh;
 
     @Override
     protected void lazyLoad() {
@@ -93,26 +74,18 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
             mCallRefresh.cancel();
         }
         mReqPageObj.data.page = 1;
-        mCallRefresh = Global.getNetEngine().obtainGiftLike(mReqPageObj);
-        mCallRefresh.enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
+        mCallRefresh = Global.getNetEngine().obtainGiftNewByPage(mReqPageObj);
+        mCallRefresh.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
             @Override
-            public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
-                                   Response<JsonRespBase<GiftLikeList>> response) {
+            public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
+                                   Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
                 if (response != null && response.isSuccessful()) {
                     if (response.body() != null && response.body().isSuccess()) {
                         refreshSuccessEnd();
-                        GiftLikeList backObj = response.body().getData();
-                        refreshLoadState(backObj.data, backObj.isEndPage);
-                        Global.setInstalledAppNames(backObj.appNames);
-                        Global.setInstalledPackageNames(backObj.packageNames);
-                        mReqPageObj.data.appNames = backObj.appNames;
-                        mReqPageObj.data.packageName = backObj.packageNames;
-                        updateData(backObj.data);
-                        FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
-                                backObj.data, true);
+                        updateData(response.body().getData().data);
                         return;
                     }
                 }
@@ -120,7 +93,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
             }
 
             @Override
-            public void onFailure(Call<JsonRespBase<GiftLikeList>> call, Throwable t) {
+            public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
                 if (!mCanShowUI || call.isCanceled()) {
                     return;
                 }
@@ -130,9 +103,9 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
     }
 
     /**
-     * 加载更多猜你喜欢数据的网络请求声明
+     * 加载更多新鲜出炉礼包数据的网络请求声明
      */
-    private Call<JsonRespBase<GiftLikeList>> mCallLoad;
+    private Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> mCallLoad;
 
     /**
      * 加载更多数据
@@ -149,18 +122,18 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
                 mCallLoad.cancel();
             }
             mReqPageObj.data.page = mLastPage + 1;
-            mCallLoad = Global.getNetEngine().obtainGiftLike(mReqPageObj);
-            mCallLoad.enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
+            mCallLoad = Global.getNetEngine().obtainGiftNewByPage(mReqPageObj);
+            mCallLoad.enqueue(new Callback<JsonRespBase<OneTypeDataList<IndexGiftNew>>>() {
                 @Override
-                public void onResponse(Call<JsonRespBase<GiftLikeList>> call,
-                                       Response<JsonRespBase<GiftLikeList>> response) {
+                public void onResponse(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call,
+                                       Response<JsonRespBase<OneTypeDataList<IndexGiftNew>>> response) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
                     if (response != null && response.isSuccessful()) {
                         if (response.body() != null && response.body().isSuccess()) {
                             moreLoadSuccessEnd();
-                            OneTypeDataList<IndexGiftLike> backObj = response.body().getData();
+                            OneTypeDataList<IndexGiftNew> backObj = response.body().getData();
                             setLoadState(backObj.data, backObj.isEndPage);
                             addMoreData(backObj.data);
                             return;
@@ -170,7 +143,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
                 }
 
                 @Override
-                public void onFailure(Call<JsonRespBase<GiftLikeList>> call, Throwable t) {
+                public void onFailure(Call<JsonRespBase<OneTypeDataList<IndexGiftNew>>> call, Throwable t) {
                     if (!mCanShowUI || call.isCanceled()) {
                         return;
                     }
@@ -181,7 +154,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
         }
     }
 
-    public void updateData(ArrayList<IndexGiftLike> data) {
+    public void updateData(ArrayList<IndexGiftNew> data) {
         if (data.size() == 0) {
             mViewManager.showEmpty();
         } else {
@@ -193,7 +166,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
         mLastPage = 1;
     }
 
-    private void addMoreData(ArrayList<IndexGiftLike> moreData) {
+    private void addMoreData(ArrayList<IndexGiftNew> moreData) {
         if (moreData == null) {
             return;
         }
@@ -204,7 +177,7 @@ public class GiftLikeListFragment extends BaseFragment_Refresh<IndexGiftLike> {
 
     @Override
     public String getPageName() {
-        return PAGE_NAME;
+        return "新鲜出炉礼包列表";
     }
 
     @Override

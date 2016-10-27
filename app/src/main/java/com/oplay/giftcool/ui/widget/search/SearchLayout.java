@@ -102,6 +102,13 @@ public class SearchLayout extends LinearLayout implements TextView.OnEditorActio
         }
     }
 
+    /**
+     * 重新发起搜索请求
+     */
+    public void reSearch() {
+        sendSearchRequest(mCurKeyWord, 0);
+    }
+
     public OnSearchActionListener getSearchActionListener() {
         return mSearchActionListener;
     }

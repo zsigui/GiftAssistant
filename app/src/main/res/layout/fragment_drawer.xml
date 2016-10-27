@@ -19,7 +19,7 @@
             android:divider = "@null" />
 
     <RelativeLayout
-            style = "@style/NavDrawerItemLayout"
+            style = "@style/MyItemLayout"
             android:id = "@+id/drawer_footer"
             android:layout_height = "60dp"
             android:clickable = "true" >
@@ -27,13 +27,13 @@
         <ImageView
                 android:id = "@+id/nav_item_icon"
                 android:contentDescription = "@null"
-                style = "@style/NavDrawerItemIcon"
+                style = "@style/MyItemIcon"
                 android:layout_marginTop = "@dimen/di_list_item_gap_normal"
                 android:src = "@drawable/ic_drawer_setting" />
 
         <TextView
                 android:id = "@+id/nav_item_text"
-                style = "@style/NavDrawerItemText"
+                style = "@style/MyText"
                 android:layout_toRightOf = "@+id/nav_item_icon"
                 android:layout_alignTop = "@+id/nav_item_icon"
                 android:textSize = "@dimen/di_text_size_normal"

@@ -100,7 +100,7 @@ public class DrawerFragment extends BaseFragment {
 
     private void updateData() {
         if (!AccountManager.getInstance().isLogin()) {
-            ivIcon.setImageResource(R.drawable.ic_avator_unlogin);
+            ivIcon.setImageResource(R.drawable.ic_avatar_un_login);
             ivIcon.setTag("");
             tvNick.setText("");
             tvName.setText("");

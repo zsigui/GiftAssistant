@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "horizontal"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background = "@color/co_white"
+        android:paddingRight = "@dimen/di_list_item_gap_normal"
+        android:paddingLeft = "@dimen/di_list_item_gap_normal" >
+
+    <LinearLayout
+            android:id = "@+id/ll_limit"
+            style = "@style/LinearLayoutIndexIconBar" >
+
+        <ImageView
+                android:id = "@+id/iv_limit"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                android:src = "@drawable/ic_icon_limit" />
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor = "@color/co_common_text_main"
+                android:text = "@string/st_index_gift_limit" />
+
+    </LinearLayout >
+
+    <LinearLayout
+            android:id = "@+id/ll_free"
+            style = "@style/LinearLayoutIndexIconBar" >
+
+        <ImageView
+                android:id = "@+id/iv_free"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                android:src = "@drawable/ic_icon_free" />
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor = "@color/co_common_text_main"
+                android:text = "@string/st_index_gift_free" />
+
+    </LinearLayout >
+
+    <LinearLayout
+            android:id = "@+id/ll_new"
+            style = "@style/LinearLayoutIndexIconBar" >
+
+        <ImageView
+                android:id = "@+id/iv_new"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                android:src = "@drawable/ic_icon_new" />
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor = "@color/co_common_text_main"
+                android:text = "@string/st_index_gift_new" />
+
+    </LinearLayout >
+
+    <LinearLayout
+            android:id = "@+id/ll_sign"
+            style = "@style/LinearLayoutIndexIconBar" >
+
+        <ImageView
+                android:id = "@+id/iv_sign"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                android:src = "@drawable/ic_icon_sign_everyday" />
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor = "@color/co_common_text_main"
+                android:text = "@string/st_index_gift_sign" />
+
+    </LinearLayout >
+</LinearLayout >

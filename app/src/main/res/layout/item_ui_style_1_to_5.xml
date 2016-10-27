@@ -4,9 +4,11 @@
         style = "@style/IndexListItemLayout"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:background = "@drawable/selector_white_module"
-        android:paddingRight = "@dimen/di_index_list_item_margin_right" >
+        android:paddingRight = "@dimen/di_index_list_item_margin_right"
+        tools:ignore = "RtlSymmetry" >
 
     <RelativeLayout
             android:id = "@+id/rl_icon"
@@ -48,7 +50,7 @@
             android:paddingRight = "@dimen/di_index_list_item_progress_padding_right"
             android:drawablePadding = "4dp"
             android:gravity = "center_vertical"
-            android:text = "[暴打魏蜀吴]新手礼包" />
+            tools:text = "[暴打魏蜀吴]新手礼包" />
 
     <TextView
             android:id = "@+id/tv_content"
@@ -88,7 +90,7 @@
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
             android:layout_toRightOf = "@+id/rl_icon"
-            android:text = "开抢时间"
+            tools:text = "开抢时间"
             android:visibility = "visible" />
 
     <LinearLayout
@@ -106,7 +108,7 @@
         <TextView
                 android:id = "@+id/tv_percent"
                 style = "@style/DefaultTextView.Text"
-                android:text="剩余4%"
+                tools:text="剩余4%"
                 android:layout_marginTop = "1dp" />
 
         <ProgressBar
@@ -128,7 +130,7 @@
             android:layout_alignParentRight = "true"
             android:layout_alignTop = "@+id/tv_name"
             android:background = "@drawable/selector_btn_orange"
-            android:text = "抢号"
+            tools:text = "抢号"
             android:textColor = "@color/co_white" />
 
     <TextView

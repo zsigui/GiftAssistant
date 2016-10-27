@@ -16,7 +16,7 @@
     <!-- 主题通用颜色 -->
     <color name="co_status_bar_bg">#df4b4b</color>
     <color name="co_tool_bar_item_bg">#d54848</color>
-    <color name="co_search_bar_hint">#ffe0e0</color>
+    <color name="co_search_bar_hint">#faa0a0</color>
 
     <color name="co_common_app_main_bg">#f85454</color>
     <color name="co_common_app_second_bg_orange">#ffaa17</color>

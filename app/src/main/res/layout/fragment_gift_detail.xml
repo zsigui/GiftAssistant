@@ -2,9 +2,11 @@
 <LinearLayout
         xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        android:orientation = "vertical" >
+        android:orientation = "vertical"
+        tools:ignore = "RtlHardcoded,RtlSymmetry" >
 
     <RelativeLayout
             android:id = "@+id/rl_header"
@@ -223,15 +225,29 @@
             android:id = "@+id/ll_download"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:orientation = "vertical"
+            android:orientation = "horizontal"
             android:background = "@color/co_common_content_bg"
-            android:visibility = "gone"
+            android:paddingTop = "@dimen/di_list_item_gap_s_normal"
+            android:paddingBottom = "@dimen/di_list_item_gap_s_normal"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
             android:gravity = "center" >
+
+        <TextView
+                android:id = "@+id/btn_more"
+                android:background = "@drawable/selector_btn_bigger_green_border"
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                style = "@style/DefaultTextView.BiggerBtn"
+                android:textColor = "@color/color_btn_green_border"
+                android:minWidth="80dp"
+                android:text = "@string/st_gift_more" />
 
         <com.oplay.giftcool.ui.widget.button.DownloadButtonView
                 android:id = "@+id/btn_download"
-                android:layout_marginTop = "10dp"
-                android:layout_marginBottom = "10dp"
+                tools:visibility = "visible"
+                android:visibility = "gone"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content" />
     </LinearLayout >

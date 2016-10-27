@@ -15,7 +15,7 @@
 
     <TextView
             android:id = "@+id/tv_un_login"
-            style = "@style/NavDrawerItemText"
+            style = "@style/MyText"
             android:textColor = "@color/co_white"
             android:textSize = "@dimen/di_text_size_big"
             android:layout_centerVertical = "true"
@@ -25,7 +25,7 @@
 
     <TextView
             android:id = "@+id/tv_nick"
-            style = "@style/NavDrawerItemText"
+            style = "@style/MyText"
             android:textColor = "@color/co_white"
             android:textSize = "@dimen/di_text_size_big"
             android:layout_marginTop = "@dimen/di_line_space_extra_normal"
@@ -34,7 +34,7 @@
 
     <TextView
             android:id = "@+id/tv_name"
-            style = "@style/NavDrawerItemText"
+            style = "@style/MyText"
             android:layout_toRightOf = "@+id/iv_icon"
             android:layout_marginTop = "@dimen/di_line_space_extra_big"
             android:layout_toLeftOf = "@+id/iv_arrow"
@@ -52,7 +52,7 @@
 
     <TextView
             android:id = "@+id/tv_score"
-            style = "@style/NavDrawerItemText"
+            style = "@style/MyText"
             android:drawableLeft = "@drawable/ic_drawer_score"
             android:layout_below = "@+id/tv_name"
             android:layout_toRightOf = "@+id/iv_icon"
@@ -61,7 +61,7 @@
 
     <TextView
             android:id = "@+id/tv_bean"
-            style = "@style/NavDrawerItemText"
+            style = "@style/MyText"
             android:drawableLeft = "@drawable/ic_drawer_bean"
             android:layout_alignTop = "@+id/tv_score"
             android:layout_toRightOf = "@+id/tv_score"

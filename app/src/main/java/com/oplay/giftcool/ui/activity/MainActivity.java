@@ -3,23 +3,17 @@ package com.oplay.giftcool.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.AssistantApp;
@@ -29,16 +23,14 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.SPConfig;
-import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.manager.ScoreManager;
-import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.model.data.resp.message.AwardNotify;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
-import com.oplay.giftcool.ui.fragment.DrawerFragment;
+import com.oplay.giftcool.ui.fragment.MyFragment;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog;
 import com.oplay.giftcool.ui.fragment.dialog.AwardDialog;
 import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
@@ -46,16 +38,13 @@ import com.oplay.giftcool.ui.fragment.dialog.ImageViewDialog;
 import com.oplay.giftcool.ui.fragment.dialog.SplashFragmentDialog;
 import com.oplay.giftcool.ui.fragment.game.GameFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
-import com.oplay.giftcool.ui.fragment.gift.GiftFreeFragment;
 import com.oplay.giftcool.ui.fragment.postbar.PostFragment;
-import com.oplay.giftcool.ui.widget.search.SearchLayout;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.PermissionUtil;
 import com.oplay.giftcool.util.SPUtil;
 import com.oplay.giftcool.util.ThreadUtil;
 import com.oplay.giftcool.util.ToastUtil;
-import com.oplay.giftcool.util.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -67,18 +56,17 @@ import java.util.ArrayList;
 public class MainActivity extends BaseAppCompatActivity implements ObserverManager.UserUpdateListener {
 
     final String TAG_GIFT = GiftFragment.class.getSimpleName();
-    final String TAG_FREE = GiftFreeFragment.class.getSimpleName();
+    final String TAG_MY = MyFragment.class.getSimpleName();
     final String TAG_GAME = GameFragment.class.getSimpleName();
     final String TAG_POST = PostFragment.class.getSimpleName();
-    final String TAG_DRAWER = DrawerFragment.class.getSimpleName();
 
     final int INDEX_COUNT = 4;
     final int INDEX_DEFAULT = -1;
     // 需要按顺序 0...n
     final int INDEX_GIFT = 0;
-    final int INDEX_FREE = 1;
+    final int INDEX_POST = 1;
     final int INDEX_GAME = 2;
-    final int INDEX_POST = 3;
+    final int INDEX_MY = 3;
 
     // 保持一个Activity的全局对象
     public static MainActivity sGlobalHolder;
@@ -88,7 +76,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     // 判断并显示弹窗
     public static boolean sIsLoginStateUnavailableShow = false;
     private boolean mHasJudgeBind = false;
-    private boolean mHasShowSelecteUser = false;
+    private boolean mHasShowSelectedUser = false;
 
     private long mLastClickTime = 0;
     private int mCurSelectedItem = INDEX_DEFAULT;
@@ -102,30 +90,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     private ImageView[] ivTabHints;
 
     // 顶部导航栏
-    private SearchLayout mSearchLayout;
-    private LinearLayout llGiftCount;
-    private ImageView ivProfile;
-    private ImageView ivHint;
-    private TextView tvGiftCount;
-    private TextView tvTitle;
-    private ImageView ivTitle;
+    private LinearLayout llSearch;
+    private FrameLayout flMsg;
+    private ImageView ivMsgHint;
     // 礼物Fragment
     private GiftFragment mGiftFragment;
-    private GiftFreeFragment mFreeFragment;
+    private MyFragment mMyFragment;
     private GameFragment mGameFragment;
     private PostFragment mPostFragment;
-    // 侧边栏
-    private DrawerLayout mDrawerLayout;
-    private DrawerFragment mDrawerFragment;
-
-    private Handler mHandler = new Handler(Looper.myLooper());
-
-    private void initHandler() {
-        if (mHandler == null) {
-            mHandler = new Handler(Looper.myLooper());
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,42 +107,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
         PermissionUtil.judgePermission(this);
         sGlobalHolder = MainActivity.this;
-        updateToolBar();
         handleIntent(getIntent());
-        updateHintState(KeyConfig.TYPE_ID_DOWNLOAD, ApkDownloadManager.getInstance(this).getEndOfPaused());
-        if (mDrawerLayout == null) {
-            createDrawer();
-        }
+        updateToolBarHint();
     }
 
     private void findFragmentByTag(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mGiftFragment = (GiftFragment) getSupportFragmentManager().findFragmentByTag(TAG_GIFT);
-            mFreeFragment = (GiftFreeFragment) getSupportFragmentManager().findFragmentByTag(TAG_FREE);
+            mMyFragment = (MyFragment) getSupportFragmentManager().findFragmentByTag(TAG_MY);
             mGameFragment = (GameFragment) getSupportFragmentManager().findFragmentByTag(TAG_GAME);
             mPostFragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(TAG_POST);
-            mDrawerFragment = (DrawerFragment) getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
         }
-    }
-
-    private void createDrawer() {
-        mDrawerLayout = getViewById(R.id.drawer_layout);
-        mDrawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.st_drawer_text_open, R.string.st_drawer_text_close));
-        // 考虑onSaveInstanceState造成的叠加问题
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (mDrawerFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_DRAWER);
-            if (f != null) {
-                mDrawerFragment = (DrawerFragment) f;
-            } else {
-                mDrawerFragment = DrawerFragment.newInstance(mDrawerLayout);
-            }
-            mDrawerFragment.setRetainInstance(true);
-        }
-        ft.replace(R.id.drawer_container, mDrawerFragment, TAG_DRAWER);
-        ft.commit();
-        updateToolBar();
     }
 
     @Override
@@ -182,17 +129,21 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     protected void initView() {
         setContentView(R.layout.activity_main);
-//		llTab = getViewById(R.id.ll_tabs);
+        llSearch = getViewById(R.id.ll_search);
+        flMsg = getViewById(R.id.fl_msg);
+        ivMsgHint = getViewById(R.id.iv_msg_hint);
+
         ivTabHints = new ImageView[INDEX_COUNT];
         ivTabHints[INDEX_GIFT] = getViewById(R.id.iv_gift_hint);
         ivTabHints[INDEX_POST] = getViewById(R.id.iv_post_hint);
+        ivTabHints[INDEX_MY] = getViewById(R.id.iv_my_hint);
         CheckedTextView ctvGame = getViewById(R.id.ctv_game);
         CheckedTextView ctvGift = getViewById(R.id.ctv_gift);
         CheckedTextView ctvEssay = getViewById(R.id.ctv_post);
-        CheckedTextView ctvFree = getViewById(R.id.ctv_free);
+        CheckedTextView ctvMy = getViewById(R.id.ctv_my);
         mCtvs = new CheckedTextView[INDEX_COUNT];
         mCtvs[INDEX_GIFT] = ctvGift;
-        mCtvs[INDEX_FREE] = ctvFree;
+        mCtvs[INDEX_MY] = ctvMy;
         mCtvs[INDEX_GAME] = ctvGame;
         mCtvs[INDEX_POST] = ctvEssay;
         if (!AssistantApp.getInstance().isAllowDownload()) {
@@ -203,51 +154,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     @Override
     protected void initMenu(@NonNull Toolbar toolbar) {
         super.initMenu(toolbar);
-        mSearchLayout = getViewById(toolbar, R.id.sl_search);
-        mSearchLayout.setCanGetFocus(false);
-        mSearchLayout.setOnClickListener(this);
-        ivProfile = getViewById(toolbar, R.id.iv_profile);
-        ivProfile.setOnClickListener(this);
-        tvGiftCount = getViewById(toolbar, R.id.tv_gift_count);
-        ivHint = getViewById(R.id.iv_hint);
-        tvTitle = getViewById(R.id.tv_title);
-        ivTitle = getViewById(R.id.iv_title);
-        llGiftCount = getViewById(R.id.ll_gift_count);
-        llGiftCount.setOnClickListener(this);
-    }
-
-    private void updateToolBar() {
-        initHandler();
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (AccountManager.getInstance().isLogin()) {
-                    if (ScoreManager.getInstance().isSignInTaskFinished()) {
-                        updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 0);
-                    } else {
-                        updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
-                    }
-                    if (mCurSelectedItem == INDEX_POST
-                            || (ScoreManager.getInstance().isSignInTaskFinished()
-                            && ScoreManager.getInstance().isFreeLotteryEmpty())) {
-                        showTabHint(INDEX_POST, View.GONE);
-                    } else {
-                        showTabHint(INDEX_POST, View.VISIBLE);
-                    }
-                    updateHintState(KeyConfig.TYPE_ID_MSG, AccountManager.getInstance().getUnreadMessageCount());
-                    UserInfo user = AccountManager.getInstance().getUserInfo();
-                    tvGiftCount.setText(String.valueOf(user.giftCount));
-                    ViewUtil.showAvatarImage(user.avatar, ivProfile, true);
-                } else {
-                    updateHintState(KeyConfig.TYPE_SIGN_IN_EVERY_DAY, 1);
-                    updateHintState(KeyConfig.TYPE_ID_MSG, 0);
-                    showTabHint(INDEX_POST, View.VISIBLE);
-                    ivProfile.setImageResource(R.drawable.ic_avator_unlogin);
-                    ivProfile.setTag("");
-                    tvGiftCount.setText("0");
-                }
-            }
-        });
+        llSearch = getViewById(R.id.ll_search);
+        flMsg = getViewById(R.id.fl_msg);
+        ivMsgHint = getViewById(R.id.iv_msg_hint);
     }
 
     /**
@@ -275,12 +184,12 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 && AccountManager.getInstance().getUserInfo().bindOuwanStatus != 1) {
             IntentUtil.jumpBindOwan(this, AccountManager.getInstance().getUser());
             mHasJudgeBind = true;
-        } else if (!mHasShowSelecteUser && SplashFragmentDialog.sHasShow
+        } else if (!mHasShowSelectedUser && SplashFragmentDialog.sHasShow
                 && !OuwanSDKManager.sIsWakeChangeAccountAction
                 && !AccountManager.getInstance().isLogin()) {
 //                OuwanSDKManager.getInstance().showSelectAccountView();
             MixUtil.sendSelectAccountBroadcast(this);
-            mHasShowSelecteUser = true;
+            mHasShowSelectedUser = true;
         }
     }
 
@@ -314,8 +223,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                         case KeyConfig.TYPE_ID_INDEX_POST:
                             jumpToIndexPost(data);
                             break;
-                        case KeyConfig.TYPE_ID_INDEX_FREE:
-                            jumpToIndexFree(data);
+                        case KeyConfig.TYPE_ID_INDEX_MY:
+                            jumpToIndexMy(data);
                             break;
                         case KeyConfig.TYPE_ID_INDEX_UPGRADE:
                             mHasShowUpdate = false;
@@ -351,6 +260,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     protected void processLogic() {
 
         ObserverManager.getInstance().addUserUpdateListener(this);
+        llSearch.setOnClickListener(this);
+        flMsg.setOnClickListener(this);
 
         for (CheckedTextView ctv : mCtvs) {
             ctv.setOnClickListener(this);
@@ -360,6 +271,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         setCurSelected(mCurSelectedItem);
         ScoreManager.getInstance().initTaskState();
     }
+
 
     public void setCurSelected(int position) {
         if (mCurSelectedItem == position
@@ -382,32 +294,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             case INDEX_GAME:
                 displayGameUI();
                 break;
-            case INDEX_FREE:
-                displayFreeUI();
+            case INDEX_MY:
+                displayMyUI();
                 break;
             case INDEX_GIFT:
             default:
                 displayGiftUI();
                 break;
         }
-        showToolbarStyle(position);
-    }
-
-    private void showToolbarStyle(int index) {
-        if (tvTitle != null) {
-            tvTitle.setVisibility(index == INDEX_POST ? View.VISIBLE : View.GONE);
-        }
-        final boolean isShowSearch = (index == INDEX_GIFT || index == INDEX_GAME || index == INDEX_DEFAULT);
-        if (mSearchLayout != null) {
-            mSearchLayout.setVisibility(isShowSearch ? View.VISIBLE : View.GONE);
-        }
-        if (llGiftCount != null) {
-            llGiftCount.setVisibility(isShowSearch ? View.VISIBLE : View.GONE);
-        }
-        if (ivTitle != null) {
-            ivTitle.setVisibility(index == INDEX_FREE ? View.VISIBLE : View.GONE);
-        }
-
     }
 
     /**
@@ -433,10 +327,10 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 mPostFragment = (PostFragment) f;
             }
         }
-        if (mFreeFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_FREE);
+        if (mMyFragment == null) {
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_MY);
             if (f != null) {
-                mFreeFragment = (GiftFreeFragment) f;
+                mMyFragment = (MyFragment) f;
             }
         }
         if (mGiftFragment != null && mCurSelectedItem != INDEX_GIFT) {
@@ -448,8 +342,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         if (mPostFragment != null && mCurSelectedItem != INDEX_POST) {
             ft.hide(mPostFragment);
         }
-        if (mFreeFragment != null && mCurSelectedItem != INDEX_FREE) {
-            ft.hide(mFreeFragment);
+        if (mMyFragment != null && mCurSelectedItem != INDEX_MY) {
+            ft.hide(mMyFragment);
         }
     }
 
@@ -502,25 +396,25 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     }
 
     /**
-     * 显示限时免费界面
+     * 显示我的界面
      */
-    private void displayFreeUI() {
-        mCurSelectedItem = INDEX_FREE;
+    private void displayMyUI() {
+        mCurSelectedItem = INDEX_MY;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hideAllFragment(ft);
-        if (mFreeFragment == null) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_FREE);
+        if (mMyFragment == null) {
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TAG_MY);
             if (f != null) {
-                mFreeFragment = (GiftFreeFragment) f;
-                ft.show(mFreeFragment);
+                mMyFragment = (MyFragment) f;
+                ft.show(mMyFragment);
             } else {
-                mFreeFragment = GiftFreeFragment.newInstance();
-                ft.add(R.id.fl_container, mFreeFragment, TAG_FREE);
+                mMyFragment = MyFragment.newInstance();
+                ft.add(R.id.fl_container, mMyFragment, TAG_MY);
             }
         } else {
-            ft.show(mFreeFragment);
+            ft.show(mMyFragment);
         }
-        mFreeFragment.setRetainInstance(true);
+        mMyFragment.setRetainInstance(true);
         ft.commit();
     }
 
@@ -614,8 +508,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         } else if (mJumpPostPos != -1) {
             setCurSelected(INDEX_POST);
             mJumpPostPos = -1;
-        } else if (mJumpFreePos != -1) {
-            setCurSelected(INDEX_FREE);
+        } else if (mJumpMyPos != -1) {
+            setCurSelected(INDEX_MY);
         }
     }
 
@@ -636,27 +530,16 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             }
         }
         switch (v.getId()) {
-            case R.id.ctv_gift:
-                setCurSelected(INDEX_GIFT);
+            case R.id.ll_search:
+                IntentUtil.jumpSearch(this);
                 break;
-            case R.id.ctv_game:
-                setCurSelected(INDEX_GAME);
-                break;
-            case R.id.sl_search:
-                IntentUtil.jumpSearch(MainActivity.this);
-                break;
-            case R.id.iv_profile:
-                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    mDrawerLayout.openDrawer(GravityCompat.START);
-                }
-                break;
-            case R.id.ll_gift_count:
+            case R.id.fl_msg:
                 if (AccountManager.getInstance().isLogin()) {
-                    IntentUtil.jumpMyGift(MainActivity.this);
+                    AccountManager.getInstance().setUnreadMessageCount(0);
+                    updateToolBarHint();
+                    IntentUtil.jumpMessageCentral(this);
                 } else {
-                    IntentUtil.jumpLogin(MainActivity.this);
+                    IntentUtil.jumpLogin(this);
                 }
                 break;
         }
@@ -664,10 +547,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            return;
-        }
 
         if (System.currentTimeMillis() - mLastClickTime <= 3000) {
             mApp.appExit();
@@ -686,11 +565,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     private int mJumpGamePos = -1;
     private int mJumpGiftPos = -1;
     private int mJumpPostPos = -1;
-    private int mJumpFreePos = -1;
+    private int mJumpMyPos = -1;
 
     public void jumpToIndexGame(int gamePosition) {
         mJumpGamePos = gamePosition;
-        mJumpFreePos = mJumpPostPos = mJumpGiftPos = -1;
+        mJumpMyPos = mJumpPostPos = mJumpGiftPos = -1;
         if (mActive) {
             jumpFragment();
         }
@@ -698,7 +577,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     public void jumpToIndexGift(final int giftPosition) {
         mJumpGiftPos = giftPosition;
-        mJumpFreePos = mJumpPostPos = mJumpGamePos = -1;
+        mJumpMyPos = mJumpPostPos = mJumpGamePos = -1;
         if (mActive) {
             jumpFragment();
         }
@@ -706,14 +585,14 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
 
     public void jumpToIndexPost(final int postPosition) {
         mJumpPostPos = postPosition;
-        mJumpFreePos = mJumpGiftPos = mJumpGamePos = -1;
+        mJumpMyPos = mJumpGiftPos = mJumpGamePos = -1;
         if (mActive) {
             jumpFragment();
         }
     }
 
-    public void jumpToIndexFree(final int freePosition) {
-        mJumpFreePos = freePosition;
+    public void jumpToIndexMy(final int myPosition) {
+        mJumpMyPos = myPosition;
         mJumpPostPos = mJumpGiftPos = mJumpGamePos = -1;
         if (mActive) {
             jumpFragment();
@@ -724,16 +603,35 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     public void onUserUpdate(int action) {
         switch (action) {
             case ObserverManager.STATUS.USER_UPDATE_ALL:
-            case ObserverManager.STATUS.USER_UPDATE_TASK:
-                updateToolBar();
+                updateToolBarHint();
                 break;
             case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
-                int msgCount = AccountManager.getInstance().getUnreadMessageCount();
-                updateHintState(KeyConfig.TYPE_ID_MSG, msgCount);
+                updateToolBarHint();
                 mNotifyAward = false;
                 judgeAwardShow();
                 break;
         }
+    }
+
+    /**
+     * 更新工具栏小红点提示 <br />
+     */
+    private void updateToolBarHint() {
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (ivMsgHint != null) {
+                    if (AccountManager.getInstance().getUnreadMessageCount() > 0) {
+                        ivMsgHint.setVisibility(View.VISIBLE);
+                    } else {
+                        ivMsgHint.setVisibility(View.GONE);
+                    }
+                }
+                if (mMyFragment != null) {
+                    mMyFragment.updateMsgHint(AccountManager.getInstance().getUnreadMessageCount());
+                }
+            }
+        });
     }
 
     private void judgeAwardShow() {
@@ -769,55 +667,6 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         dialog.show(fm, tag);
     }
 
-
-    /**
-     * 侧边栏提示数组
-     */
-    private SparseIntArray mHintCount;
-
-    /**
-     * 更新侧边栏和顶部导航栏信息
-     */
-    public void updateHintState(final int key, final int count) {
-        if (mHandler == null) {
-            return;
-        }
-        if (mHintCount == null) {
-            mHintCount = new SparseIntArray();
-        }
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int val = mHintCount.get(key, 0);
-                if (val == 0) {
-                    // 原先不存在该键值
-                    if (count != 0) {
-                        mHintCount.put(key, count);
-                        ivHint.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    // 原先已经存在该键值
-                    if (count == 0) {
-                        // 移除该键值
-                        mHintCount.delete(key);
-                        if (mHintCount.size() > 0) {
-                            ivHint.setVisibility(View.VISIBLE);
-                        } else {
-                            ivHint.setVisibility(View.GONE);
-                        }
-                    } else {
-                        mHintCount.put(key, count);
-                        ivHint.setVisibility(View.VISIBLE);
-                    }
-                }
-                if (mDrawerFragment != null) {
-                    mDrawerFragment.updateCount(key, count);
-                }
-            }
-        }, 300);
-
-    }
-
     private void handleFirstOpen() {
         if (AccountManager.getInstance().isLogin()
                 && AssistantApp.getInstance().getBroadcastBanner() != null
@@ -827,6 +676,23 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             ImageViewDialog dialog = ImageViewDialog.newInstance(AssistantApp.getInstance().getBroadcastBanner());
             dialog.show(getSupportFragmentManager(), "broadcast");
             AccountManager.getInstance().getUserInfo().isFirstLogin = false;
+        }
+    }
+
+    public void updateHintState(int key, final int count) {
+        switch (key) {
+            case KeyConfig.TYPE_ID_DOWNLOAD:
+                ThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mMyFragment != null)
+                            mMyFragment.updateDownloadHint(count);
+                    }
+                });
+                break;
+            case KeyConfig.TYPE_ID_MSG:
+                updateToolBarHint();
+                break;
         }
     }
 
@@ -852,13 +718,9 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         // 底部Tabs
 //		llTab = null;
         mCtvs = null;
-        ivProfile = null;
-        tvGiftCount = null;
         // 礼物Fragment
         mGiftFragment = null;
         mGameFragment = null;
-        mDrawerLayout = null;
-        mDrawerFragment = null;
     }
 
 }

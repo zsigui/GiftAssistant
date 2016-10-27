@@ -62,6 +62,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
             holder.tvContent = ViewUtil.getViewById(convertView, R.id.tv_content);
             holder.tvGift = ViewUtil.getViewById(convertView, R.id.tv_gift);
             holder.ivGift = ViewUtil.getViewById(convertView, R.id.iv_gift_hint);
+            holder.tvSize = ViewUtil.getViewById(convertView, R.id.tv_size);
             holder.tvDownload = ViewUtil.getViewById(convertView, R.id.tv_download);
             convertView.setTag(holder);
         } else {
@@ -93,6 +94,7 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
         convertView.setOnClickListener(this);
         convertView.setTag(TAG_POSITION, position);
         convertView.setOnClickListener(this);
+        holder.tvSize.setText(o.size);
         holder.tvDownload.setOnClickListener(this);
         holder.tvDownload.setTag(TAG_POSITION, position);
         holder.tvDownload.setTag(TAG_URL, o.downloadUrl);
@@ -183,5 +185,6 @@ public class NestedGameListAdapter extends BaseListAdapter<IndexGameNew> impleme
         TextView tvDownload;
         ImageView ivIcon;
         ImageView ivGift;
+        TextView tvSize;
     }
 }

@@ -53,6 +53,7 @@ public class IntentUtil {
         context.startActivity(intent);
     }
 
+
     /**
      * 跳转礼包详情页面
      *
@@ -60,17 +61,6 @@ public class IntentUtil {
      * @param id      礼包id
      */
     public static void jumpGiftDetail(Context context, int id) {
-        jumpGiftDetail(context, id, false);
-    }
-
-    /**
-     * 跳转礼包详情页面
-     *
-     * @param context 上下文
-     * @param id      礼包id
-     * @param newTask 是否添加新Task标志
-     */
-    public static void jumpGiftDetail(Context context, int id, boolean newTask) {
         Intent intent = new Intent(context, GiftDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_DETAIL);
@@ -81,24 +71,20 @@ public class IntentUtil {
     /**
      * 跳转猜你喜欢列表界面
      */
-    public static void jumpGiftHotList(Context context, String gameKey) {
+    public static void jumpGiftHotList(Context context) {
         Intent intent = new Intent(context, GiftListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIKE);
-        intent.putExtra(KeyConfig.KEY_DATA, gameKey);
         context.startActivity(intent);
     }
 
     /**
      * 跳转限量礼包列表界面
      */
-    public static void jumpGiftLimitList(Context context, boolean needNewTask) {
+    public static void jumpGiftLimitList(Context context) {
         Intent intent = new Intent(context, GiftListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_LIMIT);
-//		if (needNewTask) {
-//			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		}
         context.startActivity(intent);
     }
 
@@ -108,6 +94,17 @@ public class IntentUtil {
     public static void jumpGiftNewList(Context context) {
         Intent intent = new Intent(context, GiftListActivity.class);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_NEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+
+    /**
+     * 跳转限量免费礼包列表界面
+     */
+    public static void jumpGiftFreeList(Context context) {
+        Intent intent = new Intent(context, GiftListActivity.class);
+        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_GIFT_FREE);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
@@ -269,41 +266,6 @@ public class IntentUtil {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
-
-//	private static ConfirmDialog mConfirmDialog;
-//
-//	private static void loginConfirm(final Context context, final int type) {
-//		if (!(context instanceof FragmentActivity)) {
-//			return;
-//		}
-//		if (mConfirmDialog != null) {
-//			mConfirmDialog.dismissAllowingStateLoss();
-//			mConfirmDialog = null;
-//		}
-//		mConfirmDialog = ConfirmDialog.newInstance();
-//		mConfirmDialog.setListener(new BaseFragment_Dialog.OnDialogClickListener() {
-//			@Override
-//			public void onCancel() {
-//				mConfirmDialog.dismissAllowingStateLoss();
-//				mConfirmDialog = null;
-//			}
-//
-//			@Override
-//			public void onConfirm() {
-//				Intent intent = new Intent(context, LoginActivity.class);
-//				intent.putExtra(KeyConfig.KEY_TYPE, type);
-//				context.startActivity(intent);
-//				mConfirmDialog.dismissAllowingStateLoss();
-//				mConfirmDialog = null;
-//			}
-//		});
-//		FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
-//		Context appContext = AssistantApp.getInstance().getApplicationContext();
-//		mConfirmDialog.setTitle(appContext.getResources().getString(R.string.st_hint_dialog_login_title));
-//		mConfirmDialog.setContent(appContext.getResources().getString(R.string.st_hint_dialog_login_content));
-//		mConfirmDialog.show(fm, appContext.getResources().getString(R.string.st_hint_dialog_login_tag));
-//	}
-
 
     /**
      * 跳转消息中心
