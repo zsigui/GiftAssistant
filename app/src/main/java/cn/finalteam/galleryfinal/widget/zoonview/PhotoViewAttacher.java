@@ -16,6 +16,7 @@
 package cn.finalteam.galleryfinal.widget.zoonview;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -32,6 +33,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+
+import com.oplay.giftcool.config.AppDebugConfig;
+
 import java.lang.ref.WeakReference;
 
 import static android.view.MotionEvent.ACTION_CANCEL;
@@ -133,7 +137,35 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     private int mScrollEdge = EDGE_BOTH;
 
     private boolean mZoomEnabled;
+
+
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
+    private final static int DOUBLE_CLICK_DIFF_TIME = 200;
+    private final static int ONE_CLICK_TIME = 150;
+    private final static int ELAPASE_SLOP = 10;
+    private boolean mIsDoubleClick = false;
+    private int mDownX;
+    private int mUpX;
+    private int mDownY;
+    private int mUpY;
+    private Runnable mWaitToExecClickRunnable = new Runnable() {
+        @Override
+        public void run() {
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "isDouble = " + mIsDoubleClick + ", " + mImageView.get());
+            if (!mIsDoubleClick) {
+                // 执行单击效果
+                if (mImageView.get() != null) {
+                    Context c = mImageView.get().getContext();
+                    AppDebugConfig.d(AppDebugConfig.TAG_WARN, "c = " + c + ", instanceOf = " + (c instanceof Activity));
+                    if (c instanceof Activity) {
+
+                        ((Activity) c).finish();
+                    }
+                }
+            }
+            mIsDoubleClick = false;
+        }
+    };
 
     public PhotoViewAttacher(ImageView imageView) {
         this(imageView, true);
