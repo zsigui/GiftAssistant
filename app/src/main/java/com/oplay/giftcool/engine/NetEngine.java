@@ -66,6 +66,7 @@ import com.oplay.giftcool.model.json.base.JsonRespBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -376,6 +377,12 @@ public interface NetEngine {
      */
     @POST(NetUrl.GAME_FOCUS_LIST)
     Call<JsonRespBase<OneTypeDataList<MyAttention>>> obtainAttentionMessage(@Body JsonReqBase<ReqPageData> reqData);
+
+    /**
+     * 获取要订阅的推送游戏列表信息
+     */
+    @POST(NetUrl.PUSH_TOPICS_LIST)
+    Call<JsonRespBase<HashSet<String>>> obtainPushTopics(@Body JsonReqBase<Void> reqData);
 
     /**
      * 修改推送消息状态

@@ -38,6 +38,7 @@ import net.youmi.android.libs.common.coder.Coder_Md5;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.Locale;
 
 import cn.jpush.android.api.CustomPushNotificationBuilder;
@@ -188,6 +189,7 @@ public class PushMessageManager {
             }
             isInit = true;
             updateJPushTagAndAlias(context);
+            AccountManager.getInstance().obtainPushTopics();
         }
     }
 
@@ -299,7 +301,7 @@ public class PushMessageManager {
      * 处理广播收到的通知栏消息
      */
     public void handleNotifyMessage(Context context, PushMessageExtra data) {
-
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "data.type = " + data.type);
         switch (data.type) {
             case Status.ACTION_GIFT_FREE:
                 IntentUtil.jumpHome(context, true);
@@ -332,6 +334,7 @@ public class PushMessageManager {
     }
 
     private void handleTaskAction(Context context, PushMessageExtra data) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "handleTaskAction onClick !");
         TaskInfoOne infoOne = AssistantApp.getInstance().getGson().fromJson(
                 data.extraJson, TaskInfoOne.class);
         IntentUtil.handleJumpInfo(context, infoOne);
@@ -557,5 +560,53 @@ public class PushMessageManager {
         int sdkType = AssistantApp.getInstance().getPushSdk();
         if (sdkType == SdkType.ALL || sdkType == SdkType.MI)
             MiPushClient.unsetAlias(context, alias, null);
+    }
+
+    public void subscribeTopic(Context context, HashSet<String> topics) {
+        if (needSetMPush()) {
+            for (String s : topics) {
+                MiPushClient.subscribe(context, s, null);
+            }
+        }
+        if (needSetJPush()) {
+            JPushInterface.setTags(context, topics, null);
+        }
+    }
+
+    public void subscribeTopic(Context context, String topic) {
+        if (needSetMPush()) {
+            MiPushClient.subscribe(context, topic, null);
+        }
+        if (needSetJPush()) {
+            HashSet<String> s = new HashSet<>(1);
+            s.add(topic);
+            JPushInterface.setTags(context, s, null);
+        }
+    }
+
+    public void unSubscribeTopic(Context context, HashSet<String> topics) {
+        if (needSetMPush()) {
+            for (String s : topics) {
+                MiPushClient.unsubscribe(context, s, null);
+            }
+        }
+        if (needSetJPush()) {
+            JPushInterface.setTags(context, null, null);
+        }
+    }
+
+    /**
+     *
+     * @param context
+     * @param topic
+     * @param topics 移除某个topic后剩余的topic列表
+     */
+    public void unSubscribeTopic(Context context, String topic, HashSet<String> topics) {
+        if (needSetJPush()) {
+            JPushInterface.setTags(context, topics, null);
+        }
+        if (needSetMPush()) {
+            MiPushClient.unsubscribe(context, topic, null);
+        }
     }
 }

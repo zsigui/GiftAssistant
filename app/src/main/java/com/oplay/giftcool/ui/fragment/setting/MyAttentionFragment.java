@@ -18,6 +18,7 @@ import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.listener.OnItemClickListener;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
+import com.oplay.giftcool.manager.PushMessageManager;
 import com.oplay.giftcool.model.data.req.ReqChangeFocus;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.MyAttention;
@@ -298,6 +299,13 @@ public class MyAttentionFragment extends BaseFragment_Refresh<MyAttention> imple
                 if (curTime - mLastClickTime < Global.CLICK_TIME_INTERVAL) {
                     mLastClickTime = curTime;
                     return;
+                }
+                if (Global.sTopics != null) {
+                    String topic = String.valueOf(item.id);
+                    Global.sTopics.remove(topic);
+                    PushMessageManager.getInstance().unSubscribeTopic(getContext(), topic, Global.sTopics);
+                } else {
+                    AppDebugConfig.w(AppDebugConfig.TAG_FRAG, "No subscribe topics before into MyAttentionFragment!");
                 }
                 handleQuickFocus(item.id);
                 break;

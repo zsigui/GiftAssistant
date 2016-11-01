@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
 import com.oplay.giftcool.util.IntentUtil;
@@ -55,11 +56,18 @@ public class MessageCentralAdapter extends BaseRVAdapter<CentralHintMessage> imp
         if (v.getTag(TAG_POSITION) == null) {
             return;
         }
-        CentralHintMessage item = getItem((Integer) v.getTag(TAG_POSITION));
-        handleItemClick(item);
+        int pos = (int) v.getTag(TAG_POSITION);
+        CentralHintMessage item = getItem(pos);
+        handleItemClick(item, pos);
     }
 
-    private void handleItemClick(CentralHintMessage item) {
+    private void handleItemClick(CentralHintMessage item, int pos) {
+        if (mContext == null) {
+            return;
+        }
+        item.count = 0;
+        Global.updateMsgCentralData(mContext, item.code, item.count, item.content);
+        notifyItemChanged(pos);
         if (KeyConfig.CODE_MSG_COMMENT.equals(item.code)) {
             IntentUtil.jumpCommentMessage(mContext);
         } else if (KeyConfig.CODE_MSG_ADMIRE.equals(item.code)) {
@@ -71,14 +79,14 @@ public class MessageCentralAdapter extends BaseRVAdapter<CentralHintMessage> imp
         }
     }
 
-    private static class MessageHolder extends BaseRVHolder {
+    static class MessageHolder extends BaseRVHolder {
 
         private ImageView ivIcon;
         private TextView tvTitle;
         private TextView tvContent;
         private TextView tvCount;
 
-        public MessageHolder(View itemView) {
+        MessageHolder(View itemView) {
             super(itemView);
             ivIcon = getViewById(R.id.iv_icon);
             tvTitle = getViewById(R.id.tv_title);

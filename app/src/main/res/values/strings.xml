@@ -127,7 +127,7 @@
     <string name = "st_index_gift_like" >猜你喜欢</string >
     <string name = "st_index_gift_like_new_add" >今天新增</string >
     <string name = "st_index_gift_limit" >珍贵限量</string >
-    <string name = "st_index_gift_free" >限时免费</string >
+    <string name = "st_index_gift_free" >限时疯抢</string >
     <string name = "st_index_gift_limit_remain" >剩余</string >
     <string name = "st_index_gift_new" >新鲜出炉</string >
     <string name = "st_index_gift_sign" >每日签到</string >
@@ -165,6 +165,7 @@
     <string name = "st_msg_central_comment" >收到的回复</string >
     <string name = "st_msg_central_hint_no_notify" >暂时还没有收到通知哦</string >
     <string name = "st_msg_central_hint_no_reply" >暂时还没有收到回复哦</string >
+    <string name = "st_msg_central_hint_no_admire" >暂时还没有收到赞哦</string >
     <string name = "st_msg_central_get_a_admire" >%1$s 给了您一个赞</string >
 
     <!-- 消息中心 - 推送列表 -->
@@ -388,7 +389,7 @@
 
     <!-- 账户信息 -->
     <string name = "st_user_info_title" >账户信息</string >
-    <string name = "st_user_avator" >头像</string >
+    <string name = "st_user_avatar" >头像</string >
     <string name = "st_user_nick" >昵称</string >
     <string name = "st_user_ouwan_login" >登录偶玩号</string >
     <string name = "st_user_phone_login" >登录手机号</string >

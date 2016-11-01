@@ -22,6 +22,10 @@ import java.util.Queue;
  */
 public class Util_Loadlib {
     private static final String SUPPORT_CPU_ABI_LIST[] = {"armeabi","armeabi-v7a","arm64-v8a","x86","mips"};
+
+    public static void d(String s) {
+        Debug_Log.d("sdk-debug : " + s);
+    }
     public static boolean loadlib(Context context, String libName) {
 
         if (context == null) {
@@ -49,8 +53,7 @@ public class Util_Loadlib {
         }
 
         //不存在时，从assets中复制、改名并尝试加载
-        Collections.addAll(existQueue, SUPPORT_CPU_ABI_LIST);
-
+        Collections.addAll(copytQueue, SUPPORT_CPU_ABI_LIST);
         while (copytQueue.size() != 0) {
             String cpuType = copytQueue.poll();
             String libPath = context.getFilesDir().getPath()+ File.separator + cpuType + "_" + libName;

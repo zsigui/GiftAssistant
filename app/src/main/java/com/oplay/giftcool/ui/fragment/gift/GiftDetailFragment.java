@@ -315,12 +315,15 @@ public class GiftDetailFragment extends BaseFragment implements OnDownloadStatus
      * 设置消费金币提示
      */
     private void setMoneyConsume(IndexGiftNew giftData) {
-        if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE
-                && giftData.giftType != GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
+        if (giftData.priceType == GiftTypeUtil.PAY_TYPE_SCORE) {
             tvScore.setVisibility(View.VISIBLE);
+            tvOr.setVisibility(View.GONE);
+            tvBean.setVisibility(View.GONE);
             tvScore.setText(String.valueOf(giftData.score));
         } else if (giftData.priceType == GiftTypeUtil.PAY_TYPE_BEAN) {
             tvBean.setVisibility(View.VISIBLE);
+            tvScore.setVisibility(View.GONE);
+            tvOr.setVisibility(View.GONE);
             tvBean.setText(String.valueOf(giftData.bean));
         } else {
             tvScore.setVisibility(View.VISIBLE);

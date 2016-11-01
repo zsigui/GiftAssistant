@@ -27,7 +27,7 @@ public class Debug_Log extends BasicLog {
 		return "Test";
 	}
 
-	private static boolean mIsEnableDebug = true;
+	private static boolean mIsEnableDebug = false;
 
 	public static void setDebugEnable(boolean flag) {
 		mIsEnableDebug = flag;

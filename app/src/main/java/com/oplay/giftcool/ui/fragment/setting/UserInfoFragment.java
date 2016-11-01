@@ -19,6 +19,7 @@ import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.data.resp.UserInfo;
 import com.oplay.giftcool.ui.activity.base.BaseAppCompatActivity;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment;
+import com.oplay.giftcool.ui.fragment.dialog.ConfirmDialog;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.StringUtil;
 import com.oplay.giftcool.util.ToastUtil;
@@ -44,6 +45,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
     private TextView tvBindTitle;
     private TextView tvBind;
     private TextView tvHint;
+    private RelativeLayout rlLogout;
     private Context mContext = AssistantApp.getInstance().getApplicationContext();
 
     public static UserInfoFragment newInstance() {
@@ -76,6 +78,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
         ivLogin = getViewById(R.id.iv_login);
         ivBind = getViewById(R.id.iv_bind);
         tvHint = getViewById(R.id.tv_hint);
+        rlLogout = getViewById(R.id.rl_logout);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
 //        llLogin.setOnClickListener(this);
         llBind.setOnClickListener(this);
         rlModifyPwd.setOnClickListener(this);
+        rlLogout.setOnClickListener(this);
     }
 
     @Override
@@ -189,6 +193,25 @@ public class UserInfoFragment extends BaseFragment implements ObserverManager.Us
                 break;
             case R.id.rl_modify_pwd:
                 OuwanSDKManager.getInstance().showOuwanModifyPwdView(getContext());
+                break;
+            case R.id.rl_logout:
+                // 调用登出接口，但不关心结果
+                final ConfirmDialog logoutDialog = ConfirmDialog.newInstance();
+                logoutDialog.setContent(getResources().getString(R.string.st_content_logout));
+                logoutDialog.setListener(new ConfirmDialog.OnDialogClickListener() {
+                    @Override
+                    public void onCancel() {
+                        logoutDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onConfirm() {
+                        logoutDialog.dismiss();
+                        getActivity().finish();
+                        AccountManager.getInstance().logout(true);
+                    }
+                });
+                logoutDialog.show(getChildFragmentManager(), ConfirmDialog.class.getSimpleName());
                 break;
         }
     }

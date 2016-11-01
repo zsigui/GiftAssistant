@@ -1,33 +1,37 @@
 package com.oplay.giftcool.adapter;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
+import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
+import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
-import com.oplay.giftcool.adapter.base.FooterHolder;
 import com.oplay.giftcool.adapter.holder.StyleBaseHolder;
 import com.oplay.giftcool.config.AppConfig;
 import com.oplay.giftcool.config.Global;
 import com.oplay.giftcool.config.util.BannerTypeUtil;
-import com.oplay.giftcool.config.util.GiftTypeUtil;
+import com.oplay.giftcool.config.util.GameTypeUtil;
 import com.oplay.giftcool.ext.holder.BannerHolderCreator;
-import com.oplay.giftcool.listener.FooterListener;
 import com.oplay.giftcool.manager.PayManager;
-import com.oplay.giftcool.manager.StatisticsManager;
 import com.oplay.giftcool.model.data.resp.IndexBanner;
-import com.oplay.giftcool.model.data.resp.IndexGift;
+import com.oplay.giftcool.model.data.resp.IndexGiftLike;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
+import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.widget.button.GiftButton;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.UiStyleUtil;
+import com.oplay.giftcool.util.ViewUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -38,22 +42,21 @@ import java.util.Locale;
  * <p/>
  * Created by zsigui on 16-2-23.
  */
-public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.convenientbanner.listener
-        .OnItemClickListener, View.OnClickListener, FooterListener {
+public class GiftAdapter extends BaseRVAdapter<Object> implements View.OnClickListener {
 
-    private static final int TAG_POS = 0x1234FFFF;
-    private static final int TYPE_DEFAULT = 110;
-    private static final int TYPE_BANNER = TYPE_DEFAULT;
-    private static final int TYPE_LIKE = TYPE_DEFAULT + 1;
-    private static final int TYPE_LIMIT = TYPE_DEFAULT + 2;
-    private static final int TYPE_NEW_HEAD = TYPE_DEFAULT + 3;
-    private static final int TYPE_FOOTER = TYPE_DEFAULT + 4;
-    private static final int TYPE_NEW_ITEM_BASE = TYPE_DEFAULT + 5;
-    private static final int COUNT_HEADER = 4;
-    private IndexGift mData;
-    private FragmentActivity mContext;
+    private static final int TAG_TYPE = 0x1234FFFE;
+
+    public static final int TYPE_BANNER = 10001;
+    public static final int TYPE_ICON_BAR = 10002;
+    public static final int TYPE_HEADER_LIKE = 10003;
+    public static final int TYPE_HEADER_LIMIT = 10004;
+    // 限时免费即为之前的零元抢
+    public static final int TYPE_HEADER_FREE = 10005;
+    public static final int TYPE_HEADER_NEW = 10006;
+    // 由于 like 的数据类型不为礼包类型，也即是无 UI Style 设置，故单独出来
+    public static final int TYPE_ITEM_LIKE = 10007;
+
     private LayoutInflater mInflater;
-    private boolean mShowFooter = false;
 
     // banner
     private WeakReference<BannerVH> mBannerWR;
@@ -61,10 +64,12 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
     private BannerHolderCreator mBannerHolderCreator;
     private int[] mBannerIndicatorDrawable;
     private ArrayList<String> mBannerData;
+    private OnItemClickListener mOnBannerItemClickListener;
 
+    private boolean mNeedShowTabHint = false;
 
     public GiftAdapter(FragmentActivity context) {
-        mContext = context;
+        super(context);
         mInflater = LayoutInflater.from(mContext);
         initDefaultBannerConfig();
     }
@@ -78,83 +83,60 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         mBannerData = new ArrayList<>();
     }
 
-    public void setData(IndexGift data) {
-        mData = data;
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case TYPE_FOOTER:
-                return new FooterHolder(inflateView(parent, R.layout.view_item_footer));
             case TYPE_BANNER:
+                BannerVH bVH;
                 if (mBannerWR == null || mBannerWR.get() == null) {
-                    mBannerWR = new WeakReference<BannerVH>(new BannerVH(inflateView(parent, R.layout.view_banner)));
+                    bVH = new BannerVH(inflateView(parent, R.layout.view_banner));
+                    mBannerWR = new WeakReference<BannerVH>(bVH);
+                    ConvenientBanner banner = bVH.mBanner;
+                    banner.setPageIndicator(mBannerIndicatorDrawable);
+                    banner.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+                    banner.setOnItemClickListener(mOnBannerItemClickListener);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            Global.getBannerHeight(mContext));
+                    banner.setLayoutParams(lp);
+                } else {
+                    bVH = mBannerWR.get();
                 }
-                BannerVH bannerVH = mBannerWR.get();
-                ConvenientBanner banner = bannerVH.mBanner;
-                banner.setPageIndicator(mBannerIndicatorDrawable);
-                banner.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
-                banner.setOnItemClickListener(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        Global.getBannerHeight(mContext));
-                banner.setLayoutParams(lp);
-                return bannerVH;
-//			case TYPE_ZERO:
-//				ZeroVH zeroVH = new ZeroVH(mInflater.inflate(R.layout.view_gift_index_zero, parent, false));
-//				LinearLayoutManager llmZero = new LinearLayoutManager(mContext);
-//				llmZero.setOrientation(LinearLayoutManager.HORIZONTAL);
-//				zeroVH.rvContainer.setLayoutManager(llmZero);
-//				zeroVH.rvAdapter = new IndexGiftZeroAdapter(mContext);
-//				// 加载数据
-//				zeroVH.rvContainer.setAdapter(zeroVH.rvAdapter);
-//				return zeroVH;
-            case TYPE_LIKE:
-                LikeVH likeVH = new LikeVH(inflateView(parent, R.layout.view_gift_index_like));
-                LinearLayoutManager llmLike = new LinearLayoutManager(mContext);
-                llmLike.setOrientation(LinearLayoutManager.HORIZONTAL);
-                likeVH.rvContainer.setLayoutManager(llmLike);
-                likeVH.rvAdapter = new IndexGiftLikeAdapter(mContext);
-                // 加载数据
-                likeVH.rvContainer.setAdapter(likeVH.rvAdapter);
-                return likeVH;
-            case TYPE_LIMIT:
-                LimitVH limitVH = new LimitVH(inflateView(parent, R.layout.view_gift_index_limit));
-                LinearLayoutManager llmLimit = new LinearLayoutManager(mContext);
-                llmLimit.setOrientation(LinearLayoutManager.HORIZONTAL);
-                limitVH.rvContainer.setLayoutManager(llmLimit);
-                limitVH.rvAdapter = new IndexGiftLimitAdapter(mContext);
-                // 加载数据
-                limitVH.rvContainer.setAdapter(limitVH.rvAdapter);
-                return limitVH;
-            case TYPE_NEW_HEAD:
-                return new ItemTitleVH(inflateView(parent, R.layout.view_gift_index_item_title));
+                return bVH;
+            case TYPE_ICON_BAR:
+                return new IconBarVh(inflateView(parent, R.layout.item_index_gift_icon_bar));
+            case TYPE_HEADER_FREE:
+            case TYPE_HEADER_NEW:
+            case TYPE_HEADER_LIMIT:
+            case TYPE_HEADER_LIKE:
+                return new HeaderVH(inflateView(parent, R.layout.view_index_item_title_1));
+            case TYPE_ITEM_LIKE:
+                return new ItemLikeVH(inflateView(parent, R.layout.item_list_gift_like));
             default: {
-                int uiStyle = viewType - TYPE_NEW_ITEM_BASE;
-                return UiStyleUtil.onCreateHolder(mContext, null, parent, uiStyle, false);
+                return UiStyleUtil.onCreateHolder(mContext, null, parent, viewType, false);
             } // default case finished
         }
     }
 
-    protected View inflateView(ViewGroup parent, int id) {
+    public void setOnBannerItemClickListener(OnItemClickListener onBannerItemClickListener) {
+        mOnBannerItemClickListener = onBannerItemClickListener;
+    }
+
+    private View inflateView(ViewGroup parent, int id) {
         return mInflater.inflate(id, parent, false);
     }
 
     /**
      * 更新轮播图内容
      */
+    @SuppressWarnings("unchecked")
     private void updateBanners(BannerVH bannerVH) {
-        if (bannerVH == null || mData == null) {
+        if (bannerVH == null || bannerVH.mBanner == null) {
             return;
         }
-        if (mData.banner == null) {
-            mData.banner = new ArrayList<>();
-        }
-        ArrayList<IndexBanner> banners = mData.banner;
+        ArrayList<IndexBanner> banners = (ArrayList<IndexBanner>) getItem(0);
         if (banners.size() == 0) {
-            mData.banner.add(mDefaultBanner);
+            banners.add(mDefaultBanner);
         }
-        mData.banner = banners;
         mBannerData.clear();
         for (IndexBanner banner : banners) {
             mBannerData.add(banner.url);
@@ -166,16 +148,11 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
             banner.stopTurning();
         } else {
             banner.setCanLoop(true);
-            banner.startTurning(AppConfig.BANNER_LOOP_TIME);
+            if (!banner.isTurning()) {
+                banner.startTurning(AppConfig.BANNER_LOOP_TIME);
+            }
         }
 
-    }
-
-    /*
-     * 获取头部数量，默认至少有‘轮播’、‘限量’、‘新增头部’；‘猜你喜欢’延迟加载可能变动
-     */
-    private int getHeaderCount() {
-        return mData == null ? 0 : (mData.like == null || mData.like.isEmpty() ? COUNT_HEADER - 1 : COUNT_HEADER);
     }
 
     @Override
@@ -185,34 +162,96 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         }
         int type = getItemViewType(position);
         switch (type) {
-            case TYPE_FOOTER:
-                return;
             case TYPE_BANNER:
                 updateBanners((BannerVH) holder);
                 break;
-            case TYPE_LIKE:
-                LikeVH likeVH = ((LikeVH) holder);
-                likeVH.rlTitle.setOnClickListener(this);
-                likeVH.rvAdapter.updateData(mData.like);
+            case TYPE_ICON_BAR:
+                updateIconBar((IconBarVh) holder, position);
                 break;
-            case TYPE_LIMIT:
-                LimitVH limitVH = ((LimitVH) holder);
-                limitVH.rvAdapter.updateData(mData.limit);
-//				limitVH.tvSubTitle.setText(TITLE_LIMIT);
-                limitVH.rlTitle.setOnClickListener(this);
+            case TYPE_HEADER_FREE:
+            case TYPE_HEADER_LIKE:
+            case TYPE_HEADER_NEW:
+            case TYPE_HEADER_LIMIT:
+                updateHeaderData((HeaderVH) holder, position, type);
                 break;
-            case TYPE_NEW_HEAD:
+            case TYPE_ITEM_LIKE:
+                updateLikeData((ItemLikeVH) holder, position, type);
                 break;
             default:
-                if (mData.news == null || mData.news.size() == 0
-                        || mData.news.size() <= position - getHeaderCount()) {
-                    return;
-                }
-                final IndexGiftNew o = mData.news.get(position - getHeaderCount());
+                IndexGiftNew o = (IndexGiftNew) getItem(position);
                 StyleBaseHolder baseHolder = (StyleBaseHolder) holder;
-                UiStyleUtil.bindListener(baseHolder, TAG_POS, position, this);
+                UiStyleUtil.bindListener(baseHolder, TAG_POSITION, position, this);
                 UiStyleUtil.bindHolderData(mContext, baseHolder, o);
         }
+    }
+
+    private void updateIconBar(IconBarVh holder, int position) {
+        holder.llSign.setTag(TAG_POSITION, position);
+        holder.llLimit.setTag(TAG_POSITION, position);
+        holder.llNew.setTag(TAG_POSITION, position);
+        holder.llFree.setTag(TAG_POSITION, position);
+        holder.llSign.setTag(TAG_TYPE, TYPE_ICON_BAR);
+        holder.llLimit.setTag(TAG_TYPE, TYPE_ICON_BAR);
+        holder.llNew.setTag(TAG_TYPE, TYPE_ICON_BAR);
+        holder.llFree.setTag(TAG_TYPE, TYPE_ICON_BAR);
+        holder.llSign.setOnClickListener(this);
+        holder.llLimit.setOnClickListener(this);
+        holder.llNew.setOnClickListener(this);
+        holder.llFree.setOnClickListener(this);
+    }
+
+    private void updateHeaderData(HeaderVH holder, int position, int type) {
+        holder.rlItem.setOnClickListener(this);
+        holder.rlItem.setTag(TAG_POSITION, position);
+        holder.rlItem.setTag(TAG_TYPE, type);
+//        holder.tvMore.setVisibility(type == TYPE_HEADER_NEW ? View.GONE : View.VISIBLE);
+
+        CharSequence s;
+        switch (type) {
+            case TYPE_HEADER_FREE:
+                s = mContext.getText(R.string.st_index_gift_free);
+                break;
+            case TYPE_HEADER_LIKE:
+                s = mContext.getText(R.string.st_index_gift_like);
+                break;
+            case TYPE_HEADER_NEW:
+                s = mContext.getText(R.string.st_index_gift_new);
+                break;
+            default:
+                s = mContext.getText(R.string.st_index_gift_limit);
+        }
+        holder.tvTitle.setText(s);
+    }
+
+    /**
+     * 设置猜你喜欢列表数据的显示
+     */
+    private void updateLikeData(ItemLikeVH holder, int position, int type) {
+        IndexGiftLike o = (IndexGiftLike) getItem(position);
+        holder.tvName.setText(o.name);
+        if (o.newestCreateTime > Global.getLikeNewTimeArray().get(o.id) &&
+                o.newestCreateTime > AssistantApp.getInstance().getLastLaunchTime() / 1000) {
+            holder.ivHint.setVisibility(View.VISIBLE);
+            mNeedShowTabHint = true;
+        } else {
+            holder.ivHint.setVisibility(View.GONE);
+            if (position == 0) {
+
+            }
+        }
+        if (mNeedShowTabHint && MainActivity.sGlobalHolder != null) {
+            MainActivity.sGlobalHolder.showTabGiftHint(View.VISIBLE);
+        }
+        holder.tvSize.setText(o.size);
+        holder.tvCount.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%d</font>款礼包", o
+                .totalCount)));
+        holder.tvNewAdd.setText(Html.fromHtml(String.format(Locale.CHINA, "<font color='#ffaa17'>%s</font>", o
+                .giftName)));
+        ViewUtil.showImage(holder.ivIcon, o.img);
+        holder.btnCheckout.setOnClickListener(this);
+        holder.btnCheckout.setTag(TAG_POSITION, position);
+        holder.itemView.setOnClickListener(this);
+        holder.itemView.setTag(TAG_POSITION, position);
     }
 
     public void startBanner() {
@@ -227,137 +266,89 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         }
     }
 
-    public boolean updateData(IndexGift data, int start, int end) {
-        if (data == null) {
-            return false;
-        }
-//		if (start < 0) {
-//			start = -1;
-//		}
-//		if (end < 0) {
-//			end = getItemCount();
-//		}
-        // 由于线程间会造成 RV 的 Inconsistency detected 问题，忽略
-//		notifyItemRangeChanged(start, end - start);
-        mData = data;
-        notifyDataSetChanged();
-        return true;
-    }
-
-    public boolean addData(IndexGift data, int start, int end) {
-        if (data == null) {
-            return false;
-        }
-        if (start < 0) {
-            start = -1;
-        }
-        mData = data;
-        if (end < 0) {
-            end = getItemCount();
-        }
-        notifyItemRangeInserted(start, end - start);
-        return true;
-    }
-
-    @Override
-    public int getItemCount() {
-        int count;
-        if (mData == null) {
-            count = 0;
-        } else if (mData.news == null) {
-            count = getHeaderCount();
-        } else {
-            count = getHeaderCount() + mData.news.size();
-        }
-        return mShowFooter && count != 0 ? count + 1 : count;
-    }
-
-    public IndexGiftNew getItem(int position) {
-        return position >= 0 && mData != null && mData.news != null && position < mData.news.size() ?
-                mData.news.get(position) : null;
-    }
-
     @Override
     public int getItemViewType(int position) {
-        if (position >= getHeaderCount()) {
-            if (mShowFooter && position == getItemCount() - 1) {
-                return TYPE_FOOTER;
-            } else {
-                IndexGiftNew o = getItem(position - getHeaderCount());
-                if (o == null) {
-                    return GiftTypeUtil.UI_TYPE_NORMAL_SEIZE + TYPE_NEW_ITEM_BASE;
-                }
-                o.uiStyle = (o.uiStyle == GiftTypeUtil.UI_TYPE_DEFAULT ? GiftTypeUtil.getUiStyle(o) : o.uiStyle);
-                return o.uiStyle + TYPE_NEW_ITEM_BASE;
-            }
+        Object obj = getItem(position);
+        int type;
+        if (obj == null) {
+            type = 0;
+        } else if (obj instanceof ArrayList) {
+            type = position == 0 ? TYPE_BANNER : TYPE_ICON_BAR;
+        } else if (obj instanceof Integer) {
+            type = (int) obj;
+        } else if (obj instanceof  IndexGiftLike) {
+            type = TYPE_ITEM_LIKE;
         } else {
-            if (mData.like == null || mData.like.isEmpty()) {
-                if (position > 0) {
-                    return TYPE_DEFAULT + position + 1;
-                }
-            }
-            return TYPE_DEFAULT + position;
+            type = ((IndexGiftNew) obj).uiStyle;
         }
-
+        return type;
     }
 
-    @Override
-    public void onItemClick(int position) {
-        if (mData == null || mData.banner == null || mData.banner.size() <= position) {
-            return;
-        }
-        IndexBanner banner = mData.banner.get(position);
-        StatisticsManager.getInstance().trace(mContext,
-                StatisticsManager.ID.GIFT_BANNER,
-                StatisticsManager.ID.STR_GIFT_BANNER,
-                String.format(Locale.CHINA, "第%d推广位，标题：%s", position, banner.title));
-        BannerTypeUtil.handleBanner(mContext, banner);
-    }
 
     @Override
     public void onClick(View v) {
-        IndexGiftNew gift = null;
-        if (v.getId() == R.id.rl_recommend
-                || v.getId() == R.id.btn_send) {
-            Integer pos = (Integer) v.getTag(TAG_POS);
-            if (pos == null || pos < getHeaderCount() || pos - getHeaderCount() >= mData.news.size()) {
-                return;
+        Integer pos = (Integer) v.getTag(TAG_POSITION);
+        Integer type = (Integer) v.getTag(TAG_TYPE);
+        if (type != null) {
+            switch (type) {
+                case TYPE_HEADER_FREE:
+                    IntentUtil.jumpGiftFreeList(mContext);
+                    break;
+                case TYPE_HEADER_LIKE:
+                    IntentUtil.jumpGiftHotList(mContext);
+                    break;
+                case TYPE_HEADER_NEW:
+                    IntentUtil.jumpGiftNewList(mContext);
+                    break;
+                case TYPE_HEADER_LIMIT:
+                    IntentUtil.jumpGiftLimitList(mContext);
+                    break;
+                case TYPE_ICON_BAR:
+                    switch (v.getId()) {
+                        case R.id.ll_limit:
+                            IntentUtil.jumpGiftLimitList(mContext);
+                            break;
+                        case R.id.ll_new:
+                            IntentUtil.jumpGiftNewList(mContext);
+                            break;
+                        case R.id.ll_free:
+                            IntentUtil.jumpGiftFreeList(mContext);
+                            break;
+                        case R.id.ll_sign:
+                            IntentUtil.jumpSignIn(mContext);
+                            break;
+                    }
+                    break;
             }
-            gift = mData.news.get(pos - getHeaderCount());
-        }
-        switch (v.getId()) {
-            case R.id.rl_like_all:
-                IntentUtil.jumpGiftHotList(mContext);
-                break;
-            case R.id.rl_limit_all:
-                IntentUtil.jumpGiftLimitList(mContext);
-                break;
-            case R.id.rl_recommend:
-                if (gift != null) {
-                    IntentUtil.jumpGiftDetail(mContext, gift.id);
-                }
-                break;
-            case R.id.btn_send:
-                if (gift == null)
-                    return;
-                if (gift.giftType == GiftTypeUtil.GIFT_TYPE_LIMIT_FREE) {
-                    // 对于0元抢，先跳转到游戏详情
-                    IntentUtil.jumpGiftDetail(mContext, gift.id);
-                } else {
-                    PayManager.getInstance().seizeGift(mContext, gift, (GiftButton) v);
-                }
-                break;
+        } else {
+            switch (v.getId()) {
+                case R.id.btn_checkout:
+                case R.id.rl_like:
+                    IndexGiftLike o = (IndexGiftLike) getItem(pos);
+                    IntentUtil.jumpGameDetail(mContext, o.id, GameTypeUtil.JUMP_STATUS_GIFT);
+                    Global.getLikeNewTimeArray().put(o.id, o.newestCreateTime);
+                    notifyItemChanged(pos);
+                    break;
+                case R.id.rl_recommend:
+                    IndexGiftNew g1 = (IndexGiftNew) getItem(pos);
+                    IntentUtil.jumpGiftDetail(mContext, g1.id);
+                    break;
+                case R.id.btn_send:
+                    IndexGiftNew g2 = (IndexGiftNew) getItem(pos);
+                    PayManager.getInstance().seizeGift((FragmentActivity) mContext, g2, (GiftButton) v);
+                    break;
+            }
         }
     }
 
     @Override
-    public void showFooter(boolean isShow) {
-        mShowFooter = isShow;
-        if (mShowFooter) {
-            notifyItemInserted(getItemCount() - 1);
-        } else {
-            notifyItemRemoved(getItemCount());
-        }
+    public void release() {
+        mInflater = null;
+        super.release();
+        mData = null;
+        mBannerData = null;
+        mBannerHolderCreator = null;
+        mBannerWR = null;
     }
 
     static class BannerVH extends BaseRVHolder {
@@ -370,52 +361,62 @@ public class GiftAdapter extends RecyclerView.Adapter implements com.bigkoo.conv
         }
     }
 
-//	static class ZeroVH extends BaseRVHolder {
-//
-//		TextView tvSubTitle;
-//		RecyclerView rvContainer;
-//		IndexGiftZeroAdapter rvAdapter;
-//
-//		public ZeroVH(View itemView) {
-//			super(itemView);
-//			tvSubTitle = getViewById(R.id.tv_zero_limit);
-//			rvContainer = getViewById(R.id.rv_zero_content);
-//		}
-//	}
+    static class HeaderVH extends BaseRVHolder {
 
-    static class LikeVH extends BaseRVHolder {
+        TextView tvTitle;
+        TextView tvMore;
+        RelativeLayout rlItem;
 
-        RelativeLayout rlTitle;
-        RecyclerView rvContainer;
-        IndexGiftLikeAdapter rvAdapter;
-
-        public LikeVH(View itemView) {
+        public HeaderVH(View itemView) {
             super(itemView);
-            rlTitle = getViewById(R.id.rl_like_all);
-            rvContainer = getViewById(R.id.rv_like_content);
+            tvTitle = getViewById(R.id.tv_title);
+            tvMore = getViewById(R.id.tv_more);
+            rlItem = getViewById(R.id.rl_header_item);
         }
     }
 
-    static class LimitVH extends BaseRVHolder {
+    static class IconBarVh extends BaseRVHolder {
 
-        RelativeLayout rlTitle;
-        //		TextView tvSubTitle;
-        RecyclerView rvContainer;
-        IndexGiftLimitAdapter rvAdapter;
+        LinearLayout llLimit;
+        ImageView ivLimit;
+        LinearLayout llFree;
+        ImageView ivFree;
+        LinearLayout llNew;
+        ImageView ivNew;
+        LinearLayout llSign;
+        ImageView ivSign;
 
-        public LimitVH(View itemView) {
+        public IconBarVh(View itemView) {
             super(itemView);
-            rlTitle = getViewById(R.id.rl_limit_all);
-//			tvSubTitle = getViewById(R.id.tv_limit_hint);
-            rvContainer = getViewById(R.id.rv_limit_content);
-
+            llLimit = getViewById(R.id.ll_limit);
+            ivLimit = getViewById(R.id.iv_limit);
+            llFree = getViewById(R.id.ll_free);
+            ivFree = getViewById(R.id.iv_free);
+            llNew = getViewById(R.id.ll_new);
+            ivNew = getViewById(R.id.iv_new);
+            llSign = getViewById(R.id.ll_sign);
+            ivSign = getViewById(R.id.iv_sign);
         }
     }
 
-    static class ItemTitleVH extends BaseRVHolder {
+    static class ItemLikeVH extends BaseRVHolder {
+        ImageView ivHint;
+        TextView tvName;
+        TextView tvSize;
+        TextView tvCount;
+        TextView tvNewAdd;
+        ImageView ivIcon;
+        TextView btnCheckout;
 
-        public ItemTitleVH(View itemView) {
+        public ItemLikeVH(View itemView) {
             super(itemView);
+            ivHint = getViewById(R.id.iv_hint);
+            tvName = getViewById(R.id.tv_name);
+            tvSize = getViewById(R.id.tv_size);
+            tvCount = getViewById(R.id.tv_count);
+            tvNewAdd = getViewById(R.id.tv_new_add);
+            ivIcon = getViewById(R.id.iv_icon);
+            btnCheckout = getViewById(R.id.btn_checkout);
         }
     }
 }

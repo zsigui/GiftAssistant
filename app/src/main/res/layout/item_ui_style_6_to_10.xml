@@ -97,7 +97,7 @@
             android:layout_below = "@+id/tv_spend"
             android:layout_marginLeft = "@dimen/di_index_item_margin_left"
             android:layout_toRightOf = "@+id/rl_icon"
-            android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+            android:layout_marginTop = "@dimen/di_line_space_extra_big"
             android:gravity = "center_vertical"
             tools:text="价值: 8元"/>
 

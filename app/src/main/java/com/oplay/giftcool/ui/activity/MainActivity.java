@@ -23,6 +23,7 @@ import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.SPConfig;
+import com.oplay.giftcool.download.ApkDownloadManager;
 import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.ObserverManager;
@@ -64,8 +65,8 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     final int INDEX_DEFAULT = -1;
     // 需要按顺序 0...n
     final int INDEX_GIFT = 0;
-    final int INDEX_POST = 1;
-    final int INDEX_GAME = 2;
+    final int INDEX_GAME = 1;
+    final int INDEX_POST = 2;
     final int INDEX_MY = 3;
 
     // 保持一个Activity的全局对象
@@ -270,12 +271,17 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         // 加载数据在父类进行，初始先显示加载页面，同时起到占位作用
         setCurSelected(mCurSelectedItem);
         ScoreManager.getInstance().initTaskState();
+        showTabMyHint();
+        showTabPostHint();
     }
 
 
     public void setCurSelected(int position) {
         if (mCurSelectedItem == position
                 && position != INDEX_DEFAULT) {
+            if (position == INDEX_GIFT && mGiftFragment != null) {
+                showTabGiftHint(View.GONE);
+            }
             return;
         }
         if (position == INDEX_DEFAULT) {
@@ -446,6 +452,11 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         }
     }
 
+
+    public void showTabGiftHint(int view) {
+        showTabHint(INDEX_GIFT, view);
+    }
+
     /*
      * 该方法能保证在完成 Fragment 的唤醒之后再调用，防止在其他 Activity 调用本类 commit 之后出现 IllegalStateException
      */
@@ -600,16 +611,43 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
     }
 
     @Override
-    public void onUserUpdate(int action) {
-        switch (action) {
-            case ObserverManager.STATUS.USER_UPDATE_ALL:
-                updateToolBarHint();
-                break;
-            case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
-                updateToolBarHint();
-                mNotifyAward = false;
-                judgeAwardShow();
-                break;
+    public void onUserUpdate(final int action) {
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (action) {
+                    case ObserverManager.STATUS.USER_UPDATE_ALL:
+                        showTabMyHint();
+                        showTabPostHint();
+                        updateToolBarHint();
+                        break;
+                    case ObserverManager.STATUS.USER_UPDATE_PUSH_MESSAGE:
+                        updateToolBarHint();
+                        mNotifyAward = false;
+                        judgeAwardShow();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void showTabPostHint() {
+        if (AccountManager.getInstance().isLogin()
+                && ScoreManager.getInstance().isSignInTaskFinished()
+                && ScoreManager.getInstance().isFreeLotteryEmpty()) {
+            showTabHint(INDEX_POST, View.GONE);
+        } else {
+            showTabHint(INDEX_POST, View.VISIBLE);
+        }
+    }
+
+    private void showTabMyHint() {
+        if ((!AccountManager.getInstance().isLogin()
+                || AccountManager.getInstance().getUnreadMessageCount() == 0)
+                && ApkDownloadManager.getInstance(getApplicationContext()).getEndOfPaused() == 0) {
+            showTabHint(INDEX_MY, View.GONE);
+        } else {
+            showTabHint(INDEX_MY, View.VISIBLE);
         }
     }
 
@@ -620,6 +658,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
         ThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                showTabMyHint();
                 if (ivMsgHint != null) {
                     if (AccountManager.getInstance().getUnreadMessageCount() > 0) {
                         ivMsgHint.setVisibility(View.VISIBLE);
@@ -685,6 +724,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
                 ThreadUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        showTabMyHint();
                         if (mMyFragment != null)
                             mMyFragment.updateDownloadHint(count);
                     }

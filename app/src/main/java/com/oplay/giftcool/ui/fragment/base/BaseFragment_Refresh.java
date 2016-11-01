@@ -30,6 +30,7 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
     protected RefreshLayout mRefreshLayout;
     protected boolean mIsLoadMore = false;
     protected boolean mNoMoreLoad = false;
+    protected boolean mNeedHideToast = false;
     protected int mLastPage = PAGE_FIRST;
 
     @Override
@@ -75,16 +76,22 @@ public abstract class BaseFragment_Refresh<DataType> extends BaseFragment implem
     }
 
     protected void refreshCacheFailEnd() {
-        if (mIsSwipeRefresh) {
+        if (mIsSwipeRefresh && !mNeedHideToast) {
             if (NetworkUtil.isConnected(getContext())) {
                 ToastUtil.showShort(ConstString.TOAST_SERVER_BAD_CALLBACK);
             } else {
                 ToastUtil.showShort(ConstString.TOAST_NET_ERROR);
             }
+            mNeedHideToast = false;
         }
         mIsLoading = mIsSwipeRefresh = mIsNotifyRefresh = false;
-        if (mViewManager != null && !mViewManager.isShowContent()) {
+//        if (mViewManager != null && !mViewManager.isShowContent()) {
+//            mViewManager.showContent();
+//        }
+        if (mHasData) {
             mViewManager.showContent();
+        } else {
+            mViewManager.showErrorRetry();
         }
         if (mRefreshLayout != null) {
             mRefreshLayout.setEnabled(true);

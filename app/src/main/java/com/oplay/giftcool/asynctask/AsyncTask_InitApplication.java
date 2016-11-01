@@ -66,6 +66,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
             ApkDownloadManager.getInstance(mContext).initDownloadList();
         } catch (Throwable e) {
             AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
+            if (AppDebugConfig.IS_DEBUG) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -151,7 +154,6 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
         }
         // 初始化推送SDK
         PushMessageManager.getInstance().initPush(assistantApp);
-
         assistantApp.setGlobalInit(true);
     }
 

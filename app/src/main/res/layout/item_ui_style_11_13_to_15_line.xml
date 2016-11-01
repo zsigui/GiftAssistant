@@ -74,7 +74,7 @@
                 android:gravity = "center_vertical"
                 android:layout_below = "@+id/tv_name"
                 android:layout_marginLeft = "@dimen/di_index_item_margin_left"
-                android:layout_marginTop = "5dp"
+                android:layout_marginTop = "@dimen/di_line_space_extra_big"
                 tools:text = "￥6.00"
                 android:layout_toRightOf = "@+id/tv_spend"
                 style = "@style/DefaultTextView.Text" />

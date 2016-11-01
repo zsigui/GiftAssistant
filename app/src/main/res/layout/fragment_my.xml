@@ -2,256 +2,267 @@
 <layout xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:tools = "http://schemas.android.com/tools" >
 
-    <LinearLayout
-            android:orientation = "vertical"
+    <ScrollView
             android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            tools:ignore = "RtlHardcoded, ContentDescription" >
+            android:layout_height = "wrap_content" >
 
         <LinearLayout
-                android:id = "@+id/ll_user_info"
-                android:orientation = "horizontal"
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:paddingTop = "@dimen/di_list_item_gap_normal"
-                android:paddingBottom = "@dimen/di_list_item_gap_normal"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    android:id = "@+id/iv_avatar"
-                    style = "@style/MyItemIcon"
-                    android:layout_width = "@dimen/di_icon_diameter_smaller"
-                    android:layout_height = "@dimen/di_icon_diameter_smaller"
-                    android:layout_marginRight = "@dimen/di_list_item_gap_big"
-                    android:scaleType = "centerCrop"
-                    android:src = "@drawable/ic_avatar_un_login" />
-
-            <TextView
-                    android:id = "@+id/tv_un_login"
-                    style = "@style/MyText"
-                    tools:visibility = "gone"
-                    android:text = "@string/st_drawer_header_un_login" />
+                tools:ignore = "RtlHardcoded, ContentDescription" >
 
             <LinearLayout
-                    android:id = "@+id/ll_name"
-                    android:layout_width = "0dp"
-                    android:layout_weight = "1"
-                    android:orientation = "vertical"
-                    android:layout_marginRight = "@dimen/di_list_item_gap_big"
-                    android:layout_height = "wrap_content" >
+                    android:id = "@+id/ll_user_info"
+                    android:orientation = "horizontal"
+                    android:layout_height = "wrap_content"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                    android:paddingTop = "@dimen/di_list_item_gap_normal"
+                    android:paddingBottom = "@dimen/di_list_item_gap_normal"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        android:id = "@+id/iv_avatar"
+                        style = "@style/MyItemIcon"
+                        android:layout_width = "@dimen/di_icon_diameter_smaller"
+                        android:layout_height = "@dimen/di_icon_diameter_smaller"
+                        android:layout_marginRight = "@dimen/di_list_item_gap_big"
+                        android:scaleType = "centerCrop"
+                        android:src = "@drawable/ic_avatar_un_login" />
 
                 <TextView
-                        android:id = "@+id/tv_nick"
+                        android:id = "@+id/tv_un_login"
                         style = "@style/MyText"
-                        android:layout_width = "wrap_content"
-                        tools:text = "南瓜酱Sylvia" />
+                        tools:visibility = "gone"
+                        android:textColor = "@color/co_btn_orange_pressed"
+                        android:textStyle = "bold"
+                        android:textSize = "@dimen/di_text_size_big"
+                        android:text = "@string/st_drawer_header_un_login" />
 
-                <TextView
-                        android:id = "@+id/tv_name"
-                        style = "@style/MyText"
+                <LinearLayout
+                        android:id = "@+id/ll_name"
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:orientation = "vertical"
+                        android:layout_marginRight = "@dimen/di_list_item_gap_big"
+                        android:layout_height = "wrap_content" >
+
+                    <TextView
+                            android:id = "@+id/tv_nick"
+                            style = "@style/MyText"
+                            android:layout_width = "wrap_content"
+                            android:textColor = "@color/co_btn_orange_pressed"
+                            android:textStyle = "bold"
+                            tools:text = "南瓜酱Sylvia" />
+
+                    <TextView
+                            android:id = "@+id/tv_name"
+                            style = "@style/MyText"
+                            android:layout_width = "wrap_content"
+                            tools:text = "偶玩账号: 1381234123"
+                            android:textSize = "@dimen/di_text_size_small"
+                            android:textColor = "@color/co_common_text_second"
+                            android:layout_marginTop = "@dimen/di_line_space_extra_big" />
+                </LinearLayout >
+
+                <ImageView
                         android:layout_width = "wrap_content"
-                        tools:text = "偶玩账号: 1381234123"
-                        android:textSize = "@dimen/di_text_size_small"
-                        android:textColor = "@color/co_common_text_second"
-                        android:layout_marginTop = "@dimen/di_list_item_gap_small" />
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
             </LinearLayout >
 
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_wallet"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_wallet" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_my_wallet" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_money"
+                    style = "@style/MyItemLayout" >
+
+                <TextView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textColor = "@color/co_common_text_second"
+                        android:textSize = "@dimen/di_text_size_small"
+                        android:layout_marginLeft = "40dp"
+                        android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
+                        android:text = "@string/st_drawer_money_score" />
+
+                <TextView
+                        android:id = "@+id/tv_score"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textSize = "@dimen/di_text_size_normal"
+                        android:textColor = "@color/co_common_app_main_bg"
+                        android:drawableLeft = "@drawable/ic_score_mid"
+                        android:drawablePadding = "@dimen/di_line_space_extra_big"
+                        tools:text = "2505" />
+
+                <TextView
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:layout_height = "wrap_content"
+                        android:gravity = "right"
+                        android:textColor = "@color/co_common_text_second"
+                        android:textSize = "@dimen/di_text_size_small"
+                        android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
+                        android:text = "@string/st_drawer_money_bean" />
+
+                <TextView
+                        android:id = "@+id/tv_bean"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textSize = "@dimen/di_text_size_normal"
+                        android:textColor = "@color/co_common_app_main_bg"
+                        android:layout_marginRight = "40dp"
+                        android:drawableLeft = "@drawable/ic_bean_mid"
+                        android:drawablePadding = "@dimen/di_line_space_extra_big"
+                        tools:text = "2505" />
+
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                    android:id = "@+id/ll_my_gift"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_gift" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_my_gift" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_my_coupon"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_my_coupon" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_my_coupon" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_my_attention"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_my_attention" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_my_attention" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_msg"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_message" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_msg" />
+
+                <TextView
+                        android:id = "@+id/tv_msg_hint"
+                        style = "@style/MyHint"
+                        tools:visibility = "visible"
+                        tools:text = "15" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                    android:id = "@+id/ll_download"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_download" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_download" />
+
+                <TextView
+                        android:id = "@+id/tv_download_hint"
+                        style = "@style/MyHint"
+                        tools:visibility = "visible"
+                        tools:text = "15" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:id = "@+id/ll_setting"
+                    style = "@style/MyItemLayout" >
+
+                <ImageView
+                        style = "@style/MyItemIcon"
+                        android:src = "@drawable/ic_drawer_setting" />
+
+                <TextView
+                        style = "@style/MyText"
+                        android:text = "@string/st_drawer_setting" />
+
+                <ImageView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:src = "@drawable/ic_arrow_more" />
+            </LinearLayout >
         </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_wallet"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_wallet" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_my_wallet" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_money"
-                style = "@style/MyItemLayout" >
-
-            <TextView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:textColor = "@color/co_common_text_second"
-                    android:textSize = "@dimen/di_text_size_small"
-                    android:layout_marginLeft = "40dp"
-                    android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
-                    android:text = "@string/st_drawer_money_score" />
-
-            <TextView
-                    android:id = "@+id/tv_score"
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:textSize = "@dimen/di_text_size_normal"
-                    android:textColor = "@color/co_common_app_main_bg"
-                    android:drawableLeft = "@drawable/ic_score_mid"
-                    android:drawablePadding = "@dimen/di_line_space_extra_big"
-                    tools:text = "2505" />
-
-            <TextView
-                    android:layout_width = "0dp"
-                    android:layout_weight = "1"
-                    android:layout_height = "wrap_content"
-                    android:gravity = "right"
-                    android:textColor = "@color/co_common_text_second"
-                    android:textSize = "@dimen/di_text_size_small"
-                    android:layout_marginRight = "@dimen/di_list_item_gap_s_normal"
-                    android:text = "@string/st_drawer_money_bean" />
-
-            <TextView
-                    android:id = "@+id/tv_bean"
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:textSize = "@dimen/di_text_size_normal"
-                    android:textColor = "@color/co_common_app_main_bg"
-                    android:layout_marginRight = "40dp"
-                    android:drawableLeft = "@drawable/ic_bean_mid"
-                    android:drawablePadding = "@dimen/di_line_space_extra_big"
-                    tools:text = "2505" />
-
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_list_item_gap_small"
-                android:id = "@+id/ll_my_gift"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_gift" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_my_gift" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_my_coupon"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_my_coupon" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_my_coupon" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_my_attention"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_my_attention" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_my_attention" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_msg"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_message" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_msg" />
-
-            <TextView
-                    android:id = "@+id/tv_msg_hint"
-                    style = "@style/MyHint"
-                    tools:visibility = "visible"
-                    tools:text = "15" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_list_item_gap_small"
-                android:id = "@+id/ll_download"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_download" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_download" />
-
-            <TextView
-                    android:id = "@+id/tv_download_hint"
-                    style = "@style/MyHint"
-                    tools:visibility = "visible"
-                    tools:text = "15" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-
-        <LinearLayout
-                android:layout_marginTop = "@dimen/di_divider_height"
-                android:id = "@+id/ll_setting"
-                style = "@style/MyItemLayout" >
-
-            <ImageView
-                    style = "@style/MyItemIcon"
-                    android:src = "@drawable/ic_drawer_setting" />
-
-            <TextView
-                    style = "@style/MyText"
-                    android:text = "@string/st_drawer_setting" />
-
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_arrow_more" />
-        </LinearLayout >
-    </LinearLayout >
+    </ScrollView >
 </layout >

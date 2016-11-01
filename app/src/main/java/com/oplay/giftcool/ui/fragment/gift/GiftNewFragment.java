@@ -1,17 +1,22 @@
 package com.oplay.giftcool.ui.fragment.gift;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.GiftListAdapter;
 import com.oplay.giftcool.config.Global;
+import com.oplay.giftcool.listener.OnItemClickListener;
+import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.req.ReqPageData;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
 import com.oplay.giftcool.model.data.resp.OneTypeDataList;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Refresh;
+import com.oplay.giftcool.ui.widget.button.GiftButton;
+import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -23,7 +28,7 @@ import retrofit2.Response;
 /**
  * Created by zsigui on 16-10-27.
  */
-public class GiftNewFragment extends BaseFragment_Refresh<IndexGiftNew> {
+public class GiftNewFragment extends BaseFragment_Refresh<IndexGiftNew> implements OnItemClickListener<IndexGiftNew> {
 
 
     private ListView mDataView;
@@ -43,7 +48,7 @@ public class GiftNewFragment extends BaseFragment_Refresh<IndexGiftNew> {
 
     @Override
     protected void setListener() {
-
+        mAdapter.setListener(this);
     }
 
     @Override
@@ -190,6 +195,18 @@ public class GiftNewFragment extends BaseFragment_Refresh<IndexGiftNew> {
         if (mCallRefresh != null) {
             mCallRefresh.cancel();
             mCallRefresh = null;
+        }
+    }
+
+    @Override
+    public void onItemClick(IndexGiftNew item, View view, int position) {
+        switch (view.getId()) {
+            case R.id.rl_recommend:
+                IntentUtil.jumpGiftDetail(getContext(), item.id);
+                break;
+            case R.id.btn_send:
+                PayManager.getInstance().seizeGift(getActivity(), item, (GiftButton) view);
+                break;
         }
     }
 }

@@ -55,13 +55,13 @@ public class MessageCentralFragment extends BaseFragment {
 
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (Global.mMsgCentralTobeRefresh) {
-			mAdapter.notifyDataSetChanged();
-		}
-	}
+//	@Override
+//	public void onResume() {
+//		super.onResume();
+//		if (Global.mMsgCentralTobeRefresh) {
+//			mAdapter.notifyDataSetChanged();
+//		}
+//	}
 
 	@Override
 	public void release() {

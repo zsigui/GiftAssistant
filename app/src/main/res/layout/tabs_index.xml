@@ -43,6 +43,14 @@
         </FrameLayout >
 
 
+        <CheckedTextView
+                android:id = "@+id/ctv_game"
+                android:gravity = "center_horizontal"
+                style = "@style/CheckedTextNormal.Index"
+                android:drawableTop = "@drawable/selector_tab_index_game"
+                android:text = "@string/st_tabs_index_game"
+                android:checked = "false" />
+
         <FrameLayout
                 android:layout_width = "0dp"
                 android:layout_weight = "1"
@@ -69,16 +77,6 @@
                     tools:visibility="visible"
                     android:src = "@drawable/ic_toolbar_hint" />
         </FrameLayout >
-
-
-        <CheckedTextView
-                android:id = "@+id/ctv_game"
-                android:gravity = "center_horizontal"
-                style = "@style/CheckedTextNormal.Index"
-                android:drawableTop = "@drawable/selector_tab_index_game"
-                android:text = "@string/st_tabs_index_game"
-                android:checked = "false" />
-
 
         <FrameLayout
                 android:layout_width = "0dp"

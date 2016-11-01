@@ -321,6 +321,7 @@ public class OuwanLoginFragment extends BaseFragment implements TextView.OnEdito
         SocketIOManager.getInstance().connectOrReConnect(true);
         AccountManager.getInstance().notifyUserAll(userModel);
         ScoreManager.getInstance().initTaskState();
+        AccountManager.getInstance().obtainPushTopics();
         if (AppDebugConfig.IS_STATISTICS_SHOW) {
             Map<String, String> keyVal = new HashMap<>();
             keyVal.put("登录信息", userModel.userInfo.username);

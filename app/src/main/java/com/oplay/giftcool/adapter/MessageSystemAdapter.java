@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
 import com.oplay.giftcool.adapter.base.BaseRVHolder;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.listener.CallbackListener;
 import com.oplay.giftcool.manager.PayManager;
@@ -84,31 +85,37 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
 
     @Override
     public void onClick(View v) {
+        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "pos = " + v.getTag(TAG_POSITION));
         if (v.getTag(TAG_POSITION) == null) {
             return;
         }
         final Integer pos = (Integer) v.getTag(TAG_POSITION);
         final SystemMessage item = getItem(pos);
-        if (item.giftId != 0) {
-            switch (v.getId()) {
-                case R.id.rl_container:
+        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "id = " + item.giftId);
+
+        switch (v.getId()) {
+            case R.id.rl_container:
+                item.isRead = 1;
+                notifyItemChanged(pos);
+                if (item.giftId != 0) {
+                    IntentUtil.jumpGiftDetail(mContext, item.giftId);
+                }
+                break;
+            case R.id.btn_send:
+                if (fm != null && item.giftId != 0) {
+                    PayManager.getInstance().handleTakeGift(item.giftId, fm, new CallbackListener<Void>() {
+                        @Override
+                        public void doCallBack(Void data) {
+                            item.confirmStatus = KeyConfig.STATE_SYS_MSG_TAKED;
+                            item.isRead = 1;
+                            notifyItemChanged(pos);
+                        }
+                    });
+                } else {
                     item.isRead = 1;
                     notifyItemChanged(pos);
-                    IntentUtil.jumpGiftDetail(mContext, item.giftId);
-                    break;
-                case R.id.btn_send:
-                    if (fm != null) {
-                        PayManager.getInstance().handleTakeGift(item.giftId, fm, new CallbackListener<Void>() {
-                            @Override
-                            public void doCallBack(Void data) {
-                                item.confirmStatus = KeyConfig.STATE_SYS_MSG_TAKED;
-                                item.isRead = 1;
-                                notifyItemChanged(pos);
-                            }
-                        });
-                    }
-                    break;
-            }
+                }
+                break;
         }
     }
 
@@ -116,7 +123,7 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
         this.fm = fm;
     }
 
-    private class MessageHolder extends BaseRVHolder {
+    class MessageHolder extends BaseRVHolder {
 
         private TextView tvTitle;
         private ImageView ivNew;
@@ -124,7 +131,7 @@ public class MessageSystemAdapter extends BaseRVAdapter<SystemMessage> implement
         private TextView tvTime;
         private TextView btnSend;
 
-        public MessageHolder(View itemView) {
+        MessageHolder(View itemView) {
             super(itemView);
             tvTitle = getViewById(R.id.tv_title);
             ivNew = getViewById(R.id.iv_new_notify);

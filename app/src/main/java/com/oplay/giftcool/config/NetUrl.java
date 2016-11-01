@@ -337,6 +337,11 @@ public class NetUrl {
     public static final String GAME_FOCUS_LIST = "focus_game_list/";
 
     /**
+     * 关注游戏名称列表，用于主题订阅
+     */
+    public static final String PUSH_TOPICS_LIST = "focus_game_id_list";
+
+    /**
      * 修改推送消息状态
      */
     public static final String MESSAGE_CHANGE_STATUS = "change_jpush_message_status/";

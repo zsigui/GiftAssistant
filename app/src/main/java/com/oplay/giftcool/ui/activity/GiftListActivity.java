@@ -35,16 +35,16 @@ public class GiftListActivity extends BaseAppCompatActivity {
         super.initMenu(toolbar);
         switch (type) {
             case KeyConfig.TYPE_ID_GIFT_LIMIT:
-                setBarTitle("珍贵限量礼包");
+                setBarTitle(getString(R.string.st_index_gift_limit) + "礼包");
                 break;
             case KeyConfig.TYPE_ID_GIFT_NEW:
-                setBarTitle("新鲜出炉礼包");
+                setBarTitle(getString(R.string.st_index_gift_new) + "礼包");
                 break;
             case KeyConfig.TYPE_ID_GIFT_LIKE:
-                setBarTitle("猜你喜欢");
+                setBarTitle(getString(R.string.st_index_gift_like));
                 break;
             case KeyConfig.TYPE_ID_GIFT_FREE:
-                setBarTitle("限时免费礼包");
+                setBarTitle(getString(R.string.st_index_gift_free) + "礼包");
                 break;
         }
 

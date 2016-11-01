@@ -65,6 +65,7 @@
                 android:layout_marginRight = "5dp"
                 android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:visibility = "gone"
+                tools:visibility = "visible"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:text = "@string/st_gift_consume" />
 
@@ -75,6 +76,7 @@
                 android:layout_toRightOf = "@id/tv_consume"
                 android:drawableLeft = "@drawable/ic_score"
                 android:visibility = "gone"
+                tools:visibility = "visible"
                 android:textColor = "@color/co_common_app_main_bg"
                 android:drawablePadding = "@dimen/di_line_space_extra_big" />
 
@@ -86,6 +88,7 @@
                 android:layout_marginRight = "5dp"
                 android:layout_toRightOf = "@id/tv_score"
                 android:visibility = "gone"
+                tools:visibility = "visible"
                 android:text = "@string/st_gift_or" />
 
         <TextView
@@ -96,6 +99,7 @@
                 android:drawableLeft = "@drawable/ic_bean"
                 android:visibility = "gone"
                 android:textColor = "@color/co_common_app_main_bg"
+                tools:visibility = "visible"
                 android:drawablePadding = "@dimen/di_line_space_extra_big" />
 
         <TextView
@@ -166,11 +170,12 @@
                 style = "@style/DefaultTextView.Text"
                 android:layout_width = "wrap_content"
                 android:layout_marginLeft = "@dimen/di_detail_header_margin_left"
-                android:layout_marginTop = "@dimen/di_line_space_extra_normal"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
                 android:layout_below = "@+id/tv_consume"
                 android:layout_toRightOf = "@+id/rl_icon"
                 android:maxWidth = "@dimen/di_item_money_min_width"
                 android:visibility = "gone"
+                tools:visibility = "visible"
                 android:gravity = "left|center_vertical" />
 
         <com.oplay.giftcool.ui.widget.button.GiftButton
@@ -240,7 +245,7 @@
                 android:layout_weight = "1"
                 style = "@style/DefaultTextView.BiggerBtn"
                 android:textColor = "@color/color_btn_green_border"
-                android:minWidth="80dp"
+                android:minWidth = "80dp"
                 android:text = "@string/st_gift_more" />
 
         <com.oplay.giftcool.ui.widget.button.DownloadButtonView

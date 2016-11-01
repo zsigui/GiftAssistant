@@ -3,8 +3,10 @@ package com.oplay.giftcool.config;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.SparseIntArray;
 
 import com.google.gson.reflect.TypeToken;
@@ -14,10 +16,12 @@ import com.oplay.giftcool.R;
 import com.oplay.giftcool.engine.NetEngine;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
 import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
+import com.oplay.giftcool.ui.widget.LineCenterImageSpan;
 import com.oplay.giftcool.util.SPUtil;
 
 import net.youmi.android.libs.common.global.Global_Executor;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.Executor;
@@ -162,6 +166,11 @@ public class Global {
      * 手机已安装应用包名Hash列表
      */
     private static HashSet<String> sPackageName = null;
+
+    /**
+     * 关注的游戏列表
+     */
+    public static HashSet<String> sTopics = null;
 
 
     /**
@@ -341,28 +350,28 @@ public class Global {
 
     public static void updateMsgCentralData(Context context, MessageCentralUnread unread) {
         final ArrayList<CentralHintMessage> data = getMsgCentralData(context);
-        final String s = context.getResources().getString(R.string.st_msg_central_hint_no_notify);
         for (CentralHintMessage item : data) {
             if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_NEW_GIFT_NOTIFY)) {
                 item.count = unread.unreadNewGiftCount;
                 item.content = !TextUtils.isEmpty(unread.newestGift) ?
-                        unread.newestGift : s;
+                        unread.newestGift : context.getResources().getString(R.string.st_msg_central_hint_no_notify);
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_COMMENT)) {
                 item.count = unread.unreadCommentCount;
                 item.content = !TextUtils.isEmpty(unread.newestComment) ?
-                        unread.newestComment : s;
+                        unread.newestComment : context.getResources().getString(R.string.st_msg_central_hint_no_reply);
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_SYSTEM)) {
                 item.count = unread.unreadSystemCount;
                 item.content = !TextUtils.isEmpty(unread.newestSystem) ?
-                        unread.newestSystem : s;
+                        unread.newestSystem : context.getResources().getString(R.string.st_msg_central_hint_no_notify);
                 mMsgCentralTobeRefresh = true;
             } else if (item.code.equalsIgnoreCase(KeyConfig.CODE_MSG_ADMIRE)) {
                 item.count = unread.unreadAdmireCount;
-                item.content = !TextUtils.isEmpty(unread.newestAdmire) ?
-                        unread.newestAdmire :
-                        (String.format(context.getResources().getString(R.string.st_msg_central_get_a_admire), s));
+                item.content = TextUtils.isEmpty(unread.newestAdmire) ?
+                        context.getResources().getString(R.string.st_msg_central_admire) :
+                        (String.format(context.getResources().getString(R.string.st_msg_central_get_a_admire),
+                                unread.newestAdmire));
                 mMsgCentralTobeRefresh = true;
             }
         }
@@ -390,7 +399,7 @@ public class Global {
                 mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_ADMIRE,
                         R.drawable.ic_msg_admire,
                         context.getResources().getString(R.string.st_msg_central_admire),
-                        context.getResources().getString(R.string.st_msg_central_hint_no_notify),
+                        context.getResources().getString(R.string.st_msg_central_hint_no_admire),
                         0));
                 mMsgCentralData.add(new CentralHintMessage(KeyConfig.CODE_MSG_COMMENT,
                         R.drawable.ic_msg_comment,
@@ -423,19 +432,43 @@ public class Global {
     private static ImageSpan mBeanSpan;
     private static int mGreyColor;
     private static int mRedColor;
+    private static StrikethroughSpan mStrikeSpan;
 
     public static ImageSpan getScoreSpan(Context context) {
         if (mScoreSpan == null) {
-            mScoreSpan = new ImageSpan(context, R.drawable.ic_score);
+            mScoreSpan = new LineCenterImageSpan(context, R.drawable.ic_score);
         }
         return mScoreSpan;
     }
 
     public static ImageSpan getBeanSpan(Context context) {
         if (mBeanSpan == null) {
-            mBeanSpan = new ImageSpan(context, R.drawable.ic_bean);
+            mBeanSpan = new LineCenterImageSpan(context, R.drawable.ic_bean);
         }
         return mBeanSpan;
+    }
+
+    public static StrikethroughSpan getStrikeSpan() {
+        if (mStrikeSpan == null) {
+            mStrikeSpan = new StrikethroughSpan() {
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    ds.setStrikeThruText(true);
+                    try {
+                        Field f = ds.getClass().getDeclaredField("underlineThickness");
+                        if (f != null) {
+                            f.setAccessible(true);
+                            f.set(ds, 10.0f);
+                        }
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        }
+        return mStrikeSpan;
     }
 
     public static int getRedColor(Context context) {
@@ -459,6 +492,5 @@ public class Global {
         }
         return mGreyColor;
     }
-
 
 }

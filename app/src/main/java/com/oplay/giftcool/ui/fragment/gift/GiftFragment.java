@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.google.gson.reflect.TypeToken;
 import com.oplay.giftcool.R;
-import com.oplay.giftcool.adapter.GiftAdapterNew;
+import com.oplay.giftcool.adapter.GiftAdapter;
 import com.oplay.giftcool.adapter.itemdecoration.DividerItemDecoration;
 import com.oplay.giftcool.adapter.layoutmanager.SnapLinearLayoutManager;
 import com.oplay.giftcool.config.AppDebugConfig;
@@ -39,6 +39,7 @@ import com.oplay.giftcool.util.ThreadUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -63,11 +64,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     public static final int POS_FREE = 5;
 
     private RecyclerView rvContainer;
-    private GiftAdapterNew mAdapter;
+    private GiftAdapter mAdapter;
 
     // ‘猜你喜欢’ 分离出来的数据
     private IndexGift mGiftData;
     private ArrayList<IndexGiftLike> mLikeData;
+    private boolean hasRequestFromNet = false;
 
     public static GiftFragment newInstance() {
         return new GiftFragment();
@@ -129,7 +131,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 llm.getOrientation());
         rvContainer.setLayoutManager(llm);
         rvContainer.addItemDecoration(dividerItemDecoration);
-        mAdapter = new GiftAdapterNew(getActivity());
+        mAdapter = new GiftAdapter(getActivity());
         mAdapter.setOnBannerItemClickListener(this);
         rvContainer.setAdapter(mAdapter);
         readLikeCacheData();
@@ -142,9 +144,9 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                 mGiftData = (IndexGift) s;
                 mLikeData = mGiftData.like;
                 updateData(mGiftData);
-                mViewManager.showContent();
             }
         }
+        mNeedHideToast = true;
     }
 
     /**
@@ -176,6 +178,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         }
 
         ReqIndexGift data = new ReqIndexGift();
+        data.appNames = new HashSet<>();
+        data.page = PAGE_FIRST;
         JsonReqBase<ReqIndexGift> reqData = new JsonReqBase<ReqIndexGift>(data);
         mCallRefresh = Global.getNetEngine().obtainIndexGift(reqData);
         mCallRefresh.enqueue(new Callback<JsonRespBase<IndexGift>>() {
@@ -192,10 +196,13 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                         // 获取数据成功
                         refreshSuccessEnd();
                         IndexGift data = response.body().getData();
+                        data.like = mLikeData;
                         updateData(data);
                         mLastPage = PAGE_FIRST;
                         FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_INDEX, data);
-                        requestLikeData();
+                        if (!hasRequestFromNet) {
+                            requestLikeData();
+                        }
                         return;
                     }
                 }
@@ -220,7 +227,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                     @Override
                     public void doCallBack(ArrayList<IndexGiftLike> data) {
                         AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "加载的猜你喜欢数据: " + data);
-                        mLikeData = data;
+                        if (data != null && data.size() > 0) {
+                            for (int i = data.size() - 1; i > 3; i--) {
+                                data.remove(i);
+                            }
+                            mLikeData = data;
+                        }
                     }
                 }, new TypeToken<ArrayList<IndexGiftLike>>() {
                 }.getType());
@@ -232,18 +244,19 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
 
                     @Override
                     public void doCallBack(IndexGift data) {
-                        if (mLikeData == null) {
-                            if (data != null) {
-                                // 获取数据成功
-                                refreshSuccessEnd();
-                                updateData(data);
-                                mLastPage = PAGE_FIRST;
-                            } else {
-                                refreshFailEnd();
-                            }
+                        if (data != null) {
+                            // 获取数据成功
+                            refreshSuccessEnd();
+                            updateData(data);
+                            mLastPage = PAGE_FIRST;
                         } else {
-                            refreshCacheFailEnd();
+                            if (mLikeData == null) {
+                                refreshFailEnd();
+                            } else {
+                                refreshCacheFailEnd();
+                            }
                         }
+
                     }
                 }, IndexGift.class);
     }
@@ -252,7 +265,8 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     @SuppressWarnings("unchecked")
     public void updateData(IndexGift data) {
         if (data == null) {
-            if (mData == null) {
+            if (mData == null || mData.isEmpty()) {
+                mHasData = false;
                 mViewManager.showErrorRetry();
             } else {
                 mAdapter.updateData(mData);
@@ -291,42 +305,47 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
         }
 
         int pos = 2;
+        if (mLikeData != null) {
+            data.like = mLikeData;
+        }
         if (data.like != null && !data.like.isEmpty()) {
-            mData.add(GiftAdapterNew.TYPE_HEADER_LIKE);
-            mData.addAll(mLikeData);
+            mData.add(GiftAdapter.TYPE_HEADER_LIKE);
+            mData.addAll(data.like);
             mPosArray.append(POS_LIKE, pos);
             pos += data.like.size() + 1;
         }
         if (data.limit != null && !data.limit.isEmpty()) {
-            mData.add(GiftAdapterNew.TYPE_HEADER_LIMIT);
+            mData.add(GiftAdapter.TYPE_HEADER_LIMIT);
             mData.addAll(data.limit);
             mPosArray.append(POS_LIMIT, pos);
             pos += data.limit.size() + 1;
         }
         if (data.free != null && !data.free.isEmpty()) {
-            mData.add(GiftAdapterNew.TYPE_HEADER_FREE);
+            mData.add(GiftAdapter.TYPE_HEADER_FREE);
             mData.addAll(data.free);
-            mPosArray.append(POS_NEW, pos);
+            mPosArray.append(POS_FREE, pos);
             pos += data.free.size() + 1;
         }
         if (data.news != null && !data.news.isEmpty()) {
-            mData.add(GiftAdapterNew.TYPE_HEADER_NEW);
+            mData.add(GiftAdapter.TYPE_HEADER_NEW);
             mData.addAll(data.news);
             mPosArray.append(POS_NEW, pos);
         }
-        mViewManager.showContent();
+        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "show 4, mData = " + mData);
         mAdapter.updateData(mData);
+        mViewManager.showContent();
     }
 
     private boolean mIsLoadLike = false;
 
     private void requestLikeData() {
-        if (!mIsLoadLike) {
+        if (!mIsLoadLike && !hasRequestFromNet) {
             mIsLoadLike = true;
             JsonReqBase<ReqGiftLike> req = new JsonReqBase<>();
             req.data = new ReqGiftLike();
             req.data.page = 1;
             req.data.appNames = Global.getInstalledAppNames();
+            req.data.pageSize = 4;
             req.data.packageName = Global.getInstalledPackageNames();
             Global.getNetEngine().obtainGiftLike(req)
                     .enqueue(new Callback<JsonRespBase<GiftLikeList>>() {
@@ -343,14 +362,23 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
                                 if (response.body() != null && response.body().isSuccess()) {
                                     refreshSuccessEnd();
                                     GiftLikeList data = response.body().getData();
-                                    Global.setInstalledPackageNames(data.packageNames);
                                     Global.setInstalledAppNames(data.appNames);
                                     mLikeData = data.data;
+
+                                    HashSet<String> arr = new HashSet<String>();
+                                    for (IndexGiftLike o : mLikeData) {
+                                        arr.add(o.packName);
+                                    }
+                                    Global.setInstalledPackageNames(arr);
+
+                                    hasRequestFromNet = true;
                                     AppDebugConfig.d(AppDebugConfig.TAG_FRAG, "请求到猜你喜欢数据: " + mLikeData);
                                     FileUtil.writeCacheByKey(getContext(), NetUrl.GIFT_GET_ALL_LIKE,
                                             mLikeData, true);
-                                    mGiftData.like = mLikeData;
-                                    updateData(mGiftData);
+                                    if (mGiftData != null) {
+                                        mGiftData.like = mLikeData;
+                                        updateData(mGiftData);
+                                    }
                                 }
                             }
                         }
@@ -425,7 +453,12 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             if (mIsSwipeRefresh) {
                 return;
             }
-            onRefresh();
+            ThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onRefresh();
+                }
+            });
             return;
         }
         if (action == ObserverManager.STATUS.GIFT_UPDATE_LIKE) {
@@ -450,6 +483,7 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
     }
 
     private SparseIntArray mPosArray = new SparseIntArray();
+
     /**
      * 移到到指定位置
      *

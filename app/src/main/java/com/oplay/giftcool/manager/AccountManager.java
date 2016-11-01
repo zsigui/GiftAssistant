@@ -39,6 +39,7 @@ import net.youmi.android.libs.common.global.Global_SharePreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -274,9 +275,9 @@ public class AccountManager implements OnFinishListener {
     }
 
     public boolean judgeIsSessionFailed(JsonRespBase response) {
+        // 由于部分地方 10032 可能是不规范输入引起，故去掉该判断
         if (response != null
-                && (response.getCode() == NetStatusCode.ERR_UN_LOGIN
-                || response.getCode() == NetStatusCode.ERR_BAD_USER_SERVER)) {
+                && (response.getCode() == NetStatusCode.ERR_UN_LOGIN)) {
             notifyUserAll(null);
             return true;
         }
@@ -442,6 +443,36 @@ public class AccountManager implements OnFinishListener {
         }
     }
 
+    public void obtainPushTopics() {
+        if (!NetworkUtil.isAvailable(mContext)) {
+            return;
+        }
+        if (!AccountManager.getInstance().isLogin()) {
+            return;
+        }
+        Global.getNetEngine().obtainPushTopics(new JsonReqBase<Void>())
+                .enqueue(new Callback<JsonRespBase<HashSet<String>>>() {
+                    @Override
+                    public void onResponse(Call<JsonRespBase<HashSet<String>>> call,
+                                           Response<JsonRespBase<HashSet<String>>> response) {
+                        if (call.isCanceled())  {
+                            return;
+                        }
+                        if (response != null && response.isSuccessful()
+                                && response.body() != null && response.body().isSuccess()) {
+                            Global.sTopics = response.body().getData();
+                            PushMessageManager.getInstance().subscribeTopic(mContext, Global.sTopics);
+                        }
+                        AppDebugConfig.warnResp(AppDebugConfig.TAG_ENCRYPT, response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonRespBase<HashSet<String>>> call, Throwable t) {
+                        AppDebugConfig.e(AppDebugConfig.TAG_ENCRYPT, t);
+                    }
+                });
+    }
+
     /**
      * 进行更新用户登录Session的网络请求声明
      */
@@ -562,6 +593,8 @@ public class AccountManager implements OnFinishListener {
 //                }
 //            });
 //        }
+        if (Global.sTopics != null)
+            PushMessageManager.getInstance().unSubscribeTopic(mContext, Global.sTopics);
         AccountManager.getInstance().notifyUserAll(null);
         SocketIOManager.getInstance().close();
     }

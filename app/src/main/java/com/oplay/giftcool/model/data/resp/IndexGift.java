@@ -17,7 +17,7 @@ public class IndexGift implements Serializable {
     public ArrayList<String> icons;
 
     @SerializedName("zero")
-    public ArrayList<IndexGiftLike> free;
+    public ArrayList<IndexGiftNew> free;
 
     @SerializedName("like")
     public ArrayList<IndexGiftLike> like;

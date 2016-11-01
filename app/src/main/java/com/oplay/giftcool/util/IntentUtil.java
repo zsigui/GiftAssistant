@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.config.AppConfig;
+import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.config.ConstString;
 import com.oplay.giftcool.config.KeyConfig;
 import com.oplay.giftcool.config.WebViewUrl;
@@ -559,6 +560,7 @@ public class IntentUtil {
      * 处理额外信息类型为一(进行页面跳转)的数据
      */
     public static void handleJumpInfo(Context context, TaskInfoOne taskInfo) {
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "id = " + taskInfo.id + ", action = " + taskInfo.action + ", equal = " + ("GiftDetail".equalsIgnoreCase(taskInfo.action)));
         final String ACTION_PREFIX = AppConfig.PACKAGE_NAME() + ".action.";
         if ("GameDetail".equalsIgnoreCase(taskInfo.action)) {
             IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));

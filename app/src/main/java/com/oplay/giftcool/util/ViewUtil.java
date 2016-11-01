@@ -1,5 +1,6 @@
 package com.oplay.giftcool.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -9,7 +10,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.text.style.TextAppearanceSpan;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
  * @date 2015/12/28
  */
 public class ViewUtil {
+    @SuppressWarnings("unchecked")
     public static <V extends View> V getViewById(View v, @IdRes int id) {
         View child = v.findViewById(id);
         return (child != null ? (V) child : null);
@@ -92,6 +93,7 @@ public class ViewUtil {
     /**
      * 设置礼包'￥5.00'的显示方式
      */
+    @SuppressLint("NewApi")
     public static void siteValueUI(TextView tv, float value, boolean delete) {
         if (tv == null) {
             return;
@@ -112,12 +114,11 @@ public class ViewUtil {
 //            ((DeletedTextView) tv).setPaint(getColor(context, R.color.co_btn_grey_pressed), 3);
 //        }
 //        tv.setVisibility(View.VISIBLE);
-        Context context = tv.getContext();
-        final String s = String.format(Locale.CHINA, "价值: %.0f元", value);
+        final String s = String.format(Locale.CHINA, "原价值: [gold] %.0f", value * 100);
         SpannableString ss = new SpannableString(s);
-        ss.setSpan(new TextAppearanceSpan(context, R.style.DefaultTextView_ItemSubTitle_S1_S2),
-                4, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        tv.setText(ss, TextView.BufferType.NORMAL);
+        ss.setSpan(Global.getScoreSpan(tv.getContext()), 5, 11, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(Global.getStrikeSpan(), 12, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        tv.setText(ss, TextView.BufferType.SPANNABLE);
         tv.setVisibility(View.VISIBLE);
     }
 
@@ -128,8 +129,8 @@ public class ViewUtil {
         if (tv == null) {
             return;
         }
-        final ImageSpan DRAWER_GOLD = new ImageSpan(tv.getContext(), R.drawable.ic_score);
-        final ImageSpan DRAWER_BEAN = new ImageSpan(tv.getContext(), R.drawable.ic_bean);
+        final ImageSpan DRAWER_GOLD = Global.getScoreSpan(tv.getContext());
+        final ImageSpan DRAWER_BEAN = Global.getBeanSpan(tv.getContext());
         tv.setVisibility(View.VISIBLE);
         switch (type) {
             case GiftTypeUtil.PAY_TYPE_BEAN: {

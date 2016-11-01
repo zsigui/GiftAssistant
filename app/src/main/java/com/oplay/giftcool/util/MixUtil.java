@@ -192,6 +192,9 @@ public class MixUtil {
     public static boolean isInMainProcess(Context context) {
         ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
         List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        if (processInfos == null) {
+            return true;
+        }
         String mainProcessName = context.getPackageName();
         int myPid = android.os.Process.myPid();
         for (ActivityManager.RunningAppProcessInfo info : processInfos) {
@@ -265,6 +268,7 @@ public class MixUtil {
         AccountManager.getInstance().notifyUserAll(um);
         SocketIOManager.getInstance().connectOrReConnect(true);
         ScoreManager.getInstance().initTaskState();
+        AccountManager.getInstance().obtainPushTopics();
 
         Global.sHasShowedSignInHint = Global.sHasShowedLotteryHint = false;
         if (context != null) {

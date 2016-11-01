@@ -1,5 +1,7 @@
 package com.oplay.giftcool.ext.retrofit2.encrypt;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.oplay.giftcool.config.AppDebugConfig;
 import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
@@ -31,6 +33,10 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     public T convert(ResponseBody value) throws IOException {
         try {
             String json = NetDataEncrypt.getInstance().decrypt(value.bytes(), 0);
+
+            if (TextUtils.isEmpty(json))
+                return null;
+
             if (AppDebugConfig.IS_DEBUG) {
                 AppDebugConfig.w(AppDebugConfig.TAG_ENCRYPT, "url : " + requestUrl);
                 if (json.length() > 3500) {
