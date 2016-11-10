@@ -331,7 +331,6 @@ public class GiftFragment extends BaseFragment_Refresh implements OnItemClickLis
             mData.addAll(data.news);
             mPosArray.append(POS_NEW, pos);
         }
-        AppDebugConfig.d(AppDebugConfig.TAG_DEBUG_INFO, "show 4, mData = " + mData);
         mAdapter.updateData(mData);
         mViewManager.showContent();
     }

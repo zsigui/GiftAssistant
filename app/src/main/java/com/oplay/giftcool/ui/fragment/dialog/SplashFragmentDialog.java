@@ -144,10 +144,12 @@ public class SplashFragmentDialog extends DialogFragment implements CallbackList
         }
         if (b == null) {
             b = BitmapFactory.decodeResource(getResources(), R.drawable.pic_splash_2016);
+            mCurrentImg = "";
         }
 //        prefixTag = (adInfo != null && adInfo.showPass) ? "跳过" : "剩余";
         showPass(adInfo);
-        remainTime = (adInfo == null || adInfo.displayTime < DEFAULT_AD_TIME) ? DEFAULT_AD_TIME : adInfo.displayTime;
+//        remainTime = (adInfo == null || adInfo.displayTime < DEFAULT_AD_TIME) ? DEFAULT_AD_TIME : adInfo.displayTime;
+        remainTime = (adInfo == null ? DEFAULT_AD_TIME : adInfo.displayTime);
         ivSplash.setImageBitmap(b);
     }
 
@@ -238,10 +240,12 @@ public class SplashFragmentDialog extends DialogFragment implements CallbackList
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ivAdLoad.setImageBitmap(data);
-                    showPass(newInfo);
-                    disappearView(ivSplash);
-                    mCurrentImg = newInfo.img;
+                    if (ivAdLoad != null) {
+                        ivAdLoad.setImageBitmap(data);
+                        showPass(newInfo);
+                        disappearView(ivSplash);
+                        mCurrentImg = newInfo.img;
+                    }
                 }
             });
         }

@@ -22,6 +22,7 @@
                     android:layout_height = "@dimen/di_post_detail_icon_diameter"
                     android:layout_marginRight = "@dimen/di_list_item_gap_normal"
                     app:riv_oval = "true"
+                    android:scaleType = "centerCrop"
                     android:src = "@drawable/ic_avatar_default" />
 
             <TextView

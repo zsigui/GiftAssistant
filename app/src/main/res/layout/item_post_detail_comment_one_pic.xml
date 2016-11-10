@@ -21,6 +21,7 @@
             android:layout_height="@dimen/di_post_detail_icon_diameter"
             android:layout_marginRight="@dimen/di_list_item_gap_normal"
             android:src="@drawable/ic_task_upload_avator"
+            android:scaleType = "centerCrop"
             app:riv_oval="true"/>
 
         <TextView

@@ -246,9 +246,9 @@ public class AsyncTask_InitApplication extends AsyncTask<Object, Integer, Void> 
                     }
                 }
             }
-            AppDebugConfig.warnResp(AppDebugConfig.TAG_APP, response);
+            AppDebugConfig.warnResp(AppDebugConfig.TAG_DEBUG_INFO, response);
         } catch (Throwable e) {
-            AppDebugConfig.w(AppDebugConfig.TAG_APP, e);
+            AppDebugConfig.w(AppDebugConfig.TAG_DEBUG_INFO, e);
         }
         return false;
     }
