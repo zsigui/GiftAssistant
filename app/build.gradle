@@ -114,6 +114,8 @@ android {
 	dexOptions{
 //		incremental = true;
 		javaMaxHeapSize "2G"
+		// 如果不使用该状态需要设置 multidex 进行分包
+		jumboMode true
 	}
 
 	useLibrary 'org.apache.http.legacy'
@@ -145,14 +147,22 @@ android {
 //}
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile fileTree(include: ['*.jar'], dir: 'libs')
 	testCompile 'junit:junit:4.12'
-	compile 'com.android.support:appcompat-v7:23.1.1'
-	compile 'com.android.support:recyclerview-v7:23.1.1'
+	compile "com.android.support:appcompat-v7:${SUPPORT_VER}"
+	compile "com.android.support:recyclerview-v7:${SUPPORT_VER}"
+	compile("com.android.support:design:${SUPPORT_VER}") {
+		exclude group: 'android.support', module: 'support-v4'
+		exclude group: 'android.support', module: 'appcompat-v7'
+	}
+	compile("com.android.support:palette-v7:${SUPPORT_VER}") {
+		exclude group: 'android.support', module: 'support-v4'
+		exclude group: 'android.support', module: 'appcompat-v7'
+	}
 	compile 'com.squareup.retrofit2:retrofit:2.0.0'
-//	compile 'cn.pedant.sweetalert:library:1.3'
+	//	compile 'cn.pedant.sweetalert:library:1.3'
 	compile 'com.nineoldandroids:library:2.4.0'
-//	compile 'com.google.code.gson:gson:2.7.0'
+	//	compile 'com.google.code.gson:gson:2.7.0'
 	compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 	compile 'com.nolanlawson:supersaiyan-scrollview:1.2.0@aar'
 	compile 'com.makeramen:roundedimageview:2.2.1'
@@ -165,12 +175,12 @@ dependencies {
 		// excluding org.json which is provided by Android
 		exclude group: 'org.json', module: 'json'
 	}
-//	debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1' // or 1.4-beta1
-//	releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
-//	testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
+	//	debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1' // or 1.4-beta1
+	//	releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
+	//	testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
 	compile project(':third:ouwansdk')
 	compile project(':third:convenientbanner')
-//	compile project(':third:viewserver')
-    compile 'com.alipay.euler:andfix:0.5.0@aar'
-//	compile 'com.dodola:rocoo:1.0@aar'
+	//	compile project(':third:viewserver')
+	compile 'com.alipay.euler:andfix:0.5.0@aar'
+	//	compile 'com.dodola:rocoo:1.0@aar'
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:orientation = "vertical"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background = "@drawable/shape_rect_post_detail_vote_bottom" >
+
+    <TextView
+            android:id = "@+id/btn_vote"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:gravity = "center"
+            android:textColor = "@color/co_btn_green"
+            android:paddingLeft = "@dimen/di_list_item_gap_big"
+            android:paddingRight = "@dimen/di_list_item_gap_big"
+            android:paddingTop = "@dimen/di_list_item_gap_normal"
+            android:paddingBottom = "@dimen/di_list_item_gap_normal"
+            android:lineSpacingExtra = "@dimen/di_line_space_extra_big"
+            android:background = "@drawable/selector_opacity_05"
+            tools:text = "投票" />
+</LinearLayout >

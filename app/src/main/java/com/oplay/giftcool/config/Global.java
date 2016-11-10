@@ -14,6 +14,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.oplay.giftcool.AssistantApp;
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.engine.NetEngine;
+import com.oplay.giftcool.engine.NoEncryptEngine;
+import com.oplay.giftcool.ext.retrofit2.DefaultGsonConverterFactory;
 import com.oplay.giftcool.model.data.resp.message.CentralHintMessage;
 import com.oplay.giftcool.model.data.resp.message.MessageCentralUnread;
 import com.oplay.giftcool.ui.widget.LineCenterImageSpan;
@@ -25,6 +27,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.Executor;
+
+import retrofit2.Retrofit;
 
 /**
  * Created by zsigui on 15-12-16.
@@ -97,6 +101,10 @@ public class Global {
      * Retrofit网络请求接口引擎
      */
     private static NetEngine sNetEngine;
+    /**
+     * 获取非加密请求接口引擎
+     */
+    private static NoEncryptEngine sNoEncryptEngine;
 
     /**
      * ImageLoader默认图片加载配置
@@ -126,6 +134,7 @@ public class Global {
     public static boolean sHasShowedSignInHint = false;
 
     private static SparseIntArray sLikeNewTime;
+    public static String sCookie = "";
 
     public static SparseIntArray getLikeNewTimeArray() {
         if (sLikeNewTime == null) {
@@ -139,7 +148,7 @@ public class Global {
      */
     public static NetEngine getNetEngine() {
         if (sNetEngine == null) {
-            sNetEngine = AssistantApp.getInstance().getRetrofit().create(NetEngine.class);
+            sNetEngine = AssistantApp.getInstance().getRetrofit(false).create(NetEngine.class);
         }
         return sNetEngine;
     }
@@ -148,9 +157,32 @@ public class Global {
      * 重置网络请求引擎，测试的使用重新初始化会调用
      */
     public static void resetNetEngine() {
-        if (sNetEngine == null || AppConfig.TEST_MODE) {
-            sNetEngine = AssistantApp.getInstance().getRetrofit().create(NetEngine.class);
+        if (sNetEngine != null || AppConfig.TEST_MODE) {
+            sNetEngine = AssistantApp.getInstance().getRetrofit(true).create(NetEngine.class);
         }
+        if (sNoEncryptEngine != null && AppConfig.TEST_MODE) {
+            sNoEncryptEngine = new Retrofit.Builder()
+                    .baseUrl(NetUrl.getBaseUrl())
+                    .client(AssistantApp.getInstance().newHttpClient(true))
+                    .addConverterFactory(DefaultGsonConverterFactory.create(AssistantApp.getInstance().getGson()))
+                    .build()
+                    .create(NoEncryptEngine.class);
+        }
+    }
+
+    /**
+     * 获取非加密网络请求引擎
+     */
+    public static NoEncryptEngine getNoEncryptEngine() {
+        if (sNoEncryptEngine == null) {
+            sNoEncryptEngine = new Retrofit.Builder()
+                    .baseUrl(NetUrl.getBaseUrl())
+                    .client(AssistantApp.getInstance().newHttpClient(true))
+                    .addConverterFactory(DefaultGsonConverterFactory.create(AssistantApp.getInstance().getGson()))
+                    .build()
+                    .create(NoEncryptEngine.class);
+        }
+        return sNoEncryptEngine;
     }
 
     /**

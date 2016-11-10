@@ -153,7 +153,7 @@ public class NetUrl {
     /**
      * 游戏详情
      */
-    public static final String GAME_GET_DETAIL = "app_detail";
+    public static final String GAME_GET_DETAIL = "app_detail_web/";
 
     /**
      * 获取某类游戏
@@ -171,6 +171,11 @@ public class NetUrl {
      * 获取活动列表数据
      */
     public static final String POST_GET_LIST = "activity/list";
+
+    /**
+     * 获取活动详情数据
+     */
+    public static final String POST_GET_DETAIL = "activity/detail_web";
 
     /**
      * 获取活动回复提交的token
@@ -191,6 +196,21 @@ public class NetUrl {
      * 获取新游开测表数据
      */
     public static final String POST_GET_OPEN_TEST = "new_game_list";
+
+    /**
+     * 获取评论数据列表
+     */
+    public static final String COMMENT_GET_DETAIL = "activity/comment_list_web";
+
+    /**
+     * 设置点赞状态
+     */
+    public static final String COMMENT_SET_ADMIRE = "activity/add_like_web";
+
+    /**
+     * 进行投票
+     */
+    public static final String POST_SET_VOTE = "activity/add_vote_web";
 
 
 	/* 用户接口 */

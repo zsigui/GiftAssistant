@@ -94,7 +94,7 @@ public class BannerTypeUtil {
                 case ACTION_POST_DETAIL:
                     IndexPostNew post_p = AssistantApp.getInstance().getGson().fromJson(banner.extData, IndexPostNew
                             .class);
-                    IntentUtil.jumpPostDetail(context, post_p.id, "banner");
+                    IntentUtil.jumpPostDetail(context, post_p.id);
                     break;
                 case ACTION_UPGRADE:
                     // 添加于1300

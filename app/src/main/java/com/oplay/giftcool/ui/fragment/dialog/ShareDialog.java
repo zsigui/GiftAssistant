@@ -2,7 +2,7 @@ package com.oplay.giftcool.ui.fragment.dialog;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.oplay.giftcool.R;
 import com.oplay.giftcool.adapter.base.BaseRVAdapter;
-import com.oplay.giftcool.adapter.layoutmanager.FixHeightGridLayoutManager;
 import com.oplay.giftcool.ui.fragment.base.BaseFragment_Dialog_NoButton;
 
 /**
@@ -42,8 +41,8 @@ public class ShareDialog extends BaseFragment_Dialog_NoButton {
 	@Override
 	protected void bindViewWithData(View contentView, @Nullable Bundle savedInstanceState) {
 		final RecyclerView recyclerView = (RecyclerView) contentView.findViewById(R.id.rv_dialog_list);
-		RecyclerView.LayoutManager gridLayoutManager = new FixHeightGridLayoutManager(
-				getContext(), 2, LinearLayoutManager.VERTICAL, false);
+		RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(
+				getContext(), 2, GridLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(gridLayoutManager);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);

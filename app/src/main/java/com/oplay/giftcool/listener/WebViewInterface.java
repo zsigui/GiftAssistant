@@ -4,7 +4,6 @@ import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -20,18 +19,14 @@ import com.oplay.giftcool.manager.DialogManager;
 import com.oplay.giftcool.manager.PayManager;
 import com.oplay.giftcool.model.data.resp.IndexGameNew;
 import com.oplay.giftcool.model.data.resp.IndexGiftNew;
-import com.oplay.giftcool.model.data.resp.IndexPostNew;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoTwo;
 import com.oplay.giftcool.model.json.base.JsonReqBase;
 import com.oplay.giftcool.model.json.base.JsonRespBase;
 import com.oplay.giftcool.sharesdk.ShareSDKManager;
 import com.oplay.giftcool.ui.activity.MainActivity;
-import com.oplay.giftcool.ui.activity.PostDetailActivity;
 import com.oplay.giftcool.ui.fragment.game.GameDetailFragment;
 import com.oplay.giftcool.ui.fragment.gift.GiftFragment;
-import com.oplay.giftcool.ui.fragment.postbar.PostCommentFragment;
-import com.oplay.giftcool.ui.fragment.postbar.PostDetailFragment;
 import com.oplay.giftcool.util.IntentUtil;
 import com.oplay.giftcool.util.MixUtil;
 import com.oplay.giftcool.util.NetworkUtil;
@@ -475,67 +470,6 @@ public class WebViewInterface extends Observable {
             }
         });
         return RET_SUCCESS;
-    }
-
-    /**
-     * 设置回复谁 <br /> <br />
-     * <p/>
-     * Add in 1104
-     *
-     * @param commentId 回复对象ID
-     * @param name      回复对象名称
-     * @return
-     */
-    @JavascriptInterface
-    public int setReplyTo(final int commentId, final String name) {
-        if (mHostFragment != null) {
-            ThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mHostFragment instanceof PostCommentFragment) {
-                        PostCommentFragment fragment = (PostCommentFragment) mHostFragment;
-                        fragment.setReplyTo(commentId, name);
-                    } else if (mHostFragment instanceof PostDetailFragment) {
-                        ((PostDetailFragment) mHostFragment).toReply();
-                    }
-                }
-            });
-            return RET_SUCCESS;
-        }
-        return RET_INTERNAL_ERR;
-    }
-
-
-    /**
-     * 显示活动详情页面的分享按钮 <br /> <br />
-     * <p/>
-     * Add in 1108
-     *
-     * @param show 是否显示
-     * @param data 分享的数据
-     * @return
-     */
-    @JavascriptInterface
-    public int showActivityShareBtn(final boolean show, final String data) {
-        try {
-            final IndexPostNew o = TextUtils.isEmpty(data) ?
-                    null : AssistantApp.getInstance().getGson().fromJson(data, IndexPostNew.class);
-            if (mHostActivity != null) {
-                if (mHostActivity instanceof PostDetailActivity) {
-                    ThreadUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((PostDetailActivity) mHostActivity).showShareBtn(show ? View.VISIBLE : View.GONE, o);
-                        }
-                    });
-                    return RET_SUCCESS;
-                }
-            }
-            return RET_INTERNAL_ERR;
-        } catch (Throwable t) {
-            AppDebugConfig.d(AppDebugConfig.TAG_WEBVIEW, t);
-            return RET_PARAM_ERR;
-        }
     }
 
     /**

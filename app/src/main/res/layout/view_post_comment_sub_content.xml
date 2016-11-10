@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android = "http://schemas.android.com/apk/res/android"
+          style = "@style/DefaultTextView.Header"
+          android:singleLine = "false"
+          android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+          android:maxLines = "5"
+          android:lineSpacingExtra = "@dimen/di_line_space_extra_big"
+          android:ellipsize = "end" />

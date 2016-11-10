@@ -15,79 +15,88 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter implements O
 
     protected static final int TAG_POSITION = 0x1234478f;
 
-	protected ArrayList<T> mData;
-	protected OnItemClickListener<T> mListener;
-	protected Context mContext;
+    protected ArrayList<T> mData;
+    protected OnItemClickListener<T> mListener;
+    protected Context mContext;
 
-	public BaseRVAdapter(Context context) {
-		this(context, null);
-	}
+    public BaseRVAdapter(Context context) {
+        this(context, null);
+    }
 
-	public BaseRVAdapter(Context context, ArrayList<T> data) {
-		this(context, data, null);
-	}
+    public BaseRVAdapter(Context context, ArrayList<T> data) {
+        this(context, data, null);
+    }
 
-	public BaseRVAdapter(Context context, ArrayList<T> data, OnItemClickListener<T> listener) {
-		mData = data;
-		mListener = listener;
-		mContext = context;
-	}
+    public BaseRVAdapter(Context context, ArrayList<T> data, OnItemClickListener<T> listener) {
+        mData = data;
+        mListener = listener;
+        mContext = context;
+    }
 
-	public T getItem(int position) {
-		return getItemCount() <= position ? null : mData.get(position);
-	}
+    public T getItem(int position) {
+        return (position < getHeaderCount() || getItemCount() <= position) ?
+                null : mData.get(position - getHeaderCount());
+    }
 
-	@Override
-	public int getItemCount() {
-		return mData == null? 0 : mData.size();
-	}
+    @Override
+    public int getItemCount() {
+        return getHeaderCount() + (mData == null ? 0 : mData.size());
+    }
 
-	public void setData(ArrayList<T> data) {
-		mData = data;
-	}
+    public void setData(ArrayList<T> data) {
+        mData = data;
+    }
 
-	public void setListener(OnItemClickListener<T> listener) {
-		mListener = listener;
-	}
+    public void setListener(OnItemClickListener<T> listener) {
+        mListener = listener;
+    }
 
-	/**
-	 * 更新数据并通知界面刷新，需要传入数据非null和非空
-	 */
-	public void updateData(ArrayList<T> data) {
+    /**
+     * 更新数据并通知界面刷新，需要传入数据非null和非空
+     */
+    public void updateData(ArrayList<T> data) {
 //		if (data == null || data.size() == 0) {
 //			return;
 //		}
-		this.mData = data;
-		notifyDataSetChanged();
-	}
+        this.mData = data;
+        notifyDataSetChanged();
+    }
 
-	/**
-	 * 通知更新更多数据，出发{}
-	 */
-	public void addMoreData(ArrayList<T> moreData) {
-		if (moreData == null ||  moreData.isEmpty()) {
-			return;
-		}
-		int start = 0;
-		if (mData != null) {
-			start = mData.size();
-			mData.addAll(moreData);
-		} else {
-			mData = moreData;
-		}
-		notifyItemRangeInserted(start, moreData.size());
-	}
+    /**
+     * 通知更新更多数据
+     */
+    public void addMoreData(ArrayList<T> moreData) {
+        if (moreData == null || moreData.isEmpty()) {
+            return;
+        }
+        int start = 0;
+        if (mData != null) {
+            start = mData.size() + getHeaderCount();
+            mData.addAll(moreData);
+        } else {
+            mData = moreData;
+        }
+        notifyItemRangeInserted(start, moreData.size());
+    }
 
-	@Override
-	public void release() {
-		if (mData != null) {
-			mData = null;
-		}
-		if (mListener != null) {
-			mListener = null;
-		}
-		if (mContext != null) {
-			mContext = null;
-		}
-	}
+    @Override
+    public void release() {
+        if (mData != null) {
+            mData = null;
+        }
+        if (mListener != null) {
+            mListener = null;
+        }
+        if (mContext != null) {
+            mContext = null;
+        }
+    }
+
+    public int getHeaderCount() {
+        return 0;
+    }
+
+    public ArrayList<T> getData() {
+        return mData;
+    }
 }

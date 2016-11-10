@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools" >
+
+    <android.support.design.widget.CoordinatorLayout
+            android:orientation = "vertical"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent" >
+
+        <android.support.design.widget.AppBarLayout
+                android:id = "@+id/appbar"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:background = "@color/co_transparent" >
+
+            <LinearLayout
+                    android:id = "@+id/rl_header"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:orientation = "horizontal"
+                    android:padding = "@dimen/di_list_item_gap_big"
+                    app:layout_scrollFlags = "scroll|enterAlways" >
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                        android:id = "@+id/iv_icon"
+                        android:layout_width = "@dimen/di_icon_diameter"
+                        android:layout_height = "@dimen/di_icon_diameter"
+                        android:scaleType = "centerCrop"
+                        app:riv_border_color = "@color/co_stroke_bg"
+                        app:riv_border_width = "@dimen/di_icon_border_size"
+                        app:riv_corner_radius = "@dimen/di_icon_radius"
+                        android:layout_marginRight = "@dimen/di_list_item_gap_normal"
+                        android:src = "@drawable/ic_img_default"
+                        app:riv_oval = "false" />
+
+                <RelativeLayout
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:layout_height = "wrap_content"
+                        android:gravity = "center_vertical" >
+
+                    <TextView
+                            android:id = "@+id/tv_name"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            tools:text = "蜀山剑道"
+                            android:textColor = "@color/co_white"
+                            android:textStyle = "bold"
+                            android:textSize = "@dimen/di_text_size_big" />
+
+                    <TextView
+                            android:id = "@+id/tv_play"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textColor = "@color/co_white"
+                            android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                            android:layout_alignLeft = "@+id/tv_name"
+                            android:layout_below = "@+id/tv_name"
+                            tools:text = "235万人在玩"
+                            android:textSize = "@dimen/di_text_size_small" />
+
+
+                    <View
+                            android:id = "@+id/tv_div1"
+                            android:layout_width = "@dimen/di_divider_height"
+                            android:layout_height = "match_parent"
+                            android:layout_toRightOf = "@+id/tv_play"
+                            android:layout_alignTop = "@+id/tv_play"
+                            android:layout_alignBottom = "@+id/tv_play"
+                            android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                            android:layout_marginRight = "@dimen/di_list_item_gap_small"
+                            android:layout_marginTop = "1dp"
+                            android:layout_marginBottom = "1dp"
+                            android:background = "@color/co_white" />
+
+                    <TextView
+                            android:id = "@+id/tv_size"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textColor = "@color/co_white"
+                            android:layout_toRightOf = "@+id/tv_div1"
+                            android:layout_alignTop = "@+id/tv_play"
+                            tools:text = "145.5M"
+                            android:textSize = "@dimen/di_text_size_small" />
+
+
+                    <TextView
+                            android:id = "@+id/tv_new_add_title"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textColor = "@color/co_white"
+                            android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                            android:layout_alignLeft = "@+id/tv_name"
+                            android:layout_below = "@+id/tv_play"
+                            tools:text = "今天新增:"
+                            android:textSize = "@dimen/di_text_size_small" />
+
+                    <TextView
+                            android:id = "@+id/tv_new_add"
+                            style = "@style/DefaultTextView.Text"
+                            android:layout_below = "@+id/tv_name"
+                            android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                            android:layout_toRightOf = "@+id/tv_new_add_title"
+                            android:layout_alignTop = "@id/tv_new_add_title"
+                            android:background = "@drawable/shape_rect_remain_bg"
+                            tools:text = "3"
+                            android:textSize = "@dimen/di_text_size_small"
+                            android:textColor = "@color/co_white" />
+
+                    <View
+                            android:id = "@+id/tv_div2"
+                            android:layout_width = "@dimen/di_divider_height"
+                            android:layout_height = "match_parent"
+                            android:layout_toRightOf = "@+id/tv_new_add"
+                            android:layout_alignTop = "@+id/tv_new_add_title"
+                            android:layout_alignBottom = "@+id/tv_new_add_title"
+                            android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                            android:layout_marginRight = "@dimen/di_list_item_gap_small"
+                            android:layout_marginTop = "1dp"
+                            android:layout_marginBottom = "1dp"
+                            android:background = "@color/co_white" />
+
+                    <TextView
+                            android:id = "@+id/tv_total_title"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textColor = "@color/co_white"
+                            android:layout_toRightOf = "@+id/tv_div2"
+                            android:layout_alignTop = "@+id/tv_new_add_title"
+                            tools:text = "礼包总数:"
+                            android:textSize = "@dimen/di_text_size_small" />
+
+                    <TextView
+                            android:id = "@+id/tv_total"
+                            style = "@style/DefaultTextView.Text"
+                            android:layout_below = "@+id/tv_name"
+                            android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                            android:layout_toRightOf = "@+id/tv_total_title"
+                            android:layout_alignTop = "@id/tv_new_add_title"
+                            android:background = "@drawable/shape_rect_remain_bg"
+                            tools:text = "13"
+                            android:textSize = "@dimen/di_text_size_small"
+                            android:textColor = "@color/co_white" />
+                </RelativeLayout >
+
+                <CheckedTextView
+                        android:id = "@+id/tv_focus"
+                        style = "@style/DefaultTextView.NormalBtn"
+                        android:background = "@drawable/selector_btn_green_border"
+                        android:layout_marginTop = "@dimen/di_line_space_extra_big"
+                        android:checked = "true"
+                        android:textColor = "@color/color_btn_green_border"
+                        android:text = "@string/st_btn_focus" />
+
+            </LinearLayout >
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id = "@+id/stl_tab"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "@dimen/di_tabs_common_bg_height"
+                    android:paddingBottom = "0dp"
+                    android:background = "@color/co_white"
+                    app:stl_customTabTextLayoutId = "@layout/view_custom_tab"
+                    app:stl_customTabTextViewId = "@+id/tv_tab"
+                    app:stl_distributeEvenly = "true"
+                    app:stl_dividerThickness = "0dp"
+                    app:stl_indicatorThickness = "3dp"
+                    app:stl_indicatorColor = "@color/co_tabs_indicator_common_bg" />
+        </android.support.design.widget.AppBarLayout >
+
+        <android.support.v4.view.ViewPager
+                android:id = "@+id/vp_container"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                app:layout_behavior = "@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout >
+</layout >

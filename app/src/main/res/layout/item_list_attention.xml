@@ -86,5 +86,5 @@
 			android:layout_alignTop = "@+id/tv_name"
 			android:background = "@drawable/selector_btn_grey"
 			android:textColor = "@color/color_btn_grey_border"
-			android:text = "@string/st_my_attention_btn_quick" />
+			android:text = "@string/st_btn_quick_focus" />
 </RelativeLayout >

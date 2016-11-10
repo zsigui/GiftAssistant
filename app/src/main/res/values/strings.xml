@@ -62,6 +62,9 @@
     <string name = "st_post_replay_text_hint" >我也说一句</string >
     <string name = "st_post_replay_btn_send" >发表</string >
     <string name = "st_post_see_back" >查看原帖</string >
+    <string name = "st_post_vote_no_choice">请先选择后再投票哦~</string>
+    <string name = "st_post_vote_success_title">投票成功!</string>
+    <string name = "st_post_vote_success_content">感谢您的参与，获奖了我们将以系统消息通知您哦~</string>
 
     <!-- 礼包状态 -->
     <string name = "st_gift_or" >或</string >
@@ -110,7 +113,7 @@
     <string name = "st_gift_remark" >▌特别说明</string >
     <string name = "st_gift_qq" >「礼包酷」官方反馈群:%s</string >
     <string name = "st_gift_hint_content" >1、此类型礼包同一个账号只能使用1次，多次兑换无效。\n2、抢号后请马上使用，非礼包码本身问题，概不退回积分或者偶玩豆。</string >
-    <string name = "st_gift_more">更多礼包</string>
+    <string name = "st_gift_more" >更多礼包</string >
     <!-- 首充券详情 -->
     <string name = "st_coupon_content" >▌首充券内容</string >
     <string name = "st_coupon_deadline" >▌使用期限</string >
@@ -142,6 +145,12 @@
     <string name = "st_rainbow_color_3" >422f25</string >
     <string name = "st_rainbow_color_4" >533341</string >
     <string name = "st_rainbow_color_5" >f85454</string >
+    <string name = "st_game_detail_title_intro" >游戏简介</string >
+    <string name = "st_game_detail_expend" >展开全文</string >
+    <string name = "st_game_detail_collapse" >收起全文</string >
+    <string name = "st_game_detail_tab_info" >详情</string >
+    <string name = "st_game_detail_tab_gift" >礼包</string >
+    <string name = "st_game_detail_download" >下载 %s</string >
 
     <!-- 设置 -->
     <string name = "st_setting_title" >设置</string >
@@ -231,9 +240,12 @@
     <string name = "st_my_gift_title" >我的礼包</string >
     <string name = "st_wallet_money_note" >说明</string >
 
+
+    <string name = "st_btn_quick_focus" >取消关注</string >
+    <string name = "st_btn_focus" >关注</string >
+
     <!-- 设置 - 我的关注 -->
     <string name = "st_my_attention_title" >我的关注</string >
-    <string name = "st_my_attention_btn_quick" >取消关注</string >
     <string name = "st_my_attention_msg_hint" >已关注游戏新礼包上线会第一时间提醒您，请留意通知栏消息</string >
     <string name = "st_my_attention_empty_btn" >去逛逛</string >
 

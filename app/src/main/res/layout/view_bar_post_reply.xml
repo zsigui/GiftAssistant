@@ -3,7 +3,6 @@
               android:orientation = "vertical"
               android:id = "@+id/ll_bottom"
               android:layout_alignParentBottom = "true"
-              android:visibility = "gone"
               android:layout_width = "match_parent"
               android:layout_height = "wrap_content" >
 
@@ -26,7 +25,8 @@
                 android:id = "@+id/iv_img_add"
                 style = "@style/DefaultImageView"
                 android:src = "@drawable/selector_img_upload"
-                android:scaleType = "centerInside" />
+                android:scaleType = "centerInside"
+                android:contentDescription = "@null" />
 
         <EditText
                 android:id = "@+id/et_content"

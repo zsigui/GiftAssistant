@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "vertical"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent" >
+
+
+    <com.oplay.giftcool.ui.widget.WithFooterRecyclerView
+            android:id="@+id/rv_comment"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:scrollbarFadeDuration="400"
+            android:scrollbars="vertical"/>
+
+    <View style = "@style/HDividerView" />
+
+    <LinearLayout android:orientation = "horizontal"
+                  android:layout_width = "match_parent"
+                  android:layout_height = "wrap_content"
+                  android:background = "@color/co_white"
+                  android:gravity = "center_vertical"
+                  android:id = "@+id/ll_input_bar"
+                  android:paddingTop = "@dimen/di_list_item_gap_very_small"
+                  android:paddingBottom = "@dimen/di_list_item_gap_very_small"
+                  android:paddingLeft = "@dimen/di_list_item_gap_normal"
+                  android:paddingRight = "@dimen/di_list_item_gap_normal" >
+
+        <EditText
+                android:id = "@+id/et_content"
+                style = "@style/DefaultTextView.Login"
+                android:maxLines = "4"
+                android:singleLine = "false"
+                android:background = "@drawable/shape_post_reply_edit_bg"
+                android:paddingLeft = "@dimen/di_list_item_gap_big"
+                android:paddingRight = "@dimen/di_list_item_gap_big"
+                android:paddingTop = "@dimen/di_list_item_gap_small"
+                android:paddingBottom = "@dimen/di_list_item_gap_small"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_very_small"
+                android:layout_marginRight = "@dimen/di_list_item_gap_very_small"
+                android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+                android:hint = "@string/st_post_replay_text_hint" />
+
+        <TextView
+                android:id = "@+id/tv_send"
+                style = "@style/DefaultTextView.NormalBtn"
+                android:layout_height = "30dp"
+                android:enabled = "false"
+                android:background = "@drawable/selector_btn_download_blue"
+                android:text = "@string/st_post_replay_btn_send" />
+    </LinearLayout >
+
+</LinearLayout >

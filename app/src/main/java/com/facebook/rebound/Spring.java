@@ -285,7 +285,7 @@ public class Spring {
     }
 
     /* begin debug
-    long startTime = System.currentTimeMillis();
+    long pubTime = System.currentTimeMillis();
     int iterations = 0;
     end debug */
 
@@ -379,7 +379,7 @@ public class Spring {
 
     /* begin debug
     long endTime = System.currentTimeMillis();
-    long elapsedMillis = endTime - startTime;
+    long elapsedMillis = endTime - pubTime;
     Log.d(TAG,
         "iterations:" + iterations +
             " iterationTime:" + elapsedMillis +

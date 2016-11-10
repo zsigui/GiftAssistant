@@ -1,6 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		android:id = "@id/id_stickynavlayout_innerscrollview"
-		android:layout_width = "match_parent"
-		android:layout_height = "match_parent" />
+<layout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools" >
+
+    <android.support.v4.widget.NestedScrollView
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior" >
+
+        <!--<fragment-->
+        <!--android:id = "@+id/f_pics"-->
+        <!--android:layout_width = "match_parent"-->
+        <!--android:layout_height = "400dp" />-->
+
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:orientation = "vertical" >
+
+            <LinearLayout
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:orientation = "vertical"
+                    android:background = "@color/co_white"
+                    android:paddingBottom = "@dimen/di_list_item_gap_normal"
+                    android:paddingTop = "@dimen/di_list_item_gap_normal" >
+
+                <android.support.v7.widget.RecyclerView
+                        android:id = "@+id/rv_pics"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "200dp" />
+
+                <com.oplay.giftcool.ui.widget.layout.flowlayout.TagFlowLayout
+                        android:id = "@+id/tf_tags"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:paddingLeft = "@dimen/di_list_item_gap_small"
+                        android:paddingRight = "@dimen/di_list_item_gap_small" />
+            </LinearLayout >
+
+            <LinearLayout
+                    style = "@style/IndexModuleTitleLayout"
+                    android:background = "@color/co_white"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small" >
+
+                <TextView
+                        style = "@style/DefaultTextView.Header"
+                        android:layout_gravity = "center_vertical"
+                        android:text = "@string/st_game_detail_title_intro" />
+            </LinearLayout >
+
+            <LinearLayout
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:background = "@color/co_white"
+                    android:orientation = "vertical"
+                    android:layout_marginTop = "@dimen/di_divider_height"
+                    android:padding = "@dimen/di_list_item_gap_big" >
+
+                <TextView
+                        android:id = "@+id/tv_intro"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:textColor = "@color/co_common_text_second"
+                        android:textSize = "@dimen/di_text_size_small"
+                        android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"
+                        android:maxLines = "3"
+                        tools:text = "打开的开打开打开打开打开的打开的阿康jad开发jad\n的框架阿克拉结抵抗力就罚款那段事件fks京东耐克很骄傲sdk合家安康认识多久
+                    大kdj法拉克决定是否卡拉胶sdk如何将阿喀琉斯大家伙可垃圾sdk联发科实例的啊kdj法拉克搜读激活喀纳斯的" />
+
+                <TextView
+                        android:id = "@+id/tv_expend_collapse"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/st_game_detail_expend"
+                        android:textColor = "@color/co_btn_orange"
+                        android:textSize = "@dimen/di_text_size_small"
+                        android:layout_gravity = "center_horizontal"
+                        android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+                        android:drawablePadding = "@dimen/di_line_space_extra_big"
+                        android:drawableRight = "@drawable/ic_arrow_expand" />
+            </LinearLayout >
+
+        </LinearLayout >
+    </android.support.v4.widget.NestedScrollView >
+</layout >

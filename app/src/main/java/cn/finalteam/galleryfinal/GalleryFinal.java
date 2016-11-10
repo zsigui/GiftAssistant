@@ -471,6 +471,28 @@ public class GalleryFinal {
      * 打开图片预览界面
      *
      * @param selectedIndex 选择首次显示图片的下标，从0开始
+     * @param picsPath      待预览的图片地址字符串数组
+     * @return 同步处理操作的结果
+     */
+    public static int openMultiPhoto(int selectedIndex, ArrayList<String> picsPath) {
+        if (picsPath == null || picsPath.size() == 0) {
+            return Error.RET_NO_SELECTED_PHOTO;
+        }
+
+        List<PhotoInfo> photoInfos = new ArrayList<>(picsPath.size());
+        for (String s : picsPath) {
+            PhotoInfo p = new PhotoInfo();
+            p.setPhotoId(s.hashCode());
+            p.setPhotoPath(s);
+            photoInfos.add(p);
+        }
+        return openMultiPhoto(0x101, selectedIndex, null, null, photoInfos);
+    }
+
+    /**
+     * 打开图片预览界面
+     *
+     * @param selectedIndex 选择首次显示图片的下标，从0开始
      * @param photoInfos    待预览的图片信息数组
      * @return 同步处理操作的结果
      */

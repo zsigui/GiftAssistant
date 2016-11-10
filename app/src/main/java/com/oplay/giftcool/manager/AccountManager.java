@@ -37,6 +37,8 @@ import com.oplay.giftcool.util.encrypt.NetDataEncrypt;
 
 import net.youmi.android.libs.common.global.Global_SharePreferences;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -359,7 +361,7 @@ public class AccountManager implements OnFinishListener {
     /**
      * 同步Cookie
      */
-    public void syncCookie(String baseUrl, ArrayList<String> cookies) {
+    private void syncCookie(String baseUrl, ArrayList<String> cookies) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null);
             if (cookies != null && !cookies.isEmpty()) {
@@ -395,28 +397,43 @@ public class AccountManager implements OnFinishListener {
         }
 
         HashMap<String, String> cookieMap = new HashMap<>();
-        cookieMap.put("version", String.valueOf(AppConfig.SDK_VER()));
-        cookieMap.put("version_code", String.valueOf(AppConfig.SDK_VER()));
-        cookieMap.put("version_name", AppConfig.SDK_VER_NAME());
-        cookieMap.put("imei", MobileInfoModel.getInstance().getImei());
-        cookieMap.put("imsi", MobileInfoModel.getInstance().getImsi());
-        cookieMap.put("cid", MobileInfoModel.getInstance().getCid());
-        cookieMap.put("mac", MobileInfoModel.getInstance().getMac());
-        cookieMap.put("apn", MobileInfoModel.getInstance().getApn());
-        cookieMap.put("cn", MobileInfoModel.getInstance().getCn());
-        cookieMap.put("dd", MobileInfoModel.getInstance().getDd());
-        cookieMap.put("dv", MobileInfoModel.getInstance().getDv());
-        cookieMap.put("os", MobileInfoModel.getInstance().getOs());
-        cookieMap.put("chn", String.valueOf(MobileInfoModel.getInstance().getChn()));
-        cookieMap.put("chnid", String.valueOf(MobileInfoModel.getInstance().getChn()));
-        cookieMap.put("X-Client-Info", AssistantApp.getInstance().getHeaderValue());
+        try {
+            cookieMap.put("version", String.valueOf(AppConfig.SDK_VER()));
+            cookieMap.put("version_code", String.valueOf(AppConfig.SDK_VER()));
+            cookieMap.put("version_name", AppConfig.SDK_VER_NAME());
+            cookieMap.put("imei", MobileInfoModel.getInstance().getImei());
+            cookieMap.put("imsi", MobileInfoModel.getInstance().getImsi());
+            cookieMap.put("cid", MobileInfoModel.getInstance().getCid());
+            cookieMap.put("mac", MobileInfoModel.getInstance().getMac());
+            cookieMap.put("apn", MobileInfoModel.getInstance().getApn());
+            cookieMap.put("cn", URLEncoder.encode(MobileInfoModel.getInstance().getCn(), "UTF-8"));
+            cookieMap.put("dd", MobileInfoModel.getInstance().getDd());
+            cookieMap.put("dv", MobileInfoModel.getInstance().getDv());
+            cookieMap.put("os", MobileInfoModel.getInstance().getOs());
+            cookieMap.put("chn", String.valueOf(MobileInfoModel.getInstance().getChn()));
+            cookieMap.put("chnid", String.valueOf(MobileInfoModel.getInstance().getChn()));
+            cookieMap.put("X-Client-Info", AssistantApp.getInstance().getHeaderValue());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // 构造Cookie字符串
+        StringBuilder sb = new StringBuilder();
+        if (isLogin()) {
+            sb.append("cuid=").append(getUserSesion().uid)
+                    .append(";sessionid=").append(getUserSesion().session).append(";");
+        }
 
         for (Map.Entry<String, String> cookie : cookieMap.entrySet()) {
             cookies.add(String.format("%s=%s;Domain=%s;Expires=%s;Path=/;", cookie.getKey(), cookie.getValue()
                     , WebViewUrl.URL_DOMAIN, expiredDate));
+
+            sb.append(cookie.getKey()).append("=").append(cookie.getValue()).append(";");
+            Global.sCookie = sb.toString();
         }
         syncCookie(WebViewUrl.URL_BASE, cookies);
     }
+
 
     /**
      * 更新用户的Session
@@ -455,7 +472,7 @@ public class AccountManager implements OnFinishListener {
                     @Override
                     public void onResponse(Call<JsonRespBase<HashSet<String>>> call,
                                            Response<JsonRespBase<HashSet<String>>> response) {
-                        if (call.isCanceled())  {
+                        if (call.isCanceled()) {
                             return;
                         }
                         if (response != null && response.isSuccessful()

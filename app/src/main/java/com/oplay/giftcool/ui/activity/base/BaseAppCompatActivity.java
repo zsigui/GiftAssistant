@@ -64,9 +64,8 @@ public abstract class BaseAppCompatActivity extends BaseAppCompatActivityLog imp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApp = AssistantApp.getInstance();
-        int statusColor = getStatusBarColor();
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(statusColor);
+            getWindow().setStatusBarColor(getStatusBarColor());
         }
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         initView();

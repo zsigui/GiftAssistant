@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools" >
+
+    <RelativeLayout
+            android:orientation = "vertical"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+            android:layout_marginRight = "@dimen/di_list_item_gap_small"
+            android:background = "@drawable/shape_rect_round_white"
+            android:paddingLeft = "@dimen/di_list_item_gap_small"
+            android:paddingTop = "@dimen/di_list_item_gap_normal"
+            android:paddingBottom = "@dimen/di_list_item_gap_normal"
+            android:paddingRight = "@dimen/di_list_item_gap_normal" >
+
+        <com.makeramen.roundedimageview.RoundedImageView
+                android:id = "@+id/iv_icon"
+                app:riv_oval = "true"
+                android:layout_width = "@dimen/di_post_detail_icon_diameter"
+                android:layout_height = "@dimen/di_post_detail_icon_diameter"
+                android:layout_marginRight = "@dimen/di_list_item_gap_normal"
+                android:src = "@drawable/ic_task_upload_avator" />
+
+        <TextView
+                android:id = "@+id/tv_name"
+                style = "@style/DefaultTextView.Header"
+                android:layout_centerVertical = "false"
+                android:textColor = "@color/co_common_app_second_bg_orange"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                android:layout_toRightOf = "@+id/iv_icon"
+                tools:text = "Tel修罗" />
+
+        <TextView
+                android:id = "@+id/tv_floor"
+                style = "@style/DefaultTextView.Text"
+                android:layout_alignParentRight = "true"
+                android:layout_centerVertical = "false"
+                android:layout_alignTop = "@+id/tv_name"
+                tools:text = "8楼" />
+
+        <LinearLayout
+                android:id = "@+id/ll_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_alignLeft = "@+id/tv_name"
+                android:layout_below = "@+id/tv_name"
+                android:orientation = "vertical"
+                android:paddingTop = "@dimen/di_list_item_gap_normal"
+                android:paddingBottom = "@dimen/di_list_item_gap_normal" >
+
+            <TextView
+                    android:id = "@+id/tv_content"
+                    style = "@style/DefaultTextView.Header"
+                    android:singleLine = "false"
+                    android:lineSpacingExtra = "@dimen/di_line_space_extra_big"
+                    android:maxLines = "10"
+                    tools:text = "还有100杯的上升空间……可惜已经没有机会！" />
+
+            <LinearLayout
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:orientation = "horizontal"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small" >
+
+                <ImageView
+                        android:id = "@+id/iv_list_pic1"
+                        android:layout_width = "@dimen/di_post_detail_pic_width"
+                        android:layout_height = "@dimen/di_post_detail_pic_width"
+                        android:contentDescription = "@null"
+                        android:scaleType = "centerCrop"
+                        android:src = "@drawable/pic_splash_2016" />
+
+                <ImageView
+                        android:id = "@+id/iv_list_pic2"
+                        android:layout_width = "@dimen/di_post_detail_pic_width"
+                        android:layout_height = "@dimen/di_post_detail_pic_width"
+                        android:contentDescription = "@null"
+                        android:scaleType = "centerCrop"
+                        android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                        android:src = "@drawable/pic_splash_2016" />
+
+                <ImageView
+                        android:id = "@+id/iv_list_pic3"
+                        android:layout_width = "@dimen/di_post_detail_pic_width"
+                        android:layout_height = "@dimen/di_post_detail_pic_width"
+                        android:contentDescription = "@null"
+                        android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                        android:scaleType = "centerCrop"
+                        android:src = "@drawable/pic_splash_2016" />
+            </LinearLayout >
+
+        </LinearLayout >
+
+        <TextView
+                android:id = "@+id/tv_pub_time"
+                style = "@style/DefaultTextView.Text"
+                android:layout_centerVertical = "false"
+                android:layout_alignLeft = "@+id/tv_name"
+                android:layout_below = "@+id/ll_content"
+                android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                tools:text = "4-3 11:45" />
+
+        <TextView
+                android:id = "@+id/tv_admire"
+                android:layout_width = "wrap_content"
+                android:layout_height = "@dimen/di_btn_height"
+                android:background = "@drawable/selector_btn_gray_bg_border"
+                android:drawableLeft = "@drawable/selector_btn_admire"
+                android:textColor = "@color/co_btn_grey_pressed"
+                android:drawablePadding = "@dimen/di_list_item_gap_very_small"
+                android:layout_below = "@+id/ll_content"
+                android:layout_toLeftOf = "@+id/tv_comment"
+                android:gravity = "center_vertical"
+                tools:text = "8" />
+
+        <TextView
+                android:id = "@+id/tv_comment"
+                android:layout_width = "wrap_content"
+                android:layout_height = "@dimen/di_btn_height"
+                android:background = "@drawable/selector_btn_gray_bg_border"
+                android:drawableLeft = "@drawable/ic_msg_content_comment"
+                android:textColor = "@color/co_btn_grey_pressed"
+                android:drawablePadding = "@dimen/di_list_item_gap_very_small"
+                android:layout_below = "@+id/ll_content"
+                android:layout_alignParentRight = "true"
+                android:layout_marginLeft = "@dimen/di_list_item_gap_small"
+                android:gravity = "center_vertical"
+                tools:text = "18" />
+
+
+        <View
+                android:id = "@+id/v_divider"
+                style = "@style/HDividerView"
+                android:layout_below = "@+id/tv_comment"
+                android:visibility = "visible"
+                android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+                android:layout_marginBottom = "@dimen/di_list_item_gap_normal" />
+
+
+        <LinearLayout
+                android:id = "@+id/ll_comment"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_alignLeft = "@+id/tv_name"
+                android:layout_below = "@+id/v_divider"
+                android:visibility = "visible"
+                android:paddingBottom = "@dimen/di_list_item_gap_normal"
+                android:orientation = "vertical" />
+    </RelativeLayout >
+</layout >

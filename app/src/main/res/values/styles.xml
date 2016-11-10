@@ -501,5 +501,16 @@
         <item name = "android:textSize" >10sp</item >
     </style >
 
+    <!-- 回帖评论颜色样式 -->
+    <style name = "DefaultTextView.N1">
+        <item name = "android:textColor">@color/co_common_app_second_bg_orange</item>
+    </style>
+    <style name = "DefaultTextView.N2">
+        <item name = "android:textColor">@color/co_common_app_second_bg_green</item>
+    </style>
+    <style name = "DefaultTextView.N3">
+        <item name = "android:textColor">@color/co_common_text_main</item>
+    </style>
+
     <style name = "CustomNoDisplay" parent = "@android:style/Theme.NoDisplay" />
 </resources >

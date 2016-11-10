@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/tv_comment_more"
+        style = "@style/DefaultTextView.Header"
+        android:layout_width = "match_parent"
+        android:paddingTop = "@dimen/di_list_item_gap_big"
+        android:textColor = "@color/co_common_text_second"
+        android:gravity = "center"
+        android:layout_marginRight = "69dp" />

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:orientation = "vertical"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:paddingLeft = "@dimen/di_list_item_gap_big"
+        android:paddingRight = "@dimen/di_list_item_gap_big"
+        android:paddingTop = "@dimen/di_list_item_gap_normal"
+        android:paddingBottom = "@dimen/di_list_item_gap_normal"
+        android:background = "@drawable/shape_rect_post_detail_vote_content" >
+
+    <CheckedTextView
+            android:id = "@+id/tv_title"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textColor = "@color/co_common_text_main"
+            android:lineSpacingExtra = "@dimen/di_line_space_extra_big"
+            android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+            android:gravity = "center_vertical"
+            android:textIsSelectable = "true"
+            tools:text = "鹿力大仙 (你投的选项)" />
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation = "horizontal"
+            android:layout_marginTop = "@dimen/di_list_item_gap_small"
+            android:gravity = "center_vertical" >
+
+        <ProgressBar
+                android:id = "@+id/pb_percent"
+                style = "?android:attr/progressBarStyleHorizontal"
+                android:layout_width = "0dp"
+                android:layout_weight = "1"
+                android:layout_height = "@dimen/di_gift_common_pb_diameter"
+                android:max = "100"
+                android:layout_marginRight = "@dimen/di_list_item_gap_big"
+                android:progressDrawable = "@drawable/shape_progress_bar_orange" />
+
+        <TextView
+                android:id = "@+id/tv_vote_count"
+                android:textIsSelectable = "true"
+                style = "@style/DefaultTextView.Text"
+                android:textSize = "@dimen/di_text_size_small"
+                android:layout_marginRight = "@dimen/di_list_item_gap_big"
+                tools:text = "120票" />
+
+        <TextView
+                android:id = "@+id/tv_vote_percent"
+                android:textIsSelectable = "true"
+                style = "@style/DefaultTextView.Text"
+                android:textSize = "@dimen/di_text_size_small"
+                tools:text = "15%" />
+    </LinearLayout >
+</LinearLayout >

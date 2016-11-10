@@ -18,12 +18,6 @@ public class IndexPostNew implements Serializable {
     public int id;
 
     /**
-     * 游戏ID
-     */
-    @SerializedName("app_id")
-    public int appId;
-
-    /**
      * 活动小图
      */
     @SerializedName("icon")

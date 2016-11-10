@@ -19,6 +19,7 @@ import com.oplay.giftcool.manager.AccountManager;
 import com.oplay.giftcool.manager.OuwanSDKManager;
 import com.oplay.giftcool.model.data.resp.UserModel;
 import com.oplay.giftcool.model.data.resp.task.TaskInfoOne;
+import com.oplay.giftcool.ui.activity.CommentDetailActivity;
 import com.oplay.giftcool.ui.activity.GameDetailActivity;
 import com.oplay.giftcool.ui.activity.GameListActivity;
 import com.oplay.giftcool.ui.activity.GiftDetailActivity;
@@ -26,7 +27,7 @@ import com.oplay.giftcool.ui.activity.GiftListActivity;
 import com.oplay.giftcool.ui.activity.LoginActivity;
 import com.oplay.giftcool.ui.activity.MainActivity;
 import com.oplay.giftcool.ui.activity.MessageActivity;
-import com.oplay.giftcool.ui.activity.PostDetailActivity;
+import com.oplay.giftcool.ui.activity.PostDetailNewActivity;
 import com.oplay.giftcool.ui.activity.PostListActivity;
 import com.oplay.giftcool.ui.activity.SearchActivity;
 import com.oplay.giftcool.ui.activity.ServerInfoActivity;
@@ -501,31 +502,40 @@ public class IntentUtil {
      * 跳转活动详情页面
      */
     public static void jumpPostDetail(Context context, int postId) {
-        Intent intent = new Intent(context, PostDetailActivity.class);
+//        Intent intent = new Intent(context, PostDetailActivity.class);
+//        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
+//        intent.putExtra(KeyConfig.KEY_DATA, postId);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        context.startActivity(intent);
+        Intent intent = new Intent(context, PostDetailNewActivity.class);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
         intent.putExtra(KeyConfig.KEY_DATA, postId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
 
-    /**
-     * 跳转活动详情页面，并指定来源
-     */
-    public static void jumpPostDetail(Context context, int postId, String from) {
-        Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
-        intent.putExtra(KeyConfig.KEY_DATA, postId);
-        intent.putExtra(KeyConfig.KEY_DATA_T, from);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        context.startActivity(intent);
-    }
+//    /**
+//     * 跳转活动详情页面，并指定来源
+//     */
+//    public static void jumpPostDetail(Context context, int postId, String from) {
+////        Intent intent = new Intent(context, PostDetailActivity.class);
+////        intent.putExtra(KeyConfig.KEY_DATA, postId);
+////        intent.putExtra(KeyConfig.KEY_DATA_T, from);
+////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////        context.startActivity(intent);
+//        Intent intent = new Intent(context, PostDetailNewActivity.class);
+//        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_REPLY_DETAIL);
+//        intent.putExtra(KeyConfig.KEY_DATA, postId);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        context.startActivity(intent);
+//    }
 
     /**
      * 跳转活动评论详情页面
      */
     public static void jumpPostReplyDetail(Context context, int postId, int commentId) {
-        Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_COMMENT_DETAIL);
+//        Intent intent = new Intent(context, PostDetailActivity.class);
+        Intent intent = new Intent(context, CommentDetailActivity.class);
         intent.putExtra(KeyConfig.KEY_DATA, postId);
         intent.putExtra(KeyConfig.KEY_DATA_O, commentId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -538,7 +548,6 @@ public class IntentUtil {
     public static void jumpPostOfficialList(Context context) {
         Intent intent = new Intent(context, PostListActivity.class);
         intent.putExtra(KeyConfig.KEY_TYPE, KeyConfig.TYPE_ID_POST_OFFICIAL);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
@@ -560,7 +569,8 @@ public class IntentUtil {
      * 处理额外信息类型为一(进行页面跳转)的数据
      */
     public static void handleJumpInfo(Context context, TaskInfoOne taskInfo) {
-        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "id = " + taskInfo.id + ", action = " + taskInfo.action + ", equal = " + ("GiftDetail".equalsIgnoreCase(taskInfo.action)));
+        AppDebugConfig.d(AppDebugConfig.TAG_WARN, "id = " + taskInfo.id + ", action = " + taskInfo.action + ", equal " +
+                "= " + ("GiftDetail".equalsIgnoreCase(taskInfo.action)));
         final String ACTION_PREFIX = AppConfig.PACKAGE_NAME() + ".action.";
         if ("GameDetail".equalsIgnoreCase(taskInfo.action)) {
             IntentUtil.jumpGameDetail(context, taskInfo.id, Integer.parseInt(taskInfo.data));

@@ -472,6 +472,7 @@ public class MainActivity extends BaseAppCompatActivity implements ObserverManag
             handleFirstOpen();
         }
         if (!SplashFragmentDialog.sHasShow) {
+            SplashFragmentDialog.sHasShow = true;
             new SplashFragmentDialog().show(getSupportFragmentManager(), "splash");
         }
     }

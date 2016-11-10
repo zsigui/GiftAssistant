@@ -8,42 +8,42 @@ import android.support.v7.widget.RecyclerView;
 
 /**
  * 顺畅滑动到指定项到RecyclerView顶端
- *
+ * <p>
  * Created by zsigui on 16-3-10.
  */
 public class SnapLinearLayoutManager extends LinearLayoutManager {
 
-	public SnapLinearLayoutManager(Context context) {
-		super(context, VERTICAL, false);
-	}
+    public SnapLinearLayoutManager(Context context) {
+        super(context, VERTICAL, false);
+    }
 
-	public SnapLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-		super(context, orientation, reverseLayout);
-	}
+    public SnapLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+        super(context, orientation, reverseLayout);
+    }
 
-	@Override
-	public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
-	                                   int position) {
-		RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(recyclerView.getContext());
-		smoothScroller.setTargetPosition(position);
-		startSmoothScroll(smoothScroller);
-	}
+    @Override
+    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
+                                       int position) {
+        RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(recyclerView.getContext());
+        smoothScroller.setTargetPosition(position);
+        startSmoothScroll(smoothScroller);
+    }
 
-	private class TopSnappedSmoothScroller extends LinearSmoothScroller {
-		public TopSnappedSmoothScroller(Context context) {
-			super(context);
+    class TopSnappedSmoothScroller extends LinearSmoothScroller {
+        TopSnappedSmoothScroller(Context context) {
+            super(context);
 
-		}
+        }
 
-		@Override
-		public PointF computeScrollVectorForPosition(int targetPosition) {
-			return SnapLinearLayoutManager.this
-					.computeScrollVectorForPosition(targetPosition);
-		}
+        @Override
+        public PointF computeScrollVectorForPosition(int targetPosition) {
+            return SnapLinearLayoutManager.this
+                    .computeScrollVectorForPosition(targetPosition);
+        }
 
-		@Override
-		protected int getVerticalSnapPreference() {
-			return SNAP_TO_START;
-		}
-	}
+        @Override
+        protected int getVerticalSnapPreference() {
+            return SNAP_TO_START;
+        }
+    }
 }

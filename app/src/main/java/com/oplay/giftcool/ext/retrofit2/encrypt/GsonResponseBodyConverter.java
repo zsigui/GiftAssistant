@@ -55,8 +55,10 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
                     AppDebugConfig.w(AppDebugConfig.TAG_ENCRYPT, "response data : " + json);
                 }
             }
-            AppDebugConfig.file(AppDebugConfig.TAG_ENCRYPT, null,
-                    String.format(Locale.CHINA, "url : %s\nresponse data : %s", requestUrl, json));
+            if (AppDebugConfig.IS_FILE_DEBUG) {
+                AppDebugConfig.file(AppDebugConfig.TAG_ENCRYPT, null,
+                        String.format(Locale.CHINA, "url : %s\nresponse data : %s", requestUrl, json));
+            }
             return gson.fromJson(json, type);
         } catch (Exception e) {
             e.printStackTrace();

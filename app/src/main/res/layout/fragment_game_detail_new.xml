@@ -1,194 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-              xmlns:app = "http://schemas.android.com/apk/res-auto"
-              android:layout_width = "match_parent"
-              android:layout_height = "match_parent"
-              android:orientation = "vertical" >
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+<!--<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"-->
+              <!--xmlns:app = "http://schemas.android.com/apk/res-auto"-->
+              <!--android:layout_width = "match_parent"-->
+              <!--android:layout_height = "match_parent"-->
+              <!--android:orientation = "vertical" >-->
 
 
-	<com.oplay.giftcool.ui.widget.layout.GCStickyNavLayout
-			android:layout_width = "match_parent"
-			android:layout_height = "0dp"
-			android:layout_weight = "1" >
+	<!--<com.oplay.giftcool.ui.widget.layout.GCStickyNavLayout-->
+			<!--android:layout_width = "match_parent"-->
+			<!--android:layout_height = "0dp"-->
+			<!--android:layout_weight = "1" >-->
 
-		<RelativeLayout
-				android:id = "@+id/id_stickynavlayout_topview"
-				android:layout_width = "match_parent"
-				android:layout_height = "wrap_content"
-				android:paddingLeft = "@dimen/di_list_item_gap_big"
-				android:paddingTop = "@dimen/di_list_item_gap_big"
-				android:paddingBottom = "@dimen/di_list_item_gap_big"
-				android:paddingRight = "@dimen/di_list_item_gap_big" >
+		<!--<RelativeLayout-->
+				<!--android:id = "@+id/id_stickynavlayout_topview"-->
+				<!--android:layout_width = "match_parent"-->
+				<!--android:layout_height = "wrap_content"-->
+				<!--android:paddingLeft = "@dimen/di_list_item_gap_big"-->
+				<!--android:paddingTop = "@dimen/di_list_item_gap_big"-->
+				<!--android:paddingBottom = "@dimen/di_list_item_gap_big"-->
+				<!--android:paddingRight = "@dimen/di_list_item_gap_big" >-->
 
-			<com.makeramen.roundedimageview.RoundedImageView
-					android:id = "@+id/iv_icon"
-					android:layout_width = "@dimen/di_icon_diameter"
-					android:layout_height = "@dimen/di_icon_diameter"
-					android:scaleType = "centerCrop"
-					app:riv_border_color = "@color/co_stroke_bg"
-					app:riv_border_width = "@dimen/di_icon_border_size"
-					app:riv_corner_radius = "@dimen/di_icon_radius"
-					android:layout_marginRight = "@dimen/di_list_item_gap_normal"
-					android:src = "@drawable/ic_img_default"
-					app:riv_oval = "false" />
+			<!--<com.makeramen.roundedimageview.RoundedImageView-->
+					<!--android:id = "@+id/iv_icon"-->
+					<!--android:layout_width = "@dimen/di_icon_diameter"-->
+					<!--android:layout_height = "@dimen/di_icon_diameter"-->
+					<!--android:scaleType = "centerCrop"-->
+					<!--app:riv_border_color = "@color/co_stroke_bg"-->
+					<!--app:riv_border_width = "@dimen/di_icon_border_size"-->
+					<!--app:riv_corner_radius = "@dimen/di_icon_radius"-->
+					<!--android:layout_marginRight = "@dimen/di_list_item_gap_normal"-->
+					<!--android:src = "@drawable/ic_img_default"-->
+					<!--app:riv_oval = "false" />-->
 
-			<RelativeLayout
-					android:layout_toRightOf = "@+id/iv_icon"
-					android:layout_width = "wrap_content"
-					android:layout_height = "wrap_content"
-					android:layout_centerVertical = "true" >
+			<!--<RelativeLayout-->
+					<!--android:layout_toRightOf = "@+id/iv_icon"-->
+					<!--android:layout_width = "wrap_content"-->
+					<!--android:layout_height = "wrap_content"-->
+					<!--android:layout_centerVertical = "true" >-->
 
-				<TextView
-						android:id = "@+id/tv_name"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:text = "蜀山剑道"
-						android:textColor = "@color/co_white"
-						android:textStyle="bold"
-						android:textSize = "@dimen/di_text_size_big" />
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_name"-->
+						<!--android:layout_width = "wrap_content"-->
+						<!--android:layout_height = "wrap_content"-->
+						<!--android:text = "蜀山剑道"-->
+						<!--android:textColor = "@color/co_white"-->
+						<!--android:textStyle="bold"-->
+						<!--android:textSize = "@dimen/di_text_size_big" />-->
 
-				<TextView
-						android:id = "@+id/tv_play"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:textColor = "@color/co_white"
-						android:layout_marginTop = "@dimen/di_list_item_gap_small"
-						android:layout_alignLeft = "@+id/tv_name"
-						android:layout_below = "@+id/tv_name"
-						android:text = "235万人在玩"
-						android:textSize = "@dimen/di_text_size_small" />
-
-
-				<View
-						android:id = "@+id/tv_div1"
-						android:layout_width = "@dimen/di_divider_height"
-						android:layout_height = "match_parent"
-						android:layout_toRightOf = "@+id/tv_play"
-						android:layout_alignTop = "@+id/tv_play"
-						android:layout_alignBottom = "@+id/tv_play"
-						android:layout_marginLeft = "@dimen/di_list_item_gap_small"
-						android:layout_marginRight = "@dimen/di_list_item_gap_small"
-						android:layout_marginTop = "1dp"
-						android:layout_marginBottom = "1dp"
-						android:background = "@color/co_white" />
-
-				<TextView
-						android:id = "@+id/tv_size"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:textColor = "@color/co_white"
-						android:layout_toRightOf = "@+id/tv_div1"
-						android:layout_alignTop = "@+id/tv_play"
-						android:text = "145.5M"
-						android:textSize = "@dimen/di_text_size_small" />
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_play"-->
+						<!--android:layout_width = "wrap_content"-->
+						<!--android:layout_height = "wrap_content"-->
+						<!--android:textColor = "@color/co_white"-->
+						<!--android:layout_marginTop = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_alignLeft = "@+id/tv_name"-->
+						<!--android:layout_below = "@+id/tv_name"-->
+						<!--android:text = "235万人在玩"-->
+						<!--android:textSize = "@dimen/di_text_size_small" />-->
 
 
-				<TextView
-						android:id = "@+id/tv_new_add_title"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:textColor = "@color/co_white"
-						android:layout_marginTop = "@dimen/di_list_item_gap_small"
-						android:layout_alignLeft = "@+id/tv_name"
-						android:layout_below = "@+id/tv_play"
-						android:text = "今天新增:"
-						android:textSize = "@dimen/di_text_size_small" />
+				<!--<View-->
+						<!--android:id = "@+id/tv_div1"-->
+						<!--android:layout_width = "@dimen/di_divider_height"-->
+						<!--android:layout_height = "match_parent"-->
+						<!--android:layout_toRightOf = "@+id/tv_play"-->
+						<!--android:layout_alignTop = "@+id/tv_play"-->
+						<!--android:layout_alignBottom = "@+id/tv_play"-->
+						<!--android:layout_marginLeft = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_marginRight = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_marginTop = "1dp"-->
+						<!--android:layout_marginBottom = "1dp"-->
+						<!--android:background = "@color/co_white" />-->
 
-				<TextView
-						android:id = "@+id/tv_new_add"
-						style = "@style/DefaultTextView.Text"
-						android:layout_below = "@+id/tv_name"
-						android:layout_marginLeft = "@dimen/di_line_space_extra_big"
-						android:layout_toRightOf = "@+id/tv_new_add_title"
-						android:layout_alignTop = "@id/tv_new_add_title"
-						android:background = "@drawable/shape_rect_remain_bg"
-						android:text = "3"
-						android:textSize = "@dimen/di_text_size_small"
-						android:textColor = "@color/co_white" />
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_size"-->
+						<!--android:layout_width = "wrap_content"-->
+						<!--android:layout_height = "wrap_content"-->
+						<!--android:textColor = "@color/co_white"-->
+						<!--android:layout_toRightOf = "@+id/tv_div1"-->
+						<!--android:layout_alignTop = "@+id/tv_play"-->
+						<!--android:text = "145.5M"-->
+						<!--android:textSize = "@dimen/di_text_size_small" />-->
 
-				<View
-						android:id = "@+id/tv_div2"
-						android:layout_width = "@dimen/di_divider_height"
-						android:layout_height = "match_parent"
-						android:layout_toRightOf = "@+id/tv_new_add"
-						android:layout_alignTop = "@+id/tv_new_add_title"
-						android:layout_alignBottom = "@+id/tv_new_add_title"
-						android:layout_marginLeft = "@dimen/di_list_item_gap_small"
-						android:layout_marginRight = "@dimen/di_list_item_gap_small"
-						android:layout_marginTop = "1dp"
-						android:layout_marginBottom = "1dp"
-						android:background = "@color/co_white" />
 
-				<TextView
-						android:id = "@+id/tv_total_title"
-						android:layout_width = "wrap_content"
-						android:layout_height = "wrap_content"
-						android:textColor = "@color/co_white"
-						android:layout_toRightOf = "@+id/tv_div2"
-						android:layout_alignTop = "@+id/tv_new_add_title"
-						android:text = "礼包总数:"
-						android:textSize = "@dimen/di_text_size_small" />
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_new_add_title"-->
+						<!--android:layout_width = "wrap_content"-->
+						<!--android:layout_height = "wrap_content"-->
+						<!--android:textColor = "@color/co_white"-->
+						<!--android:layout_marginTop = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_alignLeft = "@+id/tv_name"-->
+						<!--android:layout_below = "@+id/tv_play"-->
+						<!--android:text = "今天新增:"-->
+						<!--android:textSize = "@dimen/di_text_size_small" />-->
 
-				<TextView
-						android:id = "@+id/tv_total"
-						style = "@style/DefaultTextView.Text"
-						android:layout_below = "@+id/tv_name"
-						android:layout_marginLeft = "@dimen/di_line_space_extra_big"
-						android:layout_toRightOf = "@+id/tv_total_title"
-						android:layout_alignTop = "@id/tv_new_add_title"
-						android:background = "@drawable/shape_rect_remain_bg"
-						android:text = "13"
-						android:textSize = "@dimen/di_text_size_small"
-						android:textColor = "@color/co_white" />
-			</RelativeLayout >
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_new_add"-->
+						<!--style = "@style/DefaultTextView.Text"-->
+						<!--android:layout_below = "@+id/tv_name"-->
+						<!--android:layout_marginLeft = "@dimen/di_line_space_extra_big"-->
+						<!--android:layout_toRightOf = "@+id/tv_new_add_title"-->
+						<!--android:layout_alignTop = "@id/tv_new_add_title"-->
+						<!--android:background = "@drawable/shape_rect_remain_bg"-->
+						<!--android:text = "3"-->
+						<!--android:textSize = "@dimen/di_text_size_small"-->
+						<!--android:textColor = "@color/co_white" />-->
 
-			<CheckedTextView
-					android:id = "@+id/tv_focus"
-					style = "@style/DefaultTextView.NormalBtn"
-					android:background = "@drawable/selector_btn_green_border"
-					android:layout_marginTop = "@dimen/di_list_item_gap_small"
-					android:layout_alignParentRight = "true"
-					android:checked = "true"
-					android:textColor="@color/color_btn_green_border"
-					android:text = "关注" />
+				<!--<View-->
+						<!--android:id = "@+id/tv_div2"-->
+						<!--android:layout_width = "@dimen/di_divider_height"-->
+						<!--android:layout_height = "match_parent"-->
+						<!--android:layout_toRightOf = "@+id/tv_new_add"-->
+						<!--android:layout_alignTop = "@+id/tv_new_add_title"-->
+						<!--android:layout_alignBottom = "@+id/tv_new_add_title"-->
+						<!--android:layout_marginLeft = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_marginRight = "@dimen/di_list_item_gap_small"-->
+						<!--android:layout_marginTop = "1dp"-->
+						<!--android:layout_marginBottom = "1dp"-->
+						<!--android:background = "@color/co_white" />-->
 
-		</RelativeLayout >
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_total_title"-->
+						<!--android:layout_width = "wrap_content"-->
+						<!--android:layout_height = "wrap_content"-->
+						<!--android:textColor = "@color/co_white"-->
+						<!--android:layout_toRightOf = "@+id/tv_div2"-->
+						<!--android:layout_alignTop = "@+id/tv_new_add_title"-->
+						<!--android:text = "礼包总数:"-->
+						<!--android:textSize = "@dimen/di_text_size_small" />-->
 
-		<com.ogaclejapan.smarttablayout.SmartTabLayout
-				android:id = "@id/id_stickynavlayout_indicator"
-				android:layout_width = "match_parent"
-				android:layout_height = "@dimen/di_tabs_common_bg_height"
-				android:paddingBottom = "0dp"
-				android:background = "@color/co_white"
-				app:stl_customTabTextLayoutId = "@layout/view_custom_tab"
-				app:stl_customTabTextViewId = "@+id/tv_tab"
-				app:stl_distributeEvenly = "true"
-				app:stl_dividerThickness = "0dp"
-				app:stl_indicatorThickness = "3dp"
-				app:stl_indicatorColor = "@color/co_tabs_indicator_common_bg" />
+				<!--<TextView-->
+						<!--android:id = "@+id/tv_total"-->
+						<!--style = "@style/DefaultTextView.Text"-->
+						<!--android:layout_below = "@+id/tv_name"-->
+						<!--android:layout_marginLeft = "@dimen/di_line_space_extra_big"-->
+						<!--android:layout_toRightOf = "@+id/tv_total_title"-->
+						<!--android:layout_alignTop = "@id/tv_new_add_title"-->
+						<!--android:background = "@drawable/shape_rect_remain_bg"-->
+						<!--android:text = "13"-->
+						<!--android:textSize = "@dimen/di_text_size_small"-->
+						<!--android:textColor = "@color/co_white" />-->
+			<!--</RelativeLayout >-->
 
-		<android.support.v4.view.ViewPager
-				android:id = "@id/id_stickynavlayout_viewpager"
-				android:layout_width = "match_parent"
-				android:layout_height = "match_parent" >
+			<!--<CheckedTextView-->
+					<!--android:id = "@+id/tv_focus"-->
+					<!--style = "@style/DefaultTextView.NormalBtn"-->
+					<!--android:background = "@drawable/selector_btn_green_border"-->
+					<!--android:layout_marginTop = "@dimen/di_list_item_gap_small"-->
+					<!--android:layout_alignParentRight = "true"-->
+					<!--android:checked = "true"-->
+					<!--android:textColor="@color/color_btn_green_border"-->
+					<!--android:text = "关注" />-->
 
-		</android.support.v4.view.ViewPager >
-	</com.oplay.giftcool.ui.widget.layout.GCStickyNavLayout >
+		<!--</RelativeLayout >-->
 
-	<LinearLayout
-			android:id = "@+id/ll_download"
-			android:layout_width = "match_parent"
-			android:layout_height = "wrap_content"
-			android:gravity = "center"
-			android:orientation = "vertical"
-			android:visibility = "gone" >
+		<!--<com.ogaclejapan.smarttablayout.SmartTabLayout-->
+				<!--android:id = "@id/id_stickynavlayout_indicator"-->
+				<!--android:layout_width = "match_parent"-->
+				<!--android:layout_height = "@dimen/di_tabs_common_bg_height"-->
+				<!--android:paddingBottom = "0dp"-->
+				<!--android:background = "@color/co_white"-->
+				<!--app:stl_customTabTextLayoutId = "@layout/view_custom_tab"-->
+				<!--app:stl_customTabTextViewId = "@+id/tv_tab"-->
+				<!--app:stl_distributeEvenly = "true"-->
+				<!--app:stl_dividerThickness = "0dp"-->
+				<!--app:stl_indicatorThickness = "3dp"-->
+				<!--app:stl_indicatorColor = "@color/co_tabs_indicator_common_bg" />-->
 
-		<com.oplay.giftcool.ui.widget.button.DownloadButtonView
-				android:id = "@+id/btn_download"
-				android:layout_marginTop = "10dp"
-				android:layout_marginBottom = "10dp"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content" />
-	</LinearLayout >
-</LinearLayout >
+		<!--<android.support.v4.view.ViewPager-->
+				<!--android:id = "@id/id_stickynavlayout_viewpager"-->
+				<!--android:layout_width = "match_parent"-->
+				<!--android:layout_height = "match_parent" >-->
+
+		<!--</android.support.v4.view.ViewPager >-->
+	<!--</com.oplay.giftcool.ui.widget.layout.GCStickyNavLayout >-->
+
+	<!--<LinearLayout-->
+			<!--android:id = "@+id/ll_download"-->
+			<!--android:layout_width = "match_parent"-->
+			<!--android:layout_height = "wrap_content"-->
+			<!--android:gravity = "center"-->
+			<!--android:orientation = "vertical"-->
+			<!--android:visibility = "gone" >-->
+
+		<!--<com.oplay.giftcool.ui.widget.button.DownloadButtonView-->
+				<!--android:id = "@+id/btn_download"-->
+				<!--android:layout_marginTop = "10dp"-->
+				<!--android:layout_marginBottom = "10dp"-->
+				<!--android:layout_width = "wrap_content"-->
+				<!--android:layout_height = "wrap_content" />-->
+	<!--</LinearLayout >-->
+<!--</LinearLayout >-->

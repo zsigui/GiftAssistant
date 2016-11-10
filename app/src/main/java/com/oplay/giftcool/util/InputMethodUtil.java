@@ -59,6 +59,11 @@ public class InputMethodUtil {
         return imm.isActive();
     }
 
+    public static boolean isActive(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        return imm.isActive(v);
+    }
+
     /**
      * 获取软键盘的高度
      */
@@ -88,5 +93,17 @@ public class InputMethodUtil {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * 根据指定根视图的可见区域变化来判断是否弹出了输入框
+     */
+    public static boolean isKeyBoardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
     }
 }

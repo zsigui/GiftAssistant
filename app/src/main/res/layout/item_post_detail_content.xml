@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools" >
+
+    <LinearLayout
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:descendantFocusability = "blocksDescendants"
+            android:orientation = "vertical" >
+
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                app:layout_scrollFlags = "scroll"
+                android:background = "@color/co_white"
+                android:padding = "@dimen/di_list_item_gap_big" >
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                    android:id = "@+id/iv_icon"
+                    android:layout_width = "@dimen/di_post_detail_icon_diameter"
+                    android:layout_height = "@dimen/di_post_detail_icon_diameter"
+                    android:layout_marginRight = "@dimen/di_list_item_gap_normal"
+                    app:riv_oval = "true"
+                    android:src = "@drawable/ic_avatar_default" />
+
+            <TextView
+                    android:id = "@+id/tv_name"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:drawableRight = "@drawable/ic_icon_vip"
+                    android:drawablePadding = "@dimen/di_line_space_extra_big"
+                    android:textColor = "@color/co_common_app_second_bg_orange"
+                    android:layout_toRightOf = "@+id/iv_icon"
+                    android:layout_marginTop = "@dimen/di_line_space_extra_big"
+                    android:gravity = "center_vertical"
+                    tools:text = "话题小编(小酷)" />
+
+            <ImageView
+                    android:id = "@+id/iv_manager"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_toRightOf = "@+id/tv_name"
+                    android:layout_alignTop = "@id/tv_name"
+                    android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                    android:layout_marginTop = "@dimen/di_line_space_extra_normal"
+                    android:src = "@drawable/ic_icon_manager" />
+
+            <TextView
+                    android:id = "@+id/tv_desc"
+                    style = "@style/DefaultTextView.Text"
+                    android:drawableRight = "@drawable/ic_post_right_quote"
+                    android:drawableLeft = "@drawable/ic_post_left_quote"
+                    android:drawablePadding = "@dimen/di_line_space_extra_big"
+                    android:layout_alignLeft = "@+id/tv_name"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_very_small"
+                    android:layout_below = "@+id/tv_name"
+                    android:textSize = "@dimen/di_text_size_small"
+                    android:ellipsize = "end"
+                    tools:text = "各种劲爆话题穷处不断，各种好玩没节操等你..." />
+        </RelativeLayout >
+
+        <View
+                style = "@style/HDividerView"
+                android:background = "@color/co_common_content_bg" />
+
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:background = "@color/co_white"
+                android:padding = "@dimen/di_list_item_gap_normal" >
+
+            <TextView
+                    android:id = "@+id/tv_title"
+                    style = "@style/DefaultTextView.Header"
+                    android:layout_centerVertical = "false"
+                    android:textSize = "@dimen/di_text_size_big"
+                    tools:text = "【皇室战争】晒杯段卡组拿充值卡" />
+
+            <TextView
+                    android:id = "@+id/tv_pub_time"
+                    style = "@style/DefaultTextView.Text"
+                    android:layout_below = "@+id/tv_title"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+                    android:layout_marginBottom = "@dimen/di_list_item_gap_normal"
+                    android:layout_marginLeft = "@dimen/di_line_space_extra_big"
+                    tools:text = "发布时间：4月3日 11:32" />
+
+            <TextView
+                    android:id = "@+id/tv_comment"
+                    style = "@style/DefaultTextView.Text"
+                    android:layout_alignTop = "@+id/tv_pub_time"
+                    android:layout_alignParentRight = "true"
+                    tools:text = "273"
+                    android:layout_marginLeft = "@dimen/di_list_item_gap_normal"
+                    android:drawablePadding = "@dimen/di_line_space_extra_big"
+                    android:drawableLeft = "@drawable/ic_msg_content_comment" />
+
+            <TextView
+                    android:id = "@+id/tv_hot"
+                    style = "@style/DefaultTextView.Text"
+                    android:layout_alignTop = "@+id/tv_pub_time"
+                    android:layout_toLeftOf = "@+id/tv_comment"
+                    tools:text = "1234"
+                    android:drawablePadding = "@dimen/di_line_space_extra_big"
+                    android:drawableLeft = "@drawable/ic_msg_content_hot" />
+
+            <!--<TextView-->
+            <!--android:id = "@+id/tv_content"-->
+            <!--android:layout_width = "match_parent"-->
+            <!--android:layout_height = "wrap_content"-->
+            <!--android:layout_below = "@+id/tv_pub_time"-->
+            <!--android:lineSpacingExtra = "@dimen/di_line_space_extra_normal"-->
+            <!--tools:text = "\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！\t《皇室战争》3月31日公测，正式开服第5天！小伙伴们冲杯顺利吗？\n\t坚守0元党阵营的潘达，记得当初在玩了4天的时候大概是1200多杯吧～根据潘达的经验，作为0元党首先心态一定要好！" />-->
+
+            <!-- style样式内容需要使用webview的内核解析，故显示内容部分需要通过webview -->
+            <WebView
+                    android:id = "@+id/wv_content"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_normal"
+                    android:focusable = "false"
+                    android:layout_below = "@+id/tv_pub_time" />
+            <!-- 需要投票时填充 -->
+            <!--<ViewStub-->
+            <!--android:id = "@+id/vs_vote"-->
+            <!--android:layout_width = "match_parent"-->
+            <!--android:layout_height = "wrap_content" />-->
+            <android.support.v7.widget.RecyclerView
+                    android:id = "@+id/rv_vote"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_below = "@+id/wv_content"
+                    android:layout_marginTop = "@dimen/di_list_item_gap_small"
+                    android:layout_marginBottom = "@dimen/di_list_item_gap_small"
+                    android:focusable = "false"
+                    android:visibility = "gone"
+                    tools:visibility = "visible" />
+        </RelativeLayout >
+
+
+    </LinearLayout >
+</layout >

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android = "http://schemas.android.com/apk/res/android" >
+    <item >
+        <shape >
+            <corners
+                    android:topLeftRadius = "@dimen/di_line_space_extra_big"
+                    android:topRightRadius = "@dimen/di_line_space_extra_big" />
+            <solid android:color = "@color/co_white" />
+            <padding
+                    android:top = "@dimen/di_line_space_extra_big"
+                    android:left = "@dimen/di_divider_height"
+                    android:right = "@dimen/di_divider_height" />
+            <stroke
+                    android:color = "@color/co_divider_bg"
+                    android:width = "@dimen/di_divider_height" />
+        </shape >
+    </item >
+    <item >
+        <shape >
+            <solid android:color = "@color/co_white" />
+        </shape >
+    </item >
+</layer-list >

@@ -125,7 +125,6 @@ public class AssistantApp extends Application {
     // 头部信息
     private String mHeaderValue;
 
-    private OkHttpClient mHttpClient;
     private long mLastLaunchTime;
     private int mPhoneLoginType;
     private int mPushSdk = PushMessageManager.SdkType.NONE;
@@ -143,8 +142,8 @@ public class AssistantApp extends Application {
         return sInstance;
     }
 
-    public Retrofit getRetrofit() {
-        if (mRetrofit == null) {
+    public Retrofit getRetrofit(boolean reset) {
+        if (mRetrofit == null || reset) {
             initRetrofit();
         }
         return mRetrofit;
@@ -305,64 +304,66 @@ public class AssistantApp extends Application {
         return mHeaderValue;
     }
 
-    public OkHttpClient getHttpClient() {
-        synchronized (Object.class) {
-            if (mHttpClient == null) {
-                File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
-                Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
-                Interceptor cacheInterceptor = new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        // 请求时携带版本信息
-                        String headerName = "X-Client-Info";
-                        Request newRequest;
-                        newRequest = chain.request().newBuilder()
-                                .addHeader(headerName, getHeaderValue())
-                                .cacheControl(CacheControl.FORCE_NETWORK)
-                                .build();
+    public OkHttpClient newHttpClient(final boolean noEncrypt) {
+        File httpCacheDir = new File(getCacheDir(), Global.NET_CACHE_PATH);
+        Cache cacheFile = new Cache(httpCacheDir, 100 * 1024 * 1024);
+        Interceptor cacheInterceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                // 请求时携带版本信息
+                String headerName = "X-Client-Info";
+                Request newRequest;
+                if (noEncrypt) {
+                    newRequest = chain.request().newBuilder()
+                            .addHeader(headerName, getHeaderValue())
+                            .addHeader("Cookie", Global.sCookie)
+                            .cacheControl(CacheControl.FORCE_NETWORK)
+                            .build();
+                } else {
+                    newRequest = chain.request().newBuilder()
+                            .addHeader(headerName, getHeaderValue())
+                            .cacheControl(CacheControl.FORCE_NETWORK)
+                            .build();
+                }
 //                        AppDebugConfig.d(AppDebugConfig.TAG_APP, "net request url = " + newRequest.url().uri()
 // .toString());
-                        AppDebugConfig.d(AppDebugConfig.TAG_ENCRYPT, "请求地址：" + newRequest.url().uri());
-                        Response response = chain.proceed(newRequest);
+                AppDebugConfig.d(AppDebugConfig.TAG_ENCRYPT, "请求地址：" + newRequest.url().uri());
+                Response response = chain.proceed(newRequest);
 
-                        CacheControl cacheControl;
+                CacheControl cacheControl;
 //						if (NetworkUtil.isConnected(getApplicationContext())) {
-                        cacheControl = new CacheControl.Builder()
-                                .noCache()
-                                .build();
+                cacheControl = new CacheControl.Builder()
+                        .noCache()
+                        .build();
 //						} else {
 //							cacheControl = new CacheControl.Builder()
 //									.onlyIfCached()
 //									.maxStale(365, TimeUnit.DAYS)
 //									.build();
 //						}
-                        String cacheControlStr = cacheControl.toString();
-                        return response.newBuilder()
-                                .removeHeader("Pragma")
-                                .header("Cache-Control", cacheControlStr)
-                                .build();
-//						return response;
-                    }
-                };
-
-                mHttpClient = new OkHttpClient.Builder()
-                        .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .writeTimeout(AppConfig.NET_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
-                        .cache(cacheFile)
-                        .addInterceptor(cacheInterceptor)
-                        .retryOnConnectionFailure(false)
+                String cacheControlStr = cacheControl.toString();
+                return response.newBuilder()
+                        .removeHeader("Pragma")
+                        .header("Cache-Control", cacheControlStr)
                         .build();
+//						return response;
             }
-        }
-        return mHttpClient;
+        };
+        return new OkHttpClient.Builder()
+                .connectTimeout(AppConfig.NET_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(AppConfig.NET_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(AppConfig.NET_WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+                .cache(cacheFile)
+                .addInterceptor(cacheInterceptor)
+                .retryOnConnectionFailure(false)
+                .build();
     }
 
     public void initRetrofit() {
         initGson();
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(NetUrl.getBaseUrl())
-                .client(getHttpClient())
+                .client(newHttpClient(false))
                 .addConverterFactory(GsonConverterFactory.create(mGson))
                 .build();
     }
@@ -675,10 +676,10 @@ public class AssistantApp extends Application {
                 mSoftInputHeight = SPUtil.getInt(this, SPConfig.SP_APP_DEVICE_FILE, SPConfig.KEY_SOFT_INPUT_HEIGHT, 0);
                 if (activity != null && mSoftInputHeight == 0) {
                     mSoftInputHeight = InputMethodUtil.getSoftInputHeight(activity);
-                    if (mSoftInputHeight == 0) {
-                        mSoftInputHeight = activity.getResources().getDimensionPixelSize(R.dimen
-                                .di_default_soft_input_height);
-                    }
+//                    if (mSoftInputHeight == 0) {
+//                        mSoftInputHeight = activity.getResources().getDimensionPixelSize(R.dimen
+//                                .di_default_soft_input_height);
+//                    }
                     setSoftInputHeight(mSoftInputHeight);
                 }
             }

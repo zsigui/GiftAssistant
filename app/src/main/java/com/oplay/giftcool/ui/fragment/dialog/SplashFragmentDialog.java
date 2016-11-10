@@ -200,7 +200,6 @@ public class SplashFragmentDialog extends DialogFragment implements CallbackList
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         AssistantApp.getInstance().setSplashAdListener(null);
-        SplashFragmentDialog.sHasShow = true;
         // 保证闪屏之后唤起切换判断，略丑陋
         if (MainActivity.sGlobalHolder != null) {
             MainActivity.sGlobalHolder.judgeBindOrSelectUser();

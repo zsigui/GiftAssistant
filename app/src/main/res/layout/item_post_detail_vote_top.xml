@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:orientation = "vertical"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:paddingLeft = "@dimen/di_list_item_gap_big"
+        android:paddingRight = "@dimen/di_list_item_gap_big"
+        android:paddingTop = "@dimen/di_list_item_gap_normal"
+        android:paddingBottom = "@dimen/di_list_item_gap_normal"
+        android:background = "@drawable/shape_rect_post_detail_vote_top" >
+
+    <TextView
+            android:id = "@+id/tv_title"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textColor = "@color/co_common_text_main"
+            android:lineSpacingExtra = "@dimen/di_line_space_extra_big"
+            android:textIsSelectable = "true"
+            android:textStyle = "bold"
+            tools:text = "刀塔西游“最强英雄”投票(单选)" />
+</LinearLayout >

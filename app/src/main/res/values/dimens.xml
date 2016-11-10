@@ -22,12 +22,14 @@
     <dimen name = "di_icon_border_size" >1dp</dimen >
     <dimen name = "di_icon_bigger_radius" >15dp</dimen >
     <dimen name = "di_icon_bigger_diameter" >80dp</dimen >
+    <dimen name = "di_post_detail_icon_diameter" >45dp</dimen >
+    <dimen name = "di_post_detail_pic_width" >80dp</dimen >
 
     <dimen name = "di_web_progress_height" >4dp</dimen >
 
     <dimen name = "di_item_money_min_width" >120dp</dimen >
 
-    <dimen name = "di_default_soft_input_height" >277dp</dimen >
+    <dimen name = "di_default_soft_input_height" >275dp</dimen >
 
     <!-- 列表四周间隔 -->
     <dimen name = "di_line_space_extra_normal" >2dp</dimen >
